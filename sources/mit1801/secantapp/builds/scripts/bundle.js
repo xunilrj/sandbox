@@ -20749,17 +20749,68 @@ var App = React.createClass({displayName: "App",
 });
 module.exports = App;
 },{"react":171}],173:[function(require,module,exports){
+'use strict';
+
+var listeners = [],
+MutationObserver = window.MutationObserver || window.WebKitMutationObserver,
+observer;
+
+var check = function(){
+    // Check the DOM for elements matching a stored selector
+    for(var i = 0, len = listeners.length, listener, elements; i < len; i++){
+        listener = listeners[i];
+        // Query for elements matching the specified selector
+        elements = document.querySelectorAll(listener.selector);
+        for(var j = 0, jLen = elements.length, element; j < jLen; j++){
+            element = elements[j];
+            // Make sure the callback isn't invoked with the 
+            // same element more than once
+            if(!element.ready){
+                element.ready = true;
+                // Invoke the callback with the element
+                listener.fn.call(element, element);
+            }
+        }
+    }
+};
+
+module.exports = {
+    run: function (selector, fn){
+        // Store the selector and callback to be monitored
+        listeners.push({
+            selector: selector,
+            fn: fn
+        });
+        if(!observer){
+            // Watch for changes in the document
+            observer = new MutationObserver(check);
+            observer.observe(document.documentElement, {
+                childList: true,
+                subtree: true
+            });
+        }
+        // Check if the element is currently in the DOM
+        check();
+    }
+}; 
+
+},{}],174:[function(require,module,exports){
+var ready = require('./libs/ready');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var componentRegistry = {
     "App": require('./components/app')
 };
-var elements = document.getElementsByClassName("react-element");
-for (var i = 0; i < elements.length; i++) {
-    var htmlElement = elements[i];
+ready.run(".react-element", function(htmlElement){
+    console.log('Identified new React Element');
     var reactElementName = htmlElement.dataset.reactElement;
-    var reactElement = React.createElement(componentRegistry[reactElementName], null);
-    ReactDOM.render(reactElement, htmlElement);    
-}
+    if(reactElementName == undefined){
+        console.warn("React Element mal formed. Fill data-react-element attribute");
+    }else{
+        var reactElementName = htmlElement.dataset.reactElement;
+        var reactElement = React.createElement(componentRegistry[reactElementName], null);
+        ReactDOM.render(reactElement, htmlElement);
+    }    
+});
 
-},{"./components/app":172,"react":171,"react-dom":27}]},{},[173]);
+},{"./components/app":172,"./libs/ready":173,"react":171,"react-dom":27}]},{},[174]);

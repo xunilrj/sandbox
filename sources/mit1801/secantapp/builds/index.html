@@ -1,9 +1,12 @@
+<!DOCTYPE html>
 <html>
 <head>
 </head>
 <body>
-    <div class="react-element" data-react-element="App"></div>    
+    <div class="react-element" data-react-element="App"></div>  
+    <div id="asd">
+    </div>
+    <button onclick="javascript:var e = document.createElement('div');e.className='react-element';e.dataset.reactElement='App';document.getElementById('asd').appendChild(e);">add</button>
     <script src="\scripts\bundle.js"></script>
 </body>
 </html>
-
