@@ -1,0 +1,22 @@
+{
+  "name": "secantapp",
+  "version": "1.0.0",
+  "dependencies": {
+    "browserify": "^13.1.0",
+    "flux": "^2.1.1",
+    "react": "^15.3.0",
+    "react-router": "^2.6.1",
+    "reactify": "^1.1.1"
+  },
+  "devDependencies": {
+    "babel-eslint": "^6.1.2",
+    "eslint": "^3.3.1",
+    "eslint-config-defaults": "^9.0.0",
+    "eslint-plugin-react": "^6.1.2",
+    "gulp": "^3.9.1",
+    "gulp-connect": "^5.0.0",
+    "gulp-eslint": "^3.0.1",
+    "gulp-open": "^2.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  }
+}
