@@ -12,7 +12,7 @@ var config = {
     devBaseUrl: 'http://localhost',
     paths:{        
         html:'./sources/*.html',
-        js:'./sources/*.js',
+        js:'./sources/**/*.js',
         mainJs:'./sources/main.js',
         build:'./builds'
     }

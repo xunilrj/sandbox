@@ -1,17 +1,19 @@
 ﻿{
-  "ecmaFeatures": {
-    "jsx": true
-  },
-  "env": {
-    "browser": true,
-    "node": true,
-    "jquery": true
-  },
-  "rules": {
-    "semi":"error"
-  },
-  "globals": {
-    "jQuery": true,
-    "$": true
-  }
+    "parserOptions":{
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "env": {
+        "browser": true,
+        "node": true,
+        "jquery": true
+    },
+    "rules": {
+        "semi":"error"
+    },
+    "globals": {
+        "jQuery": true,
+        "$": true
+    }
 }

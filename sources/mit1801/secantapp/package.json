@@ -4,15 +4,12 @@
   "dependencies": {
     "browserify": "^13.1.0",
     "flux": "^2.1.1",
-    "react": "^15.3.0",
+    "react": "^15.3.1",
+    "react-dom": "^15.3.1",
     "react-router": "^2.6.1",
     "reactify": "^1.1.1"
   },
   "devDependencies": {
-    "babel-eslint": "^6.1.2",
-    "eslint": "^3.3.1",
-    "eslint-config-defaults": "^9.0.0",
-    "eslint-plugin-react": "^6.1.2",
     "gulp": "^3.9.1",
     "gulp-connect": "^5.0.0",
     "gulp-eslint": "^3.0.1",
