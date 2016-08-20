@@ -1,6 +1,9 @@
 {
   "name": "secantapp",
   "version": "1.0.0",
+  "scripts": {
+    "test": "jest"
+  },
   "dependencies": {
     "browserify": "^13.1.0",
     "flux": "^2.1.1",
@@ -14,6 +17,8 @@
     "gulp-connect": "^5.0.0",
     "gulp-eslint": "^3.0.1",
     "gulp-open": "^2.0.0",
+    "jest": "^14.1.0",
+    "jest-cli": "^14.1.0",
     "vinyl-source-stream": "^1.1.0"
   }
 }
