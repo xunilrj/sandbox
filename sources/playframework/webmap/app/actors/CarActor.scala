@@ -5,8 +5,8 @@ import akka.actor._
 object CarActor {
   def props = Props[CarActor]
   
-  case class GetPosition()
-  case class CarData(name: String, latitude: Double, longitude: Double)
+  case class GetData()
+  case class CarData(name: Option[String], latitude: Double, longitude: Double)
 }
 
 class CarActor extends Actor {
@@ -15,11 +15,12 @@ class CarActor extends Actor {
   var name = "<NO NAME>"
   var latitude = 0.0
   var longitude = 0.0
+  var state = 0
   
   def receive = {
-    case GetPosition() => sender() ! Position(latitude, longitude)
+    case GetData() => sender() ! CarData(Some(name), latitude, longitude)
     case CarData(n, lat, long) => {
-      name = n
+      n match { case  Some(nn) => name = nn case None => {} }
       latitude = lat
       longitude = long
     }
