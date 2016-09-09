@@ -1,0 +1,7 @@
+GET     /                           controllers.HomeController.index
+GET     /count                      controllers.CountController.count
+GET     /message                    controllers.AsyncController.message
+GET     /api/car/:name              controllers.CarController.getCar(name: String)
+POST    /api/car/:name              controllers.CarController.createCar(name: String)
+PUT     /api/car/:name              controllers.CarController.updateCar(name :String)
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
