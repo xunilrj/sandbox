@@ -13,18 +13,19 @@ So the typeclass
     class Functor f where
 	    fmap :: (a -> b) -> f a -> f b
 
-means that every data type that specifies a fmap compliant to the rule will be a functor. There rule is:
-"(a->b)" = first parameter must be a function that receives one parameter and return something
-"->fa" = second parameter must be a functor
-"->fb" = the return type will be a functor
+means that every data type that specifies a fmap compliant to the above rule will be a functor.
+We can interpret the rule as:
+"(a->b)" = We have a first parameter that must be a function that receives one parameter of the type A and return something of the type B  
+"->fa" = We have a second parameter that is a functor templated on A  
+"->fb" = We will return another functor templated on B    
 
-The first step is to constuct a dummy struct that will evolve to be a functor in C++ style.
+Our first step will be to constuct a dummy struct that somehow will evolve to be a functor in C++ style.
 
     struct Just
     {
     };
 
-and we will test in compile time (http://en.cppreference.com/w/cpp/language/static_assert) if Just is a functor:
+and we will test it in compile time using the static_assert (http://en.cppreference.com/w/cpp/language/static_assert), if Just is a functor or not. Let us start!  
 
     int main()
     {   
@@ -40,7 +41,7 @@ and will define a dummy is_functor validator that will fail for now.
         static const bool value = false;
     };
 
-Compiling this
+Compiling this code, we get:
 
     g++ -std=c++11 main.cpp && ./a.out
     main.cpp: In function 'int main()':
@@ -49,11 +50,11 @@ Compiling this
 
 http://coliru.stacked-crooked.com/a/17381ac0f6078dad
 
-Well... it seems that Just is not a functor yet! Wich is fine since it really not is yet!
-OK! The fist step is, we need a way to analyze in compile time if Just have a member function named "fmap". In C++ this is called "Member Detection Idiom" 
+Well... it seems that Just is not a functor yet! Which is fine, since it really is not yet!  
+OK! The fist step here is: we need a way to analyze in compile time if Just have a member function named "fmap". In C++ this is called "Member Detection Idiom" 
 
 Today there are three ways to detect that a member exists:
-Pre-C++11
+Pre-C++11  
 https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms/Member_Detector
 
 Pre-C++17
@@ -77,7 +78,7 @@ when I try
 
     CanISum(0,1);
 
-the compiler will deduce T1 = int and T2 = int and both can be summed.
+the compiler will deduce T1 = int and T2 = int and that both types can be summed.
 
 using some C++11 features I can rewrite the same function as
 
@@ -95,16 +96,17 @@ and then
     	return a+b;
     }
 
-OK. Let us see
-1 - auto in the return that it will have to compute the return type of the function;
-2 - decltype receives a valid expression an return its type (http://en.cppreference.com/w/cpp/language/decltype);
-3 - so this functionreturn type will depend on the return of (a+b).
+OK. Let us see  
+1 - auto in the return teels the compiler that I will specify later the return type of the function;  
+2 - decltype receives a valid expression and return its type (http://en.cppreference.com/w/cpp/language/decltype);  
+3 - so this function return type will depend on the return of (a+b).  
 
 but with 
 
     CanISum(Just(), Just()) 
 
-    the compiler will raise an error:
+the compiler will raise an error:  
+
     main.cpp: In function 'int main()':
     main.cpp:26:26: error: no matching function for call to 'canISum(Just, Just)'
          canISum(Just(),Just());
@@ -119,17 +121,20 @@ but with
         auto canISum(T1 a, T2 b) -> decltype(a+b)
                                               ~^~
 
-Because the compiler does not know how the sum two Just classes. Let us create a catch all function for this case.
+Because the compiler does not know how the sum two Just classes.
+To avoid the compiler error, we can create a catch all function. For example:
 
     void CanISum(...){}
 
-The compiler error is gone. Now the compiler have resolved CanISum(Just(), Just())  to the CanISum(...) function.
+The compiler error is gone.  
+Now the compiler have resolved CanISum(Just(), Just())  to the CanISum(...) function.
 
-Now, all types that the compiler knows to sum are deduced to a function and all the others a deduced to another function.
+Now, all types that the compiler knows how to sum are deduced to a function and all the others a deduced to another function.
 
 Wonderful! Halfway there. Now we need a way to tell which function the compiler chose.
 
-But first suit yourself because will get ugly!
+But first prepare yourself because this will get ugly!
+OK!
 
 The static_assert only allows me to use compile time expressions.
 
@@ -139,9 +144,10 @@ This wil test that if 4 is equal to 4. Not particularly useful... but...
 
     static_assert(sizeof(int)==4, "Not ok!");
 
-will test if int, is in this particular machine int is 4 bytes long. hum... OK...
+will test if int, is in this particular machine is 4 bytes long. hum... OK...  
+Continuing... We know that decltype returns the type of expressions, so...   
 
-    so decltype(1) returns int
+    decltype(1) returns int
     decltype(1.0f) returns float
 
 so I can rewrite the assert as
@@ -149,26 +155,27 @@ so I can rewrite the assert as
     static_assert(sizeof(decltype(1))==4, "Not ok!");
 
 This still pass because 
-    decltype(1) = int
-    sizeof(int) = 4
-    4 == 4
+    decltype(1) == int  
+    sizeof(int) == 4  
+    4 == 4  
 
-hum... This is something! With this I can know at compile time the type of any expression. Even compile deduced templates. How about doing:
+hum... This is something! With this I can know at compile time the type of any expression. Even compile deduced templates.  
+How about doing:
 
     static_assert(sizeof(decltype(canISum(1,2)))==4, "Not ok!");
 
-Hey! It worked! Why? Well... canISum when deduced to the templated version return the type returned when summing two values. The sum of two ints are an int. So:
+Hey! It worked! Why? Well... canISum when deduced to the templated version return the type returned when summing the two values. In this case, the sum of two ints are an int. So:
 
-    sizeof(decltype(canISum(1,2)))==4
-    sizeof(int)==4
-    4==4
-    true
+    sizeof(decltype(canISum(1,2)))==4  
+    sizeof(int)==4  
+    4==4  
+    true  
 
 But when I Do
 
     static_assert(sizeof(decltype(canISum(Just(),Just())))==4, "Not ok!");
 
-The compiler comlpain:
+The compiler complains:
 
     main.cpp: In function 'int main()':
     main.cpp:31:58: warning: invalid application of 'sizeof' to a void type [-Wpointer-arith]
@@ -178,9 +185,9 @@ The compiler comlpain:
          static_assert(sizeof(decltype(canISum(Just(),Just())))==4, "Not ok!");
          ^~~~~~~~~~~~~
 
-Our CanISum is returning void, so the compiler is complaining about sizeof(void)... It is indeed a philosofical question... How is the size of Void!?
+Our CanISum(...) is returning void, so the compiler is complaining about sizeof(void)... It is indeed a philosofical question... How is the size of Void!?
 
-Putting philosophy aside let us change the return type to something easier: int!
+But putting philosophy aside, let us change the return type to something easier: int!
 
     int canISum(...){}
 
@@ -206,7 +213,7 @@ and the main point is:
     sizeof(decltype(canISum(0,1))) == 4
     sizeof(decltype(canISum(Just(),Just())) == 8
 
-all types that the compiler can sum will return sizeof(...) equal to 4 and all that it can�t will return sizeof(...) as 8. Very interesting!
+all types that the compiler can sum will return sizeof(...) equal to 4 and all that it can´t will return sizeof(...) as 8. Very interesting!
 
 Can we make it a little cleaner? Yes, we can!
 
@@ -232,7 +239,8 @@ Not very useful... but how about?
     always_true IsItTrue(int){}
     always_false IsItTrue(float){}
 
-When passing a int I want that something would ne true. When passing a float I want taht this thing to be false. And I can assert as:
+When passing a int, I want the return type to be true. When passing a float, I want that the return type to be false.  
+And I can assert this as:
 
     static_assert(decltype(IsItTrue(1))::value, "Always true");
     static_assert(!decltype(IsItTrue(1.0f))::value, "Always false");
@@ -248,12 +256,13 @@ So It seems that I only need to change my functions to returns this structures..
 
     always_false canISum(...){}
 
-and the assertions
+and the assertions become:
 
     static_assert(decltype(canISum(1,2))::value, "Not ok!");
     static_assert(decltype(canISum(Just(),Just()))::value, "Not ok!");
 
-It seems the moment for glory! Bu the compiler raises an error:
+It seems that we arrived at the moment of glory!  
+But the compiler raises an error:
 
     main.cpp: In instantiation of 'always_true canISum(T1, T2) [with T1 = Just; T2 = Just]':
     main.cpp:39:26:   required from here
@@ -261,7 +270,8 @@ It seems the moment for glory! Bu the compiler raises an error:
          auto c = a+b;
                   ~^~
 
-Suddenly the compiler cannot use the ellipsis for the Just version anymore. It would be a dead end if we did not have another trick up to the sleaves!
+Suddenly the compiler cannot use the ellipsis for the Just version anymore.
+It would be a dead end if we did not have another trick up to the sleaves!
 
 We already now that this is OK!
 
@@ -315,7 +325,7 @@ give us an error:
          static_assert(decltype(Just()+Just(), always_true())::value, "This compile!");
                        ^~~~~~~~
 
-OK! But we don�t want a compile error, we want a simple boolean value. For this we just need to return to our functions and use this last technique:
+OK! But we don´t want a compile error, we want a simple boolean value. For this we just need to return to our functions and use this last technique:
 
     template <typename T1, typename T2>
     auto canISum(T1 a, T2 b) -> decltype(a+b, always_true())
@@ -326,14 +336,14 @@ OK! But we don�t want a compile error, we want a simple boolean value. For thi
 
     always_false canISum(...){}
 
-and the statc_asserts:
+and the static_asserts:
 
     static_assert(decltype(canISum(1,2))::value, "Not ok!");
     static_assert(!decltype(canISum(Just(),Just()))::value, "Not ok!");
 
-and everything compiles! Wow! Beautiful.
-But can we make it a little cleaner? Yes, we can!
-We can for example remove those constants and work directly with the types.
+and everything compiles! Wow! Beautiful.  
+But can we make it a little cleaner? Yes, we can!  
+We can for example remove those constants and work directly with the types.  
 
 For this we will need to create a struct:
 
@@ -342,7 +352,7 @@ For this we will need to create a struct:
         static const bool value = false;
     };
 
-The C++ compiler allows me to put any compiler time value on a static const member. Well, we already know how to compute if a expressio is summable or not. So let us move our functions to inside this struct:
+The C++ compiler allows me to put any compiler time value on a static const member. Well, we already know how to compute if a expression is summable or not in compile time. So let us move our functions to inside this struct:
 
     struct can_i_sum
     {
@@ -410,7 +420,7 @@ and
 
     static_assert(can_i_sum<int,int>::value, "Not ok!");
 
-Well... we can say that the static_assert expression is done! It cannot get any better.
+Well... we can say that the static_assert expression is done! It cannot get any better.  
 But the value member is still with 1 and 2 hardcoded.
 
 This creates the problem that
@@ -421,11 +431,11 @@ does not compile anymore. We need to turn the line
 
     static const bool value = decltype(can_i_sum::canISum(1,2))::value;
 
-to be the more generic as possible and depend only on the template parameters. We can do like this using another C++11 feature std::declval. declval is almost the cotnraty to decltype. Now, given a type you receive a reference to the type. 
+to be as generic as possible and depend only on the template parameters. We can do like this using another C++11 feature std::declval. declval is almost the contrary to decltype. Now, given a type you receive a reference to an instance of that type. 
 
 http://en.cppreference.com/w/cpp/utility/declval
 
-And it is better than just calling the default contructor of the type becuase declval works even with types that do not have default contructors.
+And this is better than just calling the default contructor of the type becuase declval works even with types that do not have default contructors.
 
 And with 
 
@@ -461,11 +471,12 @@ we can compile and go to... wait! This gives another compile error:
          static_assert(can_i_sum<Just,Just>::value, "Not ok!");
          ^~~~~~~~~~~~~
 
-C++ compile are unbeatable... they nerver give up of throwing up errors!
+C++ compile are unbeatable... they never give up of throwing up errors!
 
-The problem now is that we made the struct templated, but not the function. So the c++ compiler tried to create the fucntion with template parameters passed but it realized that this is impossible.
+The problem now is that we made the struct templated, but not the function. So the c++ compiler tried to create the fucntion with the template parameters of the structure but it realized that this is impossible.
 
 The solution is simple. We have to make the member function templated again!
+
 And the (almost) gran finale!
 
     template <typename T1, typename T2>
@@ -491,12 +502,11 @@ and
 
 compiles with no error!
 
-There is some improvements that we can do:
+These are some improvements that we can do:  
 1 - The C++11 already gives me the always_true and always_false
 http://en.cppreference.com/w/cpp/types/integral_constant
 
-they are called
-std::true_type and std::false_type and live in the type_traits header.
+they are called std::true_type and std::false_type and live in the type_traits header.
 
 So our class now, is:
 
@@ -529,7 +539,7 @@ So our class now, is:
         static const bool value = decltype(canISum(std::declval<T1>(),std::declval<T2>()))::value;
     };
 
-3 - We can use more generic names in the member functions .
+3 - We can use more generic names in the member functions.
 
     template <typename T1, typename T2>
     struct can_i_sum
@@ -555,7 +565,7 @@ We can even make this a macro
         static const bool value = decltype(check(std::declval<T1>(),std::declval<T2>()))::value; \
     };
 
-and define operators checking like this:
+and define operators checking with it:
 
     check_dyadic(can_i_sum,a+b)
     check_dyadic(can_i_take_difference,a-b)
@@ -567,13 +577,13 @@ and
     static_assert(can_i_take_difference<int,int>::value, "Not ok!");
     static_assert(!can_i_take_difference<Just,Just>::value, "Not ok!");
 
-will all compile.
-Woo! Macros! We wen too far!
-Well... what a drigression! But we made it!
+will all compile.  
+Woo! Macros! We wen too far!  
+Well... what a digression! But we made it! We can try to test if an object is a functor or not! 
 
 ## Back to Functors
 
-Going back... we do not give a **** if the class have a + operator. We really wnat to know if it is a functor. So let us return to the functor definition.
+Going back... we do not give a **** if the class have a + operator or not. We really want to know if it is a functor or not. So let us return to the functor definition.
 
     class Functor f where
 	    fmap :: (a -> b) -> f a -> f b
@@ -586,10 +596,10 @@ and our functor
         static const bool value = false;
     };
 
-Out last technique helped us to understand with some type have the operator +, but the reality was that we only checked if  some expression was compliable or not. We will do this again here. Every type that contains a member function named fmap that is compliant with the definition will be a functor. 
+Out last technique helped us to understand if some type have the operator + or not, but the reality was that we only checked if some expression was compliable or not. We will do this again here. Every type that contains a member function named fmap that is compliant with the definition will be a functor. 
 
 So let us go!
-OK... another digression...
+OK... but first, another digression...
 
 let us start with a simple global fmap and out macro:
 
@@ -601,7 +611,7 @@ let us start with a simple global fmap and out macro:
 
 remember that the macro will expando to:
 
-    struct (can_i_call_fmap,fmap
+    struct can_i_call_fmap
     { 
     private: 
         template <typename A, typename B> 
@@ -616,14 +626,14 @@ and the static_assert:
     static_assert(can_i_call_fmap<Just,Just>::value, "Not ok!");
 
 will works, because we can call our current fmap with any type. Great!
-But the real fmap receives parameters. It first parameter is a function that receives a parameter and return another value.
+But the real fmap receives parameters. Its first parameter is a function that receives a parameter and return another value.
 
 To better define this function we will use another C++11 feature http://en.cppreference.com/w/cpp/language/type_alias:
 
     template <typename A, typename B>
     using fmapArg1 = B(*)(A);
 
-that defines a function that receives B and returns A. Now out fmap is:
+that defines a function that receives A and returns B. Now our fmap is:
 
     template <typename A, typename B>
     using fmapArg1 = B(*)(A);
@@ -633,11 +643,11 @@ that defines a function that receives B and returns A. Now out fmap is:
     {
     }
 
-in that notation we already have:
+in Haskell notation we already have:
 
     fmap :: (a -> b) -> nothing
 
-Including the next parameter and the return type we have:
+Including the next parameter and the return type, we have:
 
     template <typename A, typename B, typename FA, typename FB>
     FB fmap(fmapArg1<A,B> f, FA a)
@@ -653,7 +663,7 @@ Ok. It seems right, but we have a problem! This is not the same as the original 
     original: fmap :: (a -> b) -> f a -> f b
     ours: fmap :: (a -> b) -> c -> d
 
-which is too generic. We have bind the templates types to the function argument types. Like this:
+which is more generic than the functor definition. We have to bind the templates types to the function argument types. Like this:
 
     template <typename A, typename B, template <typename> typename FA, template <typename> typename FB>
     FB<B> fmap(fmapArg1<A,B> f, FA<A> a)
@@ -673,7 +683,7 @@ we see that
 
     static_assert(can_i_call_fmap<Just,Just>::value, "Not ok!");
 
-Just is not a functor yet! As expected!
+Just is not a functor! As expected!
 
 But I can specialize a version of my template to my Just structure. I do not know how to generate generic fmaps, but for this struc i know.
 
@@ -700,7 +710,7 @@ and the assertion now is:
 
     static_assert(can_i_call_fmap<fmapArg1<int,int>,Just<int>>::value, "Not ok!");
 
-See that the old assert with <Just,Just> does not make any sense now. fmap is not a simetric operator anymore.
+See that the old assert with <Just,Just> does not make any sense now. fmap is not a symmetric operator anymore.
 OK!
 
 Now we will allow Just to carry some value and make the fmap actually work:
@@ -739,7 +749,7 @@ Woo! Pleasure at last!
 Now we see the "2" on the console.
 
 Hey! But remember that we developers are lazy! We hate to type!
-Out Just struct does nothing, it just hold values. This is so common that even has a name https://en.wikipedia.org/wiki/Algebraic_data_type.
+Our Just struct does nothing, it just hold values. This is so common that even has a name https://en.wikipedia.org/wiki/Algebraic_data_type.
 
 In C++ 11 we do not need to type algebraic data types, we can use the std::tuple (http://en.cppreference.com/w/cpp/utility/tuple).
 
@@ -784,7 +794,7 @@ and now we have.
     auto just2 = fmap(plus1, just1);
     std::cout << std::get<0>(just2);
 
-Unfortunately this implementation still have a big problem. C++11 have accepted the lambda functions (http://en.cppreference.com/w/cpp/language/lambda).
+Unfortunately this implementation still have a big problem. C++11 have lambda functions (http://en.cppreference.com/w/cpp/language/lambda).
 
 But we cannot use them here:
 
@@ -820,4 +830,6 @@ We can make it work with a simple cast:
     auto just2 = fmap(static_cast<fmapArg1<int,int>>([](int x){return x+1;}), just1);
     std::cout << std::get<0>(just2);
 
-off course the solution have totally degenerated the code. So is tehre anything we can do?
+off course the solution have totally degenerated the code. So is there anything we can do?
+
+to be continued...
