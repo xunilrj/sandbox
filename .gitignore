@@ -253,3 +253,5 @@ paket-files/
 
 .build/
 .vscode/
+
+*.lib
