@@ -15,7 +15,7 @@ using Accord.Statistics;
 namespace LemonStand.Simulation
 {
     [TestClass]
-    public class UnitTest1
+    public class Simulations
     {
         [TestMethod]
         public void UsingInferNet()
