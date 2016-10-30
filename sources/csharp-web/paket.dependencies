@@ -1,0 +1,29 @@
+source https://nuget.org/api/v2
+
+nuget FAKE
+
+nuget WebActivatorEx 2.1.0.0
+nuget Microsoft.CodeDom.Providers.DotNetCompilerPlatform 1.0.0.0
+nuget Microsoft.Net.Compilers 1.0.0.0
+nuget Microsoft.AspNet.Mvc 5.2.3.0
+nuget Microsoft.AspNet.WebApi 5.2.3.0
+nuget Microsoft.AspNet.WebApi.Client 5.2.3.0
+nuget Ninject
+nuget Ninject.Web.WebApi
+
+nuget Polly
+nuget Serilog
+nuget Serilog.Settings.AppSettings
+nuget Serilog.Enrichers.Process
+nuget Serilog.Enrichers.Thread
+nuget Serilog.Extras.Web
+nuget Serilog.Sinks.RollingFile
+nuget Serilog.Sinks.Seq
+
+nuget xunit
+nuget xunit.runner.console
+nuget xunit.runner.visualstudio version_in_path: true
+nuget AutoFixture.Xunit2 
+nuget AutoFixture.AutoNSubstitute
+
+nuget Microsoft.PowerShell.5.ReferenceAssemblies
