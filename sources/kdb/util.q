@@ -6,14 +6,14 @@ use:{system["d"] upsert $[99h=type v:get x;v;(-1#` vs x)!1#v]}
 / return weekdays from list of dates
 wday:{x where 1<x mod 7}
 
-/ return a range of numbers between (s)tart and (e)nd
+/ return a range of numbers between (s)tart and (e)nd 
 / with specified (w)indow size
 rng:{[w;s;e]s+w*til ceiling(e-s)%w}
 
 / round y to nearest x
 rnd:{x*"j"$y%x}
 
-/ generate (n) uniform random numbers between (s)tart and (e)nd 
+/ generate (n) uniform random numbers between (s)tart and (e)nd
 randrng:{[n;s;e]s+n?e-s}
 
 / automatically set attributes on first column of (t)able
@@ -32,9 +32,9 @@ kasc:{$[`s=attr k:key x;x;(`s#k i)!value[x]i:iasc k]}
 / string implementation of pivot
 / pivot (c)olumns, (g)roup column, (d)ata column, (t)able
 pivots:{[c;g;d;t]
- s:"exec (`$exec string asc distinct",string[c]," from t)";
+ s:"exec (`$exec string asc distinct ",string[c]," from t)";
  s,:"#(`$string ",string[c],")!",string d;
- s,:" by ", "," sv ":" sv'string flip2#enlist g,();
+ s,:" by ", "," sv ":" sv'string flip 2#enlist g,();
  s,:" from t";
  p:eval @[parse s;1;:;t];
  p}
@@ -62,15 +62,14 @@ pivotq:{[c;g;d;t]
 pivot:{[t]
  u:`$string asc distinct last f:flip key t;
  pf:{x#(`$string y)!z};
- p:?[t;();g!g:-1_ k;(pf;`u;last k:key
- f;last key flip value t)];
+ p:?[t;();g!g:-1_ k;(pf;`u;last k:key f;last key flip value t)];
  p}
 
 / splay table to disk without enumerating sym columns
 splay:{@[x;`.d,c;:;enlist[c],y c:cols y]}
 
 / generate a list of nodes(files or variables) within tree node
-tree:{$[x~k:key x;x;11h=type k;raze (.z.s `sv x,) each k;()]}
+tree:{$[x~k:key x;x;11h=type k;raze (.z.s ` sv x,) each k;()]}
 
 / unenumerate any enumerated columns in table
 unenum:{@[x;where (type each flip x) within 20 76;get]}
@@ -78,11 +77,8 @@ unenum:{@[x;where (type each flip x) within 20 76;get]}
 / bid-ask volume (example HDB query)
 / (t)rade table, (q)uote table, (d)a(t)e
 bav:{[t;q;dt]
- r:select id,time,tp,ts from t where
- date=dt;
- r:aj[`id`time;r] select id,time,bp,ap from
- q where date=dt;
+ r:select id,time,tp,ts from t where date=dt;
+ r:aj[`id`time;r] select id,time,bp,ap from q where date=dt;
  r:update bv:ts*tp<=bp,av:ts*tp>=ap from r;
- r:0!select date:dt,sum bv,sum av,tv:sum ts
- by id from r;
+ r:0!select date:dt,sum bv,sum av,tv:sum ts by id from r;
  r}
