@@ -989,3 +989,62 @@ Here we have two options again:
 So now I have a proxy that will work with any Passive Object.
 Althought I have lost all my type safety.
 
+
+# Model Counter With TLA+
+
+---------------------- MODULE quickfind ----------------------
+EXTENDS Naturals, TLC, Sequences
+
+CONSTANT N
+
+(* --algorithm SharedCounter {
+
+variables
+    SharedCounter = 0;
+    
+process (Thread \in 1..N)
+variables privateCounter;
+{
+    step1: privateCounter := SharedCounter;
+    step2: privateCounter := privateCounter + 1;
+    step3: SharedCounter := privateCounter;
+}
+
+}*)
+
+SharedCounterOK == (\A i \in 1..N: pc[i] = "Done") => SharedCounter = N
+===================================================================
+
+# TLC Trace
+
+1: <Initial predicate>
+/\ SharedCounter = 0
+/\ privateCounter = <<defaultInitValue, defaultInitValue>>
+/\ pc = <<"step1", "step1">>
+
+2: <Action line 34, col 16 to line 37, col 41 of module quickfind>
+/\ SharedCounter = 0
+/\ privateCounter = <<defaultInitValue, 0>>
+/\ pc = <<"step1", "step2">>
+
+3: <Action line 39, col 16 to line 42, col 41 of module quickfind>
+/\ SharedCounter = 0
+/\ privateCounter = <<defaultInitValue, 1>>
+/\ pc = <<"step1", "step3">>
+
+4: <Action line 44, col 16 to line 47, col 42 of module quickfind>
+/\ SharedCounter = 1
+/\ privateCounter = <<defaultInitValue, 1>>
+/\ pc = <<"step1", "Done">>
+
+5: <Action line 34, col 16 to line 37, col 41 of module quickfind>
+/\ SharedCounter = 1
+/\ privateCounter = <<1, 1>>
+/\ pc = <<"step2", "Done">>
+
+6: <Action line 39, col 16 to line 42, col 41 of module quickfind>
+/\ SharedCounter = 1
+/\ privateCounter = <<2, 1>>
+/\ pc = <<"step3", "Done">>
+
+ERROR!
