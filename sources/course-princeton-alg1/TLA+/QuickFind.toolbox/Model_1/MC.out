@@ -1,0 +1,2352 @@
+@!@!@STARTMSG 2262:0 @!@!@
+TLC2 Version 2.08 of 21 December 2015
+@!@!@ENDMSG 2262 @!@!@
+@!@!@STARTMSG 2187:0 @!@!@
+Running in Model-Checking mode.
+@!@!@ENDMSG 2187 @!@!@
+@!@!@STARTMSG 2220:0 @!@!@
+Starting SANY...
+@!@!@ENDMSG 2220 @!@!@
+Parsing file MC.tla
+Parsing file quickfind.tla
+Parsing file C:\Users\xunil\Downloads\TLAToolbox-1.5.2-win32.win32.x86_64\toolbox\plugins\org.lamport.tlatools_1.0.0.201512230951\tla2sany\StandardModules\TLC.tla
+Parsing file C:\Users\xunil\Downloads\TLAToolbox-1.5.2-win32.win32.x86_64\toolbox\plugins\org.lamport.tlatools_1.0.0.201512230951\tla2sany\StandardModules\Naturals.tla
+Parsing file C:\Users\xunil\Downloads\TLAToolbox-1.5.2-win32.win32.x86_64\toolbox\plugins\org.lamport.tlatools_1.0.0.201512230951\tla2sany\StandardModules\Sequences.tla
+Semantic processing of module Naturals
+Semantic processing of module Sequences
+Semantic processing of module TLC
+Semantic processing of module quickfind
+Semantic processing of module MC
+@!@!@STARTMSG 2219:0 @!@!@
+SANY finished.
+@!@!@ENDMSG 2219 @!@!@
+@!@!@STARTMSG 2185:0 @!@!@
+Starting... (2016-11-07 21:31:49)
+@!@!@ENDMSG 2185 @!@!@
+@!@!@STARTMSG 2189:0 @!@!@
+Computing initial states...
+@!@!@ENDMSG 2189 @!@!@
+@!@!@STARTMSG 2190:0 @!@!@
+Finished computing initial states: 1 distinct state generated.
+@!@!@ENDMSG 2190 @!@!@
+@!@!@STARTMSG 1000:1 @!@!@
+TLC threw an unexpected exception.
+This was probably caused by an error in the spec or model.
+See the User Output or TLC Console for clues to what happened.
+The exception was a tlc2.tool.EvalException
+: @!@!@STARTMSG 2154:0 @!@!@
+Attempted to apply the operator overridden by the Java method
+public static tlc2.value.Value tlc2.module.TLC.Assert(tlc2.value.Value,tlc2.value.Value),
+but it produced the following error:
+@!@!@STARTMSG 2132:0 @!@!@
+The first argument of Assert evaluated to FALSE; the second argument was:
+"Failure of assertion at line 18, column 18."
+@!@!@ENDMSG 2132 @!@!@
+@!@!@ENDMSG 2154 @!@!@
+@!@!@ENDMSG 1000 @!@!@
+@!@!@STARTMSG 2121:1 @!@!@
+The behavior up to this point is:
+@!@!@ENDMSG 2121 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+1: <Initial predicate>
+/\ pid = <<0>>
+/\ qid = <<0>>
+/\ connected = ( <<0, 0>> :> FALSE @@
+  <<0, 1>> :> FALSE @@
+  <<0, 2>> :> FALSE @@
+  <<0, 3>> :> FALSE @@
+  <<0, 4>> :> FALSE @@
+  <<0, 5>> :> FALSE @@
+  <<0, 6>> :> FALSE @@
+  <<0, 7>> :> FALSE @@
+  <<0, 8>> :> FALSE @@
+  <<0, 9>> :> FALSE @@
+  <<1, 0>> :> FALSE @@
+  <<1, 1>> :> FALSE @@
+  <<1, 2>> :> FALSE @@
+  <<1, 3>> :> FALSE @@
+  <<1, 4>> :> FALSE @@
+  <<1, 5>> :> FALSE @@
+  <<1, 6>> :> FALSE @@
+  <<1, 7>> :> FALSE @@
+  <<1, 8>> :> FALSE @@
+  <<1, 9>> :> FALSE @@
+  <<2, 0>> :> FALSE @@
+  <<2, 1>> :> FALSE @@
+  <<2, 2>> :> FALSE @@
+  <<2, 3>> :> FALSE @@
+  <<2, 4>> :> FALSE @@
+  <<2, 5>> :> FALSE @@
+  <<2, 6>> :> FALSE @@
+  <<2, 7>> :> FALSE @@
+  <<2, 8>> :> FALSE @@
+  <<2, 9>> :> FALSE @@
+  <<3, 0>> :> FALSE @@
+  <<3, 1>> :> FALSE @@
+  <<3, 2>> :> FALSE @@
+  <<3, 3>> :> FALSE @@
+  <<3, 4>> :> FALSE @@
+  <<3, 5>> :> FALSE @@
+  <<3, 6>> :> FALSE @@
+  <<3, 7>> :> FALSE @@
+  <<3, 8>> :> FALSE @@
+  <<3, 9>> :> FALSE @@
+  <<4, 0>> :> FALSE @@
+  <<4, 1>> :> FALSE @@
+  <<4, 2>> :> FALSE @@
+  <<4, 3>> :> FALSE @@
+  <<4, 4>> :> FALSE @@
+  <<4, 5>> :> FALSE @@
+  <<4, 6>> :> FALSE @@
+  <<4, 7>> :> FALSE @@
+  <<4, 8>> :> FALSE @@
+  <<4, 9>> :> FALSE @@
+  <<5, 0>> :> FALSE @@
+  <<5, 1>> :> FALSE @@
+  <<5, 2>> :> FALSE @@
+  <<5, 3>> :> FALSE @@
+  <<5, 4>> :> FALSE @@
+  <<5, 5>> :> FALSE @@
+  <<5, 6>> :> FALSE @@
+  <<5, 7>> :> FALSE @@
+  <<5, 8>> :> FALSE @@
+  <<5, 9>> :> FALSE @@
+  <<6, 0>> :> FALSE @@
+  <<6, 1>> :> FALSE @@
+  <<6, 2>> :> FALSE @@
+  <<6, 3>> :> FALSE @@
+  <<6, 4>> :> FALSE @@
+  <<6, 5>> :> FALSE @@
+  <<6, 6>> :> FALSE @@
+  <<6, 7>> :> FALSE @@
+  <<6, 8>> :> FALSE @@
+  <<6, 9>> :> FALSE @@
+  <<7, 0>> :> FALSE @@
+  <<7, 1>> :> FALSE @@
+  <<7, 2>> :> FALSE @@
+  <<7, 3>> :> FALSE @@
+  <<7, 4>> :> FALSE @@
+  <<7, 5>> :> FALSE @@
+  <<7, 6>> :> FALSE @@
+  <<7, 7>> :> FALSE @@
+  <<7, 8>> :> FALSE @@
+  <<7, 9>> :> FALSE @@
+  <<8, 0>> :> FALSE @@
+  <<8, 1>> :> FALSE @@
+  <<8, 2>> :> FALSE @@
+  <<8, 3>> :> FALSE @@
+  <<8, 4>> :> FALSE @@
+  <<8, 5>> :> FALSE @@
+  <<8, 6>> :> FALSE @@
+  <<8, 7>> :> FALSE @@
+  <<8, 8>> :> FALSE @@
+  <<8, 9>> :> FALSE @@
+  <<9, 0>> :> FALSE @@
+  <<9, 1>> :> FALSE @@
+  <<9, 2>> :> FALSE @@
+  <<9, 3>> :> FALSE @@
+  <<9, 4>> :> FALSE @@
+  <<9, 5>> :> FALSE @@
+  <<9, 6>> :> FALSE @@
+  <<9, 7>> :> FALSE @@
+  <<9, 8>> :> FALSE @@
+  <<9, 9>> :> FALSE )
+/\ stack = <<<<>>>>
+/\ i_ = 0
+/\ i = <<0>>
+/\ id = ( 0 :> 0 @@
+  1 :> 0 @@
+  2 :> 0 @@
+  3 :> 0 @@
+  4 :> 0 @@
+  5 :> 0 @@
+  6 :> 0 @@
+  7 :> 0 @@
+  8 :> 0 @@
+  9 :> 0 )
+/\ p = <<0>>
+/\ q = <<0>>
+/\ pc = <<"init">>
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+2: <Action line 98, col 9 to line 105, col 62 of module quickfind>
+/\ pid = <<0>>
+/\ qid = <<0>>
+/\ connected = ( <<0, 0>> :> FALSE @@
+  <<0, 1>> :> FALSE @@
+  <<0, 2>> :> FALSE @@
+  <<0, 3>> :> FALSE @@
+  <<0, 4>> :> FALSE @@
+  <<0, 5>> :> FALSE @@
+  <<0, 6>> :> FALSE @@
+  <<0, 7>> :> FALSE @@
+  <<0, 8>> :> FALSE @@
+  <<0, 9>> :> FALSE @@
+  <<1, 0>> :> FALSE @@
+  <<1, 1>> :> FALSE @@
+  <<1, 2>> :> FALSE @@
+  <<1, 3>> :> FALSE @@
+  <<1, 4>> :> FALSE @@
+  <<1, 5>> :> FALSE @@
+  <<1, 6>> :> FALSE @@
+  <<1, 7>> :> FALSE @@
+  <<1, 8>> :> FALSE @@
+  <<1, 9>> :> FALSE @@
+  <<2, 0>> :> FALSE @@
+  <<2, 1>> :> FALSE @@
+  <<2, 2>> :> FALSE @@
+  <<2, 3>> :> FALSE @@
+  <<2, 4>> :> FALSE @@
+  <<2, 5>> :> FALSE @@
+  <<2, 6>> :> FALSE @@
+  <<2, 7>> :> FALSE @@
+  <<2, 8>> :> FALSE @@
+  <<2, 9>> :> FALSE @@
+  <<3, 0>> :> FALSE @@
+  <<3, 1>> :> FALSE @@
+  <<3, 2>> :> FALSE @@
+  <<3, 3>> :> FALSE @@
+  <<3, 4>> :> FALSE @@
+  <<3, 5>> :> FALSE @@
+  <<3, 6>> :> FALSE @@
+  <<3, 7>> :> FALSE @@
+  <<3, 8>> :> FALSE @@
+  <<3, 9>> :> FALSE @@
+  <<4, 0>> :> FALSE @@
+  <<4, 1>> :> FALSE @@
+  <<4, 2>> :> FALSE @@
+  <<4, 3>> :> FALSE @@
+  <<4, 4>> :> FALSE @@
+  <<4, 5>> :> FALSE @@
+  <<4, 6>> :> FALSE @@
+  <<4, 7>> :> FALSE @@
+  <<4, 8>> :> FALSE @@
+  <<4, 9>> :> FALSE @@
+  <<5, 0>> :> FALSE @@
+  <<5, 1>> :> FALSE @@
+  <<5, 2>> :> FALSE @@
+  <<5, 3>> :> FALSE @@
+  <<5, 4>> :> FALSE @@
+  <<5, 5>> :> FALSE @@
+  <<5, 6>> :> FALSE @@
+  <<5, 7>> :> FALSE @@
+  <<5, 8>> :> FALSE @@
+  <<5, 9>> :> FALSE @@
+  <<6, 0>> :> FALSE @@
+  <<6, 1>> :> FALSE @@
+  <<6, 2>> :> FALSE @@
+  <<6, 3>> :> FALSE @@
+  <<6, 4>> :> FALSE @@
+  <<6, 5>> :> FALSE @@
+  <<6, 6>> :> FALSE @@
+  <<6, 7>> :> FALSE @@
+  <<6, 8>> :> FALSE @@
+  <<6, 9>> :> FALSE @@
+  <<7, 0>> :> FALSE @@
+  <<7, 1>> :> FALSE @@
+  <<7, 2>> :> FALSE @@
+  <<7, 3>> :> FALSE @@
+  <<7, 4>> :> FALSE @@
+  <<7, 5>> :> FALSE @@
+  <<7, 6>> :> FALSE @@
+  <<7, 7>> :> FALSE @@
+  <<7, 8>> :> FALSE @@
+  <<7, 9>> :> FALSE @@
+  <<8, 0>> :> FALSE @@
+  <<8, 1>> :> FALSE @@
+  <<8, 2>> :> FALSE @@
+  <<8, 3>> :> FALSE @@
+  <<8, 4>> :> FALSE @@
+  <<8, 5>> :> FALSE @@
+  <<8, 6>> :> FALSE @@
+  <<8, 7>> :> FALSE @@
+  <<8, 8>> :> FALSE @@
+  <<8, 9>> :> FALSE @@
+  <<9, 0>> :> FALSE @@
+  <<9, 1>> :> FALSE @@
+  <<9, 2>> :> FALSE @@
+  <<9, 3>> :> FALSE @@
+  <<9, 4>> :> FALSE @@
+  <<9, 5>> :> FALSE @@
+  <<9, 6>> :> FALSE @@
+  <<9, 7>> :> FALSE @@
+  <<9, 8>> :> FALSE @@
+  <<9, 9>> :> FALSE )
+/\ stack = <<<<>>>>
+/\ i_ = 1
+/\ i = <<0>>
+/\ id = ( 0 :> 0 @@
+  1 :> 0 @@
+  2 :> 0 @@
+  3 :> 0 @@
+  4 :> 0 @@
+  5 :> 0 @@
+  6 :> 0 @@
+  7 :> 0 @@
+  8 :> 0 @@
+  9 :> 0 )
+/\ p = <<0>>
+/\ q = <<0>>
+/\ pc = <<"init">>
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+3: <Action line 98, col 9 to line 105, col 62 of module quickfind>
+/\ pid = <<0>>
+/\ qid = <<0>>
+/\ connected = ( <<0, 0>> :> FALSE @@
+  <<0, 1>> :> FALSE @@
+  <<0, 2>> :> FALSE @@
+  <<0, 3>> :> FALSE @@
+  <<0, 4>> :> FALSE @@
+  <<0, 5>> :> FALSE @@
+  <<0, 6>> :> FALSE @@
+  <<0, 7>> :> FALSE @@
+  <<0, 8>> :> FALSE @@
+  <<0, 9>> :> FALSE @@
+  <<1, 0>> :> FALSE @@
+  <<1, 1>> :> FALSE @@
+  <<1, 2>> :> FALSE @@
+  <<1, 3>> :> FALSE @@
+  <<1, 4>> :> FALSE @@
+  <<1, 5>> :> FALSE @@
+  <<1, 6>> :> FALSE @@
+  <<1, 7>> :> FALSE @@
+  <<1, 8>> :> FALSE @@
+  <<1, 9>> :> FALSE @@
+  <<2, 0>> :> FALSE @@
+  <<2, 1>> :> FALSE @@
+  <<2, 2>> :> FALSE @@
+  <<2, 3>> :> FALSE @@
+  <<2, 4>> :> FALSE @@
+  <<2, 5>> :> FALSE @@
+  <<2, 6>> :> FALSE @@
+  <<2, 7>> :> FALSE @@
+  <<2, 8>> :> FALSE @@
+  <<2, 9>> :> FALSE @@
+  <<3, 0>> :> FALSE @@
+  <<3, 1>> :> FALSE @@
+  <<3, 2>> :> FALSE @@
+  <<3, 3>> :> FALSE @@
+  <<3, 4>> :> FALSE @@
+  <<3, 5>> :> FALSE @@
+  <<3, 6>> :> FALSE @@
+  <<3, 7>> :> FALSE @@
+  <<3, 8>> :> FALSE @@
+  <<3, 9>> :> FALSE @@
+  <<4, 0>> :> FALSE @@
+  <<4, 1>> :> FALSE @@
+  <<4, 2>> :> FALSE @@
+  <<4, 3>> :> FALSE @@
+  <<4, 4>> :> FALSE @@
+  <<4, 5>> :> FALSE @@
+  <<4, 6>> :> FALSE @@
+  <<4, 7>> :> FALSE @@
+  <<4, 8>> :> FALSE @@
+  <<4, 9>> :> FALSE @@
+  <<5, 0>> :> FALSE @@
+  <<5, 1>> :> FALSE @@
+  <<5, 2>> :> FALSE @@
+  <<5, 3>> :> FALSE @@
+  <<5, 4>> :> FALSE @@
+  <<5, 5>> :> FALSE @@
+  <<5, 6>> :> FALSE @@
+  <<5, 7>> :> FALSE @@
+  <<5, 8>> :> FALSE @@
+  <<5, 9>> :> FALSE @@
+  <<6, 0>> :> FALSE @@
+  <<6, 1>> :> FALSE @@
+  <<6, 2>> :> FALSE @@
+  <<6, 3>> :> FALSE @@
+  <<6, 4>> :> FALSE @@
+  <<6, 5>> :> FALSE @@
+  <<6, 6>> :> FALSE @@
+  <<6, 7>> :> FALSE @@
+  <<6, 8>> :> FALSE @@
+  <<6, 9>> :> FALSE @@
+  <<7, 0>> :> FALSE @@
+  <<7, 1>> :> FALSE @@
+  <<7, 2>> :> FALSE @@
+  <<7, 3>> :> FALSE @@
+  <<7, 4>> :> FALSE @@
+  <<7, 5>> :> FALSE @@
+  <<7, 6>> :> FALSE @@
+  <<7, 7>> :> FALSE @@
+  <<7, 8>> :> FALSE @@
+  <<7, 9>> :> FALSE @@
+  <<8, 0>> :> FALSE @@
+  <<8, 1>> :> FALSE @@
+  <<8, 2>> :> FALSE @@
+  <<8, 3>> :> FALSE @@
+  <<8, 4>> :> FALSE @@
+  <<8, 5>> :> FALSE @@
+  <<8, 6>> :> FALSE @@
+  <<8, 7>> :> FALSE @@
+  <<8, 8>> :> FALSE @@
+  <<8, 9>> :> FALSE @@
+  <<9, 0>> :> FALSE @@
+  <<9, 1>> :> FALSE @@
+  <<9, 2>> :> FALSE @@
+  <<9, 3>> :> FALSE @@
+  <<9, 4>> :> FALSE @@
+  <<9, 5>> :> FALSE @@
+  <<9, 6>> :> FALSE @@
+  <<9, 7>> :> FALSE @@
+  <<9, 8>> :> FALSE @@
+  <<9, 9>> :> FALSE )
+/\ stack = <<<<>>>>
+/\ i_ = 2
+/\ i = <<0>>
+/\ id = ( 0 :> 0 @@
+  1 :> 1 @@
+  2 :> 0 @@
+  3 :> 0 @@
+  4 :> 0 @@
+  5 :> 0 @@
+  6 :> 0 @@
+  7 :> 0 @@
+  8 :> 0 @@
+  9 :> 0 )
+/\ p = <<0>>
+/\ q = <<0>>
+/\ pc = <<"init">>
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+4: <Action line 98, col 9 to line 105, col 62 of module quickfind>
+/\ pid = <<0>>
+/\ qid = <<0>>
+/\ connected = ( <<0, 0>> :> FALSE @@
+  <<0, 1>> :> FALSE @@
+  <<0, 2>> :> FALSE @@
+  <<0, 3>> :> FALSE @@
+  <<0, 4>> :> FALSE @@
+  <<0, 5>> :> FALSE @@
+  <<0, 6>> :> FALSE @@
+  <<0, 7>> :> FALSE @@
+  <<0, 8>> :> FALSE @@
+  <<0, 9>> :> FALSE @@
+  <<1, 0>> :> FALSE @@
+  <<1, 1>> :> FALSE @@
+  <<1, 2>> :> FALSE @@
+  <<1, 3>> :> FALSE @@
+  <<1, 4>> :> FALSE @@
+  <<1, 5>> :> FALSE @@
+  <<1, 6>> :> FALSE @@
+  <<1, 7>> :> FALSE @@
+  <<1, 8>> :> FALSE @@
+  <<1, 9>> :> FALSE @@
+  <<2, 0>> :> FALSE @@
+  <<2, 1>> :> FALSE @@
+  <<2, 2>> :> FALSE @@
+  <<2, 3>> :> FALSE @@
+  <<2, 4>> :> FALSE @@
+  <<2, 5>> :> FALSE @@
+  <<2, 6>> :> FALSE @@
+  <<2, 7>> :> FALSE @@
+  <<2, 8>> :> FALSE @@
+  <<2, 9>> :> FALSE @@
+  <<3, 0>> :> FALSE @@
+  <<3, 1>> :> FALSE @@
+  <<3, 2>> :> FALSE @@
+  <<3, 3>> :> FALSE @@
+  <<3, 4>> :> FALSE @@
+  <<3, 5>> :> FALSE @@
+  <<3, 6>> :> FALSE @@
+  <<3, 7>> :> FALSE @@
+  <<3, 8>> :> FALSE @@
+  <<3, 9>> :> FALSE @@
+  <<4, 0>> :> FALSE @@
+  <<4, 1>> :> FALSE @@
+  <<4, 2>> :> FALSE @@
+  <<4, 3>> :> FALSE @@
+  <<4, 4>> :> FALSE @@
+  <<4, 5>> :> FALSE @@
+  <<4, 6>> :> FALSE @@
+  <<4, 7>> :> FALSE @@
+  <<4, 8>> :> FALSE @@
+  <<4, 9>> :> FALSE @@
+  <<5, 0>> :> FALSE @@
+  <<5, 1>> :> FALSE @@
+  <<5, 2>> :> FALSE @@
+  <<5, 3>> :> FALSE @@
+  <<5, 4>> :> FALSE @@
+  <<5, 5>> :> FALSE @@
+  <<5, 6>> :> FALSE @@
+  <<5, 7>> :> FALSE @@
+  <<5, 8>> :> FALSE @@
+  <<5, 9>> :> FALSE @@
+  <<6, 0>> :> FALSE @@
+  <<6, 1>> :> FALSE @@
+  <<6, 2>> :> FALSE @@
+  <<6, 3>> :> FALSE @@
+  <<6, 4>> :> FALSE @@
+  <<6, 5>> :> FALSE @@
+  <<6, 6>> :> FALSE @@
+  <<6, 7>> :> FALSE @@
+  <<6, 8>> :> FALSE @@
+  <<6, 9>> :> FALSE @@
+  <<7, 0>> :> FALSE @@
+  <<7, 1>> :> FALSE @@
+  <<7, 2>> :> FALSE @@
+  <<7, 3>> :> FALSE @@
+  <<7, 4>> :> FALSE @@
+  <<7, 5>> :> FALSE @@
+  <<7, 6>> :> FALSE @@
+  <<7, 7>> :> FALSE @@
+  <<7, 8>> :> FALSE @@
+  <<7, 9>> :> FALSE @@
+  <<8, 0>> :> FALSE @@
+  <<8, 1>> :> FALSE @@
+  <<8, 2>> :> FALSE @@
+  <<8, 3>> :> FALSE @@
+  <<8, 4>> :> FALSE @@
+  <<8, 5>> :> FALSE @@
+  <<8, 6>> :> FALSE @@
+  <<8, 7>> :> FALSE @@
+  <<8, 8>> :> FALSE @@
+  <<8, 9>> :> FALSE @@
+  <<9, 0>> :> FALSE @@
+  <<9, 1>> :> FALSE @@
+  <<9, 2>> :> FALSE @@
+  <<9, 3>> :> FALSE @@
+  <<9, 4>> :> FALSE @@
+  <<9, 5>> :> FALSE @@
+  <<9, 6>> :> FALSE @@
+  <<9, 7>> :> FALSE @@
+  <<9, 8>> :> FALSE @@
+  <<9, 9>> :> FALSE )
+/\ stack = <<<<>>>>
+/\ i_ = 3
+/\ i = <<0>>
+/\ id = ( 0 :> 0 @@
+  1 :> 1 @@
+  2 :> 2 @@
+  3 :> 0 @@
+  4 :> 0 @@
+  5 :> 0 @@
+  6 :> 0 @@
+  7 :> 0 @@
+  8 :> 0 @@
+  9 :> 0 )
+/\ p = <<0>>
+/\ q = <<0>>
+/\ pc = <<"init">>
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+5: <Action line 98, col 9 to line 105, col 62 of module quickfind>
+/\ pid = <<0>>
+/\ qid = <<0>>
+/\ connected = ( <<0, 0>> :> FALSE @@
+  <<0, 1>> :> FALSE @@
+  <<0, 2>> :> FALSE @@
+  <<0, 3>> :> FALSE @@
+  <<0, 4>> :> FALSE @@
+  <<0, 5>> :> FALSE @@
+  <<0, 6>> :> FALSE @@
+  <<0, 7>> :> FALSE @@
+  <<0, 8>> :> FALSE @@
+  <<0, 9>> :> FALSE @@
+  <<1, 0>> :> FALSE @@
+  <<1, 1>> :> FALSE @@
+  <<1, 2>> :> FALSE @@
+  <<1, 3>> :> FALSE @@
+  <<1, 4>> :> FALSE @@
+  <<1, 5>> :> FALSE @@
+  <<1, 6>> :> FALSE @@
+  <<1, 7>> :> FALSE @@
+  <<1, 8>> :> FALSE @@
+  <<1, 9>> :> FALSE @@
+  <<2, 0>> :> FALSE @@
+  <<2, 1>> :> FALSE @@
+  <<2, 2>> :> FALSE @@
+  <<2, 3>> :> FALSE @@
+  <<2, 4>> :> FALSE @@
+  <<2, 5>> :> FALSE @@
+  <<2, 6>> :> FALSE @@
+  <<2, 7>> :> FALSE @@
+  <<2, 8>> :> FALSE @@
+  <<2, 9>> :> FALSE @@
+  <<3, 0>> :> FALSE @@
+  <<3, 1>> :> FALSE @@
+  <<3, 2>> :> FALSE @@
+  <<3, 3>> :> FALSE @@
+  <<3, 4>> :> FALSE @@
+  <<3, 5>> :> FALSE @@
+  <<3, 6>> :> FALSE @@
+  <<3, 7>> :> FALSE @@
+  <<3, 8>> :> FALSE @@
+  <<3, 9>> :> FALSE @@
+  <<4, 0>> :> FALSE @@
+  <<4, 1>> :> FALSE @@
+  <<4, 2>> :> FALSE @@
+  <<4, 3>> :> FALSE @@
+  <<4, 4>> :> FALSE @@
+  <<4, 5>> :> FALSE @@
+  <<4, 6>> :> FALSE @@
+  <<4, 7>> :> FALSE @@
+  <<4, 8>> :> FALSE @@
+  <<4, 9>> :> FALSE @@
+  <<5, 0>> :> FALSE @@
+  <<5, 1>> :> FALSE @@
+  <<5, 2>> :> FALSE @@
+  <<5, 3>> :> FALSE @@
+  <<5, 4>> :> FALSE @@
+  <<5, 5>> :> FALSE @@
+  <<5, 6>> :> FALSE @@
+  <<5, 7>> :> FALSE @@
+  <<5, 8>> :> FALSE @@
+  <<5, 9>> :> FALSE @@
+  <<6, 0>> :> FALSE @@
+  <<6, 1>> :> FALSE @@
+  <<6, 2>> :> FALSE @@
+  <<6, 3>> :> FALSE @@
+  <<6, 4>> :> FALSE @@
+  <<6, 5>> :> FALSE @@
+  <<6, 6>> :> FALSE @@
+  <<6, 7>> :> FALSE @@
+  <<6, 8>> :> FALSE @@
+  <<6, 9>> :> FALSE @@
+  <<7, 0>> :> FALSE @@
+  <<7, 1>> :> FALSE @@
+  <<7, 2>> :> FALSE @@
+  <<7, 3>> :> FALSE @@
+  <<7, 4>> :> FALSE @@
+  <<7, 5>> :> FALSE @@
+  <<7, 6>> :> FALSE @@
+  <<7, 7>> :> FALSE @@
+  <<7, 8>> :> FALSE @@
+  <<7, 9>> :> FALSE @@
+  <<8, 0>> :> FALSE @@
+  <<8, 1>> :> FALSE @@
+  <<8, 2>> :> FALSE @@
+  <<8, 3>> :> FALSE @@
+  <<8, 4>> :> FALSE @@
+  <<8, 5>> :> FALSE @@
+  <<8, 6>> :> FALSE @@
+  <<8, 7>> :> FALSE @@
+  <<8, 8>> :> FALSE @@
+  <<8, 9>> :> FALSE @@
+  <<9, 0>> :> FALSE @@
+  <<9, 1>> :> FALSE @@
+  <<9, 2>> :> FALSE @@
+  <<9, 3>> :> FALSE @@
+  <<9, 4>> :> FALSE @@
+  <<9, 5>> :> FALSE @@
+  <<9, 6>> :> FALSE @@
+  <<9, 7>> :> FALSE @@
+  <<9, 8>> :> FALSE @@
+  <<9, 9>> :> FALSE )
+/\ stack = <<<<>>>>
+/\ i_ = 4
+/\ i = <<0>>
+/\ id = ( 0 :> 0 @@
+  1 :> 1 @@
+  2 :> 2 @@
+  3 :> 3 @@
+  4 :> 0 @@
+  5 :> 0 @@
+  6 :> 0 @@
+  7 :> 0 @@
+  8 :> 0 @@
+  9 :> 0 )
+/\ p = <<0>>
+/\ q = <<0>>
+/\ pc = <<"init">>
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+6: <Action line 98, col 9 to line 105, col 62 of module quickfind>
+/\ pid = <<0>>
+/\ qid = <<0>>
+/\ connected = ( <<0, 0>> :> FALSE @@
+  <<0, 1>> :> FALSE @@
+  <<0, 2>> :> FALSE @@
+  <<0, 3>> :> FALSE @@
+  <<0, 4>> :> FALSE @@
+  <<0, 5>> :> FALSE @@
+  <<0, 6>> :> FALSE @@
+  <<0, 7>> :> FALSE @@
+  <<0, 8>> :> FALSE @@
+  <<0, 9>> :> FALSE @@
+  <<1, 0>> :> FALSE @@
+  <<1, 1>> :> FALSE @@
+  <<1, 2>> :> FALSE @@
+  <<1, 3>> :> FALSE @@
+  <<1, 4>> :> FALSE @@
+  <<1, 5>> :> FALSE @@
+  <<1, 6>> :> FALSE @@
+  <<1, 7>> :> FALSE @@
+  <<1, 8>> :> FALSE @@
+  <<1, 9>> :> FALSE @@
+  <<2, 0>> :> FALSE @@
+  <<2, 1>> :> FALSE @@
+  <<2, 2>> :> FALSE @@
+  <<2, 3>> :> FALSE @@
+  <<2, 4>> :> FALSE @@
+  <<2, 5>> :> FALSE @@
+  <<2, 6>> :> FALSE @@
+  <<2, 7>> :> FALSE @@
+  <<2, 8>> :> FALSE @@
+  <<2, 9>> :> FALSE @@
+  <<3, 0>> :> FALSE @@
+  <<3, 1>> :> FALSE @@
+  <<3, 2>> :> FALSE @@
+  <<3, 3>> :> FALSE @@
+  <<3, 4>> :> FALSE @@
+  <<3, 5>> :> FALSE @@
+  <<3, 6>> :> FALSE @@
+  <<3, 7>> :> FALSE @@
+  <<3, 8>> :> FALSE @@
+  <<3, 9>> :> FALSE @@
+  <<4, 0>> :> FALSE @@
+  <<4, 1>> :> FALSE @@
+  <<4, 2>> :> FALSE @@
+  <<4, 3>> :> FALSE @@
+  <<4, 4>> :> FALSE @@
+  <<4, 5>> :> FALSE @@
+  <<4, 6>> :> FALSE @@
+  <<4, 7>> :> FALSE @@
+  <<4, 8>> :> FALSE @@
+  <<4, 9>> :> FALSE @@
+  <<5, 0>> :> FALSE @@
+  <<5, 1>> :> FALSE @@
+  <<5, 2>> :> FALSE @@
+  <<5, 3>> :> FALSE @@
+  <<5, 4>> :> FALSE @@
+  <<5, 5>> :> FALSE @@
+  <<5, 6>> :> FALSE @@
+  <<5, 7>> :> FALSE @@
+  <<5, 8>> :> FALSE @@
+  <<5, 9>> :> FALSE @@
+  <<6, 0>> :> FALSE @@
+  <<6, 1>> :> FALSE @@
+  <<6, 2>> :> FALSE @@
+  <<6, 3>> :> FALSE @@
+  <<6, 4>> :> FALSE @@
+  <<6, 5>> :> FALSE @@
+  <<6, 6>> :> FALSE @@
+  <<6, 7>> :> FALSE @@
+  <<6, 8>> :> FALSE @@
+  <<6, 9>> :> FALSE @@
+  <<7, 0>> :> FALSE @@
+  <<7, 1>> :> FALSE @@
+  <<7, 2>> :> FALSE @@
+  <<7, 3>> :> FALSE @@
+  <<7, 4>> :> FALSE @@
+  <<7, 5>> :> FALSE @@
+  <<7, 6>> :> FALSE @@
+  <<7, 7>> :> FALSE @@
+  <<7, 8>> :> FALSE @@
+  <<7, 9>> :> FALSE @@
+  <<8, 0>> :> FALSE @@
+  <<8, 1>> :> FALSE @@
+  <<8, 2>> :> FALSE @@
+  <<8, 3>> :> FALSE @@
+  <<8, 4>> :> FALSE @@
+  <<8, 5>> :> FALSE @@
+  <<8, 6>> :> FALSE @@
+  <<8, 7>> :> FALSE @@
+  <<8, 8>> :> FALSE @@
+  <<8, 9>> :> FALSE @@
+  <<9, 0>> :> FALSE @@
+  <<9, 1>> :> FALSE @@
+  <<9, 2>> :> FALSE @@
+  <<9, 3>> :> FALSE @@
+  <<9, 4>> :> FALSE @@
+  <<9, 5>> :> FALSE @@
+  <<9, 6>> :> FALSE @@
+  <<9, 7>> :> FALSE @@
+  <<9, 8>> :> FALSE @@
+  <<9, 9>> :> FALSE )
+/\ stack = <<<<>>>>
+/\ i_ = 5
+/\ i = <<0>>
+/\ id = ( 0 :> 0 @@
+  1 :> 1 @@
+  2 :> 2 @@
+  3 :> 3 @@
+  4 :> 4 @@
+  5 :> 0 @@
+  6 :> 0 @@
+  7 :> 0 @@
+  8 :> 0 @@
+  9 :> 0 )
+/\ p = <<0>>
+/\ q = <<0>>
+/\ pc = <<"init">>
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+7: <Action line 98, col 9 to line 105, col 62 of module quickfind>
+/\ pid = <<0>>
+/\ qid = <<0>>
+/\ connected = ( <<0, 0>> :> FALSE @@
+  <<0, 1>> :> FALSE @@
+  <<0, 2>> :> FALSE @@
+  <<0, 3>> :> FALSE @@
+  <<0, 4>> :> FALSE @@
+  <<0, 5>> :> FALSE @@
+  <<0, 6>> :> FALSE @@
+  <<0, 7>> :> FALSE @@
+  <<0, 8>> :> FALSE @@
+  <<0, 9>> :> FALSE @@
+  <<1, 0>> :> FALSE @@
+  <<1, 1>> :> FALSE @@
+  <<1, 2>> :> FALSE @@
+  <<1, 3>> :> FALSE @@
+  <<1, 4>> :> FALSE @@
+  <<1, 5>> :> FALSE @@
+  <<1, 6>> :> FALSE @@
+  <<1, 7>> :> FALSE @@
+  <<1, 8>> :> FALSE @@
+  <<1, 9>> :> FALSE @@
+  <<2, 0>> :> FALSE @@
+  <<2, 1>> :> FALSE @@
+  <<2, 2>> :> FALSE @@
+  <<2, 3>> :> FALSE @@
+  <<2, 4>> :> FALSE @@
+  <<2, 5>> :> FALSE @@
+  <<2, 6>> :> FALSE @@
+  <<2, 7>> :> FALSE @@
+  <<2, 8>> :> FALSE @@
+  <<2, 9>> :> FALSE @@
+  <<3, 0>> :> FALSE @@
+  <<3, 1>> :> FALSE @@
+  <<3, 2>> :> FALSE @@
+  <<3, 3>> :> FALSE @@
+  <<3, 4>> :> FALSE @@
+  <<3, 5>> :> FALSE @@
+  <<3, 6>> :> FALSE @@
+  <<3, 7>> :> FALSE @@
+  <<3, 8>> :> FALSE @@
+  <<3, 9>> :> FALSE @@
+  <<4, 0>> :> FALSE @@
+  <<4, 1>> :> FALSE @@
+  <<4, 2>> :> FALSE @@
+  <<4, 3>> :> FALSE @@
+  <<4, 4>> :> FALSE @@
+  <<4, 5>> :> FALSE @@
+  <<4, 6>> :> FALSE @@
+  <<4, 7>> :> FALSE @@
+  <<4, 8>> :> FALSE @@
+  <<4, 9>> :> FALSE @@
+  <<5, 0>> :> FALSE @@
+  <<5, 1>> :> FALSE @@
+  <<5, 2>> :> FALSE @@
+  <<5, 3>> :> FALSE @@
+  <<5, 4>> :> FALSE @@
+  <<5, 5>> :> FALSE @@
+  <<5, 6>> :> FALSE @@
+  <<5, 7>> :> FALSE @@
+  <<5, 8>> :> FALSE @@
+  <<5, 9>> :> FALSE @@
+  <<6, 0>> :> FALSE @@
+  <<6, 1>> :> FALSE @@
+  <<6, 2>> :> FALSE @@
+  <<6, 3>> :> FALSE @@
+  <<6, 4>> :> FALSE @@
+  <<6, 5>> :> FALSE @@
+  <<6, 6>> :> FALSE @@
+  <<6, 7>> :> FALSE @@
+  <<6, 8>> :> FALSE @@
+  <<6, 9>> :> FALSE @@
+  <<7, 0>> :> FALSE @@
+  <<7, 1>> :> FALSE @@
+  <<7, 2>> :> FALSE @@
+  <<7, 3>> :> FALSE @@
+  <<7, 4>> :> FALSE @@
+  <<7, 5>> :> FALSE @@
+  <<7, 6>> :> FALSE @@
+  <<7, 7>> :> FALSE @@
+  <<7, 8>> :> FALSE @@
+  <<7, 9>> :> FALSE @@
+  <<8, 0>> :> FALSE @@
+  <<8, 1>> :> FALSE @@
+  <<8, 2>> :> FALSE @@
+  <<8, 3>> :> FALSE @@
+  <<8, 4>> :> FALSE @@
+  <<8, 5>> :> FALSE @@
+  <<8, 6>> :> FALSE @@
+  <<8, 7>> :> FALSE @@
+  <<8, 8>> :> FALSE @@
+  <<8, 9>> :> FALSE @@
+  <<9, 0>> :> FALSE @@
+  <<9, 1>> :> FALSE @@
+  <<9, 2>> :> FALSE @@
+  <<9, 3>> :> FALSE @@
+  <<9, 4>> :> FALSE @@
+  <<9, 5>> :> FALSE @@
+  <<9, 6>> :> FALSE @@
+  <<9, 7>> :> FALSE @@
+  <<9, 8>> :> FALSE @@
+  <<9, 9>> :> FALSE )
+/\ stack = <<<<>>>>
+/\ i_ = 6
+/\ i = <<0>>
+/\ id = ( 0 :> 0 @@
+  1 :> 1 @@
+  2 :> 2 @@
+  3 :> 3 @@
+  4 :> 4 @@
+  5 :> 5 @@
+  6 :> 0 @@
+  7 :> 0 @@
+  8 :> 0 @@
+  9 :> 0 )
+/\ p = <<0>>
+/\ q = <<0>>
+/\ pc = <<"init">>
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+8: <Action line 98, col 9 to line 105, col 62 of module quickfind>
+/\ pid = <<0>>
+/\ qid = <<0>>
+/\ connected = ( <<0, 0>> :> FALSE @@
+  <<0, 1>> :> FALSE @@
+  <<0, 2>> :> FALSE @@
+  <<0, 3>> :> FALSE @@
+  <<0, 4>> :> FALSE @@
+  <<0, 5>> :> FALSE @@
+  <<0, 6>> :> FALSE @@
+  <<0, 7>> :> FALSE @@
+  <<0, 8>> :> FALSE @@
+  <<0, 9>> :> FALSE @@
+  <<1, 0>> :> FALSE @@
+  <<1, 1>> :> FALSE @@
+  <<1, 2>> :> FALSE @@
+  <<1, 3>> :> FALSE @@
+  <<1, 4>> :> FALSE @@
+  <<1, 5>> :> FALSE @@
+  <<1, 6>> :> FALSE @@
+  <<1, 7>> :> FALSE @@
+  <<1, 8>> :> FALSE @@
+  <<1, 9>> :> FALSE @@
+  <<2, 0>> :> FALSE @@
+  <<2, 1>> :> FALSE @@
+  <<2, 2>> :> FALSE @@
+  <<2, 3>> :> FALSE @@
+  <<2, 4>> :> FALSE @@
+  <<2, 5>> :> FALSE @@
+  <<2, 6>> :> FALSE @@
+  <<2, 7>> :> FALSE @@
+  <<2, 8>> :> FALSE @@
+  <<2, 9>> :> FALSE @@
+  <<3, 0>> :> FALSE @@
+  <<3, 1>> :> FALSE @@
+  <<3, 2>> :> FALSE @@
+  <<3, 3>> :> FALSE @@
+  <<3, 4>> :> FALSE @@
+  <<3, 5>> :> FALSE @@
+  <<3, 6>> :> FALSE @@
+  <<3, 7>> :> FALSE @@
+  <<3, 8>> :> FALSE @@
+  <<3, 9>> :> FALSE @@
+  <<4, 0>> :> FALSE @@
+  <<4, 1>> :> FALSE @@
+  <<4, 2>> :> FALSE @@
+  <<4, 3>> :> FALSE @@
+  <<4, 4>> :> FALSE @@
+  <<4, 5>> :> FALSE @@
+  <<4, 6>> :> FALSE @@
+  <<4, 7>> :> FALSE @@
+  <<4, 8>> :> FALSE @@
+  <<4, 9>> :> FALSE @@
+  <<5, 0>> :> FALSE @@
+  <<5, 1>> :> FALSE @@
+  <<5, 2>> :> FALSE @@
+  <<5, 3>> :> FALSE @@
+  <<5, 4>> :> FALSE @@
+  <<5, 5>> :> FALSE @@
+  <<5, 6>> :> FALSE @@
+  <<5, 7>> :> FALSE @@
+  <<5, 8>> :> FALSE @@
+  <<5, 9>> :> FALSE @@
+  <<6, 0>> :> FALSE @@
+  <<6, 1>> :> FALSE @@
+  <<6, 2>> :> FALSE @@
+  <<6, 3>> :> FALSE @@
+  <<6, 4>> :> FALSE @@
+  <<6, 5>> :> FALSE @@
+  <<6, 6>> :> FALSE @@
+  <<6, 7>> :> FALSE @@
+  <<6, 8>> :> FALSE @@
+  <<6, 9>> :> FALSE @@
+  <<7, 0>> :> FALSE @@
+  <<7, 1>> :> FALSE @@
+  <<7, 2>> :> FALSE @@
+  <<7, 3>> :> FALSE @@
+  <<7, 4>> :> FALSE @@
+  <<7, 5>> :> FALSE @@
+  <<7, 6>> :> FALSE @@
+  <<7, 7>> :> FALSE @@
+  <<7, 8>> :> FALSE @@
+  <<7, 9>> :> FALSE @@
+  <<8, 0>> :> FALSE @@
+  <<8, 1>> :> FALSE @@
+  <<8, 2>> :> FALSE @@
+  <<8, 3>> :> FALSE @@
+  <<8, 4>> :> FALSE @@
+  <<8, 5>> :> FALSE @@
+  <<8, 6>> :> FALSE @@
+  <<8, 7>> :> FALSE @@
+  <<8, 8>> :> FALSE @@
+  <<8, 9>> :> FALSE @@
+  <<9, 0>> :> FALSE @@
+  <<9, 1>> :> FALSE @@
+  <<9, 2>> :> FALSE @@
+  <<9, 3>> :> FALSE @@
+  <<9, 4>> :> FALSE @@
+  <<9, 5>> :> FALSE @@
+  <<9, 6>> :> FALSE @@
+  <<9, 7>> :> FALSE @@
+  <<9, 8>> :> FALSE @@
+  <<9, 9>> :> FALSE )
+/\ stack = <<<<>>>>
+/\ i_ = 7
+/\ i = <<0>>
+/\ id = ( 0 :> 0 @@
+  1 :> 1 @@
+  2 :> 2 @@
+  3 :> 3 @@
+  4 :> 4 @@
+  5 :> 5 @@
+  6 :> 6 @@
+  7 :> 0 @@
+  8 :> 0 @@
+  9 :> 0 )
+/\ p = <<0>>
+/\ q = <<0>>
+/\ pc = <<"init">>
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+9: <Action line 98, col 9 to line 105, col 62 of module quickfind>
+/\ pid = <<0>>
+/\ qid = <<0>>
+/\ connected = ( <<0, 0>> :> FALSE @@
+  <<0, 1>> :> FALSE @@
+  <<0, 2>> :> FALSE @@
+  <<0, 3>> :> FALSE @@
+  <<0, 4>> :> FALSE @@
+  <<0, 5>> :> FALSE @@
+  <<0, 6>> :> FALSE @@
+  <<0, 7>> :> FALSE @@
+  <<0, 8>> :> FALSE @@
+  <<0, 9>> :> FALSE @@
+  <<1, 0>> :> FALSE @@
+  <<1, 1>> :> FALSE @@
+  <<1, 2>> :> FALSE @@
+  <<1, 3>> :> FALSE @@
+  <<1, 4>> :> FALSE @@
+  <<1, 5>> :> FALSE @@
+  <<1, 6>> :> FALSE @@
+  <<1, 7>> :> FALSE @@
+  <<1, 8>> :> FALSE @@
+  <<1, 9>> :> FALSE @@
+  <<2, 0>> :> FALSE @@
+  <<2, 1>> :> FALSE @@
+  <<2, 2>> :> FALSE @@
+  <<2, 3>> :> FALSE @@
+  <<2, 4>> :> FALSE @@
+  <<2, 5>> :> FALSE @@
+  <<2, 6>> :> FALSE @@
+  <<2, 7>> :> FALSE @@
+  <<2, 8>> :> FALSE @@
+  <<2, 9>> :> FALSE @@
+  <<3, 0>> :> FALSE @@
+  <<3, 1>> :> FALSE @@
+  <<3, 2>> :> FALSE @@
+  <<3, 3>> :> FALSE @@
+  <<3, 4>> :> FALSE @@
+  <<3, 5>> :> FALSE @@
+  <<3, 6>> :> FALSE @@
+  <<3, 7>> :> FALSE @@
+  <<3, 8>> :> FALSE @@
+  <<3, 9>> :> FALSE @@
+  <<4, 0>> :> FALSE @@
+  <<4, 1>> :> FALSE @@
+  <<4, 2>> :> FALSE @@
+  <<4, 3>> :> FALSE @@
+  <<4, 4>> :> FALSE @@
+  <<4, 5>> :> FALSE @@
+  <<4, 6>> :> FALSE @@
+  <<4, 7>> :> FALSE @@
+  <<4, 8>> :> FALSE @@
+  <<4, 9>> :> FALSE @@
+  <<5, 0>> :> FALSE @@
+  <<5, 1>> :> FALSE @@
+  <<5, 2>> :> FALSE @@
+  <<5, 3>> :> FALSE @@
+  <<5, 4>> :> FALSE @@
+  <<5, 5>> :> FALSE @@
+  <<5, 6>> :> FALSE @@
+  <<5, 7>> :> FALSE @@
+  <<5, 8>> :> FALSE @@
+  <<5, 9>> :> FALSE @@
+  <<6, 0>> :> FALSE @@
+  <<6, 1>> :> FALSE @@
+  <<6, 2>> :> FALSE @@
+  <<6, 3>> :> FALSE @@
+  <<6, 4>> :> FALSE @@
+  <<6, 5>> :> FALSE @@
+  <<6, 6>> :> FALSE @@
+  <<6, 7>> :> FALSE @@
+  <<6, 8>> :> FALSE @@
+  <<6, 9>> :> FALSE @@
+  <<7, 0>> :> FALSE @@
+  <<7, 1>> :> FALSE @@
+  <<7, 2>> :> FALSE @@
+  <<7, 3>> :> FALSE @@
+  <<7, 4>> :> FALSE @@
+  <<7, 5>> :> FALSE @@
+  <<7, 6>> :> FALSE @@
+  <<7, 7>> :> FALSE @@
+  <<7, 8>> :> FALSE @@
+  <<7, 9>> :> FALSE @@
+  <<8, 0>> :> FALSE @@
+  <<8, 1>> :> FALSE @@
+  <<8, 2>> :> FALSE @@
+  <<8, 3>> :> FALSE @@
+  <<8, 4>> :> FALSE @@
+  <<8, 5>> :> FALSE @@
+  <<8, 6>> :> FALSE @@
+  <<8, 7>> :> FALSE @@
+  <<8, 8>> :> FALSE @@
+  <<8, 9>> :> FALSE @@
+  <<9, 0>> :> FALSE @@
+  <<9, 1>> :> FALSE @@
+  <<9, 2>> :> FALSE @@
+  <<9, 3>> :> FALSE @@
+  <<9, 4>> :> FALSE @@
+  <<9, 5>> :> FALSE @@
+  <<9, 6>> :> FALSE @@
+  <<9, 7>> :> FALSE @@
+  <<9, 8>> :> FALSE @@
+  <<9, 9>> :> FALSE )
+/\ stack = <<<<>>>>
+/\ i_ = 8
+/\ i = <<0>>
+/\ id = ( 0 :> 0 @@
+  1 :> 1 @@
+  2 :> 2 @@
+  3 :> 3 @@
+  4 :> 4 @@
+  5 :> 5 @@
+  6 :> 6 @@
+  7 :> 7 @@
+  8 :> 0 @@
+  9 :> 0 )
+/\ p = <<0>>
+/\ q = <<0>>
+/\ pc = <<"init">>
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+10: <Action line 98, col 9 to line 105, col 62 of module quickfind>
+/\ pid = <<0>>
+/\ qid = <<0>>
+/\ connected = ( <<0, 0>> :> FALSE @@
+  <<0, 1>> :> FALSE @@
+  <<0, 2>> :> FALSE @@
+  <<0, 3>> :> FALSE @@
+  <<0, 4>> :> FALSE @@
+  <<0, 5>> :> FALSE @@
+  <<0, 6>> :> FALSE @@
+  <<0, 7>> :> FALSE @@
+  <<0, 8>> :> FALSE @@
+  <<0, 9>> :> FALSE @@
+  <<1, 0>> :> FALSE @@
+  <<1, 1>> :> FALSE @@
+  <<1, 2>> :> FALSE @@
+  <<1, 3>> :> FALSE @@
+  <<1, 4>> :> FALSE @@
+  <<1, 5>> :> FALSE @@
+  <<1, 6>> :> FALSE @@
+  <<1, 7>> :> FALSE @@
+  <<1, 8>> :> FALSE @@
+  <<1, 9>> :> FALSE @@
+  <<2, 0>> :> FALSE @@
+  <<2, 1>> :> FALSE @@
+  <<2, 2>> :> FALSE @@
+  <<2, 3>> :> FALSE @@
+  <<2, 4>> :> FALSE @@
+  <<2, 5>> :> FALSE @@
+  <<2, 6>> :> FALSE @@
+  <<2, 7>> :> FALSE @@
+  <<2, 8>> :> FALSE @@
+  <<2, 9>> :> FALSE @@
+  <<3, 0>> :> FALSE @@
+  <<3, 1>> :> FALSE @@
+  <<3, 2>> :> FALSE @@
+  <<3, 3>> :> FALSE @@
+  <<3, 4>> :> FALSE @@
+  <<3, 5>> :> FALSE @@
+  <<3, 6>> :> FALSE @@
+  <<3, 7>> :> FALSE @@
+  <<3, 8>> :> FALSE @@
+  <<3, 9>> :> FALSE @@
+  <<4, 0>> :> FALSE @@
+  <<4, 1>> :> FALSE @@
+  <<4, 2>> :> FALSE @@
+  <<4, 3>> :> FALSE @@
+  <<4, 4>> :> FALSE @@
+  <<4, 5>> :> FALSE @@
+  <<4, 6>> :> FALSE @@
+  <<4, 7>> :> FALSE @@
+  <<4, 8>> :> FALSE @@
+  <<4, 9>> :> FALSE @@
+  <<5, 0>> :> FALSE @@
+  <<5, 1>> :> FALSE @@
+  <<5, 2>> :> FALSE @@
+  <<5, 3>> :> FALSE @@
+  <<5, 4>> :> FALSE @@
+  <<5, 5>> :> FALSE @@
+  <<5, 6>> :> FALSE @@
+  <<5, 7>> :> FALSE @@
+  <<5, 8>> :> FALSE @@
+  <<5, 9>> :> FALSE @@
+  <<6, 0>> :> FALSE @@
+  <<6, 1>> :> FALSE @@
+  <<6, 2>> :> FALSE @@
+  <<6, 3>> :> FALSE @@
+  <<6, 4>> :> FALSE @@
+  <<6, 5>> :> FALSE @@
+  <<6, 6>> :> FALSE @@
+  <<6, 7>> :> FALSE @@
+  <<6, 8>> :> FALSE @@
+  <<6, 9>> :> FALSE @@
+  <<7, 0>> :> FALSE @@
+  <<7, 1>> :> FALSE @@
+  <<7, 2>> :> FALSE @@
+  <<7, 3>> :> FALSE @@
+  <<7, 4>> :> FALSE @@
+  <<7, 5>> :> FALSE @@
+  <<7, 6>> :> FALSE @@
+  <<7, 7>> :> FALSE @@
+  <<7, 8>> :> FALSE @@
+  <<7, 9>> :> FALSE @@
+  <<8, 0>> :> FALSE @@
+  <<8, 1>> :> FALSE @@
+  <<8, 2>> :> FALSE @@
+  <<8, 3>> :> FALSE @@
+  <<8, 4>> :> FALSE @@
+  <<8, 5>> :> FALSE @@
+  <<8, 6>> :> FALSE @@
+  <<8, 7>> :> FALSE @@
+  <<8, 8>> :> FALSE @@
+  <<8, 9>> :> FALSE @@
+  <<9, 0>> :> FALSE @@
+  <<9, 1>> :> FALSE @@
+  <<9, 2>> :> FALSE @@
+  <<9, 3>> :> FALSE @@
+  <<9, 4>> :> FALSE @@
+  <<9, 5>> :> FALSE @@
+  <<9, 6>> :> FALSE @@
+  <<9, 7>> :> FALSE @@
+  <<9, 8>> :> FALSE @@
+  <<9, 9>> :> FALSE )
+/\ stack = <<<<>>>>
+/\ i_ = 9
+/\ i = <<0>>
+/\ id = ( 0 :> 0 @@
+  1 :> 1 @@
+  2 :> 2 @@
+  3 :> 3 @@
+  4 :> 4 @@
+  5 :> 5 @@
+  6 :> 6 @@
+  7 :> 7 @@
+  8 :> 8 @@
+  9 :> 0 )
+/\ p = <<0>>
+/\ q = <<0>>
+/\ pc = <<"init">>
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+11: <Action line 98, col 9 to line 105, col 62 of module quickfind>
+/\ pid = <<0>>
+/\ qid = <<0>>
+/\ connected = ( <<0, 0>> :> FALSE @@
+  <<0, 1>> :> FALSE @@
+  <<0, 2>> :> FALSE @@
+  <<0, 3>> :> FALSE @@
+  <<0, 4>> :> FALSE @@
+  <<0, 5>> :> FALSE @@
+  <<0, 6>> :> FALSE @@
+  <<0, 7>> :> FALSE @@
+  <<0, 8>> :> FALSE @@
+  <<0, 9>> :> FALSE @@
+  <<1, 0>> :> FALSE @@
+  <<1, 1>> :> FALSE @@
+  <<1, 2>> :> FALSE @@
+  <<1, 3>> :> FALSE @@
+  <<1, 4>> :> FALSE @@
+  <<1, 5>> :> FALSE @@
+  <<1, 6>> :> FALSE @@
+  <<1, 7>> :> FALSE @@
+  <<1, 8>> :> FALSE @@
+  <<1, 9>> :> FALSE @@
+  <<2, 0>> :> FALSE @@
+  <<2, 1>> :> FALSE @@
+  <<2, 2>> :> FALSE @@
+  <<2, 3>> :> FALSE @@
+  <<2, 4>> :> FALSE @@
+  <<2, 5>> :> FALSE @@
+  <<2, 6>> :> FALSE @@
+  <<2, 7>> :> FALSE @@
+  <<2, 8>> :> FALSE @@
+  <<2, 9>> :> FALSE @@
+  <<3, 0>> :> FALSE @@
+  <<3, 1>> :> FALSE @@
+  <<3, 2>> :> FALSE @@
+  <<3, 3>> :> FALSE @@
+  <<3, 4>> :> FALSE @@
+  <<3, 5>> :> FALSE @@
+  <<3, 6>> :> FALSE @@
+  <<3, 7>> :> FALSE @@
+  <<3, 8>> :> FALSE @@
+  <<3, 9>> :> FALSE @@
+  <<4, 0>> :> FALSE @@
+  <<4, 1>> :> FALSE @@
+  <<4, 2>> :> FALSE @@
+  <<4, 3>> :> FALSE @@
+  <<4, 4>> :> FALSE @@
+  <<4, 5>> :> FALSE @@
+  <<4, 6>> :> FALSE @@
+  <<4, 7>> :> FALSE @@
+  <<4, 8>> :> FALSE @@
+  <<4, 9>> :> FALSE @@
+  <<5, 0>> :> FALSE @@
+  <<5, 1>> :> FALSE @@
+  <<5, 2>> :> FALSE @@
+  <<5, 3>> :> FALSE @@
+  <<5, 4>> :> FALSE @@
+  <<5, 5>> :> FALSE @@
+  <<5, 6>> :> FALSE @@
+  <<5, 7>> :> FALSE @@
+  <<5, 8>> :> FALSE @@
+  <<5, 9>> :> FALSE @@
+  <<6, 0>> :> FALSE @@
+  <<6, 1>> :> FALSE @@
+  <<6, 2>> :> FALSE @@
+  <<6, 3>> :> FALSE @@
+  <<6, 4>> :> FALSE @@
+  <<6, 5>> :> FALSE @@
+  <<6, 6>> :> FALSE @@
+  <<6, 7>> :> FALSE @@
+  <<6, 8>> :> FALSE @@
+  <<6, 9>> :> FALSE @@
+  <<7, 0>> :> FALSE @@
+  <<7, 1>> :> FALSE @@
+  <<7, 2>> :> FALSE @@
+  <<7, 3>> :> FALSE @@
+  <<7, 4>> :> FALSE @@
+  <<7, 5>> :> FALSE @@
+  <<7, 6>> :> FALSE @@
+  <<7, 7>> :> FALSE @@
+  <<7, 8>> :> FALSE @@
+  <<7, 9>> :> FALSE @@
+  <<8, 0>> :> FALSE @@
+  <<8, 1>> :> FALSE @@
+  <<8, 2>> :> FALSE @@
+  <<8, 3>> :> FALSE @@
+  <<8, 4>> :> FALSE @@
+  <<8, 5>> :> FALSE @@
+  <<8, 6>> :> FALSE @@
+  <<8, 7>> :> FALSE @@
+  <<8, 8>> :> FALSE @@
+  <<8, 9>> :> FALSE @@
+  <<9, 0>> :> FALSE @@
+  <<9, 1>> :> FALSE @@
+  <<9, 2>> :> FALSE @@
+  <<9, 3>> :> FALSE @@
+  <<9, 4>> :> FALSE @@
+  <<9, 5>> :> FALSE @@
+  <<9, 6>> :> FALSE @@
+  <<9, 7>> :> FALSE @@
+  <<9, 8>> :> FALSE @@
+  <<9, 9>> :> FALSE )
+/\ stack = <<<<>>>>
+/\ i_ = 10
+/\ i = <<0>>
+/\ id = ( 0 :> 0 @@
+  1 :> 1 @@
+  2 :> 2 @@
+  3 :> 3 @@
+  4 :> 4 @@
+  5 :> 5 @@
+  6 :> 6 @@
+  7 :> 7 @@
+  8 :> 8 @@
+  9 :> 9 )
+/\ p = <<0>>
+/\ q = <<0>>
+/\ pc = <<"init">>
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+12: <Action line 98, col 9 to line 105, col 62 of module quickfind>
+/\ pid = <<0>>
+/\ qid = <<0>>
+/\ connected = ( <<0, 0>> :> FALSE @@
+  <<0, 1>> :> FALSE @@
+  <<0, 2>> :> FALSE @@
+  <<0, 3>> :> FALSE @@
+  <<0, 4>> :> FALSE @@
+  <<0, 5>> :> FALSE @@
+  <<0, 6>> :> FALSE @@
+  <<0, 7>> :> FALSE @@
+  <<0, 8>> :> FALSE @@
+  <<0, 9>> :> FALSE @@
+  <<1, 0>> :> FALSE @@
+  <<1, 1>> :> FALSE @@
+  <<1, 2>> :> FALSE @@
+  <<1, 3>> :> FALSE @@
+  <<1, 4>> :> FALSE @@
+  <<1, 5>> :> FALSE @@
+  <<1, 6>> :> FALSE @@
+  <<1, 7>> :> FALSE @@
+  <<1, 8>> :> FALSE @@
+  <<1, 9>> :> FALSE @@
+  <<2, 0>> :> FALSE @@
+  <<2, 1>> :> FALSE @@
+  <<2, 2>> :> FALSE @@
+  <<2, 3>> :> FALSE @@
+  <<2, 4>> :> FALSE @@
+  <<2, 5>> :> FALSE @@
+  <<2, 6>> :> FALSE @@
+  <<2, 7>> :> FALSE @@
+  <<2, 8>> :> FALSE @@
+  <<2, 9>> :> FALSE @@
+  <<3, 0>> :> FALSE @@
+  <<3, 1>> :> FALSE @@
+  <<3, 2>> :> FALSE @@
+  <<3, 3>> :> FALSE @@
+  <<3, 4>> :> FALSE @@
+  <<3, 5>> :> FALSE @@
+  <<3, 6>> :> FALSE @@
+  <<3, 7>> :> FALSE @@
+  <<3, 8>> :> FALSE @@
+  <<3, 9>> :> FALSE @@
+  <<4, 0>> :> FALSE @@
+  <<4, 1>> :> FALSE @@
+  <<4, 2>> :> FALSE @@
+  <<4, 3>> :> FALSE @@
+  <<4, 4>> :> FALSE @@
+  <<4, 5>> :> FALSE @@
+  <<4, 6>> :> FALSE @@
+  <<4, 7>> :> FALSE @@
+  <<4, 8>> :> FALSE @@
+  <<4, 9>> :> FALSE @@
+  <<5, 0>> :> FALSE @@
+  <<5, 1>> :> FALSE @@
+  <<5, 2>> :> FALSE @@
+  <<5, 3>> :> FALSE @@
+  <<5, 4>> :> FALSE @@
+  <<5, 5>> :> FALSE @@
+  <<5, 6>> :> FALSE @@
+  <<5, 7>> :> FALSE @@
+  <<5, 8>> :> FALSE @@
+  <<5, 9>> :> FALSE @@
+  <<6, 0>> :> FALSE @@
+  <<6, 1>> :> FALSE @@
+  <<6, 2>> :> FALSE @@
+  <<6, 3>> :> FALSE @@
+  <<6, 4>> :> FALSE @@
+  <<6, 5>> :> FALSE @@
+  <<6, 6>> :> FALSE @@
+  <<6, 7>> :> FALSE @@
+  <<6, 8>> :> FALSE @@
+  <<6, 9>> :> FALSE @@
+  <<7, 0>> :> FALSE @@
+  <<7, 1>> :> FALSE @@
+  <<7, 2>> :> FALSE @@
+  <<7, 3>> :> FALSE @@
+  <<7, 4>> :> FALSE @@
+  <<7, 5>> :> FALSE @@
+  <<7, 6>> :> FALSE @@
+  <<7, 7>> :> FALSE @@
+  <<7, 8>> :> FALSE @@
+  <<7, 9>> :> FALSE @@
+  <<8, 0>> :> FALSE @@
+  <<8, 1>> :> FALSE @@
+  <<8, 2>> :> FALSE @@
+  <<8, 3>> :> FALSE @@
+  <<8, 4>> :> FALSE @@
+  <<8, 5>> :> FALSE @@
+  <<8, 6>> :> FALSE @@
+  <<8, 7>> :> FALSE @@
+  <<8, 8>> :> FALSE @@
+  <<8, 9>> :> FALSE @@
+  <<9, 0>> :> FALSE @@
+  <<9, 1>> :> FALSE @@
+  <<9, 2>> :> FALSE @@
+  <<9, 3>> :> FALSE @@
+  <<9, 4>> :> FALSE @@
+  <<9, 5>> :> FALSE @@
+  <<9, 6>> :> FALSE @@
+  <<9, 7>> :> FALSE @@
+  <<9, 8>> :> FALSE @@
+  <<9, 9>> :> FALSE )
+/\ stack = <<<<>>>>
+/\ i_ = 10
+/\ i = <<0>>
+/\ id = ( 0 :> 0 @@
+  1 :> 1 @@
+  2 :> 2 @@
+  3 :> 3 @@
+  4 :> 4 @@
+  5 :> 5 @@
+  6 :> 6 @@
+  7 :> 7 @@
+  8 :> 8 @@
+  9 :> 9 )
+/\ p = <<0>>
+/\ q = <<0>>
+/\ pc = <<"union00">>
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+13: <Action line 107, col 12 to line 122, col 47 of module quickfind>
+/\ pid = <<0>>
+/\ qid = <<0>>
+/\ connected = ( <<0, 0>> :> FALSE @@
+  <<0, 1>> :> FALSE @@
+  <<0, 2>> :> FALSE @@
+  <<0, 3>> :> FALSE @@
+  <<0, 4>> :> FALSE @@
+  <<0, 5>> :> FALSE @@
+  <<0, 6>> :> FALSE @@
+  <<0, 7>> :> FALSE @@
+  <<0, 8>> :> FALSE @@
+  <<0, 9>> :> FALSE @@
+  <<1, 0>> :> FALSE @@
+  <<1, 1>> :> FALSE @@
+  <<1, 2>> :> FALSE @@
+  <<1, 3>> :> FALSE @@
+  <<1, 4>> :> FALSE @@
+  <<1, 5>> :> FALSE @@
+  <<1, 6>> :> FALSE @@
+  <<1, 7>> :> FALSE @@
+  <<1, 8>> :> FALSE @@
+  <<1, 9>> :> FALSE @@
+  <<2, 0>> :> FALSE @@
+  <<2, 1>> :> FALSE @@
+  <<2, 2>> :> FALSE @@
+  <<2, 3>> :> FALSE @@
+  <<2, 4>> :> FALSE @@
+  <<2, 5>> :> FALSE @@
+  <<2, 6>> :> FALSE @@
+  <<2, 7>> :> FALSE @@
+  <<2, 8>> :> FALSE @@
+  <<2, 9>> :> FALSE @@
+  <<3, 0>> :> FALSE @@
+  <<3, 1>> :> FALSE @@
+  <<3, 2>> :> FALSE @@
+  <<3, 3>> :> FALSE @@
+  <<3, 4>> :> FALSE @@
+  <<3, 5>> :> FALSE @@
+  <<3, 6>> :> FALSE @@
+  <<3, 7>> :> FALSE @@
+  <<3, 8>> :> FALSE @@
+  <<3, 9>> :> FALSE @@
+  <<4, 0>> :> FALSE @@
+  <<4, 1>> :> FALSE @@
+  <<4, 2>> :> FALSE @@
+  <<4, 3>> :> FALSE @@
+  <<4, 4>> :> FALSE @@
+  <<4, 5>> :> FALSE @@
+  <<4, 6>> :> FALSE @@
+  <<4, 7>> :> FALSE @@
+  <<4, 8>> :> FALSE @@
+  <<4, 9>> :> FALSE @@
+  <<5, 0>> :> FALSE @@
+  <<5, 1>> :> FALSE @@
+  <<5, 2>> :> FALSE @@
+  <<5, 3>> :> FALSE @@
+  <<5, 4>> :> FALSE @@
+  <<5, 5>> :> FALSE @@
+  <<5, 6>> :> FALSE @@
+  <<5, 7>> :> FALSE @@
+  <<5, 8>> :> FALSE @@
+  <<5, 9>> :> FALSE @@
+  <<6, 0>> :> FALSE @@
+  <<6, 1>> :> FALSE @@
+  <<6, 2>> :> FALSE @@
+  <<6, 3>> :> FALSE @@
+  <<6, 4>> :> FALSE @@
+  <<6, 5>> :> FALSE @@
+  <<6, 6>> :> FALSE @@
+  <<6, 7>> :> FALSE @@
+  <<6, 8>> :> FALSE @@
+  <<6, 9>> :> FALSE @@
+  <<7, 0>> :> FALSE @@
+  <<7, 1>> :> FALSE @@
+  <<7, 2>> :> FALSE @@
+  <<7, 3>> :> FALSE @@
+  <<7, 4>> :> FALSE @@
+  <<7, 5>> :> FALSE @@
+  <<7, 6>> :> FALSE @@
+  <<7, 7>> :> FALSE @@
+  <<7, 8>> :> FALSE @@
+  <<7, 9>> :> FALSE @@
+  <<8, 0>> :> FALSE @@
+  <<8, 1>> :> FALSE @@
+  <<8, 2>> :> FALSE @@
+  <<8, 3>> :> FALSE @@
+  <<8, 4>> :> FALSE @@
+  <<8, 5>> :> FALSE @@
+  <<8, 6>> :> FALSE @@
+  <<8, 7>> :> FALSE @@
+  <<8, 8>> :> FALSE @@
+  <<8, 9>> :> FALSE @@
+  <<9, 0>> :> FALSE @@
+  <<9, 1>> :> FALSE @@
+  <<9, 2>> :> FALSE @@
+  <<9, 3>> :> FALSE @@
+  <<9, 4>> :> FALSE @@
+  <<9, 5>> :> FALSE @@
+  <<9, 6>> :> FALSE @@
+  <<9, 7>> :> FALSE @@
+  <<9, 8>> :> FALSE @@
+  <<9, 9>> :> FALSE )
+/\ stack = << << [ pc |-> "union01",
+        p |-> 0,
+        q |-> 0,
+        i |-> 0,
+        pid |-> 0,
+        qid |-> 0,
+        procedure |-> "union" ] >> >>
+/\ i_ = 10
+/\ i = <<0>>
+/\ id = ( 0 :> 0 @@
+  1 :> 1 @@
+  2 :> 2 @@
+  3 :> 3 @@
+  4 :> 4 @@
+  5 :> 5 @@
+  6 :> 6 @@
+  7 :> 7 @@
+  8 :> 8 @@
+  9 :> 9 )
+/\ p = <<0>>
+/\ q = <<5>>
+/\ pc = <<"union1">>
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+14: <Action line 66, col 17 to line 69, col 73 of module quickfind>
+/\ pid = <<0>>
+/\ qid = <<0>>
+/\ connected = ( <<0, 0>> :> FALSE @@
+  <<0, 1>> :> FALSE @@
+  <<0, 2>> :> FALSE @@
+  <<0, 3>> :> FALSE @@
+  <<0, 4>> :> FALSE @@
+  <<0, 5>> :> FALSE @@
+  <<0, 6>> :> FALSE @@
+  <<0, 7>> :> FALSE @@
+  <<0, 8>> :> FALSE @@
+  <<0, 9>> :> FALSE @@
+  <<1, 0>> :> FALSE @@
+  <<1, 1>> :> FALSE @@
+  <<1, 2>> :> FALSE @@
+  <<1, 3>> :> FALSE @@
+  <<1, 4>> :> FALSE @@
+  <<1, 5>> :> FALSE @@
+  <<1, 6>> :> FALSE @@
+  <<1, 7>> :> FALSE @@
+  <<1, 8>> :> FALSE @@
+  <<1, 9>> :> FALSE @@
+  <<2, 0>> :> FALSE @@
+  <<2, 1>> :> FALSE @@
+  <<2, 2>> :> FALSE @@
+  <<2, 3>> :> FALSE @@
+  <<2, 4>> :> FALSE @@
+  <<2, 5>> :> FALSE @@
+  <<2, 6>> :> FALSE @@
+  <<2, 7>> :> FALSE @@
+  <<2, 8>> :> FALSE @@
+  <<2, 9>> :> FALSE @@
+  <<3, 0>> :> FALSE @@
+  <<3, 1>> :> FALSE @@
+  <<3, 2>> :> FALSE @@
+  <<3, 3>> :> FALSE @@
+  <<3, 4>> :> FALSE @@
+  <<3, 5>> :> FALSE @@
+  <<3, 6>> :> FALSE @@
+  <<3, 7>> :> FALSE @@
+  <<3, 8>> :> FALSE @@
+  <<3, 9>> :> FALSE @@
+  <<4, 0>> :> FALSE @@
+  <<4, 1>> :> FALSE @@
+  <<4, 2>> :> FALSE @@
+  <<4, 3>> :> FALSE @@
+  <<4, 4>> :> FALSE @@
+  <<4, 5>> :> FALSE @@
+  <<4, 6>> :> FALSE @@
+  <<4, 7>> :> FALSE @@
+  <<4, 8>> :> FALSE @@
+  <<4, 9>> :> FALSE @@
+  <<5, 0>> :> FALSE @@
+  <<5, 1>> :> FALSE @@
+  <<5, 2>> :> FALSE @@
+  <<5, 3>> :> FALSE @@
+  <<5, 4>> :> FALSE @@
+  <<5, 5>> :> FALSE @@
+  <<5, 6>> :> FALSE @@
+  <<5, 7>> :> FALSE @@
+  <<5, 8>> :> FALSE @@
+  <<5, 9>> :> FALSE @@
+  <<6, 0>> :> FALSE @@
+  <<6, 1>> :> FALSE @@
+  <<6, 2>> :> FALSE @@
+  <<6, 3>> :> FALSE @@
+  <<6, 4>> :> FALSE @@
+  <<6, 5>> :> FALSE @@
+  <<6, 6>> :> FALSE @@
+  <<6, 7>> :> FALSE @@
+  <<6, 8>> :> FALSE @@
+  <<6, 9>> :> FALSE @@
+  <<7, 0>> :> FALSE @@
+  <<7, 1>> :> FALSE @@
+  <<7, 2>> :> FALSE @@
+  <<7, 3>> :> FALSE @@
+  <<7, 4>> :> FALSE @@
+  <<7, 5>> :> FALSE @@
+  <<7, 6>> :> FALSE @@
+  <<7, 7>> :> FALSE @@
+  <<7, 8>> :> FALSE @@
+  <<7, 9>> :> FALSE @@
+  <<8, 0>> :> FALSE @@
+  <<8, 1>> :> FALSE @@
+  <<8, 2>> :> FALSE @@
+  <<8, 3>> :> FALSE @@
+  <<8, 4>> :> FALSE @@
+  <<8, 5>> :> FALSE @@
+  <<8, 6>> :> FALSE @@
+  <<8, 7>> :> FALSE @@
+  <<8, 8>> :> FALSE @@
+  <<8, 9>> :> FALSE @@
+  <<9, 0>> :> FALSE @@
+  <<9, 1>> :> FALSE @@
+  <<9, 2>> :> FALSE @@
+  <<9, 3>> :> FALSE @@
+  <<9, 4>> :> FALSE @@
+  <<9, 5>> :> FALSE @@
+  <<9, 6>> :> FALSE @@
+  <<9, 7>> :> FALSE @@
+  <<9, 8>> :> FALSE @@
+  <<9, 9>> :> FALSE )
+/\ stack = << << [ pc |-> "union01",
+        p |-> 0,
+        q |-> 0,
+        i |-> 0,
+        pid |-> 0,
+        qid |-> 0,
+        procedure |-> "union" ] >> >>
+/\ i_ = 10
+/\ i = <<0>>
+/\ id = ( 0 :> 0 @@
+  1 :> 1 @@
+  2 :> 2 @@
+  3 :> 3 @@
+  4 :> 4 @@
+  5 :> 5 @@
+  6 :> 6 @@
+  7 :> 7 @@
+  8 :> 8 @@
+  9 :> 9 )
+/\ p = <<0>>
+/\ q = <<5>>
+/\ pc = <<"union2">>
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2217:4 @!@!@
+15: <Action line 71, col 17 to line 74, col 73 of module quickfind>
+/\ pid = <<0>>
+/\ qid = <<5>>
+/\ connected = ( <<0, 0>> :> FALSE @@
+  <<0, 1>> :> FALSE @@
+  <<0, 2>> :> FALSE @@
+  <<0, 3>> :> FALSE @@
+  <<0, 4>> :> FALSE @@
+  <<0, 5>> :> FALSE @@
+  <<0, 6>> :> FALSE @@
+  <<0, 7>> :> FALSE @@
+  <<0, 8>> :> FALSE @@
+  <<0, 9>> :> FALSE @@
+  <<1, 0>> :> FALSE @@
+  <<1, 1>> :> FALSE @@
+  <<1, 2>> :> FALSE @@
+  <<1, 3>> :> FALSE @@
+  <<1, 4>> :> FALSE @@
+  <<1, 5>> :> FALSE @@
+  <<1, 6>> :> FALSE @@
+  <<1, 7>> :> FALSE @@
+  <<1, 8>> :> FALSE @@
+  <<1, 9>> :> FALSE @@
+  <<2, 0>> :> FALSE @@
+  <<2, 1>> :> FALSE @@
+  <<2, 2>> :> FALSE @@
+  <<2, 3>> :> FALSE @@
+  <<2, 4>> :> FALSE @@
+  <<2, 5>> :> FALSE @@
+  <<2, 6>> :> FALSE @@
+  <<2, 7>> :> FALSE @@
+  <<2, 8>> :> FALSE @@
+  <<2, 9>> :> FALSE @@
+  <<3, 0>> :> FALSE @@
+  <<3, 1>> :> FALSE @@
+  <<3, 2>> :> FALSE @@
+  <<3, 3>> :> FALSE @@
+  <<3, 4>> :> FALSE @@
+  <<3, 5>> :> FALSE @@
+  <<3, 6>> :> FALSE @@
+  <<3, 7>> :> FALSE @@
+  <<3, 8>> :> FALSE @@
+  <<3, 9>> :> FALSE @@
+  <<4, 0>> :> FALSE @@
+  <<4, 1>> :> FALSE @@
+  <<4, 2>> :> FALSE @@
+  <<4, 3>> :> FALSE @@
+  <<4, 4>> :> FALSE @@
+  <<4, 5>> :> FALSE @@
+  <<4, 6>> :> FALSE @@
+  <<4, 7>> :> FALSE @@
+  <<4, 8>> :> FALSE @@
+  <<4, 9>> :> FALSE @@
+  <<5, 0>> :> FALSE @@
+  <<5, 1>> :> FALSE @@
+  <<5, 2>> :> FALSE @@
+  <<5, 3>> :> FALSE @@
+  <<5, 4>> :> FALSE @@
+  <<5, 5>> :> FALSE @@
+  <<5, 6>> :> FALSE @@
+  <<5, 7>> :> FALSE @@
+  <<5, 8>> :> FALSE @@
+  <<5, 9>> :> FALSE @@
+  <<6, 0>> :> FALSE @@
+  <<6, 1>> :> FALSE @@
+  <<6, 2>> :> FALSE @@
+  <<6, 3>> :> FALSE @@
+  <<6, 4>> :> FALSE @@
+  <<6, 5>> :> FALSE @@
+  <<6, 6>> :> FALSE @@
+  <<6, 7>> :> FALSE @@
+  <<6, 8>> :> FALSE @@
+  <<6, 9>> :> FALSE @@
+  <<7, 0>> :> FALSE @@
+  <<7, 1>> :> FALSE @@
+  <<7, 2>> :> FALSE @@
+  <<7, 3>> :> FALSE @@
+  <<7, 4>> :> FALSE @@
+  <<7, 5>> :> FALSE @@
+  <<7, 6>> :> FALSE @@
+  <<7, 7>> :> FALSE @@
+  <<7, 8>> :> FALSE @@
+  <<7, 9>> :> FALSE @@
+  <<8, 0>> :> FALSE @@
+  <<8, 1>> :> FALSE @@
+  <<8, 2>> :> FALSE @@
+  <<8, 3>> :> FALSE @@
+  <<8, 4>> :> FALSE @@
+  <<8, 5>> :> FALSE @@
+  <<8, 6>> :> FALSE @@
+  <<8, 7>> :> FALSE @@
+  <<8, 8>> :> FALSE @@
+  <<8, 9>> :> FALSE @@
+  <<9, 0>> :> FALSE @@
+  <<9, 1>> :> FALSE @@
+  <<9, 2>> :> FALSE @@
+  <<9, 3>> :> FALSE @@
+  <<9, 4>> :> FALSE @@
+  <<9, 5>> :> FALSE @@
+  <<9, 6>> :> FALSE @@
+  <<9, 7>> :> FALSE @@
+  <<9, 8>> :> FALSE @@
+  <<9, 9>> :> FALSE )
+/\ stack = << << [ pc |-> "union01",
+        p |-> 0,
+        q |-> 0,
+        i |-> 0,
+        pid |-> 0,
+        qid |-> 0,
+        procedure |-> "union" ] >> >>
+/\ i_ = 10
+/\ i = <<0>>
+/\ id = ( 0 :> 0 @@
+  1 :> 1 @@
+  2 :> 2 @@
+  3 :> 3 @@
+  4 :> 4 @@
+  5 :> 5 @@
+  6 :> 6 @@
+  7 :> 7 @@
+  8 :> 8 @@
+  9 :> 9 )
+/\ p = <<0>>
+/\ q = <<5>>
+/\ pc = <<"unionassert1">>
+
+@!@!@ENDMSG 2217 @!@!@
+@!@!@STARTMSG 2103:1 @!@!@
+The error occurred when TLC was evaluating the nested
+expressions at the following positions:
+0. Line 76, column 26 to line 76, column 50 in quickfind
+1. Line 77, column 26 to line 78, column 78 in quickfind
+
+
+@!@!@ENDMSG 2103 @!@!@
+@!@!@STARTMSG 2201:0 @!@!@
+The coverage statistics at 2016-11-07 21:31:51
+@!@!@ENDMSG 2201 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 100, col 23 to line 100, col 50 of module quickfind: 10
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 101, col 23 to line 101, col 34 of module quickfind: 10
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 102, col 23 to line 102, col 53 of module quickfind: 10
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 103, col 23 to line 103, col 56 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 104, col 36 to line 104, col 37 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 104, col 40 to line 104, col 41 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 105, col 25 to line 105, col 33 of module quickfind: 11
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 105, col 36 to line 105, col 40 of module quickfind: 11
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 105, col 43 to line 105, col 43 of module quickfind: 11
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 105, col 46 to line 105, col 46 of module quickfind: 11
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 105, col 49 to line 105, col 49 of module quickfind: 11
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 105, col 52 to line 105, col 54 of module quickfind: 11
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 105, col 57 to line 105, col 59 of module quickfind: 11
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 108, col 18 to line 108, col 41 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 109, col 18 to line 109, col 41 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 110, col 18 to line 117, col 60 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 118, col 15 to line 118, col 38 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 119, col 15 to line 119, col 57 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 120, col 15 to line 120, col 57 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 121, col 15 to line 121, col 47 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 122, col 28 to line 122, col 29 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 122, col 32 to line 122, col 40 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 122, col 43 to line 122, col 44 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 125, col 18 to line 125, col 41 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 126, col 18 to line 126, col 41 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 127, col 18 to line 134, col 60 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 135, col 15 to line 135, col 38 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 136, col 15 to line 136, col 57 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 137, col 15 to line 137, col 57 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 138, col 15 to line 138, col 47 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 139, col 28 to line 139, col 29 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 139, col 32 to line 139, col 40 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 139, col 43 to line 139, col 44 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 144, col 15 to line 144, col 48 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 145, col 28 to line 145, col 29 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 145, col 32 to line 145, col 40 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 145, col 43 to line 145, col 47 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 145, col 50 to line 145, col 50 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 145, col 53 to line 145, col 53 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 145, col 56 to line 145, col 56 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 145, col 59 to line 145, col 61 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 145, col 64 to line 145, col 66 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 145, col 69 to line 145, col 70 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 150, col 15 to line 150, col 48 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 151, col 28 to line 151, col 29 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 151, col 32 to line 151, col 40 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 151, col 43 to line 151, col 47 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 151, col 50 to line 151, col 50 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 151, col 53 to line 151, col 53 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 151, col 56 to line 151, col 56 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 151, col 59 to line 151, col 61 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 151, col 64 to line 151, col 66 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 151, col 69 to line 151, col 70 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 156, col 15 to line 156, col 48 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 157, col 28 to line 157, col 29 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 157, col 32 to line 157, col 40 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 157, col 43 to line 157, col 47 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 157, col 50 to line 157, col 50 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 157, col 53 to line 157, col 53 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 157, col 56 to line 157, col 56 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 157, col 59 to line 157, col 61 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 157, col 64 to line 157, col 66 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 157, col 69 to line 157, col 70 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 162, col 15 to line 162, col 48 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 163, col 28 to line 163, col 29 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 163, col 32 to line 163, col 40 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 163, col 43 to line 163, col 47 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 163, col 50 to line 163, col 50 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 163, col 53 to line 163, col 53 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 163, col 56 to line 163, col 56 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 163, col 59 to line 163, col 61 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 163, col 64 to line 163, col 66 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 163, col 69 to line 163, col 70 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 168, col 15 to line 168, col 48 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 169, col 28 to line 169, col 29 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 169, col 32 to line 169, col 40 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 169, col 43 to line 169, col 47 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 169, col 50 to line 169, col 50 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 169, col 53 to line 169, col 53 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 169, col 56 to line 169, col 56 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 169, col 59 to line 169, col 61 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 169, col 64 to line 169, col 66 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 169, col 69 to line 169, col 70 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 174, col 15 to line 174, col 45 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 175, col 28 to line 175, col 29 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 175, col 32 to line 175, col 40 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 175, col 43 to line 175, col 47 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 175, col 50 to line 175, col 50 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 175, col 53 to line 175, col 53 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 175, col 56 to line 175, col 56 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 175, col 59 to line 175, col 61 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 175, col 64 to line 175, col 66 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 175, col 69 to line 175, col 70 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 48, col 12 to line 48, col 13 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 48, col 16 to line 48, col 24 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 48, col 27 to line 48, col 28 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 48, col 31 to line 48, col 35 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 48, col 38 to line 48, col 38 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 48, col 41 to line 48, col 41 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 48, col 44 to line 48, col 44 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 48, col 47 to line 48, col 49 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 48, col 52 to line 48, col 54 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 48, col 57 to line 48, col 58 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 67, col 20 to line 67, col 60 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 68, col 20 to line 68, col 55 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 69, col 33 to line 69, col 34 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 69, col 37 to line 69, col 45 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 69, col 48 to line 69, col 52 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 69, col 55 to line 69, col 55 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 69, col 58 to line 69, col 58 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 69, col 61 to line 69, col 61 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 69, col 64 to line 69, col 66 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 69, col 69 to line 69, col 70 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 72, col 20 to line 72, col 60 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 73, col 20 to line 73, col 61 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 74, col 33 to line 74, col 34 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 74, col 37 to line 74, col 45 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 74, col 48 to line 74, col 52 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 74, col 55 to line 74, col 55 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 74, col 58 to line 74, col 58 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 74, col 61 to line 74, col 61 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 74, col 64 to line 74, col 66 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 74, col 69 to line 74, col 70 of module quickfind: 1
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 79, col 26 to line 79, col 67 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 80, col 39 to line 80, col 40 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 80, col 43 to line 80, col 51 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 80, col 54 to line 80, col 58 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 80, col 61 to line 80, col 61 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 80, col 64 to line 80, col 64 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 80, col 67 to line 80, col 67 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 80, col 70 to line 80, col 72 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 80, col 75 to line 80, col 77 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 81, col 39 to line 81, col 40 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 86, col 26 to line 86, col 73 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 87, col 26 to line 87, col 70 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 88, col 26 to line 88, col 76 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 89, col 26 to line 89, col 76 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 90, col 26 to line 90, col 70 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 91, col 26 to line 91, col 70 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 92, col 26 to line 92, col 76 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 93, col 39 to line 93, col 40 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 93, col 43 to line 93, col 51 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2221:0 @!@!@
+  line 93, col 54 to line 93, col 55 of module quickfind: 0
+@!@!@ENDMSG 2221 @!@!@
+@!@!@STARTMSG 2202:0 @!@!@
+End of statistics.
+@!@!@ENDMSG 2202 @!@!@
+@!@!@STARTMSG 2200:0 @!@!@
+Progress(15) at 2016-11-07 21:31:51: 15 states generated (738 s/min), 15 distinct states found (738 ds/min), 0 states left on queue.
+@!@!@ENDMSG 2200 @!@!@
+@!@!@STARTMSG 2199:0 @!@!@
+15 states generated, 15 distinct states found, 0 states left on queue.
+@!@!@ENDMSG 2199 @!@!@
+@!@!@STARTMSG 2194:0 @!@!@
+The depth of the complete state graph search is 15.
+@!@!@ENDMSG 2194 @!@!@
+@!@!@STARTMSG 2186:0 @!@!@
+Finished in 01s at (2016-11-07 21:31:51)
+@!@!@ENDMSG 2186 @!@!@
