@@ -177,7 +177,7 @@ assert2 == /\ pc[1] = "assert2"
            /\ UNCHANGED << id, stack, p, q, i, pid, qid, i_ >>
 
 assert3 == /\ pc[1] = "assert3"
-           /\ Assert(isConnected(0,7), 
+           /\ Assert(isConnected(0,6), 
                      "Failure of assertion at line 47, column 13.")
            /\ pc' = [pc EXCEPT ![1] = "assert4"]
            /\ UNCHANGED << id, stack, p, q, i, pid, qid, i_ >>
