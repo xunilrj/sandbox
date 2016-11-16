@@ -94,7 +94,10 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
-    <Compile Include="UnitTest1.cs" />
+    <Compile Include="UnionFind\IUnionFind.cs" />
+    <Compile Include="UnionFind\QuickFind.cs" />
+    <Compile Include="UnionFind\QuickUnionUF.cs" />
+    <Compile Include="UFTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Choose>

@@ -1,30 +1,6 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Diagnostics.Contracts;
-
-namespace PrincetonAlgorithms
+﻿namespace PrincetonAlgorithms.UnionFind
 {
-    [TestClass]
-    public class QuickFindUFTests
-    {
-        [TestMethod]
-        public void SomeInitialTests()
-        {
-            var uf = new QuickFindUF(10);
-
-            Assert.IsTrue(uf.Connected(0, 0));
-
-            uf.Union(2, 8);
-
-            Assert.IsTrue(uf.Connected(2, 8));
-
-            uf.Union(1, 8);
-
-            Assert.IsTrue(uf.Connected(1, 2));
-        }
-    }
-
-    public class QuickFindUF
+    public class QuickFindUF : IUnionFind
     {
         private readonly int[] id;
 
@@ -57,5 +33,4 @@ namespace PrincetonAlgorithms
             }
         }
     }
-
 }
