@@ -11,7 +11,7 @@ if($RunTLC.IsPresent)
     cd ./QuickFind.toolbox/Model_1
 
     Write-Host "Checking..."
-    java -cp C:/Users/xunil/Downloads/tla tlc2.TLC ".\MC.tla" "-config" ".\MC.cfg" > tlc.result.txt
+    java -cp C:/Users/xunil/Downloads/tla tlc2.TLC ".\MC.tla" "-config" ".\MC.cfg" "-dump" "dump.txt" > tlc.result.txt
     
     Write-Host "Done!"
 }

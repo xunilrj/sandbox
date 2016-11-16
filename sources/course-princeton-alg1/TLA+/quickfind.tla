@@ -6,24 +6,9 @@ CONSTANT N
 (* --algorithm QuickFind {
 
 variables
-id = [j \in 0..N-1 |-> 0];
-connected = [p1 \in 0..N-1, q1 \in 0..N-1 |-> FALSE]
+id = [j \in 0..N-1 |-> j];
 
-procedure updateconnections()
-variables i = 0; o = 0;
-{
-    updateconnection:while(i < N)
-    {
-        startinner: o := 0;
-        updateinner:while(o < N)
-        {
-            connected[i,o] := id[i] = id[o];
-            o := o + 1;
-        };
-        i := i + 1;
-    };
-    return;
-}
+define { isConnected(p,q) == id[p] = id[q] }
 
 procedure union(p, q)
 variables i = 0; pid; qid;
@@ -39,10 +24,9 @@ variables i = 0; pid; qid;
         };
         i := i + 1;
     };
-    
-    unioncall1:call updateconnections();
-    unionassert1:assert connected[p,q];
-    unionassert2:assert connected[q,p];
+
+    unionassert1:assert isConnected(p,q);
+    unionassert2:assert isConnected(q,p);
     return;
 }
     
@@ -54,34 +38,35 @@ variables i = 0;
         id[i] := i;
         i := i + 1;
     };
+    
     union00:call union(0, 5);
     union01:call union(5, 6);
     
-    assert1:assert connected[0,5];
-    assert2:assert connected[5,0];
-    assert3:assert connected[0,6];
-    assert4:assert connected[6,0];
-    assert5:assert connected[5,6];
-    assert6:assert connected[6,5];
+    assert1:assert isConnected(0,5);
+    assert2:assert isConnected(5,0);
+    assert3:assert isConnected(0,6);
+    assert4:assert isConnected(6,0);
+    assert5:assert isConnected(5,6);
+    assert6:assert isConnected(6,5);
 }
 
 }*)
 \* BEGIN TRANSLATION
-\* Process variable i of process Thread at line 50 col 11 changed to i_
-\* Procedure variable i of procedure updateconnections at line 13 col 11 changed to i_u
+\* Process variable i of process Thread at line 34 col 11 changed to i_
 CONSTANT defaultInitValue
-VARIABLES id, connected, pc, stack, i_u, o, p, q, i, pid, qid, i_
+VARIABLES id, pc, stack
 
-vars == << id, connected, pc, stack, i_u, o, p, q, i, pid, qid, i_ >>
+(* define statement *)
+isConnected(p,q) == id[p] = id[q]
+
+VARIABLES p, q, i, pid, qid, i_
+
+vars == << id, pc, stack, p, q, i, pid, qid, i_ >>
 
 ProcSet == {1}
 
 Init == (* Global variables *)
-        /\ id = [j \in 0..N-1 |-> 0]
-        /\ connected = [p1 \in 0..N-1, q1 \in 0..N-1 |-> FALSE]
-        (* Procedure updateconnections *)
-        /\ i_u = [ self \in ProcSet |-> 0]
-        /\ o = [ self \in ProcSet |-> 0]
+        /\ id = [j \in 0..N-1 |-> j]
         (* Procedure union *)
         /\ p = [ self \in ProcSet |-> defaultInitValue]
         /\ q = [ self \in ProcSet |-> defaultInitValue]
@@ -93,80 +78,37 @@ Init == (* Global variables *)
         /\ stack = [self \in ProcSet |-> << >>]
         /\ pc = [self \in ProcSet |-> "init"]
 
-updateconnection(self) == /\ pc[self] = "updateconnection"
-                          /\ IF i_u[self] < N
-                                THEN /\ pc' = [pc EXCEPT ![self] = "startinner"]
-                                     /\ UNCHANGED << stack, i_u, o >>
-                                ELSE /\ pc' = [pc EXCEPT ![self] = Head(stack[self]).pc]
-                                     /\ i_u' = [i_u EXCEPT ![self] = Head(stack[self]).i_u]
-                                     /\ o' = [o EXCEPT ![self] = Head(stack[self]).o]
-                                     /\ stack' = [stack EXCEPT ![self] = Tail(stack[self])]
-                          /\ UNCHANGED << id, connected, p, q, i, pid, qid, i_ >>
-
-startinner(self) == /\ pc[self] = "startinner"
-                    /\ o' = [o EXCEPT ![self] = 0]
-                    /\ pc' = [pc EXCEPT ![self] = "updateinner"]
-                    /\ UNCHANGED << id, connected, stack, i_u, p, q, i, pid, 
-                                    qid, i_ >>
-
-updateinner(self) == /\ pc[self] = "updateinner"
-                     /\ IF o[self] < N
-                           THEN /\ connected' = [connected EXCEPT ![i_u[self],o[self]] = id[i_u[self]] = id[o[self]]]
-                                /\ o' = [o EXCEPT ![self] = o[self] + 1]
-                                /\ pc' = [pc EXCEPT ![self] = "updateinner"]
-                                /\ i_u' = i_u
-                           ELSE /\ i_u' = [i_u EXCEPT ![self] = i_u[self] + 1]
-                                /\ pc' = [pc EXCEPT ![self] = "updateconnection"]
-                                /\ UNCHANGED << connected, o >>
-                     /\ UNCHANGED << id, stack, p, q, i, pid, qid, i_ >>
-
-updateconnections(self) == updateconnection(self) \/ startinner(self)
-                              \/ updateinner(self)
-
 union1(self) == /\ pc[self] = "union1"
                 /\ pid' = [pid EXCEPT ![self] = id[p[self]]]
                 /\ pc' = [pc EXCEPT ![self] = "union2"]
-                /\ UNCHANGED << id, connected, stack, i_u, o, p, q, i, qid, i_ >>
+                /\ UNCHANGED << id, stack, p, q, i, qid, i_ >>
 
 union2(self) == /\ pc[self] = "union2"
                 /\ qid' = [qid EXCEPT ![self] = id[q[self]]]
                 /\ pc' = [pc EXCEPT ![self] = "unionchange"]
-                /\ UNCHANGED << id, connected, stack, i_u, o, p, q, i, pid, i_ >>
+                /\ UNCHANGED << id, stack, p, q, i, pid, i_ >>
 
 unionchange(self) == /\ pc[self] = "unionchange"
                      /\ IF i[self] < N
                            THEN /\ IF id[i[self]] = pid[self]
-                                      THEN /\ id' = [id EXCEPT ![i[self]] = qid[self] + 1]
+                                      THEN /\ id' = [id EXCEPT ![i[self]] = qid[self]]
                                       ELSE /\ TRUE
                                            /\ id' = id
                                 /\ i' = [i EXCEPT ![self] = i[self] + 1]
                                 /\ pc' = [pc EXCEPT ![self] = "unionchange"]
-                           ELSE /\ pc' = [pc EXCEPT ![self] = "unioncall1"]
+                           ELSE /\ pc' = [pc EXCEPT ![self] = "unionassert1"]
                                 /\ UNCHANGED << id, i >>
-                     /\ UNCHANGED << connected, stack, i_u, o, p, q, pid, qid, 
-                                     i_ >>
-
-unioncall1(self) == /\ pc[self] = "unioncall1"
-                    /\ stack' = [stack EXCEPT ![self] = << [ procedure |->  "updateconnections",
-                                                             pc        |->  "unionassert1",
-                                                             i_u       |->  i_u[self],
-                                                             o         |->  o[self] ] >>
-                                                         \o stack[self]]
-                    /\ i_u' = [i_u EXCEPT ![self] = 0]
-                    /\ o' = [o EXCEPT ![self] = 0]
-                    /\ pc' = [pc EXCEPT ![self] = "updateconnection"]
-                    /\ UNCHANGED << id, connected, p, q, i, pid, qid, i_ >>
+                     /\ UNCHANGED << stack, p, q, pid, qid, i_ >>
 
 unionassert1(self) == /\ pc[self] = "unionassert1"
-                      /\ Assert(connected[p[self],q[self]], 
-                                "Failure of assertion at line 44, column 18.")
+                      /\ Assert(isConnected(p[self],q[self]), 
+                                "Failure of assertion at line 28, column 18.")
                       /\ pc' = [pc EXCEPT ![self] = "unionassert2"]
-                      /\ UNCHANGED << id, connected, stack, i_u, o, p, q, i, 
-                                      pid, qid, i_ >>
+                      /\ UNCHANGED << id, stack, p, q, i, pid, qid, i_ >>
 
 unionassert2(self) == /\ pc[self] = "unionassert2"
-                      /\ Assert(connected[q[self],p[self]], 
-                                "Failure of assertion at line 45, column 18.")
+                      /\ Assert(isConnected(q[self],p[self]), 
+                                "Failure of assertion at line 29, column 18.")
                       /\ pc' = [pc EXCEPT ![self] = Head(stack[self]).pc]
                       /\ i' = [i EXCEPT ![self] = Head(stack[self]).i]
                       /\ pid' = [pid EXCEPT ![self] = Head(stack[self]).pid]
@@ -174,11 +116,10 @@ unionassert2(self) == /\ pc[self] = "unionassert2"
                       /\ p' = [p EXCEPT ![self] = Head(stack[self]).p]
                       /\ q' = [q EXCEPT ![self] = Head(stack[self]).q]
                       /\ stack' = [stack EXCEPT ![self] = Tail(stack[self])]
-                      /\ UNCHANGED << id, connected, i_u, o, i_ >>
+                      /\ UNCHANGED << id, i_ >>
 
 union(self) == union1(self) \/ union2(self) \/ unionchange(self)
-                  \/ unioncall1(self) \/ unionassert1(self)
-                  \/ unionassert2(self)
+                  \/ unionassert1(self) \/ unionassert2(self)
 
 init == /\ pc[1] = "init"
         /\ IF i_ < N
@@ -187,7 +128,7 @@ init == /\ pc[1] = "init"
                    /\ pc' = [pc EXCEPT ![1] = "init"]
               ELSE /\ pc' = [pc EXCEPT ![1] = "union00"]
                    /\ UNCHANGED << id, i_ >>
-        /\ UNCHANGED << connected, stack, i_u, o, p, q, i, pid, qid >>
+        /\ UNCHANGED << stack, p, q, i, pid, qid >>
 
 union00 == /\ pc[1] = "union00"
            /\ /\ p' = [p EXCEPT ![1] = 0]
@@ -204,7 +145,7 @@ union00 == /\ pc[1] = "union00"
            /\ pid' = [pid EXCEPT ![1] = defaultInitValue]
            /\ qid' = [qid EXCEPT ![1] = defaultInitValue]
            /\ pc' = [pc EXCEPT ![1] = "union1"]
-           /\ UNCHANGED << id, connected, i_u, o, i_ >>
+           /\ UNCHANGED << id, i_ >>
 
 union01 == /\ pc[1] = "union01"
            /\ /\ p' = [p EXCEPT ![1] = 5]
@@ -221,49 +162,49 @@ union01 == /\ pc[1] = "union01"
            /\ pid' = [pid EXCEPT ![1] = defaultInitValue]
            /\ qid' = [qid EXCEPT ![1] = defaultInitValue]
            /\ pc' = [pc EXCEPT ![1] = "union1"]
-           /\ UNCHANGED << id, connected, i_u, o, i_ >>
+           /\ UNCHANGED << id, i_ >>
 
 assert1 == /\ pc[1] = "assert1"
-           /\ Assert(connected[0,5], 
-                     "Failure of assertion at line 60, column 13.")
+           /\ Assert(isConnected(0,5), 
+                     "Failure of assertion at line 45, column 13.")
            /\ pc' = [pc EXCEPT ![1] = "assert2"]
-           /\ UNCHANGED << id, connected, stack, i_u, o, p, q, i, pid, qid, i_ >>
+           /\ UNCHANGED << id, stack, p, q, i, pid, qid, i_ >>
 
 assert2 == /\ pc[1] = "assert2"
-           /\ Assert(connected[5,0], 
-                     "Failure of assertion at line 61, column 13.")
+           /\ Assert(isConnected(5,0), 
+                     "Failure of assertion at line 46, column 13.")
            /\ pc' = [pc EXCEPT ![1] = "assert3"]
-           /\ UNCHANGED << id, connected, stack, i_u, o, p, q, i, pid, qid, i_ >>
+           /\ UNCHANGED << id, stack, p, q, i, pid, qid, i_ >>
 
 assert3 == /\ pc[1] = "assert3"
-           /\ Assert(connected[0,6], 
-                     "Failure of assertion at line 62, column 13.")
+           /\ Assert(isConnected(0,7), 
+                     "Failure of assertion at line 47, column 13.")
            /\ pc' = [pc EXCEPT ![1] = "assert4"]
-           /\ UNCHANGED << id, connected, stack, i_u, o, p, q, i, pid, qid, i_ >>
+           /\ UNCHANGED << id, stack, p, q, i, pid, qid, i_ >>
 
 assert4 == /\ pc[1] = "assert4"
-           /\ Assert(connected[6,0], 
-                     "Failure of assertion at line 63, column 13.")
+           /\ Assert(isConnected(6,0), 
+                     "Failure of assertion at line 48, column 13.")
            /\ pc' = [pc EXCEPT ![1] = "assert5"]
-           /\ UNCHANGED << id, connected, stack, i_u, o, p, q, i, pid, qid, i_ >>
+           /\ UNCHANGED << id, stack, p, q, i, pid, qid, i_ >>
 
 assert5 == /\ pc[1] = "assert5"
-           /\ Assert(connected[5,6], 
-                     "Failure of assertion at line 64, column 13.")
+           /\ Assert(isConnected(5,6), 
+                     "Failure of assertion at line 49, column 13.")
            /\ pc' = [pc EXCEPT ![1] = "assert6"]
-           /\ UNCHANGED << id, connected, stack, i_u, o, p, q, i, pid, qid, i_ >>
+           /\ UNCHANGED << id, stack, p, q, i, pid, qid, i_ >>
 
 assert6 == /\ pc[1] = "assert6"
-           /\ Assert(connected[6,5], 
-                     "Failure of assertion at line 65, column 13.")
+           /\ Assert(isConnected(6,5), 
+                     "Failure of assertion at line 50, column 13.")
            /\ pc' = [pc EXCEPT ![1] = "Done"]
-           /\ UNCHANGED << id, connected, stack, i_u, o, p, q, i, pid, qid, i_ >>
+           /\ UNCHANGED << id, stack, p, q, i, pid, qid, i_ >>
 
 Thread == init \/ union00 \/ union01 \/ assert1 \/ assert2 \/ assert3
              \/ assert4 \/ assert5 \/ assert6
 
 Next == Thread
-           \/ (\E self \in ProcSet: updateconnections(self) \/ union(self))
+           \/ (\E self \in ProcSet: union(self))
            \/ (* Disjunct to prevent deadlock on termination *)
               ((\A self \in ProcSet: pc[self] = "Done") /\ UNCHANGED vars)
 
