@@ -1,22 +1,28 @@
-﻿namespace PrincetonAlgorithms.UnionFind
+﻿using PrincetonAlgorithms.Memory;
+
+namespace PrincetonAlgorithms.UnionFind
 {
     public class QuickUnionUF : IUnionFind
     {
-        private int[] id;
+        IRandomAccess<int> Id;
 
-        public QuickUnionUF(int N)
+        public int Size { get { return (int)Id.Size; } }
+
+        public QuickUnionUF(IRandomAccess<int> id)
         {
-            id = new int[N];
-            for (int i = 0; i < N; i++)
+            Id = id;
 
-            { id[i] = i; }
+            for (int i = 0; i < Id.Size; i++)
+            {
+                Id.Write(i, i);
+            }
         }
 
         private int root(int i)
         {
-            while (i != id[i])
+            while (i != Id.Read(i))
             {
-                i = id[i];
+                i = Id.Read(i);
             }
 
             return i;
@@ -31,7 +37,7 @@
         {
             int i = root(p);
             int j = root(q);
-            id[i] = j;
+            Id.Write(i, j);
         }
     }
 

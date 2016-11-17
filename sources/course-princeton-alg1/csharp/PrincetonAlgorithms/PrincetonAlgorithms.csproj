@@ -94,8 +94,14 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="Memory\IFiniteMemory.cs" />
+    <Compile Include="Memory\IMemoryReport.cs" />
+    <Compile Include="Memory\IRandomAccess.cs" />
+    <Compile Include="Memory\IRandomReader.cs" />
+    <Compile Include="Memory\IRandomWriter.cs" />
+    <Compile Include="Memory\MemoryReadWrite.cs" />
     <Compile Include="UnionFind\IUnionFind.cs" />
-    <Compile Include="UnionFind\QuickFind.cs" />
+    <Compile Include="UnionFind\QuickFindUF.cs" />
     <Compile Include="UnionFind\QuickUnionUF.cs" />
     <Compile Include="UFTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
