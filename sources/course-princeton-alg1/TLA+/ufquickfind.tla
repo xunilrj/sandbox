@@ -1,9 +1,9 @@
----------------------- MODULE quickfind ----------------------
+---------------------- MODULE ufquickfind ----------------------
 EXTENDS Naturals, TLC, Sequences
 
 CONSTANT N
 
-(* --algorithm QuickFind {
+(* --algorithm UFQuickFind {
 
 variables
 id = [j \in 0..N-1 |-> j];
