@@ -30,6 +30,38 @@ namespace PrincetonAlgorithms
             AssertUF(10, memory, uf);
         }
 
+        [TestMethod]
+        public void WeightedQuickUnion()
+        {
+            Console.WriteLine("Size: 10");
+            var memory = new MemoryReadWrite<int>(10);
+            var sizes = new MemoryReadWrite<int>(10);
+            var uf = new WeightedQuickUnionUF(memory, sizes);
+
+            AssertUF(10, memory, uf);
+        }
+
+        [TestMethod]
+        public void QuickUnionPathCompression()
+        {
+            Console.WriteLine("Size: 10");
+            var memory = new MemoryReadWrite<int>(10);
+            var uf = new QuickUnionPathCompressionUF(memory);
+
+            AssertUF(10, memory, uf);
+        }
+
+        [TestMethod]
+        public void WeightedQuickUnionPathCompression()
+        {
+            Console.WriteLine("Size: 10");
+            var memory = new MemoryReadWrite<int>(10);
+            var sizes = new MemoryReadWrite<int>(10);
+            var uf = new WeightedQuickUnionPathCompressionUF(memory, sizes);
+
+            AssertUF(10, memory, uf);
+        }
+
         private void AssertUF(long size, IMemoryReport report, IUnionFind uf)
         {
             WriteReport("Init", size, report);

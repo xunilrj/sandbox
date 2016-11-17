@@ -102,6 +102,9 @@
     <Compile Include="Memory\MemoryReadWrite.cs" />
     <Compile Include="UnionFind\IUnionFind.cs" />
     <Compile Include="UnionFind\QuickFindUF.cs" />
+    <Compile Include="UnionFind\QuickUnionPathCompressionUF.cs" />
+    <Compile Include="UnionFind\WeightedQuickUnionPathCompressionUF.cs" />
+    <Compile Include="UnionFind\WeightedQuickUnionUF.cs" />
     <Compile Include="UnionFind\QuickUnionUF.cs" />
     <Compile Include="UFTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
