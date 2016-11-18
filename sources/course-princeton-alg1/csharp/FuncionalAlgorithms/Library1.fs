@@ -54,8 +54,6 @@ module ListExtensionsTests =
         Assert.True result
         union uf 2 8
         [| (2,8) |] |> assertIsConnected
-        Assert.True (isConnected uf 2 8)
-        Assert.True (isConnected uf 8 2)
         union uf 1 8
         [| (1,8); (2,1) |] |> assertIsConnected
     [<Fact>] 
