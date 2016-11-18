@@ -37,51 +37,36 @@ module TestHelpers =
         for y in 0..(size-1) do
             if x = y then yield (x,y)
     }
-    let doubleBackPipe f (a,b) = f a b
 
 module ListExtensionsTests = 
-    open Xunit    
+    open Xunit
+    let AssertUF isConnected union uf =
+        let assertIsConnected items =
+            let result = items |> Seq.forall (fun (a,b) -> (isConnected uf a b) && (isConnected uf b a))
+            Assert.True result
+        let result =
+            TestHelpers.NonEqualPairs 10 
+            |> Seq.forall (fun (a,b) -> isConnected uf a b = false)
+        Assert.True result
+        let result = 
+            TestHelpers.EqualPairs 10
+            |> Seq.forall ((<||) <| isConnected uf)
+        Assert.True result
+        union uf 2 8
+        [| (2,8) |] |> assertIsConnected
+        Assert.True (isConnected uf 2 8)
+        Assert.True (isConnected uf 8 2)
+        union uf 1 8
+        [| (1,8); (2,1) |] |> assertIsConnected
     [<Fact>] 
     let QuickFindTests() =
-        let AssertUF uf =
-            let result =
-                TestHelpers.NonEqualPairs 10 
-                |> Seq.forall (fun (a,b) -> QuickFind.isConnected uf a b = false)
-            Assert.True result
-            let result = 
-                TestHelpers.EqualPairs 10
-                |> Seq.forall (TestHelpers.doubleBackPipe <| QuickFind.isConnected uf)
-            Assert.True result
-            QuickFind.union uf 2 8
-            Assert.True (QuickFind.isConnected uf 2 8)
-            Assert.True (QuickFind.isConnected uf 8 2)
-            QuickFind.union uf 1 8
-            Assert.True (QuickFind.isConnected uf 1 8)
-            Assert.True (QuickFind.isConnected uf 8 1)
-            Assert.True (QuickFind.isConnected uf 2 1)
-            Assert.True (QuickFind.isConnected uf 1 2)
+        let qfAssert = AssertUF QuickFind.isConnected QuickFind.union
         let uf = QuickFind.init 10
-        AssertUF uf
+        qfAssert uf
     [<Fact>] 
     let QuickUnionTests() =
-        let AssertUF uf =
-            let result =
-                TestHelpers.NonEqualPairs 10 
-                |> Seq.forall (fun (a,b) -> QuickUnion.isConnected uf a b = false)
-            Assert.True result
-            let result = 
-                TestHelpers.EqualPairs 10
-                |> Seq.forall (TestHelpers.doubleBackPipe <| QuickUnion.isConnected uf)
-            Assert.True result
-            QuickUnion.union uf 2 8
-            Assert.True (QuickUnion.isConnected uf 2 8)
-            Assert.True (QuickUnion.isConnected uf 8 2)
-            QuickUnion.union uf 1 8
-            Assert.True (QuickUnion.isConnected uf 1 8)
-            Assert.True (QuickUnion.isConnected uf 8 1)
-            Assert.True (QuickUnion.isConnected uf 2 1)
-            Assert.True (QuickUnion.isConnected uf 1 2)
+        let quAssert = AssertUF QuickUnion.isConnected QuickUnion.union
         let uf = QuickUnion.init 10
-        AssertUF uf
+        quAssert uf
         
         
