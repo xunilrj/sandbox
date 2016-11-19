@@ -1,6 +1,6 @@
-﻿using PrincetonAlgorithms.Memory;
+﻿using Algorithms.UnionFind.Memory;
 
-namespace PrincetonAlgorithms.UnionFind
+namespace Algorithms.UnionFind.UnionFind
 {
     public class QuickUnionPathCompressionUF : IUnionFind
     {
@@ -30,7 +30,7 @@ namespace PrincetonAlgorithms.UnionFind
             return i;
         }
 
-        public bool Connected(int p, int q)
+        public bool IsConnected(int p, int q)
         {
             return root(p) == root(q);
         }

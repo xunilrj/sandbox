@@ -1,15 +1,15 @@
-﻿using PrincetonAlgorithms.Memory;
+﻿using Algorithms.UnionFind.Memory;
 
-namespace PrincetonAlgorithms.UnionFind
+namespace Algorithms.UnionFind.UnionFind
 {
-    public class WeightedQuickUnionPathCompressionUF : IUnionFind
+    public class WeightedQuickUnionUF : IUnionFind
     {
         IRandomAccess<int> Id;
         IRandomAccess<int> Sizes;
 
         public int Size { get { return (int)Id.Size; } }
 
-        public WeightedQuickUnionPathCompressionUF(IRandomAccess<int> id, IRandomAccess<int> sizes)
+        public WeightedQuickUnionUF(IRandomAccess<int> id, IRandomAccess<int> sizes)
         {
             Id = id;
             Sizes = sizes;
@@ -25,16 +25,13 @@ namespace PrincetonAlgorithms.UnionFind
         {
             while (i != Id.Read(i))
             {
-                var grandparent = Id.Read(Id.Read(i));
-                Id.Write(i, grandparent);
-
                 i = Id.Read(i);
             }
 
             return i;
         }
 
-        public bool Connected(int p, int q)
+        public bool IsConnected(int p, int q)
         {
             return root(p) == root(q);
         }
@@ -58,4 +55,5 @@ namespace PrincetonAlgorithms.UnionFind
             }
         }
     }
+
 }

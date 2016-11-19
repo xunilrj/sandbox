@@ -1,15 +1,18 @@
-﻿using PrincetonAlgorithms.Memory;
+﻿using Algorithms.UnionFind.Memory;
+using System.Runtime.Serialization;
+using System;
 
-namespace PrincetonAlgorithms.UnionFind
+namespace Algorithms.UnionFind.UnionFind
 {
-    public class WeightedQuickUnionUF : IUnionFind
+    [Serializable]
+    public class WeightedQuickUnionPathCompressionUF : IUnionFind, ISerializable
     {
         IRandomAccess<int> Id;
         IRandomAccess<int> Sizes;
 
         public int Size { get { return (int)Id.Size; } }
 
-        public WeightedQuickUnionUF(IRandomAccess<int> id, IRandomAccess<int> sizes)
+        public WeightedQuickUnionPathCompressionUF(IRandomAccess<int> id, IRandomAccess<int> sizes)
         {
             Id = id;
             Sizes = sizes;
@@ -25,13 +28,16 @@ namespace PrincetonAlgorithms.UnionFind
         {
             while (i != Id.Read(i))
             {
+                var grandparent = Id.Read(Id.Read(i));
+                Id.Write(i, grandparent);
+
                 i = Id.Read(i);
             }
 
             return i;
         }
 
-        public bool Connected(int p, int q)
+        public bool IsConnected(int p, int q)
         {
             return root(p) == root(q);
         }
@@ -54,6 +60,17 @@ namespace PrincetonAlgorithms.UnionFind
                 Sizes.Write(proot, Sizes.Read(proot) + Sizes.Read(qroot));
             }
         }
-    }
 
+        public WeightedQuickUnionPathCompressionUF(SerializationInfo info, StreamingContext ctxt)
+        {
+            Id = (MemoryReadWrite<int>)info.GetValue(nameof(Id), typeof(MemoryReadWrite<int>));
+            Sizes = (MemoryReadWrite<int>)info.GetValue(nameof(Sizes), typeof(MemoryReadWrite<int>));
+        }
+
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(Id), Id);
+            info.AddValue(nameof(Sizes), Sizes);
+        }
+    }
 }

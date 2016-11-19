@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Runtime.Serialization;
 using System.Threading;
-using System.Threading.Tasks;
 
-namespace PrincetonAlgorithms.Memory
+namespace Algorithms.UnionFind.Memory
 {
-    class MemoryReadWrite<T> : IRandomAccess<T>, IMemoryReport
+    [Serializable]
+    public class MemoryReadWrite<T> : IRandomAccess<T>, IMemoryReport, ISerializable
     {
         T[] Array;
 
@@ -41,6 +39,16 @@ namespace PrincetonAlgorithms.Memory
         {
             _Reads = 0;
             _Writes = 0;
+        }
+
+        public MemoryReadWrite(SerializationInfo info, StreamingContext ctxt)
+        {
+            Array = (T[])info.GetValue(nameof(Array), typeof(int[]));
+        }
+
+        void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue(nameof(Array), Array);
         }
     }
 }

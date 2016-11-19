@@ -1,6 +1,6 @@
-﻿using PrincetonAlgorithms.Memory;
+﻿using Algorithms.UnionFind.Memory;
 
-namespace PrincetonAlgorithms.UnionFind
+namespace Algorithms.UnionFind.UnionFind
 {
     public class QuickFindUF : IUnionFind
     {
@@ -18,7 +18,7 @@ namespace PrincetonAlgorithms.UnionFind
             }
         }
 
-        public bool Connected(int p, int q)
+        public bool IsConnected(int p, int q)
         {
             return Id.Read(p) == Id.Read(q);
         }

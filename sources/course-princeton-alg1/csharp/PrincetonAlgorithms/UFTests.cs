@@ -2,8 +2,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
-using PrincetonAlgorithms.UnionFind;
-using PrincetonAlgorithms.Memory;
+using Algorithms.UnionFind.Memory;
+using Algorithms.UnionFind.UnionFind;
 
 namespace PrincetonAlgorithms
 {
@@ -66,28 +66,28 @@ namespace PrincetonAlgorithms
         {
             WriteReport("Init", size, report);
 
-            AssertAll(OnlyEqualPair(10), x => uf.Connected(x.Item1, x.Item2));
-            AssertAll(NonEqualPair(10), x => uf.Connected(x.Item1, x.Item2) == false);
+            AssertAll(OnlyEqualPair(10), x => uf.IsConnected(x.Item1, x.Item2));
+            AssertAll(NonEqualPair(10), x => uf.IsConnected(x.Item1, x.Item2) == false);
 
             report.Reset();
             uf.Union(2, 8);
             WriteReport("Union", size, report);
 
             report.Reset();
-            var connected = uf.Connected(2, 8);
+            var connected = uf.IsConnected(2, 8);
             WriteReport("Connected", size, report);
 
             Assert.IsTrue(connected);
-            Assert.IsTrue(uf.Connected(8, 2));
+            Assert.IsTrue(uf.IsConnected(8, 2));
 
             uf.Union(1, 8);
 
-            Assert.IsTrue(uf.Connected(1, 8));
-            Assert.IsTrue(uf.Connected(8, 1));
-            Assert.IsTrue(uf.Connected(1, 2));
-            Assert.IsTrue(uf.Connected(2, 1));
-            Assert.IsTrue(uf.Connected(2, 8));
-            Assert.IsTrue(uf.Connected(8, 2));
+            Assert.IsTrue(uf.IsConnected(1, 8));
+            Assert.IsTrue(uf.IsConnected(8, 1));
+            Assert.IsTrue(uf.IsConnected(1, 2));
+            Assert.IsTrue(uf.IsConnected(2, 1));
+            Assert.IsTrue(uf.IsConnected(2, 8));
+            Assert.IsTrue(uf.IsConnected(8, 2));
 
             report.Reset();
             foreach (var item in NonEqualPair(uf.Size))
