@@ -257,6 +257,20 @@ namespace SedgewickBook
 
             return i;
         }
+
+        [TestMethod]
+        public void Exercise11015()
+        {
+            var numbers = new[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+            var hist = Histogram(3, numbers);
+        }
+
+        private int[] Histogram(int size, int[] numbers)
+        {
+            var hist = new int[size];
+
+            return hist;
+        }
     }
 
 
