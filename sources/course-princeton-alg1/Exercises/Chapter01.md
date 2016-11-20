@@ -79,73 +79,268 @@ true
         return (x > start) && (x < end);
     }
 
-1.1.6 What does the following program print?
-int f = 0;
-int g = 1;
-for (int i = 0; i <= 15; i++)
-{
-StdOut.println(f);
-f = f + g;
-g = f - g;
-}
-54 Chapter 1
-n Fundamentals
-1.1.7 Give the value printed by each of the following code fragments:
-a. double t = 9.0;
-while (Math.abs(t - 9.0/t) > .001)
-t = (9.0/t + t) / 2.0;
-StdOut.printf("%.5f\n", t);
-b. int sum = 0;
-for (int i = 1; i < 1000; i++)
-for (int j = 0; j < i; j++)
-sum++;
-StdOut.println(sum);
-c. int sum = 0;
-for (int i = 1; i < 1000; i *= 2)
-for (int j = 0; j < 1000; j++)
-sum++;
-StdOut.println(sum);
-1.1.8 What do each of the following print?
-a. System.out.println('b');
-b. System.out.println('b' + 'c');
-c. System.out.println((char) ('a' + 4));
+## 1.1.6 What does the following program print?
+
+    int f = 0;
+    int g = 1;
+    for (int i = 0; i <= 15; i++)
+    {
+        StdOut.println(f);
+        f = f + g;
+        g = f - g;
+    }
+
+### Answers
+
+It is the Fibonacci sequence
+
+## 1.1.7 Give the value printed by each of the following code fragments:
+
+1.
+
+    double t = 9.0;
+    while (Math.abs(t - 9.0/t) > .001)
+        t = (9.0/t + t) / 2.0;
+    StdOut.printf("%.5f\n", t);
+
+2.
+
+    int sum = 0;
+    for (int i = 1; i < 1000; i++)
+        for (int j = 0; j < i; j++)
+            sum++;
+    StdOut.println(sum);
+
+3.
+
+    int sum = 0;
+    for (int i = 1; i < 1000; i *= 2)
+        for (int j = 0; j < 1000; j++)
+            sum++;
+    StdOut.println(sum);
+
+### Answers
+
+1.
+
+Aproximation of the squared root of 9.
+3.00009
+
+2.
+
+Sum of the arithmetic progression starting between 1 and 999
+999(1+999)/2 = 499,500
+
+3.
+
+log_2 {1000} = (log 1000) / (log 2)  
+             = 3 / 0.30102999566398119521373889472449  
+             = 9.9657842846620870436109582884683  
+             = 9 <- Max integer power lower than 1000  
+
+Starting in zero and finishing in 9, we have  
+= (9-0)+1  
+= 9+1  
+= 10 items  
+
+Just to be sure
+
+0 1 2 3 4  5  6  7   8   9  
+1 2 4 8 16 32 64 128 256 512  
+
+OK!
+
+So the algorithm will print the sum:
+
+= 1000 + 1000 + 1000 + ... + 1000 <10 times>  
+= 1000 * 10  
+= 10,000  
+
+## 1.1.8 What do each of the following print?
+1. System.out.println('b');
+2. System.out.println('b' + 'c');
+3. System.out.println((char) ('a' + 4));
 Explain each outcome.
-1.1.9 Write a code fragment that puts the binary representation of a positive integer N
-into a String s .
-Solution: Java has a built-in method Integer.toBinaryString(N) for this job, but
-the point of the exercise is to see how such a method might be implemented. Here is a
-particularly concise solution:
-String s = "";
-for (int n = N; n > 0; n /= 2)
-s = (n % 2) + s;
-55 1.1
-n Basic Programming Model
-1.1.10 What is wrong with the following code fragment?
-int[] a;
-for (int i = 0; i < 10; i++)
-a[i] = i * i;
-Solution: It does not allocate memory for a[] with new . This code results in a
-variable a might not have been initialized compile-time error.
-1.1.11 Write a code fragment that prints the contents of a two-dimensional boolean
-array, using * to represent true and a space to represent false . Include row and column
-numbers.
-1.1.12 What does the following code fragment print?
-int[] a = new int[10];
-for (int i = 0; i < 10; i++)
-a[i] = 9 - i;
-for (int i = 0; i < 10; i++)
-a[i] = a[a[i]];
-for (int i = 0; i < 10; i++)
-System.out.println(a[i]);
-1.1.13 Write a code fragment to print the transposition (rows and columns changed)
-of a two-dimensional array with M rows and N columns.
-1.1.14 Write a static method lg() that takes an int value N as argument and returns
-the largest int not larger than the base-2 logarithm of N . Do not use Math .
-1.1.15 Write a static method histogram() that takes an array a[] of int values and
-an integer M as arguments and returns an array of length M whose i th entry is the num-
-ber of times the integer i appeared in the argument array. If the values in a[] are all
-between 0 and M–1 , the sum of the values in the returned array should be equal to
-a.length .
+
+###Answers
+1. b
+2. 197
+3. 'a' = 61
+61 + 4 = 65 = 'e'
+so
+e
+
+## 1.1.9 Write a code fragment that puts the binary representation of a positive integer N into a String s .
+Solution: Java has a built-in method Integer.toBinaryString(N) 
+for this job, but the point of the exercise is to see how
+such a method might be implemented. Here is a particularly
+concise solution:
+
+    String s = "";
+    for (int n = N; n > 0; n /= 2)
+    s = (n % 2) + s;
+
+### Answers
+
+    int x = 7;
+    uint mask = (uint)1 << 31;
+    while(mask > 0)
+    {
+        var r = x & mask;
+        Console.Write(r > 0 ? "1" : "0");
+        mask = mask >> 1;
+    }
+
+## 1.1.10 What is wrong with the following code fragment?
+
+    int[] a;
+    for (int i = 0; i < 10; i++)
+        a[i] = i * i;
+
+Solution: It does not allocate memory for a[] with new.
+This code results in a variable a might not have been
+initialized compile-time error.
+
+## 1.1.11 Write a code fragment that prints the contents of a two-dimensional boolean array, using * to represent true and a space to represent false . Include row and column numbers.
+
+### Answers
+
+    private void Print(bool[,] matrix)
+    {
+        var ysize = matrix.GetLength(0);
+        var xsize = matrix.GetLength(1);
+
+        var ychars = (int)Math.Log10(ysize) + 1;
+        var xchars = (int)Math.Log10(xsize) + 1;
+
+        var ycolumnsize = ychars + 4;
+
+        Console.Write(new string(' ', ycolumnsize));
+
+        //Print Header
+        for (int i = 0; i < matrix.GetLength(1); i++)
+        {
+            Console.Write("[,");
+            Console.Write((i).ToString().PadLeft(xchars));
+            Console.Write("] ");
+        }
+
+        Console.WriteLine();
+
+        for (int y = 0; y < matrix.GetLength(0); y++)
+        {
+            Console.Write("[");
+            Console.Write(y.ToString().PadLeft(ychars));
+            Console.Write(",] ");
+
+            for (int x = 0; x < matrix.GetLength(1); x++)
+            {
+                int lchars = xchars / 2;
+                int lmod = xchars % 2;
+                Console.Write(" ".PadLeft(lchars + lmod + 1));
+                Console.Write(matrix[y, x] ? ("*") : (" "));
+                Console.Write(" ".PadRight(lchars + 2));
+            }
+
+            Console.WriteLine();
+        }
+    }
+
+## 1.1.12 What does the following code fragment print?
+
+    int[] a = new int[10];
+    for (int i = 0; i < 10; i++)
+        a[i] = 9 - i;
+    for (int i = 0; i < 10; i++)
+        a[i] = a[a[i]];
+    for (int i = 0; i < 10; i++)
+        System.out.println(a[i]);
+
+### Asnwers
+
+0 1 2 3 4 4 3 2 1 0
+
+## 1.1.13 Write a code fragment to print the transposition (rows and columns changed) of a two-dimensional array with M rows and N columns.
+
+### Answers
+
+little modification to the print method
+to choose who is the x and y axis.
+
+    private void PrintTransposition(bool[,] matrix)
+    {
+        Print(matrix, 1, 0);
+    }
+    
+    private void Print(bool[,] matrix, int yaxis, int xaxis)
+    {
+        var ysize = matrix.GetLength(yaxis);
+        var xsize = matrix.GetLength(xaxis);
+
+        var ychars = (int)Math.Log10(ysize) + 1;
+        var xchars = (int)Math.Log10(xsize) + 1;
+
+        var ycolumnsize = ychars + 4;
+
+        Console.Write(new string(' ', ycolumnsize));
+
+        //Print Header
+        for (int i = 0; i < matrix.GetLength(xaxis); i++)
+        {
+            Console.Write("[,");
+            Console.Write((i).ToString().PadLeft(xchars));
+            Console.Write("] ");
+        }
+
+        Console.WriteLine();
+
+        for (int y = 0; y < matrix.GetLength(yaxis); y++)
+        {
+            Console.Write("[");
+            Console.Write(y.ToString().PadLeft(ychars));
+            Console.Write(",] ");
+
+            for (int x = 0; x < matrix.GetLength(xaxis); x++)
+            {
+                int lchars = xchars / 2;
+                int lmod = xchars % 2;
+                Console.Write(" ".PadLeft(lchars + lmod + 1));
+                var indices = new[] { y, x }
+                    .Zip(new[] { yaxis, xaxis }, Tuple.Create)
+                    .OrderBy(item => item.Item2)
+                    .Select(item => item.Item1)
+                    .ToArray();
+                Console.Write((bool)matrix.GetValue(indices) ? ("*") : (" "));
+                Console.Write(" ".PadRight(lchars + 2));
+            }
+
+            Console.WriteLine();
+        }
+    }
+
+## 1.1.14 Write a static method lg() that takes an int value N as argument and returns the largest int not larger than the base-2 logarithm of N . Do not use Math .
+
+### Answers
+
+    static int Lg(int x)
+    {
+        int lg = x;
+        int i = 0;
+
+        while (lg > 1)
+        {
+            lg = lg >> 1;
+            i++;
+        }
+
+        return i;
+    }
+
+## 1.1.15 Write a static method histogram() that takes an array a[] of int values and an integer M as arguments and returns an array of length M whose i th entry is the number of times the integer i appeared in the argument array. If the values in a[] are all between 0 and M–1 , the sum of the values in the returned array should be equal to a.length.
+
+### Asnwers
+
+
 1.1.16 Give the value of exR1(6) :
 public static String exR1(int n)
 {

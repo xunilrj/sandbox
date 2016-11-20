@@ -15,6 +15,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AkkaNet.Host", "AkkaNet.Hos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SedgewickBook", "SedgewickBook\SedgewickBook.csproj", "{B1E76031-6B45-45B6-A074-407B9B79708F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Book", "Book", "{0708E7A0-CBE3-4491-95B1-72A46BA16212}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Chapter01", "Chapter01", "{A7BE290F-87C6-448E-961B-7A237ADA3E7B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Exercise113", "Exercise113\Exercise113.csproj", "{D4EFEFF1-5AB1-481A-94E3-5831B02033FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,8 +51,17 @@ Global
 		{B1E76031-6B45-45B6-A074-407B9B79708F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1E76031-6B45-45B6-A074-407B9B79708F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1E76031-6B45-45B6-A074-407B9B79708F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D4EFEFF1-5AB1-481A-94E3-5831B02033FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D4EFEFF1-5AB1-481A-94E3-5831B02033FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D4EFEFF1-5AB1-481A-94E3-5831B02033FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D4EFEFF1-5AB1-481A-94E3-5831B02033FF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B1E76031-6B45-45B6-A074-407B9B79708F} = {A7BE290F-87C6-448E-961B-7A237ADA3E7B}
+		{A7BE290F-87C6-448E-961B-7A237ADA3E7B} = {0708E7A0-CBE3-4491-95B1-72A46BA16212}
+		{D4EFEFF1-5AB1-481A-94E3-5831B02033FF} = {A7BE290F-87C6-448E-961B-7A237ADA3E7B}
 	EndGlobalSection
 EndGlobal
