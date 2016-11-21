@@ -340,35 +340,86 @@ to choose who is the x and y axis.
 
 ### Asnwers
 
+    private int[] Histogram(int size, int[] numbers)
+    {
+        var hist = new int[size];
 
-1.1.16 Give the value of exR1(6) :
-public static String exR1(int n)
-{
-if (n <= 0) return "";
-return exR1(n-3) + n + exR1(n-2) + n;
-}
-ExErcisEs (continued)
-56 Chapter 1
-n Fundamentals
-1.1.17 Criticize the following recursive function:
-public static String exR2(int n)
-{
-String s = exR2(n-3) + n + exR2(n-2) + n;
-if (n <= 0) return "";
-return s;
-}
-Answer : The base case will never be reached. A call to exR2(3) will result in calls to
-exR2(0) , exR2(-3) , exR3(-6) , and so forth until a StackOverflowError occurs.
-1.1.18 Consider the following recursive function:
-public static int mystery(int a, int b)
-{
-if (b == 0) return 0;
-if (b % 2 == 0) return mystery(a+a, b/2);
-return mystery(a+a, b/2) + a;
-}
-What are the values of mystery(2, 25) and mystery(3, 11) ? Given positive integers
-a and b , describe what value mystery(a, b) computes. Answer the same question, but
-replace the three + operators with * and replace return 0 with return 1 .
+        for (int i = 0; i < numbers.Length; i++)
+        {
+            hist[numbers[i]]++;
+        }
+
+        return hist;
+    }
+
+
+## 1.1.16 Give the value of exR1(6) :
+
+    public static String exR1(int n)
+    {
+        if (n <= 0) return "";
+        return exR1(n-3) + n + exR1(n-2) + n;
+    }
+
+### Answers
+
+exR1(6) = exR1(3) + 6 + exR1(4) + 6
+        = (exR1(0) + 3 + exR1(1) + 3) 
+            + 6 
+            + (exR1(1) + 4 + exR1(2) + 4)
+            + 6
+        = ("" + 3 + (exR1(-2) + 1 + exR1(-1) + 1) + 3)
+            + 6
+            + (exR1(1) + 4 + exR1(2) + 4)
+            + 6
+        = "3" + ("" + 1 + "" + 1) + 3
+            + 6
+            + (exR1(1) + 4 + exR1(2) + 4)
+            + 6
+        = "31136" + (exR1(1) + 4 + exR1(2) + 4) + 6
+        = "31136 + ("114" + "22" + 4) + 6
+        = "311361142246"
+
+## 1.1.17 Criticize the following recursive function:
+    
+    public static String exR2(int n)
+    {
+        String s = exR2(n-3) + n + exR2(n-2) + n;
+        if (n <= 0) return "";
+        return s;
+    }
+
+Answer : The base case will never be reached. A call to exR2(3) will result in calls to exR2(0) , exR2(-3) , exR3(-6) , and so forth until a StackOverflowError occurs.
+
+### Answers
+
+The base case return must always be before the recursion call.
+
+## 1.1.18 Consider the following recursive function:
+
+    public static int mystery(int a, int b)
+    {
+        if (b == 0) return 0;
+        if (b % 2 == 0) return mystery(a+a, b/2);
+        return mystery(a+a, b/2) + a;
+    }
+
+What are the values of mystery(2, 25) and mystery(3, 11)?  
+Given positive integers a and b , describe what value mystery(a, b) computes. Answer the same question, but replace the three + operators with * and replace return 0 with return 1 .
+
+### Answers
+
+mystery(2,25) = 50
+mystery(3,11) = 33
+
+It is the multiplication operator!
+
+Changing it we got
+
+mystery2(2,4) = 16
+
+It is the power operator!
+
 1.1.19 Run the following program on your computer:
 public class Fibonacci
 {
