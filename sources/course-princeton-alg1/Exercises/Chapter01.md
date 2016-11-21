@@ -595,19 +595,90 @@ log_e{N!} = log_e{N*(N-1)!} = log_e{N} + log_e{N-1!}
 
 ## 1.1.21 Write a program that reads in lines from standard input with each line containing a name and two integers and then uses printf() to print a table with a column of the names, the integers, and the result of dividing the first by the second, accurate to three decimal places. You could use a program like this to tabulate batting averages for baseball players or grades for students.
 
-1.1.22 Write a version of BinarySearch that uses the recursive rank() given on page
-25 and traces the method calls. Each time the recursive method is called, print the argu-
-ment values lo and hi , indented by the depth of the recursion. Hint: Add an argument
-to the recursive method that keeps track of the depth.
-1.1.23 Add to the BinarySearch test client the ability to respond to a second argu-
-ment: + to print numbers from standard input that are not in the whitelist, - to print
-numbers that are in the whitelist.
-1.1.24 Give the sequence of values of p and q that are computed when Euclid’s algo-
-rithm is used to compute the greatest common divisor of 105 and 24. Extend the code
-given on page 4 to develop a program Euclid that takes two integers from the command
-line and computes their greatest common divisor, printing out the two arguments for
-each call on the recursive method. Use your program to compute the greatest common
-divisor of 1111111 and 1234567.
+## Answers
+
+    private void Print(StringReader reader)
+    {
+        string line = reader.ReadLine();
+        while (line != null)
+        {
+            var data = line.Split(' ');
+            var result = double.Parse(data[1]) / double.Parse(data[2]);
+            Console.WriteLine($"{data[0]} {data[1]} {data[2]} {result:N3}");
+            line = reader.ReadLine();
+        }
+    }
+
+## 1.1.22 Write a version of BinarySearch that uses the recursive rank() given on page 25 and traces the method calls. Each time the recursive method is called, print the argument values lo and hi , indented by the depth of the recursion. Hint: Add an argument to the recursive method that keeps track of the depth.
+
+### Arnswers
+
+    public static int TracedRank(int key, int[] a)
+    {
+        return TracedRank(key, a, 0, a.Length - 1, 0);
+    }
+
+    public static int TracedRank(int key, int[] a, int lo, int hi, int depth)
+    {
+        // Index of key in a[], if present, is not smaller than lo
+        // and not larger than hi.
+        Console.WriteLine($"{new String(' ', depth * 4)} {lo} {hi}");
+
+        if (lo > hi) return -1;
+
+        int mid = lo + (hi - lo) / 2;
+
+        if (key < a[mid])
+        {
+            return TracedRank(key, a, lo, mid - 1, ++depth);
+        }
+        else if (key > a[mid])
+        {
+            return TracedRank(key, a, mid + 1, hi, ++depth);
+        }
+        else
+        {
+            return mid;
+        }
+    }
+
+## 1.1.23 Add to the BinarySearch test client the ability to respond to a second argument: + to print numbers from standard input that are not in the whitelist, - to print numbers that are in the whitelist.
+
+### Answers
+
+    public static void BlackWhiteList(int[] numbers, string op, TextReader reader)
+    {
+        string line = reader.ReadLine();
+        while(line != null)
+        {
+            var n = int.Parse(line);
+            var rank = BinarySearch.Rank(n, numbers);
+
+            if (op == "+")
+            {
+                if(rank == -1)
+                {
+                    Console.WriteLine(n);
+                }
+            }
+            else
+            {
+                if (rank != -1)
+                {
+                    Console.WriteLine(n);
+                }
+            }
+
+            line = reader.ReadLine();
+        }
+    }
+
+## 1.1.24 Give the sequence of values of p and q that are computed when Euclid’s algorithm is used to compute the greatest common divisor of 105 and 24. Extend the code given on page 4 to develop a program Euclid that takes two integers from the command line and computes their greatest common  divisor, printing out the two arguments for each call on the recursive method. Use your program to compute the greatest common divisor of 1111111 and 1234567.
+
+### Answers
+
+
+
 1.1.25 Use mathematical induction to prove that Euclid’s algorithm computes the
 greatest common divisor of any pair of nonnegative integers p and q.
 ExErcisEs (continued)

@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.IO;
 
 namespace SedgewickBook
 {
@@ -381,16 +382,122 @@ namespace SedgewickBook
         [TestMethod]
         public void Exercise11020()
         {
+            var rf = Factorial(10);
+            var rln = Math.Log(rf);
+            Assert.AreEqual(rln, lnf(10), 0.000001);
+        }
 
+        public static int Factorial(int N)
+        {
+            int result = 1;
+            while (N > 0)
+            {
+                result *= N;
+                N--;
+            }
+            return result;
         }
 
         public static double lnf(int N)
         {
+            if (N == 0) return 0;
             return Math.Log(N) + lnf(N - 1);
+        }
+
+        [TestMethod]
+        public void Exercise11021()
+        {
+            var reader = new StringReader(@"Daniel 4 2
+Daniel 5 2");
+            Print(reader);
+        }
+
+        private void Print(StringReader reader)
+        {
+            string line = reader.ReadLine();
+            while (line != null)
+            {
+                var data = line.Split(' ');
+                var result = double.Parse(data[1]) / double.Parse(data[2]);
+                Console.WriteLine($"{data[0]} {data[1]} {data[2]} {result:N3}");
+                line = reader.ReadLine();
+            }
+        }
+
+        [TestMethod]
+        public void Exercise11022()
+        {
+            var numbers = new[] { 10, 20, 30, 40, 50, 60, 70, 80 };
+            TracedRank(30, numbers);
+        }
+
+        public static int TracedRank(int key, int[] a)
+        {
+            return TracedRank(key, a, 0, a.Length - 1, 0);
+        }
+
+        public static int TracedRank(int key, int[] a, int lo, int hi, int depth)
+        {
+            // Index of key in a[], if present, is not smaller than lo
+            // and not larger than hi.
+            Console.WriteLine($"{new String(' ', depth * 4)} {lo} {hi}");
+
+            if (lo > hi) return -1;
+
+            int mid = lo + (hi - lo) / 2;
+
+            if (key < a[mid])
+            {
+                return TracedRank(key, a, lo, mid - 1, ++depth);
+            }
+            else if (key > a[mid])
+            {
+                return TracedRank(key, a, mid + 1, hi, ++depth);
+            }
+            else
+            {
+                return mid;
+            }
+        }
+
+        [TestMethod]
+        public void Exercise11023()
+        {
+            var numbers = new[] { 10, 20, 30, 40, 50, 60, 70, 80 };
+            BlackWhiteList(numbers, "+", new StringReader("10\r\n11\r\n19\r\n20\r\n21"));
+            Console.WriteLine("-------------------");
+            BlackWhiteList(numbers, "-", new StringReader("10\r\n11\r\n19\r\n20\r\n21"));
+        }
+
+        public static void BlackWhiteList(int[] numbers, string op, TextReader reader)
+        {
+            string line = reader.ReadLine();
+            while(line != null)
+            {
+                var n = int.Parse(line);
+                var rank = BinarySearch.Rank(n, numbers);
+
+                if (op == "+")
+                {
+                    if(rank == -1)
+                    {
+                        Console.WriteLine(n);
+                    }
+                }
+                else
+                {
+                    if (rank != -1)
+                    {
+                        Console.WriteLine(n);
+                    }
+                }
+
+                line = reader.ReadLine();
+            }
         }
     }
 
-   
+
 
     [TestClass]
     public class Page21
@@ -664,7 +771,7 @@ namespace SedgewickBook
 
     public static class BinarySearch
     {
-        public static int rank(int key, int[] a)
+        public static int Rank(int key, int[] a)
         {
             return rank(key, a, 0, a.Length - 1);
         }
