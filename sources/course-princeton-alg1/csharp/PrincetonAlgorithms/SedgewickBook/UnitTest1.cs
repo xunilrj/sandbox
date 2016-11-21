@@ -295,32 +295,102 @@ namespace SedgewickBook
         }
 
         [TestMethod]
-        public void MyTestMethod()
+        public void Exercise11018()
         {
-            Console.WriteLine(mystery(2, 25, true));
+            Console.WriteLine(mystery(2, 25));
             Console.WriteLine(mystery(3, 11));
+
+            Console.WriteLine(mystery2(2, 10));
         }
 
-        public static int mystery(int a, int b, bool log = false)
+        public static int mystery(int a, int b)
         {
-            Console.WriteLine("");
-            if (log) Console.Write($"{a} {b} = ");
-            if (b == 0)
+            if (b == 0) return 0;
+            if (b % 2 == 0) return mystery(a + a, b / 2);
+            return mystery(a + a, b / 2) + a;
+        }
+
+        public static int mystery2(int a, int b)
+        {
+            if (b == 0) return 1;
+            if (b % 2 == 0) return mystery2(a * a, b / 2);
+            return mystery2(a * a, b / 2) * a;
+        }
+
+        [TestMethod, Ignore]
+        public void Exercise11019A()
+        {
+            for (int N = 0; N < 100; N++)
             {
-                if (log) Console.WriteLine("zero");
-                return 0;
+                var w = Stopwatch.StartNew();
+
+                var result = F(N);
+
+                w.Stop();
+                Console.WriteLine($"{w.Elapsed} - {N} - {result}");
+
             }
-            if (b % 2 == 0)
+        }
+
+        [TestMethod]
+        public void Exercise11019B()
+        {
+            for (int N = 0; N < 100; N++)
             {
-                if (log) Console.WriteLine($"return {mystery(a + a, b / 2)}");
-                return mystery(a + a, b / 2, true);
+                var w = Stopwatch.StartNew();
+
+                var result = F2(N);
+
+                w.Stop();
+                Console.WriteLine($"{w.Elapsed} - {N} - {result}");
+
+            }
+        }
+
+        public static long F(int N)
+        {
+            if (N == 0) return 0;
+            if (N == 1) return 1;
+            return F(N - 1) + F(N - 2);
+        }
+
+        static long?[] F2Result = new long?[100];
+        public static long F2(int N)
+        {
+            if (F2Result[N].HasValue)
+            {
+                return F2Result[N].Value;
             }
 
-            if (log) Console.WriteLine($"return {mystery(a + a, b / 2)} + {a}");
-            return mystery(a + a, b / 2, true) + a;
+            if (N == 0)
+            {
+                F2Result[0] = 0;
+                return 0;
+            }
+            if (N == 1)
+            {
+                F2Result[1] = 1;
+                return 1;
+            }
+
+            var result = F2(N - 1) + F2(N - 2);
+            F2Result[N] = result;
+            return result;
+        }
+
+        [TestMethod]
+        public void Exercise11020()
+        {
+
+        }
+
+        public static double lnf(int N)
+        {
+            return Math.Log(N) + lnf(N - 1);
         }
     }
 
+   
 
     [TestClass]
     public class Page21
