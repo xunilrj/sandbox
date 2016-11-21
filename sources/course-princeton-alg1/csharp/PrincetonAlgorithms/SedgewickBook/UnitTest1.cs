@@ -495,8 +495,41 @@ Daniel 5 2");
                 line = reader.ReadLine();
             }
         }
+
+        [TestMethod]
+        public void Exercise11024()
+        {
+            TracedGCD(new StringReader(@"1111111 1234567"));
+        }
+
+        private void TracedGCD(TextReader reader)
+        {
+            var numbers = reader.ReadLine();
+            var data = numbers.Split(' ').Select(x => int.Parse(x)).ToArray();
+
+            var gcd = Euclid.TracedGCD(data[0], data[1]);
+            Console.WriteLine(gcd);
+        }
     }
 
+    public static class Euclid
+    {
+        public static int gcd(int p, int q)
+        {
+            if (q == 0) return p;
+            int r = p % q;
+            return gcd(q, r);
+        }
+
+        public static int TracedGCD(int p, int q)
+        {
+            Console.WriteLine($"{p} {q}");
+
+            if (q == 0) return p;
+            int r = p % q;
+            return TracedGCD(q, r);
+        }
+    }
 
 
     [TestClass]

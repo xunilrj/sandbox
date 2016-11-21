@@ -677,14 +677,87 @@ log_e{N!} = log_e{N*(N-1)!} = log_e{N} + log_e{N-1!}
 
 ### Answers
 
+    private void TracedGCD(TextReader reader)
+    {
+        var numbers = reader.ReadLine();
+        var data = numbers.Split(' ').Select(x => int.Parse(x)).ToArray();
+
+        var gcd = Euclid.TracedGCD(data[0], data[1]);
+        Console.WriteLine(gcd);
+    }
+
+    public static int TracedGCD(int p, int q)
+    {
+        Console.WriteLine($"{p} {q}");
+
+        if (q == 0) return p;
+        int r = p % q;
+        return TracedGCD(q, r);
+    }
+
+## 1.1.25 Use mathematical induction to prove that Euclid’s algorithm computes the greatest common divisor of any pair of nonnegative integers p and q.
+
+gcd(a,b) =  
+    1. a                if b == 0  
+    2. gcd(b, a MOD b)  else
+
+w = gcd(a,b)
+a MOD w = 0  
+b MOD w = 0  
+=>  
+a MOD b MOD w = 0
+
+(a - (a DIV b)b) MOD w = 0
+(a MOD w) - ((a DIV b)b) MOD w = 0
+0 -  ((a DIV b)b) MOD w = 0
+but if (b MOD w) = k(b MOD w) for all k so
+0 - 0 = 0
+OK
+
+N = 1  
+--------------------------
 
 
-1.1.25 Use mathematical induction to prove that Euclid’s algorithm computes the
-greatest common divisor of any pair of nonnegative integers p and q.
-ExErcisEs (continued)
-58 Chapter 1
-n Fundamentals
-crEAtivE problEms
+N
+---------------------------
+N = a*b
+
+N + 1
+--------------------------
+N = a*b + 1
+
+a = (a / w)w + (a MOD w)
+b = (b / w)w + (b MOD w)
+
+if w divides a and b so
+a = (a/w)w
+    = 
+b = (b/w)w
+
+
+
+Proof of the base
+This means that in the previous step, the previous x was multiple of y
+gcd(y,0) = y => ok
+
+if x is multiple of y then
+gcd(x,y) = gcd(y, x MOD y) = gcd(y, 0) => OK
+gcd(x+1,y) = gcd(y, (x+1) MOD y) = gcd(y,1) = gcd(1,0) = ok
+gcd(x,y+1) = gcd(y+1, x MOD y+1) = gcd(y+1, y-1) 
+    = gcd(y-1, (y+1) MOD (y-1))
+    = gcd(y-1, 2)
+    or = gcd(2, 0) => OK
+    or = gcd(2, 1) = gcd(1,0) => OK
+
+if x is not multiple of y then
+gcd(x,y) + 1 = 
+    = gcd(x + (x / gcd(x,y)), y + (y / gcd(x,y)))
+    = gcd(y + (y / gcd(x,y)), x + (x / gcd(x,y)) MOD y + (y / gcd(x,y)))
+    = gcd(y + (y / gcd(x,y)), gcd(x,y)+1)
+    = gcd(gcd(x,y)+1, y + (y / gcd(x,y)) MOD gcd(x,y))
+    = gcd(gcd(x,y)+1, y / gcd(x,y) MOD gcd(x,y))
+    
+
 1.1.26 Sorting three numbers. Suppose that the variables a , b , c , and t are all of the
 same numeric primitive type. Show that the following code puts a , b , and c in ascending
 order:
