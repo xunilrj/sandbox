@@ -805,16 +805,21 @@ QED
     c = 3  
 1 2 3 => OK
 
-1.1.27 Binomial distribution. Estimate the number of recursive calls that would be
-used by the code
-public static double binomial(int N, int k, double p)
-{
-if ((N == 0) && (k == 0)) return 1.0;
-if ((N < 0) || (k < 0)) return 0.0;
-return (1 - p)*binomial(N-1, k, p) + p*binomial(N-1, k-1, p);
-}
-to compute binomial(100, 50, 0.25) . Develop a better implementation that is based
-on saving computed values in an array.
+## 1.1.27 Binomial distribution. Estimate the number of recursive calls that would be used by the code to compute binomial(100, 50, 0.25) . Develop a better implementation that is based on saving computed values in an array.
+    
+    public static double binomial(int N, int k, double p)
+    {
+        if ((N == 0) && (k == 0)) return 1.0;
+        if ((N < 0) || (k < 0)) return 0.0;
+        return (1 - p)*binomial(N-1, k, p) + p*binomial(N-1, k-1, p);
+    }
+
+binomial(100, 50, 0.25)
+    return (1-p)*binomial(99, 50, p) + p*binomial(99,49, p)
+    binomial(99,50,p)
+        return (1-p)*binomial(98, 50, p) + p*binomial(98,49,p)
+    binomial()
+
 1.1.28 Remove duplicates. Modify the test client in BinarySearch to remove any du-
 plicate keys in the whitelist after the sort.
 1.1.29 Equal keys. Add to BinarySearch a static method rank() that takes a key and
