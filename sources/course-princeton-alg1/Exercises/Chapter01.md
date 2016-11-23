@@ -697,66 +697,63 @@ log_e{N!} = log_e{N*(N-1)!} = log_e{N} + log_e{N-1!}
 
 ## 1.1.25 Use mathematical induction to prove that Euclid’s algorithm computes the greatest common divisor of any pair of nonnegative integers p and q.
 
+gcd(a,b) = g
+g|a
+g|b
+
+require a > b
 gcd(a,b) =  
     1. a                if b == 0  
     2. gcd(b, a MOD b)  else
 
-w = gcd(a,b)
-a MOD w = 0  
-b MOD w = 0  
-=>  
-a MOD b MOD w = 0
+Induction on N = a*b:
+Induction Step = gcd(b, a MOD b) = gcd(a, b)
 
-(a - (a DIV b)b) MOD w = 0
-(a MOD w) - ((a DIV b)b) MOD w = 0
-0 -  ((a DIV b)b) MOD w = 0
-but if (b MOD w) = k(b MOD w) for all k so
-0 - 0 = 0
-OK
+Base When N = 0
+b = 0
+gcd(a,0) = a
+a|a => OK
+a|0 => OK
+a = 1*a + 0*0 => OK
 
-N = 1  
---------------------------
+Assume that 
+gcd(b, a MOD b) = g
+g|b
+g|(a MOD b)
+g = g_1*a + g_2*b
 
+So we have to prove that:
+1. g|a
+2. g|b
+3. g = g_1*a + g_2*b
 
-N
----------------------------
-N = a*b
+Immediately
+2. g|b => OK (by assumption)
 
-N + 1
---------------------------
-N = a*b + 1
+b = b'g
+a MOD b = c'g
 
-a = (a / w)w + (a MOD w)
-b = (b / w)w + (b MOD w)
+a = bq + r
+a = bq + (a mod b)
+a = (b'g)q + c'g
+a = b'qg + c'g
+a = (b'q + c')g
+a = a'g
+or g|a
+1. g|a => OK
 
-if w divides a and b so
-a = (a/w)w
-    = 
-b = (b/w)w
+Imagine that exist
+g' = gcd(a,b)
+where g' > g
+in this case
+g'|a
+g'|b
+=> g'|(a MOD b).
 
+But the greatest value that divides both b and (a MOD b) is g.
+So does not exist g' > g.
 
-
-Proof of the base
-This means that in the previous step, the previous x was multiple of y
-gcd(y,0) = y => ok
-
-if x is multiple of y then
-gcd(x,y) = gcd(y, x MOD y) = gcd(y, 0) => OK
-gcd(x+1,y) = gcd(y, (x+1) MOD y) = gcd(y,1) = gcd(1,0) = ok
-gcd(x,y+1) = gcd(y+1, x MOD y+1) = gcd(y+1, y-1) 
-    = gcd(y-1, (y+1) MOD (y-1))
-    = gcd(y-1, 2)
-    or = gcd(2, 0) => OK
-    or = gcd(2, 1) = gcd(1,0) => OK
-
-if x is not multiple of y then
-gcd(x,y) + 1 = 
-    = gcd(x + (x / gcd(x,y)), y + (y / gcd(x,y)))
-    = gcd(y + (y / gcd(x,y)), x + (x / gcd(x,y)) MOD y + (y / gcd(x,y)))
-    = gcd(y + (y / gcd(x,y)), gcd(x,y)+1)
-    = gcd(gcd(x,y)+1, y + (y / gcd(x,y)) MOD gcd(x,y))
-    = gcd(gcd(x,y)+1, y / gcd(x,y) MOD gcd(x,y))
-    
+QED    
 
 1.1.26 Sorting three numbers. Suppose that the variables a , b , c , and t are all of the
 same numeric primitive type. Show that the following code puts a , b , and c in ascending
