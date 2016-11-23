@@ -755,12 +755,56 @@ So does not exist g' > g.
 
 QED    
 
-1.1.26 Sorting three numbers. Suppose that the variables a , b , c , and t are all of the
-same numeric primitive type. Show that the following code puts a , b , and c in ascending
-order:
-if (a > b) { t = a; a = b; b = t; }
-if (a > c) { t = a; a = c; c = t; }
-if (b > c) { t = b; b = c; c = t; }
+## 1.1.26 Sorting three numbers. Suppose that the variables a , b , c , and t are all of the same numeric primitive type. Show that the following code puts a , b , and c in ascending order:
+
+    if (a > b) { t = a; a = b; b = t; }
+    if (a > c) { t = a; a = c; c = t; }
+    if (b > c) { t = b; b = c; c = t; }
+
+### Answers
+
+1 2 3
+1. a > b = false
+2. a > c = false
+3. b > c = false  
+1 2 3 OK
+
+1 3 2
+1. a > b = false
+2. a > c = false
+3. b > c = true  
+    t = 3  
+    b = 2  
+    c = 3    
+1 2 3 => OK
+
+2 1 3
+1. a > b = true  
+    t = 2  
+    a = 1  
+    b = 2    
+1 2 3  
+2. a > c = false  
+3. b > c = false  
+1 2 3 => OK
+
+3 2 1
+1. a > b = true  
+    t = 3  
+    a = 2  
+    b = 3  
+2 3 1
+2. a > c = true  
+    t = 2  
+    a = 1  
+    c = 2  
+1 3 2
+3. b > c = true  
+    t = 3  
+    b = 2  
+    c = 3  
+1 2 3 => OK
+
 1.1.27 Binomial distribution. Estimate the number of recursive calls that would be
 used by the code
 public static double binomial(int N, int k, double p)
