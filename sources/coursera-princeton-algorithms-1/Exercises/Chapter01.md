@@ -814,11 +814,72 @@ QED
         return (1 - p)*binomial(N-1, k, p) + p*binomial(N-1, k-1, p);
     }
 
-binomial(100, 50, 0.25)
-    return (1-p)*binomial(99, 50, p) + p*binomial(99,49, p)
-    binomial(99,50,p)
-        return (1-p)*binomial(98, 50, p) + p*binomial(98,49,p)
-    binomial()
+
+### Answers
+
+Call Tree:  
+
+.1 binomial(4,2).  
+.2 binomial(3,2).  
+.3 binomial(2,2) = 1.  
+.3 binomial(2,1).  
+.4 binomial(1,1) = 1.  
+.4 binomial(1,0) = 1.  
+.2 binomial(3,1).  
+.3 binomial(2,1).  
+.4 binomial(1,1) = 1.  
+.4 binomial(1,0) = 1.  
+.3 binomial(2,0) = 1.  
+
+All leafs always have value 1. So binomial(n,k) = 1 + 1 + ... + 1 + 1. In this case the call tree have:
+11 nodes =   
+6 leafs  
+5 aggregators  
+
+Every aggregator comes from a recursive call. So  
+binomial(4,2) makes 5 recursives calls.  
+
+\#binomial(n,k) = \#binomial(n-1,k) + \#binomial(n-1,k-1) + 1  
+
+Thesis:  
+\#binomial(n,k) = binomial(n,k) - 1  
+
+Bases:  
+\#binomial(1,0) = binomial(1,0) - 1 = 1 - 1 = 0 (OK)  
+
+Step:  
+\#binomial(n,k) = binomial(n,k) - 1  
+\#binomial(n,k) + binomial(n,k+1) = binomial(n,k) - 1 + binomial(n,k+1)  
+\#binomial(n,k) + \#binomial(n,k+1) + 1 = binomial(n+1,k+1) - 1  
+\#binomial(n+1,k+1) = binomial(n+1,k+1) - 1  
+QED  
+
+so
+binomial(100, 50, p) will have binomial(100,50) - 1 calls  
+binomial(100,50) = 100!/(50!(100-50)!)  
+binomial(100,50) = (100*99*...*51*50!)/(50!(100-50)!)  
+binomial(100,50) = (100*99*...*51)/50!  
+
+which is very hard to calculate. A more simple and elegant
+way is  
+binomial(N,k) = (n/k)*binomial(n-1,k-1)  
+binomial(N,k) = (n/k)*(n-1/k-1)*binomial(n-2,k-2)  
+...  
+binomial(N,k) = (n/k)*(n-1,k-1)*...*(n-(k-2)/k-(k-2))*(n-(k-1)/k-(k-1))*binomial(n-k, k-k)  
+binomial(N,k) = (n/k)*(n-1,k-1)*...*(n-(k-2)/k-(k-2))*(n-(k-1)/k-(k-1))*binomial(n-k, 0)  
+binomial(N,k) = (n/k)*(n-1,k-1)*...*(n-(k-2)/k-(k-2))*(n-(k-1)/k-(k-1))*1  
+binomial(N,k) = (n/k)*(n-1,k-1)*...*(n-(k-2)/k-k+2))*(n-(k-1)/k-k+1))*1  
+binomial(N,k) = (n/k)*(n-1,k-1)*...*(n-(k-2)/k-k+2))*(n-(k-1)/k-k+1))*1  
+binomial(N,k) = (n/k)*(n-1,k-1)*...*(n-(k-2)/0+2))*(n-(k-1)/0+1))*1  
+binomial(N,k) = (n/k)*(n-1,k-1)*...*(n-(k-2)/2))*(n-(k-1)/1))*1  
+  
+or:  
+binomial(100,50) = 1*(100*(50-1))*(100*(50-2)/2)*...*(100*2/49)*(100*1/50)  
+binomial(100,50) = 1*(100*49)*(100*48/2)*...*(100*2/49)*(100*1/50)  
+binomial(100,50) = 100891344545564193334812497256  
+
+\#binomial(100,50) = 100891344545564193334812497256 - 1  
+\#binomial(100,50) = 100891344545564193334812497255
 
 1.1.28 Remove duplicates. Modify the test client in BinarySearch to remove any du-
 plicate keys in the whitelist after the sort.

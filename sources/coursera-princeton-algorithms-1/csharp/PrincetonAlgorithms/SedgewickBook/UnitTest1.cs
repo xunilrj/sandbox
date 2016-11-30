@@ -510,6 +510,63 @@ Daniel 5 2");
             var gcd = Euclid.TracedGCD(data[0], data[1]);
             Console.WriteLine(gcd);
         }
+
+        [TestMethod]
+        public void Exercise11027()
+        {
+            AssertBinomialCallCount(0, 0, 0);
+
+            AssertBinomialCallCount(2, 1, 0);
+            AssertBinomialCallCount(4, 2, 0);
+            AssertBinomialCallCount(6, 3, 0);
+
+            AssertBinomialCallCount(200, 100, 0);
+            AssertBinomialCallCount(10102, 100, 1);
+            AssertBinomialCallCount(333702, 100, 2);
+            //AssertBinomialCallCount(8186052, 100, 3);
+            //AssertBinomialCallCount(200, 100, 4);
+
+            AssertBinomialCallCount(2, 0, 1);
+            AssertBinomialCallCount(2, 0, 2);
+
+            AssertBinomialCallCount(4, 1, 1);
+            AssertBinomialCallCount(6, 1, 2);
+            AssertBinomialCallCount(6, 1, 3);
+            AssertBinomialCallCount(6, 1, 4);
+
+            AssertBinomialCallCount(12, 2, 2);
+            AssertBinomialCallCount(28, 3, 3);
+
+            //AssertBinomialCallCount(28, 10, 20);
+        }
+
+        private static void AssertBinomialCallCount(int expected, int N, int k)
+        {
+            int count = 0;
+            binomial(N, k, 0, ref count);
+            Assert.AreEqual(expected, count);
+        }
+
+        static int?[,] binomialMemory = new int?[101, 101];
+        public static double binomial(int N, int k, double p, ref int count)
+        {
+            if ((N == 0) && (k == 0)) return 1.0;
+            if ((N < 0) || (k < 0)) return 0.0;
+
+            //if (N >= 1 && k >= 1 && binomialMemory[N-1, k].HasValue && binomialMemory[N - 1, k-1].HasValue)
+            //{
+            //    count += binomialMemory[N-1, k].Value + binomialMemory[N-1, k-1].Value;
+            //    count += 2;
+            //    binomialMemory[N, k] = count;
+            //    return 0;
+            //}
+            //else
+            //{
+                count += 2;
+                binomialMemory[N, k] = count;
+                return (1 - p) * binomial(N - 1, k, p, ref count) + p * binomial(N - 1, k - 1, p, ref count);
+            //}
+        }
     }
 
     public static class Euclid
