@@ -912,31 +912,93 @@ binomial(100,50) = 100891344545564193334812497256
 ## 1.1.29 Equal keys. Add to BinarySearch a static method rank() that takes a key and a sorted array of int values (some of which may be equal) as arguments and returns the number of elements that are smaller than the key and a similar method count() that returns the number of elements equal to the key. Note : If i and j are the values returned by rank(key, a) and count(key, a) respectively, then a[i..i+j-1 ] are the values in the array that are equal to key .
 
 ### Answers
-
-    public static int RankLower(int key, int[] a)
-    {
-        return RankLower(key, a, 0, a.Length - 1);
-    }
-
+    
     static int RankLower(int key, int[] a, int lo, int hi)
     {
         if (lo > hi) return -1;
-        if ((lo == hi) && key == a[lo]) return lo;
+        if (lo == hi)
+        {
+            if (key == a[lo])
+            {
+                return lo;
+            }
+            else
+            {
+                return -1;
+            }
+        }
 
         int mid = lo + (hi - lo) / 2;
 
+        //System.Console.WriteLine($"{key} - a[{lo}] = {a[lo]} = a[{mid}] = {a[mid]} - a[{hi}] = {a[hi]}");
+
         if (key <= a[mid])
         {
-            return RankLower(key, a, lo, mid - 1);
+            return RankLower(key, a, lo, mid);
         }
-        else if (key > a[mid])
+        else //if (key > a[mid])
         {
             return RankLower(key, a, mid + 1, hi);
         }
-        else
+    }
+
+
+    public static int RankHigher(int key, int[] a)
+    {
+        return RankHigher(key, a, 0, a.Length - 1);
+    }
+
+    static int RankHigher(int key, int[] a, int lo, int hi)
+    {
+        if (lo > hi) return -1;
+        if ((lo == hi))
         {
-            return mid;
+            if (key == a[lo])
+            {
+                return lo;
+            }
+            else
+            {
+                return -1;
+            }
         }
+
+        int diff = (hi - lo) / 2;
+        int mid = lo + ((diff == 0) ? (1) : (diff));
+
+        //System.Console.WriteLine($"{key} - a[{lo}] = {a[lo]} - a[{mid}] = {a[mid]} - a[{hi}] = {a[hi]}");
+
+        if (key < a[mid])
+        {
+            return RankHigher(key, a, lo, mid - 1);
+        }
+        else // if (key >= a[mid])
+        {
+            return RankHigher(key, a, mid, hi);
+        }
+    }
+
+    public static int Count(int key, int[] numbers)
+    {
+        var lower = RankLower(key, numbers);
+        var higher = RankHigher(key, numbers);
+
+        return higher - lower + 1;
+    }
+
+    public static int FasterCountForSmallCounts(int key, int[] numbers)
+    {
+        var lower = RankLower(key, numbers);
+
+        int count = 1;
+
+        for (int i = lower + 1; i < numbers.Length; ++i)
+        {
+            if (numbers[i - 1] == numbers[i]) count++;
+            else break;
+        }
+
+        return count;
     }
 
 1.1.30 Array exercise. Write a code fragment that creates an N-by-N boolean array

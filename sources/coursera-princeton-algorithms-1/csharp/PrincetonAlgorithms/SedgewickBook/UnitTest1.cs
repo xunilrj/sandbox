@@ -606,10 +606,20 @@ Daniel 5 2");
         [TestMethod]
         public void Exercise11029()
         {
+            //                        0  1  2  3  4  5  6  7  8  9  0  1  2
             var numbers = new int[] { 1, 2, 3, 4, 4, 4, 5, 6, 6, 8, 9, 9, 10 };
+
             Assert.AreEqual(3, BinarySearch.RankLower(4, numbers));
+            Assert.AreEqual(5, BinarySearch.RankHigher(4, numbers));
+
             Assert.AreEqual(10, BinarySearch.RankLower(9, numbers));
+            Assert.AreEqual(11, BinarySearch.RankHigher(9, numbers));
+
             Assert.AreEqual(-1, BinarySearch.RankLower(7, numbers));
+            Assert.AreEqual(-1, BinarySearch.RankHigher(7, numbers));
+
+            Assert.AreEqual(3, BinarySearch.Count(4, numbers));
+            Assert.AreEqual(3, BinarySearch.FasterCountForSmallCounts(4, numbers));
         }
     }
 
@@ -939,29 +949,91 @@ Daniel 5 2");
 
         static int RankLower(int key, int[] a, int lo, int hi)
         {
-            System.Console.WriteLine($"{key} - {lo} - {hi}");
-            // Index of key in a[], if present, is not smaller than lo
-            // and not larger than hi.
-
             if (lo > hi) return -1;
-            if ((lo == hi) && key == a[lo]) return lo;
+            if (lo == hi)
+            {
+                if (key == a[lo])
+                {
+                    return lo;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
 
             int mid = lo + (hi - lo) / 2;
 
+            //System.Console.WriteLine($"{key} - a[{lo}] = {a[lo]} = a[{mid}] = {a[mid]} - a[{hi}] = {a[hi]}");
+
             if (key <= a[mid])
             {
-                return RankLower(key, a, lo, mid - 1);
+                return RankLower(key, a, lo, mid);
             }
-            else if (key > a[mid])
+            else //if (key > a[mid])
             {
                 return RankLower(key, a, mid + 1, hi);
             }
-            else
+        }
+
+
+        public static int RankHigher(int key, int[] a)
+        {
+            return RankHigher(key, a, 0, a.Length - 1);
+        }
+
+        static int RankHigher(int key, int[] a, int lo, int hi)
+        {
+            if (lo > hi) return -1;
+            if ((lo == hi))
             {
-                return mid;
+                if (key == a[lo])
+                {
+                    return lo;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+
+            int diff = (hi - lo) / 2;
+            int mid = lo + ((diff == 0) ? (1) : (diff));
+
+            //System.Console.WriteLine($"{key} - a[{lo}] = {a[lo]} - a[{mid}] = {a[mid]} - a[{hi}] = {a[hi]}");
+
+            if (key < a[mid])
+            {
+                return RankHigher(key, a, lo, mid - 1);
+            }
+            else // if (key >= a[mid])
+            {
+                return RankHigher(key, a, mid, hi);
             }
         }
 
+        public static int Count(int key, int[] numbers)
+        {
+            var lower = RankLower(key, numbers);
+            var higher = RankHigher(key, numbers);
+
+            return higher - lower + 1;
+        }
+
+        public static int FasterCountForSmallCounts(int key, int[] numbers)
+        {
+            var lower = RankLower(key, numbers);
+
+            int count = 1;
+
+            for (int i = lower + 1; i < numbers.Length; ++i)
+            {
+                if (numbers[i - 1] == numbers[i]) count++;
+                else break;
+            }
+
+            return count;
+        }
     }
 
     public static class StdRandom
