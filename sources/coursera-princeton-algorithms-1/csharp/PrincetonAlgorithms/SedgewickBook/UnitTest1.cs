@@ -472,14 +472,14 @@ Daniel 5 2");
         public static void BlackWhiteList(int[] numbers, string op, TextReader reader)
         {
             string line = reader.ReadLine();
-            while(line != null)
+            while (line != null)
             {
                 var n = int.Parse(line);
                 var rank = BinarySearch.Rank(n, numbers);
 
                 if (op == "+")
                 {
-                    if(rank == -1)
+                    if (rank == -1)
                     {
                         Console.WriteLine(n);
                     }
@@ -562,10 +562,54 @@ Daniel 5 2");
             //}
             //else
             //{
-                count += 2;
-                binomialMemory[N, k] = count;
-                return (1 - p) * binomial(N - 1, k, p, ref count) + p * binomial(N - 1, k - 1, p, ref count);
+            count += 2;
+            binomialMemory[N, k] = count;
+            return (1 - p) * binomial(N - 1, k, p, ref count) + p * binomial(N - 1, k - 1, p, ref count);
             //}
+        }
+
+        [TestMethod]
+        public void Exercise11028()
+        {
+            var numbers = new int[] { 1, 2, 3, 4, 4, 4, 5, 6, 6, 7, 8, 9, 9, 10 };
+
+            var distinct = numbers.Distinct();
+            var unique = Unique(numbers);
+
+            Assert.IsTrue(distinct.Zip(unique, (a, b) => a == b).All(x => x));
+        }
+
+        private int[] Unique(int[] numbers)
+        {
+            int count = 1;
+
+            for (int i = 1; i < numbers.Length; ++i)
+            {
+                if (numbers[i - 1] != numbers[i]) count++;
+            }
+
+            var result = new int[count];
+            result[0] = numbers[0];
+            int current = 1;
+
+            for (int i = 1; i < numbers.Length; ++i)
+            {
+                if (numbers[i - 1] != numbers[i])
+                {
+                    result[current++] = numbers[i];
+                }
+            }
+
+            return result;
+        }
+
+        [TestMethod]
+        public void Exercise11029()
+        {
+            var numbers = new int[] { 1, 2, 3, 4, 4, 4, 5, 6, 6, 8, 9, 9, 10 };
+            Assert.AreEqual(3, BinarySearch.RankLower(4, numbers));
+            Assert.AreEqual(10, BinarySearch.RankLower(9, numbers));
+            Assert.AreEqual(-1, BinarySearch.RankLower(7, numbers));
         }
     }
 
@@ -887,6 +931,37 @@ Daniel 5 2");
                 return mid;
             }
         }
+
+        public static int RankLower(int key, int[] a)
+        {
+            return RankLower(key, a, 0, a.Length - 1);
+        }
+
+        static int RankLower(int key, int[] a, int lo, int hi)
+        {
+            System.Console.WriteLine($"{key} - {lo} - {hi}");
+            // Index of key in a[], if present, is not smaller than lo
+            // and not larger than hi.
+
+            if (lo > hi) return -1;
+            if ((lo == hi) && key == a[lo]) return lo;
+
+            int mid = lo + (hi - lo) / 2;
+
+            if (key <= a[mid])
+            {
+                return RankLower(key, a, lo, mid - 1);
+            }
+            else if (key > a[mid])
+            {
+                return RankLower(key, a, mid + 1, hi);
+            }
+            else
+            {
+                return mid;
+            }
+        }
+
     }
 
     public static class StdRandom

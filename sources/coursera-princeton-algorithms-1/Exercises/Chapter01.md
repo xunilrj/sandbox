@@ -881,14 +881,64 @@ binomial(100,50) = 100891344545564193334812497256
 \#binomial(100,50) = 100891344545564193334812497256 - 1  
 \#binomial(100,50) = 100891344545564193334812497255
 
-1.1.28 Remove duplicates. Modify the test client in BinarySearch to remove any du-
-plicate keys in the whitelist after the sort.
-1.1.29 Equal keys. Add to BinarySearch a static method rank() that takes a key and
-a sorted array of int values (some of which may be equal) as arguments and returns the
-number of elements that are smaller than the key and a similar method count() that
-returns the number of elements equal to the key. Note : If i and j are the values returned
-by rank(key, a) and count(key, a) respectively, then a[i..i+j-1 ] are the values in
-the array that are equal to key .
+## 1.1.28 Remove duplicates. Modify the test client in BinarySearch to remove any duplicate keys in the whitelist after the sort.
+
+### Asnwers
+
+    private int[] Unique(int[] numbers)
+    {
+        int count = 1;
+
+        for (int i = 1; i < numbers.Length; ++i)
+        {
+            if (numbers[i - 1] != numbers[i]) count++;
+        }
+
+        var result = new int[count];
+        result[0] = numbers[0];
+        int current = 1;
+
+        for (int i = 1; i < numbers.Length; ++i)
+        {
+            if (numbers[i - 1] != numbers[i])
+            {
+                result[current++] = numbers[i];
+            }
+        }
+
+        return result;
+    }
+
+## 1.1.29 Equal keys. Add to BinarySearch a static method rank() that takes a key and a sorted array of int values (some of which may be equal) as arguments and returns the number of elements that are smaller than the key and a similar method count() that returns the number of elements equal to the key. Note : If i and j are the values returned by rank(key, a) and count(key, a) respectively, then a[i..i+j-1 ] are the values in the array that are equal to key .
+
+### Answers
+
+    public static int RankLower(int key, int[] a)
+    {
+        return RankLower(key, a, 0, a.Length - 1);
+    }
+
+    static int RankLower(int key, int[] a, int lo, int hi)
+    {
+        if (lo > hi) return -1;
+        if ((lo == hi) && key == a[lo]) return lo;
+
+        int mid = lo + (hi - lo) / 2;
+
+        if (key <= a[mid])
+        {
+            return RankLower(key, a, lo, mid - 1);
+        }
+        else if (key > a[mid])
+        {
+            return RankLower(key, a, mid + 1, hi);
+        }
+        else
+        {
+            return mid;
+        }
+    }
+
 1.1.30 Array exercise. Write a code fragment that creates an N-by-N boolean array
 a[][] such that a[i][j] is true if i and j are relatively prime (have no common fac-
 tors), and false otherwise.
