@@ -621,6 +621,33 @@ Daniel 5 2");
             Assert.AreEqual(3, BinarySearch.Count(4, numbers));
             Assert.AreEqual(3, BinarySearch.FasterCountForSmallCounts(4, numbers));
         }
+
+
+        [TestMethod]
+        public void Exercise11030()
+        {
+            var m = RelativePrimeMarix(10, 10);
+            Assert.IsTrue(m[2, 3]);
+            Assert.IsTrue(m[3, 2]);
+
+            Assert.IsFalse(m[2, 4]);
+            Assert.IsFalse(m[4, 2]);
+        }
+
+        bool[,] RelativePrimeMarix(int w, int h)
+        {
+            bool[,] matrix = new bool[w, h];
+
+            for (int x = 0; x < w; ++x)
+            {
+                for (int y = 0; y < h; ++y)
+                {
+                    matrix[y, x] = Euclid.gcd(x, y) == 1 ? true : false;
+                }
+            }
+
+            return matrix;
+        }
     }
 
     public static class Euclid
@@ -1034,6 +1061,7 @@ Daniel 5 2");
 
             return count;
         }
+
     }
 
     public static class StdRandom

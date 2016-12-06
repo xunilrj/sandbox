@@ -1001,9 +1001,12 @@ binomial(100,50) = 100891344545564193334812497256
         return count;
     }
 
-1.1.30 Array exercise. Write a code fragment that creates an N-by-N boolean array
-a[][] such that a[i][j] is true if i and j are relatively prime (have no common fac-
-tors), and false otherwise.
+## 1.1.30 Array exercise. Write a code fragment that creates an N-by-N boolean array a[][] such that a[i][j] is true if i and j are relatively prime (have no common factors), and false otherwise.
+
+### Answers
+
+
+
 1.1.31 Random connections. Write a program that takes as command-line arguments
 an integer N and a double value p (between 0 and 1), plots N equally spaced dots of size
 .05 on the circumference of a circle, and then, with probability p for each pair of points,
