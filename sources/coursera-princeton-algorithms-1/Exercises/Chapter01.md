@@ -1005,7 +1005,20 @@ binomial(100,50) = 100891344545564193334812497256
 
 ### Answers
 
+    bool[,] RelativePrimeMarix(int w, int h)
+    {
+        bool[,] matrix = new bool[w, h];
 
+        for (int x = 0; x < w; ++x)
+        {
+            for (int y = 0; y < h; ++y)
+            {
+                matrix[y, x] = Euclid.gcd(x, y) == 1 ? true : false;
+            }
+        }
+
+        return matrix;
+    }
 
 1.1.31 Random connections. Write a program that takes as command-line arguments
 an integer N and a double value p (between 0 and 1), plots N equally spaced dots of size
