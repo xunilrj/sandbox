@@ -1020,17 +1020,62 @@ binomial(100,50) = 100891344545564193334812497256
         return matrix;
     }
 
-1.1.31 Random connections. Write a program that takes as command-line arguments
-an integer N and a double value p (between 0 and 1), plots N equally spaced dots of size
-.05 on the circumference of a circle, and then, with probability p for each pair of points,
-draws a gray line connecting them.
-59 1.1
-n Basic Programming Model
-1.1.32 Histogram. Suppose that the standard input stream is a sequence of double
-values. Write a program that takes an integer N and two double values l and r from the
-command line and uses StdDraw to plot a histogram of the count of the numbers in the
-standard input stream that fall in each of the N intervals defined by dividing (l , r) into
-N equal-sized intervals.
+## 1.1.31 Random connections. Write a program that takes as command-line arguments an integer N and a double value p (between 0 and 1), plots N equally spaced dots of size .05 on the circumference of a circle, and then, with probability p for each pair of points, draws a gray line connecting them.
+
+### Answers
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <script src="https://cdn.rawgit.com/wout/svg.js/master/dist/svg.min.js" data-require="svg.js@*" data-semver="1.0.1"></script>
+    </head>
+    <body>
+        <div id="drawing"></div>
+        <script>
+        var scale = 200;
+        var draw = SVG('drawing').size(1*scale, 1*scale);
+        var N = 10;
+        var p = 0.2;
+    
+        pos = function(n,N){
+            var angle = 2*Math.PI/N;
+            var theta = n*angle;
+            return {
+            x:Math.sin(theta)*(scale/2-2*scaledRadius)+(scale/2),
+            y:Math.cos(theta)*(scale/2-scaledRadius)+(scale/2)}
+        }
+    
+        var radius = 0.05;
+        var scaledRadius = radius*scale;
+        for(var n = 0; n < N;n++){
+            var position = pos(n,N);
+            draw.circle(radius*scale)
+            .attr({ fill: '#f06' })
+            .move(position.x,position.y);
+        }
+    
+        for(var n1 = 0; n1 < N;n1++){
+            for(var n2 = 0; n2 < N;n2++){
+            var r = Math.random();
+            if(r<p)
+            {
+                var position1 = pos(n1,N);
+                var position2 = pos(n2,N);
+                
+                draw.line(position1.x, position1.y,
+                position2.x, position2.y)
+                .stroke({ width: 1 });
+            }
+            }
+        }
+        </script>
+    </body>
+    </html>
+
+## 1.1.32 Histogram. Suppose that the standard input stream is a sequence of double values. Write a program that takes an integer N and two double values l and r from the command line and uses StdDraw to plot a histogram of the count of the numbers in the standard input stream that fall in each of the N intervals defined by dividing (l , r) into N equal-sized intervals.
+
+### Answers
+
 1.1.33 Matrix library. Write a library Matrix that implements the following API:
 public class Matrix
 static double dot(double[] x, double[] y) vector dot product
