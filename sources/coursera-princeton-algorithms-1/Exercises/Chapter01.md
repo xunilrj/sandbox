@@ -1076,6 +1076,51 @@ binomial(100,50) = 100891344545564193334812497256
 
 ### Answers
 
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+        <script src="https://cdn.rawgit.com/wout/svg.js/master/dist/svg.min.js" data-require="svg.js@*" data-semver="1.0.1"></script>
+        <link href="style.css" rel="stylesheet" />
+        <script src="script.js"></script>
+    </head>
+
+    <body>
+        <div id="drawing"></div>
+        <script>
+        let N = 10;
+        let l = -5.0;
+        let r = 15.0;
+        let binwidth = 1/N;
+        
+        let numbers = [-1,2,5,5,8,8,4,-2,3,-4,10,6,7,3,2,12,2,4,3,5,6,7,8,1,3,2,3,4,5,3,2];
+        var hist = new Array(N).fill(0);
+        
+        for(let n of numbers){
+            let nbin = Math.floor(((n-l)/(r-l))*N);
+            hist[nbin]++;
+        }
+        
+        let max = Math.max(...hist);
+        
+        const scale = 100
+        canvas = SVG("drawing").size(1*scale,1*scale);
+        
+        for(let x = 0; x < N; ++x){
+            let width = (1/N*0.9)*scale;
+            let height = (hist[x]/max)*80;
+            let posx = (x/N)*scale;
+            let posy = scale-height;
+            canvas.rect(width,height)
+            .move(posx,posy);
+        }
+        
+        </script>
+    </body>
+
+    </html>
+
+
 1.1.33 Matrix library. Write a library Matrix that implements the following API:
 public class Matrix
 static double dot(double[] x, double[] y) vector dot product
