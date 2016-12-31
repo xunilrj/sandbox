@@ -723,7 +723,7 @@ Daniel 5 2");
         public void Exercise11036()
         {
             int M = 5;
-            int N = 30;
+            int N = 100;
 
             var table = new int[M, M];
 
