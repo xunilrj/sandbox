@@ -1121,44 +1121,170 @@ binomial(100,50) = 100891344545564193334812497256
     </html>
 
 
-1.1.33 Matrix library. Write a library Matrix that implements the following API:
-public class Matrix
-static double dot(double[] x, double[] y) vector dot product
-static double[][] mult(double[][] a, double[][] b) matrix-matrix product
-static double[][] transpose(double[][] a) transpose
-static double[] mult(double[][] a, double[] x) matrix-vector product
-static double[] mult(double[] y, double[][] a) vector-matrix product
-Develop a test client that reads values from standard input and tests all the methods.
-1.1.34 Filtering. Which of the following require saving all the values from standard
-input (in an array, say), and which could be implemented as a filter using only a fixed
-number of variables and arrays of fixed size (not dependent on N)? For each, the input
-comes from standard input and consists of N real numbers between 0 and 1.
-n Print the maximum and minimum numbers.
-n Print the median of the numbers.
-n Print the k th smallest value, for k less than 100.
-n Print the sum of the squares of the numbers.
-n Print the average of the N numbers.
-n Print the percentage of numbers greater than the average.
-n Print the N numbers in increasing order.
-n Print the N numbers in random order.
-crEAtivE problEms (continued)
-60 Chapter 1
-n Fundamentals
-ExpErimENts
-1.1.35 Dice simulation. The following code computes the exact probability distribu-
-tion for the sum of two dice:
-int SIDES = 6;
-double[] dist = new double[2*SIDES+1];
-for (int i = 1; i <= SIDES; i++)
-for (int j = 1; j <= SIDES; j++)
-dist[i+j] += 1.0;
-for (int k = 2; k <= 2*SIDES; k++)
-dist[k] /= 36.0;
-The value dist[k] is the probability that the dice sum to k . Run experiments to vali-
-date this calculation simulating N dice throws, keeping track of the frequencies of oc-
-currence of each value when you compute the sum of two random integers between 1
-and 6. How large does N have to be before your empirical results match the exact results
-to three decimal places?
+## 1.1.33 Matrix library. Write a library Matrix that implements the following API: Develop a test client that reads values from standard input and tests all the methods.
+
+    public class Matrix{
+        static double dot(double[] x, double[] y); //vector dot product
+        static double[][] mult(double[][] a, double[][] b); //matrix-matrix product
+        static double[][] transpose(double[][] a); //transpose
+        static double[] mult(double[][] a, double[] x); //matrix-vector product
+        static double[] mult(double[] y, double[][] a); //vector-matrix product
+    }
+
+### Answers
+
+    public class Matrix
+    {
+        public static double[][] id => new double[][] {
+                new double[] { 1, 0, 0 },
+                new double[] { 0, 1, 0 },
+                new double[] { 0, 0, 1 }
+            };
+
+        public static double [][] zero(int h, int w)
+        {
+            var result = new double[w][];
+
+            for( var cx = 0; cx < w; cx++)
+            {
+                result[cx] = new double[h];
+                result[cx].Initialize();
+            }
+
+            return result;
+        }
+
+        public static double dot(double[] x, double[] y)
+        {
+            double accum = 0;
+            for (int i = 0; i < x.Length; ++i)
+            {
+                accum += x[i] * y[i];
+            }
+            return accum;
+        }
+        
+        public static double[][] mult(double[][] a, double[][] b)
+        {
+            Debug.Assert(a.Length == b[0].Length);
+
+            var newh = a[0].Length;
+            var neww = b.Length;
+            var inner = a.Length;
+
+            var result = new double[neww][];
+
+            for (int x = 0; x < neww; x++)
+            {
+                result[x] = new double[newh];
+
+                for (int y = 0; y < newh; y++)
+                {
+                    Console.WriteLine($"a[j][{y}] - b[{x}][j]");
+                    var accum = 0.0;
+
+                    for (var j = 0; j < inner; ++j)
+                    {
+                        accum += a[j][y] * b[x][j];
+                    }
+
+                    result[x][y] = accum;
+                }
+            }
+
+            return result;
+        }
+
+        public static double[][] transpose(double[][] a)
+        {
+            var result = new double[a.Length][];
+
+            for (int x = 0; x < a.Length; x++)
+            {
+                result[x] = new double[a.Length];
+
+                for (int y = 0; y < a.Length; y++)
+                {
+                    result[x][y] = a[y][x];
+                }
+            }
+
+            return result;
+        }
+        
+        public static double[] mult(double[][] a, double[] b)
+        {
+            var result = new double[a.Length];
+
+            for (int x = 0; x < a.Length; x++)
+            {
+                var accum = 0.0;
+
+                for (var j = 0; j < a.Length; ++j)
+                {
+                    accum += a[x][j] * b[j];
+                }
+
+                result[x] = accum;
+            }
+
+            return result;
+        }
+
+        public static double[] mult(double[] b, double[][] a)
+        {
+            var result = new double[b.Length];
+
+            for (int x = 0; x < a.Length; x++)
+            {
+                var accum = 0.0;
+
+                for (var j = 0; j < a.Length; ++j)
+                {
+                    accum += a[j][x] * b[j];
+                }
+
+                result[x] = accum;
+            }
+
+            return result;
+        }
+    }
+
+## 1.1.34 Filtering. Which of the following require saving all the values from standard input (in an array, say), and which could be implemented as a filter using only a fixed number of variables and arrays of fixed size (not dependent on N)? For each, the input comes from standard input and consists of N real numbers between 0 and 1.
+1 Print the maximum and minimum numbers.  
+2 Print the median of the numbers.  
+3 Print the k th smallest value, for k less than 100.  
+4 Print the sum of the squares of the numbers.  
+5 Print the average of the N numbers.  
+6 Print the percentage of numbers greater than the average.  
+7 Print the N numbers in increasing order.  
+8 Print the N numbers in random order.  
+
+### Answers
+1 Filter  
+2 Save All or filter with N/2 cells)
+3 Filter with 100 cells  
+4 Filter
+5 Filter  
+6 Save All  
+7 Save All  
+8 Filter with k cells
+
+## 1.1.35 Dice simulation. The following code computes the exact probability distribution for the sum of two dice. The value dist[k] is the probability that the dice sum to k . Run experiments to validate this calculation simulating N dice throws, keeping track of the frequencies of occurrence of each value when you compute the sum of two random integers between 1 and 6. How large does N have to be before your empirical results match the exact results to three decimal places?
+
+    int SIDES = 6;
+    double[] dist = new double[2*SIDES+1];
+    for (int i = 1; i <= SIDES; i++)
+        for (int j = 1; j <= SIDES; j++)
+            dist[i+j] += 1.0;
+    for (int k = 2; k <= 2*SIDES; k++)
+        dist[k] /= 36.0;
+
+### Answers
+
+1900
+
 1.1.36 Empirical shuffle check. Run computational experiments to check that our
 shuffling code on page 32 works as advertised. Write a program ShuffleTest that
 takes command-line arguments M and N, does N shuffles of an array of size M that is

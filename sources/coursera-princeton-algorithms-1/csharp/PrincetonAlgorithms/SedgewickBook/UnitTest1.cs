@@ -648,6 +648,194 @@ Daniel 5 2");
 
             return matrix;
         }
+
+        [TestMethod]
+        public void Exercise11033()
+        {
+            var numbers = new double[] { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+            var n1 = numbers.Take(5).ToArray();
+            var n2 = numbers.Skip(5).Take(5).ToArray();
+
+            //var dot = Matrix.dot(n1, n2);
+            var r = Matrix.mult(Matrix.id, Matrix.id);
+            r = Matrix.mult(Matrix.zero(4, 3), Matrix.zero(3, 2));
+
+            r = Matrix.transpose(Matrix.id);
+
+            var r2 = Matrix.mult(Matrix.id, new[] { 1.0, 2, 3 });
+
+            //r2 = Matrix.mult(new[] { 1.0, 2, 3 }, Matrix.id);
+        }
+
+        [TestMethod]
+        public void Exercise11035()
+        {
+            int SIDES = 6;
+            double[] dist = new double[2 * SIDES + 1];
+            for (int i = 1; i <= SIDES; i++)
+                for (int j = 1; j <= SIDES; j++)
+                    dist[i + j] += 1.0;
+            for (int k = 2; k <= 2 * SIDES; k++)
+                dist[k] /= 36.0;
+
+            for (int i = 0; i < dist.Length; i++)
+            {
+                Console.Write($"{i} {dist[i].ToString("N3")} - ");
+            }
+
+            Console.WriteLine();
+            var random = new Random();
+
+            var values = new double[13];
+            var pvalues = new double[13];
+            int xxx = 0;
+            for (; xxx < 10000; xxx++)
+            {
+                var v = random.Next(1, 7) + random.Next(1, 7);
+                values[v]++;
+
+                if (xxx % 100 == 0)
+                {
+                    //Console.WriteLine();
+                    //Console.WriteLine();
+
+                    for (int ii = 0; ii < dist.Length; ii++)
+                    {
+                        pvalues[ii] = values[ii] / (double)xxx;
+                    }
+
+                    int score = 0;
+                    for (int ii = 0; ii < dist.Length; ii++)
+                    {
+                        var per = pvalues[ii] - dist[ii];
+                        if (Math.Abs(per) < 0.0001) score++;
+                    }
+
+                    Console.WriteLine(score)~;
+                    if (score >= 10) break;
+                }
+            }
+
+            Console.WriteLine(xxx);
+        }
+    }
+
+    public class Matrix
+    {
+        public static double[][] id => new double[][] {
+                new double[] { 1, 0, 0 },
+                new double[] { 0, 1, 0 },
+                new double[] { 0, 0, 1 }
+            };
+
+        public static double[][] zero(int h, int w)
+        {
+            var result = new double[w][];
+
+            for (var cx = 0; cx < w; cx++)
+            {
+                result[cx] = new double[h];
+                result[cx].Initialize();
+            }
+
+            return result;
+        }
+
+        public static double dot(double[] x, double[] y)
+        {
+            double accum = 0;
+            for (int i = 0; i < x.Length; ++i)
+            {
+                accum += x[i] * y[i];
+            }
+            return accum;
+        }
+
+        public static double[][] mult(double[][] a, double[][] b)
+        {
+            Debug.Assert(a.Length == b[0].Length);
+
+            var newh = a[0].Length;
+            var neww = b.Length;
+            var inner = a.Length;
+
+            var result = new double[neww][];
+
+            for (int x = 0; x < neww; x++)
+            {
+                result[x] = new double[newh];
+
+                for (int y = 0; y < newh; y++)
+                {
+                    Console.WriteLine($"a[j][{y}] - b[{x}][j]");
+                    var accum = 0.0;
+
+                    for (var j = 0; j < inner; ++j)
+                    {
+                        accum += a[j][y] * b[x][j];
+                    }
+
+                    result[x][y] = accum;
+                }
+            }
+
+            return result;
+        }
+
+        public static double[][] transpose(double[][] a)
+        {
+            var result = new double[a.Length][];
+
+            for (int x = 0; x < a.Length; x++)
+            {
+                result[x] = new double[a.Length];
+
+                for (int y = 0; y < a.Length; y++)
+                {
+                    result[x][y] = a[y][x];
+                }
+            }
+
+            return result;
+        }
+
+        public static double[] mult(double[][] a, double[] b)
+        {
+            var result = new double[a.Length];
+
+            for (int x = 0; x < a.Length; x++)
+            {
+                var accum = 0.0;
+
+                for (var j = 0; j < a.Length; ++j)
+                {
+                    accum += a[x][j] * b[j];
+                }
+
+                result[x] = accum;
+            }
+
+            return result;
+        }
+
+        public static double[] mult(double[] b, double[][] a)
+        {
+            var result = new double[b.Length];
+
+            for (int x = 0; x < a.Length; x++)
+            {
+                var accum = 0.0;
+
+                for (var j = 0; j < a.Length; ++j)
+                {
+                    accum += a[j][x] * b[j];
+                }
+
+                result[x] = accum;
+            }
+
+            return result;
+        }
     }
 
     public static class Euclid
