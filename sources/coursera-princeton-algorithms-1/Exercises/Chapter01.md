@@ -1283,14 +1283,28 @@ binomial(100,50) = 100891344545564193334812497256
 
 ### Answers
 
-1900
+20000
 
-1.1.36 Empirical shuffle check. Run computational experiments to check that our
-shuffling code on page 32 works as advertised. Write a program ShuffleTest that
-takes command-line arguments M and N, does N shuffles of an array of size M that is
-initialized with a[i] = i before each shuffle, and prints an M-by-M table such that row
-i gives the number of times i wound up in position j for all j . All entries in the table
-should be close to N/M.
+## 1.1.36 Empirical shuffle check. Run computational experiments to check that our shuffling code on page 32 works as advertised. Write a program ShuffleTest that takes command-line arguments M and N, does N shuffles of an array of size M that is initialized with a[i] = i before each shuffle, and  prints an M-by-M table such that row i gives the number of times i wound up in position j for all j . All entries in the table should be close to N/M.
+
+### Answer
+
+     var table = new int[M, M];
+
+    var random = new Random();
+    for (int i = 0; i < N; ++i)
+    {
+        var ar = Enumerable.Range(0, M)
+            .OrderBy(x => random.Next())
+            .ToArray();
+
+        for (int j = 0; j < ar.Length; j++)
+        {
+            var pos = Array.FindIndex(ar, new Predicate<int>(x => x == j));
+            table[j, pos]++;
+        }
+    }
+
 1.1.37 Bad shuffling. Suppose that you choose a random integer between 0 and N-1
 in our shuffling code instead of one between i and N-1 . Show that the resulting order is
 not equally likely to be one of the N ! possibilities. Run the test of the previous exercise

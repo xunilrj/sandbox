@@ -689,12 +689,12 @@ Daniel 5 2");
             var values = new double[13];
             var pvalues = new double[13];
             int xxx = 0;
-            for (; xxx < 10000; xxx++)
+            for (; xxx < 100000; xxx++)
             {
                 var v = random.Next(1, 7) + random.Next(1, 7);
                 values[v]++;
 
-                if (xxx % 100 == 0)
+                if (xxx % 1000 == 0)
                 {
                     //Console.WriteLine();
                     //Console.WriteLine();
@@ -708,15 +708,48 @@ Daniel 5 2");
                     for (int ii = 0; ii < dist.Length; ii++)
                     {
                         var per = pvalues[ii] - dist[ii];
-                        if (Math.Abs(per) < 0.0001) score++;
+                        if (Math.Abs(per) < 0.001) score++;
                     }
 
-                    Console.WriteLine(score)~;
+                    Console.WriteLine(score);
                     if (score >= 10) break;
                 }
             }
 
             Console.WriteLine(xxx);
+        }
+
+        [TestMethod]
+        public void Exercise11036()
+        {
+            int M = 5;
+            int N = 30;
+
+            var table = new int[M, M];
+
+            var random = new Random();
+            for (int i = 0; i < N; ++i)
+            {
+                var ar = Enumerable.Range(0, M)
+                    .OrderBy(x => random.Next())
+                    .ToArray();
+
+                for (int j = 0; j < ar.Length; j++)
+                {
+                    var pos = Array.FindIndex(ar, new Predicate<int>(x => x == j));
+                    table[j, pos]++;
+                }
+            }
+
+            Console.WriteLine();
+            for (int x = 0; x < M; x++)
+            {
+                for (int y = 0; y < M; y++)
+                {
+                    Console.Write($".{table[x, y]}.");
+                }
+                Console.WriteLine();
+            }
         }
     }
 
