@@ -1,0 +1,42 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\begin{document}
+	\section{Karatsuba Multiplication}
+	
+	Two numbers $l$ and $r$, can be written in the following way:	
+	\begin{align*}	
+	l &= a*10^N + b\\  
+	r &= c*10^N + d\\
+	\end{align*}
+	In this case their multiplication can be written
+	\begin{align*}
+	l*r &= (a*10^N + b)*(c*10^N + d)\\ 
+	&= (a*c*10^{2N})+(a*d*10^N)+(b*c*10^N)+(b*d)\\  
+	&= (a*c*10^{2N})+([(a*d)+(b*c)]*10^N)+]+(b*d)  
+	\end{align*}
+	but $(a*d)+(b*c)$ is equal to
+	\begin{align*}
+	&= (a*d)+(b*c)\\
+	&= (a+b)*(c+d) - ac - bd\\
+	&= a*c + a*d + b*c + b*d - a*c - b*d\\
+	&= a*d + b*c
+	\end{align*}
+	now we can change two multiplications $(a*d)$ and $(b*c)$ to just one: $(a+b)*(c+d)$, given that we have already calculated $a*c$ and $b*d$.  
+	
+	This gives us the final form:	
+	\begin{align*}
+	l*r &= (a*c*10^{2N})\\&+([(a+b)*(c+d) - a*c - b*d]*10^N)\\&+(b*d)
+	\end{align*}
+	
+	See:\\
+	\url{https://academic.microsoft.com/#/detail/204623740}\\\\
+	\url{https://scholar.google.co.uk/scholar?q=Multiplication+of+Many-Digital+Numbers+by+Automatic+Computers&btnG=&hl=en&as_sdt=0%2C5}\\\\
+	\url{http://cstheory.stackexchange.com/questions/21564/why-did-kolmogorov-publish-karatsubas-algorithm}\\
+	\\
+	The Art of Computer Programming, Volume II, page 294, section 4.3.3
+\end{document}
