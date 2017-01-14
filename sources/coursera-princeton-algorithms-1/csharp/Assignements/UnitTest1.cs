@@ -578,6 +578,126 @@ namespace Assignements
         {
             return $"[{string.Join(",", array.Select(x => x.ToString()).ToArray())}]";
         }
+
+        /// <summary>
+        /// You are given an n by n grid of distinct numbers.
+        /// A number is a local minimum if it is smaller than
+        /// all of its neighbors. (A neighbor of a number is one
+        /// immediately above, below, to the left, or the
+        /// right. Most numbers have four neighbors; numbers 
+        /// on the side have three; the four corners have two.)
+        /// Use the divide-and-conquer algorithm design paradigm
+        /// to compute a local minimum with only O(n) comparisons
+        /// between pairs of numbers. (Note: since there are n2 
+        /// numbers in the input, you cannot afford to look at 
+        /// all of them.
+        /// Hint: Think about what types of recurrences would 
+        /// give you the desired upper bound.)
+        /// </summary>
+        [TestMethod]
+        public void LowerestInMatrix()
+        {
+            var matrix = Parse(@"
+5 5 5 5 5 5 5 5
+5 4 4 4 4 4 5 5
+5 4 4 3 4 4 5 5
+5 4 4 4 4 4 5 5
+5 4 4 4 4 4 5 5
+5 4 4 4 4 4 5 5
+5 4 4 4 4 4 5 5
+5 4 4 4 4 4 5 5");
+            localminimunCount = 0;
+            var r = FindLocalMinimun(new MatrixReader(matrix), 0);
+            Console.WriteLine($"Cmparisons = {localminimunCount}");
+            Assert.IsTrue(r);
+        }
+
+        int localminimunCount = 0;
+
+        private bool FindLocalMinimun(MatrixReader matrix, int rec)
+        {
+            Console.Write($"{new string(' ', rec * 3)} {matrix.X},{matrix.Y},{matrix.W},{matrix.H}");
+            if ((matrix.W <= 1) && (matrix.H <= 1))
+            {
+                var result = matrix.islower(0, 0);
+                localminimunCount += 4;
+                Console.WriteLine($" - {matrix._(0, 0)} = {result}");
+                return result;
+            }
+            else
+            {
+                Console.WriteLine();
+            }
+
+            var qs = matrix.GetQuadrants().ToArray();
+            var rq1 = FindLocalMinimun(qs[0], rec + 1);
+            var rq2 = FindLocalMinimun(qs[1], rec + 1);
+            var rq3 = FindLocalMinimun(qs[2], rec + 1);
+            var rq4 = FindLocalMinimun(qs[3], rec + 1);
+
+            return rq1 || rq2 || rq3 || rq4;
+        }
+
+        public class MatrixReader
+        {
+            int[][] Data;
+            public int X;
+            public int Y;
+            public int W;
+            public int H;
+
+            public MatrixReader(int[][] data)
+                : this(data, 0, 0, data.Length, data[0].Length)
+            {
+            }
+
+            public MatrixReader(int[][] data, int x, int y, int w, int h)
+            {
+                Data = data;
+                X = x; Y = y; W = w; H = h;
+            }
+
+            public int _(int x, int y)
+            {
+                var lx = X + x;
+                var ly = Y + y;
+                if (lx < 0) return int.MaxValue;
+                if (ly < 0) return int.MaxValue;
+                if (lx >= Data[0].Length) return int.MaxValue;
+                if (ly >= Data.Length) return int.MaxValue;
+                return Data[Y + y][lx];
+            }
+
+            public IEnumerable<MatrixReader> GetQuadrants()
+            {
+                int mx = W / 2;
+                int my = H / 2;
+                yield return new MatrixReader(Data, X, Y, mx, my);
+                yield return new MatrixReader(Data, X + mx, Y, mx, my);
+                yield return new MatrixReader(Data, X, Y + my, mx, my);
+                yield return new MatrixReader(Data, X + mx, Y + my, mx, my);
+            }
+
+            internal bool islower(int x, int y)
+            {
+                var l = _(x - 1, y) > _(x, y);
+                var r = _(x + 1, y) > _(x, y);
+                var u = _(x, y - 1) > _(x, y);
+                var d = _(x, y + 1) > _(x, y);
+
+                return l || r || u || d;
+            }
+        }
+
+        private int[][] Parse(string v)
+        {
+            return v.Split(new[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries)
+                .Where(x => !string.IsNullOrEmpty(x))
+                .Select(x =>
+            {
+                return x.Split(' ').Select(s => int.Parse(s)).ToArray();
+            }).ToArray();
+        }
     }
 
     public class MasterMethod<T>
