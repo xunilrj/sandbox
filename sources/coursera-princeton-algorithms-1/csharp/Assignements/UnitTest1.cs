@@ -438,7 +438,7 @@ namespace Assignements
         ///the second-largest number in the array, and
         ///that uses at most n+log2n−2 comparisons.
         /// </summary>
-        [TestMethod]        
+        [TestMethod]
         public void GetSecondBiggest()
         {
             for (int i = 1; i < 10; ++i)
@@ -501,6 +501,82 @@ namespace Assignements
                     return GetUnimodalBiggest(l);
                 }
             }
+        }
+
+        /// <summary>
+        /// You are given a sorted (from smallest to largest) array A
+        /// of n distinct integers which can be positive, negative,
+        /// or zero. You want to decide whether or not there is an
+        /// index i such that A[i] = i. Design the fastest algorithm
+        /// that you can for solving this problem.
+        /// </summary>
+        [TestMethod]
+        public void MyTestMethod()
+        {
+            var array = new[] { -1, 0, 1, 3, 4, 7, 8, 9 };
+            var has = new HasAiEqualI().Run(array);
+            Assert.IsTrue(has);
+        }
+
+        /// <summary>
+        /// Best Case: O(log n)
+        /// Worst Case: Complete Master Method (a=2, b=2, d=0)
+        /// a > b^d = O(n^log_b(a)) = O(n^log_2(2)) = O(n^1) = O(n)
+        /// </summary>
+        public class HasAiEqualI
+        {
+            public bool Run(int[] array)
+            {
+                return Run(array, 0, array.Length - 1, 0);
+            }
+
+            public bool Run(int[] array, int istart, int iend, int rec)
+            {
+
+                //for (int i = 0; i < array.Length; ++i)
+                //{
+                //    if (array[i] == i)
+                //    {
+                //        return true;
+                //    }
+                //}
+
+                if (istart == iend)
+                {
+                    Console.WriteLine($"{new string(' ', rec * 3)}{istart} - {iend} {PrintArray(array)}");
+                    return array[0] == istart;
+                }
+                else
+                {
+                    Console.WriteLine($"{new string(' ', rec * 3)}{istart} - {iend} {PrintArray(array)}");
+                }
+
+                var l = array.Take(array.Length / 2).ToArray();
+                var r = array.Skip(array.Length / 2).ToArray();
+
+                var lfirst = l.First();
+                var rfirst = r.First();
+
+                var lresult = false;
+                var rresult = false;
+
+                if ((lfirst >= istart) && (lfirst <= iend))
+                {
+                    lresult = Run(l, istart, istart + l.Length - 1, rec + 1);
+                }
+
+                if ((rfirst >= istart) && (rfirst <= iend))
+                {
+                    rresult = Run(r, istart + l.Length, iend, rec + 1);
+                }
+
+                return lresult || rresult;
+            }
+        }
+
+        static string PrintArray(int[] array)
+        {
+            return $"[{string.Join(",", array.Select(x => x.ToString()).ToArray())}]";
         }
     }
 
