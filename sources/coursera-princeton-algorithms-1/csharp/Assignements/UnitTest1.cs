@@ -308,4 +308,248 @@ namespace Assignements
             }
         }
     }
+
+    [TestClass]
+    public class Week02Challenges
+    {
+        public class Comparer
+        {
+            public int Count { get; set; }
+
+            public int Compare(int l, int r)
+            {
+                Count++;
+                return l.CompareTo(r);
+            }
+        }
+
+        public class SGN2
+        {
+            public Comparer Comparer;
+
+            public SGN2()
+            {
+                Comparer = new Comparer();
+            }
+
+            public int Get(params int[] numbers)
+            {
+                var ns = new[] { Math.Min(numbers[0], numbers[1]), Math.Max(numbers[0], numbers[1]) };
+
+                for (int i = 2; i < numbers.Length; ++i)
+                {
+                    if (Comparer.Compare(numbers[i], ns[1]) > 0)
+                    {
+                        ns[0] = ns[1];
+                        ns[1] = numbers[i];
+                    }
+                    else if (Comparer.Compare(numbers[i], ns[0]) > 0)
+                    {
+                        ns[0] = numbers[i];
+                    }
+                }
+
+                return ns[0];
+            }
+        }
+
+        public class SecondGreatestNumber
+        {
+            public Comparer Comparer;
+
+            public SecondGreatestNumber()
+            {
+                Comparer = new Comparer();
+            }
+
+            public int Get(params int[] numbers)
+            {
+                return _Get(numbers)[0];
+            }
+
+            public int[] _Get(params int[] numbers)
+            {
+                if (numbers.Length == 2)
+                {
+                    Array.Sort(numbers);
+                    return numbers;
+                }
+                else
+                {
+                    int[] larger = new int[2];
+
+                    int n = numbers.Length;
+                    var l = _Get(numbers.Take(n / 2).ToArray());
+                    var r = _Get(numbers.Skip(n / 2).ToArray());
+
+                    int largeri = 0;
+                    int li = 0;
+                    int ri = 0;
+                    for (int i = 0; i < 4 && largeri < 2; i++)
+                    {
+                        if (Comparer.Compare(l[li], r[li]) > 0)
+                        {
+                            larger[largeri] = l[li];
+                            li++;
+                        }
+                        else
+                        {
+                            larger[largeri] = r[ri];
+                            ri++;
+                        }
+                        largeri++;
+                    }
+
+                    return larger;
+                }
+            }
+        }
+
+
+        private static int[] GetArray(int size)
+        {
+            var array = new int[size];
+
+            var r = new Random();
+            for (int i = 0; i < size; i++)
+            {
+                array[i] = r.Next();
+            }
+
+            return array;
+        }
+
+        private static void ShowComparisons(int[] array)
+        {
+            var sgn = new SecondGreatestNumber();
+            var n = sgn.Get(array);
+            //Assert.AreEqual(3, n);
+            Console.Write($"{sgn.Comparer.Count} - ");
+
+            var SGN2 = new SGN2();
+            SGN2.Get(array);
+
+            Console.WriteLine(SGN2.Comparer.Count);
+        }
+
+        /// <summary>
+        ///You are given as input an unsorted array of n distinct numbers,
+        ///where n is a power of 2. Give an algorithm that identifies
+        ///the second-largest number in the array, and
+        ///that uses at most n+log2n−2 comparisons.
+        /// </summary>
+        [TestMethod]        
+        public void GetSecondBiggest()
+        {
+            for (int i = 1; i < 10; ++i)
+            {
+                int size = (int)Math.Pow(2, i);
+                Console.Write($"Size: {size} - {size + (int)Math.Log(size, 2) - 2} - ");
+                ShowComparisons(GetArray(size));
+            }
+        }
+
+        /// <summary>
+        /// You are a given a unimodal array of n distinct elements,
+        /// meaning that its entries are in increasing order up
+        /// until its maximum element, after which its elements are
+        /// in decreasing order. Give an algorithm to compute the maximum
+        /// element that runs in O(log n) time.
+        /// </summary>
+        [TestMethod]
+        public void FindUnimodalBiggest()
+        {
+            var array = new[] { 1, 2, 3, 4, 5, 6, 5, 4 };
+            var big = GetUnimodalBiggest(array);
+
+            Assert.AreEqual(6, big);
+
+            //var alg = new MasterMethod<int[]>();
+            //alg.DividerSize = 2;
+            //alg.AddDivider(x => x.Take(x.Length / 2).ToArray());
+            ////alg.AddDivider(x => x.Skip(x.Length / 2).ToArray());
+            //alg.ConstantConquer((l, r) =>
+            //{
+            //    return 0;
+            //});
+
+            //Console.WriteLine(alg.Complexity);
+        }
+
+        private int GetUnimodalBiggest(int[] array)
+        {
+            int n = array.Length;
+
+            if (n <= 2)
+            {
+                return Math.Max(array[0], array[1]);
+            }
+            else
+            {
+                var l = array.Take(n / 2).ToArray();
+                var r = array.Skip(n / 2).ToArray();
+
+                var llast = l.Last();
+                var rfirst = r.First();
+
+                if (rfirst > llast)
+                {
+                    return GetUnimodalBiggest(r);
+                }
+                else //if (rfirst < llast)
+                {
+                    return GetUnimodalBiggest(l);
+                }
+            }
+        }
+    }
+
+    public class MasterMethod<T>
+    {
+        List<Func<T, T>> Dividers = new List<Func<T, T>>();
+        int D = 0;
+
+        public int DividerSize { get; set; }
+
+        public string Complexity
+        {
+            get
+            {
+                int a = Dividers.Count;
+                int b = DividerSize;
+                int d = D;
+
+                if (a == (int)Math.Pow(b, d))
+                {
+                    if (d == 0)
+                    {
+                        return "O(log(n))";
+                    }
+                    else
+                    {
+                        return $"O(n^{d}*log(n))";
+                    }
+                }
+                else if (a > (int)Math.Pow(b, d))
+                {
+                    var logba = (int)Math.Log(a, b);
+                    return $"O(n^{logba})";
+                }
+                else //if (a < (int)Math.Pow(d, b))
+                {
+                    return $"O(n^{d})";
+                }
+            }
+        }
+
+        public void AddDivider(Func<T, T> divider)
+        {
+            Dividers.Add(divider);
+        }
+
+        internal void ConstantConquer(Func<object, object, object> p)
+        {
+            D = 0;
+        }
+    }
 }
