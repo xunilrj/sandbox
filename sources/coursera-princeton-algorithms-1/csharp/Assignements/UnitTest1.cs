@@ -598,49 +598,60 @@ namespace Assignements
         public void LowerestInMatrix()
         {
             var matrix = Parse(@"
-5 5 5 5 5 5 5 5
-5 4 4 4 4 4 5 5
-5 4 4 3 4 4 5 5
-5 4 4 4 4 4 5 5
-5 4 4 4 4 4 5 5
-5 4 4 4 4 4 5 5
-5 4 4 4 4 4 5 5
-5 4 4 4 4 4 5 5");
+5 5 5 6 5 5 5
+5 4 4 5 4 3 5
+5 4 4 5 4 4 5
+5 4 4 5 4 4 5
+5 4 4 5 4 4 5
+5 4 4 5 4 4 5
+5 4 4 5 4 4 5");
             localminimunCount = 0;
             var r = FindLocalMinimun(new MatrixReader(matrix), 0);
             Console.WriteLine($"Cmparisons = {localminimunCount}");
-            Assert.IsTrue(r);
+            Assert.AreEqual(3, r);
         }
 
         int localminimunCount = 0;
 
-        private bool FindLocalMinimun(MatrixReader matrix, int rec)
+        private int FindLocalMinimun(MatrixReader matrix, int rec)
         {
-            Console.Write($"{new string(' ', rec * 3)} {matrix.X},{matrix.Y},{matrix.W},{matrix.H}");
-            if ((matrix.W <= 1) && (matrix.H <= 1))
+            Console.WriteLine($"{matrix.X} {matrix.Y} {matrix.W} {matrix.H}");
+            int x = matrix.W / 2;
+            int mx = 0, my = 0;
+            int currentMinimun = int.MaxValue;
+            for (int y = 0; y < matrix.H; y++)
             {
-                var result = matrix.islower(0, 0);
-                localminimunCount += 4;
-                Console.WriteLine($" - {matrix._(0, 0)} = {result}");
-                return result;
-            }
-            else
-            {
-                Console.WriteLine();
+                if (matrix._(x, y) < currentMinimun)
+                {
+                    mx = x;
+                    my = y;
+                    currentMinimun = matrix._(x, y);
+                }
             }
 
-            var qs = matrix.GetQuadrants().ToArray();
-            var rq1 = FindLocalMinimun(qs[0], rec + 1);
-            var rq2 = FindLocalMinimun(qs[1], rec + 1);
-            var rq3 = FindLocalMinimun(qs[2], rec + 1);
-            var rq4 = FindLocalMinimun(qs[3], rec + 1);
+            Console.WriteLine($"{mx} {my} {currentMinimun}");
 
-            return rq1 || rq2 || rq3 || rq4;
+            if (matrix._(mx + 1, my) < currentMinimun)
+            {
+                return FindLocalMinimun(new MatrixReader(matrix.Data,
+                    matrix.X + matrix.W / 2,
+                    matrix.Y, (int)Math.Ceiling(matrix.W / 2.0),
+                    (int)Math.Ceiling(matrix.H / 2.0)), rec + 1);
+            }
+            else if(matrix._(mx - 1, my) < currentMinimun)
+            {
+                return FindLocalMinimun(new MatrixReader(matrix.Data,
+                    matrix.X, matrix.Y,
+                    (int)Math.Floor(matrix.W / 2.0),
+                    (int)Math.Floor(matrix.H / 2.0)), rec + 1);
+            }
+
+            return currentMinimun;
         }
 
         public class MatrixReader
         {
-            int[][] Data;
+            public int[][] Data;
             public int X;
             public int Y;
             public int W;
