@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
+using System.IO;
 
 namespace Assignements
 {
@@ -638,7 +639,7 @@ namespace Assignements
                     matrix.Y, (int)Math.Ceiling(matrix.W / 2.0),
                     (int)Math.Ceiling(matrix.H / 2.0)), rec + 1);
             }
-            else if(matrix._(mx - 1, my) < currentMinimun)
+            else if (matrix._(mx - 1, my) < currentMinimun)
             {
                 return FindLocalMinimun(new MatrixReader(matrix.Data,
                     matrix.X, matrix.Y,
@@ -757,6 +758,192 @@ namespace Assignements
         internal void ConstantConquer(Func<object, object, object> p)
         {
             D = 0;
+        }
+    }
+
+
+
+    [TestClass]
+    public class Week03
+    {
+        [TestMethod]
+        public void WhenAtBeginning()
+        {
+            var numbers = File.ReadLines(@"C:\Users\xunil\Desktop\_32387ba40b36359a38625cbb397eee65_QuickSort.txt")
+                .Select(x => int.Parse(x))
+                .ToArray();
+
+            BigInteger comparisons = 0;
+            Quicksort(new ArraySegment<int>(numbers), PivotType.Beginning, ref comparisons, 0);
+            Console.WriteLine(comparisons);
+
+            Console.WriteLine("---------------------");
+
+            Assert.IsTrue(numbers.Zip(numbers.Skip(1), (l, r) => r - l).All(x => x == 1));
+        }
+
+        [TestMethod]
+        public void WhenAtEnd()
+        {
+            var numbers = File.ReadLines(@"C:\Users\xunil\Desktop\_32387ba40b36359a38625cbb397eee65_QuickSort.txt")
+                .Select(x => int.Parse(x))
+                .ToArray();
+
+            BigInteger comparisons = 0;
+            Quicksort(new ArraySegment<int>(numbers), PivotType.End, ref comparisons, 0);
+            Console.WriteLine(comparisons);
+
+            Console.WriteLine("---------------------");
+
+            Assert.IsTrue(numbers.Zip(numbers.Skip(1), (l, r) => r - l).All(x => x == 1));
+        }
+
+        [TestMethod]
+        public void WhenBestThree()
+        {
+            var numbers = File.ReadLines(@"C:\Users\xunil\Desktop\_32387ba40b36359a38625cbb397eee65_QuickSort.txt")
+                .Select(x => int.Parse(x))
+                .ToArray();
+
+            BigInteger comparisons = 0;
+            Quicksort(new ArraySegment<int>(numbers), PivotType.BestThree, ref comparisons, 0);
+            Console.WriteLine(comparisons);
+
+            Console.WriteLine("---------------------");
+
+            Assert.IsTrue(numbers.Zip(numbers.Skip(1), (l, r) => r - l).All(x => x == 1));
+        }
+
+        enum PivotType
+        {
+            Beginning, End, BestThree
+        }
+
+        void Quicksort(ArraySegment<int> array, PivotType type, ref BigInteger comp, int rec)
+        {
+            //Console.WriteLine($"{new string(' ', rec * 3)} {array.Offset} {array.Offset + array.Count - 1}");
+            //-­‐ If n = 1 return
+            if (array.Count == 1)
+            {
+                return;
+            }
+
+            int temp;
+
+            //-­‐ p = ChoosePivot(A, n)
+            var pivot = ChoosePivot(type, array);
+
+            temp = array.Array[array.Offset];
+            array.Array[array.Offset] = array.Array[pivot];
+            array.Array[pivot] = temp;
+            pivot = array.Offset;
+
+            int i = array.Offset + 1;
+
+            //-­‐ Partition  A  around  p
+            for (int j = array.Offset + 1; j < array.Offset + array.Count; ++j)
+            {
+                //if A[j] < p
+                if (array.Array[j] < array.Array[pivot])
+                {
+                    //-­‐swap A[j] and A[i]
+                    temp = array.Array[i];
+                    array.Array[i] = array.Array[j];
+                    array.Array[j] = temp;
+                    //-­‐  i:= i + 1
+                    ++i;
+                }
+            }
+
+            temp = array.Array[i - 1];
+            array.Array[i - 1] = array.Array[pivot];
+            array.Array[array.Offset] = temp;
+
+            var ls = array.Offset;
+            var le = i - 1;
+            var rs = i;
+            var re = array.Offset + array.Count;
+
+            comp += array.Count - 1;
+
+            //-­‐ Recursively sort 1 st part
+            if (le > ls)
+            {
+                Quicksort(new ArraySegment<int>(array.Array, ls, le - ls), type, ref comp, rec + 1);
+            }
+
+            if (re > rs)
+            {
+                //-­‐ Recursively sort 2 nd part
+                Quicksort(new ArraySegment<int>(array.Array, rs, re - rs), type, ref comp, rec + 1);
+            }
+        }
+
+        private int ChoosePivot(PivotType type, ArraySegment<int> array)
+        {
+            if (type == PivotType.Beginning)
+            {
+                return array.Offset;
+            }
+            else if (type == PivotType.End)
+            {
+                return array.Offset + array.Count - 1;
+            }
+            else if (type == PivotType.BestThree)
+            {
+                var l = array.Offset;
+                var lv = array.Array[l];
+                var r = array.Offset + array.Count - 1;
+                var rv = array.Array[r];
+
+                var mpos = 0;
+                if (array.Count % 2 == 0)
+                {
+                    mpos = (array.Count / 2) - 1;
+                }
+                else
+                {
+                    mpos = array.Count / 2;
+                }
+                var m = array.Offset + mpos;
+                var mv = array.Array[m];
+
+                if (lv < mv && lv < rv)
+                {
+                    if (mv < rv)
+                    {
+                        return m;
+                    }
+                    else
+                    {
+                        return r;
+                    }
+                }
+                else if (mv < lv && mv < rv)
+                {
+                    if (lv < rv)
+                    {
+                        return l;
+                    }
+                    else
+                    {
+                        return r;
+                    }
+                }
+                else if (rv < lv && rv < mv)
+                {
+                    if (lv < mv)
+                    {
+                        return l;
+                    }
+                    else
+                    {
+                        return m;
+                    }
+                }
+            }
+
+            throw new NotImplementedException();
         }
     }
 }

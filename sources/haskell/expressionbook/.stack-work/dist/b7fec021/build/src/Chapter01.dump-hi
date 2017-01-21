@@ -1,0 +1,70 @@
+
+==================== FINAL INTERFACE ====================
+2017-01-04 19:28:05.4361858 UTC
+
+interface expressionbook-0.1.0.0-LlBwiZN2GcABqwDhckJdFj:Chapter01 8001
+  interface hash: 06d082ad486f73d35307946dd7cf7d29
+  ABI hash: 41d48812351173aa17af635ae5cd25b0
+  export-list hash: dadfebdb619e0923352dc857fb49f911
+  orphan hash: 693e9af84d3dfcc71e640e005bdc5e2e
+  flag hash: 0f3860b082f95e97a33161660d3f0b92
+  sig of: Nothing
+  used TH splices: False
+  where
+exports:
+  Chapter01.chapter01Func
+module dependencies:
+package dependencies: base-4.9.0.0* ghc-prim-0.5.0.0
+                      integer-gmp-1.0.0.1
+orphans: base-4.9.0.0:GHC.Base base-4.9.0.0:GHC.Float
+family instance modules: base-4.9.0.0:Control.Applicative
+                         base-4.9.0.0:Data.Either base-4.9.0.0:Data.Functor.Const
+                         base-4.9.0.0:Data.Monoid base-4.9.0.0:Data.Type.Equality
+                         base-4.9.0.0:GHC.Generics base-4.9.0.0:GHC.IO.Exception
+                         base-4.9.0.0:GHC.TypeLits
+import  -/  base-4.9.0.0:Prelude 2d9cd8b0ec3d728f62b734df888d2e34
+import  -/  base-4.9.0.0:System.IO c1068c4f4231e3198e330f99a58145b0
+import  -/  ghc-prim-0.5.0.0:GHC.Types 7378e41b7749213c8c88ceb6b0665d4c
+0e97b4f7b5c83f0322dc812a8049436e
+  $trModule :: GHC.Types.Module
+  {- HasNoCafRefs, Strictness: m,
+     Unfolding: (GHC.Types.Module
+                   Chapter01.$trModule2
+                   Chapter01.$trModule1) -}
+d0e0d1ff398534852975213d10585a0b
+  $trModule1 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS "Chapter01"#) -}
+01c5950be7183624789e90f0066a3a42
+  $trModule2 :: GHC.Types.TrName
+  {- HasNoCafRefs, Strictness: m1,
+     Unfolding: (GHC.Types.TrNameS
+                   "expressionbook-0.1.0.0-LlBwiZN2GcABqwDhckJdFj"#) -}
+02d2ce57b45cc26829e42da5d1f16d7d
+  chapter01Func :: GHC.Types.IO ()
+  {- Arity: 1, Strictness: <S,U>,
+     Unfolding: InlineRule (0, True, True)
+                Chapter01.chapter01Func1 `cast` (Sym (GHC.Types.N:IO[0] <()>_R)) -}
+e6f9bf794338ac053810b1a0c0868e75
+  chapter01Func1 ::
+    GHC.Prim.State# GHC.Prim.RealWorld
+    -> (# GHC.Prim.State# GHC.Prim.RealWorld, () #)
+  {- Arity: 1, Strictness: <S,U>,
+     Unfolding: (\ (eta :: GHC.Prim.State#
+                             GHC.Prim.RealWorld)[OneShot] ->
+                 GHC.IO.Handle.Text.hPutStr2
+                   GHC.IO.Handle.FD.stdout
+                   Chapter01.chapter01Func2
+                   GHC.Types.True
+                   eta) -}
+80c45092ec687c1ff4f4a78a0fd904a3
+  chapter01Func2 :: [GHC.Types.Char]
+  {- Unfolding: (GHC.CString.unpackCString# "Chapter01"#) -}
+vectorised variables:
+vectorised tycons:
+vectorised reused tycons:
+parallel variables:
+parallel tycons:
+trusted: safe
+require own pkg trusted: False
+

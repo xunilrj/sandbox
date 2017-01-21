@@ -43,25 +43,25 @@ namespace UnityLifecycle
             }
         }
 
-[TestMethod]
-public void DoNotForgetToCallTheDispose()
-{
-    var container = new UnityContainer();
-    container.RegisterType<IUnitOfWork, UnitOfWork>(new HierarchicalLifetimeManager());
+        [TestMethod]
+        public void DoNotForgetToCallTheDispose()
+        {
+            var container = new UnityContainer();
+            container.RegisterType<IUnitOfWork, UnitOfWork>(new HierarchicalLifetimeManager());
 
-    List<UnitOfWork> objects = new List<UnitOfWork>();
+            List<UnitOfWork> objects = new List<UnitOfWork>();
 
-    for (int i = 0; i < 10; ++i)
-    {
-        var child = container.CreateChildContainer();
-        var uow = (UnitOfWork)child.Resolve<IUnitOfWork>();
-        objects.Add(uow);
+            for (int i = 0; i < 10; ++i)
+            {
+                var child = container.CreateChildContainer();
+                var uow = (UnitOfWork)child.Resolve<IUnitOfWork>();
+                objects.Add(uow);
 
-        Assert.IsFalse(uow.Disposed);
-    }
+                Assert.IsFalse(uow.Disposed);
+            }
 
-    Assert.IsTrue(objects.All(x => x.Disposed)); // Will throw!
-}
+            Assert.IsTrue(objects.All(x => x.Disposed)); // Will throw!
+        }
 
 
         public interface IUnitOfWork : IDisposable

@@ -37,6 +37,7 @@ parseFile <- function() {
 
 df <- parseFile()
 
+inNewYork <- df[df$Provider.State == "NY",]
 
 ggplot(df, aes(x = Average.Covered.Charges, y = Average.Total.Payments)) +
   stat_density2d(aes(alpha=..level.., fill=..level..), size=2, 
@@ -46,20 +47,35 @@ ggplot(df, aes(x = Average.Covered.Charges, y = Average.Total.Payments)) +
   geom_density2d(colour="black", bins=10) +
   guides(alpha=FALSE) + xlim(c(2500, 52500)) + ylim(c(2600, 12000))
 
-inNewYork = df[df$Provider.City == "NEW YORK",]
-inNewYork[,"Provider.Zip.Code"] <- as.factor(inNewYork[,"Provider.Zip.Code"])
-strsplit(as.character(inNewYork$DRG.Definition), "-")[[1]]
-
-inNewYork[,"DRG"] <- as.factor(sapply(as.character(inNewYork$DRG.Definition),
-       function(x){strsplit(x," - ")[[1]][1]}, USE.NAMES = FALSE))
-
 plot <- ggplot(inNewYork, aes(x = Average.Covered.Charges,
                       y = Average.Total.Payments)) +
-  geom_point(aes(color = DRG)) +
+  geom_point() +
   ggtitle("IPPS Summary in New York (2011)") +
   ylab("Average Total Payments") +
   xlab("Average Covered Changes") + 
   scale_x_continuous(labels=dollar_format()) +
   scale_y_continuous(labels=dollar_format())
 
-ggsave('plot1.pdf', plot = plot)
+ggsave('reproducible.research.week01.01.pdf', plot = plot, width = 10, height = 10)
+
+df[,"DRG"] <- sapply(as.character(df$DRG.Definition),
+                                      function(x){
+                                        strsplit(x," - ")[[1]][1]
+                                      }, USE.NAMES = FALSE)
+
+df[,"Provider.Zip.Code"] <- as.factor(df[,"Provider.Zip.Code"])
+
+plot <- ggplot(df, aes(x = Average.Covered.Charges,
+                              y = Average.Total.Payments)) +
+  geom_point(aes(color = DRG)) +
+  ggtitle("IPPS Summary (2011)") +
+  ylab("Average Total Payments") +
+  xlab("Average Covered Changes") + 
+  scale_x_continuous(labels=dollar_format()) +
+  scale_y_continuous(labels=dollar_format()) + 
+  facet_grid(Provider.State ~ DRG) +
+  theme(legend.position = "top",
+        legend.text=element_text(size=5),
+        axis.text.x = element_text(angle = 90, hjust = 1))
+
+ggsave('reproducible.research.week01.02.pdf', plot = plot, width = 10, height = 10)
