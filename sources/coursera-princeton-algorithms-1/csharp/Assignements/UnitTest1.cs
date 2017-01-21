@@ -908,7 +908,7 @@ namespace Assignements
                 var m = array.Offset + mpos;
                 var mv = array.Array[m];
 
-                if (lv < mv && lv < rv)
+                if (lv <= mv && lv <= rv)
                 {
                     if (mv < rv)
                     {
@@ -919,7 +919,7 @@ namespace Assignements
                         return r;
                     }
                 }
-                else if (mv < lv && mv < rv)
+                else if (mv <= lv && mv <= rv)
                 {
                     if (lv < rv)
                     {
@@ -930,7 +930,7 @@ namespace Assignements
                         return r;
                     }
                 }
-                else if (rv < lv && rv < mv)
+                else if (rv <= lv && rv <= mv)
                 {
                     if (lv < mv)
                     {
