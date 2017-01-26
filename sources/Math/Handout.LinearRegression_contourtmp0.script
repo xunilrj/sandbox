@@ -1,0 +1,1 @@
+unset surface; set cntrparam levels 10; set contour; set table "Handout.LinearRegression_contourtmp0.table"; splot "Handout.LinearRegression_contourtmp0.dat";
