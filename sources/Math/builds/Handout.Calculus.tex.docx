@@ -1,0 +1,61 @@
+\section{Introduction}\label{introduction}
+
+{[}Derivative Definition{]}{[}definitions:derivative{]}
+\[\begin{aligned}
+\frac {d}{dx} f(x) = f'(x) = \lim_{\Delta x \to 0} {\frac {f(x+\Delta x) - f(x)} {\Delta x}}\end{aligned}\]
+
+{[}Derivative on the sum{]}{[}definitions:derivative:sum{]}
+\[\begin{aligned}
+    f(x)= u(x)+g(x)\\
+    f'(x)= u'(x)+g'(x)
+    \end{aligned}\]
+
+\[\begin{aligned}
+    f(x) &= u(x)+g(x) \\
+    f'(x) &= \lim_{\Delta x \to 0} {\frac {f(x+\Delta x) - f(x)} {\Delta x}} \\
+    &= \lim_{\Delta x \to 0} {\frac {(u(x+\Delta x)+g(x + \Delta x)) - (u(x)+g(x))} {\Delta x}} \\
+    &= \lim_{\Delta x \to 0} {\frac {u(x+\Delta x) - u(x) +g(x + \Delta x) - g(x)} {\Delta x}} \\
+    &= \lim_{\Delta x \to 0} {\left[\frac {u(x+\Delta x) - u(x)} {\Delta x} + \frac {g(x + \Delta x) - g(x)} {\Delta x} \right]} \\
+    &= \lim_{\Delta x \to 0} {\frac {u(x+\Delta x) - u(x)} {\Delta x}} + \lim_{\Delta x \to 0} {\frac {g(x + \Delta x) - g(x)} {\Delta x}} \\
+    &= u'(x) + g'(x)
+    \end{aligned}\]
+
+{[}Derivative of \(1/x\){]}{[}definitions:derivative:oneoverx{]}
+\[\begin{aligned}
+f(x) &= \frac 1 x \\
+f'(x) &= \frac {-1} {x^2}\end{aligned}\]
+
+\[\begin{aligned}
+f(x) &= \frac 1 x \\
+f'(x) &= \lim_{\Delta x \to 0} {\frac {f(x+\Delta x) - f(x)} {\Delta x}} \\
+&= \lim_{\Delta x \to 0} {\frac {\frac {1} {x+\Delta x} - \frac {1} {x}} {\Delta x}} \\
+&= \lim_{\Delta x \to 0} {\frac {\frac {1*x} {(x+\Delta x)*x} - \frac {1*(x+\Delta x)} {x*(x+\Delta x)}} {\Delta x}} \\
+&= \lim_{\Delta x \to 0} {\frac {\frac {(1*x)-[1*(x+\Delta x)]} {(x+\Delta x)*x}} {\Delta x}} \\
+&= \lim_{\Delta x \to 0} {\frac {\frac {x-(x+\Delta x)} {(x+\Delta x)*x}} {\Delta x}} \\
+&= \lim_{\Delta x \to 0} {\frac {\frac {x-x-\Delta x} {(x+\Delta x)*x}} {\Delta x}} \\
+&= \lim_{\Delta x \to 0} {\frac {\frac {-\Delta x} {(x+\Delta x)*x}} {\Delta x}} \\
+&= \lim_{\Delta x \to 0} {\left[ \frac {1} {\Delta x} * \frac {-\Delta x} {(x+\Delta x)*x} \right]} \\
+&= \lim_{\Delta x \to 0} {\frac {-1} {(x+\Delta x)*x}} \\
+&= \frac {-1} {(x+0)*x} \\
+&= \frac {-1} {x*x} \\
+&= -\frac {1} {x^2} \\\end{aligned}\]
+
+{[}Derivative of \(x^n\){]}{[}definitions:derivative:xpowern{]}
+\[\begin{aligned}
+f(x) &= x^n \\
+f'(x) &= {nx^{n-1}}\end{aligned}\]
+
+\(f(x)=x^2\) and \(f'(x)=2x\)\\
+
+\(f(x)=x^3\) and \(f'(x)=3x^2\)\\
+
+\(f(x)=x^4\) and \(f'(x)=4x^3\)\\
+
+\[\begin{aligned}
+f(x) &= x^n \\
+f'(x) &= \lim_{\Delta x \to 0} {\frac {f(x+\Delta x) - f(x)} {\Delta x}} \\
+&= \lim_{\Delta x \to 0} {\frac {(x+\Delta x)^n - x^n} {\Delta x}} \\
+&= \lim_{\Delta x \to 0} {\frac {[x^n+nx^{n-1}\Delta x + \mathcal{O}((\Delta x)^2)] - x^n} {\Delta x}} \\
+&= \lim_{\Delta x \to 0} {\frac {[nx^{n-1}\Delta x + \mathcal{O}((\Delta x)^2)]} {\Delta x}} \\
+&= \lim_{\Delta x \to 0} {nx^{n-1} + \mathcal{O}(\Delta x)} \\
+&= nx^{n-1} \\\end{aligned}\]

@@ -1,0 +1,28 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\begin{document}
+	\begin{align*}
+		&=\sum_{i=0}^{N}{[y_i-(w_1*x_i+w_0)]^2}\\
+		&=\sum_{i=0}^{N}{[y_i^2-2*y_i*(w_1*x_i+w_0)+(w_1*x_i+w_0)^2]}\\
+		&=\sum_{i=0}^{N}{[y_i^2-2*y_i*w_1*x_i-2*y_i*w_0+(w_1*x_i+w_0)^2]}\\
+		&=\sum_{i=0}^{N}{[y_i^2-2*y_i*w_1*x_i-2*y_i*w_0+(w_1*x_i)^2+2*w_1*x_i*w_0+w_0^2]}\\
+		&=\sum_{i=0}^{N}{[y_i^2]}-\sum_{i=0}^{N}{[2*y_i*w_1*x_i-2*y_i*w_0+(w_1*x_i)^2+2*w_1*x_i*w_0+w_0^2]}\\
+		&=\sum_{i=0}^{N}{[y_i^2]}-\sum_{i=0}^{N}{[2*y_i*w_1*x_i]}-\sum_{i=0}^{N}{[2*y_i*w_0+(w_1*x_i)^2+2*w_1*x_i*w_0+w_0^2]}\\
+		&=\sum_{i=0}^{N}{[y_i^2]}-2*w_1*\sum_{i=0}^{N}{[y_i*x_i]}-\sum_{i=0}^{N}{[2*y_i*w_0+(w_1*x_i)^2+2*w_1*x_i*w_0+w_0^2]}\\
+		&=\sum_{i=0}^{N}{[y_i^2]}-2*w_1*\sum_{i=0}^{N}{[y_i*x_i]}-\sum_{i=0}^{N}{[2*y_i*w_0]}+\sum_{i=0}^{N}{[(w_1*x_i)^2+2*w_1*x_i*w_0+w_0^2]}\\
+		&=\sum_{i=0}^{N}{[y_i^2]}-2*w_1*\sum_{i=0}^{N}{[y_i*x_i]}-2*w_0*\sum_{i=0}^{N}{[y_i]}+\sum_{i=0}^{N}{[(w_1*x_i)^2+2*w_1*x_i*w_0+w_0^2]}\\
+		&=\sum_{i=0}^{N}{[y_i^2]}-2*w_1*\sum_{i=0}^{N}{[y_i*x_i]}-2*w_0*\sum_{i=0}^{N}{[y_i]}+\sum_{i=0}^{N}{[(w_1*x_i)^2]}+\sum_{i=0}^{N}{[2*w_1*x_i*w_0+w_0^2]}\\
+		&=\sum_{i=0}^{N}{[y_i^2]}-2*w_1*\sum_{i=0}^{N}{[y_i*x_i]}-2*w_0*\sum_{i=0}^{N}{[y_i]}+w_1^2*\sum_{i=0}^{N}{(x_i)^2}+\sum_{i=0}^{N}{[2*w_1*x_i*w_0+w_0^2]}\\
+		&=\sum_{i=0}^{N}{[y_i^2]}-2w_1\sum_{i=0}^{N}{[y_ix_i]}-2w_0\sum_{i=0}^{N}{[y_i]}+w_1^2\sum_{i=0}^{N}{(x_i)^2}+\sum_{i=0}^{N}{[2w_1x_iw_0+w_0^2]}\\
+		&=\sum_{i=0}^{N}{[y_i^2]}-2w_1\sum_{i=0}^{N}{[y_ix_i]}-2w_0\sum_{i=0}^{N}{[y_i]}+w_1^2\sum_{i=0}^{N}{(x_i)^2}+\sum_{i=0}^{N}{[2w_1x_iw_0]}+\sum_{i=0}^{N}{[w_0^2]}\\
+		&=\sum_{i=0}^{N}{[y_i^2]}-2w_1\sum_{i=0}^{N}{[y_ix_i]}-2w_0\sum_{i=0}^{N}{[y_i]}+w_1^2\sum_{i=0}^{N}{(x_i)^2}+2w_1w_0\sum_{i=0}^{N}{[x_i]}+\sum_{i=0}^{N}{[w_0^2]}\\
+		&=\sum_{i=0}^{N}{[y_i^2]}-2w_1\sum_{i=0}^{N}{[y_ix_i]}-2w_0\sum_{i=0}^{N}{[y_i]}+w_1^2\sum_{i=0}^{N}{(x_i)^2}+2w_1w_0\sum_{i=0}^{N}{[x_i]}+w_0^2N\\
+		\\
+		&\frac{\sum_{i=0}^{N}{y_i^2}}{N}=\bar{y}\\
+		&\sum_{i=0}^{N}{y_i^2}=\bar{y}*N
+	\end{align*}
+\end{document}

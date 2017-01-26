@@ -1,0 +1,47 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel} 
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\title{Mathematics Handout - Logaritmics}
+\author{Daniel Frederico Lins Leite}
+\date{July 2016}
+\begin{document}
+\section{Introduction}
+\maketitle
+\begin{proof}{Exp is continuous}
+\[x^l = A => log_x A = l\]
+\[x^m = B => log_x B = m\]      
+\[x^n = A*B => log_x(A*B) = n\]
+\[x^n = x^l*x^m\]
+\[x^n = x^(l+m)\]
+Given that power in bijective and onto *
+\[n = l+m\]
+\[log_x (A*B) = log_x A + log_x B\]
+\end{proof}
+\begin{proof}{Logarithm Division Rule}
+\[x^l = A => log_x A = l\]
+\[x^m = B => log_x B = m\]      
+\[x^n = A/B => log_x(A/B) = n\]
+\[x^n = (x^l)/(x^m)\]
+\[x^n = x^l*x^(-m)\]
+Given that power in bijective and onto *
+\[n=l-m\]
+\[log_x (A/B) = log_x A - log_x B\]
+\end{proof}
+\begin{proof}{Logarithm Division Rule}
+\[log_x A = B => x^B = A\]
+First multiply the left side for c
+\[C*(log_x A) = C*B\]
+Now  raise the right side to C
+\[(x^B)^C =  A^C\]
+Given the Power rule
+\[x^(B*C) = A^C\]
+We can write this expression as log as
+\[log_x (A^C) = B*C\]
+Which give use
+\[log_x (A^C) = C*(log_x A)\]
+\end{proof}
+\end{document}

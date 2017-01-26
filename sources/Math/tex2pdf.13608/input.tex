@@ -1,0 +1,76 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[unicode=true]{hyperref}
+\hypersetup{
+            pdftitle={Mathematics Handout - Logaritmics},
+            pdfauthor={Daniel Frederico Lins Leite},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+\title{Mathematics Handout - Logaritmics}
+\author{Daniel Frederico Lins Leite}
+\date{July 2016}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}\label{introduction}
+
+{Exp is continuous} \[x^l = A => log_x A = l\]
+\[x^m = B => log_x B = m\] \[x^n = A*B => log_x(A*B) = n\]
+\[x^n = x^l*x^m\] \[x^n = x^(l+m)\] Given that power in bijective and
+onto * \[n = l+m\] \[log_x (A*B) = log_x A + log_x B\]
+
+{Logarithm Division Rule} \[x^l = A => log_x A = l\]
+\[x^m = B => log_x B = m\] \[x^n = A/B => log_x(A/B) = n\]
+\[x^n = (x^l)/(x^m)\] \[x^n = x^l*x^(-m)\] Given that power in bijective
+and onto * \[n=l-m\] \[log_x (A/B) = log_x A - log_x B\]
+
+{Logarithm Division Rule} \[log_x A = B => x^B = A\] First multiply the
+left side for c \[C*(log_x A) = C*B\] Now raise the right side to C
+\[(x^B)^C =  A^C\] Given the Power rule \[x^(B*C) = A^C\] We can write
+this expression as log as \[log_x (A^C) = B*C\] Which give use
+\[log_x (A^C) = C*(log_x A)\]
+
+\end{document}

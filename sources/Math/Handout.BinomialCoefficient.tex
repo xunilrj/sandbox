@@ -1,0 +1,33 @@
+\documentclass[]{article}
+\usepackage{amsmath,amssymb,amsthm}
+
+\begin{document}
+	
+	The notation (nk) for the binomial coefficient was introduced by Andreas Freiherr von Ettingshausen in his 1826 work Die combinatorische Analysis.
+	
+	It appears to have become the de facto standard in recent years.
+
+\begin{align}
+	\binom{N}{K} &= \binom{N - 1}{K - 1} + \binom{N - 1}{K}\\ 
+	\binom{N}{0} &= 1
+\end{align}
+
+Identities 
+\begin{align}
+	\binom{n}{k} &= \frac {n}{k} \binom{n-1}{k-1}
+\end{align}
+proof
+\begin{align}
+	\binom{n}{k} &= \frac {n!}{k!(n-k)!}\\
+	&= \frac{n*(n-1)!}{k*(k-1)!(n-k)!}\\
+	u &= n-1\\
+	z &= k-1\\
+	u-z &= (n-1)-(k-1)\\
+	&= n-1-k+1\\
+	&= n-k\\
+	&= \frac{n}{k} * \frac {u!}{z!(u-z)!}\\
+	&= \frac{n}{k} * \binom{u}{z}\\
+	&= \frac{n}{k} * \binom{n-1}{k-1}
+\end{align}
+
+\end{document}

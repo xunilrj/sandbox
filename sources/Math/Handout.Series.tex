@@ -1,0 +1,82 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel} 
+\usepackage{amsmath,amssymb,amsthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem{lemma}[theorem]{Lemma}
+\title{Mathematics Handout - Logaritmics}
+\author{Daniel Frederico Lins Leite}
+\date{July 2016}
+\begin{document}
+\section{Introduction}
+\maketitle
+
+\[{x_n}\] is a sequence of real numbers
+Th sequence converge if:
+$$\exists a \in Re$$
+$$\exists \epsilon \in R such that \epsilon > 0$$
+$$\exists N_a \in I such that N_a > 0$$
+$$\forall n > N_a, |a - x_n| < \epsilon$$
+
+if for example exists another 
+$$\exists b \in Re$$ such that
+$$\exists N_b \in I such that N_b > 0$$
+$$\forall n > N_b, |b - x_n| < \epsilon$$
+
+then 
+
+$$|a-b| = |a - x_n + x_n - b|$$
+
+Given that the $$R^n$$, the space of the elements of the sequence is a normed vector space, we can apply the Triangle Inequality. So
+
+$$|a - x_n + x_n - b| <= |a - x_n| + |x_n - b|$$
+
+given that $$|x_n - b|$$ is a even function
+$$f(x) = f(-x)$$ we have that
+$$|x_n - b| = -1 * |x_n - b| = |-x_n + b| = |b - x_x|$$
+
+so we have
+
+$$|a - x_n| + |x_n - b| < |a - x_n| + |b - x_n| <= \epsilon + \epsilon <= 2\epsilon$$
+
+So
+
+$$ 0 <= |a - b| <= 2\epsilon$$ 
+
+So $|a-b|$ is squeezed between this two function. Given that this is true for every $\epsilon$, if $\epsilon -> 0$
+we will have that:
+$$|a-b| = 0$$ and $$a=b$$
+
+The value a is called the limit of the sequence.
+
+The 
+
+$$S = \sum_{i=0}^{\inf} {x_i}$$ is called the series associated with se sequence.
+
+The partial sum is
+
+$$S_n = \sum_{i=0}^{n} {x_i}$$
+
+So
+
+${S_n}$ is also a sequence. In the same way it can converge and have a limit.
+If the sequence converge, we say that the series converge and that the limit is
+
+$$limit of {S_n} =  \sum_{i=0}^{\inf} {x_i}$$
+
+If we have two convergent series:
+
+$$S_1 = \sum_{i=0}^{\inf} {a_i}$$
+$$S_2 = \sum_{i=0}^{\inf} {b_i}$$
+
+then
+
+$$\sum_{i=0}^{\inf} {(a_i + b_i)} = \sum_{i=0}^{\inf} {a_i} + \sum_{i=0}^{\inf} {b_i}$$
+
+
+
+
+
+
+\end{document}

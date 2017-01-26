@@ -1,0 +1,197 @@
+\documentclass[]{article}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsthm}
+
+%opening
+\title{}
+\author{}
+
+\newcommand{\distas}[1]{\mathbin{\overset{#1}{\kern\z@\sim}}}%
+\newsavebox{\mybox}\newsavebox{\mysim}
+\newcommand{\distras}[1]{%
+	\savebox{\mybox}{\hbox{\kern3pt$\scriptstyle#1$\kern3pt}}%
+	\savebox{\mysim}{\hbox{$\sim$}}%
+	\mathbin{\overset{#1}{\kern\z@\resizebox{\wd\mybox}{\ht\mysim}{$\sim$}}}%
+}
+
+
+\begin{document}
+	
+Expected Value\\
+X is discrete random variable\\
+$g : \mathbf{R} \rightarrow \mathbf{R}$\\
+$\Omega X = Im(X)$\\
+
+\begin{align}
+	E[g(X)] &= \sum_{x \in \Omega X} {P(X=x)*g(x)}
+\end{align}
+
+Variance\\
+
+\begin{align}
+	var(g(X)) &= E([g(X) - E(g(X))]^2)\\
+	&= \sum_{x\in \Omega X} {[g(X) - E(g(X))]^2*P(X=x)]}\\
+	&= \sum_{x\in \Omega X} {[g(X)^2 - 2*g(X)*E(g(X)) + E(g(X))^2]*P(X=x)}\\
+	&= \sum_{x\in \Omega X} {g(X)^2*P(X=x)} \\&- \sum_{x\in \Omega X} {2*g(X)*E(g(X))*P(X=x)} \\&+ \sum_{x \in \Omega X} {E(g(X))^2*P(X=x)}\\
+	&= \sum_{x\in \Omega X} {g(X)^2*P(X=x)} \\&- 2*E(g(X))*\sum_{x\in \Omega X} {g(X)*P(X=x)} \\&+ E(g(X))^2*\sum_{x \in \Omega X} {P(X=x)}\\
+	&= E(g(X)^2) - 2*E(g(X))*E(g(X)) + E(g(X))^2*1\\
+	&= E(g(X)^2) - 2*E(g(X))^2 + E(g(X))^2\\
+	&= E(g(X)^2) - E(g(X))^2\\
+	\qed
+\end{align}
+
+Variance of the Sample Mean
+
+\begin{align}
+Var\left({\overline{X}}\right)&=Var\left( \frac{1}{n}\sum_{i=1}^nX_i\right)\\&= \frac{1}{n^2}Var\left( \sum_{i=1}^nX_i\right)\\&=\frac{1}{n^2}\sum_{i=1}^nVar(X_i), \text{ by independence}\\&= \frac{1}{n^2}\left[Var(X_1)+Var(X_2)+\ldots+Var(X_n) \right]\\&=\frac{1}{n^2}\left[\sigma^2+\sigma^2+\ldots+\sigma^2  \right], \text{ since the }X_i \text{ are identically distributed }\\&= \frac{1}{n^2}(n\sigma^2)\\&=\frac{\sigma^2}{n}\end{align}
+
+Binomial Distribution
+
+PMF
+\begin{align}
+P(X=k) &= \binom{n} {k} p^k (1-p)^{n-k}
+\end{align}
+
+%prove that the summation is 1
+%prove the expected value
+%\paragraph{https://proofwiki.org/wiki/Expectation_of_Binomial_Distribution}
+
+Expected Value\\
+
+$E[g(X)]$ when $g(X) = X$.
+
+\begin{align}
+E(X) &= \sum_{k \geqslant 0}P(x=k)*k\\
+&= \sum_{k \geqslant 0}[\binom{n} {k} p^k (1-p)^{n-k}] * k\\
+\end{align}
+
+when $$k=0$$, the formula $$[\binom{n} {k} p^k (1-p)^{n-k}] * k = [\binom{n} {0} p^k (1-p)^n] * 0 = 0$$, so the index of the summation can be increased by 1.
+
+\begin{align}
+E(X) &= \sum_{k \geqslant 1} \binom{n}{k} p^k (1-p)^{n-k} * k\\
+&= \sum_{k \geqslant 1} \frac{n}{k} * \binom{n-1}{k-1} p^k (1-p)^{n-k} * k && \text{see BinomialCoefficient}\\
+&= \sum_{k \geqslant 1} \frac{n*k}{k} * \binom{n-1}{k-1} p^k (1-p)^{n-k}\\
+&= \sum_{k \geqslant 1} n * \binom{n-1}{k-1} p^k (1-p)^{n-k}\\
+&= \sum_{k \geqslant 1} n*p * \binom{n-1}{k-1} p^{k-1} (1-p)^{n-k}\\
+&= np * \sum_{k \geqslant 1} \binom{n-1}{k-1} p^{k-1} (1-p)^{n-k}\\
+u = n-1\\
+z = k-1\\
+u-z&=(n-1)-(k-1)\\
+&=n-1-k+1\\
+&=n-k\\
+k>1&=(z+1)>1\\
+&=z>0\\
+&= np * \sum_{z>0} \binom{u}{z} p^{z} (1-p)^{u-z}\\
+&= np * 1 && see BinomialDistributionProofEquals1\\
+&= np\\
+\qedsymbol
+\end{align}
+
+Variance\\
+\begin{align}
+	Var(X) &= E(X^2) - E(X)^2 && \text{see Variance}\\
+	&= \sum_{k \geqslant 0} {[\binom{n} {k} p^k (1-p)^{n-k}]*k^2} - np && \text{see Binomial Expected Value}
+\end{align}
+
+when $$k=0$$, the formula $$[\binom{n} {k} p^k (1-p)^{n-k}] * k = [\binom{n} {0} p^k (1-p)^n] * 0 = 0$$, so the index of the summation can be increased by 1.
+
+\begin{align}
+&= \sum_{k \geqslant 1} {[\binom{n} {k} p^k (1-p)^{n-k}]*k^2} - (np)^2\\
+&= \sum_{k \geqslant 1} {\frac{n}{k} [\binom{n-1} {k-1} p^k (1-p)^{n-k}]*k^2} - (np)^2\\
+&= \sum_{k \geqslant 1} {\frac{n*k^2}{k} [\binom{n-1} {k-1} p^k (1-p)^{n-k}]} - (np)^2\\
+&= \sum_{k \geqslant 1} {[nk*\binom{n-1} {k-1} p^k (1-p)^{n-k}]} - (np)^2\\
+&= \sum_{k \geqslant 1} {[nkp*\binom{n-1} {k-1} p^{k-1} (1-p)^{n-k}]} - (np)^2\\
+&= np*\sum_{k \geqslant 1} {[k*\binom{n-1} {k-1} p^{k-1} (1-p)^{n-k}]} - (np)^2\\
+u = n-1\\
+z = k-1\\
+u-z&=(n-1)-(k-1)\\
+&=n-1-k+1\\
+&=n-k\\
+k >= 1 &= (z+1) >=1\\
+&= z >= 0\\
+&= np*\sum_{z \geqslant 0} {[(z+1)* \binom{u} {z} p^{z} (1-p)^{u-z}]} - (np)^2\\
+&= np*[\sum_{z \geqslant 0} {[z*\binom{u} {z} p^{z} (1-p)^{u-z}]} + \sum_{z \geqslant 0} {[\binom{u} {z} p^{z} (1-p)^{u-z}]}] - (np)^2\\
+&= np*[\sum_{z \geqslant 0} {[z*\frac{u}{z}*\binom{u-1} {z-1} p^{z} (1-p)^{u-z}]} + \sum_{z \geqslant 0} {[\binom{u} {z} p^{z} (1-p)^{u-z}]}] - (np)^2\\
+&= np*[u*\sum_{z \geqslant 0} {[\binom{u-1} {z-1} p^{z} (1-p)^{u-z}]} + \sum_{z \geqslant 0} {[\binom{u} {z} p^{z} (1-p)^{u-z}]}] - (np)^2\\
+\end{align}
+\begin{align}
+&= np*[up*\sum_{z \geqslant 0} {[\binom{u-1} {z-1} p^{z-1} (1-p)^{u-z}]} + \sum_{z \geqslant 0} {[\binom{u} {z} p^{z} (1-p)^{u-z}]}] - (np)^2\\
+&= np*[up*\sum_{z \geqslant 1} {[\binom{u-1} {z-1} p^{z-1} (1-p)^{(u-1)-(z-1)}]} + \sum_{z \geqslant 0} {[\binom{u} {z} p^{z} (1-p)^{u-z}]}] - (np)^2\\
+&= np*[up*\sum_{z \geqslant 0} {[\binom{u} {z} p^{z} (1-p)^{u-z}]} + \sum_{z \geqslant 0} {[\binom{u} {z} p^{z} (1-p)^{u-z}]}] - (np)^2\\
+&= np*[up*(p+q)^{u-1} + (p+q)^u] - (np)^2\\
+&= np*[(n-1)*p*(p+q)^{n-1-1}+(p+q)^(n-1)] -(np)^2\\
+&= np*[(n-1)*p*(p+q)^{n-2}+(p+q)^(n-1)] - (np)^2\\
+&= np*([(n-1)*p*(p+q)^{n-2}+(p+q)^(n-1)] - np)\\
+&= np*([(n-1)*p+1] - np) && \text{p+q=1}\\
+&= np*([(n-1)*p+1] - np)\\
+&= np*([np-p +1] - np)\\
+&= np*(np-p +1- np)\\
+&= np*(-p +1)\\
+&= np*(1-p)\\
+\qed
+\end{align}
+
+Bernoulli Distribution
+
+The Bernoulli Distribution is a special case of the Binomial Distribution, where $$n=1$$.
+
+PMF
+\begin{align}
+P(X=k) &= \binom{1} {k} p^k (1-p)^{1-k}\\
+&=p^k (1-p)^{n-k}
+\end{align}
+
+Expected Value
+\begin{align}
+	E(x) &= \sum_{k \geqslant 1} [\binom{n}{k} p^k (1-p)^{n-k}] * k\\
+	&= np && see BinomialDistribution\\
+	&= 1*p\\
+	&= p
+\end{align}
+
+Variance
+\begin{align}
+	Var(X) &= np*(1-p)\\
+	&= p*(1-p)\\
+\end{align}
+
+Likelihood of IID Bernoulli
+
+\begin{align}
+	x_i \overset{iid}{\sim} Bernoulli(p)\\
+	L(x_i|p)&=p(x_1,x_2,...,x_n|p)\\&=\prod_{n=1}^np(x_i|p)\\
+	&=p^S*(1-p)^{n-S}
+ \end{align}
+ 
+ Maximun Likelihood
+ 
+ \begin{align}
+	 \frac{d[L(x_i|p)]}{dp} &=\frac{d[p^S*(1-p)^{n-S}]}{dp}\\
+	 \frac{d[log(L(x_i|p))]}{dp} &=\frac{d[log(p^S*(1-p)^{n-S})]}{dp}\\
+	 &= \frac{d}{dp}*[log(p^S*(1-p)^{n-S})]\\
+	 &= \frac{d}{dp}[log(p^S)+log((1-p)^{n-S})]\\
+	 &= \frac{d}{dp}[S*log(p)+(n-S)*log(1-p)]\\
+	 &= S*\frac{d}{dp}[log(p)]+(n-S)*\frac{d}{dp}[log(1-p)]\\
+	 &= S*[\frac{1}{p}]+(n-S)*\frac{d}{dp}[log(1-p)] && \text{chain rule}\\
+	 &= S*\frac{1}{p}+(n-S)*\frac{1}{p-1}\\
+ 	 &= \frac{S}{p}+\frac{n-S}{p-1}\\
+ 	 &= \frac{S*(p-1)}{p*(p-1)}+\frac{p*(n-S)}{p*(p-1)}\\
+ 	 &= \frac{S*(p-1)+p*(n-S)}{p*(p-1)}\\
+ 	 &= \frac{S*p-S+p*n-p*S}{p*(p-1)}\\
+ 	 &= \frac{-S+p*n}{p*(p-1)}\\
+ 	 0 &= \frac{-S+p*n}{p*(p-1)}\\
+  	 0*(p*(p-1)) &= -S+p*n\\
+  	 0 &= -S+p*n\\
+ 	 S &= p*n\\
+ 	 \frac{S}{n} &= p\\
+  	 p &= \frac{S}{n}\\
+ \end{align}
+
+Normal Distribution
+Definition
+
+\begin{align}
+pdf(x) &= \frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)
+\end{align}
+
+\end{document}
