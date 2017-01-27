@@ -129,4 +129,62 @@
 		\big(\frac{\mean{x^2}}{\mean{x}},\frac{\mean{yx}}{\mean{x}}\big)\\
 	\end{align*}
 	
+	Solving for $w_1$
+	
+	\begin{align*}
+		\begin{cases}
+			w_1\mean{x}+w_0=\mean{y}\\
+			w_1\frac{\mean{x^2}}{\mean{x}}+w_0=\frac{\mean{yx}}{\mean{x}}
+		\end{cases}\\
+		\begin{cases}
+			w_1\mean{x}+w_0=\mean{y}\\
+			-w_1\frac{\mean{x^2}}{\mean{x}}-w_0=-\frac{\mean{yx}}{\mean{x}}
+		\end{cases}\\
+		\begin{cases}
+			w_1\mean{x}+w_0=\mean{y}\\
+			w_1\mean{x}-w_1\frac{\mean{x^2}}{\mean{x}}=\mean{y}-\frac{\mean{yx}}{\mean{x}}
+		\end{cases}\\
+		\begin{cases}
+			w_1\mean{x}+w_0=\mean{y}\\
+			w_1(\mean{x}-\frac{\mean{x^2}}{\mean{x}})=\mean{y}-\frac{\mean{yx}}{\mean{x}}
+		\end{cases}\\
+		\begin{cases}
+			w_1\mean{x}+w_0=\mean{y}\\
+			w_1=\frac{\mean{y}-\frac{\mean{yx}}{\mean{x}}}{\mean{x}-\frac{\mean{x^2}}{\mean{x}}}
+		\end{cases}\\
+		\begin{cases}
+			w_1\mean{x}+w_0=\mean{y}\\
+			w_1=\frac{\mean{y}-\frac{\mean{yx}}{\mean{x}}}{\mean{x}-\frac{\mean{x^2}}{\mean{x}}}*\frac{\mean{x}}{\mean{x}}
+		\end{cases}\\
+		\begin{cases}
+			w_1\mean{x}+w_0=\mean{y}\\
+			w_1=\frac{\mean{x}*\mean{y}-\mean{yx}}{\mean{x}-\frac{\mean{x^2}}{\mean{x}}}*\frac{1}{\mean{x}}
+		\end{cases}\\
+		\begin{cases}
+			w_1\mean{x}+w_0=\mean{y}\\
+			w_1=\frac{\mean{x}*\mean{y}-\mean{yx}}{(\mean{x})^2-\mean{x^2}}
+		\end{cases}\\
+	\end{align*}
+	
+	and now for $w_0$
+	
+	\begin{align*}
+		\begin{cases}
+			w_1\mean{x}+w_0=\mean{y}\\
+			w_1=\frac{\mean{x}*\mean{y}-\mean{yx}}{(\mean{x})^2-\mean{x^2}}
+		\end{cases}\\
+		\begin{cases}
+			w_0=\mean{y}-w_1\mean{x}\\
+			w_1=\frac{\mean{x}*\mean{y}-\mean{yx}}{(\mean{x})^2-\mean{x^2}}
+		\end{cases}\\
+		\begin{cases}
+			w_0=\mean{y}-\big(\frac{\mean{x}*\mean{y}-\mean{yx}}{(\mean{x})^2-\mean{x^2}}\big)\mean{x}\\
+			w_1=\frac{\mean{x}*\mean{y}-\mean{yx}}{(\mean{x})^2-\mean{x^2}}
+		\end{cases}\\
+		\begin{cases}
+			w_0=\mean{y}-\big(\frac{(\mean{x})^2\mean{y}-\mean{x}*\mean{yx}}{(\mean{x})^2-\mean{x^2}}\big)\\
+			w_1=\frac{\mean{x}*\mean{y}-\mean{yx}}{(\mean{x})^2-\mean{x^2}}
+		\end{cases}\\
+	\end{align*}
+	
 \end{document}
