@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ConsoleApplication1", "ConsoleApplication1\ConsoleApplication1.fsproj", "{0946CC77-97E6-48EC-8BDC-FBB5569B5CD2}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "StompParser", "StompParser\StompParser.fsproj", "{0416EEDA-92A3-4346-BDFC-14865D90249B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0946CC77-97E6-48EC-8BDC-FBB5569B5CD2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0946CC77-97E6-48EC-8BDC-FBB5569B5CD2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0946CC77-97E6-48EC-8BDC-FBB5569B5CD2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0946CC77-97E6-48EC-8BDC-FBB5569B5CD2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0416EEDA-92A3-4346-BDFC-14865D90249B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0416EEDA-92A3-4346-BDFC-14865D90249B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0416EEDA-92A3-4346-BDFC-14865D90249B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0416EEDA-92A3-4346-BDFC-14865D90249B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
