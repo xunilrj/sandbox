@@ -361,17 +361,20 @@ let test p str =
     | Success(result, _, _)   -> printfn "Success: %A" result
     | Failure(errorMsg, _, _) -> printfn "Failure: %s" errorMsg
 
-let TOKEN = many1Chars asciiLetter
-let TOKENSPACE = TOKEN .>> spaces;
-let COLONSPACE = pchar ':' .>> spaces;
-
+//PARSERS
 let pZero = pchar (char 0)
 let pNewLine = pchar (char 13)
-let FirstLine = many1Chars asciiLetter .>> pNewLine
-let HeaderName = many1Chars (choice [asciiLetter;pchar '-']) .>> spaces
-let HeaderValue = many1CharsTill (anyChar) (pNewLine)
+let pUntil = many1CharsTill (anyChar)
+//TOKENS
+let COLONSPACE = pchar ':' .>> spaces
+let LETTERS = many1Chars asciiLetter
+let IDENTIFIER =  many1Chars (choice [asciiLetter;pchar '-'])
+//SYNTAX
+let FirstLine = LETTERS .>> pNewLine
+let HeaderName = IDENTIFIER .>> spaces
+let HeaderValue = pUntil pNewLine
 let HeaderLine = HeaderName .>> COLONSPACE .>>. HeaderValue
-let Main = FirstLine .>>. many HeaderLine .>> pNewLine .>>. many1CharsTill (anyChar) (pZero)
+let Main = FirstLine .>>. many HeaderLine .>> pNewLine .>>. pUntil pZero
 test Main "SOMECOMMAND\r\n\
            HEA-DER: START1234567890-=q´[]~ç;.,\|!@#$%¨&*()_+{`^}:>ÇEND\r\n\
            Hea-Der: VAL-UE\r\n\

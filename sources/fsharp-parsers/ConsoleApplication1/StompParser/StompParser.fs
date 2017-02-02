@@ -18,5 +18,5 @@ module StompParser =
         let Main = FirstLine .>>. many HeaderLine .>> pNewLine .>>. pUntil pZero
         //RUN
         match run Main message with
-            | Success(result, _, _)   -> ""
+            | Success(((cmd,head),body), _, _)   -> ""
             | Failure(errorMsg, _, _) -> ""
