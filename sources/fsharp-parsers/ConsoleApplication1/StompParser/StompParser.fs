@@ -1,7 +1,8 @@
 ﻿namespace StompParser
+
 open FParsec
 module StompParser =
-    let Parse message:string =
+    let Parse message =
         //PARSERS
         let pZero = pchar (char 0)
         let pNewLine = pchar (char 13)
@@ -18,5 +19,5 @@ module StompParser =
         let Main = FirstLine .>>. many HeaderLine .>> pNewLine .>>. pUntil pZero
         //RUN
         match run Main message with
-            | Success(((cmd,head),body), _, _)   -> ""
-            | Failure(errorMsg, _, _) -> ""
+            | Success(((cmd,head),body), us, pos) -> Success(new StompMessages.StompMessage(cmd, head, body), us, pos)
+            | Failure(a, b, c) -> Failure(a,b,c)
