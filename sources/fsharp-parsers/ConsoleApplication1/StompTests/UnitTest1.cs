@@ -2,6 +2,8 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using StompMessages;
 using System.Diagnostics;
+using static FParsec.CharParsers;
+using System.Text;
 
 namespace StompTests
 {
@@ -25,7 +27,7 @@ namespace StompTests
         public void ParseUsingCsharp()
         {
             var message = GetMessage();
-            Parse(message);
+            Parse<string>(message);
             //TODO PARSE
             var msg = new StompMessage("COMMAND", new[] { Tuple.Create("headerA", "value1"), Tuple.Create("headerB", "value2") }, GetJson());
 
@@ -35,23 +37,114 @@ namespace StompTests
             Assert.AreEqual(GetJson(), msg.Body);
         }
 
-        public StompMessage Parse(string message)
+        public StompMessage Parse<T>(string message)
         {
-            var pZero = pchar('\0');
-            var pCR = pchar('\r');
-            var pLF = pchar('\n');
-            var pDash = pchar('-');
-            var pAsciiLetter = pFunc(Char.IsLetter);
-            var pIDENTIFIER = pChoice(pAsciiLetter, pDash);
+            //let inputABC = "ABC"
+            //run parseA inputABC  // Success ('A', "BC")
 
-            var result = pIDENTIFIER(message, 0);
+            var input = "ABC";
+            var parseA = pchar<T>('A');
+            var parseB = pchar<T>('B');
+            var parseC = pchar<T>('C');
+
+            var result = ((parseA | parseB) & parseB & parseC).Run(input);
 
             return null;
+            //var pZero = pchar('\0');
+            //var pCR = pchar('\r');
+            //var pLF = pchar('\n');
+            //var pDash = pchar('-');
+            //var pAsciiLetter = pFunc(Char.IsLetter);
+            //var pIDENTIFIER = pChoice(pAsciiLetter, pDash);
+
+            //var result = pIDENTIFIER(message, 0);
+
+            //return null;
         }
 
-        Func<string, int, bool> pchar(char c)
+        public abstract class ParserResult<T>
         {
-            return new Func<string, int, bool>((str, pos) => str[pos] == c);
+            public T Value { get; set; }
+            public string Input { get; set; }
+            public int Position { get; set; }
+
+            public ParserResult<T> Match(Func<Success<T>, ParserResult<T>> onSuccess = null, Func<Failure<T>, ParserResult<T>> onFailture = null)
+            {
+                if (this is Success<T>)
+                {
+                    if (onSuccess != null) { return onSuccess(this as Success<T>); }
+                    return this;
+                }
+                else
+                {
+                    if (onFailture != null) { return onFailture(this as Failure<T>); }
+                    return this;
+                }
+            }
+
+
+        }
+
+        public class Success<T> : ParserResult<T>
+        {
+        }
+
+        public class Failure<T> : ParserResult<T>
+        {
+            public string Message { get; set; }
+        }
+
+        //type Parser<'T> = Parser of (string -> Result<'T* string>)
+        public class Parser<T>
+        {
+            Func<ParserResult<T>, ParserResult<T>> F;
+
+            public Parser(Func<ParserResult<T>, ParserResult<T>> f)
+            {
+                F = f;
+            }
+
+            public ParserResult<T> Run(string input)
+            {
+                return F(new Success<T>()
+                {
+                    Input = input,
+                    Position = 0
+                });
+            }
+
+            public static Parser<T> operator &(Parser<T> l, Parser<T> r)
+            {
+                return AndThen(l, r);
+            }
+
+            public static Parser<T> AndThen(Parser<T> l, Parser<T> r)
+            {
+                return new Parser<T>(x => r.F(l.F(x)));
+            }
+
+            public static Parser<T> operator |(Parser<T> l, Parser<T> r)
+            {
+                return OrElse(l, r);
+            }
+
+            public static Parser<T> OrElse(Parser<T> l, Parser<T> r)
+            {
+                return new Parser<T>(x =>
+                {
+                    return l.F(x).Match(onFailture: _ => r.F(x));
+                });
+            }
+        }
+
+        Parser<T> p<T>(Func<char, bool> check, Func<ParserResult<T>, ParserResult<T>> onSuccess, Func<ParserResult<T>, ParserResult<T>> onFailure)
+        {
+            return new Parser<T>(new Func<ParserResult<T>, ParserResult<T>>((result) => result.Match(onSuccess: r => check(r.Input[r.Position]) ? onSuccess(r) : onFailure(r))));
+        }
+
+        Parser<T> pchar<T>(char c)
+        {
+            return p<T>(x => x == c, x => new Success<T>() { Input = x.Input, Position = x.Position + 1 }, x => new Failure<T>() { Input = x.Input, Position = x.Position + 1, Message = $"Expecting {c}. Got {x.Input[x.Position]}." });
         }
 
         Func<string, int, bool> pFunc(Func<char, bool> isChar)
@@ -61,7 +154,7 @@ namespace StompTests
 
         Func<string, int, bool> pChoice(Func<string, int, bool> p1, Func<string, int, bool> p2)
         {
-            return new Func<string, int, bool>((str, pos) => p1(str,pos) || p2(str,pos));
+            return new Func<string, int, bool>((str, pos) => p1(str, pos) || p2(str, pos));
         }
 
         [TestMethod]
