@@ -61,6 +61,19 @@ namespace StompTests
             Assert.IsFalse(parserAB.Run("CC").MathAsBool());
         }
 
+        [TestMethod]
+        public void ParseOneCharOrElseAnotherChar()
+        {
+            var parserA = pchar<bool>('A');
+            var parserB = pchar<bool>('B');
+
+            var parserAB = parserA | parserB;
+
+            Assert.IsTrue(parserAB.Run("A").MathAsBool());
+            Assert.IsTrue(parserAB.Run("B").MathAsBool());
+            Assert.IsFalse(parserAB.Run("C").MathAsBool());
+        }
+
         public StompMessage Parse<T>(string message)
         {
             //let inputABC = "ABC"
