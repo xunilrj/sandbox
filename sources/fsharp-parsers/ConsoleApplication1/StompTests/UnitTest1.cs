@@ -4,6 +4,7 @@ using StompMessages;
 using System.Diagnostics;
 using static FParsec.CharParsers;
 using System.Text;
+using static StompTests.UnitTest1;
 
 namespace StompTests
 {
@@ -37,6 +38,29 @@ namespace StompTests
             Assert.AreEqual(GetJson(), msg.Body);
         }
 
+        [TestMethod]
+        public void ParseOneChar()
+        {
+            var parserA = pchar<bool>('A');
+
+            Assert.IsTrue(parserA.Run("A").MathAsBool());
+            Assert.IsFalse(parserA.Run("B").MathAsBool());
+        }
+
+        [TestMethod]
+        public void ParseOneCharAndThenAnotherChar()
+        {
+            var parserA = pchar<bool>('A');
+            var parserB = pchar<bool>('B');
+
+            var parserAB = parserA & parserB;
+
+            Assert.IsTrue(parserAB.Run("AB").MathAsBool());
+            Assert.IsFalse(parserAB.Run("AC").MathAsBool());
+            Assert.IsFalse(parserAB.Run("CB").MathAsBool());
+            Assert.IsFalse(parserAB.Run("CC").MathAsBool());
+        }
+
         public StompMessage Parse<T>(string message)
         {
             //let inputABC = "ABC"
@@ -68,6 +92,20 @@ namespace StompTests
             public string Input { get; set; }
             public int Position { get; set; }
 
+            public TR Match<TR>(Func<Success<T>, TR> onSuccess = null, Func<Failure<T>, TR> onFailture = null)
+            {
+                if (this is Success<T>)
+                {
+                    if (onSuccess != null) { return onSuccess(this as Success<T>); }
+                    return default(TR);
+                }
+                else
+                {
+                    if (onFailture != null) { return onFailture(this as Failure<T>); }
+                    return default(TR);
+                }
+            }
+
             public ParserResult<T> Match(Func<Success<T>, ParserResult<T>> onSuccess = null, Func<Failure<T>, ParserResult<T>> onFailture = null)
             {
                 if (this is Success<T>)
@@ -81,9 +119,8 @@ namespace StompTests
                     return this;
                 }
             }
-
-
         }
+
 
         public class Success<T> : ParserResult<T>
         {
@@ -189,6 +226,14 @@ headerA: value1
 headerB: value2
 
 {GetJson()}" + "\0";
+        }
+    }
+
+    public static class ParserResultExtensions
+    {
+        public static bool MathAsBool<T>(this ParserResult<T> pr)
+        {
+            return pr.Match<bool>(x => true, x => false);
         }
     }
 }
