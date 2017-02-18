@@ -1,0 +1,453 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\begin{document}
+	Introdu?º?úo a An?ílise Real
+	
+	Daniel Frederico Lins Leite
+	
+	2015/09/19
+	
+	\section{Topologia do Espa?ºo
+		Euclidiano}\label{topologia-do-espauxe7o-euclidiano}
+	
+	\subsection{O Espa?ºo Euclidiano}\label{o-espauxe7o-euclidiano}
+	
+	O espa?ºo euclidiano n-dimensional ?® representado por \(\mathbb{R}^{n}\)e
+	?® formado por todas as n-tuplas de n??meros reais que n?úo representadas
+	por \(x = (x_{1},\ldots,x_{n)}\). Quando se fala do espa?ºo euclidiano
+	estas n-tuplas tamb?®m s?úo chamadas de pontos e/ou vetores.
+	
+	A seguintes opera?º?Áes entre tuplas s?úo:
+	
+	\[x = y\  \leftrightarrow \ x_{i} = y_{i}\forall i \in (1\ldots n)\]
+	
+	\[x + y = (x_{1} + y_{1},\ldots,x_{n} + y_{n})\]
+	
+	\[\mathbb{\propto \in R,\ }\alpha x = \left( \alpha x_{1},\ldots,\alpha x_{n} \right)\]
+	
+	Deste modo:
+	
+	\[0x = (0x_{1},\ldots,0x_{n})\]
+	
+	\[0x = x - x = (x_{1} - x_{1},\ldots,x_{n} - x_{n})\]
+	
+	\[x + y = y + x\]
+	
+	\[x + 0 = x\]
+	
+	\[x + \left( y + z \right) = \left( x + y \right) + z\]
+	
+	\[\alpha\left( \text{??x} \right) = \left( \text{????} \right)x\]
+	
+	\[\left( \alpha + \beta \right)x = \alpha x + \beta x\]
+	
+	\[\alpha\left( x + y \right) = \alpha x + \alpha y\]
+	
+	Deste modo qualquer tupla pode ser escrita na forma:
+	
+	\[x = x_{1}e_{1} + \ldots + x_{n}e_{n}\]
+	
+	Onde
+	
+	\[e_{i} = \left( x_{j} \right)\ onde\ j\  \in \left\lbrack 1,n \right\rbrack\text{\ e\ }\left\{ \begin{matrix}
+	0,\ se\ j\  \neq i \\
+	1,\ se\ j = 1 \\
+	\end{matrix} \right.\ \]
+	
+	\subsubsection{Produto Interno}\label{produto-interno}
+	
+	O espa?ºo euclidiano ainda possui uma opera?º?úo chamada de produto
+	interno:
+	
+	\[< x,y > = x_{1}y_{1} + \ldots + x_{n}y_{n}\]
+	
+	\paragraph{Propriedades do Produto
+		Interno}\label{propriedades-do-produto-interno}
+	
+	\[< x,y > = < y,x >\]
+	
+	\[< x,y + z > \  = \  < x,y > + < x,z >\]
+	
+	\[< \alpha x,y > = \alpha < x,y >\]
+	
+	\[< x,x > \  > 0\ se\ x\  \neq 0\]
+	
+	\paragraph{Comutatividade}\label{comutatividade}
+	
+	\[< x,y >\]
+	
+	\[= \ x_{1}y_{1} + \ldots + x_{n}y_{n)}\]
+	
+	\[= y_{1}x_{1} + \ldots + y_{n}x_{n}\]
+	
+	\[= < y,x >\]
+	
+	\[\]
+	
+	\paragraph{Distributatividade
+		Vetorial}\label{distributatividade-vetorial}
+	
+	\[< x,y + z >\]
+	
+	\[= x_{1}\left( y_{1}{+ z}_{1} \right) + \ldots + x_{n}\left( y_{n}{+ z}_{n} \right)\]
+	
+	\[= x_{1}y_{1}{+ x_{1}z}_{1} + \ldots + x_{n}y_{n}{+ x_{n}z}_{n}\]
+	
+	\[= x_{1}y_{1} + \ldots + x_{n}y_{n} + x_{1}z_{1} + \ldots + x_{n}z_{n}\]
+	
+	\[= < x,y > + < x,z >\]
+	
+	\[\]
+	
+	\paragraph{Distrivutatividade Escalar}\label{distrivutatividade-escalar}
+	
+	\[< \alpha x,y >\]
+	
+	\[= \alpha x_{1}y_{1} + \ldots + \alpha x_{n}y_{n}\]
+	
+	\[= \alpha\left( x_{1}y_{1} + \ldots + x_{n}y_{n} \right)\]
+	
+	\[= \alpha < x,y >\]
+	
+	\[\]
+	
+	\paragraph{Ortogonalidade}\label{ortogonalidade}
+	
+	\[< x,y > \  = 0\]
+	
+	Se x e/ou y forem zero o caso trivialmente ?® provado. Por?®m, caso
+	
+	\[y = z - \frac{< x,z >}{< x,x >}x\]
+	
+	\[< x,y > \  = \  < x,z - \frac{< x,z >}{< x,x >}x >\]
+	
+	\[= < x,z > - < x,\frac{< x,z >}{< x,x >}x >\]
+	
+	\[= < x,z > - \ \frac{< x,z >}{< x,x >} < x,x >\]
+	
+	\[= < x,z > - \ \frac{< x,z >}{< x,x >} < x,x >\]
+	
+	\[= < x,z > - < x.z >\]
+	
+	\[= 0\]
+	
+	\[\]
+	
+	Isso significa que toda tupla do espa?ºo euclidiano possui pelo menos uma
+	outra tupla que ?® ortogonal a esta.
+	
+	Desse modo, z pode ser escrito por:
+	
+	\[z = y + \frac{< x,z >}{< x,x >}x\]
+	
+	Isto significa que (y, \(\frac{< x,z >}{< x,x >}x)\) podem descrever
+	qualquer vetor do espa?ºo o que os fazem serem a base do espa?ºo. Mais
+	sobre bases a frente.
+	
+	\subsubsection{Norma}\label{norma}
+	
+	Sendo \(< x,x >\):
+	
+	\[< x,x >\]
+	
+	\[= x_{1}x_{1} + \ldots + x_{n}x_{n}\]
+	
+	\[= x_{1}^{2} + \ldots + x_{n}^{2}\]
+	
+	E sendo a f??rmula
+	
+	\[\left| x \right| = \sqrt{x_{1}^{2} + \ldots + x_{n}^{2}}\]
+	
+	Podemos chamar de ``Norma de X'':
+	
+	\[\left| x \right| = \sqrt{< x,x >}\]
+	
+	\[< x,x > \  = \ {|x|}^{2}\]
+	
+	Mais genericamente, toda fun?º?úo \(\mathbb{R}^{n}\mathbb{\rightarrow R}\)
+	pode ser chamada como norma.
+	
+	Caso a tupla/vetor possua norma 1, se diz que est?í normalizado, que ?® um
+	vetor unit?írio. Pode-se normalizar qualquer tupla/vetor diferente de
+	zero do seguinte modo:
+	
+	\[u = \frac{x}{|x|}\]
+	
+	\paragraph{Propriedades da Norma}\label{propriedades-da-norma}
+	
+	Por esta defini?º?úo a norma possui as seguintes propriedades
+	
+	\[\left| x \right| > 0,\ se\ x \neq 0\]
+	
+	\[\left| \text{??x} \right| = \left| \alpha \right||x|\]
+	
+	\[\left| x + y \right| \leq \left| x \right| + |y|\]
+	
+	\[\left| \left| x \right| \right| = \left| x \right|\]
+	
+	Exemplo:
+	
+	\[a = b - c + d\]
+	
+	\[\left| a \right| = \left| b - c + d \right|\]
+	
+	\[\left| a \right| \leq \left| b - c \right| + \left| d \right|\]
+	
+	\paragraph{Teorema de Pit?ígoras}\label{teorema-de-pituxe1goras}
+	
+	Se analisarmos o Teorema de Pit?ígoras, na sua forma do espa?ºo
+	euclidiano:
+	
+	\[\left| x + y \right|^{2} = {|x|}^{2} + {|y|}^{2}\]
+	
+	Como \(< x,x > \  = \ {|x|}^{2}\)
+	
+	\[\left| x + y \right|^{2} = \  < x + y,x + y > \ \]
+	
+	\[= \  < x,x > + 2 < x,y > + < y,y >\]
+	
+	Como \(x\bot y\), \(< x,y > \  = 0\), ent?úo
+	
+	\[= < x,x > + 2*0 + < y,y >\]
+	
+	\[= < x,x > + < y,y >\]
+	
+	Como \(< x,x > \  = \left| x \right|^{2}\)
+	
+	\[= \left| x \right|^{2} + \left| y \right|^{2}\]
+	
+	\[\]
+	
+	\paragraph{Desigualdade de Schwarz}\label{desigualdade-de-schwarz}
+	
+	\[| < x,y > | \leq \left| x \right||y|\]
+	
+	Pela propriedade da base do espa?ºo euclidiano ?® poss?¡vel escrever
+	
+	\[y = \alpha x + z\]
+	
+	sendo \(x\bot z\) e \(\alpha = \frac{< x,y >}{{|x|}^{2}}\)
+	
+	Utilizando o Teorema de Pit?ígoras
+	
+	\[\left| x + y \right|^{2} = {|x|}^{2} + {|y|}^{2}\]
+	
+	\[{|y|}^{2} = \left| x + y \right|^{2} - {|x|}^{2}\]
+	
+	Substituindo
+	
+	\[\left| y \right|^{2} = \left| x + \alpha x + z \right|^{2} - \left| x \right|^{2}\]
+	
+	\[= \left| x \right|^{2} + \left| \text{ax} \right|^{2} + \left| z \right|^{2} - \left| x \right|^{2}\]
+	
+	\[= \alpha^{2}\left| x \right|^{2} + {|z|}^{2}\]
+	
+	Logo
+	
+	\[\left| y \right|^{2} \geq \alpha^{2}\left| x \right|^{2}\]
+	
+	Substituindo \(\alpha\)
+	
+	\[{|y|}^{2} \geq \left( \frac{< x,y >}{\left| x \right|^{2}} \right)^{2}{|x|}^{2}\]
+	
+	\[\geq \frac{{( < x,y > )}^{2}}{{|x|}^{4}}{|x|}^{2}\]
+	
+	\[\geq \frac{{( < x,y > )}^{2}}{{|x|}^{4}{|x|}^{2}}{|x|}^{2}\]
+	
+	logo
+	
+	\[{|y|}^{2} \geq \ \frac{{( < x,y > )}^{2}}{{|x|}^{2}}\]
+	
+	\[\left| y \right|^{2}\left| x \right|^{2} \geq {( < x,y > )}^{2}\]
+	
+	\[\left| y \right|\left| x \right| \geq | < x,y > |\]
+	
+	Invertendo temos que
+	
+	\[\left| < x,y > \left| \leq \left| x \right| \right|y \right|\]
+	
+	\[\]
+	
+	\paragraph{Norma}\label{norma-1}
+	
+	Dada a propriedade da norma
+	
+	\[\left| x + y \right| \leq \left| x \right| + |y|\]
+	
+	Elevando ambos lados ao quadrado temos:
+	
+	\[\left| x + y \right|^{2} \leq \left( \left| x \right| + \left| y \right| \right)^{2}\]
+	
+	Por?®m:
+	
+	\[{|x + y|}^{2}\]
+	
+	\[= < x + y,x + y >\]
+	
+	\[\left| x \right|^{2} + 2 < x,y > + \left| y \right|^{2}\]
+	
+	Aplicando a Desigualdade de Schwarz:
+	
+	\[\leq \left| x \right|^{2} + 2\left| x \right|\left| y \right| + {|y|}^{2}\]
+	
+	\[\left( \left| x \right| + \left| y \right| \right)^{2}\]
+	
+	\paragraph{Norma Euclidiana}\label{norma-euclidiana}
+	
+	Caso a fun?º?úo \textbar{}x\textbar{} for declarada como
+	
+	\[\left| x \right| = \sqrt[2]{x_{1}^{2} + \ldots + x_{n}^{2}}\]
+	
+	\paragraph{Norma do M?íximo}\label{norma-do-muxe1ximo}
+	
+	\[\left| x \right| = {|x|}_{M} = max\{\left| x_{'} \right|,\ldots,|x_{n}|\}\]
+	
+	\paragraph{Norma da Soma}\label{norma-da-soma}
+	
+	\[\left| x \right| = {|x|}_{S} = \left| x_{1} \right| + \ldots + |x_{n}|\]
+	
+	\paragraph{Compara?º?úo entre as Normas Euclidianas, M?íximo e
+		Soma}\label{comparauxe7uxe3o-entre-as-normas-euclidianas-muxe1ximo-e-soma}
+	
+	Dada estas defini?º?Áes, podemos provar que:
+	
+	\[\left| x \right|_{M} \leq \left| x \right| \leq \left| x \right|_{S} \leq n\left| x \right|_{M}\]
+	
+	A prova pode ser repartida em:
+	
+	\[\left| x \right|_{M} \leq \left| x \right|\]
+	
+	\[{|x|}_{M} = \max\left\{ \left| x_{'} \right|,\ldots,\left| x_{n} \right| \right\} = \sqrt[2]{{|x|}_{M}^{2}}\]
+	
+	\[\left| x \right| = \sqrt[2]{x_{1}^{2} + \ldots + {|x|}_{M}^{2} + \ldots + x_{n}^{2}}\]
+	
+	Deste modo, necessariamente
+	
+	\[\sqrt[2]{{|x|}_{M}^{2}} \leq \sqrt[2]{x_{1}^{2} + \ldots + {|x|}_{M}^{2} + \ldots + x_{n}^{2}}\]
+	
+	A segunda parte ?®:
+	
+	\[\left| x \right| \leq \left| x \right|_{S}\]
+	
+	\[\sqrt[2]{x_{1}^{2} + \ldots + x_{n}^{2}} \leq \left| x_{1} \right| + \ldots + |x_{n}|\]
+	
+	Elevando os dois lados ao quadrado
+	
+	\[x_{1}^{2} + \ldots + x_{n}^{2} \leq \left( \left| x_{1} \right| + \ldots + |x_{n}| \right)^{2}\]
+	
+	\[\sum_{i = 1}^{n}x_{i}^{2} \leq \left( \sum_{i = 1}^{n}{|x_{i}|} \right)^{2}\]
+	
+	Pelo Regra do Quadrado da Soma
+	
+	\[\left( \sum_{i = 1}^{n}{|x_{i}|} \right)^{2} = \sum_{i = 1}^{n}{|x_{i}|}^{2} + 2\sum_{i < j}^{}{\left| x_{i} \right||x_{j}|}\]
+	
+	Logo
+	
+	\[\sum_{i = 1}^{n}x_{i}^{2} \leq \sum_{i = 1}^{n}{|x_{i}|}^{2} + 2\sum_{i < j}^{}{\left| x_{i} \right||x_{j}|}\]
+	
+	Como:
+	
+	\[2\sum_{i < j}^{}{\left| x_{i} \right||x_{j}|} \geq 0\]
+	
+	Ent?úo temos que de fato
+	
+	\[\left| x \right| \leq \left| x \right|_{S}\]
+	
+	A terceira parte ?® provar que:
+	
+	\[\left| x \right|_{S} \leq n\left| x \right|_{M}\]
+	
+	\[\left| x_{1} \right| + \ldots + \left| x_{n} \right| \leq n(\max\left\{ \left| x_{'} \right|,\ldots,\left| x_{n} \right| \right\})\]
+	
+	Onde
+	
+	\[\left| x_{1} \right| + \ldots + \left| x_{n} \right| = \sum_{i = 1}^{n}{|x_{i}|}\]
+	
+	\[n(\max\left\{ \left| x_{'} \right|,\ldots,\left| x_{n} \right| \right\} = \sum_{i = 1}^{n}{|x_{\max}|}\]
+	
+	Ou seja
+	
+	\[\sum_{i = 1}^{n}{|x_{i}|} \leq \sum_{i = 1}^{n}{|x_{\max}|}\]
+	
+	\[0\  \leq \sum_{i = 1}^{n}\left| x_{\max} \right| - \sum_{i = 1}^{n}{|x_{i}|}\]
+	
+	\[\sum_{i = 1}^{n}\left( \left| x_{\max} \right| - \left| x_{i} \right| \right) \geq 0\]
+	
+	Como \(\left| x_{\max} \right| \geq \left| x_{i} \right|\) ent?úo temos
+	que a inequa?º?úo ?® sempre verdade.
+	
+	Com isso temos que:
+	
+	\[\left\{ \begin{matrix}
+	\left| x \right|_{M} \leq \left| x \right| \\
+	\left| x \right| \leq \left| x \right|_{S} \\
+	\left| x \right|_{S} \leq n\left| x \right|_{M} \\
+	\end{matrix} \right.\ \]
+	
+	O que nos leva a concluir que, de fato,
+	
+	\[\left| x \right|_{M} \leq \left| x \right| \leq \left| x \right|_{S} \leq n\left| x \right|_{M}\]
+	
+	\[\]
+	
+	\paragraph{Propriedade da Norma}\label{propriedade-da-norma}
+	
+	Outra propriedade da norma ?®
+	
+	\[\left| \left| x \right| - \left| y \right| \right| \leq \left| x - y \right|\]
+	
+	Para esta prova s?úo precisos dois passos. Primeiro:
+	
+	\[x = \left( x - y \right) + y\]
+	
+	Pelas propriedades b?ísicas da norma
+	
+	\[\left| x \right| \leq \left| x - y \right| + \left| y \right|\]
+	
+	\[\left| x \right| - \left| y \right| \leq \left| x - y \right|\]
+	
+	Tirando a norma dos dois lados, temos que:
+	
+	\[\left| \left| x \right| - \left| y \right| \right| < \left| \left| x - y \right| \right|\]
+	
+	\[\left| \left| x \right| - \left| y \right| \right| \leq \left| x - y \right|\]
+	
+	\[\]
+	
+	\paragraph{Norma Euclidiana como
+		Dist?óncia}\label{norma-euclidiana-como-distuxe2ncia}
+	
+	Dentro de uma interpreta?º?úo geom?®trica mais cl?íssica, a Norma Euclidiana
+	pode ser interpretada como a dist?óncia entre dois pontos.
+	
+	\subsubsection{Bolas e Conjuntos
+		Limitados}\label{bolas-e-conjuntos-limitados}
+	
+	Uma bola aberta pode ser definida como:
+	
+	\[B\left( a;r \right) = \left\{ x \in \mathbb{R}^{n};\left| x - a \right| < r \right\}\]
+	
+	Uma bola fechada pode ser definida como:
+	
+	\[B\left\lbrack a;r \right\rbrack = \left\{ x \in \mathbb{R}^{n};\left| x - a \right| \leq r \right\}\]
+	
+	Uma esfera pode ser definida como:
+	
+	\[S\left\lbrack a;r \right\rbrack = \left\{ x \in \mathbb{R}^{n};\left| x - a \right| = r \right\}\]
+	
+	De modo que
+	
+	\[B\left\lbrack a;r \right\rbrack = B(a;r) \cup S\lbrack a;r\rbrack\]
+	
+	Tamb?®m pode ser chamado de Disco. De particular interesse ?® o disco
+	B{[}0;1{]} que ?® chamado de disco unit?írio.
+	
+	Uma nota?º?úo espec?¡fica existe tamb?®m para a esfera unit?íria:
+	
+	\[S^{n - 1} = \left\{ x \in \mathbb{R}^{n};\left| x \right| = 1 \right\}\]
+	
+\end{document}
