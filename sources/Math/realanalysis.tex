@@ -5,29 +5,31 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \begin{document}
-	Introdu?º?úo a An?ílise Real
+	\title{Introdução à Análise Real}
+	\author{Daniel Frederico Lins Leite}
+	\date{2015/09/19}
 	
-	Daniel Frederico Lins Leite
+	\maketitle
+		
+	\section{Topologia do Espaço Euclidiano}\label{topologia-do-espaco-euclidiano}
 	
-	2015/09/19
+	\subsection{O Espaço Euclidiano}\label{o-espaco-euclidiano}
 	
-	\section{Topologia do Espa?ºo
-		Euclidiano}\label{topologia-do-espauxe7o-euclidiano}
+	O espaço euclidiano n-dimensional é representado por \(\mathbb{R}^{n}\) e
+	é formado por todas as n-tuplas de números reais que são representadas
+	por \(x = (x_{1},\ldots,x_{n)}\). Quando se fala do espaço euclidiano
+	estas n-tuplas também são chamadas de pontos e/ou vetores.
 	
-	\subsection{O Espa?ºo Euclidiano}\label{o-espauxe7o-euclidiano}
+	As seguintes operações entre tuplas são:
 	
-	O espa?ºo euclidiano n-dimensional ?® representado por \(\mathbb{R}^{n}\)e
-	?® formado por todas as n-tuplas de n??meros reais que n?úo representadas
-	por \(x = (x_{1},\ldots,x_{n)}\). Quando se fala do espa?ºo euclidiano
-	estas n-tuplas tamb?®m s?úo chamadas de pontos e/ou vetores.
-	
-	A seguintes opera?º?Áes entre tuplas s?úo:
-	
+	Igualdade: $x$ é igual a $y$ se e somente se ($\leftrightarrow $) para todo ($\forall$) i entre 1 e n, $x_i$ é igual a $y_i$.
 	\[x = y\  \leftrightarrow \ x_{i} = y_{i}\forall i \in (1\ldots n)\]
 	
+	Soma:
 	\[x + y = (x_{1} + y_{1},\ldots,x_{n} + y_{n})\]
 	
-	\[\mathbb{\propto \in R,\ }\alpha x = \left( \alpha x_{1},\ldots,\alpha x_{n} \right)\]
+	Escala:
+	\[\alpha \in R, \alpha x = \left( \alpha x_{1},\ldots,\alpha x_{n} \right)\]
 	
 	Deste modo:
 	
@@ -41,18 +43,15 @@
 	
 	\[x + \left( y + z \right) = \left( x + y \right) + z\]
 	
-	\[\alpha\left( \text{??x} \right) = \left( \text{????} \right)x\]
+	\[\alpha ( \beta x) = (\alpha\beta)x\]
 	
-	\[\left( \alpha + \beta \right)x = \alpha x + \beta x\]
+	\[ (\alpha + \beta)x = \alpha x + \beta x\]
 	
-	\[\alpha\left( x + y \right) = \alpha x + \alpha y\]
+	\[\alpha ( x + y ) = \alpha x + \alpha y\]
 	
 	Deste modo qualquer tupla pode ser escrita na forma:
 	
-	\[x = x_{1}e_{1} + \ldots + x_{n}e_{n}\]
-	
-	Onde
-	
+	\[x = x_{1}e_{1} + \ldots + x_{n}e_{n}\]	
 	\[e_{i} = \left( x_{j} \right)\ onde\ j\  \in \left\lbrack 1,n \right\rbrack\text{\ e\ }\left\{ \begin{matrix}
 	0,\ se\ j\  \neq i \\
 	1,\ se\ j = 1 \\
@@ -60,10 +59,10 @@
 	
 	\subsubsection{Produto Interno}\label{produto-interno}
 	
-	O espa?ºo euclidiano ainda possui uma opera?º?úo chamada de produto
+	O espaço euclidiano possui uma operação chamada de produto
 	interno:
 	
-	\[< x,y > = x_{1}y_{1} + \ldots + x_{n}y_{n}\]
+	\[<x,y> = x_{1}y_{1} + \ldots + x_{n}y_{n}\]
 	
 	\paragraph{Propriedades do Produto
 		Interno}\label{propriedades-do-produto-interno}
@@ -76,50 +75,39 @@
 	
 	\[< x,x > \  > 0\ se\ x\  \neq 0\]
 	
+	\paragraph{Provas:}
 	\paragraph{Comutatividade}\label{comutatividade}
-	
-	\[< x,y >\]
-	
-	\[= \ x_{1}y_{1} + \ldots + x_{n}y_{n)}\]
-	
-	\[= y_{1}x_{1} + \ldots + y_{n}x_{n}\]
-	
-	\[= < y,x >\]
-	
-	\[\]
-	
-	\paragraph{Distributatividade
-		Vetorial}\label{distributatividade-vetorial}
-	
-	\[< x,y + z >\]
-	
-	\[= x_{1}\left( y_{1}{+ z}_{1} \right) + \ldots + x_{n}\left( y_{n}{+ z}_{n} \right)\]
-	
-	\[= x_{1}y_{1}{+ x_{1}z}_{1} + \ldots + x_{n}y_{n}{+ x_{n}z}_{n}\]
-	
-	\[= x_{1}y_{1} + \ldots + x_{n}y_{n} + x_{1}z_{1} + \ldots + x_{n}z_{n}\]
-	
-	\[= < x,y > + < x,z >\]
-	
-	\[\]
-	
+	\begin{align*}
+		< x,y >\\
+		&= \ x_{1}y_{1} + \ldots + x_{n}y_{n}\\
+		&= y_{1}x_{1} + \ldots + y_{n}x_{n}\\
+		&= <y,x>\\
+		\blacksquare
+	\end{align*}
+		
+	\paragraph{Distributatividade Vetorial}\label{distributatividade-vetorial}
+	\begin{align*}
+		<x,y+z>\\
+		&= x_{1}\left( y_{1}{+ z}_{1} \right) + \ldots + x_{n}\left( y_{n}{+ z}_{n} \right)\\
+		&= x_{1}y_{1}{+ x_{1}z}_{1} + \ldots + x_{n}y_{n}{+ x_{n}z}_{n}\\
+		&= x_{1}y_{1} + \ldots + x_{n}y_{n} + x_{1}z_{1} + \ldots + x_{n}z_{n}\\
+		&= < x,y > + < x,z >\\
+		\blacksquare
+	\end{align*}	
 	\paragraph{Distrivutatividade Escalar}\label{distrivutatividade-escalar}
-	
-	\[< \alpha x,y >\]
-	
-	\[= \alpha x_{1}y_{1} + \ldots + \alpha x_{n}y_{n}\]
-	
-	\[= \alpha\left( x_{1}y_{1} + \ldots + x_{n}y_{n} \right)\]
-	
-	\[= \alpha < x,y >\]
-	
-	\[\]
+	\begin{align*}
+		<\alpha x,y>\\
+		&= \alpha x_{1}y_{1} + \ldots + \alpha x_{n}y_{n}\\
+		&= \alpha\left( x_{1}y_{1} + \ldots + x_{n}y_{n} \right)\\
+		&= \alpha < x,y >\\
+		\blacksquare
+	\end{align*}
 	
 	\paragraph{Ortogonalidade}\label{ortogonalidade}
 	
 	\[< x,y > \  = 0\]
 	
-	Se x e/ou y forem zero o caso trivialmente ?® provado. Por?®m, caso
+	Se x e/ou y forem zero, o caso é trivialmente provado. Porém, caso
 	
 	\[y = z - \frac{< x,z >}{< x,x >}x\]
 	
@@ -137,16 +125,16 @@
 	
 	\[\]
 	
-	Isso significa que toda tupla do espa?ºo euclidiano possui pelo menos uma
-	outra tupla que ?® ortogonal a esta.
+	Isso significa que toda tupla do espaço euclidiano possui pelo menos uma
+	outra tupla que é ortogonal a esta.
 	
 	Desse modo, z pode ser escrito por:
 	
 	\[z = y + \frac{< x,z >}{< x,x >}x\]
 	
 	Isto significa que (y, \(\frac{< x,z >}{< x,x >}x)\) podem descrever
-	qualquer vetor do espa?ºo o que os fazem serem a base do espa?ºo. Mais
-	sobre bases a frente.
+	qualquer vetor do espaço o que os fazem serem a base do espaço. Mais
+	sobre bases à seguir.
 	
 	\subsubsection{Norma}\label{norma}
 	
@@ -158,7 +146,7 @@
 	
 	\[= x_{1}^{2} + \ldots + x_{n}^{2}\]
 	
-	E sendo a f??rmula
+	E sendo a fórmula
 	
 	\[\left| x \right| = \sqrt{x_{1}^{2} + \ldots + x_{n}^{2}}\]
 	
@@ -168,22 +156,20 @@
 	
 	\[< x,x > \  = \ {|x|}^{2}\]
 	
-	Mais genericamente, toda fun?º?úo \(\mathbb{R}^{n}\mathbb{\rightarrow R}\)
+	Mais genericamente, toda função \(\mathbb{R}^{n}\mathbb{\rightarrow R}\)
 	pode ser chamada como norma.
 	
-	Caso a tupla/vetor possua norma 1, se diz que est?í normalizado, que ?® um
-	vetor unit?írio. Pode-se normalizar qualquer tupla/vetor diferente de
-	zero do seguinte modo:
+	Caso a tupla/vetor possua norma 1, se diz que a tupla/vetor está normalizado, que é um(a) tupla/vetor unitário. Pode-se normalizar qualquer tupla/vetor diferente de zero do seguinte modo:
 	
 	\[u = \frac{x}{|x|}\]
 	
 	\paragraph{Propriedades da Norma}\label{propriedades-da-norma}
 	
-	Por esta defini?º?úo a norma possui as seguintes propriedades
+	Por esta definição a norma possui as seguintes propriedades
 	
 	\[\left| x \right| > 0,\ se\ x \neq 0\]
 	
-	\[\left| \text{??x} \right| = \left| \alpha \right||x|\]
+	\[\left| \alpha x \right| = \left| \alpha \right||x|\]
 	
 	\[\left| x + y \right| \leq \left| x \right| + |y|\]
 	
@@ -197,31 +183,27 @@
 	
 	\[\left| a \right| \leq \left| b - c \right| + \left| d \right|\]
 	
-	\paragraph{Teorema de Pit?ígoras}\label{teorema-de-pituxe1goras}
+	\paragraph{Teorema de Pitágoras}\label{teorema-de-pituxe1goras}
 	
-	Se analisarmos o Teorema de Pit?ígoras, na sua forma do espa?ºo
+	Se analisarmos o Teorema de Pitágoras, na sua forma do espaço
 	euclidiano:
-	
-	\[\left| x + y \right|^{2} = {|x|}^{2} + {|y|}^{2}\]
-	
-	Como \(< x,x > \  = \ {|x|}^{2}\)
-	
-	\[\left| x + y \right|^{2} = \  < x + y,x + y > \ \]
-	
-	\[= \  < x,x > + 2 < x,y > + < y,y >\]
-	
-	Como \(x\bot y\), \(< x,y > \  = 0\), ent?úo
-	
-	\[= < x,x > + 2*0 + < y,y >\]
-	
-	\[= < x,x > + < y,y >\]
-	
-	Como \(< x,x > \  = \left| x \right|^{2}\)
-	
-	\[= \left| x \right|^{2} + \left| y \right|^{2}\]
-	
-	\[\]
-	
+	\begin{align*}
+		\left| x + y \right|^{2} &= {|x|}^{2} + {|y|}^{2} , x\bot y\\
+		\\
+		<x,x> &= {|x|}^{2}\\	
+		<x+y,x+y> &= \left|x+y\right|^{2}\\
+		&=<x,x>+2<x,y>+<y,y>\\
+		\\
+		<x,y> &= 0 && \text{by x orthogonal to y}\\
+		\\
+		\left|x+y \right|^{2} &= <x+y,x+y>\\
+		&= <x,x>+2<x,y>+<y,y>\\
+		&= <x,x>+2*0+<y,y>\\
+		&= <x,x> + <y,y>\\
+		&= {|x|}^{2} + {|y|}^{2}\\
+		\blacksquare
+	\end{align*}
+		
 	\paragraph{Desigualdade de Schwarz}\label{desigualdade-de-schwarz}
 	
 	\[| < x,y > | \leq \left| x \right||y|\]
