@@ -40,6 +40,21 @@ Variance\\
 	\qed
 \end{align}
 
+Covariance Matrix
+
+\begin{align}
+cov(X) &= E[(X-E(X)]^2\\
+&= \sum_{x\in \Omega X} {(X-E(X))^2*P(X=x)}\\
+&= \sum_{x\in \Omega X} {[X^2-2XE(X)+E(X)^2]*P(X=x)}\\
+&= \sum_{x\in \Omega X} {X^2P(X=x)} \\&- \sum_{x\in \Omega X} {2XE(X)*P(X=x)} \\&+ \sum_{x \in \Omega X} {E(X)^2P(X=x)}\\
+&= \sum_{x\in \Omega X} {X^2P(X=x)} \\&- 2E(X)*\sum_{x\in \Omega X} {XP(X=x)} \\&+ E(X)^2*\sum_{x \in \Omega X} {P(X=x)}\\
+&= E(X^2)-2E(X)E(X)+E(X)^2*1\\
+&= E(X^2)-2*E(X)^2+E(X)^2\\
+&= E(X^2)-E(X)^2\\
+&= E(X^tX)-\mu^t\mu\\
+\qed
+\end{align}
+
 Variance of the Sample Mean
 
 \begin{align}
