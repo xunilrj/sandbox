@@ -1,4 +1,5 @@
 library(scales)
+library(MASS)
 
 generateData <- function (u, sdx, sdy){
   size <- 1000
@@ -53,7 +54,23 @@ plotEigenvectors(X)
 X <- generateData(0, 4, 1)
 rot45 <- rotationMatrix(-pi/4)
 X <- X %*% rot45
+C <- covarianceMatrix(X)
+eigenC <- eigen(C)
 plotMatrix(X)
 plotEigenvectors(X)
 
+X <- generateData(0,1,1)
+R <- rotationMatrix(-pi/4)
+S <- matrix(c(4,0,0,1), nrow=2, ncol=2)
+T <- R%*%S
+#R is a orthonormal matrix so t(R) = ginv(R)
+C <- T%*%t(T)
+plotMatrix(X)
+plotMatrix(X%*%S%*%R)
+eigenVectors <- t(R)%*%S
+arrows(0,0,eigenVectors[1,1],eigenVectors[2,1], lwd = 4, col = "red")
+arrows(0,0,eigenVectors[1,2],eigenVectors[2,2], lwd = 4, col = "blue")
 
+# These matrices should be as near as zero as possible
+eigenC$vectors - t(R)
+diag(sqrt(eigenC$values), 2, 2) - S
