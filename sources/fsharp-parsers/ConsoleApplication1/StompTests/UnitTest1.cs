@@ -107,6 +107,21 @@ namespace StompTests
             Assert.IsFalse(parserDigit.Run("A").MatchAsBool());
         }
 
+        [TestMethod]
+        public void SumExpression()
+        {
+            //TODO allow numbers of more one digit
+            var parserAppend = pmap(pappend);
+            var parserInt = pmap(pint);
+            var parserDigit = pstring<char>("0123456789");
+            var parserNumberString = parserAppend(parserDigit);
+            var parserNumber = parserNumberString.Map(pint);
+            //var parserSumSymbol = pchar<char>('+');
+            //var parserSum = parserDigit & parserSumSymbol & parserDigit;
+
+            var digit = parserNumber.Run("1");
+            //var exp = parserSum.Run("1+1");
+        }
 
         public StompMessage Parse<T>(string message)
         {
@@ -139,7 +154,7 @@ namespace StompTests
             public string Input { get; set; }
             public int Position { get; set; }
 
-            public TR Match<TR>(Func<Success<T>, TR> onSuccess = null, Func<Failure<T>, TR> onFailture = null)
+            public TR Match<TR>(Func<Success<T>, TR> onSuccess = null, Func<Failure<T>, TR> onFailure = null)
             {
                 if (this is Success<T>)
                 {
@@ -148,7 +163,7 @@ namespace StompTests
                 }
                 else
                 {
-                    if (onFailture != null) { return onFailture(this as Failure<T>); }
+                    if (onFailure != null) { return onFailure(this as Failure<T>); }
                     return default(TR);
                 }
             }
@@ -168,7 +183,6 @@ namespace StompTests
             }
         }
 
-
         public class Success<T> : ParserResult<T>
         {
         }
@@ -178,82 +192,149 @@ namespace StompTests
             public string Message { get; set; }
         }
 
-        //type Parser<'T> = Parser of (string -> Result<'T* string>)
-        public class Parser<T>
+        //type Parser<'T> = Parser -of (string -> Result<'T* string>)
+        public class Parser<T1, T2>
         {
-            Func<ParserResult<T>, ParserResult<T>> F;
+            protected Func<ParserResult<T1>, ParserResult<T2>> F;
 
-            public Parser(Func<ParserResult<T>, ParserResult<T>> f)
+            public Parser(Func<ParserResult<T1>, ParserResult<T2>> f)
             {
                 F = f;
             }
 
-            public ParserResult<T> Run(string input)
+            public Parser<T1, T3> Map<T3>(Func<T2, T3> map)
             {
-                return F(new Success<T>()
+                return Lift<T3>(map, this);
+            }
+
+            public ParserResult<T2> Run(string input)
+            {
+                return F(new Success<T1>()
                 {
                     Input = input,
                     Position = 0
                 });
             }
 
-            public static Parser<T> operator &(Parser<T> l, Parser<T> r)
+            public static Parser<T1, T2> operator &(Parser<T1, T2> l, Parser<T2, T2> r)
             {
                 return AndThen(l, r);
             }
 
-            public static Parser<T> AndThen(Parser<T> l, Parser<T> r)
+            public static Parser<T1, T2> AndThen(Parser<T1, T2> l, Parser<T2, T2> r)
             {
-                return new Parser<T>(x => r.F(l.F(x)));
+                return new Parser<T1, T2>(x => r.F(l.F(x)));
             }
 
-            public static Parser<T> operator |(Parser<T> l, Parser<T> r)
+            public static Parser<T1, T2> operator |(Parser<T1, T2> l, Parser<T1, T2> r)
             {
                 return OrElse(l, r);
             }
 
-            public static Parser<T> OrElse(Parser<T> l, Parser<T> r)
+            public static Parser<T1, T2> OrElse(Parser<T1, T2> l, Parser<T1, T2> r)
             {
-                return new Parser<T>(x =>
-                {
-                    return l.F(x).Match(onFailture: _ => r.F(x));
-                });
+                return new Parser<T1, T2>(x =>
+                 {
+                     return l.F(x).Match(onFailture: _ => r.F(x));
+                 });
+            }
+
+            public static Parser<T1, T3> Lift<T3>(Func<T2, T3> map, Parser<T1, T2> p)
+            {
+                return new Parser<T1, T3>(r => p.F(r).Match<ParserResult<T3>>(
+                     onSuccess: s => new Success<T3>()
+                     {
+                         Input = s.Input,
+                         Position = s.Position,
+                         Value = map(s.Value)
+                     },
+                     onFailure: f => new Failure<T3>()
+                     {
+                         Input = f.Input,
+                         Position = f.Position,
+                         Value = map(f.Value)
+                     }));
             }
         }
 
-
         public class Parser
         {
-            public static Parser<T> Choice<T>(IEnumerable<Parser<T>> parsers)
+            public static Parser<T1, T2> Choice<T1, T2>(IEnumerable<Parser<T1, T2>> parsers)
             {
-                return parsers.FoldLeft(Parser<T>.OrElse);
+                return parsers.FoldLeft(Parser<T1, T2>.OrElse);
             }
 
-            public static Parser<T> Choice<T>(params Parser<T>[] parsers)
+            public static Parser<T1, T2> Choice<T1, T2>(params Parser<T1, T2>[] parsers)
             {
-                return Choice(parsers as IEnumerable<Parser<T>>);
+                return Choice(parsers as IEnumerable<Parser<T1, T2>>);
             }
 
-            public static Parser<char> Choice(IEnumerable<char> characters)
+            public static Parser<char, char> Choice(IEnumerable<char> characters)
             {
                 var parsers = characters.Select(pchar<char>);
                 return Choice(parsers);
             }
 
-            public static Parser<char> Choice(string characters)
+            public static Parser<char, char> Choice(string characters)
             {
                 return Choice(characters as IEnumerable<char>);
             }
+
+
         }
 
-        public static Parser<T> p<T>(Func<char, bool> check, Func<ParserResult<T>, ParserResult<T>> onSuccess, Func<ParserResult<T>, ParserResult<T>> onFailure)
+        public static Parser<T, T> p<T>(Func<char, bool> check, Func<ParserResult<T>, ParserResult<T>> onSuccess, Func<ParserResult<T>, ParserResult<T>> onFailure)
         {
-            return new Parser<T>(new Func<ParserResult<T>, ParserResult<T>>((result) => result.Match(onSuccess: r => check(r.Input[r.Position]) ? onSuccess(r) : onFailure(r))));
+            return new Parser<T, T>(new Func<ParserResult<T>, ParserResult<T>>((result) => result.Match(onSuccess: r => check(r.Input[r.Position]) ? onSuccess(r) : onFailure(r))));
         }
 
-        public static Parser<T> pchar<T>(char c)
+        public static Parser<T, T> pchar<T>(char c)
         {
-            return p<T>(x => x == c, x => new Success<T>() { Input = x.Input, Position = x.Position + 1 }, x => new Failure<T>() { Input = x.Input, Position = x.Position + 1, Message = $"Expecting {c}. Got {x.Input[x.Position]}." });
+            return p<T>(x => x == c, x => new Success<T>() {
+                Input = x.Input,
+                Position = x.Position + 1,
+                Value = (T)(object)x.Input[x.Position]
+            }, x => new Failure<T>() {
+                Input = x.Input,
+                Position = x.Position + 1,
+                Message = $"Expecting {c}. Got {x.Input[x.Position]}."
+            });
+        }
+
+        public static Parser<T, T> pchoice<T>(Parser<T, T> l, Parser<T, T> r)
+        {
+            return Parser.Choice(l, r);
+        }
+
+        public static Parser<T, T> pstring<T>(string str)
+        {
+            return str.Select(pchar<T>).FoldLeft(pchoice<T>);
+        }
+
+        public static Func<Parser<T, T>, Parser<T, TR>> pmap<T, TR>(Func<T, TR> map)
+        {
+            return new Func<Parser<T, T>, Parser<T, TR>>(l => Parser<T,T>.Lift<TR>(map, l));
+        }
+
+        public static Func<string, int> pint
+        {
+            get
+            {
+                return new Func<string, int>(x => int.Parse(x));
+            }
+        }
+
+        public static Func<char, string> pappend
+        {
+            get
+            {
+                var builder = new StringBuilder();
+                return new Func<char, string>(x =>
+                {
+                    builder.Append(x);
+                    return builder.ToString();
+                });
+            }
         }
 
         public static Func<string, int, bool> pFunc(Func<char, bool> isChar)
