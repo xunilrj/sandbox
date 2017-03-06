@@ -5,6 +5,8 @@ using System.Diagnostics;
 using static FParsec.CharParsers;
 using System.Text;
 using static StompTests.UnitTest1;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace StompTests
 {
@@ -43,8 +45,8 @@ namespace StompTests
         {
             var parserA = pchar<bool>('A');
 
-            Assert.IsTrue(parserA.Run("A").MathAsBool());
-            Assert.IsFalse(parserA.Run("B").MathAsBool());
+            Assert.IsTrue(parserA.Run("A").MatchAsBool());
+            Assert.IsFalse(parserA.Run("B").MatchAsBool());
         }
 
         [TestMethod]
@@ -55,10 +57,10 @@ namespace StompTests
 
             var parserAB = parserA & parserB;
 
-            Assert.IsTrue(parserAB.Run("AB").MathAsBool());
-            Assert.IsFalse(parserAB.Run("AC").MathAsBool());
-            Assert.IsFalse(parserAB.Run("CB").MathAsBool());
-            Assert.IsFalse(parserAB.Run("CC").MathAsBool());
+            Assert.IsTrue(parserAB.Run("AB").MatchAsBool());
+            Assert.IsFalse(parserAB.Run("AC").MatchAsBool());
+            Assert.IsFalse(parserAB.Run("CB").MatchAsBool());
+            Assert.IsFalse(parserAB.Run("CC").MatchAsBool());
         }
 
         [TestMethod]
@@ -69,10 +71,42 @@ namespace StompTests
 
             var parserAB = parserA | parserB;
 
-            Assert.IsTrue(parserAB.Run("A").MathAsBool());
-            Assert.IsTrue(parserAB.Run("B").MathAsBool());
-            Assert.IsFalse(parserAB.Run("C").MathAsBool());
+            Assert.IsTrue(parserAB.Run("A").MatchAsBool());
+            Assert.IsTrue(parserAB.Run("B").MatchAsBool());
+            Assert.IsFalse(parserAB.Run("C").MatchAsBool());
         }
+
+        [TestMethod]
+        public void ParseChoice()
+        {
+            var parserA = pchar<bool>('A');
+            var parserB = pchar<bool>('B');
+
+            var parserAB = Parser.Choice(parserA, parserB);
+
+            Assert.IsTrue(parserAB.Run("A").MatchAsBool());
+            Assert.IsTrue(parserAB.Run("B").MatchAsBool());
+            Assert.IsFalse(parserAB.Run("C").MatchAsBool());
+        }
+
+        [TestMethod]
+        public void ParseDigit()
+        {
+            var parserDigit = Parser.Choice("0123456789");
+
+            Assert.IsTrue(parserDigit.Run("0").MatchAsBool());
+            Assert.IsTrue(parserDigit.Run("1").MatchAsBool());
+            Assert.IsTrue(parserDigit.Run("2").MatchAsBool());
+            Assert.IsTrue(parserDigit.Run("3").MatchAsBool());
+            Assert.IsTrue(parserDigit.Run("4").MatchAsBool());
+            Assert.IsTrue(parserDigit.Run("5").MatchAsBool());
+            Assert.IsTrue(parserDigit.Run("6").MatchAsBool());
+            Assert.IsTrue(parserDigit.Run("7").MatchAsBool());
+            Assert.IsTrue(parserDigit.Run("8").MatchAsBool());
+            Assert.IsTrue(parserDigit.Run("9").MatchAsBool());
+            Assert.IsFalse(parserDigit.Run("A").MatchAsBool());
+        }
+
 
         public StompMessage Parse<T>(string message)
         {
@@ -187,22 +221,47 @@ namespace StompTests
             }
         }
 
-        Parser<T> p<T>(Func<char, bool> check, Func<ParserResult<T>, ParserResult<T>> onSuccess, Func<ParserResult<T>, ParserResult<T>> onFailure)
+
+        public class Parser
+        {
+            public static Parser<T> Choice<T>(IEnumerable<Parser<T>> parsers)
+            {
+                return parsers.FoldLeft(Parser<T>.OrElse);
+            }
+
+            public static Parser<T> Choice<T>(params Parser<T>[] parsers)
+            {
+                return Choice(parsers as IEnumerable<Parser<T>>);
+            }
+
+            public static Parser<char> Choice(IEnumerable<char> characters)
+            {
+                var parsers = characters.Select(pchar<char>);
+                return Choice(parsers);
+            }
+
+            public static Parser<char> Choice(string characters)
+            {
+                return Choice(characters as IEnumerable<char>);
+            }
+        }
+
+        public static Parser<T> p<T>(Func<char, bool> check, Func<ParserResult<T>, ParserResult<T>> onSuccess, Func<ParserResult<T>, ParserResult<T>> onFailure)
         {
             return new Parser<T>(new Func<ParserResult<T>, ParserResult<T>>((result) => result.Match(onSuccess: r => check(r.Input[r.Position]) ? onSuccess(r) : onFailure(r))));
         }
 
-        Parser<T> pchar<T>(char c)
+        public static Parser<T> pchar<T>(char c)
         {
             return p<T>(x => x == c, x => new Success<T>() { Input = x.Input, Position = x.Position + 1 }, x => new Failure<T>() { Input = x.Input, Position = x.Position + 1, Message = $"Expecting {c}. Got {x.Input[x.Position]}." });
         }
 
-        Func<string, int, bool> pFunc(Func<char, bool> isChar)
+        public static Func<string, int, bool> pFunc(Func<char, bool> isChar)
         {
             return new Func<string, int, bool>((str, pos) => isChar(str[pos]));
         }
 
-        Func<string, int, bool> pChoice(Func<string, int, bool> p1, Func<string, int, bool> p2)
+        public static Func<string, int, bool> pChoice(Func<string, int, bool> p1, Func<string, int, bool> p2)
         {
             return new Func<string, int, bool>((str, pos) => p1(str, pos) || p2(str, pos));
         }
@@ -242,9 +301,23 @@ headerB: value2
         }
     }
 
+    public static class LinqExtensions
+    {
+        public static T1 FoldLeft<T1>(this IEnumerable<T1> items, Func<T1, T1, T1> binaryOperator)
+        {
+            return items.Skip(1).Aggregate(items.First(), binaryOperator, x => x);
+        }
+
+        public static T1 FoldRight<T1>(this IEnumerable<T1> items, Func<T1, T1, T1> binaryOperator)
+        {
+            return FoldLeft(items.Reverse(), binaryOperator);
+        }
+    }
+
+
     public static class ParserResultExtensions
     {
-        public static bool MathAsBool<T>(this ParserResult<T> pr)
+        public static bool MatchAsBool<T>(this ParserResult<T> pr)
         {
             return pr.Match<bool>(x => true, x => false);
         }
