@@ -120,4 +120,24 @@ namespace MachinaAurum.Data.Processing
     {
 
     }
+
+    public interface ILogisticRegression : ICovarianceMatrixClassifier
+    {
+
+    }
+
+    public interface IDataSimilarityClassifier
+    {
+
+    }
+
+    public interface IKNNClassifier : IDataSimilarityClassifier
+    {
+
+    }
+
+    public interface IPerceptronClassifier : IClassifier
+    {
+
+    }
 }
