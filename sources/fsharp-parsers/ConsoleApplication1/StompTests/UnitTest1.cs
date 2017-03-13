@@ -454,53 +454,72 @@ public class Tests
             onSuccess: s => { Assert.AreEqual("AB", s.Value); },
             onFailure: f => Assert.Fail());
     }
+
+    [TestMethod]
+    public void ParseOrElse()
+    {
+        var pA = Parsers.Char('A');
+        var pB = Parsers.Char('B');
+        var pAorB = Parsers.OrElse(pA, pB);
+
+        var result = pAorB.Parse("A");
+        Assert.IsFalse(result.HasError);
+        result.Match(
+            onSuccess: s => { Assert.AreEqual('A', s.Value); },
+            onFailure: f => Assert.Fail());
+
+        result = pAorB.Parse("B");
+        Assert.IsFalse(result.HasError);
+        result.Match(
+            onSuccess: s => { Assert.AreEqual('B', s.Value); },
+            onFailure: f => Assert.Fail());
+
+        result = pAorB.Parse("C");
+        Assert.IsTrue(result.HasError);
+    }
 }
 
 public class Parsers
 {
     public static Parser<char, char> Char(char c)
     {
-        return new Parser<char, char>(stream =>
-        {
-            if (stream.MoveNext() == false)
-            {
-                return new Failure<char, char>()
-                {
-                    Stream = stream,
-                    Message = $"Expecting {c}, but found End of Stream."
-                };
-            }
-            else
-            {
-                if (stream.Current == c)
-                {
-                    return new Success<char, char>()
-                    {
-                        Stream = stream,
-                        Value = stream.Current
-                    };
-                }
-                else
-                {
-                    return new Failure<char, char>()
-                    {
-                        Stream = stream,
-                        Message = $"Expecting {c}, but found {stream.Current}"
-                    };
-                }
-            }
-        });
+        return Func<char>(current => current == c);
     }
 
     public static Parser<char, string> String(string str)
     {
         var builder = new StringBuilder();
         return str.Select(Parsers.Char)
-            .FoldLeft<Parser<char, char>, Parser<char, string>>((a, b) => Parsers.AndThen(a, b, (va, vb) =>
+            .FoldLeft<Parser<char, string>, Parser<char, char>>((l, r) => Parsers.AndThen(l, r, (valuel, valuer) =>
+            {
+                builder.Append(valuer);
+                return builder.ToString();
+            }));
+    }
+
+    public static Parser<T, T> Func<T>(Func<T, bool> isValid)
+    {
+        return new Parser<T, T>(stream =>
+        {
+            var current = stream.Current;
+            if (isValid(current))
+            {
+                stream.MoveNext();
+                return new Success<T, T>()
                 {
-                    builder.Append(vb);
-                    return builder.ToString();
-                }));
+                    Stream = stream,
+                    Value = current
+                };
+            }
+            else
+            {
+                return new Failure<T, T>()
+                {
+                    Stream = stream,
+                    Message = $"Not expecting {current}."
+                };
+            }
+        });
     }
 
     public static Parser<T, TValueFinal> AndThen<T, TValueL, TValueR, TValueFinal>(Parser<T, TValueL> l, Parser<T, TValueR> r, Func<TValueL, TValueR, TValueFinal> map)
@@ -546,24 +565,55 @@ public class Parsers
                 onFailure: x => Failure<T, TValueFinal>.Propagate(x));
         });
     }
+
+    public static Parser<T, TValue> OrElse<T, TValue>(Parser<T, TValue> l, Parser<T, TValue> r)
+    {
+        if (l == null)
+        {
+            return r;
+        }
+
+        if (r == null)
+        {
+            return l;
+        }
+
+        return new Parser<T, TValue>(stream =>
+        {
+            return l.ParseFunction(stream).Map(
+                onSuccess: s1 => s1,
+                onFailure: f1 => r.ParseFunction(stream));
+        });
+    }
 }
 
-public class Parser<T, TValue>
+public class Parser<TStream, TValue>
 {
-    public Func<IEnumerator<T>, ParserResult<T, TValue>> ParseFunction;
+    public Func<IEnumerator<TStream>, ParserResult<TStream, TValue>> ParseFunction;
+    public Queue<TStream> Queue;
 
-    public Parser(Func<IEnumerator<T>, ParserResult<T, TValue>> parse)
+    public Parser(Func<IEnumerator<TStream>, ParserResult<TStream, TValue>> parse)
     {
         ParseFunction = parse;
+        Queue = new Queue<TStream>();
     }
 
-    public ParserResult<T, TValue> Parse(IEnumerable<T> stream)
+    public ParserResult<TStream, TValue> Parse(IEnumerable<TStream> stream)
     {
         var enumerator = stream.GetEnumerator();
+
+        if (enumerator.MoveNext() == false)
+        {
+            return new Failure<TStream, TValue>()
+            {
+                Message = "End of Stream."
+            };
+        }
+
         return ParseFunction(enumerator);
     }
 
-    public static Parser<T, Tuple<TValue, TValue>> operator &(Parser<T, TValue> l, Parser<T, TValue> r)
+    public static Parser<TStream, Tuple<TValue, TValue>> operator &(Parser<TStream, TValue> l, Parser<TStream, TValue> r)
     {
         return Parsers.AndThen(l, r, Tuple.Create);
     }
@@ -638,13 +688,40 @@ public static class Curry
 
 public static class LinqExtensions
 {
-    public static T2 FoldLeft<T1, T2>(this IEnumerable<T1> items, Func<T2, T1, T2> binaryOperator)
+    /// <summary>
+    /// foldl :: (a -> b -> a) -> a -> [b] -> a
+    /// http://hackage.haskell.org/packages/archive/base/latest/doc/html/Prelude.html#v:foldl
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <typeparam name="T2"></typeparam>
+    /// <param name="items"></param>
+    /// <param name="binaryOperator"></param>
+    /// <returns></returns>
+    public static TA FoldLeft<TA, TB>(this IEnumerable<TB> items, Func<TA, TB, TA> binaryOperator, TA seed = default(TA))
     {
-        return items.Aggregate(default(T2), binaryOperator, x => x);
+        return items.Aggregate(seed, binaryOperator, x => x);
     }
 
-    public static T1 FoldRight<T1>(this IEnumerable<T1> items, Func<T1, T1, T1> binaryOperator)
+    //public static T1 FoldRight<T1>(this IEnumerable<T1> items, Func<T1, T1, T1> binaryOperator)
+    //{
+    //    return FoldLeft(items.Reverse(), binaryOperator);
+    //}
+}
+
+public class ParserAndThen<TA, TB, TC> : IFunc<TA, TB, TC>
+{
+    public TA LeftIdentity
     {
-        return FoldLeft(items.Reverse(), binaryOperator);
+        get { return default(TA); }
     }
+
+    public TC Run(TA a, TB b)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public interface IFunc<TA, TB, TC>
+{
+    TC Run(TA a, TB b);
 }
