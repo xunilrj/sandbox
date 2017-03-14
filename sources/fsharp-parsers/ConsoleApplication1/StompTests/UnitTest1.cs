@@ -481,22 +481,6 @@ public class Tests
 
 public class Parsers
 {
-    public static Parser<char, char> Char(char c)
-    {
-        return Func<char>(current => current == c);
-    }
-
-    public static Parser<char, string> String(string str)
-    {
-        var builder = new StringBuilder();
-        return str.Select(Parsers.Char)
-            .FoldLeft<Parser<char, string>, Parser<char, char>>((l, r) => Parsers.AndThen(l, r, (valuel, valuer) =>
-            {
-                builder.Append(valuer);
-                return builder.ToString();
-            }));
-    }
-
     public static Parser<T, T> Func<T>(Func<T, bool> isValid)
     {
         return new Parser<T, T>(stream =>
@@ -516,10 +500,26 @@ public class Parsers
                 return new Failure<T, T>()
                 {
                     Stream = stream,
-                    Message = $"Not expecting {current}."
+                    Messages = new List<string>(new[] { $"Not expecting {current}." })
                 };
             }
         });
+    }
+
+    public static Parser<char, char> Char(char c)
+    {
+        return Func<char>(current => current == c);
+    }
+
+    public static Parser<char, string> String(string str)
+    {
+        var builder = new StringBuilder();
+        return str.Select(Parsers.Char)
+            .FoldLeft<Parser<char, string>, Parser<char, char>>((l, r) => Parsers.AndThen(l, r, (valuel, valuer) =>
+            {
+                builder.Append(valuer);
+                return builder.ToString();
+            }));
     }
 
     public static Parser<T, TValueFinal> AndThen<T, TValueL, TValueR, TValueFinal>(Parser<T, TValueL> l, Parser<T, TValueR> r, Func<TValueL, TValueR, TValueFinal> map)
@@ -606,7 +606,7 @@ public class Parser<TStream, TValue>
         {
             return new Failure<TStream, TValue>()
             {
-                Message = "End of Stream."
+                Messages = new List<string>(new[] { "End of Stream." })
             };
         }
 
@@ -666,11 +666,11 @@ public class Failure<T, TValue> : ParserResult<T, TValue>
         return new Failure<T, TValue>()
         {
             Stream = f.Stream,
-            Message = f.Message
+            Messages = f.Messages
         };
     }
 
-    public string Message { get; set; }
+    public List<string> Messages { get; set; }
 
     public Failure()
     {
