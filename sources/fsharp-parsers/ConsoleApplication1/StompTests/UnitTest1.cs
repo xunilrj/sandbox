@@ -477,6 +477,63 @@ public class Tests
         result = pAorB.Parse("C");
         Assert.IsTrue(result.HasError);
     }
+
+    [TestMethod]
+    public void ParseChoice()
+    {
+        var pA = Parsers.Char('A');
+        var pB = Parsers.Char('B');
+        var pC = Parsers.Char('C');
+        var pAorBorC = Parsers.Choice(new[] { pA, pB, pC });
+
+        var result = pAorBorC.Parse("A");
+        Assert.IsFalse(result.HasError);
+        result.Match(
+            onSuccess: s => { Assert.AreEqual('A', s.Value); },
+            onFailure: f => Assert.Fail());
+
+        result = pAorBorC.Parse("B");
+        Assert.IsFalse(result.HasError);
+        result.Match(
+            onSuccess: s => { Assert.AreEqual('B', s.Value); },
+            onFailure: f => Assert.Fail());
+
+        result = pAorBorC.Parse("C");
+        Assert.IsFalse(result.HasError);
+        result.Match(
+            onSuccess: s => { Assert.AreEqual('C', s.Value); },
+            onFailure: f => Assert.Fail());
+
+        result = pAorBorC.Parse("D");
+        Assert.IsTrue(result.HasError);
+    }
+
+    [TestMethod]
+    public void ParseAnyOf()
+    {
+        var pAorBorC = Parsers.AnyOf("ABC");
+
+        var result = pAorBorC.Parse("A");
+        Assert.IsFalse(result.HasError);
+        result.Match(
+            onSuccess: s => { Assert.AreEqual('A', s.Value); },
+            onFailure: f => Assert.Fail());
+
+        result = pAorBorC.Parse("B");
+        Assert.IsFalse(result.HasError);
+        result.Match(
+            onSuccess: s => { Assert.AreEqual('B', s.Value); },
+            onFailure: f => Assert.Fail());
+
+        result = pAorBorC.Parse("C");
+        Assert.IsFalse(result.HasError);
+        result.Match(
+            onSuccess: s => { Assert.AreEqual('C', s.Value); },
+            onFailure: f => Assert.Fail());
+
+        result = pAorBorC.Parse("D");
+        Assert.IsTrue(result.HasError);
+    }
 }
 
 public class Parsers
@@ -509,6 +566,11 @@ public class Parsers
     public static Parser<char, char> Char(char c)
     {
         return Func<char>(current => current == c);
+    }
+
+    public static Parser<char, char> AnyOf(string chars)
+    {
+        return Choice(chars.Select(Parsers.Char));
     }
 
     public static Parser<char, string> String(string str)
@@ -584,6 +646,11 @@ public class Parsers
                 onSuccess: s1 => s1,
                 onFailure: f1 => r.ParseFunction(stream));
         });
+    }
+
+    public static Parser<T, T> Choice<T>(IEnumerable<Parser<T, T>> parsers)
+    {
+        return parsers.Reduce(OrElse);
     }
 }
 
@@ -706,6 +773,16 @@ public static class LinqExtensions
     //{
     //    return FoldLeft(items.Reverse(), binaryOperator);
     //}
+
+    public static TA Reduce<TA>(this IEnumerable<TA> items, Func<TA, TA, TA> binaryOperator)
+    {
+        return FoldLeft(items, binaryOperator);
+    }
+
+    public static Func<IEnumerable<TA>, TA> Reduce<TA>(Func<TA, TA, TA> binaryOperator)
+    {
+        return new Func<IEnumerable<TA>, TA>(x => Reduce(x,binaryOperator));
+    }
 }
 
 public class ParserAndThen<TA, TB, TC> : IFunc<TA, TB, TC>
