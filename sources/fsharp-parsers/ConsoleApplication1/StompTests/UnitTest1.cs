@@ -534,6 +534,15 @@ public class Tests
         result = pAorBorC.Parse("D");
         Assert.IsTrue(result.HasError);
     }
+
+    [TestMethod]
+    public void MyTestMethod()
+    {
+        var p123 = Parsers.String("123");
+        var result = p123.Parse("123");
+
+        Assert.IsFalse(result.HasError);
+    }
 }
 
 public class Parsers
@@ -576,7 +585,8 @@ public class Parsers
     public static Parser<char, string> String(string str)
     {
         var builder = new StringBuilder();
-        return str.Select(Parsers.Char)
+        return str
+            .Select(Parsers.Char)
             .FoldLeft<Parser<char, string>, Parser<char, char>>((l, r) => Parsers.AndThen(l, r, (valuel, valuer) =>
             {
                 builder.Append(valuer);
@@ -652,6 +662,14 @@ public class Parsers
     {
         return parsers.Reduce(OrElse);
     }
+
+    static Func<IEnumerator<TStream>, ParserResult<TStream, TValue>> ComposeParseFunction<TStream, TValue>(Func<IEnumerator<TStream>, ParserResult<TStream, TValue>> l, Func<IEnumerator<TStream>, ParserResult<TStream, TValue>> r)
+    {
+        return new Func<IEnumerator<TStream>, ParserResult<TStream, TValue>>(x =>
+        {
+            return l(x).Map(onSuccess: lr => r(lr.Stream));
+        });
+    }
 }
 
 public class Parser<TStream, TValue>
@@ -686,7 +704,7 @@ public class Parser<TStream, TValue>
     }
 }
 
-public class ParserResult<T, TValue>
+public class ParserResult<T, TValue> : IEnumerator<T>
 {
     public IEnumerator<T> Stream { get; set; }
     public bool HasError { get; set; }
@@ -703,6 +721,20 @@ public class ParserResult<T, TValue>
         }
     }
 
+    public ParserResult<T, TValue> Map<TResult>(Func<Success<T, TValue>, Success<T, TValue>> onSuccess = null, Func<Failure<T, TValue>, Failure<T, TValue>> onFailure = null)
+    {
+        if (this is Success<T, TValue>)
+        {
+            if (onSuccess == null) return this;
+            return onSuccess(this as Success<T, TValue>);
+        }
+        else
+        {
+            if (onFailure == null) return this;
+            return onFailure(this as Failure<T, TValue>);
+        }
+    }
+
     public TResult Map<TResult>(Func<Success<T, TValue>, TResult> onSuccess = null, Func<Failure<T, TValue>, TResult> onFailure = null)
     {
         if (this is Success<T, TValue>)
@@ -713,6 +745,53 @@ public class ParserResult<T, TValue>
         {
             return onFailure(this as Failure<T, TValue>);
         }
+    }
+
+    //public static ParserResult<T, TValue> operator +(ParserResult<T, TValue> l, ParserResult<T, TValue> r)
+    //{
+    //    if (l == null) { return r; }
+    //    if (r == null) { return l; }
+
+    //    if (l is Success<T, TValue> && r is Success<T, TValue>)
+    //    {
+    //        return new Success<T, TValue>()
+    //        {
+    //            Stream = l.Stream,
+    //            Value = default(TValue) // l.Value ?? r.Value
+    //        };
+    //    }
+    //}
+
+    // Mixin Stream
+    T IEnumerator<T>.Current
+    {
+        get
+        {
+            return Stream.Current;
+        }
+    }
+
+    object IEnumerator.Current
+    {
+        get
+        {
+            return Stream.Current;
+        }
+    }
+
+    void IDisposable.Dispose()
+    {
+        Stream.Dispose();
+    }
+
+    bool IEnumerator.MoveNext()
+    {
+        return Stream.MoveNext();
+    }
+
+    void IEnumerator.Reset()
+    {
+        Stream.Reset();
     }
 }
 
@@ -781,7 +860,7 @@ public static class LinqExtensions
 
     public static Func<IEnumerable<TA>, TA> Reduce<TA>(Func<TA, TA, TA> binaryOperator)
     {
-        return new Func<IEnumerable<TA>, TA>(x => Reduce(x,binaryOperator));
+        return new Func<IEnumerable<TA>, TA>(x => Reduce(x, binaryOperator));
     }
 }
 
