@@ -10,6 +10,11 @@ namespace MachinaAurum.Data.Processing
 
     }
 
+    public interface IConvexFunc : IFunc
+    {
+
+    }
+
     public interface ISet
     {
 
@@ -20,8 +25,63 @@ namespace MachinaAurum.Data.Processing
 
     }
 
+    public interface IConvexSet : ISet
+    {
+
+    }
+
 
     public interface ITransformation : IFunc
+    {
+
+    }
+
+    public interface IBinaryTransformation : ITransformation
+    {
+
+    }
+
+    public interface IClosureBinaryTransformation<T> : IBinaryTransformation
+    {
+        T Run(T l, T r);
+    }
+
+    public interface IConvexFunctionPreserveTransformation : IClosureBinaryTransformation<IConvexFunc>
+    {
+
+    }
+
+    public interface INonNegativeWeigthedSum : IConvexFunctionPreserveTransformation
+    {
+
+    }
+
+    public interface IMaximumAdnSupremum : IConvexFunctionPreserveTransformation
+    {
+
+    }
+
+    public interface IMaximumAdnSupremum : IConvexFunctionPreserveTransformation
+    {
+
+    }
+
+    public interface IConvexSetPreserveTransformation : IClosureBinaryTransformation<IConvexSet>
+    {
+
+    }
+
+    public interface IIntersection : IConvexSetPreserveTransformation
+    {
+
+    }
+
+    public interface IAffineTransformation : IConvexSetPreserveTransformation
+    {
+
+    }
+
+    public interface IPerspectiveTransformation : IConvexSetPreserveTransformation
     {
 
     }
@@ -30,6 +90,8 @@ namespace MachinaAurum.Data.Processing
     {
 
     }
+
+   
 
     public interface IPCADimensionReduction : IDimensionReduction
     {
