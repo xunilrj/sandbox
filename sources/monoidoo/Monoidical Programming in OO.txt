@@ -1,0 +1,65 @@
+Monoidical Programming in OO
+
+Monoid is a very simple concept. From the perspective of a sum, a integer is a monoid because:
+Closure
+1 - if 	a is an integer
+	b is an integer
+	so a + b is an integer
+Associativity
+2 - (a + b) + c = a + (b + c)
+Identity Element
+3 - a + I = I + a = a
+In this case I = 0
+
+The same thing can be said from the multiplication perspective
+Close
+1 - a * b = c
+2 - (a * b ) * c = a * (b * c)
+3 - a * 1 = 1 * a = a
+
+So Monoidical Programming is as simple as implementing classes and interfaces that respect this behaviour.
+It is like the old "your class should behave like an int" rule.
+
+A monoid is an object that contais a transformation tht respect three rules.
+1- has a transformation a<combine>b =c such that
+1.1 a,b,c have the same type (closure)
+1.2 have zero obhect.
+
+C# us not a partivular good language to develop in symbolic algebra because it is very restrict in its operators.
+
+public interface IMonoidBinaryOperator
+		TA Run(TA l, TA r)
+
+TA Identity 
+	return new TA();
+ta run(ta l, ta r)
+{
+	l = l ?? Identity;
+	r = r ?? Identity;
+	return op(l,r);
+}
+
+to facilitatr the usr we can create extension methods.
+
+TA Sum(this TA l, TA r)
+	return Sum.Run(l,r);
+
+to illystrate let us create a vey simple case: an integrr class.
+
+
+to illystrate a more comolex case, lrt us create minoidival parsers.
+
+public Parsers
+	Parser Nothing
+
+
+public ParseResult
+	public class Success
+	public class Error
+
+public class AndThen
+	Parser Identity { return Parsers.Nothing}
+	Parser Run(Parser l, Parser r)
+		l = l ?? Identity;
+		r = r ?? Identity;
+		return op(l,r);
