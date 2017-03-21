@@ -61,9 +61,9 @@ function Rebase-Work
 
 function Add-Files
 {
-    $modifiedFiles = git status | % {$result = $_ -match "^\s*modified\:\s*(?<FILEPATH>.*)$"; if($result){$Matches["FILEPATH"]}}
+    $modifiedFiles = git status --porcelain | % {$result = $_ -match "(?<STATUS>..)\s(?<FILEPATH>.*)$"; if($result){New-Object PSCustomObject -Property @{Status=$Matches["STATUS"];File=$Matches["FILEPATH"]}}}
     $filesToCommit = $modifiedFiles | ogv -PassThru
-    $modifiedFiles  | % {git add $_ *>&1 } | % {Write-Verbose $_}
+    $filesToCommit  | % {git add $_.File *>&1 } | % {Write-Verbose $_}
 }
 
 function Commit-Work
