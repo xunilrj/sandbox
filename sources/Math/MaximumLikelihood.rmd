@@ -151,3 +151,70 @@ arrows(-1,0,-1,dnorm(-1,-1,0.5), col = "red")
 Actually we can always improve the likelihood by decreasing the sd in this particular case, because we just have one point.
 
 ### Likelihood of two points
+
+For the likelihood of two points we are going to use the same method to find the best Gaussian distribution to explain both observations together.
+
+This means:
+
+L(theta|x) = L(theta|x1,x2) = p(x1,x2|theta)
+
+To simplify let start optimizing this function for u first. So we have:
+
+p(x1,x2|u) = p(x1|x2)p(x2) = p(x2|x1)p(x1)
+
+We generraly assume that both observations are independent because in this way we have that
+
+p(x2|x1) = p(x2)  
+p(x1|x2) = p(x1)  
+
+so
+
+p(x1,x2|u) = p(x1)p(x2)
+
+This means that the we must optimize the product of the probability density function.
+
+First let plot this product value for various u values. With this plot we can clearly see that the function is optimized when the product is maximized.
+
+```{R}
+A <- -0.25  
+B <- -1
+obs <- c(A,B)
+r <- seq(-5,5, by = 0.1)
+plot(r,sapply(r, function(x) {dnorm(A, mean = x, sd = 1)}), col = "red")
+points(r,sapply(r, function(x) {dnorm(B, mean = x, sd = 1)}), col = "blue")
+points(r,sapply(r, function(x) {dnorm(A, mean = x, sd = 1)*dnorm(B, mean = x, sd = 1)}))
+arrows(A,0,A,dnorm(A,A,1), col = "red")
+arrows(B,0,B,dnorm(B,B,1), col = "blue")
+```
+
+So, first lets try to optimize the function numeracally:
+
+```{R}
+A <- -0.25  
+B <- -1
+f <- function (x) {dnorm(A, mean = x, sd = 1)*dnorm(B, mean = x, sd = 1)}
+xmax <- optimize(f, c(-5, 5), tol = 0.0001, maximum = TRUE)
+
+A <- -0.25  
+B <- -1
+obs <- c(A,B)
+r <- seq(-5,5, by = 0.1)
+plot(r,sapply(r, function(x) {dnorm(A, mean = x, sd = 1)}), col = "red")
+points(r,sapply(r, function(x) {dnorm(B, mean = x, sd = 1)}), col = "blue")
+points(r,sapply(r, function(x) {dnorm(A, mean = x, sd = 1)*dnorm(B, mean = x, sd = 1)}))
+arrows(A,0,A,dnorm(A,A,1), col = "red")
+arrows(B,0,B,dnorm(B,B,1), col = "blue")
+arrows(xmax$maximum,0,xmax$maximum,xmax$objective, col = "green")
+```
+
+So now we now that:
+L(theta|x)    
+  = L(theta|x1,x2)  
+  = p(x1,x2|theta) (for simplicity theta={u})   
+  = p(x1|x2)p(x2) for Gaussian(u,sd = 1)  
+  = p(x1)p(x2) for Gaussian(u,sd = 1)  
+  
+argmax(u) in p(x1)p(x2) for Gaussian(u,sd = 1)  
+  maximum at `r xmax$maximum`  
+  
+so the best distribution is: Gaussian(u = `r xmax$maximum`, sd = 1)
