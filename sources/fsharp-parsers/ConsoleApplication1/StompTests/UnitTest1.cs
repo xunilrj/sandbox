@@ -474,74 +474,90 @@ public class Tests
         Assert.IsNull(result.Value);
     }
 
-    //[TestMethod]
-    //public void ParseChoice()
-    //{
-    //    var pA = Parsers.Char('A');
-    //    var pB = Parsers.Char('B');
-    //    var pC = Parsers.Char('C');
-    //    var pAorBorC = Parsers.Choice(new[] { pA, pB, pC });
+    [TestMethod]
+    public void ParseChoice()
+    {
+        var pA = Parsers.Char('A');
+        var pB = Parsers.Char('B');
+        var pC = Parsers.Char('C');
+        var pAorBorC = Parsers.Choice(new[] { pA, pB, pC });
 
-    //    var result = pAorBorC.Parse("A");
-    //    Assert.IsFalse(result.HasError);
-    //    result.Match(
-    //        onSuccess: s => { Assert.AreEqual('A', s.Value); },
-    //        onFailure: f => Assert.Fail());
+        var result = pAorBorC.Parse("A");
+        Assert.AreEqual(ParserResultType.Success, result.Type);
+        Assert.AreEqual("A", result.Value.ToString());
 
-    //    result = pAorBorC.Parse("B");
-    //    Assert.IsFalse(result.HasError);
-    //    result.Match(
-    //        onSuccess: s => { Assert.AreEqual('B', s.Value); },
-    //        onFailure: f => Assert.Fail());
+        result = pAorBorC.Parse("B");
+        Assert.AreEqual(ParserResultType.Success, result.Type);
+        Assert.AreEqual("B", result.Value.ToString());
 
-    //    result = pAorBorC.Parse("C");
-    //    Assert.IsFalse(result.HasError);
-    //    result.Match(
-    //        onSuccess: s => { Assert.AreEqual('C', s.Value); },
-    //        onFailure: f => Assert.Fail());
+        result = pAorBorC.Parse("C");
+        Assert.AreEqual(ParserResultType.Success, result.Type);
+        Assert.AreEqual("C", result.Value.ToString());
 
-    //    result = pAorBorC.Parse("D");
-    //    Assert.IsTrue(result.HasError);
-    //}
+        result = pAorBorC.Parse("D");
+        Assert.AreEqual(ParserResultType.Failure, result.Type);
+    }
 
-    //[TestMethod]
-    //public void ParseAnyOf()
-    //{
-    //    var pAorBorC = Parsers.AnyOf("ABC");
+    [TestMethod]
+    public void ParseAnyOf()
+    {
+        var pAorBorC = Parsers.AnyOf("ABC");
 
-    //    var result = pAorBorC.Parse("A");
-    //    Assert.IsFalse(result.HasError);
-    //    result.Match(
-    //        onSuccess: s => { Assert.AreEqual('A', s.Value); },
-    //        onFailure: f => Assert.Fail());
+        var result = pAorBorC.Parse("A");
+        Assert.AreEqual(ParserResultType.Success, result.Type);
+        Assert.AreEqual("A", result.Value.ToString());
 
-    //    result = pAorBorC.Parse("B");
-    //    Assert.IsFalse(result.HasError);
-    //    result.Match(
-    //        onSuccess: s => { Assert.AreEqual('B', s.Value); },
-    //        onFailure: f => Assert.Fail());
+        result = pAorBorC.Parse("B");
+        Assert.AreEqual(ParserResultType.Success, result.Type);
+        Assert.AreEqual("B", result.Value.ToString());
 
-    //    result = pAorBorC.Parse("C");
-    //    Assert.IsFalse(result.HasError);
-    //    result.Match(
-    //        onSuccess: s => { Assert.AreEqual('C', s.Value); },
-    //        onFailure: f => Assert.Fail());
+        result = pAorBorC.Parse("C");
+        Assert.AreEqual(ParserResultType.Success, result.Type);
+        Assert.AreEqual("C", result.Value.ToString());
 
-    //    result = pAorBorC.Parse("D");
-    //    Assert.IsTrue(result.HasError);
-    //}
+        result = pAorBorC.Parse("D");
+        Assert.AreEqual(ParserResultType.Failure, result.Type);
+    }
 
-    //[TestMethod]
-    //public void MyTestMethod()
-    //{
-    //    var p123 = Parsers.String("123");
-    //    var result = p123.Parse("123");
+    [TestMethod]
+    public void ParseStringToInt()
+    {
+        var p123 = Parsers.String("123");
+        var result = p123.Parse("123");
 
-    //    Assert.IsFalse(result.HasError);
-    //}
+        var pInt = p123.Map(x => int.Parse(x.ToString()));
+        var resultInt = pInt.Parse("123");
+
+        Assert.AreEqual(123, resultInt.Value);
+    }
 }
 
-public class Parsers
+public static class MonadParser<T, TValue>
+{
+    /// <summary>
+    /// \eta \colon 1_{C}\to T (where {\displaystyle 1_{C}} 1_{C} denotes the identity functor on {\displaystyle C} C)
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
+    /// <returns></returns>
+    public static Parser<T, TValue> Eta()
+    {
+        return Parser<T, TValue>.Nothing;
+    }
+
+    /// <summary>
+    /// \mu \colon T^{2}\to T (where {\displaystyle T^{2}} T^{2} is the functor {\displaystyle T\circ T} T\circ T from {\displaystyle C} C to {\displaystyle C} C).
+    /// </summary>
+    /// <param name="l"></param>
+    /// <param name="r"></param>
+    /// <returns></returns>
+    public static Parser<T, TValue> Mu(Parser<T, TValue> l, Parser<T, TValue> r)
+    {
+        return l.AndThen(r);
+    }
+}
+
+public static class Parsers
 {
     public static Parser<T, T> Func<T>(Func<T, bool> isValid)
     {
@@ -598,7 +614,7 @@ public class Parsers
             .Reduce(AndThen);
     }
 
-    public static Parser<T, TValue> AndThen<T, TValue>(Parser<T, TValue> l, Parser<T, TValue> r)
+    public static Parser<T, TValue> AndThen<T, TValue>(this Parser<T, TValue> l, Parser<T, TValue> r)
     {
         l = l ?? Parser<T, TValue>.Nothing;
         r = r ?? Parser<T, TValue>.Nothing;
@@ -609,20 +625,58 @@ public class Parsers
         });
     }
 
-    public static Parser<T, TValue> OrElse<T, TValue>(Parser<T, TValue> l, Parser<T, TValue> r)
+    public static Parser<T, TValue> OrElse<T, TValue>(this Parser<T, TValue> l, Parser<T, TValue> r)
     {
-        l = l ?? Parser<T, TValue>.Nothing;
-        r = r ?? Parser<T, TValue>.Nothing;
+        l = l ?? Parser<T, TValue>.Fail;
+        r = r ?? Parser<T, TValue>.Fail;
         return new Parser<T, TValue>(x =>
         {
             l.ParseFunction(x);
-            if (x.Type == ParserResultType.Failure) r.ParseFunction(x);
+            if (x.Type == ParserResultType.Failure)
+            {
+                x.Messages.RemoveAt(x.Messages.Count - 1);
+                r.ParseFunction(x);
+            }
         });
     }
 
-    public static Parser<T, TValue> Choice<T, TValue>(IEnumerable<Parser<T, TValue>> parsers)
+    public static Parser<T, TValue> Choice<T, TValue>(this IEnumerable<Parser<T, TValue>> parsers)
     {
         return parsers.Reduce(OrElse);
+    }
+
+    //public static Func<Parser<T, TValue>, Parser<T, TMappedValue>> Map<T, TValue, TMappedValue>(Func<TValue, TMappedValue> map)
+    //{
+    //    return new Parser<T, TMappedValue>(x =>
+    //    {
+    //        var pr = ParserResult<T, TValue>.Success(x.Stream);
+    //        parser.ParseFunction(pr);
+
+    //        x.Type = pr.Type;
+    //        if (pr.Type == ParserResultType.Success)
+    //        {
+    //            x.Value = map(pr.Value);
+    //            x.Messages.AddRange(pr.Messages);
+    //            x.Stream = pr.Stream;
+    //        }
+    //    });
+    //}
+
+    public static Parser<T, TMappedValue> Map<T, TValue, TMappedValue>(this Parser<T, TValue> parser, Func<TValue, TMappedValue> map)
+    {
+        return new Parser<T, TMappedValue>(x =>
+        {
+            var pr = ParserResult<T, TValue>.Success(x.Stream);
+            parser.ParseFunction(pr);
+
+            x.Type = pr.Type;
+            if (pr.Type == ParserResultType.Success)
+            {
+                x.Value = map(pr.Value);
+                x.Messages.AddRange(pr.Messages);
+                x.Stream = pr.Stream;
+            }
+        });
     }
 }
 
@@ -670,6 +724,18 @@ public class Parser<TStream, TValue>
             });
         }
     }
+
+    public static Parser<TStream, TValue> Fail
+    {
+        get
+        {
+            return new Parser<TStream, TValue>(x =>
+            {
+                x.Type = ParserResultType.Failure;
+                x.Messages.Add("");
+            });
+        }
+    }
 }
 
 public enum ParserResultType
@@ -680,6 +746,15 @@ public enum ParserResultType
 
 public class ParserResult<T, TValue>
 {
+    public static ParserResult<T, TValue> Success(IEnumerator<T> stream)
+    {
+        return new ParserResult<T, TValue>()
+        {
+            Type = ParserResultType.Success,
+            Stream = stream
+        };
+    }
+
     public ParserResultType Type { get; set; }
     public IEnumerator<T> Stream { get; set; }
 
@@ -691,47 +766,6 @@ public class ParserResult<T, TValue>
     {
         Messages = new List<string>();
     }
-
-    public ParserResult<T, TValue> On(Func<ParserResult<T, TValue>, ParserResult<T, TValue>> success = null, Func<ParserResult<T, TValue>, ParserResult<T, TValue>> failure = null)
-    {
-        if (this.Type == ParserResultType.Success)
-        {
-            if (success == null) return this;
-            return success(this);
-        }
-        else
-        {
-            if (failure == null) return this;
-            return failure(this);
-        }
-    }
-
-    //public TResult Map<TResult>(Func<Success<T, TValue>, TResult> onSuccess = null, Func<Failure<T, TValue>, TResult> onFailure = null)
-    //{
-    //    if (this is Success<T, TValue>)
-    //    {
-    //        return onSuccess(this as Success<T, TValue>);
-    //    }
-    //    else
-    //    {
-    //        return onFailure(this as Failure<T, TValue>);
-    //    }
-    //}
-
-    //public static ParserResult<T, TValue> operator +(ParserResult<T, TValue> l, ParserResult<T, TValue> r)
-    //{
-    //    if (l == null) { return r; }
-    //    if (r == null) { return l; }
-
-    //    if (l is Success<T, TValue> && r is Success<T, TValue>)
-    //    {
-    //        return new Success<T, TValue>()
-    //        {
-    //            Stream = l.Stream,
-    //            Value = default(TValue) // l.Value ?? r.Value
-    //        };
-    //    }
-    //}
 }
 
 public static class Curry
