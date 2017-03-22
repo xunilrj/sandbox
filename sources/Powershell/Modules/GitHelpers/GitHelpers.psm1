@@ -33,10 +33,14 @@ function Get-CurrentBranch
 
 function Rebase-Work
 {
-    Add-Files
+    $count = Add-Files
 
-    Write-Verbose "git stash"
-    git stash *>&1 | %{Write-Verbose $_}
+    if($count -gt 0){
+        Write-Verbose "git stash"
+        git stash *>&1 | %{Write-Verbose $_}
+    }else{
+        Write-Verbose "Nothing to stash"
+    }
     $currentBranch = Get-CurrentBranch
     Write-Verbose "git checkout master"
     git checkout master *>&1 | %{Write-Verbose $_}
@@ -48,32 +52,57 @@ function Rebase-Work
     git push origin HEAD *>&1 | %{Write-Verbose $_}
     Write-Verbose "git checkout $currentBranch"
     git checkout $currentBranch *>&1 | %{Write-Verbose $_}
+
+    $rebaseNothing = $false
     Write-Verbose "git rebase master"
-    git rebase master *>&1 | %{Write-Verbose $_}
+    git rebase master *>&1 | %{
+        if($_ -match "Current branch (.*?) is up to date.") { $rebaseNothing = $true }
+        Write-Verbose $_
+    }
 
-    $response = read-host "Press [enter] after conflict were resolved"
+    if($rebaseNothing -eq $false){
+        $response = read-host "Press [enter] after conflict were resolved"
 
-    Write-Verbose "git push origin HEAD -f"
-    git push origin HEAD -f *>&1 | %{Write-Verbose $_}
-    Write-Verbose "git stash apply"
-    git stash apply *>&1 | %{Write-Verbose $_}
+        Write-Verbose "git push origin HEAD -f"
+        git push origin HEAD -f *>&1 | %{Write-Verbose $_}
+    }
+
+    if($count -gt 0){
+        Write-Verbose "git stash apply"
+        git stash apply *>&1 | %{Write-Verbose $_}
+    }
 }
 
 function Add-Files
 {
     $modifiedFiles = git status --porcelain | % {$result = $_ -match "(?<STATUS>..)\s(?<FILEPATH>.*)$"; if($result){New-Object PSCustomObject -Property @{Status=$Matches["STATUS"];File=$Matches["FILEPATH"]}}}
-    $filesToCommit = $modifiedFiles | ogv -PassThru
-    $filesToCommit  | % {git add $_.File *>&1 } | % {Write-Verbose $_}
+
+    if(($modifiedFiles | Measure-Object).Count -eq 0){
+        0
+    }
+    else
+    {
+        $filesToCommit = $modifiedFiles | ogv -PassThru
+        $filesToCommit  | % {git add $_.File *>&1 } | % {Write-Verbose $_}
+        ($filesToCommit | Measure-Object).Count
+    }
 }
 
 function Commit-Work
 {
-    $files = Add-Files
+    $count = Add-Files
 
-    $message = Read-Host "Commit Message"
+    if($count -gt 0){
+        $message = Read-Host "Commit Message"
 
-    git commit -m $message *>&1 | % {Write-Verbose $_}
-    git push origin HEAD | % {Write-Verbose $_}
+        git commit -m $message *>&1 | % {Write-Verbose $_}
+        git push origin HEAD | % {Write-Verbose $_}
+
+        $true
+    }
+    else{
+        $false
+    }
 }
 
 function Pull-Work
@@ -82,10 +111,12 @@ function Pull-Work
     Rebase-Work
 
     Write-Verbose "Commiting work"
-    Commit-Work
+    $commited = Commit-Work
 
-    $response = read-host "Press [enter] to after the PR is accepted"
+    if($commited){
+        $response = read-host "Press [enter] to after the PR is accepted"
 
-    Write-Verbose "Getting PR"
-    Rebase-Work
+        Write-Verbose "Getting PR"
+        Rebase-Work
+    }
 }
