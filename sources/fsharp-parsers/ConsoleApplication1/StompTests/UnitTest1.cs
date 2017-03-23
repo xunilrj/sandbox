@@ -530,6 +530,20 @@ public class Tests
 
         Assert.AreEqual(123, resultInt.Value);
     }
+
+    [TestMethod]
+    public void LiftedSumTest()
+    {
+        var sum = new Func<int, int, int>((l, r) => l + r);
+        var toInt = new Func<StringBuilder, int>(x => int.Parse(x.ToString()));
+        var p1 = Parsers.Char('1').Map(toInt);
+        var sumParser = Parsers.Lift2(sum, p1, p1);
+
+        var result = sumParser.Parse("11");
+
+        Assert.AreEqual(ParserResultType.Success, result.Type);
+        Assert.AreEqual(2, result.Value);
+    }
 }
 
 public static class MonadParser<T, TValue>
@@ -625,6 +639,29 @@ public static class Parsers
         });
     }
 
+    public static Parser<T, TC> AndThen<T, TA, TB, TC>(this Parser<T, TA> l, Parser<T, TB> r, Func<TA, TB, TC> map)
+    {
+        l = l ?? Parser<T, TA>.Nothing;
+        r = r ?? Parser<T, TB>.Nothing;
+        return new Parser<T, TC>(x =>
+        {
+            var pr1 = new ParserResult<T, TA>() { Stream = x.Stream };
+
+            l.ParseFunction(pr1);
+            if (pr1.Type == ParserResultType.Success)
+            {
+                var pr2 = new ParserResult<T, TB>() { Stream = x.Stream };
+                r.ParseFunction(pr2);
+
+                if (pr2.Type == ParserResultType.Success)
+                {
+                    x.Type = ParserResultType.Success;
+                    x.Value = map(pr1.Value, pr2.Value);
+                }
+            }
+        });
+    }
+
     public static Parser<T, TValue> OrElse<T, TValue>(this Parser<T, TValue> l, Parser<T, TValue> r)
     {
         l = l ?? Parser<T, TValue>.Fail;
@@ -677,6 +714,50 @@ public static class Parsers
                 x.Stream = pr.Stream;
             }
         });
+    }
+
+    /// <summary>
+    /// val returnP : 'a -> Parser<'a>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TValue"></typeparam>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static Parser<T, TValue> Return<T, TValue>(TValue value)
+    {
+        return new Parser<T, TValue>(x =>
+        {
+            x.Type = ParserResultType.Success;
+            x.Value = value;
+        });
+    }
+
+    /// <summary>
+    /// val applyP : Parser<('a -> 'b)> -> Parser<'a> -> Parser<'b>
+    /// </summary>
+    public static Parser<T, TB> Apply<T, TA, TB>(this Parser<T, Func<TA, TB>> f, Parser<T, TA> pa)
+    {
+        //let applyP fP xP =
+        //    // create a Parser containing a pair (f,x)
+        //    (fP.>>.xP)
+        //    // map the pair by applying f to x
+        //    |> mapP(fun(f, x)->f x)
+
+        return f.AndThen(pa, (l, r) => l(r));
+    }
+
+    /// <summary>
+    /// f:('a -> 'b -> 'c) -> Parser<'a> -> Parser<'b> -> Parser<'c>
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="TA"></typeparam>
+    /// <typeparam name="TB"></typeparam>
+    /// <returns></returns>
+    public static Parser<T, TC> Lift2<T, TA, TB, TC>(Func<TA, TB, TC> f, Parser<T, TA> l, Parser<T, TB> r)
+    {
+        return Return<T, Func<TA, TB, TC>>(f)
+            .AndThen(l, Tuple.Create)
+            .AndThen(r, (tuple, rv) => tuple.Item1(tuple.Item2, rv));
     }
 }
 
