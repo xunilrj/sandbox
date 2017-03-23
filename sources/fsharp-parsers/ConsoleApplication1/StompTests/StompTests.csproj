@@ -70,10 +70,6 @@
       <Project>{a5651210-71cd-4912-b63e-3cd767e4f3d6}</Project>
       <Name>StompMessages</Name>
     </ProjectReference>
-    <ProjectReference Include="..\StompParser\StompParser.fsproj">
-      <Project>{0416eeda-92a3-4346-bdfc-14865d90249b}</Project>
-      <Name>StompParser</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
