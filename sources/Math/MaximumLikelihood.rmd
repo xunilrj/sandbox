@@ -217,4 +217,72 @@ L(theta|x)
 argmax(u) in p(x1)p(x2) for Gaussian(u,sd = 1)  
   maximum at `r xmax$maximum`  
   
+L(u = `r xmax$maximum`, sd = 1) = `r xmax$objective`
+  
 so the best distribution is: Gaussian(u = `r xmax$maximum`, sd = 1)
+
+But we have more than one parameter to optimize. Maybe it is possible to optimize even futher the function by using other values of sd.
+
+Let try some values:
+
+```{R}
+A <- -0.25  
+B <- -1
+x = seq(-2, 1, length= 20)
+y = seq(-1, 2, length= 20)
+f = function(x, y) { dnorm(A, mean = x, sd = y)*dnorm(B, mean = x, sd = y) }
+z = outer(x, y, f)
+z[is.na(z)] = 0
+library(RColorBrewer)
+contour(x,y,z,col=rev(brewer.pal(11, "RdYlBu")), nlevels = 11)
+abline(h=1, lty=2)
+points(xmax$maximum, 1)
+```
+
+We have analyzed the problem with sd fixed as 1, and searched for the maximum likelihood in this scenario. If we analyze the above plot we will see that we searched the maximum following the dashed line and found it on the circled point.
+
+Now it is clear that we hace now actually found the best solution to the problem.
+
+```{R}
+A <- -0.25  
+B <- -1
+f = function(x) { dnorm(A, mean = x[1], sd = x[2])*dnorm(B, mean = x[1], sd = x[2]) }
+max = optim( c(xmax$maximum,1), f ,control=list(fnscale=-1))
+
+contour(x,y,z,col=rev(brewer.pal(11, "RdYlBu")), nlevels = 11)
+abline(h=max$par[2], v = max$par[1], lty=2)
+```
+
+OK! So now we have the best Gaussian distribution for our two observations.
+
+Gaussian
+
+L(theta|x)    
+  = L(theta|x1,x2)  
+  = p(x1,x2|theta) (theta={u,sd})   
+  = p(x1|x2)p(x2) for Gaussian(u,sd)  
+  = p(x1)p(x2) for Gaussian(u,sd)  
+  
+argmax(u,sd) in p(x1)p(x2) for Gaussian(u,sd)  
+  maximum at (u = `r max$par[1]`, sd = `r max$par[2]`)  
+L(u = `r max$par[1]`, sd = `r max$par[2]`) = `r max$value`
+
+So taking sd into consideration we improved out likelihood from `r xmax$objective` to `r max$value`
+
+# Likelihood Interpretation
+
+OK. We have a likelihood of `r max$value`, but what this means?
+We know that L(theta|x) = p(x|theta). So this means that we have calculated the probability of the product of two variables sampled from a distribution with the found configuration to be A*B.
+
+Let us see if this is true.
+
+```{R}
+A <- -0.25  
+B <- -1
+AB <- A * B
+samples <- rnorm(100000, mean = max$par[1], sd = max$par[2])*rnorm(100000, mean = max$par[1], sd = max$par[2])
+h <- hist(samples, freq = FALSE)
+h$counts=h$counts/sum(h$counts)
+plot(h)
+abline(v = AB, lty=2)
+```
