@@ -280,9 +280,7 @@ Let us see if this is true.
 A <- -0.25  
 B <- -1
 AB <- A * B
-samples <- rnorm(100000, mean = max$par[1], sd = max$par[2])*rnorm(100000, mean = max$par[1], sd = max$par[2])
-h <- hist(samples, freq = FALSE)
-h$counts=h$counts/sum(h$counts)
-plot(h)
-abline(v = AB, lty=2)
+samples <- rnorm(100000, mean = max$par[1], sd = max$par[2])/max$par[2]*rnorm(100000, mean = max$par[1], sd = max$par[2])/max$par[2]
+hist(samples, freq = FALSE, breaks = 50)
+abline(v = AB / max$par[2], lty=2)
 ```

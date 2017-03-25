@@ -1,0 +1,41 @@
+\contentsline {chapter}{\numberline {1}Introduction}{5}
+\contentsline {section}{\numberline {1.1}Moral Basis for Philosophy}{6}
+\contentsline {subsection}{\numberline {1.1.1}Sincerity}{6}
+\contentsline {subsection}{\numberline {1.1.2}Love}{6}
+\contentsline {subsection}{\numberline {1.1.3}Science}{6}
+\contentsline {section}{\numberline {1.2}Idea versus Reality}{6}
+\contentsline {subsection}{\numberline {1.2.1}Reality}{6}
+\contentsline {subsection}{\numberline {1.2.2}Idea}{6}
+\contentsline {section}{\numberline {1.3}Philosopher Maturity}{6}
+\contentsline {subsection}{\numberline {1.3.1}Impression of Reality}{6}
+\contentsline {subsubsection}{Senses}{6}
+\contentsline {subsubsection}{Limited Structure of the Reality}{6}
+\contentsline {subsection}{\numberline {1.3.2}Unification}{6}
+\contentsline {subsubsection}{Reality Unification}{6}
+\contentsline {subsubsection}{Conscience Unification}{6}
+\contentsline {subsubsection}{12 layers of personality}{6}
+\contentsline {subsubsection}{Cognitive Parallax}{6}
+\contentsline {subsection}{\numberline {1.3.3}Expression of Reality}{6}
+\contentsline {subsubsection}{4 modes of discourses}{6}
+\contentsline {subsubsection}{Poetic}{6}
+\contentsline {subsubsection}{Rhetoric}{6}
+\contentsline {subsubsection}{Dialectic}{6}
+\contentsline {subsubsection}{Logic}{6}
+\contentsline {chapter}{\numberline {2}Applications}{7}
+\contentsline {section}{\numberline {2.1}Philosophy}{7}
+\contentsline {subsection}{\numberline {2.1.1}Status Quo}{7}
+\contentsline {subsection}{\numberline {2.1.2}History of the History of Philosophy}{7}
+\contentsline {subsection}{\numberline {2.1.3}Greek Philosophy}{7}
+\contentsline {subsection}{\numberline {2.1.4}Christian Philosophy}{7}
+\contentsline {subsection}{\numberline {2.1.5}Muslim Philosophy}{7}
+\contentsline {subsection}{\numberline {2.1.6}Modern Philosophy}{7}
+\contentsline {subsection}{\numberline {2.1.7}Current Philosophy}{7}
+\contentsline {section}{\numberline {2.2}Politics}{7}
+\contentsline {subsection}{\numberline {2.2.1}Status Quo}{7}
+\contentsline {subsection}{\numberline {2.2.2}Inversion of the Evolution of the State}{7}
+\contentsline {subsection}{\numberline {2.2.3}Conscience of Transcendent}{7}
+\contentsline {subsection}{\numberline {2.2.4}Messianic Discourse}{7}
+\contentsline {subsection}{\numberline {2.2.5}Revolutionary Mentality}{7}
+\contentsline {section}{\numberline {2.3}Science}{7}
+\contentsline {subsection}{\numberline {2.3.1}Status Quo}{7}
+\contentsline {subsection}{\numberline {2.3.2}Inversion of Modern Cosmological Views}{7}
