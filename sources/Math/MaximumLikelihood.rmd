@@ -265,7 +265,7 @@ L(theta|x)
   
 argmax(u,sd) in p(x1)p(x2) for Gaussian(u,sd)  
   maximum at (u = `r max$par[1]`, sd = `r max$par[2]`)  
-L(u = `r max$par[1]`, sd = `r max$par[2]`) = `r max$value`
+L({u = `r max$par[1]`, sd = `r max$par[2]`}|x1,x2) = `r max$value`
 
 So taking sd into consideration we improved out likelihood from `r xmax$objective` to `r max$value`
 
@@ -279,8 +279,14 @@ Let us see if this is true.
 ```{R}
 A <- -0.25  
 B <- -1
-AB <- A * B
-samples <- rnorm(100000, mean = max$par[1], sd = max$par[2])/max$par[2]*rnorm(100000, mean = max$par[1], sd = max$par[2])/max$par[2]
-hist(samples, freq = FALSE, breaks = 50)
-abline(v = AB / max$par[2], lty=2)
+
+x = seq(-2, 1, length= 20)
+y = seq(-2, 0.5, length= 20)
+f = function(x, y) { dnorm(x, mean = max$par[1], sd = max$par[2])*dnorm(y, mean = max$par[1], sd = max$par[2]) }
+z = outer(x, y, f)
+z[is.na(z)] = 0
+library(RColorBrewer)
+contour(x,y,z,col=rev(brewer.pal(11, "RdYlBu")), nlevels = 11)
+abline(h=A,v=B)
+points(B, A)
 ```
