@@ -1,0 +1,12 @@
+There are various ways to measure richness:
+1 - Local currency comparison;
+2 - Global currency comparison;
+3 - Normalized currency comparison;
+4 - Globalized product comparison;
+5 - Hours of work comparison
+
+But I still have not found a framework to compare wealth by the capacity of inserting a acquisiton in a healthy way in a agent budget.
+
+So in this framework the richer is not the one that has a big number in its paycheck, not the time spent to buy something, but the hability to healthy acquire something.
+
+In this way, the unhealthy expansion of credit is not a process to enrich a population, we all know how artificial cost of capital can deform all capital calculation (see ABCT).
