@@ -1,0 +1,34 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\author{Daniel Frederico Lins Leite}
+\title{Maximum Likelihood}
+\newcommand{\distas}[1]{\mathbin{\overset{#1}{\kern\z@\sim}}}%
+\newsavebox{\mybox}\newsavebox{\mysim}
+\newcommand{\distras}[1]{%
+	\savebox{\mybox}{\hbox{\kern3pt$\scriptstyle#1$\kern3pt}}%
+	\savebox{\mysim}{\hbox{$\sim$}}%
+	\mathbin{\overset{#1}{\kern\z@\resizebox{\wd\mybox}{\ht\mysim}{$\sim$}}}%
+}
+\begin{document}
+	\maketitle
+	
+	\section{Gaussian Likelihood}
+	\begin{align*}
+		X \overset{iid}{\sim} N(\mu,\sigma^2)\\
+		L(theta|X) &= p(X|theta)\\
+		&= p(X|\mu,\sigma^2)\\
+		&= \prod{p(x_i|\mu,\sigma^2)}\\
+		\\
+		\max_{\mu,sd}{L(theta|X)} &= \max_{\mu,\sigma^2}{\prod{p(x_i|\mu,\sigma^2)}}\\
+		&= \max_{\mu,\sigma^2}{ln(\prod{p(x_i|\mu,\sigma^2)))}}\\
+		&= \max_{\mu,\sigma^2}{\sum{ln(p(x_i|\mu,\sigma^2))}}\\
+		\\
+		p(x|\mu,\sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}
+		\\
+		&= \max_{\mu,\sigma^2}{\sum{ln(\frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x_i-\mu)^2}{2\sigma^2}})}}\\
+	\end{align*}
+\end{document}
