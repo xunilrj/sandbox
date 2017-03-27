@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
+using System.Collections.Concurrent;
 
 [TestClass]
 public class Tests
@@ -133,6 +134,57 @@ public class Tests
 
         Assert.AreEqual(ParserResultType.Success, result.Type);
         Assert.AreEqual(2, result.Value);
+    }
+
+    interface IA
+    {
+
+    }
+
+    public class A : IA
+    {
+
+    }
+
+    public class B : A
+    {
+
+    }
+
+
+    [TestMethod]
+    public void OpenMethodsTestAction1()
+    {
+        var builder = new StringBuilder();
+        OpenMethods.AddAction("PrintIA", (IA a) => builder.AppendLine("IA"));
+        OpenMethods.AddAction("PrintIA", (A a) => builder.AppendLine("A"));
+        OpenMethods.AddAction("PrintIA", (B a) => builder.AppendLine("B"));
+
+        var printIA = OpenMethods.GetAction1<IA>("PrintIA");
+        printIA(new A());
+        printIA(new B());
+    }
+
+    [TestMethod]
+    public void OpenMethodsTestFunc2()
+    {
+        var builder = new StringBuilder();
+        OpenMethods.AddFunc("Sum", (int a, int b) => a + b);
+        OpenMethods.AddFunc("Parse", (string a) => int.Parse(a));
+
+        var f = OpenMethods.GetFunc2<int, int, int>("Sum");
+        var p = OpenMethods.GetFunc1<string, int>("Parse");
+
+        var r = f(p("1"), p("2"));
+        Assert.AreEqual(3, r);
+
+        r = ParseSum("1", "2", "3", "4");
+        Assert.AreEqual(10, r);
+    }
+
+    int ParseSum(params string[] strings)
+    {
+        return OpenMethods.MapReduce<string, int>("Parse", "Sum")(strings);
     }
 }
 
@@ -492,7 +544,198 @@ public class ParserAndThen<TA, TB, TC> : IFunc<TA, TB, TC>
     }
 }
 
+public interface IFunc<TA, TB>
+{
+    TB Run(TA a);
+}
+
 public interface IFunc<TA, TB, TC>
 {
     TC Run(TA a, TB b);
+}
+
+public interface IBinaryOperator<TA, TB, TC> : IFunc<TA, TB, TC>
+{
+
+}
+
+public class Return<TA, TB> : IFunc<TA, TB>
+{
+    public TB Run(TA a)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+///// <summary>
+///// f:('a -> 'b -> 'c) -> Parser<'a> -> Parser<'b> -> Parser<'c>
+///// </summary>
+///// <typeparam name="TA"></typeparam>
+///// <typeparam name="TB"></typeparam>
+//public class Lift<TA, TB, TC, TA2, TB2, TC2> : IFunc<IBinaryOperator<TA, TB, TC>, IBinaryOperator<TA2, TB2, TC2>>
+//{
+//    public IBinaryOperator<TA2, TB2, TC2> Run(IBinaryOperator<TA, TB, TC> a)
+//    {
+//        return new Return.Run(a)
+//            .AndThen(l, Tuple.Create)
+//            .AndThen(r, (tuple, rv) => tuple.Item1(tuple.Item2, rv));
+//    }
+//}
+
+//public class Sum : IBinaryOperator<int, int, int>
+//{
+//    public int Run(int a, int b)
+//    {
+//        return a + b;
+//    }
+//}
+
+public static class OpenMethods
+{
+    static Dictionary<string, List<object>> Actions1 = new Dictionary<string, List<object>>();
+    static Dictionary<string, List<object>> Func1 = new Dictionary<string, List<object>>();
+    static Dictionary<string, List<object>> Func2 = new Dictionary<string, List<object>>();
+
+    public static void AddAction<TA>(string name, Action<TA> f)
+    {
+        List<object> actions = null;
+
+        if (Actions1.TryGetValue(name, out actions) == false)
+        {
+            actions = new List<object>();
+            Actions1.Add(name, actions);
+        }
+
+        actions.Add(f);
+    }
+
+    public static void AddFunc<TA, TB>(string name, Func<TA, TB> f)
+    {
+        List<object> actions = null;
+
+        if (Func1.TryGetValue(name, out actions) == false)
+        {
+            actions = new List<object>();
+            Func1.Add(name, actions);
+        }
+
+        actions.Add(f);
+    }
+
+    public static void AddFunc<TA, TB, TC>(string name, Func<TA, TB, TC> f)
+    {
+        List<object> actions = null;
+
+        if (Func2.TryGetValue(name, out actions) == false)
+        {
+            actions = new List<object>();
+            Func2.Add(name, actions);
+        }
+
+        actions.Add(f);
+    }
+
+    public static Action<T> GetAction1<T>(string name)
+    {
+        return new Action<T>(arg =>
+        {
+            var candidates = Actions1[name].Select(x => new
+            {
+                Delegate = x,
+                Score = GetScore(arg, x)
+            }).OrderByDescending(x => x.Score);
+
+            var best = candidates.FirstOrDefault();
+
+            if (best != null)
+            {
+                (best.Delegate as Delegate).DynamicInvoke(arg);
+            }
+            else
+            {
+                throw new Exception();
+            }
+        });
+    }
+
+    public static Func<TA, TB> GetFunc1<TA, TB>(string name)
+    {
+        return new Func<TA, TB>((a) =>
+        {
+            var candidates = Func1[name].Select(x => new
+            {
+                Delegate = x,
+                Score = GetScore(a, x)
+            }).OrderByDescending(x => x.Score);
+
+            var best = candidates.FirstOrDefault();
+
+            if (best != null)
+            {
+                return (TB)(best.Delegate as Delegate).DynamicInvoke(a);
+            }
+            else
+            {
+                throw new Exception();
+            }
+        });
+    }
+
+    public static Func<TA, TB, TC> GetFunc2<TA, TB, TC>(string name)
+    {
+        return new Func<TA, TB, TC>((a, b) =>
+        {
+            var candidates = Func2[name].Select(x => new
+            {
+                Delegate = x,
+                Score = GetScore(a, b, x)
+            }).OrderByDescending(x => x.Score);
+
+            var best = candidates.FirstOrDefault();
+
+            if (best != null)
+            {
+                return (TC)(best.Delegate as Delegate).DynamicInvoke(a, b);
+            }
+            else
+            {
+                throw new Exception();
+            }
+        });
+    }
+
+    internal static Func<IEnumerable<T1>, T2> MapReduce<T1, T2>(string map, string reduce)
+    {
+        var mapf = GetFunc1<T1, T2>(map);
+        var reducef = GetFunc2<T2, T2, T2>(reduce);
+
+        return new Func<IEnumerable<T1>, T2>((ls) => ls.Select(lsi => mapf(lsi)).Reduce(reducef));
+    }
+
+    private static float GetScore<T>(T a, object x)
+    {
+        var arg1 = x.GetType().GetGenericArguments()[0];
+        if (a.GetType() == arg1)
+        {
+            return 1.0f;
+        }
+        else
+        {
+            return 0.0f;
+        }
+    }
+
+    private static float GetScore<TA, TB>(TA a, TB b, object x)
+    {
+        var arg1 = x.GetType().GetGenericArguments()[0];
+        var arg2 = x.GetType().GetGenericArguments()[2];
+        if ((a.GetType() == arg1) && (b.GetType() == arg2))
+        {
+            return 1.0f;
+        }
+        else
+        {
+            return 0.0f;
+        }
+    }
 }
