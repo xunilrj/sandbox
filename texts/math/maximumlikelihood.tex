@@ -5,7 +5,7 @@
 \usepackage{amssymb}
 \usepackage{graphicx}
 \author{Daniel Frederico Lins Leite}
-\title{Maximum Likelihood}
+\title{Gaussian Maximum Likelihood}
 \newcommand{\distas}[1]{\mathbin{\overset{#1}{\kern\z@\sim}}}%
 \newsavebox{\mybox}\newsavebox{\mysim}
 \newcommand{\distras}[1]{%
@@ -16,7 +16,7 @@
 \begin{document}
 	\maketitle
 	
-	\section{Gaussian Likelihood}
+	\section{Gaussian Maximum Likelihood}
 	\begin{align*}
 		X \overset{iid}{\sim} N(\mu,\sigma^2)\\
 		L(theta|X) &= p(X|theta)\\
@@ -30,5 +30,19 @@
 		p(x|\mu,\sigma^2) = \frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x-\mu)^2}{2\sigma^2}}
 		\\
 		&= \max_{\mu,\sigma^2}{\sum{ln(\frac{1}{\sqrt{2\pi\sigma^2}} e^{-\frac{(x_i-\mu)^2}{2\sigma^2}})}}\\
+		&= \max_{\mu,\sigma^2}{\sum{\big[ln(\frac{1}{\sqrt{2\pi\sigma^2}})+ln( e^{-\frac{(x_i-\mu)^2}{2\sigma^2}})\big]}}\\
+		&= \max_{\mu,\sigma^2}{\sum{\big[ln(\frac{1}{\sqrt{2\pi\sigma^2}})+-\frac{(x_i-\mu)^2}{2\sigma^2}\big]}}\\
+		&= \max_{\mu,\sigma^2}{\sum{\big[ln(\frac{1}{\sqrt{2\pi\sigma^2}})\big]-\sum{\big[\frac{(x_i-\mu)^2}{2\sigma^2}\big]}}}\\
+		&= \max_{\mu,\sigma^2}{\sum{\big[ln((2\pi\sigma^2)^{\frac{1}{2}})\big]-\sum{\big[\frac{(x_i-\mu)^2}{2\sigma^2}\big]}}}\\
+		&= \max_{\mu,\sigma^2}{\big[ln((2\pi\sigma^2)^{\frac{1}{2}})\big]\sum{1}-\sum{\big[\frac{(x_i-\mu)^2}{2\sigma^2}\big]}}\\
+		&= \max_{\mu,\sigma^2}{\big[\frac{1}{2}ln(2\pi\sigma^2)\big]\sum{1}-\sum{\big[\frac{(x_i-\mu)^2}{2\sigma^2}\big]}}\\
+		&= \max_{\mu,\sigma^2}{\big[\frac{1}{2}ln(2\pi\sigma^2)\big]N-\sum{\big[\frac{(x_i-\mu)^2}{2\sigma^2}\big]}}\\
+	\end{align*}
+	
+	TODO
+	
+	\begin{align*}
+		\overset{*}{\mu} &= \frac{1}{N}\sum{x_i}\\
+		\overset{*}{\sigma^2}&=\frac{1}{N}\sum{(x_n-\overset{*}{\mu})^2}
 	\end{align*}
 \end{document}
