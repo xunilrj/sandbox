@@ -1,0 +1,6 @@
+parseHttpCommands: httpRequest -> [command]
+raiseEvents: [command] -> ([exception],[domainEvent])
+raiseSideEffects:[domainEvent] -> [domainEvent]
+Persist: [domainEvent] -> IO
+handleSync: [domainEvent]-> IO
+handleAsync: [domainEvent]-> IO

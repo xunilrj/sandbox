@@ -1,0 +1,30 @@
+\contentsline {section}{\numberline {1}Computer Science}{2}{section.1}
+\contentsline {subsection}{\numberline {1.1}Algorithms}{2}{subsection.1.1}
+\contentsline {subsubsection}{\numberline {1.1.1}Analysis}{2}{subsubsection.1.1.1}
+\contentsline {subsubsection}{\numberline {1.1.2}Compression}{2}{subsubsection.1.1.2}
+\contentsline {subsubsection}{\numberline {1.1.3}Hash}{2}{subsubsection.1.1.3}
+\contentsline {subsubsection}{\numberline {1.1.4}Data Structures}{2}{subsubsection.1.1.4}
+\contentsline {subsubsection}{\numberline {1.1.5}Elections + Consensus}{2}{subsubsection.1.1.5}
+\contentsline {subsection}{\numberline {1.2}Architectures}{2}{subsection.1.2}
+\contentsline {subsubsection}{\numberline {1.2.1}Computer Architecture}{2}{subsubsection.1.2.1}
+\contentsline {subsubsection}{\numberline {1.2.2}Multi Tenancy}{3}{subsubsection.1.2.2}
+\contentsline {subsubsection}{\numberline {1.2.3}REST}{3}{subsubsection.1.2.3}
+\contentsline {subsubsection}{\numberline {1.2.4}SEDA}{3}{subsubsection.1.2.4}
+\contentsline {subsubsection}{\numberline {1.2.5}Servers}{3}{subsubsection.1.2.5}
+\contentsline {subsubsection}{\numberline {1.2.6}Other Architectures}{3}{subsubsection.1.2.6}
+\contentsline {subsubsection}{\numberline {1.2.7}Patterns}{4}{subsubsection.1.2.7}
+\contentsline {subsubsection}{\numberline {1.2.8}Overlay Networks}{4}{subsubsection.1.2.8}
+\contentsline {subsubsection}{\numberline {1.2.9}Distributed Systems}{4}{subsubsection.1.2.9}
+\contentsline {subsubsection}{\numberline {1.2.10}Event Based Architecture}{4}{subsubsection.1.2.10}
+\contentsline {subsubsection}{\numberline {1.2.11}Resiliency}{5}{subsubsection.1.2.11}
+\contentsline {subsection}{\numberline {1.3}Programming Paradigms}{5}{subsection.1.3}
+\contentsline {subsubsection}{\numberline {1.3.1}Object Oriented}{5}{subsubsection.1.3.1}
+\contentsline {subsubsection}{\numberline {1.3.2}Double Dispatch}{5}{subsubsection.1.3.2}
+\contentsline {subsection}{\numberline {1.4}Database}{5}{subsection.1.4}
+\contentsline {subsection}{\numberline {1.5}Data Fusion}{6}{subsection.1.5}
+\contentsline {section}{\numberline {2}Mathematics}{6}{section.2}
+\contentsline {subsection}{\numberline {2.1}Real Analysis}{6}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Statistics}{7}{subsection.2.2}
+\contentsline {section}{\numberline {3}Economy}{7}{section.3}
+\contentsline {subsection}{\numberline {3.1}Political Economy}{7}{subsection.3.1}
+\contentsline {subsubsection}{\numberline {3.1.1}Taxes}{7}{subsubsection.3.1.1}

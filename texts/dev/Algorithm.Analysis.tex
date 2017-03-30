@@ -1,0 +1,117 @@
+\documentclass{article}
+\usepackage{listings}
+\usepackage{dirtree}
+
+\begin{document}
+	
+Recursive Call Count Operator
+
+if f is a function, \#f returns how much recursive call f does.
+	
+Fibonnaci Numbers
+
+\lstset{language=C}
+\begin{lstlisting}[frame=single]
+int fibonnaci(int n){
+	if(n <= 2) return 1;
+	return fibonnaci(n-1) + fibonnaci(n-2);
+}
+\end{lstlisting}
+
+Call tree\\
+
+\dirtree{%
+	.1 fibonnaci(5).
+	.2 fibonnaci(4).
+	.3 fibonnaci(3).
+	.4 fibonnaci(2) = 1.
+	.4 fibonnaci(1) = 1.
+	.3 fibonnaci(2) = 1.
+	.2 fibonnaci(3).
+	.3 fibonnaci(2) = 1.
+	.3 fibonnaci(1) = 1.
+}
+
+All leafs always have value 1. So\\ 
+fibonnaci(n) = 1 + 1 + ... + 1 + 1\\
+In this case the call tree have:\\
+9 nodes = \\
+5 leafs\\
+4 aggregators\\
+
+Every aggregator comes from a recursive call. So\\
+fibonnaci(5) makes 4 recursives calls.\\
+
+So
+\#fibonnaci(n) = \#fibonnaci(n-1) + \#fibonnaci(n-2) + 1\\
+
+Thesis:\\
+\#fibonnaci(n) = fibonnaci(n) - 1\\
+
+Proof by Induction\\
+Base\\
+\#fibonnaci(1) = fibonnaci(1) - 1 = 1 - 1 = 0 (OK)\\
+\#fibonnaci(2) = fibonnaci(2) - 1 = 1 - 1 = 0 (OK)\\
+
+Step\\
+\#fibonnaci(n) = fibonnaci(n) - 1\\
+\#fibonnaci(n) + fibonnaci(n-1) = fibonnaci(n) - 1 + fibonnaci(n-1)\\
+\#fibonnaci(n) + fibonnaci(n-1) = fibonnaci(n) + fibonnaci(n-1) - 1\\
+\#fibonnaci(n) + \#fibonnaci(n-1) + 1 = fibonnaci(n+1) - 1\\
+\#fibonnaci(n+1) = fibonnaci(n+1) - 1\\
+QED
+
+
+Binomial Numbers
+
+\lstset{language=C}
+\begin{lstlisting}[frame=single]
+int binomial(int n, int k){
+	if(k > n) return 0;
+	if(k == 0 || n == k) return 1;
+	return binomial(n-1,k) + binomial(n-1,k-1)
+}
+\end{lstlisting}
+
+Call Tree:
+
+\dirtree{%
+	.1 binomial(4,2).
+	.2 binomial(3,2).
+	.3 binomial(2,2) = 1.
+	.3 binomial(2,1).
+	.4 binomial(1,1) = 1.
+	.4 binomial(1,0) = 1.
+	.2 binomial(3,1).
+	.3 binomial(2,1).
+	.4 binomial(1,1) = 1.
+	.4 binomial(1,0) = 1.
+	.3 binomial(2,0) = 1.
+}
+
+All leafs always have value 1. So\\ 
+binomial(n,k) = 1 + 1 + ... + 1 + 1\\
+In this case the call tree have:\\
+11 nodes = \\
+6 leafs\\
+5 aggregators\\
+
+Every aggregator comes from a recursive call. So\\
+binomial(4,2) makes 5 recursives calls.\\
+
+\#binomial(n,k) = \#binomial(n-1,k) + \#binomial(n-1,k-1) + 1\\
+
+Thesis:\\
+\#binomial(n,k) = binomial(n,k) - 1\\
+
+Bases:\\
+\#binomial(1,0) = binomial(1,0) - 1 = 1 - 1 = 0 (OK)\\
+
+Step:\\
+\#binomial(n,k) = binomial(n,k) - 1\\
+\#binomial(n,k) + binomial(n,k+1) = binomial(n,k) - 1 + binomial(n,k+1)\\
+\#binomial(n,k) + \#binomial(n,k+1) + 1 = binomial(n+1,k+1) - 1\\
+\#binomial(n+1,k+1) = binomial(n+1,k+1) - 1\\
+QED\\
+
+\end{document}
