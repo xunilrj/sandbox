@@ -153,7 +153,7 @@ function Invoke-Get
     }
 
     Add-Type -Assembly System.Net.Http        
-    $request = [System.Net.Http.HttpRequestMessage]::new("Get", $uri)
+    $request = [System.Net.Http.HttpRequestMessage]::new("GET", $uri)
     if([System.String]::IsNullOrEmpty($Global:authToken) -eq $false){
         $request.Headers.Authorization = [System.Net.Http.Headers.AuthenticationHeaderValue]::Parse($Global:authToken)
     }
@@ -165,6 +165,7 @@ function Invoke-Get
         }
     }
 
+    $request.Headers.Host = $request.RequestUri.Host
     $request | Format-Message -Stream Verbose
     
     $clientHandler = [System.Net.Http.HttpClientHandler]::new()
@@ -198,7 +199,7 @@ function Invoke-Post
     }
 
     Add-Type -Assembly System.Net.Http        
-    $request = [System.Net.Http.HttpRequestMessage]::new("Post", $uri)
+    $request = [System.Net.Http.HttpRequestMessage]::new("POST", $uri)
     if($Global:authToken -ne $null){
         $request.Headers.Authorization = [System.Net.Http.Headers.AuthenticationHeaderValue]::Parse($Global:authToken)
     }
@@ -213,6 +214,7 @@ function Invoke-Post
         }
     }
 
+    $request.Headers.Host = $request.RequestUri.Host
     $request | Format-Message -Stream Verbose
     
     $clientHandler = [System.Net.Http.HttpClientHandler]::new()
@@ -240,7 +242,7 @@ function Invoke-PostFile
     }
 
     Add-Type -Assembly System.Net.Http        
-    $request = [System.Net.Http.HttpRequestMessage]::new("Post", $uri)
+    $request = [System.Net.Http.HttpRequestMessage]::new("POST", $uri)
     if($Global:authToken -ne $null){
         $request.Headers.Authorization = [System.Net.Http.Headers.AuthenticationHeaderValue]::Parse($Global:authToken)
     }
@@ -252,15 +254,26 @@ function Invoke-PostFile
         Write-Verbose "[$Path] is a relative path. Searching file at $($pathUri)"
     }
 
-    $currentLocation = Get-Location
-    $bytes =[System.IO.File]::ReadAllBytes($pathUri)
     $pathName = [System.IO.FileInfo]::new($pathUri)
-    $fileContent = [System.Net.Http.ByteArrayContent]::new($bytes);
-    $fileContent.Headers.ContentDisposition = [System.Net.Http.Headers.ContentDispositionHeaderValue]::Parse("form-data; name=""file""; filename=""$($pathName.Name)""")
-    $fileContent.Headers.ContentType = [System.Net.Http.Headers.MediaTypeHeaderValue]::Parse("application/pdf")
 
-    $request.Content = [System.Net.Http.MultipartFormDataContent]::new("----InvokePostFileFormBoundary39alldZLmVipsDgx")
-    $request.Content.Add($fileContent)
+    $stream = [System.IO.MemoryStream]::new()
+    $writer = [System.IO.StreamWriter]::new($stream)
+    $writer.WriteLine("--INVOKEPOSTFILEBOUNDARY")
+    $writer.WriteLine("Content-Disposition: form-data; name=""file""; filename=""$($pathName.Name)""")
+    $writer.WriteLine("Content-Type: application/pdf")
+    $writer.WriteLine("Content-Length: $([System.IO.FileInfo]::new($pathUri).Length)")    
+    $writer.WriteLine()
+    $writer.Flush()
+    [System.IO.File]::OpenRead($pathUri).CopyTo($stream)
+    $writer.WriteLine()
+    $writer.Flush()
+    $writer.WriteLine("--INVOKEPOSTFILEBOUNDARY--")
+    $writer.Flush()
+
+    $request.Content = [System.Net.Http.StreamContent]::new($stream)
+    $request.Content.Headers.TryAddWithoutValidation("Content-Type", "multipart/form-data; boundary=INVOKEPOSTFILEBOUNDARY")
+    $request.Content.Headers.ContentLength = $stream.Position
+    $stream.Position = 0
 
     if($Headers -ne $null){
         $Headers.Keys |% {
@@ -269,6 +282,7 @@ function Invoke-PostFile
         }
     }
 
+    $request.Headers.Host = $request.RequestUri.Host
     $request | Format-Message -Stream Verbose
     
     $clientHandler = [System.Net.Http.HttpClientHandler]::new()
@@ -302,7 +316,7 @@ function Invoke-Put
     }
 
     Add-Type -Assembly System.Net.Http        
-    $request = [System.Net.Http.HttpRequestMessage]::new("Put", $uri)
+    $request = [System.Net.Http.HttpRequestMessage]::new("PUT", $uri)
     if($Global:authToken -ne $null){
         $request.Headers.Authorization = [System.Net.Http.Headers.AuthenticationHeaderValue]::Parse($Global:authToken)
     }
@@ -317,6 +331,7 @@ function Invoke-Put
         }
     }
 
+    $request.Headers.Host = $request.RequestUri.Host
     $request | Format-Message -Stream Verbose
     
     $clientHandler = [System.Net.Http.HttpClientHandler]::new()
@@ -344,7 +359,7 @@ function Invoke-Delete
     }
 
     Add-Type -Assembly System.Net.Http        
-    $request = [System.Net.Http.HttpRequestMessage]::new("Delete", $uri)
+    $request = [System.Net.Http.HttpRequestMessage]::new("DELETE", $uri)
     if($Global:authToken -ne $null){
         $request.Headers.Authorization = [System.Net.Http.Headers.AuthenticationHeaderValue]::Parse($Global:authToken)
     }
@@ -356,6 +371,10 @@ function Invoke-Delete
         }
     }
 
+    $request.Content = [System.Net.Http.ByteArrayContent]::new(@())
+    $request.Content.Headers.ContentLength = 0
+
+    $request.Headers.Host = $request.RequestUri.Host
     $request | Format-Message -Stream Verbose
     
     $clientHandler = [System.Net.Http.HttpClientHandler]::new()
@@ -390,12 +409,14 @@ function Invoke-Patch
     }
 
     Add-Type -Assembly System.Net.Http        
-    $request = [System.Net.Http.HttpRequestMessage]::new("Patch", $uri)
+    $request = [System.Net.Http.HttpRequestMessage]::new("PATCH", $uri)
     $request.Headers.Authorization = [System.Net.Http.Headers.AuthenticationHeaderValue]::Parse($Global:authToken)
+    $request.Headers.Connection.Add("Keep-Alive")
+    $request.Headers.Host = $request.RequestUri.Host
     $request.Content = [System.Net.Http.StringContent]::new($asJson)
     $request.Content.Headers.ContentType = [System.Net.Http.Headers.MediaTypeHeaderValue]::new("application/json")
     $request.Content.Headers.ContentLength = $asJson.Length
-
+    
     $request | Format-Message -Stream Verbose
     
     $clientHandler = [System.Net.Http.HttpClientHandler]::new()
@@ -443,7 +464,7 @@ function Format-Message{
         }
         elseif($_ -is [System.Net.Http.HttpRequestMessage]){
             $current = [System.Net.Http.HttpRequestMessage]$_
-            $output.Invoke("$($current.Method.ToString().ToUpper()) $($current.RequestUri.ToString()) HTTP/1.1")
+            $output.Invoke("$($current.Method.ToString()) $($current.RequestUri.ToString()) HTTP/1.1")
             $current.Headers | %{
                 $output.Invoke("$($_.Key): $($_.Value)")
             }
