@@ -6,3 +6,12 @@
         $_ | Select-String -Pattern $regexp -NotMatch:$NotMatch
     }
 }
+
+function cut
+{
+    [CmdletBinding()]
+    param([Parameter(Mandatory=$true,Position=0)][Alias("d")]$Delimiter, [Parameter()][Alias("f")]$Index, [Parameter(ValueFromPipeline = $true)]$PSItem)
+    process{
+        $_ | % {$_.Split($Delimiter)[$Index]}
+    }
+}
