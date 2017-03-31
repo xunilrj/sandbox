@@ -1,9 +1,12 @@
-
+﻿
 #include <string>
 #include <iterator>
 #include <functional>
 #include <cassert>
 #include <memory>
+#include <map>
+#include <vector>
+//#include <experimental\any>
 
 template <typename T>
 struct function_traits
@@ -28,6 +31,37 @@ std::unique_ptr<Derived, Del> down_cast(std::unique_ptr<Base, Del>&& p)
 	auto d = static_cast<Derived *>(p.release());
 	return std::unique_ptr<Derived, Del>(d, std::move(p.get_deleter()));
 }
+
+//FROM http://alexandria.tue.nl/extra1/wskrap/publichtml/200402.pdf
+//1. Operational semantics.A computer program is modeled as an execution of an abstract machine.
+//A state of such a machine is a valuation of variables, a transition between states is an 
+//elementary program instruction.Pioneer of this ﬁeld is McCarthy[64]. 
+
+class OperationalSemantics
+{
+public:
+	//A state of such a machine is a valuation of variables
+	std::map<std::string, void*> GetState() const
+	{
+		auto map = std::map<std::string, void*>();
+		for (auto &v : Variables)
+		{
+			map[v] = Eval(v);
+		}
+		return map;
+	}
+private:
+	std::function<void*(std::string)> Eval;
+	std::vector<std::string> Variables;
+};
+
+//2. Denotational semantics.More abstract than operational semantics, computer programs are
+//usually modeled by a function transforming input into output.Most well - known 
+//are Scott and Strachey[92]. 
+//3. Axiomatic semantics.Here, emphasis is put on proof methods proving programs 
+//correct.Central notions are program assertions, proof triples consisting of precondition, 
+//program statement and postcondition, and invariants.Pioneers are Floyd[38] and Hoare[53].
+
 
 template <typename TValue>
 struct ParserResult
