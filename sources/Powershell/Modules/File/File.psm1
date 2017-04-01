@@ -37,3 +37,24 @@ function Get-PDFText
 
     $builder.ToString()
 }
+
+function Watch-Item
+{
+    param($Path,$Filter,$Expression)
+    
+    if([string]::IsNullOrEmpty($Filter)) { $Filter = "*.*" }
+
+    $watcher = New-Object IO.FileSystemWatcher $folder, $filter -Property @{ 
+        IncludeSubdirectories = $false
+        EnableRaisingEvents = $true
+    }
+
+    if($Expression -eq $null){
+        $Expression = [scriptblock]::Create('')
+    }
+
+    Register-ObjectEvent $Watcher "Changed" -Action $Expression
+    while($true){
+        Start-Sleep -Seconds 5
+    }
+}
