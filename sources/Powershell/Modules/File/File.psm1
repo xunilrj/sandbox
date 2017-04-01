@@ -40,21 +40,25 @@ function Get-PDFText
 
 function Watch-Item
 {
-    param($Path,$Filter,$Expression)
+    param([Parameter(Position=0)]$Expression,[Parameter(Position=1)]$Path,[Parameter(Position=2)]$Filter)
     
+    if($Expression -eq $null){
+        $Expression = [scriptblock]::Create('')
+    }
+    if([string]::IsNullOrEmpty($Path)) { $Path = ((gl).Path) }
     if([string]::IsNullOrEmpty($Filter)) { $Filter = "*.*" }
 
-    $watcher = New-Object IO.FileSystemWatcher $folder, $filter -Property @{ 
+    $watcher = New-Object IO.FileSystemWatcher $Path, $Filter -Property @{ 
         IncludeSubdirectories = $false
         EnableRaisingEvents = $true
     }
 
-    if($Expression -eq $null){
-        $Expression = [scriptblock]::Create('')
+    $event = Register-ObjectEvent $watcher "Changed" -Action $Expression
+    while($true){
+        Start-Sleep -Seconds 1
+        $job = Get-Job $event.Id
+        $job | Receive-Job
     }
 
-    Register-ObjectEvent $Watcher "Changed" -Action $Expression
-    while($true){
-        Start-Sleep -Seconds 5
-    }
+    Unregister-Event = $event.Id
 }

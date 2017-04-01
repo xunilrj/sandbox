@@ -5,6 +5,8 @@ os.path.dirname(os.path.abspath(__file__))
 
 import sys
 import numpy
+import scipy
+
 
 xtrain = "X_train.csv"
 if(len(sys.argv) >= 2):
@@ -23,8 +25,37 @@ print("ytrain:", ytrain)
 print("xtest:", xtest)
 
 XtrainM = numpy.loadtxt(open(xtrain, "rb"), delimiter=",", skiprows=0)
-YtrainM = numpy.loadtxt(open(ytrain, "rb"), delimiter=",", skiprows=0)
+YtrainM = numpy.loadtxt(open(ytrain, "rb"), dtype=numpy.int64, delimiter=",", skiprows=0)
 XtestM = numpy.loadtxt(open(xtest, "rb"), delimiter=",", skiprows=0)
 
+def ml(indices):
+    xk = XtrainM[indices]
+    xkt = numpy.transpose(xk)
+    return [numpy.mean(xk, axis=0),numpy.dot(xk,xkt)]
+
 #class prior probabilities
-numpy.unique(YtrainM)
+Ycount = numpy.size(YtrainM)
+classes = numpy.unique(YtrainM)
+pihat = numpy.divide(numpy.bincount(YtrainM), Ycount)
+
+#class specific Gaussian parameters
+classes = [ml(numpy.where(YtrainM == classk)) for classk in classes]
+classesLen = len(classes)
+
+#predict
+from scipy.stats import multivariate_normal
+def pdf(x):
+    return [multivariate_normal(classes[k][0],classes[k][1]).pdf(x)
+            for k in range(0, classesLen)]
+
+probabilities = [pdf(x) for x in range(0,numpy.size(XtestM, axis=0))]
+probabilitiesLen = len(probabilities)
+
+f = open("probs_test.csv", 'w')
+for row in range(0, probabilitiesLen):
+    for col in range(0, classesLen):
+        f.write(('%.5f' % probabilities[row][col]))
+        if(col != classesLen - 1):
+            f.write(",")
+    f.write("\n")
+f.close()

@@ -1,0 +1,5 @@
+if the island theory is true, gravitation is nothing more than the resultant of all radiations and G is not a constant, but a function of (x,y,z,t), maybe we can calculate this resultant exactly like we calculate the receive light radiation.
+The light equation can be expanded to all radiation that generates gravity.
+One way to approximate this calculation, a integral around the container sphere is to using spherical harmonics like CG does.
+
+One possibility is to calculate the needed radiation following the theory to see if the known or existing radiation would generate th expected vector field that would be approximated by the G constant.
