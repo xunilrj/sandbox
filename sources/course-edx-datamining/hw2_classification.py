@@ -24,23 +24,22 @@ YtrainM = numpy.loadtxt(open(ytrain, "rb"), dtype=numpy.int64, delimiter=",", sk
 XtestM = numpy.loadtxt(open(xtest, "rb"), delimiter=",", skiprows=0)
 
 #class prior probabilities 
-pihatCount = numpy.size(YtrainM)
-pihat = numpy.divide(numpy.bincount(YtrainM), pihatCount)
+YtrainMCount = numpy.size(YtrainM)
+def classpercentage(k):
+    indices = numpy.where(YtrainM == k)
+    yk = YtrainM[indices]
+    count = numpy.size(yk)
+    return (count * 1.00) / (YtrainMCount * 1.00)
+pihat = {k:classpercentage(k) for k in numpy.unique(YtrainM)}
 
 #class specific MLE estimate
 def mle(k):
     indices = numpy.where(YtrainM == k)
     xk = XtrainM[indices]
-    xksize = numpy.size(xk, axis=0)
-    muhatml = numpy.mean(xk, axis=0)
-    def sigmahatmlsummationitem(xi):
-        ximinusmuhatml = numpy.matrix(xi - muhatml)
-        return numpy.dot(numpy.transpose(ximinusmuhatml),ximinusmuhatml)
-    def sigmahatml():
-        items = [sigmahatmlsummationitem(xk[i]) for i in range(0,xksize)]
-        itemssum = numpy.sum(items, 0)
-        return itemssum * (1.0/xksize)
-    return [muhatml,sigmahatml()]
+    muhat = numpy.mean(xk, axis=0)
+    centeredxk = xk - muhat
+    sigmahat = numpy.dot(numpy.transpose(centeredxk), centeredxk)
+    return [muhat, numpy.mean(sigmahat, axis=0)]
 
 classes = numpy.unique(YtrainM) 
 mlEstimates = {k:mle(k) for k in classes}
@@ -55,11 +54,15 @@ def pofxgivenmuandsigma(x,mu,sigma):
 
 #predict
 def pforeachclass(i):
-    return [pofxgivenmuandsigma(XtestM[i], muhat(k),sigmahat(k))
+    return [pofxgivenmuandsigma(XtestM[i], muhat(k),sigmahat(k))*pihat[k]
             for k in classes]
+def normalizepofeachclass(ps):
+    #sumps = numpy.sum(ps)
+    #return ps / sumps;
+    return ps
 
 XtestMRows = numpy.size(XtestM, axis=0)
-probabilities = [pforeachclass(i) for i in range(0,XtestMRows)]
+probabilities = [normalizepofeachclass(pforeachclass(i)) for i in range(0,XtestMRows)]
 probabilitiesLen = len(probabilities)
    
 #print result file
@@ -69,7 +72,8 @@ def printMatrix(M):
         for col in range(0, shape[1]):
             f.write('%.50f' % M[row][col])
             if(col != classesCount - 1):
-                f.write(",")   
+                f.write(",")
+        f.write("," + str(numpy.array(M[row]).argmax()))     
         f.write("\n")
 
 f = open("probs_test.csv", 'w')

@@ -34,9 +34,9 @@
 \contentsline {subsection}{\numberline {2.2.1}Status Quo}{7}
 \contentsline {subsection}{\numberline {2.2.2}Scientist versus Agent}{7}
 \contentsline {subsection}{\numberline {2.2.3}Inversion of the Evolution of the State}{7}
-\contentsline {subsection}{\numberline {2.2.4}Conscience of Transcendent}{7}
-\contentsline {subsection}{\numberline {2.2.5}Messianic Discourse}{7}
-\contentsline {subsection}{\numberline {2.2.6}Revolutionary Mentality}{7}
-\contentsline {section}{\numberline {2.3}Science}{7}
-\contentsline {subsection}{\numberline {2.3.1}Status Quo}{7}
-\contentsline {subsection}{\numberline {2.3.2}Inversion of Modern Cosmological Views}{7}
+\contentsline {subsection}{\numberline {2.2.4}Conscience of Transcendent}{8}
+\contentsline {subsection}{\numberline {2.2.5}Messianic Discourse}{8}
+\contentsline {subsection}{\numberline {2.2.6}Revolutionary Mentality}{8}
+\contentsline {section}{\numberline {2.3}Science}{8}
+\contentsline {subsection}{\numberline {2.3.1}Status Quo}{8}
+\contentsline {subsection}{\numberline {2.3.2}Inversion of Modern Cosmological Views}{8}
