@@ -5,8 +5,7 @@ os.path.dirname(os.path.abspath(__file__))
 
 import sys
 import numpy
-import scipy
-
+from scipy.stats import multivariate_normal
 
 xtrain = "X_train.csv"
 if(len(sys.argv) >= 2):
@@ -24,12 +23,17 @@ print("xtrain:", xtrain)
 print("ytrain:", ytrain)
 print("xtest:", xtest)
 
-from functools import reduce
-
 XtrainM = numpy.loadtxt(open(xtrain, "rb"), delimiter=",", skiprows=0)
 YtrainM = numpy.loadtxt(open(ytrain, "rb"), dtype=numpy.int64, delimiter=",", skiprows=0)
 XtestM = numpy.loadtxt(open(xtest, "rb"), delimiter=",", skiprows=0)
-def ml(indices):
+
+#class prior probabilities 
+pihatCount = numpy.size(YtrainM)
+pihat = numpy.divide(numpy.bincount(YtrainM), pihatCount)
+
+#class specific MLE estimate
+def mle(k):
+    indices = numpy.where(YtrainM == k)
     xk = XtrainM[indices]
     xksize = numpy.size(xk, axis=0)
     muhatml = numpy.mean(xk, axis=0)
@@ -41,43 +45,44 @@ def ml(indices):
         return numpy.sum(items, 0) * (1/xksize)
     return [muhatml,sigmahatml()]
 
-#class prior probabilities
-Ycount = numpy.size(YtrainM)
 classes = numpy.unique(YtrainM)
-pihat = numpy.divide(numpy.bincount(YtrainM), Ycount)
+mlEstimates = [mle(k) for k in classes]
+classesCount = len(mlEstimates)
 
-#class specific Gaussian parameters
-classes = [ml(numpy.where(YtrainM == classk)) for classk in classes]
-classesLen = len(classes)
+def muhat(k):
+    return mlEstimates[k][0]
+def sigmahat(k):
+    return mlEstimates[k][1]
+def pofxgivenmuandsigma(x,mu,sigma):
+    return multivariate_normal(mu,sigma).pdf(x)
 
+print("mu")
+for i in range(0, classesCount):
+    print(muhat(i))
+print("sigma")
+for i in range(0, classesCount):
+    print(sigmahat(i))
+    
 #predict
-from scipy.stats import multivariate_normal
-def pdf(x):
-    return [multivariate_normal(classes[k][0],classes[k][1]).pdf(x)
-            for k in range(0, classesLen)]
+def pforeachclass(i):
+    return [pofxgivenmuandsigma(XtestM[i], muhat(k),sigmahat(k))
+            for k in range(0, classesCount)]
 
-probabilities = [pdf(XtestM[i]) for i in range(0,numpy.size(XtestM, axis=0))]
+XtestMRows = numpy.size(XtestM, axis=0)
+probabilities = [pforeachclass(i) for i in range(0,XtestMRows)]
 probabilitiesLen = len(probabilities)
-
-        
+   
+#print result file
 def printMatrix(M):
     shape = numpy.shape(M)
     for row in range(0, shape[0]):
         for col in range(0, shape[1]):
             f.write('%.5f' % M[row][col])
-            if(col != classesLen - 1):
+            if(col != classesCount - 1):
                 f.write(",") 
-        f.write("," + str(numpy.array(M[row]).argmax()))    
+        #f.write("," + str(numpy.array(M[row]).argmax()))    
         f.write("\n")
 
 f = open("probs_test.csv", 'w')
-print("mu")
-print(classes[0][0])
-print(classes[1][0])
-print(classes[2][0])
-print("sigma")
-print(classes[0][1])
-print(classes[1][1])
-print(classes[2][1])
 printMatrix(probabilities)
 f.close()
