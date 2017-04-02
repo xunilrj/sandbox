@@ -18,10 +18,6 @@ if(len(sys.argv) >= 3):
 xtest = "X_test.csv"
 if(len(sys.argv) >= 4):
     xtest = sys.argv[3]
-    
-print("xtrain:", xtrain)
-print("ytrain:", ytrain)
-print("xtest:", xtest)
 
 XtrainM = numpy.loadtxt(open(xtrain, "rb"), delimiter=",", skiprows=0)
 YtrainM = numpy.loadtxt(open(ytrain, "rb"), dtype=numpy.int64, delimiter=",", skiprows=0)
@@ -38,15 +34,16 @@ def mle(k):
     xksize = numpy.size(xk, axis=0)
     muhatml = numpy.mean(xk, axis=0)
     def sigmahatmlsummationitem(xi):
-        ximinusmuhatml = numpy.matrix(xi - muhatml, )
+        ximinusmuhatml = numpy.matrix(xi - muhatml)
         return numpy.dot(numpy.transpose(ximinusmuhatml),ximinusmuhatml)
     def sigmahatml():
         items = [sigmahatmlsummationitem(xk[i]) for i in range(0,xksize)]
-        return numpy.sum(items, 0) * (1/xksize)
+        itemssum = numpy.sum(items, 0)
+        return itemssum * (1.0/xksize)
     return [muhatml,sigmahatml()]
 
-classes = numpy.unique(YtrainM)
-mlEstimates = [mle(k) for k in classes]
+classes = numpy.unique(YtrainM) 
+mlEstimates = {k:mle(k) for k in classes}
 classesCount = len(mlEstimates)
 
 def muhat(k):
@@ -56,17 +53,10 @@ def sigmahat(k):
 def pofxgivenmuandsigma(x,mu,sigma):
     return multivariate_normal(mu,sigma).pdf(x)
 
-print("mu")
-for i in range(0, classesCount):
-    print(muhat(i))
-print("sigma")
-for i in range(0, classesCount):
-    print(sigmahat(i))
-    
 #predict
 def pforeachclass(i):
     return [pofxgivenmuandsigma(XtestM[i], muhat(k),sigmahat(k))
-            for k in range(0, classesCount)]
+            for k in classes]
 
 XtestMRows = numpy.size(XtestM, axis=0)
 probabilities = [pforeachclass(i) for i in range(0,XtestMRows)]
@@ -77,10 +67,9 @@ def printMatrix(M):
     shape = numpy.shape(M)
     for row in range(0, shape[0]):
         for col in range(0, shape[1]):
-            f.write('%.5f' % M[row][col])
+            f.write('%.50f' % M[row][col])
             if(col != classesCount - 1):
-                f.write(",") 
-        #f.write("," + str(numpy.array(M[row]).argmax()))    
+                f.write(",")   
         f.write("\n")
 
 f = open("probs_test.csv", 'w')
