@@ -1,0 +1,3 @@
+There is a big discussion on statistics about the bad use of hypothesis testing. Specially because it is very hard to interpret some alternatives hypothesis or because it is very easy to do p-boosting.
+
+Maybe it would help to have some kind of Hypothesis Algebra. Maybe model hypothesis as monoid, monads or monadplus ia n way that we can carry all branches of the hypothesis to the final stage where we can have the final word about all hypothesis branches.

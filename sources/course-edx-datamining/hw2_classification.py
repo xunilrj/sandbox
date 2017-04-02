@@ -24,21 +24,21 @@ print("xtrain:", xtrain)
 print("ytrain:", ytrain)
 print("xtest:", xtest)
 
+from functools import reduce
+
 XtrainM = numpy.loadtxt(open(xtrain, "rb"), delimiter=",", skiprows=0)
 YtrainM = numpy.loadtxt(open(ytrain, "rb"), dtype=numpy.int64, delimiter=",", skiprows=0)
 XtestM = numpy.loadtxt(open(xtest, "rb"), delimiter=",", skiprows=0)
 def ml(indices):
     xk = XtrainM[indices]
     xksize = numpy.size(xk, axis=0)
-    print(xksize) 
-    print(xk)
     muhatml = numpy.mean(xk, axis=0)
     def sigmahatmlsummationitem(xi):
-        ximinusmuhatml = xi - muhatml
-        return numpy.dot(ximinusmuhatml,numpy.transpose(ximinusmuhatml))
+        ximinusmuhatml = numpy.matrix(xi - muhatml, )
+        return numpy.dot(numpy.transpose(ximinusmuhatml),ximinusmuhatml)
     def sigmahatml():
         items = [sigmahatmlsummationitem(xk[i]) for i in range(0,xksize)]
-        return numpy.sum(items) * (1/xksize)
+        return numpy.sum(items, 0) * (1/xksize)
     return [muhatml,sigmahatml()]
 
 #class prior probabilities
@@ -56,14 +56,28 @@ def pdf(x):
     return [multivariate_normal(classes[k][0],classes[k][1]).pdf(x)
             for k in range(0, classesLen)]
 
-probabilities = [pdf(x) for x in range(0,numpy.size(XtestM, axis=0))]
+probabilities = [pdf(XtestM[i]) for i in range(0,numpy.size(XtestM, axis=0))]
 probabilitiesLen = len(probabilities)
 
+        
+def printMatrix(M):
+    shape = numpy.shape(M)
+    for row in range(0, shape[0]):
+        for col in range(0, shape[1]):
+            f.write('%.5f' % M[row][col])
+            if(col != classesLen - 1):
+                f.write(",") 
+        f.write("," + str(numpy.array(M[row]).argmax()))    
+        f.write("\n")
+
 f = open("probs_test.csv", 'w')
-for row in range(0, probabilitiesLen):
-    for col in range(0, classesLen):
-        f.write(('%.5f' % probabilities[row][col]))
-        if(col != classesLen - 1):
-            f.write(",")
-    f.write("\n")
+print("mu")
+print(classes[0][0])
+print(classes[1][0])
+print(classes[2][0])
+print("sigma")
+print(classes[0][1])
+print(classes[1][1])
+print(classes[2][1])
+printMatrix(probabilities)
 f.close()
