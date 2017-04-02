@@ -27,11 +27,19 @@ print("xtest:", xtest)
 XtrainM = numpy.loadtxt(open(xtrain, "rb"), delimiter=",", skiprows=0)
 YtrainM = numpy.loadtxt(open(ytrain, "rb"), dtype=numpy.int64, delimiter=",", skiprows=0)
 XtestM = numpy.loadtxt(open(xtest, "rb"), delimiter=",", skiprows=0)
-
 def ml(indices):
     xk = XtrainM[indices]
-    xkt = numpy.transpose(xk)
-    return [numpy.mean(xk, axis=0),numpy.dot(xk,xkt)]
+    xksize = numpy.size(xk, axis=0)
+    print(xksize) 
+    print(xk)
+    muhatml = numpy.mean(xk, axis=0)
+    def sigmahatmlsummationitem(xi):
+        ximinusmuhatml = xi - muhatml
+        return numpy.dot(ximinusmuhatml,numpy.transpose(ximinusmuhatml))
+    def sigmahatml():
+        items = [sigmahatmlsummationitem(xk[i]) for i in range(0,xksize)]
+        return numpy.sum(items) * (1/xksize)
+    return [muhatml,sigmahatml()]
 
 #class prior probabilities
 Ycount = numpy.size(YtrainM)
