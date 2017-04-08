@@ -50,11 +50,12 @@ def printMatrix(path, matrix2print):
     shape = numpy.shape(matrix2print)
     for row in range(0, shape[0]):
         for col in range(0, shape[1]):
-            f.write('%.5f' % matrix2print[row][col])
+            f.write('%.5f' % matrix2print[row,col])
             if(col != shape[1]-1):
                 f.write(",")
         f.write("\n")
     f.close()
+    print(path)
 
 fobj = open("objectives.csv", 'w')
 iteration = 0
@@ -101,11 +102,12 @@ for iteration in range(0,iterations):
     obj = objfirstpart + objsecondpart + objthirdpart
     fobj.write('%.5f' % obj)
     fobj.write("\n")
-    if(iteration == 10 or iteration == 25 or iteration == 50):
-        printMatrix("U-" + iteration + ".csv", uM)
-        printMatrix("V-" + iteration + ".csv", vM)
+    if iteration == 9 or iteration == 24 or iteration == 49:
+        printMatrix("U-" + str(iteration+1) + ".csv", uM)
+        printMatrix("V-" + str(iteration+1) + ".csv", vM)
+    print(iteration)
 
-fobj.close()
+fobj.close() 
 result = numpy.dot(T(vM),uM)
 
 print(result)
