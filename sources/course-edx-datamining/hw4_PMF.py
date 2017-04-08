@@ -20,23 +20,30 @@ iterations = 50
 ratingsM = numpy.loadtxt(open(ratings, "rb"), delimiter=",", skiprows=0)
 
 usersA = numpy.unique(ratingsM[:,0])
-usersQtd = int(numpy.max(usersA) + 1)
+N1 = int(numpy.max(usersA) + 1)
 moviesA = numpy.unique(ratingsM[:,1])
-moviesQtd = int(numpy.max(moviesA) + 1)
+N2 = int(numpy.max(moviesA) + 1)
 
-M = numpy.matrix(numpy.repeat(0.0, usersQtd * moviesQtd))
-M = numpy.reshape(M, (usersQtd, moviesQtd))
+M = numpy.matrix(numpy.repeat(0.0, N1 * N2))
+M = numpy.reshape(M, (N1, N2))
+
+def omega():
+    return [[i,j] for i in range(0,N1) for j in range(0,N2) if M[i,j] > 0.0]
+def omegaui(i):
+    return [indices[1] for indices in omega() if indices[0] == i]
+def omegavi(i):
+    return [indices[0] for indices in omega() if indices[1] == i]
 
 for rating in ratingsM:
     M[int(rating[0]),int(rating[1])] = rating[2]
 
-uM = numpy.matrix(numpy.repeat(0, d * moviesQtd))
-uM = numpy.reshape(uM, (d, moviesQtd))
+uM = numpy.matrix(numpy.repeat(0, d * N2))
+uM = numpy.reshape(uM, (d, N2))
 
-vM = numpy.matrix(numpy.repeat(0, d * moviesQtd))
-vM = numpy.reshape(vM, (d, moviesQtd))
+vM = numpy.matrix(numpy.repeat(0, d * N2))
+vM = numpy.reshape(vM, (d, N2))
 
-for j in range(0,moviesQtd):
+for j in range(0,N2):
     for ix in range(0, d):
             vM[j,ix] = numpy.random.normal(0,1)
 
@@ -60,7 +67,7 @@ def printMatrix(path, matrix2print):
 fobj = open("objectives.csv", 'w')
 iteration = 0
 for iteration in range(0,iterations):    
-    for i in range(0,usersQtd):
+    for i in range(0,N1):
         #u_i = \big[\lambda\sigma^2I + \sum_{j\in \omega ui}{v_jv^T}\big]*\big[\sum_{j\in \omega u_i}{M_{ij}v_j}\big]
         indices = numpy.where(ratingsM[:,0] == i)
         uiRatings = ratingsM[indices]
@@ -72,7 +79,7 @@ for iteration in range(0,iterations):
         result = numpy.dot(itemiI, item2) 
         for ix in range(0, numpy.size(result)):
             uM[i,ix] = result[ix]
-    for j in range(0,moviesQtd):
+    for j in range(0,N2):
         indices = numpy.where(ratingsM[:,1] == i)
         uiRatings = ratingsM[indices]
         iss = numpy.unique(uiRatings[:,1])
@@ -96,9 +103,9 @@ for iteration in range(0,iterations):
         vi = vM[:,1]
         vi = numpy.linalg.norm(vi) * numpy.linalg.norm(vi)
         return (lambdaa/2.0)*vi
-    objfirstpart = numpy.sum([objfirst(i,j) for i in range(0,usersQtd) for j in range(0,moviesQtd)])
-    objsecondpart = numpy.sum([objsecond(i) for i in range(0,usersQtd)])
-    objthirdpart = numpy.sum([objthird(j) for j in range(0,moviesQtd)])
+    objfirstpart = numpy.sum([objfirst(i,j) for i in range(0,N1) for j in range(0,N2)])
+    objsecondpart = numpy.sum([objsecond(i) for i in range(0,N1)])
+    objthirdpart = numpy.sum([objthird(j) for j in range(0,N2)])
     obj = objfirstpart + objsecondpart + objthirdpart
     fobj.write('%.5f' % obj)
     fobj.write("\n")
