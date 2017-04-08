@@ -13,8 +13,8 @@ if(len(sys.argv) >= 2):
 print(ratings)
 
 d = 5 
-sigma2 = 1/10
-lambdaa = 2 
+sigma2 = 1.0/10.0
+lambdaa = 2.0 
 iterations = 50
 
 ratingsM = numpy.loadtxt(open(ratings, "rb"), delimiter=",", skiprows=0)
@@ -37,15 +37,22 @@ def omegavi(i):
 for rating in ratingsM:
     M[int(rating[0]),int(rating[1])] = rating[2]
 
-uM = numpy.matrix(numpy.repeat(0, d * N2))
+uM = numpy.matrix(numpy.repeat(0.0, d * N2))
 uM = numpy.reshape(uM, (d, N2))
 
-vM = numpy.matrix(numpy.repeat(0, d * N2))
+vM = numpy.matrix(numpy.repeat(0.0, d * N2))
 vM = numpy.reshape(vM, (d, N2))
 
+for i in range(0,N2):
+    for ix in range(0, d):
+            uM[i,ix] = numpy.random.normal(0.0,1.0)
+            
 for j in range(0,N2):
     for ix in range(0, d):
-            vM[j,ix] = numpy.random.normal(0,1)
+            vM[j,ix] = numpy.random.normal(0.0,1.0)
+             
+print(uM)
+print(vM)
 
 def I(n):
     return numpy.matrix(numpy.identity(n))
@@ -93,7 +100,7 @@ for iteration in range(0,iterations):
     def objfirst(i,j):
         dot = (M[i,j] - numpy.dot(T(uM[:,i]),vM[:,j]))
         dot = dot*dot
-        dot = 1/(2.0*sigma2)
+        dot = 1.0/(2.0*sigma2)
         return dot
     def objsecond(i):
         ui = uM[:,1]
@@ -112,10 +119,6 @@ for iteration in range(0,iterations):
     if iteration == 9 or iteration == 24 or iteration == 49:
         printMatrix("U-" + str(iteration+1) + ".csv", uM)
         printMatrix("V-" + str(iteration+1) + ".csv", vM)
-    print(iteration)
 
 fobj.close() 
 result = numpy.dot(T(vM),uM)
-
-print(result)
-
