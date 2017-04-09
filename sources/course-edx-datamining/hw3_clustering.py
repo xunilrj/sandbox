@@ -6,7 +6,7 @@ os.path.dirname(os.path.abspath(__file__))
 import sys
 import numpy
 
-ratings = "ratings.csv"
+ratings = "X.csv"
 if(len(sys.argv) >= 2):
     ratings = sys.argv[1]
  
