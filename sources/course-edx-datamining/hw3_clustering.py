@@ -90,7 +90,7 @@ pika = [1.0/kn for i in range(0,kn)]
 def xi(i):
     return numpy.reshape(numpy.matrix(dataM[i,:]), (1,d))
 def likelihood(xi,means,sds):
-    return multivariate_normal(means,[sds[0,0],sds[1,1]]).pdf(xi)
+    return multivariate_normal(means,sds).pdf(xi)
 def pxigivenk(i,k):
     return likelihood(xi(i),centroids[k],params[k])
 def pofk(k):
@@ -142,11 +142,11 @@ for i in range(0,iterations):
         for di in range(0,d):
             result = numpy.sum(dataM[:,di]*cM[:,k])/ksums[k]
             centroids[k][di] = result
-    plt.figure()
-    plt.scatter(dataM[:,0],dataM[:,1], c=pointsColor(dataM,cM))
-    for k in range(0,kn):
-        plt.scatter(centroids[k][0],centroids[k][1], c="black")
-    plt.savefig("state_kmean_" + "{:0>2}".format(i))
+    #plt.figure()
+    #plt.scatter(dataM[:,0],dataM[:,1], c=pointsColor(dataM,cM))
+    #for k in range(0,kn):
+    #    plt.scatter(centroids[k][0],centroids[k][1], c="black")
+    #plt.savefig("state_kmean_" + "{:0>2}".format(i))
 
 #EM GMM (Expectation Maximization of Gaussian Mixture Models)
 print("EM GMM (Expectation Maximization of Gaussian Mixture Models)")
@@ -163,11 +163,11 @@ for i in range(0,iterations):
             cM[row,k] = pkgivenxi(row,k)
     ksums = numpy.sum(cM, axis=0)
     pika = ksums/n
-    plt.figure()
-    plt.scatter(dataM[:,0],dataM[:,1], c=pointsColor(dataM,cM))
-    for k in range(0,kn):
-        plotContour(k, centroids[k], params[k])
-    plt.savefig("state_" + "{:0>2}".format(i))
+    #plt.figure()
+    #plt.scatter(dataM[:,0],dataM[:,1], c=pointsColor(dataM,cM))
+    #for k in range(0,kn):
+    #    plotContour(k, centroids[k], params[k])
+    #plt.savefig("state_" + "{:0>2}".format(i))
     for k in range(0,kn):
         for di in range(0,d):
             result = numpy.sum(dataM[:,di]*cM[:,k])/ksums[k]

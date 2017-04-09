@@ -36,10 +36,16 @@ pihat = {k:classpercentage(k) for k in numpy.unique(YtrainM)}
 def mle(k):
     indices = numpy.where(YtrainM == k)
     xk = XtrainM[indices]
-    muhat = numpy.mean(xk, axis=0)
-    centeredxk = xk - muhat
-    sigmahat = numpy.dot(numpy.transpose(centeredxk), centeredxk)
-    return [muhat, numpy.mean(sigmahat, axis=0)]
+    xksize = numpy.size(xk, axis=0)
+    muhatml = numpy.mean(xk, axis=0)
+    def sigmahatmlsummationitem(xi):
+        ximinusmuhatml = numpy.matrix(xi - muhatml)
+        return numpy.dot(numpy.transpose(ximinusmuhatml),ximinusmuhatml)
+    def sigmahatml():
+        items = [sigmahatmlsummationitem(xk[i]) for i in range(0,xksize)]
+        itemssum = numpy.sum(items, 0)
+        return itemssum * (1.0/xksize)
+    return [muhatml,sigmahatml()]
 
 classes = numpy.unique(YtrainM) 
 mlEstimates = {k:mle(k) for k in classes}
@@ -54,15 +60,11 @@ def pofxgivenmuandsigma(x,mu,sigma):
 
 #predict
 def pforeachclass(i):
-    return [pofxgivenmuandsigma(XtestM[i], muhat(k),sigmahat(k))*pihat[k]
-            for k in classes]
-def normalizepofeachclass(ps):
-    #sumps = numpy.sum(ps)
-    #return ps / sumps;
-    return ps
+    denominator = numpy.sum([pofxgivenmuandsigma(XtestM[i], muhat(k),sigmahat(k))*pihat[k] for k in classes])
+    return [pofxgivenmuandsigma(XtestM[i], muhat(k),sigmahat(k))*pihat[k]/denominator for k in classes]
 
 XtestMRows = numpy.size(XtestM, axis=0)
-probabilities = [normalizepofeachclass(pforeachclass(i)) for i in range(0,XtestMRows)]
+probabilities = [pforeachclass(i) for i in range(0,XtestMRows)]
 probabilitiesLen = len(probabilities)
    
 #print result file
@@ -72,8 +74,7 @@ def printMatrix(M):
         for col in range(0, shape[1]):
             f.write('%.50f' % M[row][col])
             if(col != classesCount - 1):
-                f.write(",")
-        f.write("," + str(numpy.array(M[row]).argmax()))     
+                f.write(",")   
         f.write("\n")
 
 f = open("probs_test.csv", 'w')
