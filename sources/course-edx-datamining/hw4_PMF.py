@@ -21,6 +21,11 @@ def printMatrixShape(name, M):
     print(name + ": " + str(numpy.shape(M)) + " (rows,columns)")
 
 ratingsM = numpy.loadtxt(open(ratings, "rb"), delimiter=",", skiprows=0)
+
+for row in range(0, numpy.shape(ratingsM)[0]):
+    ratingsM[row,0] = ratingsM[row,0] - 1
+    ratingsM[row,1] = ratingsM[row,1] - 1
+
 printMatrixShape("ratingsM", ratingsM)
 
 usersA = numpy.unique(ratingsM[:,0])
@@ -33,12 +38,22 @@ M = numpy.reshape(M, (N1, N2))
 
 printMatrixShape("M", M)
 
-def omega():
+def _omega():
     return [[i,j] for i in range(0,N1) for j in range(0,N2) if M[i,j] > 0.0]
-def omegaui(i):
+preCalcOmega = _omega()
+def omega():
+    return preCalcOmega
+    
+def _omegaui(i):
     return [indices[1] for indices in omega() if indices[0] == i]
+def _omegavj(j):
+    return [indices[0] for indices in omega() if indices[1] == j]
+preCalcOmegaUi = {i:_omegaui(i) for i in range(0,N1)}
+preCalcOmegaVj = {j:_omegavj(j) for j in range(0,N2)}
+def omegaui(i):
+    return preCalcOmegaUi[i]
 def omegavi(i):
-    return [indices[0] for indices in omega() if indices[1] == i]
+    return preCalcOmegaVj[i]
 
 for rating in ratingsM:
     M[int(rating[0]),int(rating[1])] = rating[2]
@@ -83,20 +98,24 @@ def printMatrix(path, matrix2print):
             f.write('%.5f' % matrix2print[row,col])
             if(col != shape[1]-1):
                 f.write(",")
-        f.write("\n")
+        if(row != shape[0]-1):
+            f.write("\n")
     f.close()
     
 def summ(l,r,c):
     if len(l) == 0:
         return numpy.zeros((r,c))
     return numpy.sum(l, axis=0)
+    
+from datetime import datetime
 
-fobj = open("objectives.csv", 'w')
-for iteration in range(0,iterations):    
+fobj = open("objective.csv", 'w')
+for iteration in range(0,iterations):
+    print("iteration:"+ str(iteration) + ":" + str(datetime.now().time()))
     for i in range(0,N1):
         #u_i = \big[\lambda\sigma^2I + \sum_{j\in \omega ui}{v_jv^T}\big]*\big[\sum_{j\in \omega u_i}{M_{ij}v_j}\big]
-        sumofvjvjt = numpy.sum([numpy.dot(vj(j),T(vj(j)))
-            for j in omegaui(i)], 0)
+        #sumofvjvjt = numpy.sum([numpy.dot(vj(j),T(vj(j))) for j in omegaui(i)], 0)
+        sumofvjvjt = numpy.sum([numpy.dot(vj(j),T(vj(j))) for j in omegaui(i)], 0)
         item1 = (lambdaa*sigma2)*I(d)
         itemiI = numpy.linalg.inv(item1 + sumofvjvjt)
         item2 = summ([Mij(i,j)*vj(j) for j in omegaui(i)],d,1)
@@ -132,7 +151,7 @@ for iteration in range(0,iterations):
     fobj.write("\n") 
     if iteration == 9 or iteration == 24 or iteration == 49:
         printMatrix("U-" + str(iteration+1) + ".csv", uM)
-        printMatrix("V-" + str(iteration+1) + ".csv", vM)
+        printMatrix("V-" + str(iteration+1) + ".csv", T(vM))
 
 fobj.close()
 printMatrixShape("M",numpy.dot(uM,vM))
