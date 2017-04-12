@@ -45,10 +45,10 @@ def summ(l,r,c):
         return numpy.zeros((r,c))
     return numpy.sum(l, axis=0)
 
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import matplotlib.mlab as mlab
+#import matplotlib
+#matplotlib.use("Agg")
+#import matplotlib.pyplot as plt
+#import matplotlib.mlab as mlab
 from scipy.stats import multivariate_normal
 
 
@@ -95,11 +95,10 @@ def pxigivenk(i,k):
     return likelihood(xi(i),centroids[k],params[k])
 def pofk(k):
     return pika[k];
-def pkgivenxi(i,k):
+def pkgivenxi(i,k, denominator):
     numerator = pxigivenk(i,k)*pofk(k)
-    denominator = numpy.sum([pxigivenk(i,ck)*pofk(ck)
-        for ck 
-        in range(0,kn)])
+    if( denominator is None):
+        denominator = numpy.sum([pxigivenk(i,ck)*pofk(ck) for ck in range(0,kn)])
     return numerator/denominator
 def clusterColors():
     return [
@@ -128,10 +127,12 @@ def getNearestCentroid(i):
     distances = [distance(xi(i),centroids[k]) for k in range(0,kn)]
     return indexmax(distances)
 
+from datetime import datetime
+    
 print("K-Means")
 centroids = initCentroids()
 for i in range(0,iterations):
-    print(str(i))
+    print("iteration:"+ str(i) + ":" + str(datetime.now().time()))
     printMatrix("centroids-" + str(i+1) + ".csv", centroids)
     cM = numpy.zeros((n,kn))
     for row in range(0,n):
@@ -152,15 +153,17 @@ for i in range(0,iterations):
 print("EM GMM (Expectation Maximization of Gaussian Mixture Models)")
 centroids = initCentroids()
 for i in range(0,iterations):
-    print(str(i))
+    print("iteration:"+ str(i) + ":" + str(datetime.now().time()))
     printMatrix("pi-" + str(i + 1) + ".csv", pika)
     for k in range(0,kn):
         printMatrix("Sigma-" + str(k) + "-" +str(i+1) + ".csv", params[k])
     printMatrix("mu-" + str(i+1) + ".csv", centroids)
     cM = numpy.zeros((n,kn))
+    print("calculating cM:" + str(datetime.now().time()))
     for row in range(0,n):
+        denominator = numpy.sum([pxigivenk(i,ck)*pofk(ck) for ck in range(0,kn)])
         for k in range(0,kn):
-            cM[row,k] = pkgivenxi(row,k)
+            cM[row,k] = pkgivenxi(row,k, denominator)
     ksums = numpy.sum(cM, axis=0)
     pika = ksums/n
     #plt.figure()
@@ -168,10 +171,13 @@ for i in range(0,iterations):
     #for k in range(0,kn):
     #    plotContour(k, centroids[k], params[k])
     #plt.savefig("state_" + "{:0>2}".format(i))
+    print("updating centroids:" + str(datetime.now().time()))
     for k in range(0,kn):
+        cMk = cM[:,k]
         for di in range(0,d):
-            result = numpy.sum(dataM[:,di]*cM[:,k])/ksums[k]
+            dataMdi = dataM[:,di]
+            result = numpy.sum(dataMdi*cMk)/ksums[k]
             centroids[k][di] = result
-            params[k][di] = numpy.sum((dataM[:,di]-result)*(dataM[:,di]-result)*cM[:,k])/ksums[k]    
+            params[k][di] = numpy.sum((dataMdi-result)*(dataMdi-result)*cMk)/ksums[k]    
         params[k] = numpy.sum([cM[i,k]*numpy.dot(T(xi(i)-centroids[k]),(xi(i)-centroids[k])) for i in range(0,n)],0)/(ksums[k])
 print("ok")
