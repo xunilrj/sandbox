@@ -1,8 +1,16 @@
-﻿filter ConvertFrom-Xml{
+﻿function ConvertFrom-Xml
+{
+    param([Parameter(ValueFromPipeline=$true)]$Item)
     process{
-        [xml]$_
+        if($Item -is [System.IO.FileInfo]){
+            [xml][System.IO.File]::ReadAllText($Item.FullName)
+        }else{
+            [xml]$Item 
+        }
     }
 }
+
+Set-Alias xml ConvertFrom-xml
 
 function %% {
     param([Parameter(Position=0)]$Name,[Parameter(ValueFromPipeline=$true)]$Item)
@@ -36,4 +44,3 @@ function ??? {
         }
     }
 }
-cat "C:\github\xunilrj-mardocs\MarDocs\MarDocs.Core\Models\DrySpotFixture\DrySpotFixture.cs" | ??? "public string (?<NAME>.*?)"
