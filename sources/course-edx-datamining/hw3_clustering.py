@@ -45,10 +45,10 @@ def summ(l,r,c):
         return numpy.zeros((r,c))
     return numpy.sum(l, axis=0)
 
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-import matplotlib.mlab as mlab
+#import matplotlib
+#matplotlib.use("Agg")
+#import matplotlib.pyplot as plt
+#import matplotlib.mlab as mlab
 from scipy.stats import multivariate_normal
 
 
@@ -186,7 +186,11 @@ for i in range(0,iterations):
             dataMdi = dataM[:,di]
             result = numpy.sum(dataMdi*cMk)/ksums[k]
             centroids[k][di] = result
+<<<<<<< HEAD
             #params[k][di] = numpy.sum((dataMdi-result)*(dataMdi-result)*cMk)/ksums[k]    
+=======
+            params[k][di] = numpy.sum((dataMdi-result)*(dataMdi-result)*cMk)/ksums[k]    
+>>>>>>> 7f9653b1fd932acc6d49dc47ec91beb9129ff9a1
         params[k] = numpy.sum([cM[i,k]*numpy.dot(T(xi(i)-centroids[k]),(xi(i)-centroids[k])) for i in range(0,n)],0)/(ksums[k])
         centroids[k] = numpy.nan_to_num(centroids[k])
         params[k] = numpy.nan_to_num(params[k])
