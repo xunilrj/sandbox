@@ -50,13 +50,14 @@ wrr = numpy.dot(numpy.dot(inverted, XmatrixT), Ymatrix)
 
 #ACTIVE
 
-#sumxixiT = sum([Xmatrix[:][i]*numpy.transpose(Xmatrix[:][i]) for i in range(0, Xmatrix.shape[0])])
+XtextM = numpy.loadtxt(open(xtest, "rb"), delimiter=",", skiprows=0)
 
-SIGMA = numpy.linalg.inv(lambdaMatrix + (1/s2)*xTx)
-def s02Value(i):
-    return numpy.dot(numpy.dot(numpy.transpose(Xmatrix[:][i]),SIGMA),Xmatrix[:][i])
-si2s = [(i,s02Value(i)) for i in range(0, Xmatrix.shape[0])]
-si2sdesc = sorted(si2s, key=lambda tup: tup[1])[0:10]
+ybar = numpy.mean(Ymatrix)
+print(ybar)
+predictions = numpy.dot(XtextM,wrr)
+
+for row in range(0,numpy.shape(xTextM)[0]):
+    predictions[row]-ybar
 
 f = open('wRR_' + str(l) + ".csv", 'w')
 for i in range(0, wrr.shape[0]):

@@ -93,7 +93,9 @@ def summ(l,r,c):
 
 fobj = open("objectives.csv", 'w')
 for iteration in range(0,iterations):    
+    print("iteration:" + str(iteration))
     for i in range(0,N1):
+        print("user:" + str(i))
         #u_i = \big[\lambda\sigma^2I + \sum_{j\in \omega ui}{v_jv^T}\big]*\big[\sum_{j\in \omega u_i}{M_{ij}v_j}\big]
         sumofvjvjt = numpy.sum([numpy.dot(vj(j),T(vj(j)))
             for j in omegaui(i)], 0)
@@ -103,6 +105,7 @@ for iteration in range(0,iterations):
         result = numpy.dot(itemiI, item2) 
         setUi(i, result)
     for j in range(0,N2):
+        print("obj:" + str(j))
         sumofujujt = numpy.sum([numpy.dot(T(ui(i)),ui(i))
             for i in omegavi(j)], 0)
         item1 = (lambdaa*sigma2)*I(d)
