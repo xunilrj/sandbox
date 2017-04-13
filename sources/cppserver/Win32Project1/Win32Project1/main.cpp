@@ -5,83 +5,171 @@
 #include<stdio.h>
 #include<winsock2.h>
 #include "main.h"
+#include <utility>
 
 #pragma comment(lib,"ws2_32.lib") //Winsock Library
+
+struct handle_traits
+{
+	static HANDLE invalid() throw()
+	{
+		return nullptr;
+	}
+	static void close(HANDLE value) throw()
+	{
+		CloseHandle(value);
+	}
+};
+
+template <typename Type, typename Traits>
+class unique_handle
+{
+	unique_handle(unique_handle const &) = delete;
+	unique_handle & operator=(unique_handle const &) = delete;
+	void close() throw()
+	{
+		if (*this)
+		{
+			Traits::close(m_value);
+		}
+	}
+	Type m_value;
+public:
+	explicit unique_handle(Type value = Traits::invalid()) throw() :
+		m_value(value)
+	{
+	}
+	~unique_handle() throw()
+	{
+		close();
+	}
+
+private:
+	struct boolean_struct { int member; };
+	typedef int boolean_struct::* boolean_type;
+	bool operator==(unique_handle const &) = delete;
+	bool operator!=(unique_handle const &) = delete;
+public:
+	operator boolean_type() const throw()
+	{
+		return Traits::invalid() != m_value ? &boolean_struct::member : nullptr;
+	}
+	Type get() const throw()
+	{
+		return m_value;
+	}
+	bool reset(Type value = Traits::invalid()) throw()
+	{
+		if (m_value != value)
+		{
+			close();
+			m_value = value;
+		}
+		return *this;
+	}
+	Type release() throw()
+	{
+		auto value = m_value;
+		m_value = Traits::invalid();
+		return value;
+	}
+	unique_handle(unique_handle && other) throw() :
+		m_value(other.release())
+	{
+	}
+	unique_handle & operator=(unique_handle && other) throw()
+	{
+		reset(other.release());
+		return *this;
+	}
+};
+
+struct socket_trait
+{
+	static auto invalid() noexcept
+	{
+		return 0;
+	}
+
+	static auto close(SOCKET value) noexcept
+	{
+		closesocket(value);
+	}
+};
+
+using socket_handle = unique_handle<SOCKET, socket_trait>;
+
+struct socket_client
+{
+	socket_handle handle;
+
+	//TODO is this right?
+	socket_client(socket_handle &handle) : handle(std::move(handle))
+	{			
+	}
+
+	void send(const char * buffer, int len)
+	{
+		::send(handle.get(), buffer, len, 0);
+	}
+};
+
+struct socket_server
+{
+	socket_handle handle;
+
+	auto open(unsigned int port, unsigned int backlog)
+	{
+		auto const result = socket(AF_INET, SOCK_STREAM, 0);
+
+		if (result == INVALID_SOCKET) {
+			throw 1;
+		}
+
+		struct sockaddr_in server;
+		server.sin_family = AF_INET;
+		server.sin_addr.s_addr = INADDR_ANY;
+		server.sin_port = htons(port);
+
+		bind(result, (struct sockaddr *)&server, sizeof(server));
+
+		listen(result, backlog);
+
+		auto localHandle = socket_handle(result);
+		handle = std::move(localHandle);
+	}
+
+	auto accept()
+	{
+		struct sockaddr_in client;
+		int c = sizeof(struct sockaddr_in);
+		auto const result = ::accept(handle.get(), (struct sockaddr *)&client, &c);
+
+		auto localHandle = socket_handle(result);
+		return socket_client(localHandle);
+	}
+};
+
+
 
 int main(int argc, char *argv[])
 {
 	WSADATA wsa;
-	SOCKET s, new_socket;
-	struct sockaddr_in server, client;
-	int c;
-	char *message;
-
 	printf("\nInitialising Winsock...");
 	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
 	{
 		printf("Failed. Error Code : %d", WSAGetLastError());
 		return 1;
 	}
-
 	printf("Initialised.\n");
 
-	//Create a socket
-	if ((s = socket(AF_INET, SOCK_STREAM, 0)) == INVALID_SOCKET)
-	{
-		printf("Could not create socket : %d", WSAGetLastError());
-	}
-
-	printf("Socket created.\n");
-
-	//Prepare the sockaddr_in structure
-	server.sin_family = AF_INET;
-	server.sin_addr.s_addr = INADDR_ANY;
-	server.sin_port = htons(8889);
-
-	//Bind
-	if (bind(s, (struct sockaddr *)&server, sizeof(server)) == SOCKET_ERROR)
-	{
-		printf("Bind failed with error code : %d", WSAGetLastError());
-	}
-
-	puts("Bind done");
-
-	//Listen to incoming connections
-	listen(s, 3);
-
-	//Accept and incoming connection
-	puts("Waiting for incoming connections...");
-
-	c = sizeof(struct sockaddr_in);
-	new_socket = accept(s, (struct sockaddr *)&client, &c);
-	if (new_socket == INVALID_SOCKET)
-	{
-		printf("accept failed with error code : %d", WSAGetLastError());
-	}
-
-	puts("Connection accepted");
-
-	//Reply to client
-	
-	auto message1 = "HTTP/1.1 ";
-	send(new_socket, message1, strlen(message1), 0);
-	Send200OK(new_socket);
-	
-	/*auto message4 = "Content-Length: ";
-	auto message5 = "44\n";
-	send(new_socket, message4, strlen(message4), 0);
-	send(new_socket, message5, strlen(message5), 0);*/
-
-	SendContentTypeHtml(new_socket);
-	SendTransferEncodingChunked(new_socket);
-	SendEndHeaders(new_socket);
-	
-	auto message8 = "2c\r\n<html><body><h1>It works!</h1></body></html>\r\n0\r\n\r\n";
-	send(new_socket, message8, strlen(message8), 0);
-
+	socket_server ss;
+	ss.open(8889, 1);
+	auto sc  = ss.accept();
+	auto response = "HTTP/1.1 200 OK\nContent-Length: 2\n\nOK";
+	sc.send(response, strlen(response));
+			
 	getchar();
-
-	closesocket(s);
 	WSACleanup();
 
 	return 0;
