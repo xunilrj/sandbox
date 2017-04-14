@@ -260,3 +260,4 @@ __pycache__/
 dependencies/
 
 sources/Powershell/Modules/Flyway/Flyway/
+jspm_packages/

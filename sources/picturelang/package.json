@@ -1,0 +1,32 @@
+{
+  "name": "picturelang",
+  "version": "0.0.0",
+  "description": "",
+  "main": "wwwroot/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "jspm": "^0.16.53"
+  },
+  "jspm": {
+    "directories": {
+      "baseURL": "wwwroot"
+    },
+    "dependencies": {
+      "babel-plugin-inferno": "npm:babel-plugin-inferno@^3.2.0",
+      "babel-preset-es2015": "npm:babel-preset-es2015@^6.24.1",
+      "freezer-js": "npm:freezer-js@^0.11.2",
+      "inferno": "npm:inferno@^3.0.4",
+      "inferno-hyperscript": "npm:inferno-hyperscript@^3.0.4",
+      "ramda": "npm:ramda@^0.23.0"
+    },
+    "devDependencies": {
+      "babel": "npm:babel-core@^5.8.24",
+      "babel-runtime": "npm:babel-runtime@^5.8.24",
+      "core-js": "npm:core-js@^1.1.4"
+    }
+  }
+}
