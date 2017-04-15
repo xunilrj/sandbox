@@ -9,6 +9,7 @@
 
 #pragma comment(lib,"ws2_32.lib") //Winsock Library
 
+
 struct handle_traits
 {
 	static HANDLE invalid() throw()
@@ -84,16 +85,45 @@ public:
 	}
 };
 
-struct socket_trait
+struct wsa_trait
 {
 	static auto invalid() noexcept
 	{
 		return 0;
 	}
 
+	static auto close(int value) noexcept
+	{
+		WSACleanup();
+	}
+};
+
+struct wsa
+{
+	unique_handle<int, wsa_trait> handle;
+
+	wsa()
+	{
+		WSADATA wsa;
+		::WSAStartup(MAKEWORD(2, 2), &wsa);
+	}
+};
+
+struct socket_trait
+{
+	static auto invalid() noexcept
+	{
+		return INVALID_SOCKET;
+	}
+
 	static auto close(SOCKET value) noexcept
 	{
-		closesocket(value);
+		//WSAEVENT e = WSACreateEvent();
+		//WSAEventSelect(value, e, FD_CLOSE);
+		::shutdown(value, SD_BOTH);
+		//WSAWaitForMultipleEvents(1, &e, FALSE, WSA_INFINITE, FALSE);
+
+		::closesocket(value);
 	}
 };
 
@@ -105,12 +135,25 @@ struct socket_client
 
 	//TODO is this right?
 	socket_client(socket_handle &handle) : handle(std::move(handle))
-	{			
+	{
+	}
+
+	void receive()
+	{
+		char recvbuf[1024];
+		int recvbuflen = 1024;
+		auto result = recv(handle.get(), recvbuf, recvbuflen, 0);
+
+		recvbuf[result] = 0;
+		printf(recvbuf);
 	}
 
 	void send(const char * buffer, int len)
 	{
-		::send(handle.get(), buffer, len, 0);
+		auto result = ::send(handle.get(), buffer, len, 0);
+		if (result == SOCKET_ERROR) {
+			printf("send failed with error: %d\n", WSAGetLastError());
+		}
 	}
 };
 
@@ -118,9 +161,9 @@ struct socket_server
 {
 	socket_handle handle;
 
-	auto open(unsigned int port, unsigned int backlog)
+	auto open(unsigned int port)
 	{
-		auto const result = socket(AF_INET, SOCK_STREAM, 0);
+		auto const result = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
 		if (result == INVALID_SOCKET) {
 			throw 1;
@@ -131,9 +174,8 @@ struct socket_server
 		server.sin_addr.s_addr = INADDR_ANY;
 		server.sin_port = htons(port);
 
-		bind(result, (struct sockaddr *)&server, sizeof(server));
-
-		listen(result, backlog);
+		::bind(result, (struct sockaddr *)&server, sizeof(server));
+		::listen(result, SOMAXCONN);
 
 		auto localHandle = socket_handle(result);
 		handle = std::move(localHandle);
@@ -141,9 +183,11 @@ struct socket_server
 
 	auto accept()
 	{
-		struct sockaddr_in client;
-		int c = sizeof(struct sockaddr_in);
-		auto const result = ::accept(handle.get(), (struct sockaddr *)&client, &c);
+		auto const result = ::accept(handle.get(), NULL, NULL);
+
+		if (result == INVALID_SOCKET) {
+			printf("accept failed with error: %d\n", WSAGetLastError());
+		}
 
 		auto localHandle = socket_handle(result);
 		return socket_client(localHandle);
@@ -154,22 +198,19 @@ struct socket_server
 
 int main(int argc, char *argv[])
 {
-	WSADATA wsa;
-	printf("\nInitialising Winsock...");
-	if (WSAStartup(MAKEWORD(2, 2), &wsa) != 0)
-	{
-		printf("Failed. Error Code : %d", WSAGetLastError());
-		return 1;
-	}
-	printf("Initialised.\n");
+	wsa wsa;
 
 	socket_server ss;
-	ss.open(8889, 1);
-	auto sc  = ss.accept();
-	auto response = "HTTP/1.1 200 OK\nContent-Length: 2\n\nOK";
-	sc.send(response, strlen(response));
-			
-	getchar();
+	ss.open(8889);
+
+	while (true) {
+		auto sc = ss.accept();
+		auto response = "HTTP/1.1 200 OK\nContent-Length: 2\n\nOK";
+
+		sc.receive();
+		sc.send(response, strlen(response));
+	}
+
 	WSACleanup();
 
 	return 0;
