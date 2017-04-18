@@ -3,6 +3,9 @@
 	*/
 #include<io.h>
 #include<stdio.h>
+#include <string>
+#include <iostream>     // std::cout, std::ios
+#include <sstream> 
 #include<winsock2.h>
 #include "main.h"
 #include <utility>
@@ -194,7 +197,35 @@ struct socket_server
 	}
 };
 
+enum htmltag {
+	htmltag_html,
+	htmltag_head,
+	htmltag_body,
+	htmltag_div
+};
 
+
+struct hypernode
+{
+	hypernode(htmltag tag) : Tag(tag)
+	{
+	}
+	
+	htmltag Tag;
+};
+
+hypernode h(htmltag tag)
+{
+	return hypernode(tag);
+}
+
+void to_html(std::ostringstream& ss, hypernode * node)
+{
+	if (node->Tag == htmltag::htmltag_div)
+	{
+		ss << "<div>ok</div>";
+	}
+}
 
 int main(int argc, char *argv[])
 {
@@ -205,10 +236,21 @@ int main(int argc, char *argv[])
 
 	while (true) {
 		auto sc = ss.accept();
-		auto response = "HTTP/1.1 200 OK\nContent-Length: 2\n\nOK";
-
 		sc.receive();
-		sc.send(response, strlen(response));
+
+		auto document = h(htmltag::htmltag_div);
+
+		auto ss = std::ostringstream();
+		to_html(ss, &document);
+		auto html = ss.str();
+		auto html_size = html.length();
+
+		auto response = std::ostringstream();
+		response << "HTTP/1.1 200 OK\nContent-Length: " << html_size << "\n\n";
+		auto response_str = response.str();
+		
+		sc.send(response_str.c_str(), response_str.length());
+		sc.send(html.c_str(), html_size);
 	}
 
 	WSACleanup();
