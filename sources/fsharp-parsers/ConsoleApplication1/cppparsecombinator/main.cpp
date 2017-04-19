@@ -57,7 +57,17 @@ private:
 
 //2. Denotational semantics.More abstract than operational semantics, computer programs are
 //usually modeled by a function transforming input into output.Most well - known 
-//are Scott and Strachey[92]. 
+//are Scott and Strachey[92].
+
+class DenotationalSemantics
+{
+public:
+	void Run(std::map<std::string, void*> input, std::map<std::string, void*>output)
+	{
+
+	}
+};
+
 //3. Axiomatic semantics.Here, emphasis is put on proof methods proving programs 
 //correct.Central notions are program assertions, proof triples consisting of precondition, 
 //program statement and postcondition, and invariants.Pioneers are Floyd[38] and Hoare[53].
@@ -95,15 +105,15 @@ struct FailureParserResult : ParserResult<TValue>
 };
 
 template <typename TValue>
-std::unique_ptr<ParserResult<TValue>> success(TValue value)
+ParserResult<TValue> success(TValue value)
 {
-	return std::make_unique<SuccessParserResult<TValue>>(value);
+	return SuccessParserResult<TValue>(value);
 }
 
 template <typename TValue>
-std::unique_ptr<ParserResult<TValue>> failure()
+ParserResult<TValue> failure()
 {
-	return std::make_unique<FailureParserResult<TValue>>();
+	return FailureParserResult<TValue>();
 }
 
 template<typename TObject, typename TValue>
@@ -112,18 +122,18 @@ class Parser
 public:
 	typedef typename TObject::iterator TIterator;
 
-	Parser(std::function<std::unique_ptr<ParserResult<TValue>>(TIterator&)> pf) : ParserFunction(pf)
+	Parser(std::function<ParserResult<TValue>(TIterator&)> pf) : ParserFunction(pf)
 	{
 	}
 
-	std::unique_ptr<ParserResult<TValue>> Parse(TIterator& iterator)
+	ParserResult<TValue> Parse(TIterator& iterator) const
 	{
 		auto r = ParserFunction(iterator);
 		++iterator;
 		return r;
 	}
 private:
-	std::function<std::unique_ptr<ParserResult<TValue>>(TIterator&)> ParserFunction;
+	std::function<ParserResult<TValue>(TIterator&)> ParserFunction;
 };
 
 
@@ -132,34 +142,43 @@ namespace builders
 	template<typename T>
 	struct parsers
 	{
-		Parser<typename T, char>* pchar(char c)
+		static Parser<typename T, char> pchar(char c)
 		{
-			return new Parser<typename T, char>([c](T::iterator& iterator) {
+			return Parser<typename T, char>([c](T::iterator& iterator) {
 				auto currentchar = *iterator;
 				if (currentchar == c) return success(currentchar);
 				else return failure<char>();
 			});
 		}
 
-		template<typename TValueL, typename TValueR>
-		static Parser<typename T, std::tuple<TValueL, TValueR>>* andThen(Parser<typename T, TValueL>* l, Parser<typename T, TValueR>* r)
+		template<typename F,
+			typename FReturnType = typename function_traits<F>::result_type,
+			typename FArg0 = typename function_traits<F>::arg<0>::type,
+			typename FArg1 = typename function_traits<F>::arg<1>::type>
+		static Parser<typename T, FReturnType> andThen(Parser<typename T, FArg0> l, Parser<typename T, FArg1> r, F f)
 		{
-			return new Parser<typename T, std::tuple<TValueL, TValueR>>([l, r](typename T::iterator obj) {
-				auto resultl = l->Parse(obj);
-				if (resultl->Success) {
-					auto resultr = r->Parse(obj);
-					if (resultr->Success) {
-						return success(std::make_tuple(resultl->Value, resultr->Value));
+			return Parser<typename T, FReturnType>([l, r, f](typename T::iterator obj) {
+				auto resultl = l.Parse(obj);
+				if (resultl.Success) {
+					auto resultr = r.Parse(obj);
+					if (resultr.Success) {
+						return success(f(resultl.Value, resultr.Value));
 					}
 				}
-				return failure<std::tuple<TValueL, TValueR>>();
+				return failure<FReturnType>();
 			});
+		}
+
+		template<typename TValueL, typename TValueR>
+		static Parser<typename T, std::tuple<TValueL, TValueR>> andThen(Parser<typename T, TValueL> l, Parser<typename T, TValueR> r)
+		{
+			return andThen(l, r, [](TValueL vl, TValueR vr) {return std::make_tuple(vl, vr); });
 		}
 
 		template<typename F,
 			typename TValue = typename function_traits<F>::result_type,
 			typename TValueL = typename function_traits<F>::arg<0>::type>
-			static Parser<typename T, TValue>* map(Parser<typename T, TValueL> * l, F f)
+			static Parser<typename T, TValue> map(Parser<typename T, TValueL> l, F f)
 		{
 			return _map<TValue, TValueL>(l, f);
 		}
@@ -168,49 +187,50 @@ namespace builders
 			typename TValue = typename function_traits<F>::result_type,
 			typename TValueL = typename function_traits<F>::arg<0>::type,
 			typename TValueR = typename function_traits<F>::arg<1>::type>
-			static Parser<typename T, TValue>* map(Parser<typename T, std::tuple<TValueL, TValueR>> * l, F f)
+			static Parser<typename T, TValue> map(Parser<typename T, std::tuple<TValueL, TValueR>> l, F f)
 		{
 			return _map<TValue, TValueL, TValueR>(l, f);
 		}
 
 		template<typename TValue>
-		Parser<typename T, TValue>* ret(TValue value)
+		static Parser<typename T, TValue> ret(TValue value)
 		{
-			return new Parser<typename T, TValue([&value](typename T obj) {
+			return Parser<typename T, TValue>([value](typename T obj) {
 				return success(value);
 			});
 		}
 
+		//lift1 : (FArg0 -> FReturnType) -> (Parser FARg0 -> Parser FReturnType)
 		template<typename F,
-			typename TValue = typename function_traits<F>::result_type,
-			typename TValueL = typename function_traits<F>::arg<0>::type>
-			std::function<Parser<typename T, TValue>*(Parser<typename T, TValueL>*)> lift1(F f)
+			typename FReturnType = typename function_traits<F>::result_type,
+			typename FArg0 = typename function_traits<F>::arg<0>::type>
+			static std::function<Parser<typename T, FReturnType>(Parser<typename T, FArg0>)> lift1(F f)
 		{
-			return [this, f](Parser<typename T, TValueL>* l) {
-				return this->map(l, f);
+			return [f](Parser<typename T, FArg0> l) {
+				return map(l, f);
 			};
 		}
 
+		//lift2: (FArg0 -> FArg1 -> FReturnType) -> (Parser FArg0 -> Parser FArg1 -> Parser FReturnType)
 		template<typename F,
-			typename TValue = typename function_traits<F>::result_type,
-			typename TValueL = typename function_traits<F>::arg<0>::type,
-			typename TValueR = typename function_traits<F>::arg<1>::type>
-			std::function<Parser<typename T, TValue>*(Parser<typename T, TValueL>*, Parser<typename T, TValueR>*)> lift2(F f)
+			typename FReturnType = typename function_traits<F>::result_type,
+			typename FArg0 = typename function_traits<F>::arg<0>::type,
+			typename FArg1 = typename function_traits<F>::arg<1>::type>
+			static std::function<Parser<typename T, FReturnType>(Parser<typename T, FArg0>, Parser<typename T, FArg1>)> lift2(F f)
 		{
-			return [this, f](Parser<typename T, TValueL>* l, Parser<typename T, TValueR>* r) {
-				auto p = andThen(l, r);
-				return this->map(p, f);
+			return [f](Parser<typename T, FArg0> l, Parser<typename T, FArg1> r) {
+				return andThen(l, r, f);
 			};
 		}
 
 	private:
 		template<typename TValue, typename TValueL>
-		static Parser<typename T, TValue>* _map(Parser<typename T, TValueL> * l, std::function<TValue(TValueL)> f)
+		static Parser<typename T, TValue> _map(Parser<typename T, TValueL> l, std::function<TValue(TValueL)> f)
 		{
-			return new Parser<typename T, TValue>([l, f](typename T::iterator obj) {
-				auto r = l->Parse(obj);
-				if (r->Success) {
-					auto value = f(r->Value);
+			return  Parser<typename T, TValue>([l, f](typename T::iterator obj) {
+				auto r = l.Parse(obj);
+				if (r.Success) {
+					auto value = f(r.Value);
 					return success(value);
 				}
 				return failure<TValue>();
@@ -218,13 +238,13 @@ namespace builders
 		}
 
 		template<typename TValue, typename TValueL, typename TValueR>
-		static Parser<typename T, TValue>* _map(Parser<typename T, std::tuple<TValueL, TValueR>> * l, std::function<TValue(TValueL, TValueR)> f)
+		static Parser<typename T, TValue> _map(Parser<typename T, std::tuple<TValueL, TValueR>> l, std::function<TValue(TValueL, TValueR)> f)
 		{
-			return new Parser<typename T, TValue>([l, f](typename T::iterator obj) {
-				auto r = l->Parse(obj);
-				if (r->Success) {
-					auto valuel = std::get<0>(r->Value);
-					auto valuer = std::get<1>(r->Value);
+			return Parser<typename T, TValue>([l, f](typename T::iterator obj) {
+				auto r = l.Parse(obj);
+				if (r.Success) {
+					auto valuel = std::get<0>(r.Value);
+					auto valuer = std::get<1>(r.Value);
 					auto value = f(valuel, valuer);
 					return success(value);
 				}
@@ -235,17 +255,17 @@ namespace builders
 }
 
 template<typename T, typename TValueL, typename TValueR>
-Parser<typename T, std::tuple<TValueL, TValueR>>* operator & (Parser<typename T, TValueL>& l, Parser<typename T, TValueR>& r)
+Parser<typename T, std::tuple<TValueL, TValueR>> operator & (Parser<typename T, TValueL> l, Parser<typename T, TValueR> r)
 {
-	return builders::parsers<T>::andThen(&l, &r);
+	return builders::parsers<T>::andThen(l, r);
 }
 
 template<typename T, typename F,
 	typename TValue = typename function_traits<F>::result_type,
 	typename TValueL = typename function_traits<F>::arg<0>::type>
-	Parser<typename T, TValue>* operator >> (Parser<typename T, TValueL>& l, F f)
+	Parser<typename T, TValue> operator >> (Parser<typename T, TValueL> l, F f)
 {
-	return builders::parsers<T>::map(&l, f);
+	return builders::parsers<T>::map(l, f);
 }
 
 void main()
@@ -260,11 +280,11 @@ void main()
 	auto sum = [](int l, int r) {return l + r; };
 
 	//PARSER COMPOSITION WITH OPERATORS
-	auto * p1 = stringparser.pchar('1');
-	auto * p11 = *(*(*p1 >> atoi) & *(*p1 >> atoi)) >> sum;
+	auto p1 = stringparser.pchar('1');
+	auto p11 = ((p1 >> atoi) & (p1 >> atoi)) >> sum;
 
-	auto result = p11->Parse(i);
-	assert(result->Value == 2);
+	auto result = p11.Parse(i);
+	assert(result.Value == 2);
 
 	//PARSER COMPOSITION WITH LIFTEDFUNCTIONS
 	auto pAtoi = stringparser.lift1(atoi);
@@ -272,6 +292,6 @@ void main()
 	p11 = pSum(pAtoi(p1), pAtoi(p1));
 
 	i = text.begin();
-	result = p11->Parse(i);
-	assert(result->Value == 2);
+	result = p11.Parse(i);
+	assert(result.Value == 2);
 }
