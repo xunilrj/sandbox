@@ -19,10 +19,11 @@
 \contentsline {subsubsection}{\numberline {1.2.11}Event Based Architecture}{5}{subsubsection.1.2.11}
 \contentsline {subsubsection}{\numberline {1.2.12}Resiliency}{5}{subsubsection.1.2.12}
 \contentsline {subsection}{\numberline {1.3}Programming Paradigms}{5}{subsection.1.3}
-\contentsline {subsubsection}{\numberline {1.3.1}Process Theory}{5}{subsubsection.1.3.1}
-\contentsline {subsubsection}{\numberline {1.3.2}Object Oriented}{5}{subsubsection.1.3.2}
-\contentsline {subsubsection}{\numberline {1.3.3}Generic Programming}{6}{subsubsection.1.3.3}
-\contentsline {subsubsection}{\numberline {1.3.4}Dynamic Dispatch}{6}{subsubsection.1.3.4}
+\contentsline {subsubsection}{\numberline {1.3.1}Language Analysis}{5}{subsubsection.1.3.1}
+\contentsline {subsubsection}{\numberline {1.3.2}Process Theory}{5}{subsubsection.1.3.2}
+\contentsline {subsubsection}{\numberline {1.3.3}Object Oriented}{5}{subsubsection.1.3.3}
+\contentsline {subsubsection}{\numberline {1.3.4}Generic Programming}{6}{subsubsection.1.3.4}
+\contentsline {subsubsection}{\numberline {1.3.5}Dynamic Dispatch}{6}{subsubsection.1.3.5}
 \contentsline {subsection}{\numberline {1.4}Database}{6}{subsection.1.4}
 \contentsline {subsection}{\numberline {1.5}Data Fusion}{7}{subsection.1.5}
 \contentsline {section}{\numberline {2}Mathematics}{7}{section.2}
