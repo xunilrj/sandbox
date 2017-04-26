@@ -44,3 +44,24 @@ function ??? {
         }
     }
 }
+
+function ...
+{
+    param([Parameter(Position=0)]$Expression, [Parameter(Position = 1)]$Count = 999, [Parameter(Position = 2)]$SleepMs = 1000)
+    do
+    {
+        try{
+            $result = $Expression.Invoke()
+        }catch
+        {
+            $result = $null
+        }
+
+        if($result -eq $null)
+        {
+            Start-Sleep -Milliseconds $SleepMs
+        }
+        --$Count
+    }while($result -eq $null -and $Count -gt 0)
+    $result
+}
