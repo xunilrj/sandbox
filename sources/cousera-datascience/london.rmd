@@ -1,0 +1,34 @@
+---
+title: "London Tube"
+author: "Daniel Frederico Lins Leite"
+date: "21 April 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(leaflet)
+library(jsonlite)
+library(RCurl)
+library(dplyr)
+```
+
+## Realtime London Underground Position
+
+page created at 2017-04-21 by Daniel Leite
+
+```{r}
+raw_data <- getURL("http://traintimes.org.uk/map/tube/data/london.json")
+
+data <- fromJSON(raw_data, flatten = TRUE)
+trains <- data$trains
+trains["lat"] <- sapply(data$trains$point, function(x) x[1])
+trains["long"] <- sapply(data$trains$point, function(x) x[2])
+
+subicon <- makeIcon("http://cdn2.iconfinder.com/data/icons/circle-icons-1/64/train-32.png", 32, 32)
+trains %>% 
+  leaflet() %>%
+  addTiles() %>%
+  addMarkers(popup = trains$title, icon = subicon)
+```
+

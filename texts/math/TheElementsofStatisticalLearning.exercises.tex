@@ -1,0 +1,239 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{bbm}
+\author{Daniel Frederico Lins Leite}
+\begin{document}
+	\section{Exercise 2.1}
+	Suppose each of K classes has an associated target $t_k$, which is a vector of all zeros, except a one in the k-th position. Show that classifying to the largest element of \^{y} amounts to choosing the closest target, $argmin_k ||t_k - \hat{y}||$, if the elements of \^{y} sum to one.
+	
+	\subsection{Interpretation}
+	This problem can be interpreted as a "target coding scheme". This specific target coding is can be found in the following papers:
+	
+	\url{http://ieeexplore.ieee.org/document/88570/}\\
+	\url{https://www.researchgate.net/publication/3191927_Optimized_feature_extraction_and_the_Bayes_decision_in_feed-forwardclassifier_networks}
+	\begin{quote}
+		This may be viewed as a gain matrix in which the gain of
+		assigning to class j a pattern which belongs to class i is zero
+		($i \ne j$) , but is unity for correct classification.
+	\end{quote}
+	
+	\url{http://personal.ie.cuhk.edu.hk/~ccloy/files/aaai_2015_target_coding.pdf}
+	\begin{quote}
+		The 1-of-K coding, containing vectors of length K, with the k-th element as one and the remaining zeros, is typically used along with a softmax function for classification. Each element in a 1-of-K code represents a probability of a specific class. 
+	\end{quote}
+	
+	This paper also contains a more general definition of target coding, but it is not necessary for this exercise.
+	
+	Following, we can say that:
+	
+	\begin{align*}
+		t = \left[ \begin{array}{c}
+		t_1 \\
+		t_2 \\
+		\vdots \\
+		t_K \end{array} \right] = \left[ \begin{array}{cccc}
+		1 & 0 & \dots & 0 \\
+		0 & 1 & \dots & 0 \\
+		\vdots & \vdots & \ddots & \vdots \\
+		0 & 0 & \dots & 1 \end{array} \right]
+	\end{align*}
+	
+	In the problem, $\hat{y}$ can be considered as the prediction of a vector $x$ such that $y_k$ is the probability of $x$ being of the class $k$. That is why the sum of $y_k$ is equal to $1$.This also demands that $y_k$ are greater than $0$, although this does not make difference for this particular exercise.
+	
+	And now we arrive to the proof part: the k in which the $\hat{y}_k$ is the greatest, the class that we would choose in our prediction is the same $k$ of the $t_k$ that is nearer to the $\hat{y}$. In mathematical symbols:
+	
+	\begin{align*}
+		\arg\min_k ||\hat{y}-t_k||\\
+	\end{align*}	
+	
+	\subsection{Solution}
+	
+	\begin{align*}
+		K &> 0\\
+		\\
+		x &\in \Re^N\\
+		y &= f(x)\\
+		&	\sum_{i=1}^{K}{y_i} = 1\\
+		&	y_i \ge 0, i \in {1,...,K}\\
+		\\
+		1 &\ge k \ge K\\
+		t_k &= (t_{k1},...,t_{ki},...,t_{kK}), t_{ki} = \begin{cases}
+			0 &\mbox{if } i \neq k\\
+			1 &\mbox{if } i = k
+		\end{cases}
+		\\
+		\arg\min_k||t_k - \hat{y}|| &= \arg\min_k||y-t_k||^2\\
+		&= \arg\min_k\sum_{i=1}^{K}{(y_i-t_{ki})}^2\\
+		&= \arg\min_k\sum_{i=1}^{K}{(y_{i}^2-2y_{i}t_{ki}+t_{ki}^2)}\\
+		&= \arg\min_k\big[\sum_{i=1}^{K}{y_{i}^2}+\sum_{i=1}^{K}{(-2y_{i}t_{ki}+t_{ki}^2)}\big]
+	\end{align*}
+	Since $\sum_{i=1}^{K}{y_{i}^2}$ is a constant and does not depend on k
+	\begin{align*}
+		&= \arg\min_k \sum_{i=1}^{K}{(-2y_{i}t_{ki}+t_{ki}^2)}\\
+		&= \arg\min_k\big[\sum_{i=1}^{K}{(-2y_{i}t_{ki})}+\sum_{i=1}^{K}{t_{ki}^2}\big]\\
+	\end{align*}
+	Since $\sum_{i=1}^{K}{t_{ki}^2} = 1$
+	\begin{align*}
+		&= \arg\min_k\big[\sum_{i=1}^{K}{(-2y_{i}t_{ki})}+1\big]
+	\end{align*}
+	Since $\sum_{i=1}^{K}{y_{i}t_{ki}} = y_k$, because $t_k$ is zero in all but $i=k$ position.
+	\begin{align*}
+		&= \arg\min_k\big[-2*\sum_{i=1}^{K}{y_{i}t_{ki}}+1\big]\\
+		&= \arg\min_k\big[-2y_k+1\big] &&\mbox{(argmax plus constant)}\\
+		&= \arg\min_k\big[-2y_k\big] &&\mbox{(argmax times constant)}\\
+		&= \arg\min_k\big[-y_k\big] &&\mbox{(argmax inverse argmin)}\\
+		&= \arg\max_k\big[y_k\big] &&\mbox{(argmax inverse argmin)}
+	\end{align*}
+	
+	Which give us that:
+	\begin{align*}
+		\arg\min_k ||\hat{y}-t_k|| &= \arg\max_k\big[y_k\big]
+	\end{align*}
+	
+	This problem can be interpreted as the proof of why in book the author says:
+	\begin{quote}
+		With the 0-1 loss function [...] the solution is known as the Bayes classifier, and says that
+		we classify to the most probable class, using the conditional (discrete) distribution $Pr(G|X)$.
+	\end{quote}
+
+	\section{Exercise 2.2}
+	
+	From the previous exercise, we know that the Bayes Classifier, will classify the point to the most probable class. So, the boundary is located exactly where there is no clear most probable class. 
+	To simplify let us imagine that we have just 2 classes.
+	
+	\begin{align*}
+		P(K_1|X) = P(K_2|X)\\
+		\frac{P(K_1,X)}{P(X)} = \frac{P(K_2,X)}{P(X)}\\
+		\frac{P(X|K_1)P(K_1)}{P(X)} = \frac{P(X|K_2)P(K_2)}{P(X)}\\
+	\end{align*}
+	
+	$P(X|K_i)$ is the same as the likelihood of seeing X using a generative model from the i-th class. If we suppose that all classes come from a Gaussian Distribution, this simplify to:
+	
+	\begin{align*}
+		\frac{\mathcal{L}(\theta_1|X)P(K_1)}{P(X)} = \frac{\mathcal{L}(\theta_2|X)P(K_2)}{P(X)}\\
+	\end{align*}
+	
+	To calculate $P(X)$ we can marginalize $X$ over all possibilities, in this case two, so:
+	
+	\begin{align*}
+		P(X) &= \sum_{k\in K}{P(X|K=k)}\\
+		&= \sum_{k\in K}{\mathcal{L}(\theta_k|X)}
+	\end{align*}
+	
+	So now we have:
+	
+	\begin{align*}
+		\frac{P(X|K_1)P(K_1)}{\sum_{k\in K}{\mathcal{L}(\theta_k|X)}} = \frac{P(X|K_2)P(K_2)}{\sum_{k\in K}{\mathcal{L}(\theta_k|X)}}\\
+	\end{align*}
+	
+	But we can simplify it.
+
+	\begin{align*}
+		P(X|K_1)P(K_1) = P(X|K_2)P(K_2)\\
+	\end{align*}
+	
+	We can do the same for $P(K_1)$
+	
+	\begin{align*}
+		P(K_1) &= \int_{x\in X}{P(K_1|X)P(dx)}\\
+		&= \int_{x\in X}{P(K_1|X)P(dx)}\\
+		&= \int_{x\in X}{\mathcal{L}(X|\theta_1)P(dx)}
+	\end{align*}
+	
+	Which give us the final formula:
+	
+	\begin{align*}
+			P(X|K_1)\int_{x\in X}{\mathcal{L}(X|\theta_1)P(dx)} = P(X|K_2)\int_{x\in X}{\mathcal{L}(X|\theta_2)P(dx)}\\
+	\end{align*}
+	
+	The first possible simplification is to estimate $P(K_i)$ and two possible ways:
+	- First, we can say that they both have the same probability;
+	- Second, if we have a dataset we can calculate them by
+	\begin{align*}
+		P(K_1) = \frac{\sum_{y_i\in Y}{\mathbbm{1}(y_i = k_1)}}{N}\\
+		P(K_2) = \frac{\sum_{y_i\in Y}{\mathbbm{1}(y_i = k_2)}}{N}\\
+	\end{align*}
+	
+	Equal Prior Distributions:
+	
+	In this case the equality can be simplified to
+	
+	\begin{align*}
+	P(X|K_1) = P(X|K_2)\\
+	\end{align*}
+	
+	For futher simplification we can imagine a two dimensional X:
+	
+	\begin{align*}
+	P(x_1,x_2|K_1) = P(x_1,x_2|K_2)\\
+	\end{align*}
+	
+	if we choose another simplification, that x1 and x2 and independent, we arrive at a Naive Bayer Classifier, and the equation become:
+	
+	\begin{align*}
+	P(x_1|K_1)P(x_2|K_1) = P(x_1|K_2)P(x_2|K_2)
+	\end{align*}
+	
+	with two classes and Gaussian distribution:
+	Different mean, same variance = line/plane
+	Same mean, different variance = circle/elipse
+	general case = parabolic curve
+	
+	with more than two cases will be a piecewise combination of the above three cases.
+	
+	\begin{align*}
+(\frac{1}{\sqrt{2\pi\sigma_1^2}}e^{-\frac{(x_1-\mu_1)^2}{2\sigma_1^2}})(\frac{1}{\sqrt{2\pi\sigma_1^2}}e^{-\frac{(x_2-\mu_1)^2}{2\sigma_1^2}}) &= (\frac{1}{\sqrt{2\pi\sigma_2^2}}e^{-\frac{(x_1-\mu_2)^2}{2\sigma_2^2}})(\frac{1}{\sqrt{2\pi\sigma_2^2}}e^{-\frac{(x_2-\mu_2)^2}{2\sigma_2^2}})\\
+(\frac{1}{\sqrt{2\pi\sigma_1^2}})^2(e^{-\frac{(x_1-\mu_1)^2}{2\sigma_1^2}})(e^{-\frac{(x_2-\mu_1)^2}{2\sigma_1^2}}) &= (\frac{1}{\sqrt{2\pi\sigma_2^2}})^2(e^{-\frac{(x_1-\mu_2)^2}{2\sigma_2^2}})(e^{-\frac{(x_2-\mu_2)^2}{2\sigma_2^2}})\\
+	A &= (\frac{1}{\sqrt{2\pi\sigma_1^2}})^2\\
+	B &= (\frac{1}{\sqrt{2\pi\sigma_2^2}})^2\\
+	C &= -\frac{1}{2\sigma^2}\\
+	A(e^{\frac{(x_1-\mu_1)^2}{C}})(e^{\frac{(x_2-\mu_1)^2}{C}}) &= B(e^{\frac{(x_1-\mu_2)^2}{C}})(e^{\frac{(x_2-\mu_2)^2}{C}})\\
+	A\frac{(e^{\frac{(x_1-\mu_1)^2}{C}})}{(e^{\frac{(x_1-\mu_2)^2}{C}})} &= B\frac{(e^{\frac{(x_2-\mu_2)^2}{C}})}{(e^{\frac{(x_2-\mu_1)^2}{C}})}\\
+	Ae^{\frac{(x_1-\mu_1)^2}{C}*\frac{C}{(x_1-\mu_2)^2}} &= Be^{\frac{(x_2-\mu_2)^2}{C}*\frac{C}{(x_2-\mu_1)^2}}\\
+	Ae^{\frac{(x_1-\mu_1)^2}{(x_1-\mu_2)^2}} &= Be^{\frac{(x_2-\mu_2)^2}{(x_2-\mu_1)^2}}\\
+	ln(Ae^{\frac{(x_1-\mu_1)^2}{(x_1-\mu_2)^2}}) &= ln(Be^{\frac{(x_2-\mu_2)^2}{(x_2-\mu_1)^2}})\\
+	ln(A)ln(e^{\frac{(x_1-\mu_1)^2}{(x_1-\mu_2)^2}}) &= ln(B)ln(e^{\frac{(x_2-\mu_2)^2}{(x_2-\mu_1)^2}})\\
+	A'=ln(A)\\
+	B'=ln(B)\\
+	A'\frac{(x_1-\mu_1)^2}{(x_1-\mu_2)^2} &= B'\frac{(x_2-\mu_2)^2}{(x_2-\mu_1)^2}\\
+	A'(\frac{x_1-\mu_1}{x_1-\mu_2})^2 &= B'(\frac{x_2-\mu_2}{x_2-\mu_1})^2\\
+	(\frac{x_1-\mu_1}{x_1-\mu_2})^2 &= \frac{B'}{A'}(\frac{x_2-\mu_2}{x_2-\mu_1})^2\\
+	\frac{x_1-\mu_1}{x_1-\mu_2} &= \sqrt{\frac{B'}{A'}(\frac{x_2-\mu_2}{x_2-\mu_1})^2}\\
+	\frac{x_1-\mu_1}{x_1-\mu_2} &= (\frac{x_2-\mu_2}{x_2-\mu_1})\sqrt{\frac{B'}{A'}}\\
+	C' = \sqrt{\frac{B'}{A'}}\\
+	\frac{x_1-\mu_1}{x_1-\mu_2} &= C'(\frac{x_2-\mu_2}{x_2-\mu_1})\\
+	\end{align*}
+	
+	We can simplify the left side of the equation, because:
+	
+	\begin{align*}
+		\frac{x-\mu_1}{x-\mu_2} &= \frac{x-\mu_2+\mu_2+\mu_1}{x-\mu_2}\\
+		&= \frac{x-\mu_2}{x-\mu_2}+\frac{\mu_2+\mu_1}{x-\mu_2}\\
+		&= 1 + \frac{\mu_2+\mu_1}{x-\mu_2}
+	\end{align*}
+	
+	and
+	
+	\begin{align*}
+	\frac{x_2-\mu_2}{x_2-\mu_1} &= \frac{x_2-\mu_1+\mu_1-\mu_2}{x_2-\mu_1}\\
+	&= \frac{x_2-\mu_1}{x_2-\mu_1}+\frac{\mu_1-\mu_2}{x_2-\mu_1}\\
+	&= 1 +\frac{\mu_1-\mu_2}{x_2-\mu_1}
+	\end{align*}
+	
+	\begin{align*}
+	\frac{x_1-\mu_1}{x_1-\mu_2} &= C'(\frac{x_2-\mu_2}{x_2-\mu_1})\\
+	1 + \frac{\mu_2+\mu_1}{x_1-\mu_2} &= C'(1 +\frac{\mu_1-\mu_2}{x_2-\mu_1})\\
+	\frac{\mu_2+\mu_1}{x_1-\mu_2} &= C'(1 +\frac{\mu_1-\mu_2}{x_2-\mu_1}) - 1\\
+	\frac{1}{x_1-\mu_2} &=\frac{C'(1 +\frac{\mu_1-\mu_2}{x_2-\mu_1}) - 1}{\mu_2+\mu_1}\\
+	x_1-\mu_2 &=\frac{\mu_2+\mu_1}{C'(1 +\frac{\mu_1-\mu_2}{x_2-\mu_1}) - 1}\\
+	x_1 &=\frac{\mu_2+\mu_1}{C'(1 +\frac{\mu_1-\mu_2}{x_2-\mu_1}) - 1} + \mu_2\\
+	x_1 &=\frac{\mu_2+\mu_1}{\sqrt{\frac{ln(B)}{ln(A)}}(1 +\frac{\mu_1-\mu_2}{x_2-\mu_1}) - 1} + \mu_2\\
+	x_1 &=\frac{\mu_2+\mu_1}{\sqrt{\frac{ln( (\frac{1}{\sqrt{2\pi\sigma_2^2}})^2)}{ln((\frac{1}{\sqrt{2\pi\sigma_1^2}})^2)}}(1 +\frac{\mu_1-\mu_2}{x_2-\mu_1}) - 1} + \mu_2\\
+	\end{align*}
+	
+\end{document}

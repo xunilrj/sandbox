@@ -227,8 +227,43 @@ void to_html(std::ostringstream& ss, hypernode * node)
 	}
 }
 
+typedef bool(*testFunction)();
+
 int main(int argc, char *argv[])
 {
+	HINSTANCE hDll = LoadLibraryA("server\\server.dll");
+	if (hDll)
+	{
+		auto dllFunction = (testFunction)GetProcAddress(hDll, "example");
+		dllFunction();
+	}
+
+	/*HANDLE dwChangeHandles;
+	dwChangeHandles = FindFirstChangeNotificationA(
+		"C:\\github\\xunilrj-sandbox\\sources\\cppserver\\Win32Project1\\Debug\\server",
+		FALSE,                         
+		FILE_NOTIFY_CHANGE_LAST_WRITE);
+
+	DWORD dwWaitStatus = WaitForSingleObject(dwChangeHandles, INFINITE);
+
+	switch (dwWaitStatus)
+	{
+		case WAIT_OBJECT_0:
+		{
+			FreeLibrary(hDll);
+			break;
+		}
+	}
+
+	hDll = LoadLibraryA("server\\server.dll");
+	if (hDll)
+	{
+		auto dllFunction = (testFunction)GetProcAddress(hDll, "example");
+		dllFunction();
+	}*/
+
+	
+
 	wsa wsa;
 
 	socket_server ss;

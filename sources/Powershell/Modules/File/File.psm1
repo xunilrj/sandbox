@@ -50,4 +50,31 @@ function ConvertFrom-Xml
     }
 }
 
+function Watch-Item
+{
+    param([Parameter(Position=0)]$Expression,[Parameter(Position=1)]$Path,[Parameter(Position=2)]$Filter)
+
+    if($Expression -eq $null){
+        $Expression = [scriptblock]::Create('')
+    }
+
+    if([string]::IsNullOrEmpty($Path)) { $Path = ((gl).Path) }
+    if([string]::IsNullOrEmpty($Filter)) { $Filter = "*.*" }
+
+    $watcher = New-Object IO.FileSystemWatcher $Path, $Filter -Property @{ 
+        IncludeSubdirectories = $false
+        EnableRaisingEvents = $true
+    }
+
+
+    $event = Register-ObjectEvent $watcher "Changed" -Action $Expression
+
+    while($true){
+        Start-Sleep -Seconds 1
+        $job = Get-Job $event.Id
+        $job | Receive-Job
+    }
+    Unregister-Event = $event.Id
+}
+
 Set-Alias xml ConvertFrom-xml
