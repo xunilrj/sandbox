@@ -12,7 +12,6 @@
 
 #pragma comment(lib,"ws2_32.lib") //Winsock Library
 
-
 struct handle_traits
 {
 	static HANDLE invalid() throw()
@@ -121,11 +120,7 @@ struct socket_trait
 
 	static auto close(SOCKET value) noexcept
 	{
-		//WSAEVENT e = WSACreateEvent();
-		//WSAEventSelect(value, e, FD_CLOSE);
 		::shutdown(value, SD_BOTH);
-		//WSAWaitForMultipleEvents(1, &e, FALSE, WSA_INFINITE, FALSE);
-
 		::closesocket(value);
 	}
 };
@@ -197,6 +192,148 @@ struct socket_server
 	}
 };
 
+struct watcher_trait
+{
+	static auto invalid() noexcept
+	{
+		return INVALID_HANDLE_VALUE;
+	}
+
+	static auto close(HANDLE value) noexcept
+	{
+		FindCloseChangeNotification(value);
+	}
+};
+
+using watcher_handle = unique_handle<HANDLE, watcher_trait>;
+
+struct file_watcher
+{
+	file_watcher(std::string path) : handle(FindFirstChangeNotificationA(
+		path.c_str(),
+		FALSE,
+		FILE_NOTIFY_CHANGE_LAST_WRITE))
+	{
+	}
+
+	bool wait()
+	{
+		auto status = WaitForSingleObject(handle.get(), INFINITE);
+		switch (status)
+		{
+			case WAIT_OBJECT_0:return true;
+			default: return false;
+		}
+	}
+private:
+	watcher_handle handle;
+};
+
+class completion_port
+{
+	HANDLE h;
+	HANDLE hf;
+	completion_port(completion_port const &);
+	completion_port & operator=(completion_port const &);
+public:
+	explicit completion_port(DWORD tc = 0) :
+		h(CreateIoCompletionPort(INVALID_HANDLE_VALUE, nullptr, 0, tc))
+	{
+		//ASSERT(h);
+	}
+	~completion_port()
+	{
+		CloseHandle(h);
+	}
+	void add_file(HANDLE f, ULONG_PTR k = 0)
+	{
+		hf = f;
+		auto r = CreateIoCompletionPort(f, h, k, 0);
+	}
+	void queue(DWORD c, ULONG_PTR k, OVERLAPPED * o)
+	{
+		PostQueuedCompletionStatus(h, c, k, o);
+	}
+	void dequeue(DWORD & c, ULONG_PTR & k, OVERLAPPED *& o)
+	{
+		GetQueuedCompletionStatus(h, &c, &k, &o, INFINITE);
+	}
+	void when()
+	{
+		OVERLAPPED o = {};
+		char b[64];
+		auto io = CreateThreadpoolIo(hf, [](PTP_CALLBACK_INSTANCE Instance,
+			PVOID                 Context,
+			PVOID                 Overlapped,
+			ULONG                 IoResult,
+			ULONG_PTR             NumberOfBytesTransferred,
+			PTP_IO                Io)
+		{
+		}, b, nullptr);
+		auto error = GetLastError();
+
+		StartThreadpoolIo(io);
+	}
+};
+
+struct namedpipe_trait
+{
+	static auto invalid() noexcept
+	{
+		return INVALID_HANDLE_VALUE;
+	}
+
+	static auto close(HANDLE value) noexcept
+	{
+		CloseHandle(value);
+	}
+};
+
+using namedpipe_handle = unique_handle<HANDLE, namedpipe_trait>;
+
+class namedpipe
+{
+public:
+	namedpipe() : handle(CreateNamedPipe(
+		L"\\\\.\\pipe\\my_pipe", // name of the pipe
+		PIPE_ACCESS_DUPLEX |        // read/write access
+		FILE_FLAG_OVERLAPPED,       // overlapped mode
+		PIPE_TYPE_MESSAGE |         // message-type pipe
+		PIPE_READMODE_MESSAGE |     // message read mode
+		PIPE_WAIT,                  // blocking mode
+		PIPE_UNLIMITED_INSTANCES,   // unlimited instances
+		1024,                   // output buffer size
+		1024,                   // input buffer size
+		0,               // client time-out
+		NULL))
+	{
+	}
+
+	void associate(completion_port & port)
+	{
+		port.add_file(handle.get());
+	}
+
+	void connect()
+	{
+		ConnectNamedPipe(handle.get(), NULL);
+	}
+
+	void enqueue()
+	{
+		const wchar_t *data = L"*** Hello Pipe World ***";
+		DWORD numBytesWritten = 0;
+		WriteFile(handle.get(),
+			data, // data to send
+			wcslen(data) * sizeof(wchar_t), // length of data to send (bytes)
+			&numBytesWritten, // will store actual amount of data sent
+			NULL // not using overlapped IO
+		);
+	}
+private:
+	namedpipe_handle handle;
+};
+
 enum htmltag {
 	htmltag_html,
 	htmltag_head,
@@ -210,7 +347,7 @@ struct hypernode
 	hypernode(htmltag tag) : Tag(tag)
 	{
 	}
-	
+
 	htmltag Tag;
 };
 
@@ -227,42 +364,83 @@ void to_html(std::ostringstream& ss, hypernode * node)
 	}
 }
 
-typedef bool(*testFunction)();
+typedef void(*testFunction)();
+
+#include "MemoryModule.h"
+
+void* ReadLibrary(size_t* pSize) {
+	size_t read;
+	void* result;
+	FILE* fp;
+	fp = fopen("C:\\github\\xunilrj-sandbox\\sources\\cppserver\\Win32Project1\\Debug\\server\\server.dll", "rb");
+	fseek(fp, 0, SEEK_END);
+	*pSize = static_cast<size_t>(ftell(fp));
+	if (*pSize == 0)
+	{
+		fclose(fp);
+		return NULL;
+	}
+
+	result = (unsigned char *)malloc(*pSize);
+	fseek(fp, 0, SEEK_SET);
+	read = fread(result, 1, *pSize, fp);
+	fclose(fp);
+	return result;
+}
+
+void LoadFromMemory(void)
+{
+	void *data;
+	size_t size;
+	HMEMORYMODULE handle;
+	testFunction f;
+	HMEMORYRSRC resourceInfo;
+	DWORD resourceSize;
+	LPVOID resourceData;
+	TCHAR buffer[100];
+	data = ReadLibrary(&size);
+	handle = MemoryLoadLibrary(data, size);
+
+	f = (testFunction)MemoryGetProcAddress(handle, "start");
+	f();
+
+	resourceInfo = MemoryFindResource(handle, MAKEINTRESOURCE(VS_VERSION_INFO), RT_VERSION);
+	resourceSize = MemorySizeofResource(handle, resourceInfo);
+	resourceData = MemoryLoadResource(handle, resourceInfo);
+	MemoryLoadString(handle, 1, buffer, sizeof(buffer));
+	MemoryLoadString(handle, 20, buffer, sizeof(buffer));
+	MemoryFreeLibrary(handle);
+
+	free(data);
+}
+
+#include <chrono>
+#include <thread>
 
 int main(int argc, char *argv[])
 {
-	HINSTANCE hDll = LoadLibraryA("server\\server.dll");
-	if (hDll)
+	/*completion_port p;
+
+	std::string dllpath = "C:\\github\\xunilrj-sandbox\\sources\\cppserver\\Win32Project1\\Debug\\server";
 	{
-		auto dllFunction = (testFunction)GetProcAddress(hDll, "example");
-		dllFunction();
+		auto path = file_watcher(dllpath);
+		path.wait();
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 	}
-
-	/*HANDLE dwChangeHandles;
-	dwChangeHandles = FindFirstChangeNotificationA(
-		"C:\\github\\xunilrj-sandbox\\sources\\cppserver\\Win32Project1\\Debug\\server",
-		FALSE,                         
-		FILE_NOTIFY_CHANGE_LAST_WRITE);
-
-	DWORD dwWaitStatus = WaitForSingleObject(dwChangeHandles, INFINITE);
-
-	switch (dwWaitStatus)
-	{
-		case WAIT_OBJECT_0:
-		{
-			FreeLibrary(hDll);
-			break;
-		}
-	}
-
-	hDll = LoadLibraryA("server\\server.dll");
-	if (hDll)
-	{
-		auto dllFunction = (testFunction)GetProcAddress(hDll, "example");
-		dllFunction();
-	}*/
-
+	*/
 	
+	completion_port port;
+	namedpipe pipe;
+	pipe.associate(port);
+	port.when();
+
+	TrySubmitThreadpoolCallback([](PTP_CALLBACK_INSTANCE, void *)
+	{
+		LoadFromMemory();
+	},
+		nullptr, nullptr);
+	pipe.connect();
+	pipe.enqueue();
 
 	wsa wsa;
 
@@ -283,7 +461,7 @@ int main(int argc, char *argv[])
 		auto response = std::ostringstream();
 		response << "HTTP/1.1 200 OK\nContent-Length: " << html_size << "\n\n";
 		auto response_str = response.str();
-		
+
 		sc.send(response_str.c_str(), response_str.length());
 		sc.send(html.c_str(), html_size);
 	}
