@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JS Bin</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js">
+  </script>
+  <script>
+    function play(){
+      setTimeout(function(){
+        var value = parseInt(document.forms[0].year.value);
+        var max = parseInt(document.forms[0].year.max);
+        document.forms[0].year.value =
+          (value+1).toString();
+        document.forms[0].year.dispatchEvent(new Event('change'));
+        if(value < max)
+          play();
+      }, 1000);     
+    }
+    function updateImage(x)
+    {
+      console.log(x);
+      var d = moment("2008-01-01");
+      d = d.add(moment.duration(parseInt(x), 'months'));
+      var y = d.format("YYYY");
+      var m= d.format("MM");
+      document.getElementById('yearValue').innerHTML = d.format("YYYY MM");
+      document.getElementById('yearSrc').src='http://osisaf.met.no/quicklooks/prod/ice/'+y+'/'+m+'/ice_type_nh_'+y+m+'011200.jpg';
+    }
+  </script>
+</head>
+<body>
+  <form>
+    <button onclick="play(); return false;">play</button>
+    <input id="year" type="range" min="0" max="120" value="0" step="1" onchange="updateImage(this.value)">
+    <span id="yearValue"></span>
+    
+  </form>
+  <img id="yearSrc" src="" width="300" height="300"/>
+</body>
+</html>
