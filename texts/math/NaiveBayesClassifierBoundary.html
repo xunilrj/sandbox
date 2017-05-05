@@ -1,0 +1,49 @@
+<html>
+  <head>
+   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+	<script>
+var rangef = function (start,end,step,f){
+	  f = f || function (x){return x;};
+	  var a = [];
+	  for (var current = start; current <= end; current += step) {
+		      a.push(f(current));
+		    }
+	  return a;
+}
+function Redraw(){
+	  var mu1 = parseFloat(document.forms[0].mu1.value);document.getElementById("mu1value").innerHTML = mu1.toString();
+	  var sigma1 = parseFloat(document.forms[0].sigma1.value);document.getElementById("sigma1value").innerHTML = sigma1.toString();
+	  var mu2 = parseFloat(document.forms[0].mu2.value);document.getElementById("mu2value").innerHTML = mu2.toString();
+	  var sigma2 = parseFloat(document.forms[0].sigma2.value);document.getElementById("sigma2value").innerHTML = sigma2.toString();
+	  Plotly.purge('graph');
+	  Plotly.plot('graph', [{
+		      mode: 'markers',
+		      type:"scatter",
+		      x: rangef(-10,10,0.1),
+		      y: rangef(-10,10,0.1, function(x){
+			            var numerator = mu2+mu1;
+			            var numerator1 = 1.0 / (Math.sqrt(2.0*3.14159*(sigma2*sigma2)));
+			            numerator1 = Math.log(numerator1*numerator1);
+			            var denominator1 = 1.0 / (Math.sqrt(2.0*3.14159*(sigma1*sigma1)));
+			            denominator1 = Math.log(denominator1*denominator1);
+			            var a = Math.sqrt(numerator1/denominator1);
+			            var denominator = a*(1.0+((mu1-mu2)/(x-mu1)))-1.0;
+			            return (numerator/denominator) + mu2;
+			          })
+		    }])
+}
+Redraw();
+	</script>
+  </head>
+  <body>
+  <form>
+   <div>mu1<input id="mu1" type="range" min="-5" max="5" step="0.01" value="-2" onchange="Redraw()"/><span id="mu1value"></span></div>
+   <div>sigma1<input id="sigma1" type="range" min="0" max="5" step="0.01" value="1" onchange="Redraw()"/><span id="sigma1value"></span></div>
+   <div>mu2<input id="mu2" type="range" min="-5" max="5" step="0.01" value="2" onchange="Redraw()"/><span id="mu2value"></span></div>
+   <div>sigma2<input id="sigma2" type="range" min="0" max="5" step="0.01" value="1" onchange="Redraw()"/><span id="sigma2value"></span></div>
+   <button onclick="document.forms[0].sigma1.value = document.forms[0].sigma2.value = 1;">Same sigma</button>
+   <button onclick="document.forms[0].mu1.value = document.forms[0].mu2.value = 0;">Same Mean</button>
+  </form>    
+  <div id="graph"></div>
+  </body>
+</html>

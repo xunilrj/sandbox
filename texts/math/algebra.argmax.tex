@@ -1,0 +1,36 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\title{argmax Algebra}
+\author{Daniel Frederico Lins Leite}
+\begin{document}
+	\maketitle
+	\section{argmax plus constant}
+	\begin{align*}
+		\arg\max {\big[f(x) + 1\big]} &= \arg\max {\big[f(x)\big]}\\
+		&= \big[x \in D | g(x) > g(y) \forall y \in D]\\
+		\\
+		\mbox{given}\\
+		g(x) &= f(x) + 1\\
+		\mbox{so}\\
+		&=\big[x \in D | \big[f(x) + 1 > f(y) + 1\big] \forall y \in D]\\
+		&=\big[x \in D | \big[f(x) + 1 - 1 > f(y) + 1 - 1\big] \forall y \in D]\\
+		&=\big[x \in D | \big[f(x) > f(y)\big] \forall y \in D]\\
+		&=\arg\max {\big[f(x)\big]}\\
+	\end{align*}
+	\section{argmax times constant}
+	\begin{align*}
+		\arg\max {\big[2*f(x)\big]} &= \arg\max {\big[f(x)\big]}\\		&= \big[x \in D | g(x) > g(y) \forall y \in D]\\
+		\\
+		\mbox{given}\\
+		g(x) &= 2*f(x)\\
+		\mbox{so}\\
+		&= \big[x \in D | 2*f(x) > 2*f(y) \forall y \in D]\\
+		&= \big[x \in D | \frac{2*f(x)}{2} > \frac{2*f(y)}{2} \forall y \in D]\\
+		&= \big[x \in D | f(x) > f(y) \forall y \in D]\\
+		&=\arg\max {\big[f(x)\big]}\\
+	\end{align*}
+\end{document}
