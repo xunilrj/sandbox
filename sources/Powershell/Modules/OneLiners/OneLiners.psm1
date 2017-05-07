@@ -52,6 +52,7 @@ function ...
     {
         try{
             $result = $Expression.Invoke()
+            $result = $result[0]
         }catch
         {
             $result = $null

@@ -57,6 +57,7 @@ function Checkpoint-Database
     [Parameter(ValueFromPipelineByPropertyName=$true)]$Database,
     [Parameter(ValueFromPipelineByPropertyName=$true)]$Username,
     [Parameter(ValueFromPipelineByPropertyName=$true)]$Password,
+    [Parameter()]$Version,
     [Parameter(ValueFromPipeline=$true)]$PSItem,
     [switch]$PassThru
     )
