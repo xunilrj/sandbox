@@ -66,3 +66,16 @@ function ...
     }while($result -eq $null -and $Count -gt 0)
     $result
 }
+
+function trim
+{
+    [CmdletBinding()]
+    param([Parameter(ValueFromPipeline=$true)]$PSItem)
+    process{
+        if([System.String]::IsNullOrEmpty($PSItem) -eq $false){
+            $PSItem.Trim()
+        }else{
+            $PSItem
+        }
+    }
+}
