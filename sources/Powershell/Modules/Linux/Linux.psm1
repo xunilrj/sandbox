@@ -7,7 +7,7 @@
             $asstring = $_.ToString()
             $return = $false
 
-            $asstring | Select-String -Pattern $regexp -NotMatch:$NotMatch | % {
+            $asstring -split "`n" | Select-String -Pattern $regexp -NotMatch:$NotMatch | % {
                 $currentPos = 0
                 $line = $_.Line
                 $_.Matches | % {
@@ -24,7 +24,7 @@
         else{
             $return = $false
             $asString = $_.ToString()
-            $asString | Select-String -Pattern $regexp -NotMatch:$NotMatch | % {$return = $true}
+            $asString -split "`n" | Select-String -Pattern $regexp -NotMatch:$NotMatch | % {$return = $true}
             if($return){$_}
         }        
     }

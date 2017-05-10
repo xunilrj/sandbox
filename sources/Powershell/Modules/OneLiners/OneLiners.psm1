@@ -109,3 +109,24 @@ function trim
         }
     }
 }
+
+function Out-TxtEditor
+{
+    [CmdletBinding()]
+    param([Parameter(ValueFromPipeline=$true)]$Item)
+    begin{
+        $tempFile = [System.IO.Path]::GetTempFileName() + ".txt"
+        $stream = [System.IO.StreamWriter][System.IO.File]::CreateText($tempFile)
+    }
+    process{
+        $asstring = $_
+        if($asstring -isnot [string]){
+            $asstring = $_.ToString()
+        }
+        $stream.Write($asstring)        
+    }
+    end{
+        $stream.Dispose()
+        start $tempFile
+    }
+}
