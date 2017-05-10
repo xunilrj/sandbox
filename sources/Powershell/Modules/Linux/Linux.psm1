@@ -1,9 +1,32 @@
 ﻿function grep
 {
     [CmdletBinding()]
-    param([Parameter(Mandatory=$true,Position=0)][Alias("e")]$regexp, [Parameter()][Alias("v")][switch]$NotMatch, [Parameter(ValueFromPipeline = $true)]$PSItem)
+    param([Parameter(Mandatory=$true,Position=0)][Alias("e")]$regexp, [Parameter()][Alias("v")][switch]$NotMatch, [Parameter()][ValidateSet("auto")]$Color = $null, [Parameter()][switch]$PassThru, [Parameter(ValueFromPipeline = $true)]$PSItem)
     process{
-        $_ | Select-String -Pattern $regexp -NotMatch:$NotMatch | % {$_.ToString()}
+        if($Color -eq "auto"){
+            $asstring = $_.ToString()
+            $return = $false
+
+            $asstring | Select-String -Pattern $regexp -NotMatch:$NotMatch | % {
+                $currentPos = 0
+                $line = $_.Line
+                $_.Matches | % {
+                    Write-Host $line.Substring($currentPos, $_.Index).ToString() -NoNewline
+                    Write-Host $line.Substring($_.Index,$_.Length).ToString() -ForegroundColor Red -NoNewline
+                    $currentPos = $_.Index+$_.Length
+                } 
+                Write-Host $line.Substring($currentPos, $line.Length - $currentPos)
+                $return = $true
+            }
+
+            if($PassThru -and $return) {$_}
+        }
+        else{
+            $return = $false
+            $asString = $_.ToString()
+            $asString | Select-String -Pattern $regexp -NotMatch:$NotMatch | % {$return = $true}
+            if($return){$_}
+        }        
     }
 }
 

@@ -13,17 +13,47 @@
 Set-Alias xml ConvertFrom-xml
 
 function %% {
-    param([Parameter(Position=0)]$Name,[Parameter(ValueFromPipeline=$true)]$Item)
+    param([Parameter(Position=0)]$Path,[Parameter(Position=1)][string[]]$Name,[Parameter(ValueFromPipeline=$true)]$Item)
     begin{
-        $properties = $Name.Split('.')
-        $properties | % {Write-Verbose $_}
+        $splittedProperties = [System.Collections.ArrayList]::new()
+        if($Path -is [string]){
+            $properties = $Path.Split('.')
+            $properties | % {Write-Verbose $_}
+            $splittedProperties.Add($properties) | Out-Null
+        }else
+        {
+            $Path | % {
+                $properties = $_.Split('.')
+                $properties | % {Write-Verbose $_}
+                $splittedProperties.Add($properties) | Out-Null
+            }
+        }
+        
     }
     process{
-        $currentValue = $_
-        $properties | % {
-            $currentValue = $currentValue | % $_
-        } | Out-Null
-        $currentValue
+        $i=0  
+        $currentPipeValue = $_
+        $result = New-Object PSCustomObject
+        $splittedProperties | % {
+            
+            $currentSplitProperties = $_
+            $currentValue = $currentPipeValue
+            $_ | % { $currentValue = ($currentValue | % $_)} | Out-Null
+            #$currentValue
+
+            if($Name -eq $null){
+                $currentValue
+            }
+            else
+            {
+                $result | Add-Member -Name ($Name[$i]) -MemberType NoteProperty -Value $currentValue | Out-Null
+            }
+            $i++
+        }
+
+        if($Name -ne $null){
+            $result      
+        }
     }
 }
 
