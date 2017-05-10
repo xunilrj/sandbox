@@ -3,30 +3,36 @@
     [CmdletBinding()]
     param([Parameter(Mandatory=$true,Position=0)][Alias("e")]$regexp, [Parameter()][Alias("v")][switch]$NotMatch, [Parameter()][ValidateSet("auto")]$Color = $null, [Parameter()][switch]$PassThru, [Parameter(ValueFromPipeline = $true)]$PSItem)
     process{
-        if($Color -eq "auto"){
+        if($_ -ne $null)
+        {
             $asstring = $_.ToString()
-            $return = $false
 
-            $asstring -split "`n" | Select-String -Pattern $regexp -NotMatch:$NotMatch | % {
-                $currentPos = 0
-                $line = $_.Line
-                $_.Matches | % {
-                    Write-Host $line.Substring($currentPos, $_.Index).ToString() -NoNewline
-                    Write-Host $line.Substring($_.Index,$_.Length).ToString() -ForegroundColor Red -NoNewline
-                    $currentPos = $_.Index+$_.Length
-                } 
-                Write-Host $line.Substring($currentPos, $line.Length - $currentPos)
-                $return = $true
+            if($asstring -eq $_.GetType().FullName){
+                $asstring = $_ | ConvertTo-Json -Depth 5
             }
 
-            if($PassThru -and $return) {$_}
-        }
-        else{
-            $return = $false
-            $asString = $_.ToString()
-            $asString -split "`n" | Select-String -Pattern $regexp -NotMatch:$NotMatch | % {$return = $true}
-            if($return){$_}
-        }        
+            if($Color -eq "auto"){
+                $return = $false
+                $asstring -split "`n" | Select-String -Pattern $regexp -NotMatch:$NotMatch | % {
+                    $currentPos = 0
+                    $line = $_.Line
+                    $_.Matches | % {
+                        Write-Host $line.Substring($currentPos, $_.Index).ToString() -NoNewline
+                        Write-Host $line.Substring($_.Index,$_.Length).ToString() -ForegroundColor Red -NoNewline
+                        $currentPos = $_.Index+$_.Length
+                    } 
+                    Write-Host $line.Substring($currentPos, $line.Length - $currentPos)
+                    $return = $true
+                }
+
+                if($PassThru -and $return) {$_}
+            }
+            else{
+                $return = $false
+                $asString -split "`n" | Select-String -Pattern $regexp -NotMatch:$NotMatch | % {$return = $true}
+                if($return){$_}
+            }
+        }      
     }
 }
 
