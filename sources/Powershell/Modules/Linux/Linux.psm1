@@ -62,3 +62,20 @@ function touch
         New-Item $Path
     }
 }
+
+function head
+{
+    [CmdletBinding()]
+    param([Parameter(Position=0)]$Count,[Parameter(ValueFromPipeline=$true)]$Item)
+    begin{
+        $remaining = $Count
+    }
+    process{
+        if($Item -ne $null){
+            $remaining = $remaining - 1
+            if($remaining -ge 0){
+                $Item
+            }
+        }
+    }
+}
