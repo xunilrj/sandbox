@@ -68,6 +68,14 @@ public:
 	}
 };
 
+namespace denotational
+{
+	char pchar(char expected)
+	{
+
+	}
+}
+
 //3. Axiomatic semantics.Here, emphasis is put on proof methods proving programs 
 //correct.Central notions are program assertions, proof triples consisting of precondition, 
 //program statement and postcondition, and invariants.Pioneers are Floyd[38] and Hoare[53].
@@ -266,7 +274,7 @@ template<typename T, typename F,
 	Parser<typename T, TValue> operator >> (Parser<typename T, TValueL> l, F f)
 {
 	return builders::parsers<T>::map(l, f);
-}
+} 
 
 void main()
 {
