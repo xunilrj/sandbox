@@ -62,7 +62,7 @@ function Watch-Item
     if([string]::IsNullOrEmpty($Filter)) { $Filter = "*.*" }
 
     $watcher = New-Object IO.FileSystemWatcher $Path, $Filter -Property @{ 
-        IncludeSubdirectories = $false
+        IncludeSubdirectories = $true
         EnableRaisingEvents = $true
     }
 
