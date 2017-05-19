@@ -130,3 +130,16 @@ function Out-TxtEditor
         start $tempFile
     }
 }
+
+function Enable-Streams([switch]$Verbose)
+{
+	$VerbosePreference = "SilentlyContinue";
+	if($Verbose.IsPresent){
+		$VerbosePreference = "Continue"
+	}
+
+}
+
+function Measure-Object
+{
+}

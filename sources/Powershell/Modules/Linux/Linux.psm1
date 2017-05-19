@@ -56,7 +56,7 @@ function touch
 {
     [CmdletBinding()]
     param([Parameter(Position=0)]$Path)
-    $item = Get-Item $Path
+    $item = Get-Item $Path -EA SilentlyContinue
     if($item -eq $null)
     {
         New-Item $Path
