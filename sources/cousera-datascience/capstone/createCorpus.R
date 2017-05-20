@@ -1,4 +1,5 @@
-crateCorpus <- function(format, i){
+createCorpus <- function(format, i){
+  library(tm)
   file <- sprintf(format, i, "txt")
   fileRDS <- sprintf(format, i, "rds")
   if (!file.exists(fileRDS)){

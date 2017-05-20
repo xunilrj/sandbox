@@ -6,7 +6,7 @@ splitIn <- function(A, n, format){
     to<-((i+1)*perfile)
     if (!file.exists(name)){
       file.create(name)
+      writeLines(A[from:to], name)
     }
-    writeLines(A[from:to], name)
   }
 }
