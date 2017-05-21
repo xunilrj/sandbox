@@ -8,3 +8,12 @@ generateDTM <- function(format, i){
     saveRDS(DTM, fileRDS)
   }
 }
+
+sumDTMRows <- function(format, i){
+  fileDTMRDS <- sprintf(format, i, "dtm.rds")
+  fileDTMsumRDS <- sprintf(format, i, ".dtm.sum.rds")
+  
+  DTM <- readRDS(fileDTMRDS)
+  terms <- rowmap(DTM, sum)
+  saveRDS(terms, fileDTMsumRDS)
+}
