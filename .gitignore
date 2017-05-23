@@ -31,6 +31,9 @@ bld/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
 
+/sources/cousera-datascience/capstone/coursera-switftkey.zip
+/sources/cousera-datascience/capstone/final/
+
 # NUNIT
 *.VisualState.xml
 TestResult.xml
@@ -261,3 +264,5 @@ dependencies/
 
 sources/Powershell/Modules/Flyway/Flyway/
 jspm_packages/
+/sources/cousera-datascience/capstone/final/
+/sources/cousera-datascience/capstone/temp/
