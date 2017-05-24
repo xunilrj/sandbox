@@ -95,3 +95,32 @@ function New-CMakeCppFile
     New-Item "sources/$Name.cpp"
     "add_executable(input sources/main.cpp)" | Out-FileUtf8NoBom CMakeLists.txt -Append
 }
+
+$ToolChainFile = $null
+function Set-DCMakeToolchainFile($File)
+{
+    $global:ToolChainFile = $File
+}
+
+function Invoke-CMakeBuild
+{
+    param([switch]$ForceGeneration)
+    $exist = Test-Path .\.build\msvc -EA SilentlyContinue
+    if($exist -ne $true -or $ForceGeneration.IsPresent){
+        ri .\.build\msvc -EA SilentlyContinue -Recurse -Force
+        mkdir .\.build -Force | Out-Null
+        mkdir .\.build\msvc -Force | Out-Null
+        pushd .\.build\msvc
+
+        if($global:ToolChainFile -eq $null){
+        cmake ..\.. -DCMAKE_TOOLCHAIN_FILE=$($global:ToolChainFile)
+        }
+        else{
+        cmake ..\.. -G "Visual Studio 15 Win64"
+        }
+        
+        popd
+    }
+    
+    cmake --build .\.build\msvc --config Debug 
+}

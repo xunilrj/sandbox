@@ -10,6 +10,12 @@
             if($asstring -eq $_.GetType().FullName){
                 $asstring = $_ | ConvertTo-Json -Depth 5
             }
+            elseif($_ -is [PSCustomObject]){
+                $asstring = $_ | ConvertTo-Json -Depth 5
+            }
+            elseif($_ -is [PSObject]){
+                $asstring = $_ | ConvertTo-Json -Depth 5
+            }
 
             if($Color -eq "auto"){
                 $return = $false

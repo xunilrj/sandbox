@@ -1,11 +1,7 @@
 cmake_minimum_required(VERSION 3.0.0)
 project(ia VERSION 0.0.0)
 
-include(CTest)
-enable_testing()
+find_path(SYSTEM_INCLUDE_DIR doctest.h)
+include_directories(${SYSTEM_INCLUDE_DIR})
 
 add_executable(ia main.cpp)
-
-set(CPACK_PROJECT_NAME ${PROJECT_NAME})
-set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
-include(CPack)
