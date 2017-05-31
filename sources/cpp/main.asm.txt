@@ -1,0 +1,2994 @@
+
+Dump of file .\main.obj
+
+File Type: COFF OBJECT
+
+_main:
+  00000000: 68 00 00 00 00     push        offset $SG32566
+  00000005: 68 00 00 00 00     push        offset ?cout@std@@3V?$basic_ostream@DU?$char_traits@D@std@@@1@A
+  0000000A: E8 00 00 00 00     call        ??$?6U?$char_traits@D@std@@@std@@YAAAV?$basic_ostream@DU?$char_traits@D@std@@@0@AAV10@PBD@Z
+  0000000F: 83 C4 08           add         esp,8
+  00000012: 33 C0              xor         eax,eax
+  00000014: C3                 ret
+
+??$?0$$V@?$_Compressed_pair@U?$_Wrap_alloc@V?$allocator@D@std@@@std@@V?$_String_val@U?$_Simple_types@D@std@@@2@$00@std@@QAE@U_Zero_then_variadic_args_t@1@@Z (public: __thiscall std::_Compressed_pair<struct std::_Wrap_alloc<class std::allocator<char> >,class std::_String_val<struct std::_Simple_types<char> >,1>::_Compressed_pair<struct std::_Wrap_alloc<class std::allocator<char> >,class std::_String_val<struct std::_Simple_types<char> >,1><>(struct std::_Zero_then_variadic_args_t)):
+  00000000: C7 41 10 00 00 00  mov         dword ptr [ecx+10h],0
+            00
+  00000007: 8B C1              mov         eax,ecx
+  00000009: C7 41 14 00 00 00  mov         dword ptr [ecx+14h],0
+            00
+  00000010: C2 04 00           ret         4
+
+??$?0U?$_Wrap_alloc@V?$allocator@D@std@@@std@@$$V@?$_Compressed_pair@U?$_Wrap_alloc@V?$allocator@D@std@@@std@@V?$_String_val@U?$_Simple_types@D@std@@@2@$00@std@@QAE@U_One_then_variadic_args_t@1@$$QAU?$_Wrap_alloc@V?$allocator@D@std@@@1@@Z (public: __thiscall std::_Compressed_pair<struct std::_Wrap_alloc<class std::allocator<char> >,class std::_String_val<struct std::_Simple_types<char> >,1>::_Compressed_pair<struct std::_Wrap_alloc<class std::allocator<char> >,class std::_String_val<struct std::_Simple_types<char> >,1><struct std::_Wrap_alloc<class std::allocator<char> > >(struct std::_One_then_variadic_args_t,struct std::_Wrap_alloc<class std::allocator<char> > &&)):
+  00000000: C7 41 10 00 00 00  mov         dword ptr [ecx+10h],0
+            00
+  00000007: 8B C1              mov         eax,ecx
+  00000009: C7 41 14 00 00 00  mov         dword ptr [ecx+14h],0
+            00
+  00000010: C2 08 00           ret         8
+
+??$?0U?$_Wrap_alloc@V?$allocator@D@std@@@std@@X@?$_String_alloc@U?$_String_base_types@DV?$allocator@D@std@@@std@@@std@@QAE@$$QAU?$_Wrap_alloc@V?$allocator@D@std@@@1@@Z (public: __thiscall std::_String_alloc<struct std::_String_base_types<char,class std::allocator<char> > >::_String_alloc<struct std::_String_base_types<char,class std::allocator<char> > ><struct std::_Wrap_alloc<class std::allocator<char> >,void>(struct std::_Wrap_alloc<class std::allocator<char> > &&)):
+  00000000: C7 41 10 00 00 00  mov         dword ptr [ecx+10h],0
+            00
+  00000007: 8B C1              mov         eax,ecx
+  00000009: C7 41 14 00 00 00  mov         dword ptr [ecx+14h],0
+            00
+  00000010: C2 04 00           ret         4
+
+??$?0V?$allocator@D@std@@@?$_Wrap_alloc@V?$allocator@D@std@@@std@@QAE@$$QAV?$allocator@D@1@@Z (public: __thiscall std::_Wrap_alloc<class std::allocator<char> >::_Wrap_alloc<class std::allocator<char> ><class std::allocator<char> >(class std::allocator<char> &&)):
+  00000000: 8B C1              mov         eax,ecx
+  00000002: C2 04 00           ret         4
+
+??$?6U?$char_traits@D@std@@@std@@YAAAV?$basic_ostream@DU?$char_traits@D@std@@@0@AAV10@PBD@Z (class std::basic_ostream<char,struct std::char_traits<char> > & __cdecl std::operator<<<struct std::char_traits<char> >(class std::basic_ostream<char,struct std::char_traits<char> > &,char const *)):
+  00000000: 55                 push        ebp
+  00000001: 8B EC              mov         ebp,esp
+  00000003: 6A FF              push        0FFFFFFFFh
+  00000005: 68 00 00 00 00     push        offset __ehhandler$??$?6U?$char_traits@D@std@@@std@@YAAAV?$basic_ostream@DU?$char_traits@D@std@@@0@AAV10@PBD@Z
+  0000000A: 64 A1 00 00 00 00  mov         eax,dword ptr fs:[00000000h]
+  00000010: 50                 push        eax
+  00000011: 83 EC 20           sub         esp,20h
+  00000014: 53                 push        ebx
+  00000015: 56                 push        esi
+  00000016: 57                 push        edi
+  00000017: A1 00 00 00 00     mov         eax,dword ptr [___security_cookie]
+  0000001C: 33 C5              xor         eax,ebp
+  0000001E: 50                 push        eax
+  0000001F: 8D 45 F4           lea         eax,[ebp-0Ch]
+  00000022: 64 A3 00 00 00 00  mov         dword ptr fs:[00000000h],eax
+  00000028: 89 65 F0           mov         dword ptr [ebp-10h],esp
+  0000002B: 33 DB              xor         ebx,ebx
+  0000002D: 89 5D EC           mov         dword ptr [ebp-14h],ebx
+  00000030: 8B 45 0C           mov         eax,dword ptr [ebp+0Ch]
+  00000033: 38 18              cmp         byte ptr [eax],bl
+  00000035: 75 04              jne         0000003B
+  00000037: 33 D2              xor         edx,edx
+  00000039: EB 0E              jmp         00000049
+  0000003B: 8B D0              mov         edx,eax
+  0000003D: 8D 4A 01           lea         ecx,[edx+1]
+  00000040: 8A 02              mov         al,byte ptr [edx]
+  00000042: 42                 inc         edx
+  00000043: 84 C0              test        al,al
+  00000045: 75 F9              jne         00000040
+  00000047: 2B D1              sub         edx,ecx
+  00000049: 89 55 E8           mov         dword ptr [ebp-18h],edx
+  0000004C: 8B 4D 08           mov         ecx,dword ptr [ebp+8]
+  0000004F: 8B 01              mov         eax,dword ptr [ecx]
+  00000051: 8B 40 04           mov         eax,dword ptr [eax+4]
+  00000054: 8B 74 08 20        mov         esi,dword ptr [eax+ecx+20h]
+  00000058: 8B 7C 08 24        mov         edi,dword ptr [eax+ecx+24h]
+  0000005C: 85 FF              test        edi,edi
+  0000005E: 7C 16              jl          00000076
+  00000060: 7F 0E              jg          00000070
+  00000062: 85 F6              test        esi,esi
+  00000064: 74 10              je          00000076
+  00000066: 85 FF              test        edi,edi
+  00000068: 7C 0C              jl          00000076
+  0000006A: 7F 04              jg          00000070
+  0000006C: 3B F2              cmp         esi,edx
+  0000006E: 76 06              jbe         00000076
+  00000070: 2B F2              sub         esi,edx
+  00000072: 1B FB              sbb         edi,ebx
+  00000074: EB 0E              jmp         00000084
+  00000076: 0F 57 C0           xorps       xmm0,xmm0
+  00000079: 66 0F 13 45 DC     movlpd      qword ptr [ebp-24h],xmm0
+  0000007E: 8B 7D E0           mov         edi,dword ptr [ebp-20h]
+  00000081: 8B 75 DC           mov         esi,dword ptr [ebp-24h]
+  00000084: 89 4D D4           mov         dword ptr [ebp-2Ch],ecx
+  00000087: 8B 54 08 38        mov         edx,dword ptr [eax+ecx+38h]
+  0000008B: 85 D2              test        edx,edx
+  0000008D: 74 0A              je          00000099
+  0000008F: 8B 02              mov         eax,dword ptr [edx]
+  00000091: 8B CA              mov         ecx,edx
+  00000093: FF 50 04           call        dword ptr [eax+4]
+  00000096: 8B 4D 08           mov         ecx,dword ptr [ebp+8]
+  00000099: 8B 01              mov         eax,dword ptr [ecx]
+  0000009B: 8B 40 04           mov         eax,dword ptr [eax+4]
+  0000009E: 39 5C 08 0C        cmp         dword ptr [eax+ecx+0Ch],ebx
+  000000A2: 75 16              jne         000000BA
+  000000A4: 8B 44 08 3C        mov         eax,dword ptr [eax+ecx+3Ch]
+  000000A8: 85 C0              test        eax,eax
+  000000AA: 74 0E              je          000000BA
+  000000AC: 3B C1              cmp         eax,ecx
+  000000AE: 74 0A              je          000000BA
+  000000B0: 8B C8              mov         ecx,eax
+  000000B2: E8 00 00 00 00     call        ?flush@?$basic_ostream@DU?$char_traits@D@std@@@std@@QAEAAV12@XZ
+  000000B7: 8B 4D 08           mov         ecx,dword ptr [ebp+8]
+  000000BA: 8B 01              mov         eax,dword ptr [ecx]
+  000000BC: 8B 40 04           mov         eax,dword ptr [eax+4]
+  000000BF: 39 5C 08 0C        cmp         dword ptr [eax+ecx+0Ch],ebx
+  000000C3: 74 0A              je          000000CF
+  000000C5: BB 04 00 00 00     mov         ebx,4
+  000000CA: E9 23 01 00 00     jmp         000001F2
+  000000CF: C7 45 FC 00 00 00  mov         dword ptr [ebp-4],0
+            00
+  000000D6: 8B 01              mov         eax,dword ptr [ecx]
+  000000D8: 8B 40 04           mov         eax,dword ptr [eax+4]
+  000000DB: 8B 44 08 14        mov         eax,dword ptr [eax+ecx+14h]
+  000000DF: 25 C0 01 00 00     and         eax,1C0h
+  000000E4: 83 F8 40           cmp         eax,40h
+  000000E7: 74 4D              je          00000136
+  000000E9: 0F 1F 80 00 00 00  nop         dword ptr [eax]
+            00
+  000000F0: 85 FF              test        edi,edi
+  000000F2: 7C 3E              jl          00000132
+  000000F4: 7F 04              jg          000000FA
+  000000F6: 85 F6              test        esi,esi
+  000000F8: 74 38              je          00000132
+  000000FA: 8B 01              mov         eax,dword ptr [ecx]
+  000000FC: 8B 40 04           mov         eax,dword ptr [eax+4]
+  000000FF: 03 C8              add         ecx,eax
+  00000101: 8A 41 40           mov         al,byte ptr [ecx+40h]
+  00000104: 88 45 E4           mov         byte ptr [ebp-1Ch],al
+  00000107: FF 75 E4           push        dword ptr [ebp-1Ch]
+  0000010A: 8B 49 38           mov         ecx,dword ptr [ecx+38h]
+  0000010D: E8 00 00 00 00     call        ?sputc@?$basic_streambuf@DU?$char_traits@D@std@@@std@@QAEHD@Z
+  00000112: 8B 4D 08           mov         ecx,dword ptr [ebp+8]
+  00000115: 83 F8 FF           cmp         eax,0FFFFFFFFh
+  00000118: 75 0A              jne         00000124
+  0000011A: BB 04 00 00 00     mov         ebx,4
+  0000011F: 89 5D EC           mov         dword ptr [ebp-14h],ebx
+  00000122: EB 79              jmp         0000019D
+  00000124: 83 C6 FF           add         esi,0FFFFFFFFh
+  00000127: 89 75 DC           mov         dword ptr [ebp-24h],esi
+  0000012A: 83 D7 FF           adc         edi,0FFFFFFFFh
+  0000012D: 89 7D E0           mov         dword ptr [ebp-20h],edi
+  00000130: EB BE              jmp         000000F0
+  00000132: 85 DB              test        ebx,ebx
+  00000134: 75 67              jne         0000019D
+  00000136: 8B 01              mov         eax,dword ptr [ecx]
+  00000138: 8B 40 04           mov         eax,dword ptr [eax+4]
+  0000013B: 6A 00              push        0
+  0000013D: FF 75 E8           push        dword ptr [ebp-18h]
+  00000140: FF 75 0C           push        dword ptr [ebp+0Ch]
+  00000143: 8B 4C 08 38        mov         ecx,dword ptr [eax+ecx+38h]
+  00000147: E8 00 00 00 00     call        ?sputn@?$basic_streambuf@DU?$char_traits@D@std@@@std@@QAE_JPBD_J@Z
+  0000014C: 3B 45 E8           cmp         eax,dword ptr [ebp-18h]
+  0000014F: 75 41              jne         00000192
+  00000151: 85 D2              test        edx,edx
+  00000153: 75 3D              jne         00000192
+  00000155: 85 FF              test        edi,edi
+  00000157: 7C 41              jl          0000019A
+  00000159: 7F 04              jg          0000015F
+  0000015B: 85 F6              test        esi,esi
+  0000015D: 74 3B              je          0000019A
+  0000015F: 8B 4D 08           mov         ecx,dword ptr [ebp+8]
+  00000162: 8B 01              mov         eax,dword ptr [ecx]
+  00000164: 8B 40 04           mov         eax,dword ptr [eax+4]
+  00000167: 03 C8              add         ecx,eax
+  00000169: 8A 41 40           mov         al,byte ptr [ecx+40h]
+  0000016C: 88 45 0C           mov         byte ptr [ebp+0Ch],al
+  0000016F: FF 75 0C           push        dword ptr [ebp+0Ch]
+  00000172: 8B 49 38           mov         ecx,dword ptr [ecx+38h]
+  00000175: E8 00 00 00 00     call        ?sputc@?$basic_streambuf@DU?$char_traits@D@std@@@std@@QAEHD@Z
+  0000017A: 83 F8 FF           cmp         eax,0FFFFFFFFh
+  0000017D: 75 05              jne         00000184
+  0000017F: 83 CB 04           or          ebx,4
+  00000182: EB 13              jmp         00000197
+  00000184: 83 C6 FF           add         esi,0FFFFFFFFh
+  00000187: 89 75 DC           mov         dword ptr [ebp-24h],esi
+  0000018A: 83 D7 FF           adc         edi,0FFFFFFFFh
+  0000018D: 89 7D E0           mov         dword ptr [ebp-20h],edi
+  00000190: EB C3              jmp         00000155
+  00000192: BB 04 00 00 00     mov         ebx,4
+  00000197: 89 5D EC           mov         dword ptr [ebp-14h],ebx
+  0000019A: 8B 4D 08           mov         ecx,dword ptr [ebp+8]
+  0000019D: 8B 01              mov         eax,dword ptr [ecx]
+  0000019F: 8B 40 04           mov         eax,dword ptr [eax+4]
+  000001A2: C7 44 08 20 00 00  mov         dword ptr [eax+ecx+20h],0
+            00 00
+  000001AA: C7 44 08 24 00 00  mov         dword ptr [eax+ecx+24h],0
+            00 00
+  000001B2: C7 45 FC FF FF FF  mov         dword ptr [ebp-4],0FFFFFFFFh
+            FF
+  000001B9: EB 37              jmp         000001F2
+__catch$??$?6U?$char_traits@D@std@@@std@@YAAAV?$basic_ostream@DU?$char_traits@D@std@@@0@AAV10@PBD@Z$0:
+  000001BB: 8B 4D 08           mov         ecx,dword ptr [ebp+8]
+  000001BE: 8B 01              mov         eax,dword ptr [ecx]
+  000001C0: 8B 50 04           mov         edx,dword ptr [eax+4]
+  000001C3: 03 D1              add         edx,ecx
+  000001C5: 8B 42 0C           mov         eax,dword ptr [edx+0Ch]
+  000001C8: 83 C8 04           or          eax,4
+  000001CB: 83 7A 38 00        cmp         dword ptr [edx+38h],0
+  000001CF: 75 03              jne         000001D4
+  000001D1: 83 C8 04           or          eax,4
+  000001D4: 83 E0 17           and         eax,17h
+  000001D7: 89 42 0C           mov         dword ptr [edx+0Ch],eax
+  000001DA: 85 42 10           test        dword ptr [edx+10h],eax
+  000001DD: 75 73              jne         00000252
+  000001DF: B8 00 00 00 00     mov         eax,offset $LN22
+  000001E4: C3                 ret
+$LN22:
+  000001E5: C7 45 FC FF FF FF  mov         dword ptr [ebp-4],0FFFFFFFFh
+            FF
+  000001EC: 8B 5D EC           mov         ebx,dword ptr [ebp-14h]
+  000001EF: 8B 4D 08           mov         ecx,dword ptr [ebp+8]
+  000001F2: 8B 01              mov         eax,dword ptr [ecx]
+  000001F4: 8B 70 04           mov         esi,dword ptr [eax+4]
+  000001F7: 03 F1              add         esi,ecx
+  000001F9: 85 DB              test        ebx,ebx
+  000001FB: 74 1B              je          00000218
+  000001FD: 8B 56 0C           mov         edx,dword ptr [esi+0Ch]
+  00000200: 0B D3              or          edx,ebx
+  00000202: 6A 00              push        0
+  00000204: 8B C2              mov         eax,edx
+  00000206: 83 C8 04           or          eax,4
+  00000209: 83 7E 38 00        cmp         dword ptr [esi+38h],0
+  0000020D: 0F 45 C2           cmovne      eax,edx
+  00000210: 50                 push        eax
+  00000211: 8B CE              mov         ecx,esi
+  00000213: E8 00 00 00 00     call        ?clear@ios_base@std@@QAEXH_N@Z
+  00000218: E8 00 00 00 00     call        ?uncaught_exception@std@@YA_NXZ
+  0000021D: 8B 75 D4           mov         esi,dword ptr [ebp-2Ch]
+  00000220: 84 C0              test        al,al
+  00000222: 75 07              jne         0000022B
+  00000224: 8B CE              mov         ecx,esi
+  00000226: E8 00 00 00 00     call        ?_Osfx@?$basic_ostream@DU?$char_traits@D@std@@@std@@QAEXXZ
+  0000022B: 8B 06              mov         eax,dword ptr [esi]
+  0000022D: 8B 40 04           mov         eax,dword ptr [eax+4]
+  00000230: 8B 4C 30 38        mov         ecx,dword ptr [eax+esi+38h]
+  00000234: 85 C9              test        ecx,ecx
+  00000236: 74 05              je          0000023D
+  00000238: 8B 11              mov         edx,dword ptr [ecx]
+  0000023A: FF 52 08           call        dword ptr [edx+8]
+  0000023D: 8B 45 08           mov         eax,dword ptr [ebp+8]
+  00000240: 8B 4D F4           mov         ecx,dword ptr [ebp-0Ch]
+  00000243: 64 89 0D 00 00 00  mov         dword ptr fs:[0],ecx
+            00
+  0000024A: 59                 pop         ecx
+  0000024B: 5F                 pop         edi
+  0000024C: 5E                 pop         esi
+  0000024D: 5B                 pop         ebx
+  0000024E: 8B E5              mov         esp,ebp
+  00000250: 5D                 pop         ebp
+  00000251: C3                 ret
+  00000252: 6A 00              push        0
+  00000254: 6A 00              push        0
+  00000256: E8 00 00 00 00     call        __CxxThrowException@8
+$LN167:
+  0000025B: CC                 int         3
+
+__ehhandler$??$?6U?$char_traits@D@std@@@std@@YAAAV?$basic_ostream@DU?$char_traits@D@std@@@0@AAV10@PBD@Z:
+  00000000: 8B 54 24 08        mov         edx,dword ptr [esp+8]
+  00000004: 8D 42 0C           lea         eax,[edx+0Ch]
+  00000007: 8B 4A D0           mov         ecx,dword ptr [edx-30h]
+  0000000A: 33 C8              xor         ecx,eax
+  0000000C: E8 00 00 00 00     call        @__security_check_cookie@4
+  00000011: B8 00 00 00 00     mov         eax,offset __ehfuncinfo$??$?6U?$char_traits@D@std@@@std@@YAAAV?$basic_ostream@DU?$char_traits@D@std@@@0@AAV10@PBD@Z
+  00000016: E9 00 00 00 00     jmp         ___CxxFrameHandler3
+
+??$_Immortalize@V_Iostream_error_category@std@@@std@@YAAAV_Iostream_error_category@0@XZ (class std::_Iostream_error_category & __cdecl std::_Immortalize<class std::_Iostream_error_category>(void)):
+  00000000: 64 A1 00 00 00 00  mov         eax,dword ptr fs:[__tls_array]
+  00000006: 8B 0D 00 00 00 00  mov         ecx,dword ptr [__tls_index]
+  0000000C: 8B 0C 88           mov         ecx,dword ptr [eax+ecx*4]
+  0000000F: A1 00 00 00 00     mov         eax,dword ptr [?$TSS0@?1???$_Immortalize@V_Iostream_error_category@std@@@std@@YAAAV_Iostream_error_category@1@XZ@4HA]
+  00000014: 3B 81 00 00 00 00  cmp         eax,dword ptr __Init_thread_epoch[ecx]
+  0000001A: 7F 06              jg          00000022
+  0000001C: B8 00 00 00 00     mov         eax,offset ?_Static@?1???$_Immortalize@V_Iostream_error_category@std@@@std@@YAAAV_Iostream_error_category@1@XZ@4U?$_Immortalizer@V_Iostream_error_category@std@@@1@A
+  00000021: C3                 ret
+  00000022: 68 00 00 00 00     push        offset ?$TSS0@?1???$_Immortalize@V_Iostream_error_category@std@@@std@@YAAAV_Iostream_error_category@1@XZ@4HA
+  00000027: E8 00 00 00 00     call        __Init_thread_header
+  0000002C: 83 C4 04           add         esp,4
+  0000002F: 83 3D 00 00 00 00  cmp         dword ptr [?$TSS0@?1???$_Immortalize@V_Iostream_error_category@std@@@std@@YAAAV_Iostream_error_category@1@XZ@4HA],0FFFFFFFFh
+            FF
+  00000036: 75 E4              jne         0000001C
+  00000038: 68 00 00 00 00     push        offset ??__F_Static@?1???$_Immortalize@V_Iostream_error_category@std@@@std@@YAAAV_Iostream_error_category@0@XZ@YAXXZ
+  0000003D: C7 05 00 00 00 00  mov         dword ptr [?_Static@?1???$_Immortalize@V_Iostream_error_category@std@@@std@@YAAAV_Iostream_error_category@1@XZ@4U?$_Immortalizer@V_Iostream_error_category@std@@@1@A],offset ??_7_Iostream_error_category@std@@6B@
+            00 00 00 00
+  00000047: C7 05 04 00 00 00  mov         dword ptr [?_Static@?1???$_Immortalize@V_Iostream_error_category@std@@@std@@YAAAV_Iostream_error_category@1@XZ@4U?$_Immortalizer@V_Iostream_error_category@std@@@1@A+4],5
+            05 00 00 00
+  00000051: E8 00 00 00 00     call        _atexit
+  00000056: 68 00 00 00 00     push        offset ?$TSS0@?1???$_Immortalize@V_Iostream_error_category@std@@@std@@YAAAV_Iostream_error_category@1@XZ@4HA
+  0000005B: E8 00 00 00 00     call        __Init_thread_footer
+  00000060: 83 C4 08           add         esp,8
+  00000063: EB B7              jmp         0000001C
+
+??$_Unfancy@D@std@@YAPADPAD@Z (char * __cdecl std::_Unfancy<char>(char *)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: C3                 ret
+
+??$addressof@PAD@std@@YAPAPADAAPAD@Z (char * * __cdecl std::addressof<char *>(char * &)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: C3                 ret
+
+??$construct@PADAAPAD@?$_Wrap_alloc@V?$allocator@D@std@@@std@@QAEXPAPADAAPAD@Z (public: void __thiscall std::_Wrap_alloc<class std::allocator<char> >::construct<char *,char * &>(char * *,char * &)):
+  00000000: 8B 4C 24 04        mov         ecx,dword ptr [esp+4]
+  00000004: 85 C9              test        ecx,ecx
+  00000006: 74 08              je          00000010
+  00000008: 8B 44 24 08        mov         eax,dword ptr [esp+8]
+  0000000C: 8B 00              mov         eax,dword ptr [eax]
+  0000000E: 89 01              mov         dword ptr [ecx],eax
+  00000010: C2 08 00           ret         8
+
+??$construct@PADAAPAD@?$allocator@D@std@@QAEXPAPADAAPAD@Z (public: void __thiscall std::allocator<char>::construct<char *,char * &>(char * *,char * &)):
+  00000000: 8B 4C 24 04        mov         ecx,dword ptr [esp+4]
+  00000004: 85 C9              test        ecx,ecx
+  00000006: 74 08              je          00000010
+  00000008: 8B 44 24 08        mov         eax,dword ptr [esp+8]
+  0000000C: 8B 00              mov         eax,dword ptr [eax]
+  0000000E: 89 01              mov         dword ptr [ecx],eax
+  00000010: C2 08 00           ret         8
+
+??$construct@PADAAPAD@?$allocator_traits@V?$allocator@D@std@@@std@@SAXAAV?$allocator@D@1@PAPADAAPAD@Z (public: static void __cdecl std::allocator_traits<class std::allocator<char> >::construct<char *,char * &>(class std::allocator<char> &,char * *,char * &)):
+  00000000: 8B 4C 24 08        mov         ecx,dword ptr [esp+8]
+  00000004: 85 C9              test        ecx,ecx
+  00000006: 74 08              je          00000010
+  00000008: 8B 44 24 0C        mov         eax,dword ptr [esp+0Ch]
+  0000000C: 8B 00              mov         eax,dword ptr [eax]
+  0000000E: 89 01              mov         dword ptr [ecx],eax
+  00000010: C3                 ret
+
+??$destroy@PAD@?$_Wrap_alloc@V?$allocator@D@std@@@std@@QAEXPAPAD@Z (public: void __thiscall std::_Wrap_alloc<class std::allocator<char> >::destroy<char *>(char * *)):
+  00000000: C2 04 00           ret         4
+
+??$destroy@PAD@?$allocator@D@std@@QAEXPAPAD@Z (public: void __thiscall std::allocator<char>::destroy<char *>(char * *)):
+  00000000: C2 04 00           ret         4
+
+??$destroy@PAD@?$allocator_traits@V?$allocator@D@std@@@std@@SAXAAV?$allocator@D@1@PAPAD@Z (public: static void __cdecl std::allocator_traits<class std::allocator<char> >::destroy<char *>(class std::allocator<char> &,char * *)):
+  00000000: C3                 ret
+
+??$forward@AAPAD@std@@YAAAPADAAPAD@Z (char * & __cdecl std::forward<char * &>(char * &)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: C3                 ret
+
+??$forward@U?$_Wrap_alloc@V?$allocator@D@std@@@std@@@std@@YA$$QAU?$_Wrap_alloc@V?$allocator@D@std@@@0@AAU10@@Z (struct std::_Wrap_alloc<class std::allocator<char> > && __cdecl std::forward<struct std::_Wrap_alloc<class std::allocator<char> > >(struct std::_Wrap_alloc<class std::allocator<char> > &)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: C3                 ret
+
+??$forward@V?$allocator@D@std@@@std@@YA$$QAV?$allocator@D@0@AAV10@@Z (class std::allocator<char> && __cdecl std::forward<class std::allocator<char> >(class std::allocator<char> &)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: C3                 ret
+
+??$forward@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@std@@YA$$QAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@0@AAV10@@Z (class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > && __cdecl std::forward<class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > >(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: C3                 ret
+
+??$move@AAU?$_Wrap_alloc@V?$allocator@D@std@@@std@@@std@@YA$$QAU?$_Wrap_alloc@V?$allocator@D@std@@@0@AAU10@@Z (struct std::_Wrap_alloc<class std::allocator<char> > && __cdecl std::move<struct std::_Wrap_alloc<class std::allocator<char> > &>(struct std::_Wrap_alloc<class std::allocator<char> > &)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: C3                 ret
+
+??0?$_Immortalizer@V_Iostream_error_category@std@@@std@@QAE@XZ (public: __thiscall std::_Immortalizer<class std::_Iostream_error_category>::_Immortalizer<class std::_Iostream_error_category>(void)):
+  00000000: 8B C1              mov         eax,ecx
+  00000002: 85 C9              test        ecx,ecx
+  00000004: 74 0D              je          00000013
+  00000006: C7 01 00 00 00 00  mov         dword ptr [ecx],offset ??_7_Iostream_error_category@std@@6B@
+  0000000C: C7 41 04 05 00 00  mov         dword ptr [ecx+4],5
+            00
+  00000013: C3                 ret
+
+??0?$_String_alloc@U?$_String_base_types@DV?$allocator@D@std@@@std@@@std@@QAE@XZ (public: __thiscall std::_String_alloc<struct std::_String_base_types<char,class std::allocator<char> > >::_String_alloc<struct std::_String_base_types<char,class std::allocator<char> > >(void)):
+  00000000: C7 41 10 00 00 00  mov         dword ptr [ecx+10h],0
+            00
+  00000007: 8B C1              mov         eax,ecx
+  00000009: C7 41 14 00 00 00  mov         dword ptr [ecx+14h],0
+            00
+  00000010: C3                 ret
+
+??0?$_String_val@U?$_Simple_types@D@std@@@std@@QAE@XZ (public: __thiscall std::_String_val<struct std::_Simple_types<char> >::_String_val<struct std::_Simple_types<char> >(void)):
+  00000000: C7 41 10 00 00 00  mov         dword ptr [ecx+10h],0
+            00
+  00000007: 8B C1              mov         eax,ecx
+  00000009: C7 41 14 00 00 00  mov         dword ptr [ecx+14h],0
+            00
+  00000010: C3                 ret
+
+??0?$_Wrap_alloc@V?$allocator@D@std@@@std@@QAE@$$QAU01@@Z (public: __thiscall std::_Wrap_alloc<class std::allocator<char> >::_Wrap_alloc<class std::allocator<char> >(struct std::_Wrap_alloc<class std::allocator<char> > &&)):
+  00000000: 8B C1              mov         eax,ecx
+  00000002: C2 04 00           ret         4
+
+??0?$_Wrap_alloc@V?$allocator@D@std@@@std@@QAE@XZ (public: __thiscall std::_Wrap_alloc<class std::allocator<char> >::_Wrap_alloc<class std::allocator<char> >(void)):
+  00000000: 8B C1              mov         eax,ecx
+  00000002: C3                 ret
+
+??0?$allocator@D@std@@QAE@ABV01@@Z (public: __thiscall std::allocator<char>::allocator<char>(class std::allocator<char> const &)):
+  00000000: 8B C1              mov         eax,ecx
+  00000002: C2 04 00           ret         4
+
+??0?$allocator@D@std@@QAE@XZ (public: __thiscall std::allocator<char>::allocator<char>(void)):
+  00000000: 8B C1              mov         eax,ecx
+  00000002: C3                 ret
+
+??0?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAE@$$QAV01@@Z (public: __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &&)):
+  00000000: 56                 push        esi
+  00000001: FF 74 24 08        push        dword ptr [esp+8]
+  00000005: 8B F1              mov         esi,ecx
+  00000007: C7 46 14 0F 00 00  mov         dword ptr [esi+14h],0Fh
+            00
+  0000000E: C7 46 10 00 00 00  mov         dword ptr [esi+10h],0
+            00
+  00000015: C6 06 00           mov         byte ptr [esi],0
+  00000018: E8 00 00 00 00     call        ?_Assign_rv@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEX$$QAV12@@Z
+  0000001D: 8B C6              mov         eax,esi
+  0000001F: 5E                 pop         esi
+  00000020: C2 04 00           ret         4
+
+??0?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAE@ABV01@@Z (public: __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)):
+  00000000: 56                 push        esi
+  00000001: 8B F1              mov         esi,ecx
+  00000003: 6A FF              push        0FFFFFFFFh
+  00000005: 6A 00              push        0
+  00000007: FF 74 24 10        push        dword ptr [esp+10h]
+  0000000B: C7 46 14 0F 00 00  mov         dword ptr [esi+14h],0Fh
+            00
+  00000012: C7 46 10 00 00 00  mov         dword ptr [esi+10h],0
+            00
+  00000019: C6 06 00           mov         byte ptr [esi],0
+  0000001C: E8 00 00 00 00     call        ?assign@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@ABV12@II@Z
+  00000021: 8B C6              mov         eax,esi
+  00000023: 5E                 pop         esi
+  00000024: C2 04 00           ret         4
+
+??0?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAE@PBD@Z (public: __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >(char const *)):
+  00000000: 56                 push        esi
+  00000001: 8B F1              mov         esi,ecx
+  00000003: 8B 4C 24 08        mov         ecx,dword ptr [esp+8]
+  00000007: C7 46 14 0F 00 00  mov         dword ptr [esi+14h],0Fh
+            00
+  0000000E: C7 46 10 00 00 00  mov         dword ptr [esi+10h],0
+            00
+  00000015: C6 06 00           mov         byte ptr [esi],0
+  00000018: 80 39 00           cmp         byte ptr [ecx],0
+  0000001B: 75 11              jne         0000002E
+  0000001D: 33 D2              xor         edx,edx
+  0000001F: 52                 push        edx
+  00000020: 51                 push        ecx
+  00000021: 8B CE              mov         ecx,esi
+  00000023: E8 00 00 00 00     call        ?assign@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@PBDI@Z
+  00000028: 8B C6              mov         eax,esi
+  0000002A: 5E                 pop         esi
+  0000002B: C2 04 00           ret         4
+  0000002E: 8B D1              mov         edx,ecx
+  00000030: 57                 push        edi
+  00000031: 8D 7A 01           lea         edi,[edx+1]
+  00000034: 8A 02              mov         al,byte ptr [edx]
+  00000036: 42                 inc         edx
+  00000037: 84 C0              test        al,al
+  00000039: 75 F9              jne         00000034
+  0000003B: 2B D7              sub         edx,edi
+  0000003D: 5F                 pop         edi
+  0000003E: 52                 push        edx
+  0000003F: 51                 push        ecx
+  00000040: 8B CE              mov         ecx,esi
+  00000042: E8 00 00 00 00     call        ?assign@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@PBDI@Z
+  00000047: 8B C6              mov         eax,esi
+  00000049: 5E                 pop         esi
+  0000004A: C2 04 00           ret         4
+
+??0_Bxty@?$_String_val@U?$_Simple_types@D@std@@@std@@QAE@XZ (public: __thiscall std::_String_val<struct std::_Simple_types<char> >::_Bxty::_Bxty(void)):
+  00000000: 8B C1              mov         eax,ecx
+  00000002: C3                 ret
+
+??0_Generic_error_category@std@@QAE@XZ (public: __thiscall std::_Generic_error_category::_Generic_error_category(void)):
+  00000000: C7 01 00 00 00 00  mov         dword ptr [ecx],offset ??_7_Generic_error_category@std@@6B@
+  00000006: 8B C1              mov         eax,ecx
+  00000008: C7 41 04 03 00 00  mov         dword ptr [ecx+4],3
+            00
+  0000000F: C3                 ret
+
+??0_Iostream_error_category@std@@QAE@XZ (public: __thiscall std::_Iostream_error_category::_Iostream_error_category(void)):
+  00000000: C7 01 00 00 00 00  mov         dword ptr [ecx],offset ??_7_Iostream_error_category@std@@6B@
+  00000006: 8B C1              mov         eax,ecx
+  00000008: C7 41 04 05 00 00  mov         dword ptr [ecx+4],5
+            00
+  0000000F: C3                 ret
+
+??0_Sentry_base@?$basic_ostream@DU?$char_traits@D@std@@@std@@QAE@AAV12@@Z (public: __thiscall std::basic_ostream<char,struct std::char_traits<char> >::_Sentry_base::_Sentry_base(class std::basic_ostream<char,struct std::char_traits<char> > &)):
+  00000000: 8B 54 24 04        mov         edx,dword ptr [esp+4]
+  00000004: 56                 push        esi
+  00000005: 8B F1              mov         esi,ecx
+  00000007: 89 16              mov         dword ptr [esi],edx
+  00000009: 8B 02              mov         eax,dword ptr [edx]
+  0000000B: 8B 40 04           mov         eax,dword ptr [eax+4]
+  0000000E: 8B 4C 10 38        mov         ecx,dword ptr [eax+edx+38h]
+  00000012: 85 C9              test        ecx,ecx
+  00000014: 74 05              je          0000001B
+  00000016: 8B 01              mov         eax,dword ptr [ecx]
+  00000018: FF 50 04           call        dword ptr [eax+4]
+  0000001B: 8B C6              mov         eax,esi
+  0000001D: 5E                 pop         esi
+  0000001E: C2 04 00           ret         4
+
+??0_System_error@std@@IAE@Verror_code@1@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@1@@Z (protected: __thiscall std::_System_error::_System_error(class std::error_code,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)):
+  00000000: 83 EC 24           sub         esp,24h
+  00000003: A1 00 00 00 00     mov         eax,dword ptr [___security_cookie]
+  00000008: 33 C4              xor         eax,esp
+  0000000A: 89 44 24 20        mov         dword ptr [esp+20h],eax
+  0000000E: 8B 44 24 30        mov         eax,dword ptr [esp+30h]
+  00000012: 56                 push        esi
+  00000013: 83 EC 18           sub         esp,18h
+  00000016: 8B F1              mov         esi,ecx
+  00000018: 8B CC              mov         ecx,esp
+  0000001A: 6A FF              push        0FFFFFFFFh
+  0000001C: 6A 00              push        0
+  0000001E: C7 41 14 0F 00 00  mov         dword ptr [ecx+14h],0Fh
+            00
+  00000025: C7 41 10 00 00 00  mov         dword ptr [ecx+10h],0
+            00
+  0000002C: 50                 push        eax
+  0000002D: C6 01 00           mov         byte ptr [ecx],0
+  00000030: E8 00 00 00 00     call        ?assign@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@ABV12@II@Z
+  00000035: FF 74 24 48        push        dword ptr [esp+48h]
+  00000039: 8D 44 24 28        lea         eax,[esp+28h]
+  0000003D: FF 74 24 48        push        dword ptr [esp+48h]
+  00000041: 50                 push        eax
+  00000042: E8 00 00 00 00     call        ?_Makestr@_System_error@std@@CA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@2@Verror_code@2@V32@@Z
+  00000047: 8B C8              mov         ecx,eax
+  00000049: 83 C4 24           add         esp,24h
+  0000004C: 83 79 14 10        cmp         dword ptr [ecx+14h],10h
+  00000050: 72 02              jb          00000054
+  00000052: 8B 09              mov         ecx,dword ptr [ecx]
+  00000054: 8D 46 04           lea         eax,[esi+4]
+  00000057: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7exception@std@@6B@
+  0000005D: 0F 57 C0           xorps       xmm0,xmm0
+  00000060: 89 4C 24 04        mov         dword ptr [esp+4],ecx
+  00000064: 50                 push        eax
+  00000065: 66 0F D6 00        movq        mmword ptr [eax],xmm0
+  00000069: 8D 44 24 08        lea         eax,[esp+8]
+  0000006D: 50                 push        eax
+  0000006E: C6 44 24 10 01     mov         byte ptr [esp+10h],1
+  00000073: E8 00 00 00 00     call        ___std_exception_copy
+  00000078: 8B 44 24 28        mov         eax,dword ptr [esp+28h]
+  0000007C: 83 C4 08           add         esp,8
+  0000007F: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7runtime_error@std@@6B@
+  00000085: 83 F8 10           cmp         eax,10h
+  00000088: 72 0F              jb          00000099
+  0000008A: 40                 inc         eax
+  0000008B: 8D 4C 24 0C        lea         ecx,[esp+0Ch]
+  0000008F: 50                 push        eax
+  00000090: FF 74 24 10        push        dword ptr [esp+10h]
+  00000094: E8 00 00 00 00     call        ?deallocate@?$_Wrap_alloc@V?$allocator@D@std@@@std@@QAEXPADI@Z
+  00000099: 8B 4C 24 2C        mov         ecx,dword ptr [esp+2Ch]
+  0000009D: 8B C6              mov         eax,esi
+  0000009F: 89 4E 0C           mov         dword ptr [esi+0Ch],ecx
+  000000A2: 8B 4C 24 30        mov         ecx,dword ptr [esp+30h]
+  000000A6: 89 4E 10           mov         dword ptr [esi+10h],ecx
+  000000A9: 8B 4C 24 24        mov         ecx,dword ptr [esp+24h]
+  000000AD: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7_System_error@std@@6B@
+  000000B3: 5E                 pop         esi
+  000000B4: 33 CC              xor         ecx,esp
+  000000B6: E8 00 00 00 00     call        @__security_check_cookie@4
+  000000BB: 83 C4 24           add         esp,24h
+  000000BE: C2 0C 00           ret         0Ch
+
+??0_System_error@std@@QAE@ABV01@@Z (public: __thiscall std::_System_error::_System_error(class std::_System_error const &)):
+  00000000: 56                 push        esi
+  00000001: 8B 74 24 08        mov         esi,dword ptr [esp+8]
+  00000005: 0F 57 C0           xorps       xmm0,xmm0
+  00000008: 57                 push        edi
+  00000009: 8B F9              mov         edi,ecx
+  0000000B: 8D 47 04           lea         eax,[edi+4]
+  0000000E: 50                 push        eax
+  0000000F: C7 07 00 00 00 00  mov         dword ptr [edi],offset ??_7exception@std@@6B@
+  00000015: 66 0F D6 00        movq        mmword ptr [eax],xmm0
+  00000019: 8D 46 04           lea         eax,[esi+4]
+  0000001C: 50                 push        eax
+  0000001D: E8 00 00 00 00     call        ___std_exception_copy
+  00000022: C7 07 00 00 00 00  mov         dword ptr [edi],offset ??_7_System_error@std@@6B@
+  00000028: 83 C4 08           add         esp,8
+  0000002B: 8B 46 0C           mov         eax,dword ptr [esi+0Ch]
+  0000002E: 89 47 0C           mov         dword ptr [edi+0Ch],eax
+  00000031: 8B 46 10           mov         eax,dword ptr [esi+10h]
+  00000034: 89 47 10           mov         dword ptr [edi+10h],eax
+  00000037: 8B C7              mov         eax,edi
+  00000039: 5F                 pop         edi
+  0000003A: 5E                 pop         esi
+  0000003B: C2 04 00           ret         4
+
+??0error_category@std@@QAE@XZ (public: __thiscall std::error_category::error_category(void)):
+  00000000: C7 01 00 00 00 00  mov         dword ptr [ecx],offset ??_7error_category@std@@6B@
+  00000006: 8B C1              mov         eax,ecx
+  00000008: 89 49 04           mov         dword ptr [ecx+4],ecx
+  0000000B: C3                 ret
+
+??0error_code@std@@QAE@HABVerror_category@1@@Z (public: __thiscall std::error_code::error_code(int,class std::error_category const &)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: 89 01              mov         dword ptr [ecx],eax
+  00000006: 8B 44 24 08        mov         eax,dword ptr [esp+8]
+  0000000A: 89 41 04           mov         dword ptr [ecx+4],eax
+  0000000D: 8B C1              mov         eax,ecx
+  0000000F: C2 08 00           ret         8
+
+??0error_condition@std@@QAE@HABVerror_category@1@@Z (public: __thiscall std::error_condition::error_condition(int,class std::error_category const &)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: 89 01              mov         dword ptr [ecx],eax
+  00000006: 8B 44 24 08        mov         eax,dword ptr [esp+8]
+  0000000A: 89 41 04           mov         dword ptr [ecx+4],eax
+  0000000D: 8B C1              mov         eax,ecx
+  0000000F: C2 08 00           ret         8
+
+??0exception@std@@QAE@ABV01@@Z (public: __thiscall std::exception::exception(class std::exception const &)):
+  00000000: 56                 push        esi
+  00000001: 8B F1              mov         esi,ecx
+  00000003: 0F 57 C0           xorps       xmm0,xmm0
+  00000006: 8D 46 04           lea         eax,[esi+4]
+  00000009: 50                 push        eax
+  0000000A: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7exception@std@@6B@
+  00000010: 66 0F D6 00        movq        mmword ptr [eax],xmm0
+  00000014: 8B 44 24 0C        mov         eax,dword ptr [esp+0Ch]
+  00000018: 83 C0 04           add         eax,4
+  0000001B: 50                 push        eax
+  0000001C: E8 00 00 00 00     call        ___std_exception_copy
+  00000021: 83 C4 08           add         esp,8
+  00000024: 8B C6              mov         eax,esi
+  00000026: 5E                 pop         esi
+  00000027: C2 04 00           ret         4
+
+??0exception@std@@QAE@QBD@Z (public: __thiscall std::exception::exception(char const * const)):
+  00000000: 83 EC 08           sub         esp,8
+  00000003: 8B 44 24 0C        mov         eax,dword ptr [esp+0Ch]
+  00000007: 0F 57 C0           xorps       xmm0,xmm0
+  0000000A: 56                 push        esi
+  0000000B: 8B F1              mov         esi,ecx
+  0000000D: 89 44 24 04        mov         dword ptr [esp+4],eax
+  00000011: 8D 56 04           lea         edx,[esi+4]
+  00000014: C6 44 24 08 01     mov         byte ptr [esp+8],1
+  00000019: 52                 push        edx
+  0000001A: 8D 44 24 08        lea         eax,[esp+8]
+  0000001E: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7exception@std@@6B@
+  00000024: 50                 push        eax
+  00000025: 66 0F D6 02        movq        mmword ptr [edx],xmm0
+  00000029: E8 00 00 00 00     call        ___std_exception_copy
+  0000002E: 83 C4 08           add         esp,8
+  00000031: 8B C6              mov         eax,esi
+  00000033: 5E                 pop         esi
+  00000034: 83 C4 08           add         esp,8
+  00000037: C2 04 00           ret         4
+
+??0failure@ios_base@std@@QAE@ABV012@@Z (public: __thiscall std::ios_base::failure::failure(class std::ios_base::failure const &)):
+  00000000: 56                 push        esi
+  00000001: 8B 74 24 08        mov         esi,dword ptr [esp+8]
+  00000005: 0F 57 C0           xorps       xmm0,xmm0
+  00000008: 57                 push        edi
+  00000009: 8B F9              mov         edi,ecx
+  0000000B: 8D 47 04           lea         eax,[edi+4]
+  0000000E: 50                 push        eax
+  0000000F: C7 07 00 00 00 00  mov         dword ptr [edi],offset ??_7exception@std@@6B@
+  00000015: 66 0F D6 00        movq        mmword ptr [eax],xmm0
+  00000019: 8D 46 04           lea         eax,[esi+4]
+  0000001C: 50                 push        eax
+  0000001D: E8 00 00 00 00     call        ___std_exception_copy
+  00000022: C7 07 00 00 00 00  mov         dword ptr [edi],offset ??_7_System_error@std@@6B@
+  00000028: 83 C4 08           add         esp,8
+  0000002B: 8B 46 0C           mov         eax,dword ptr [esi+0Ch]
+  0000002E: 89 47 0C           mov         dword ptr [edi+0Ch],eax
+  00000031: 8B 46 10           mov         eax,dword ptr [esi+10h]
+  00000034: 89 47 10           mov         dword ptr [edi+10h],eax
+  00000037: 8B C7              mov         eax,edi
+  00000039: C7 07 00 00 00 00  mov         dword ptr [edi],offset ??_7failure@ios_base@std@@6B@
+  0000003F: 5F                 pop         edi
+  00000040: 5E                 pop         esi
+  00000041: C2 04 00           ret         4
+
+??0failure@ios_base@std@@QAE@PBDABVerror_code@2@@Z (public: __thiscall std::ios_base::failure::failure(char const *,class std::error_code const &)):
+  00000000: 8B 44 24 08        mov         eax,dword ptr [esp+8]
+  00000004: 56                 push        esi
+  00000005: FF 74 24 08        push        dword ptr [esp+8]
+  00000009: 8B F1              mov         esi,ecx
+  0000000B: FF 70 04           push        dword ptr [eax+4]
+  0000000E: FF 30              push        dword ptr [eax]
+  00000010: E8 00 00 00 00     call        ??0system_error@std@@QAE@Verror_code@1@PBD@Z
+  00000015: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7failure@ios_base@std@@6B@
+  0000001B: 8B C6              mov         eax,esi
+  0000001D: 5E                 pop         esi
+  0000001E: C2 08 00           ret         8
+
+??0runtime_error@std@@QAE@ABV01@@Z (public: __thiscall std::runtime_error::runtime_error(class std::runtime_error const &)):
+  00000000: 56                 push        esi
+  00000001: 8B F1              mov         esi,ecx
+  00000003: 0F 57 C0           xorps       xmm0,xmm0
+  00000006: 8D 46 04           lea         eax,[esi+4]
+  00000009: 50                 push        eax
+  0000000A: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7exception@std@@6B@
+  00000010: 66 0F D6 00        movq        mmword ptr [eax],xmm0
+  00000014: 8B 44 24 0C        mov         eax,dword ptr [esp+0Ch]
+  00000018: 83 C0 04           add         eax,4
+  0000001B: 50                 push        eax
+  0000001C: E8 00 00 00 00     call        ___std_exception_copy
+  00000021: 83 C4 08           add         esp,8
+  00000024: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7runtime_error@std@@6B@
+  0000002A: 8B C6              mov         eax,esi
+  0000002C: 5E                 pop         esi
+  0000002D: C2 04 00           ret         4
+
+??0runtime_error@std@@QAE@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@1@@Z (public: __thiscall std::runtime_error::runtime_error(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)):
+  00000000: 8B 54 24 04        mov         edx,dword ptr [esp+4]
+  00000004: 83 EC 08           sub         esp,8
+  00000007: 83 7A 14 10        cmp         dword ptr [edx+14h],10h
+  0000000B: 56                 push        esi
+  0000000C: 8B F1              mov         esi,ecx
+  0000000E: 72 02              jb          00000012
+  00000010: 8B 12              mov         edx,dword ptr [edx]
+  00000012: 8D 46 04           lea         eax,[esi+4]
+  00000015: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7exception@std@@6B@
+  0000001B: 0F 57 C0           xorps       xmm0,xmm0
+  0000001E: 89 54 24 04        mov         dword ptr [esp+4],edx
+  00000022: 50                 push        eax
+  00000023: 66 0F D6 00        movq        mmword ptr [eax],xmm0
+  00000027: 8D 44 24 08        lea         eax,[esp+8]
+  0000002B: 50                 push        eax
+  0000002C: C6 44 24 10 01     mov         byte ptr [esp+10h],1
+  00000031: E8 00 00 00 00     call        ___std_exception_copy
+  00000036: 83 C4 08           add         esp,8
+  00000039: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7runtime_error@std@@6B@
+  0000003F: 8B C6              mov         eax,esi
+  00000041: 5E                 pop         esi
+  00000042: 83 C4 08           add         esp,8
+  00000045: C2 04 00           ret         4
+
+??0sentry@?$basic_ostream@DU?$char_traits@D@std@@@std@@QAE@AAV12@@Z (public: __thiscall std::basic_ostream<char,struct std::char_traits<char> >::sentry::sentry(class std::basic_ostream<char,struct std::char_traits<char> > &)):
+  00000000: 56                 push        esi
+  00000001: 8B 74 24 08        mov         esi,dword ptr [esp+8]
+  00000005: 57                 push        edi
+  00000006: 8B F9              mov         edi,ecx
+  00000008: 89 37              mov         dword ptr [edi],esi
+  0000000A: 8B 06              mov         eax,dword ptr [esi]
+  0000000C: 8B 40 04           mov         eax,dword ptr [eax+4]
+  0000000F: 8B 4C 30 38        mov         ecx,dword ptr [eax+esi+38h]
+  00000013: 85 C9              test        ecx,ecx
+  00000015: 74 05              je          0000001C
+  00000017: 8B 01              mov         eax,dword ptr [ecx]
+  00000019: FF 50 04           call        dword ptr [eax+4]
+  0000001C: 8B 06              mov         eax,dword ptr [esi]
+  0000001E: 8B 40 04           mov         eax,dword ptr [eax+4]
+  00000021: 83 7C 30 0C 00     cmp         dword ptr [eax+esi+0Ch],0
+  00000026: 75 11              jne         00000039
+  00000028: 8B 4C 30 3C        mov         ecx,dword ptr [eax+esi+3Ch]
+  0000002C: 85 C9              test        ecx,ecx
+  0000002E: 74 09              je          00000039
+  00000030: 3B CE              cmp         ecx,esi
+  00000032: 74 05              je          00000039
+  00000034: E8 00 00 00 00     call        ?flush@?$basic_ostream@DU?$char_traits@D@std@@@std@@QAEAAV12@XZ
+  00000039: 8B 06              mov         eax,dword ptr [esi]
+  0000003B: 8B 40 04           mov         eax,dword ptr [eax+4]
+  0000003E: 83 7C 30 0C 00     cmp         dword ptr [eax+esi+0Ch],0
+  00000043: 0F 94 C0           sete        al
+  00000046: 88 47 04           mov         byte ptr [edi+4],al
+  00000049: 8B C7              mov         eax,edi
+  0000004B: 5F                 pop         edi
+  0000004C: 5E                 pop         esi
+  0000004D: C2 04 00           ret         4
+
+??0system_error@std@@QAE@ABV01@@Z (public: __thiscall std::system_error::system_error(class std::system_error const &)):
+  00000000: 56                 push        esi
+  00000001: 8B 74 24 08        mov         esi,dword ptr [esp+8]
+  00000005: 0F 57 C0           xorps       xmm0,xmm0
+  00000008: 57                 push        edi
+  00000009: 8B F9              mov         edi,ecx
+  0000000B: 8D 47 04           lea         eax,[edi+4]
+  0000000E: 50                 push        eax
+  0000000F: C7 07 00 00 00 00  mov         dword ptr [edi],offset ??_7exception@std@@6B@
+  00000015: 66 0F D6 00        movq        mmword ptr [eax],xmm0
+  00000019: 8D 46 04           lea         eax,[esi+4]
+  0000001C: 50                 push        eax
+  0000001D: E8 00 00 00 00     call        ___std_exception_copy
+  00000022: C7 07 00 00 00 00  mov         dword ptr [edi],offset ??_7_System_error@std@@6B@
+  00000028: 83 C4 08           add         esp,8
+  0000002B: 8B 46 0C           mov         eax,dword ptr [esi+0Ch]
+  0000002E: 89 47 0C           mov         dword ptr [edi+0Ch],eax
+  00000031: 8B 46 10           mov         eax,dword ptr [esi+10h]
+  00000034: 89 47 10           mov         dword ptr [edi+10h],eax
+  00000037: 8B C7              mov         eax,edi
+  00000039: C7 07 00 00 00 00  mov         dword ptr [edi],offset ??_7system_error@std@@6B@
+  0000003F: 5F                 pop         edi
+  00000040: 5E                 pop         esi
+  00000041: C2 04 00           ret         4
+
+??0system_error@std@@QAE@Verror_code@1@PBD@Z (public: __thiscall std::system_error::system_error(class std::error_code,char const *)):
+  00000000: 83 EC 1C           sub         esp,1Ch
+  00000003: A1 00 00 00 00     mov         eax,dword ptr [___security_cookie]
+  00000008: 33 C4              xor         eax,esp
+  0000000A: 89 44 24 18        mov         dword ptr [esp+18h],eax
+  0000000E: 8B 54 24 28        mov         edx,dword ptr [esp+28h]
+  00000012: 56                 push        esi
+  00000013: 8B F1              mov         esi,ecx
+  00000015: C7 44 24 18 0F 00  mov         dword ptr [esp+18h],0Fh
+            00 00
+  0000001D: C7 44 24 14 00 00  mov         dword ptr [esp+14h],0
+            00 00
+  00000025: 80 3A 00           cmp         byte ptr [edx],0
+  00000028: C6 44 24 04 00     mov         byte ptr [esp+4],0
+  0000002D: 75 04              jne         00000033
+  0000002F: 33 C9              xor         ecx,ecx
+  00000031: EB 17              jmp         0000004A
+  00000033: 8B CA              mov         ecx,edx
+  00000035: 57                 push        edi
+  00000036: 8D 79 01           lea         edi,[ecx+1]
+  00000039: 0F 1F 80 00 00 00  nop         dword ptr [eax]
+            00
+  00000040: 8A 01              mov         al,byte ptr [ecx]
+  00000042: 41                 inc         ecx
+  00000043: 84 C0              test        al,al
+  00000045: 75 F9              jne         00000040
+  00000047: 2B CF              sub         ecx,edi
+  00000049: 5F                 pop         edi
+  0000004A: 51                 push        ecx
+  0000004B: 52                 push        edx
+  0000004C: 8D 4C 24 0C        lea         ecx,[esp+0Ch]
+  00000050: E8 00 00 00 00     call        ?assign@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@PBDI@Z
+  00000055: 8D 44 24 04        lea         eax,[esp+4]
+  00000059: 8B CE              mov         ecx,esi
+  0000005B: 50                 push        eax
+  0000005C: FF 74 24 2C        push        dword ptr [esp+2Ch]
+  00000060: FF 74 24 2C        push        dword ptr [esp+2Ch]
+  00000064: E8 00 00 00 00     call        ??0_System_error@std@@IAE@Verror_code@1@ABV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@1@@Z
+  00000069: 8B 4C 24 18        mov         ecx,dword ptr [esp+18h]
+  0000006D: 83 F9 10           cmp         ecx,10h
+  00000070: 72 0F              jb          00000081
+  00000072: 41                 inc         ecx
+  00000073: 51                 push        ecx
+  00000074: FF 74 24 08        push        dword ptr [esp+8]
+  00000078: 8D 4C 24 0C        lea         ecx,[esp+0Ch]
+  0000007C: E8 00 00 00 00     call        ?deallocate@?$_Wrap_alloc@V?$allocator@D@std@@@std@@QAEXPADI@Z
+  00000081: 8B 4C 24 1C        mov         ecx,dword ptr [esp+1Ch]
+  00000085: 8B C6              mov         eax,esi
+  00000087: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7system_error@std@@6B@
+  0000008D: 5E                 pop         esi
+  0000008E: 33 CC              xor         ecx,esp
+  00000090: E8 00 00 00 00     call        @__security_check_cookie@4
+  00000095: 83 C4 1C           add         esp,1Ch
+  00000098: C2 0C 00           ret         0Ch
+
+??1?$_Compressed_pair@U?$_Wrap_alloc@V?$allocator@D@std@@@std@@V?$_String_val@U?$_Simple_types@D@std@@@2@$00@std@@QAE@XZ (public: __thiscall std::_Compressed_pair<struct std::_Wrap_alloc<class std::allocator<char> >,class std::_String_val<struct std::_Simple_types<char> >,1>::~_Compressed_pair<struct std::_Wrap_alloc<class std::allocator<char> >,class std::_String_val<struct std::_Simple_types<char> >,1>(void)):
+  00000000: C3                 ret
+
+??1?$_Immortalizer@V_Iostream_error_category@std@@@std@@QAE@XZ (public: __thiscall std::_Immortalizer<class std::_Iostream_error_category>::~_Immortalizer<class std::_Iostream_error_category>(void)):
+  00000000: C3                 ret
+
+??1?$_String_alloc@U?$_String_base_types@DV?$allocator@D@std@@@std@@@std@@QAE@XZ (public: __thiscall std::_String_alloc<struct std::_String_base_types<char,class std::allocator<char> > >::~_String_alloc<struct std::_String_base_types<char,class std::allocator<char> > >(void)):
+  00000000: C3                 ret
+
+??1?$_String_val@U?$_Simple_types@D@std@@@std@@QAE@XZ (public: __thiscall std::_String_val<struct std::_Simple_types<char> >::~_String_val<struct std::_Simple_types<char> >(void)):
+  00000000: C3                 ret
+
+??1?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAE@XZ (public: __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::~basic_string<char,struct std::char_traits<char>,class std::allocator<char> >(void)):
+  00000000: 56                 push        esi
+  00000001: 8B F1              mov         esi,ecx
+  00000003: 8B 46 14           mov         eax,dword ptr [esi+14h]
+  00000006: 83 F8 10           cmp         eax,10h
+  00000009: 72 09              jb          00000014
+  0000000B: 40                 inc         eax
+  0000000C: 50                 push        eax
+  0000000D: FF 36              push        dword ptr [esi]
+  0000000F: E8 00 00 00 00     call        ?deallocate@?$_Wrap_alloc@V?$allocator@D@std@@@std@@QAEXPADI@Z
+  00000014: C7 46 14 0F 00 00  mov         dword ptr [esi+14h],0Fh
+            00
+  0000001B: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  0000001F: C7 46 10 00 00 00  mov         dword ptr [esi+10h],0
+            00
+  00000026: 72 07              jb          0000002F
+  00000028: 8B 06              mov         eax,dword ptr [esi]
+  0000002A: 5E                 pop         esi
+  0000002B: C6 00 00           mov         byte ptr [eax],0
+  0000002E: C3                 ret
+  0000002F: C6 06 00           mov         byte ptr [esi],0
+  00000032: 5E                 pop         esi
+  00000033: C3                 ret
+
+??1_Bxty@?$_String_val@U?$_Simple_types@D@std@@@std@@QAE@XZ (public: __thiscall std::_String_val<struct std::_Simple_types<char> >::_Bxty::~_Bxty(void)):
+  00000000: C3                 ret
+
+??1_Generic_error_category@std@@UAE@XZ (public: virtual __thiscall std::_Generic_error_category::~_Generic_error_category(void)):
+  00000000: C7 01 00 00 00 00  mov         dword ptr [ecx],offset ??_7error_category@std@@6B@
+  00000006: C3                 ret
+
+??1_Iostream_error_category@std@@UAE@XZ (public: virtual __thiscall std::_Iostream_error_category::~_Iostream_error_category(void)):
+  00000000: C7 01 00 00 00 00  mov         dword ptr [ecx],offset ??_7error_category@std@@6B@
+  00000006: C3                 ret
+
+??1_Sentry_base@?$basic_ostream@DU?$char_traits@D@std@@@std@@QAE@XZ (public: __thiscall std::basic_ostream<char,struct std::char_traits<char> >::_Sentry_base::~_Sentry_base(void)):
+  00000000: 8B 09              mov         ecx,dword ptr [ecx]
+  00000002: 8B 01              mov         eax,dword ptr [ecx]
+  00000004: 8B 40 04           mov         eax,dword ptr [eax+4]
+  00000007: 8B 4C 08 38        mov         ecx,dword ptr [eax+ecx+38h]
+  0000000B: 85 C9              test        ecx,ecx
+  0000000D: 74 05              je          00000014
+  0000000F: 8B 01              mov         eax,dword ptr [ecx]
+  00000011: FF 60 08           jmp         dword ptr [eax+8]
+  00000014: C3                 ret
+
+??1_System_error@std@@UAE@XZ (public: virtual __thiscall std::_System_error::~_System_error(void)):
+  00000000: 8D 41 04           lea         eax,[ecx+4]
+  00000003: C7 01 00 00 00 00  mov         dword ptr [ecx],offset ??_7exception@std@@6B@
+  00000009: 50                 push        eax
+  0000000A: E8 00 00 00 00     call        ___std_exception_destroy
+  0000000F: 59                 pop         ecx
+  00000010: C3                 ret
+
+??1error_category@std@@UAE@XZ (public: virtual __thiscall std::error_category::~error_category(void)):
+  00000000: C7 01 00 00 00 00  mov         dword ptr [ecx],offset ??_7error_category@std@@6B@
+  00000006: C3                 ret
+
+??1exception@std@@UAE@XZ (public: virtual __thiscall std::exception::~exception(void)):
+  00000000: 8D 41 04           lea         eax,[ecx+4]
+  00000003: C7 01 00 00 00 00  mov         dword ptr [ecx],offset ??_7exception@std@@6B@
+  00000009: 50                 push        eax
+  0000000A: E8 00 00 00 00     call        ___std_exception_destroy
+  0000000F: 59                 pop         ecx
+  00000010: C3                 ret
+
+??1failure@ios_base@std@@UAE@XZ (public: virtual __thiscall std::ios_base::failure::~failure(void)):
+  00000000: 8D 41 04           lea         eax,[ecx+4]
+  00000003: C7 01 00 00 00 00  mov         dword ptr [ecx],offset ??_7exception@std@@6B@
+  00000009: 50                 push        eax
+  0000000A: E8 00 00 00 00     call        ___std_exception_destroy
+  0000000F: 59                 pop         ecx
+  00000010: C3                 ret
+
+??1runtime_error@std@@UAE@XZ (public: virtual __thiscall std::runtime_error::~runtime_error(void)):
+  00000000: 8D 41 04           lea         eax,[ecx+4]
+  00000003: C7 01 00 00 00 00  mov         dword ptr [ecx],offset ??_7exception@std@@6B@
+  00000009: 50                 push        eax
+  0000000A: E8 00 00 00 00     call        ___std_exception_destroy
+  0000000F: 59                 pop         ecx
+  00000010: C3                 ret
+
+??1sentry@?$basic_ostream@DU?$char_traits@D@std@@@std@@QAE@XZ (public: __thiscall std::basic_ostream<char,struct std::char_traits<char> >::sentry::~sentry(void)):
+  00000000: 56                 push        esi
+  00000001: 8B F1              mov         esi,ecx
+  00000003: E8 00 00 00 00     call        ?uncaught_exception@std@@YA_NXZ
+  00000008: 84 C0              test        al,al
+  0000000A: 75 07              jne         00000013
+  0000000C: 8B 0E              mov         ecx,dword ptr [esi]
+  0000000E: E8 00 00 00 00     call        ?_Osfx@?$basic_ostream@DU?$char_traits@D@std@@@std@@QAEXXZ
+  00000013: 8B 0E              mov         ecx,dword ptr [esi]
+  00000015: 5E                 pop         esi
+  00000016: 8B 01              mov         eax,dword ptr [ecx]
+  00000018: 8B 40 04           mov         eax,dword ptr [eax+4]
+  0000001B: 8B 4C 08 38        mov         ecx,dword ptr [eax+ecx+38h]
+  0000001F: 85 C9              test        ecx,ecx
+  00000021: 74 05              je          00000028
+  00000023: 8B 01              mov         eax,dword ptr [ecx]
+  00000025: FF 60 08           jmp         dword ptr [eax+8]
+  00000028: C3                 ret
+
+??1system_error@std@@UAE@XZ (public: virtual __thiscall std::system_error::~system_error(void)):
+  00000000: 8D 41 04           lea         eax,[ecx+4]
+  00000003: C7 01 00 00 00 00  mov         dword ptr [ecx],offset ??_7exception@std@@6B@
+  00000009: 50                 push        eax
+  0000000A: E8 00 00 00 00     call        ___std_exception_destroy
+  0000000F: 59                 pop         ecx
+  00000010: C3                 ret
+
+??2@YAPAXIPAX@Z (void * __cdecl operator new(unsigned int,void *)):
+  00000000: 8B 44 24 08        mov         eax,dword ptr [esp+8]
+  00000004: C3                 ret
+
+??8error_category@std@@QBE_NABV01@@Z (public: bool __thiscall std::error_category::operator==(class std::error_category const &)const ):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: 8B 49 04           mov         ecx,dword ptr [ecx+4]
+  00000007: 3B 48 04           cmp         ecx,dword ptr [eax+4]
+  0000000A: 0F 94 C0           sete        al
+  0000000D: C2 04 00           ret         4
+
+??8std@@YA_NABVerror_condition@0@0@Z (bool __cdecl std::operator==(class std::error_condition const &,class std::error_condition const &)):
+  00000000: 8B 54 24 04        mov         edx,dword ptr [esp+4]
+  00000004: 56                 push        esi
+  00000005: 8B 74 24 0C        mov         esi,dword ptr [esp+0Ch]
+  00000009: 8B 42 04           mov         eax,dword ptr [edx+4]
+  0000000C: 8B 4E 04           mov         ecx,dword ptr [esi+4]
+  0000000F: 8B 40 04           mov         eax,dword ptr [eax+4]
+  00000012: 3B 41 04           cmp         eax,dword ptr [ecx+4]
+  00000015: 75 0A              jne         00000021
+  00000017: 8B 02              mov         eax,dword ptr [edx]
+  00000019: 3B 06              cmp         eax,dword ptr [esi]
+  0000001B: 75 04              jne         00000021
+  0000001D: B0 01              mov         al,1
+  0000001F: 5E                 pop         esi
+  00000020: C3                 ret
+  00000021: 32 C0              xor         al,al
+  00000023: 5E                 pop         esi
+  00000024: C3                 ret
+
+??Bsentry@?$basic_ostream@DU?$char_traits@D@std@@@std@@QBE_NXZ (public: __thiscall std::basic_ostream<char,struct std::char_traits<char> >::sentry::operator bool(void)const ):
+  00000000: 8A 41 04           mov         al,byte ptr [ecx+4]
+  00000003: C3                 ret
+
+??_G_Generic_error_category@std@@UAEPAXI@Z (public: virtual void * __thiscall std::_Generic_error_category::`scalar deleting destructor'(unsigned int)):
+  00000000: F6 44 24 04 01     test        byte ptr [esp+4],1
+  00000005: 56                 push        esi
+  00000006: 8B F1              mov         esi,ecx
+  00000008: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7error_category@std@@6B@
+  0000000E: 74 0B              je          0000001B
+  00000010: 6A 08              push        8
+  00000012: 56                 push        esi
+  00000013: E8 00 00 00 00     call        ??3@YAXPAXI@Z
+  00000018: 83 C4 08           add         esp,8
+  0000001B: 8B C6              mov         eax,esi
+  0000001D: 5E                 pop         esi
+  0000001E: C2 04 00           ret         4
+
+??_G_Iostream_error_category@std@@UAEPAXI@Z (public: virtual void * __thiscall std::_Iostream_error_category::`scalar deleting destructor'(unsigned int)):
+  00000000: F6 44 24 04 01     test        byte ptr [esp+4],1
+  00000005: 56                 push        esi
+  00000006: 8B F1              mov         esi,ecx
+  00000008: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7error_category@std@@6B@
+  0000000E: 74 0B              je          0000001B
+  00000010: 6A 08              push        8
+  00000012: 56                 push        esi
+  00000013: E8 00 00 00 00     call        ??3@YAXPAXI@Z
+  00000018: 83 C4 08           add         esp,8
+  0000001B: 8B C6              mov         eax,esi
+  0000001D: 5E                 pop         esi
+  0000001E: C2 04 00           ret         4
+
+??_G_System_error@std@@UAEPAXI@Z (public: virtual void * __thiscall std::_System_error::`scalar deleting destructor'(unsigned int)):
+  00000000: 56                 push        esi
+  00000001: 8B F1              mov         esi,ecx
+  00000003: 8D 46 04           lea         eax,[esi+4]
+  00000006: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7exception@std@@6B@
+  0000000C: 50                 push        eax
+  0000000D: E8 00 00 00 00     call        ___std_exception_destroy
+  00000012: 83 C4 04           add         esp,4
+  00000015: F6 44 24 08 01     test        byte ptr [esp+8],1
+  0000001A: 74 0B              je          00000027
+  0000001C: 6A 14              push        14h
+  0000001E: 56                 push        esi
+  0000001F: E8 00 00 00 00     call        ??3@YAXPAXI@Z
+  00000024: 83 C4 08           add         esp,8
+  00000027: 8B C6              mov         eax,esi
+  00000029: 5E                 pop         esi
+  0000002A: C2 04 00           ret         4
+
+??_Gerror_category@std@@UAEPAXI@Z (public: virtual void * __thiscall std::error_category::`scalar deleting destructor'(unsigned int)):
+  00000000: F6 44 24 04 01     test        byte ptr [esp+4],1
+  00000005: 56                 push        esi
+  00000006: 8B F1              mov         esi,ecx
+  00000008: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7error_category@std@@6B@
+  0000000E: 74 0B              je          0000001B
+  00000010: 6A 08              push        8
+  00000012: 56                 push        esi
+  00000013: E8 00 00 00 00     call        ??3@YAXPAXI@Z
+  00000018: 83 C4 08           add         esp,8
+  0000001B: 8B C6              mov         eax,esi
+  0000001D: 5E                 pop         esi
+  0000001E: C2 04 00           ret         4
+
+??_Gexception@std@@UAEPAXI@Z (public: virtual void * __thiscall std::exception::`scalar deleting destructor'(unsigned int)):
+  00000000: 56                 push        esi
+  00000001: 8B F1              mov         esi,ecx
+  00000003: 8D 46 04           lea         eax,[esi+4]
+  00000006: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7exception@std@@6B@
+  0000000C: 50                 push        eax
+  0000000D: E8 00 00 00 00     call        ___std_exception_destroy
+  00000012: 83 C4 04           add         esp,4
+  00000015: F6 44 24 08 01     test        byte ptr [esp+8],1
+  0000001A: 74 0B              je          00000027
+  0000001C: 6A 0C              push        0Ch
+  0000001E: 56                 push        esi
+  0000001F: E8 00 00 00 00     call        ??3@YAXPAXI@Z
+  00000024: 83 C4 08           add         esp,8
+  00000027: 8B C6              mov         eax,esi
+  00000029: 5E                 pop         esi
+  0000002A: C2 04 00           ret         4
+
+??_Gfailure@ios_base@std@@UAEPAXI@Z (public: virtual void * __thiscall std::ios_base::failure::`scalar deleting destructor'(unsigned int)):
+  00000000: 56                 push        esi
+  00000001: 8B F1              mov         esi,ecx
+  00000003: 8D 46 04           lea         eax,[esi+4]
+  00000006: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7exception@std@@6B@
+  0000000C: 50                 push        eax
+  0000000D: E8 00 00 00 00     call        ___std_exception_destroy
+  00000012: 83 C4 04           add         esp,4
+  00000015: F6 44 24 08 01     test        byte ptr [esp+8],1
+  0000001A: 74 0B              je          00000027
+  0000001C: 6A 14              push        14h
+  0000001E: 56                 push        esi
+  0000001F: E8 00 00 00 00     call        ??3@YAXPAXI@Z
+  00000024: 83 C4 08           add         esp,8
+  00000027: 8B C6              mov         eax,esi
+  00000029: 5E                 pop         esi
+  0000002A: C2 04 00           ret         4
+
+??_Gruntime_error@std@@UAEPAXI@Z (public: virtual void * __thiscall std::runtime_error::`scalar deleting destructor'(unsigned int)):
+  00000000: 56                 push        esi
+  00000001: 8B F1              mov         esi,ecx
+  00000003: 8D 46 04           lea         eax,[esi+4]
+  00000006: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7exception@std@@6B@
+  0000000C: 50                 push        eax
+  0000000D: E8 00 00 00 00     call        ___std_exception_destroy
+  00000012: 83 C4 04           add         esp,4
+  00000015: F6 44 24 08 01     test        byte ptr [esp+8],1
+  0000001A: 74 0B              je          00000027
+  0000001C: 6A 0C              push        0Ch
+  0000001E: 56                 push        esi
+  0000001F: E8 00 00 00 00     call        ??3@YAXPAXI@Z
+  00000024: 83 C4 08           add         esp,8
+  00000027: 8B C6              mov         eax,esi
+  00000029: 5E                 pop         esi
+  0000002A: C2 04 00           ret         4
+
+??_Gsystem_error@std@@UAEPAXI@Z (public: virtual void * __thiscall std::system_error::`scalar deleting destructor'(unsigned int)):
+  00000000: 56                 push        esi
+  00000001: 8B F1              mov         esi,ecx
+  00000003: 8D 46 04           lea         eax,[esi+4]
+  00000006: C7 06 00 00 00 00  mov         dword ptr [esi],offset ??_7exception@std@@6B@
+  0000000C: 50                 push        eax
+  0000000D: E8 00 00 00 00     call        ___std_exception_destroy
+  00000012: 83 C4 04           add         esp,4
+  00000015: F6 44 24 08 01     test        byte ptr [esp+8],1
+  0000001A: 74 0B              je          00000027
+  0000001C: 6A 14              push        14h
+  0000001E: 56                 push        esi
+  0000001F: E8 00 00 00 00     call        ??3@YAXPAXI@Z
+  00000024: 83 C4 08           add         esp,8
+  00000027: 8B C6              mov         eax,esi
+  00000029: 5E                 pop         esi
+  0000002A: C2 04 00           ret         4
+
+??__F_Static@?1???$_Immortalize@V_Iostream_error_category@std@@@std@@YAAAV_Iostream_error_category@0@XZ@YAXXZ (void __cdecl `class _Static::_Iostream_error_category & __cdecl std::_Immortalize<class std::_Iostream_error_category>(void)'::`2'::`dynamic atexit destructor for '_Static''(void)):
+  00000000: C3                 ret
+
+?_Allocate@std@@YAPAXII_N@Z (void * __cdecl std::_Allocate(unsigned int,unsigned int,bool)):
+  00000000: 8B 4C 24 04        mov         ecx,dword ptr [esp+4]
+  00000004: 85 C9              test        ecx,ecx
+  00000006: 75 03              jne         0000000B
+  00000008: 33 C0              xor         eax,eax
+  0000000A: C3                 ret
+  0000000B: 83 C8 FF           or          eax,0FFFFFFFFh
+  0000000E: 33 D2              xor         edx,edx
+  00000010: F7 74 24 08        div         eax,dword ptr [esp+8]
+  00000014: 3B C1              cmp         eax,ecx
+  00000016: 0F 82 00 00 00 00  jb          ?_Xbad_alloc@std@@YAXXZ
+  0000001C: 0F AF 4C 24 08     imul        ecx,dword ptr [esp+8]
+  00000021: 80 7C 24 0C 00     cmp         byte ptr [esp+0Ch],0
+  00000026: 74 30              je          00000058
+  00000028: 81 F9 00 10 00 00  cmp         ecx,1000h
+  0000002E: 72 28              jb          00000058
+  00000030: 8D 41 23           lea         eax,[ecx+23h]
+  00000033: 3B C1              cmp         eax,ecx
+  00000035: 0F 86 00 00 00 00  jbe         ?_Xbad_alloc@std@@YAXXZ
+  0000003B: 50                 push        eax
+  0000003C: E8 00 00 00 00     call        ??2@YAPAXI@Z
+  00000041: 8B C8              mov         ecx,eax
+  00000043: 83 C4 04           add         esp,4
+  00000046: 85 C9              test        ecx,ecx
+  00000048: 0F 84 00 00 00 00  je          __invalid_parameter_noinfo_noreturn
+  0000004E: 8D 41 23           lea         eax,[ecx+23h]
+  00000051: 83 E0 E0           and         eax,0FFFFFFE0h
+  00000054: 89 48 FC           mov         dword ptr [eax-4],ecx
+  00000057: C3                 ret
+  00000058: 51                 push        ecx
+  00000059: E8 00 00 00 00     call        ??2@YAPAXI@Z
+  0000005E: 83 C4 04           add         esp,4
+  00000061: 85 C0              test        eax,eax
+  00000063: 0F 84 00 00 00 00  je          __invalid_parameter_noinfo_noreturn
+  00000069: C3                 ret
+
+?_Assign_rv@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEX$$QAV12@@Z (public: void __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::_Assign_rv(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > &&)):
+  00000000: 56                 push        esi
+  00000001: 8B 74 24 08        mov         esi,dword ptr [esp+8]
+  00000005: 57                 push        edi
+  00000006: 8B F9              mov         edi,ecx
+  00000008: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  0000000C: 73 15              jae         00000023
+  0000000E: 8B 46 10           mov         eax,dword ptr [esi+10h]
+  00000011: 83 C0 01           add         eax,1
+  00000014: 74 1B              je          00000031
+  00000016: 50                 push        eax
+  00000017: 56                 push        esi
+  00000018: 57                 push        edi
+  00000019: E8 00 00 00 00     call        _memmove
+  0000001E: 83 C4 0C           add         esp,0Ch
+  00000021: EB 0E              jmp         00000031
+  00000023: 85 FF              test        edi,edi
+  00000025: 74 04              je          0000002B
+  00000027: 8B 06              mov         eax,dword ptr [esi]
+  00000029: 89 07              mov         dword ptr [edi],eax
+  0000002B: C7 06 00 00 00 00  mov         dword ptr [esi],0
+  00000031: 8B 46 10           mov         eax,dword ptr [esi+10h]
+  00000034: 89 47 10           mov         dword ptr [edi+10h],eax
+  00000037: 8B 46 14           mov         eax,dword ptr [esi+14h]
+  0000003A: 89 47 14           mov         dword ptr [edi+14h],eax
+  0000003D: C7 46 14 0F 00 00  mov         dword ptr [esi+14h],0Fh
+            00
+  00000044: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  00000048: C7 46 10 00 00 00  mov         dword ptr [esi+10h],0
+            00
+  0000004F: 72 0A              jb          0000005B
+  00000051: 8B 06              mov         eax,dword ptr [esi]
+  00000053: 5F                 pop         edi
+  00000054: 5E                 pop         esi
+  00000055: C6 00 00           mov         byte ptr [eax],0
+  00000058: C2 04 00           ret         4
+  0000005B: 5F                 pop         edi
+  0000005C: C6 06 00           mov         byte ptr [esi],0
+  0000005F: 5E                 pop         esi
+  00000060: C2 04 00           ret         4
+
+?_Bx@?$_String_alloc@U?$_String_base_types@DV?$allocator@D@std@@@std@@@std@@QAEAAT_Bxty@?$_String_val@U?$_Simple_types@D@std@@@2@XZ (public: union std::_String_val<struct std::_Simple_types<char> >::_Bxty & __thiscall std::_String_alloc<struct std::_String_base_types<char,class std::allocator<char> > >::_Bx(void)):
+  00000000: 8B C1              mov         eax,ecx
+  00000002: C3                 ret
+
+?_Check_offset@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QBEXI@Z (public: void __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::_Check_offset(unsigned int)const ):
+  00000000: 8B 41 10           mov         eax,dword ptr [ecx+10h]
+  00000003: 3B 44 24 04        cmp         eax,dword ptr [esp+4]
+  00000007: 72 03              jb          0000000C
+  00000009: C2 04 00           ret         4
+  0000000C: 68 00 00 00 00     push        offset ??_C@_0BI@CFPLBAOH@invalid?5string?5position?$AA@
+  00000011: E8 00 00 00 00     call        ?_Xout_of_range@std@@YAXPBD@Z
+$LN13:
+  00000016: CC                 int         3
+
+?_Clamp_suffix_size@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QBEIII@Z (public: unsigned int __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::_Clamp_suffix_size(unsigned int,unsigned int)const ):
+  00000000: 8B 41 10           mov         eax,dword ptr [ecx+10h]
+  00000003: 2B 44 24 04        sub         eax,dword ptr [esp+4]
+  00000007: 39 44 24 08        cmp         dword ptr [esp+8],eax
+  0000000B: 0F 46 44 24 08     cmovbe      eax,dword ptr [esp+8]
+  00000010: C2 08 00           ret         8
+
+?_Copy@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEXII@Z (public: void __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::_Copy(unsigned int,unsigned int)):
+  00000000: 55                 push        ebp
+  00000001: 8B EC              mov         ebp,esp
+  00000003: 6A FF              push        0FFFFFFFFh
+  00000005: 68 00 00 00 00     push        offset __ehhandler$?_Copy@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEXII@Z
+  0000000A: 64 A1 00 00 00 00  mov         eax,dword ptr fs:[00000000h]
+  00000010: 50                 push        eax
+  00000011: 83 EC 0C           sub         esp,0Ch
+  00000014: 53                 push        ebx
+  00000015: 56                 push        esi
+  00000016: 57                 push        edi
+  00000017: A1 00 00 00 00     mov         eax,dword ptr [___security_cookie]
+  0000001C: 33 C5              xor         eax,ebp
+  0000001E: 50                 push        eax
+  0000001F: 8D 45 F4           lea         eax,[ebp-0Ch]
+  00000022: 64 A3 00 00 00 00  mov         dword ptr fs:[00000000h],eax
+  00000028: 89 65 F0           mov         dword ptr [ebp-10h],esp
+  0000002B: 8B F1              mov         esi,ecx
+  0000002D: 89 75 E8           mov         dword ptr [ebp-18h],esi
+  00000030: 8B 45 08           mov         eax,dword ptr [ebp+8]
+  00000033: 8B F8              mov         edi,eax
+  00000035: 83 CF 0F           or          edi,0Fh
+  00000038: 83 FF FE           cmp         edi,0FFFFFFFEh
+  0000003B: 76 04              jbe         00000041
+  0000003D: 8B F8              mov         edi,eax
+  0000003F: EB 27              jmp         00000068
+  00000041: 8B 5E 14           mov         ebx,dword ptr [esi+14h]
+  00000044: 8B CB              mov         ecx,ebx
+  00000046: D1 E9              shr         ecx,1
+  00000048: B8 AB AA AA AA     mov         eax,0AAAAAAABh
+  0000004D: F7 E7              mul         eax,edi
+  0000004F: D1 EA              shr         edx,1
+  00000051: 3B CA              cmp         ecx,edx
+  00000053: 76 13              jbe         00000068
+  00000055: B8 FE FF FF FF     mov         eax,0FFFFFFFEh
+  0000005A: 2B C1              sub         eax,ecx
+  0000005C: 3B D8              cmp         ebx,eax
+  0000005E: 8D 3C 19           lea         edi,[ecx+ebx]
+  00000061: 76 05              jbe         00000068
+  00000063: BF FE FF FF FF     mov         edi,0FFFFFFFEh
+  00000068: C7 45 FC 00 00 00  mov         dword ptr [ebp-4],0
+            00
+  0000006F: 8D 47 01           lea         eax,[edi+1]
+  00000072: 50                 push        eax
+  00000073: 8B CE              mov         ecx,esi
+  00000075: E8 00 00 00 00     call        ?allocate@?$_Wrap_alloc@V?$allocator@D@std@@@std@@QAEPADI@Z
+  0000007A: 89 45 EC           mov         dword ptr [ebp-14h],eax
+  0000007D: C7 45 FC FF FF FF  mov         dword ptr [ebp-4],0FFFFFFFFh
+            FF
+  00000084: EB 37              jmp         000000BD
+__catch$?_Copy@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEXII@Z$0:
+  00000086: 89 65 F0           mov         dword ptr [ebp-10h],esp
+  00000089: 8B 45 08           mov         eax,dword ptr [ebp+8]
+  0000008C: 89 45 08           mov         dword ptr [ebp+8],eax
+  0000008F: C6 45 FC 02        mov         byte ptr [ebp-4],2
+  00000093: 40                 inc         eax
+  00000094: 50                 push        eax
+  00000095: 8B 4D E8           mov         ecx,dword ptr [ebp-18h]
+  00000098: E8 00 00 00 00     call        ?allocate@?$_Wrap_alloc@V?$allocator@D@std@@@std@@QAEPADI@Z
+  0000009D: 89 45 EC           mov         dword ptr [ebp-14h],eax
+  000000A0: C7 45 FC 01 00 00  mov         dword ptr [ebp-4],1
+            00
+  000000A7: B8 00 00 00 00     mov         eax,offset $LN19
+  000000AC: C3                 ret
+$LN19:
+  000000AD: C7 45 FC FF FF FF  mov         dword ptr [ebp-4],0FFFFFFFFh
+            FF
+  000000B4: 8B 75 E8           mov         esi,dword ptr [ebp-18h]
+  000000B7: 8B 7D 08           mov         edi,dword ptr [ebp+8]
+  000000BA: 8B 45 EC           mov         eax,dword ptr [ebp-14h]
+  000000BD: 8B 5D 0C           mov         ebx,dword ptr [ebp+0Ch]
+  000000C0: 85 DB              test        ebx,ebx
+  000000C2: 74 1B              je          000000DF
+  000000C4: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  000000C8: 72 04              jb          000000CE
+  000000CA: 8B 0E              mov         ecx,dword ptr [esi]
+  000000CC: EB 02              jmp         000000D0
+  000000CE: 8B CE              mov         ecx,esi
+  000000D0: 85 DB              test        ebx,ebx
+  000000D2: 74 0B              je          000000DF
+  000000D4: 53                 push        ebx
+  000000D5: 51                 push        ecx
+  000000D6: 50                 push        eax
+  000000D7: E8 00 00 00 00     call        _memcpy
+  000000DC: 83 C4 0C           add         esp,0Ch
+  000000DF: 8B 46 14           mov         eax,dword ptr [esi+14h]
+  000000E2: 83 F8 10           cmp         eax,10h
+  000000E5: 72 0B              jb          000000F2
+  000000E7: 40                 inc         eax
+  000000E8: 50                 push        eax
+  000000E9: FF 36              push        dword ptr [esi]
+  000000EB: 8B CE              mov         ecx,esi
+  000000ED: E8 00 00 00 00     call        ?deallocate@?$_Wrap_alloc@V?$allocator@D@std@@@std@@QAEXPADI@Z
+  000000F2: C7 46 14 0F 00 00  mov         dword ptr [esi+14h],0Fh
+            00
+  000000F9: C7 46 10 00 00 00  mov         dword ptr [esi+10h],0
+            00
+  00000100: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  00000104: 72 04              jb          0000010A
+  00000106: 8B 06              mov         eax,dword ptr [esi]
+  00000108: EB 02              jmp         0000010C
+  0000010A: 8B C6              mov         eax,esi
+  0000010C: C6 00 00           mov         byte ptr [eax],0
+  0000010F: 8B 45 EC           mov         eax,dword ptr [ebp-14h]
+  00000112: 89 06              mov         dword ptr [esi],eax
+  00000114: 89 7E 14           mov         dword ptr [esi+14h],edi
+  00000117: 89 5E 10           mov         dword ptr [esi+10h],ebx
+  0000011A: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  0000011E: 72 02              jb          00000122
+  00000120: 8B F0              mov         esi,eax
+  00000122: C6 04 1E 00        mov         byte ptr [esi+ebx],0
+  00000126: 8B 4D F4           mov         ecx,dword ptr [ebp-0Ch]
+  00000129: 64 89 0D 00 00 00  mov         dword ptr fs:[0],ecx
+            00
+  00000130: 59                 pop         ecx
+  00000131: 5F                 pop         edi
+  00000132: 5E                 pop         esi
+  00000133: 5B                 pop         ebx
+  00000134: 8B E5              mov         esp,ebp
+  00000136: 5D                 pop         ebp
+  00000137: C2 08 00           ret         8
+__catch$?_Copy@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEXII@Z$1:
+  0000013A: 8B 75 E8           mov         esi,dword ptr [ebp-18h]
+  0000013D: 8B 46 14           mov         eax,dword ptr [esi+14h]
+  00000140: 83 F8 10           cmp         eax,10h
+  00000143: 72 0B              jb          00000150
+  00000145: 40                 inc         eax
+  00000146: 50                 push        eax
+  00000147: FF 36              push        dword ptr [esi]
+  00000149: 8B CE              mov         ecx,esi
+  0000014B: E8 00 00 00 00     call        ?deallocate@?$_Wrap_alloc@V?$allocator@D@std@@@std@@QAEXPADI@Z
+  00000150: C7 46 14 0F 00 00  mov         dword ptr [esi+14h],0Fh
+            00
+  00000157: C7 46 10 00 00 00  mov         dword ptr [esi+10h],0
+            00
+  0000015E: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  00000162: 72 02              jb          00000166
+  00000164: 8B 36              mov         esi,dword ptr [esi]
+  00000166: C6 06 00           mov         byte ptr [esi],0
+  00000169: 6A 00              push        0
+  0000016B: 6A 00              push        0
+  0000016D: E8 00 00 00 00     call        __CxxThrowException@8
+$LN311:
+  00000172: CC                 int         3
+
+__ehhandler$?_Copy@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEXII@Z:
+  00000000: 8B 54 24 08        mov         edx,dword ptr [esp+8]
+  00000004: 8D 42 0C           lea         eax,[edx+0Ch]
+  00000007: 8B 4A E4           mov         ecx,dword ptr [edx-1Ch]
+  0000000A: 33 C8              xor         ecx,eax
+  0000000C: E8 00 00 00 00     call        @__security_check_cookie@4
+  00000011: B8 00 00 00 00     mov         eax,offset __ehfuncinfo$?_Copy@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEXII@Z
+  00000016: E9 00 00 00 00     jmp         ___CxxFrameHandler3
+
+?_Deallocate@std@@YAXPAXII@Z (void __cdecl std::_Deallocate(void *,unsigned int,unsigned int)):
+  00000000: 83 C8 FF           or          eax,0FFFFFFFFh
+  00000003: 8B 4C 24 08        mov         ecx,dword ptr [esp+8]
+  00000007: 33 D2              xor         edx,edx
+  00000009: F7 74 24 0C        div         eax,dword ptr [esp+0Ch]
+  0000000D: 3B C8              cmp         ecx,eax
+  0000000F: 0F 87 00 00 00 00  ja          __invalid_parameter_noinfo_noreturn
+  00000015: 0F AF 4C 24 0C     imul        ecx,dword ptr [esp+0Ch]
+  0000001A: 81 F9 00 10 00 00  cmp         ecx,1000h
+  00000020: 72 2C              jb          0000004E
+  00000022: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000026: A8 1F              test        al,1Fh
+  00000028: 0F 85 00 00 00 00  jne         __invalid_parameter_noinfo_noreturn
+  0000002E: 8B 48 FC           mov         ecx,dword ptr [eax-4]
+  00000031: 3B C8              cmp         ecx,eax
+  00000033: 0F 83 00 00 00 00  jae         __invalid_parameter_noinfo_noreturn
+  00000039: 2B C1              sub         eax,ecx
+  0000003B: 83 F8 04           cmp         eax,4
+  0000003E: 0F 82 00 00 00 00  jb          __invalid_parameter_noinfo_noreturn
+  00000044: 83 F8 23           cmp         eax,23h
+  00000047: 76 09              jbe         00000052
+  00000049: E9 00 00 00 00     jmp         __invalid_parameter_noinfo_noreturn
+  0000004E: 8B 4C 24 04        mov         ecx,dword ptr [esp+4]
+  00000052: 51                 push        ecx
+  00000053: E8 00 00 00 00     call        ??3@YAXPAX@Z
+  00000058: 59                 pop         ecx
+  00000059: C3                 ret
+
+?_Eos@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEXI@Z (public: void __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::_Eos(unsigned int)):
+  00000000: 83 79 14 10        cmp         dword ptr [ecx+14h],10h
+  00000004: 8B 54 24 04        mov         edx,dword ptr [esp+4]
+  00000008: 89 51 10           mov         dword ptr [ecx+10h],edx
+  0000000B: 72 09              jb          00000016
+  0000000D: 8B 01              mov         eax,dword ptr [ecx]
+  0000000F: C6 04 10 00        mov         byte ptr [eax+edx],0
+  00000013: C2 04 00           ret         4
+  00000016: C6 04 11 00        mov         byte ptr [ecx+edx],0
+  0000001A: C2 04 00           ret         4
+
+?_Get_data@?$_String_alloc@U?$_String_base_types@DV?$allocator@D@std@@@std@@@std@@QAEAAV?$_String_val@U?$_Simple_types@D@std@@@2@XZ (public: class std::_String_val<struct std::_Simple_types<char> > & __thiscall std::_String_alloc<struct std::_String_base_types<char,class std::allocator<char> > >::_Get_data(void)):
+  00000000: 8B C1              mov         eax,ecx
+  00000002: C3                 ret
+
+?_Get_data@?$_String_alloc@U?$_String_base_types@DV?$allocator@D@std@@@std@@@std@@QBEABV?$_String_val@U?$_Simple_types@D@std@@@2@XZ (public: class std::_String_val<struct std::_Simple_types<char> > const & __thiscall std::_String_alloc<struct std::_String_base_types<char,class std::allocator<char> > >::_Get_data(void)const ):
+  00000000: 8B C1              mov         eax,ecx
+  00000002: C3                 ret
+
+?_Get_first@?$_Compressed_pair@U?$_Wrap_alloc@V?$allocator@D@std@@@std@@V?$_String_val@U?$_Simple_types@D@std@@@2@$00@std@@QAEAAU?$_Wrap_alloc@V?$allocator@D@std@@@2@XZ (public: struct std::_Wrap_alloc<class std::allocator<char> > & __thiscall std::_Compressed_pair<struct std::_Wrap_alloc<class std::allocator<char> >,class std::_String_val<struct std::_Simple_types<char> >,1>::_Get_first(void)):
+  00000000: 8B C1              mov         eax,ecx
+  00000002: C3                 ret
+
+?_Get_first@?$_Compressed_pair@U?$_Wrap_alloc@V?$allocator@D@std@@@std@@V?$_String_val@U?$_Simple_types@D@std@@@2@$00@std@@QBEABU?$_Wrap_alloc@V?$allocator@D@std@@@2@XZ (public: struct std::_Wrap_alloc<class std::allocator<char> > const & __thiscall std::_Compressed_pair<struct std::_Wrap_alloc<class std::allocator<char> >,class std::_String_val<struct std::_Simple_types<char> >,1>::_Get_first(void)const ):
+  00000000: 8B C1              mov         eax,ecx
+  00000002: C3                 ret
+
+?_Get_second@?$_Compressed_pair@U?$_Wrap_alloc@V?$allocator@D@std@@@std@@V?$_String_val@U?$_Simple_types@D@std@@@2@$00@std@@QAEAAV?$_String_val@U?$_Simple_types@D@std@@@2@XZ (public: class std::_String_val<struct std::_Simple_types<char> > & __thiscall std::_Compressed_pair<struct std::_Wrap_alloc<class std::allocator<char> >,class std::_String_val<struct std::_Simple_types<char> >,1>::_Get_second(void)):
+  00000000: 8B C1              mov         eax,ecx
+  00000002: C3                 ret
+
+?_Get_second@?$_Compressed_pair@U?$_Wrap_alloc@V?$allocator@D@std@@@std@@V?$_String_val@U?$_Simple_types@D@std@@@2@$00@std@@QBEABV?$_String_val@U?$_Simple_types@D@std@@@2@XZ (public: class std::_String_val<struct std::_Simple_types<char> > const & __thiscall std::_Compressed_pair<struct std::_Wrap_alloc<class std::allocator<char> >,class std::_String_val<struct std::_Simple_types<char> >,1>::_Get_second(void)const ):
+  00000000: 8B C1              mov         eax,ecx
+  00000002: C3                 ret
+
+?_Getal@?$_String_alloc@U?$_String_base_types@DV?$allocator@D@std@@@std@@@std@@QAEAAU?$_Wrap_alloc@V?$allocator@D@std@@@2@XZ (public: struct std::_Wrap_alloc<class std::allocator<char> > & __thiscall std::_String_alloc<struct std::_String_base_types<char,class std::allocator<char> > >::_Getal(void)):
+  00000000: 8B C1              mov         eax,ecx
+  00000002: C3                 ret
+
+?_Getal@?$_String_alloc@U?$_String_base_types@DV?$allocator@D@std@@@std@@@std@@QBEABU?$_Wrap_alloc@V?$allocator@D@std@@@2@XZ (public: struct std::_Wrap_alloc<class std::allocator<char> > const & __thiscall std::_String_alloc<struct std::_String_base_types<char,class std::allocator<char> > >::_Getal(void)const ):
+  00000000: 8B C1              mov         eax,ecx
+  00000002: C3                 ret
+
+?_Grow@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAE_NI_N@Z (public: bool __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::_Grow(unsigned int,bool)):
+  00000000: 56                 push        esi
+  00000001: 8B 74 24 08        mov         esi,dword ptr [esp+8]
+  00000005: 83 FE FE           cmp         esi,0FFFFFFFEh
+  00000008: 77 57              ja          00000061
+  0000000A: 39 71 14           cmp         dword ptr [ecx+14h],esi
+  0000000D: 73 12              jae         00000021
+  0000000F: FF 71 10           push        dword ptr [ecx+10h]
+  00000012: 56                 push        esi
+  00000013: E8 00 00 00 00     call        ?_Copy@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEXII@Z
+  00000018: 85 F6              test        esi,esi
+  0000001A: 5E                 pop         esi
+  0000001B: 0F 95 C0           setne       al
+  0000001E: C2 08 00           ret         8
+  00000021: 80 7C 24 0C 00     cmp         byte ptr [esp+0Ch],0
+  00000026: 74 1E              je          00000046
+  00000028: 83 FE 10           cmp         esi,10h
+  0000002B: 73 19              jae         00000046
+  0000002D: 8B 41 10           mov         eax,dword ptr [ecx+10h]
+  00000030: 3B F0              cmp         esi,eax
+  00000032: 0F 42 C6           cmovb       eax,esi
+  00000035: 50                 push        eax
+  00000036: 6A 01              push        1
+  00000038: E8 00 00 00 00     call        ?_Tidy@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEX_NI@Z
+  0000003D: 85 F6              test        esi,esi
+  0000003F: 5E                 pop         esi
+  00000040: 0F 95 C0           setne       al
+  00000043: C2 08 00           ret         8
+  00000046: 85 F6              test        esi,esi
+  00000048: 75 10              jne         0000005A
+  0000004A: 83 79 14 10        cmp         dword ptr [ecx+14h],10h
+  0000004E: 89 71 10           mov         dword ptr [ecx+10h],esi
+  00000051: 72 02              jb          00000055
+  00000053: 8B 09              mov         ecx,dword ptr [ecx]
+  00000055: C6 01 00           mov         byte ptr [ecx],0
+  00000058: 85 F6              test        esi,esi
+  0000005A: 0F 95 C0           setne       al
+  0000005D: 5E                 pop         esi
+  0000005E: C2 08 00           ret         8
+  00000061: 68 00 00 00 00     push        offset ??_C@_0BA@JFNIOLAK@string?5too?5long?$AA@
+  00000066: E8 00 00 00 00     call        ?_Xlength_error@std@@YAXPBD@Z
+$LN66:
+  0000006B: CC                 int         3
+
+?_Inside@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAE_NPBD@Z (public: bool __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::_Inside(char const *)):
+  00000000: 8B 54 24 04        mov         edx,dword ptr [esp+4]
+  00000004: 56                 push        esi
+  00000005: 85 D2              test        edx,edx
+  00000007: 74 2C              je          00000035
+  00000009: 8B 41 14           mov         eax,dword ptr [ecx+14h]
+  0000000C: 83 F8 10           cmp         eax,10h
+  0000000F: 72 04              jb          00000015
+  00000011: 8B 31              mov         esi,dword ptr [ecx]
+  00000013: EB 02              jmp         00000017
+  00000015: 8B F1              mov         esi,ecx
+  00000017: 3B D6              cmp         edx,esi
+  00000019: 72 1A              jb          00000035
+  0000001B: 83 F8 10           cmp         eax,10h
+  0000001E: 72 04              jb          00000024
+  00000020: 8B 31              mov         esi,dword ptr [ecx]
+  00000022: EB 02              jmp         00000026
+  00000024: 8B F1              mov         esi,ecx
+  00000026: 8B 41 10           mov         eax,dword ptr [ecx+10h]
+  00000029: 03 C6              add         eax,esi
+  0000002B: 3B C2              cmp         eax,edx
+  0000002D: 76 06              jbe         00000035
+  0000002F: B0 01              mov         al,1
+  00000031: 5E                 pop         esi
+  00000032: C2 04 00           ret         4
+  00000035: 32 C0              xor         al,al
+  00000037: 5E                 pop         esi
+  00000038: C2 04 00           ret         4
+
+?_Makestr@_System_error@std@@CA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@2@Verror_code@2@V32@@Z (private: static class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __cdecl std::_System_error::_Makestr(class std::error_code,class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >)):
+  00000000: 83 EC 1C           sub         esp,1Ch
+  00000003: A1 00 00 00 00     mov         eax,dword ptr [___security_cookie]
+  00000008: 33 C4              xor         eax,esp
+  0000000A: 89 44 24 18        mov         dword ptr [esp+18h],eax
+  0000000E: 83 7C 24 3C 00     cmp         dword ptr [esp+3Ch],0
+  00000013: 56                 push        esi
+  00000014: 8B 74 24 24        mov         esi,dword ptr [esp+24h]
+  00000018: 74 10              je          0000002A
+  0000001A: 6A 02              push        2
+  0000001C: 68 00 00 00 00     push        offset ??_C@_02LMMGGCAJ@?3?5?$AA@
+  00000021: 8D 4C 24 38        lea         ecx,[esp+38h]
+  00000025: E8 00 00 00 00     call        ?append@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@PBDI@Z
+  0000002A: 8B 4C 24 2C        mov         ecx,dword ptr [esp+2Ch]
+  0000002E: 8D 54 24 04        lea         edx,[esp+4]
+  00000032: FF 74 24 28        push        dword ptr [esp+28h]
+  00000036: 52                 push        edx
+  00000037: 8B 01              mov         eax,dword ptr [ecx]
+  00000039: FF 50 08           call        dword ptr [eax+8]
+  0000003C: 6A FF              push        0FFFFFFFFh
+  0000003E: 6A 00              push        0
+  00000040: 8D 44 24 0C        lea         eax,[esp+0Ch]
+  00000044: 50                 push        eax
+  00000045: 8D 4C 24 3C        lea         ecx,[esp+3Ch]
+  00000049: E8 00 00 00 00     call        ?append@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@ABV12@II@Z
+  0000004E: 8B 44 24 18        mov         eax,dword ptr [esp+18h]
+  00000052: 83 F8 10           cmp         eax,10h
+  00000055: 72 0F              jb          00000066
+  00000057: 40                 inc         eax
+  00000058: 8D 4C 24 04        lea         ecx,[esp+4]
+  0000005C: 50                 push        eax
+  0000005D: FF 74 24 08        push        dword ptr [esp+8]
+  00000061: E8 00 00 00 00     call        ?deallocate@?$_Wrap_alloc@V?$allocator@D@std@@@std@@QAEXPADI@Z
+  00000066: C7 46 14 0F 00 00  mov         dword ptr [esi+14h],0Fh
+            00
+  0000006D: C7 46 10 00 00 00  mov         dword ptr [esi+10h],0
+            00
+  00000074: C6 06 00           mov         byte ptr [esi],0
+  00000077: 8B 54 24 44        mov         edx,dword ptr [esp+44h]
+  0000007B: 83 FA 10           cmp         edx,10h
+  0000007E: 73 1E              jae         0000009E
+  00000080: 8B 44 24 40        mov         eax,dword ptr [esp+40h]
+  00000084: 83 C0 01           add         eax,1
+  00000087: 74 1B              je          000000A4
+  00000089: 50                 push        eax
+  0000008A: 8D 44 24 34        lea         eax,[esp+34h]
+  0000008E: 50                 push        eax
+  0000008F: 56                 push        esi
+  00000090: E8 00 00 00 00     call        _memmove
+  00000095: 8B 54 24 50        mov         edx,dword ptr [esp+50h]
+  00000099: 83 C4 0C           add         esp,0Ch
+  0000009C: EB 06              jmp         000000A4
+  0000009E: 8B 4C 24 30        mov         ecx,dword ptr [esp+30h]
+  000000A2: 89 0E              mov         dword ptr [esi],ecx
+  000000A4: 8B 4C 24 40        mov         ecx,dword ptr [esp+40h]
+  000000A8: 8B C6              mov         eax,esi
+  000000AA: 89 4E 10           mov         dword ptr [esi+10h],ecx
+  000000AD: 8B 4C 24 1C        mov         ecx,dword ptr [esp+1Ch]
+  000000B1: 89 56 14           mov         dword ptr [esi+14h],edx
+  000000B4: 5E                 pop         esi
+  000000B5: 33 CC              xor         ecx,esp
+  000000B7: E8 00 00 00 00     call        @__security_check_cookie@4
+  000000BC: 83 C4 1C           add         esp,1Ch
+  000000BF: C3                 ret
+
+?_Myptr@?$_String_alloc@U?$_String_base_types@DV?$allocator@D@std@@@std@@@std@@QAEPADXZ (public: char * __thiscall std::_String_alloc<struct std::_String_base_types<char,class std::allocator<char> > >::_Myptr(void)):
+  00000000: 83 79 14 10        cmp         dword ptr [ecx+14h],10h
+  00000004: 72 03              jb          00000009
+  00000006: 8B 01              mov         eax,dword ptr [ecx]
+  00000008: C3                 ret
+  00000009: 8B C1              mov         eax,ecx
+  0000000B: C3                 ret
+
+?_Myptr@?$_String_alloc@U?$_String_base_types@DV?$allocator@D@std@@@std@@@std@@QBEPBDXZ (public: char const * __thiscall std::_String_alloc<struct std::_String_base_types<char,class std::allocator<char> > >::_Myptr(void)const ):
+  00000000: 83 79 14 10        cmp         dword ptr [ecx+14h],10h
+  00000004: 72 03              jb          00000009
+  00000006: 8B 01              mov         eax,dword ptr [ecx]
+  00000008: C3                 ret
+  00000009: 8B C1              mov         eax,ecx
+  0000000B: C3                 ret
+
+?_Myptr@?$_String_val@U?$_Simple_types@D@std@@@std@@QAEPADXZ (public: char * __thiscall std::_String_val<struct std::_Simple_types<char> >::_Myptr(void)):
+  00000000: 83 79 14 10        cmp         dword ptr [ecx+14h],10h
+  00000004: 72 03              jb          00000009
+  00000006: 8B 01              mov         eax,dword ptr [ecx]
+  00000008: C3                 ret
+  00000009: 8B C1              mov         eax,ecx
+  0000000B: C3                 ret
+
+?_Myptr@?$_String_val@U?$_Simple_types@D@std@@@std@@QBEPBDXZ (public: char const * __thiscall std::_String_val<struct std::_Simple_types<char> >::_Myptr(void)const ):
+  00000000: 83 79 14 10        cmp         dword ptr [ecx+14h],10h
+  00000004: 72 03              jb          00000009
+  00000006: 8B 01              mov         eax,dword ptr [ecx]
+  00000008: C3                 ret
+  00000009: 8B C1              mov         eax,ecx
+  0000000B: C3                 ret
+
+?_Myres@?$_String_alloc@U?$_String_base_types@DV?$allocator@D@std@@@std@@@std@@QAEAAIXZ (public: unsigned int & __thiscall std::_String_alloc<struct std::_String_base_types<char,class std::allocator<char> > >::_Myres(void)):
+  00000000: 8D 41 14           lea         eax,[ecx+14h]
+  00000003: C3                 ret
+
+?_Mysize@?$_String_alloc@U?$_String_base_types@DV?$allocator@D@std@@@std@@@std@@QAEAAIXZ (public: unsigned int & __thiscall std::_String_alloc<struct std::_String_base_types<char,class std::allocator<char> > >::_Mysize(void)):
+  00000000: 8D 41 10           lea         eax,[ecx+10h]
+  00000003: C3                 ret
+
+?_Mysize@?$_String_alloc@U?$_String_base_types@DV?$allocator@D@std@@@std@@@std@@QBEABIXZ (public: unsigned int const & __thiscall std::_String_alloc<struct std::_String_base_types<char,class std::allocator<char> > >::_Mysize(void)const ):
+  00000000: 8D 41 10           lea         eax,[ecx+10h]
+  00000003: C3                 ret
+
+?_Osfx@?$basic_ostream@DU?$char_traits@D@std@@@std@@QAEXXZ (public: void __thiscall std::basic_ostream<char,struct std::char_traits<char> >::_Osfx(void)):
+  00000000: 55                 push        ebp
+  00000001: 8B EC              mov         ebp,esp
+  00000003: 6A FF              push        0FFFFFFFFh
+  00000005: 68 00 00 00 00     push        offset __ehhandler$?_Osfx@?$basic_ostream@DU?$char_traits@D@std@@@std@@QAEXXZ
+  0000000A: 64 A1 00 00 00 00  mov         eax,dword ptr fs:[00000000h]
+  00000010: 50                 push        eax
+  00000011: 51                 push        ecx
+  00000012: 53                 push        ebx
+  00000013: 56                 push        esi
+  00000014: 57                 push        edi
+  00000015: A1 00 00 00 00     mov         eax,dword ptr [___security_cookie]
+  0000001A: 33 C5              xor         eax,ebp
+  0000001C: 50                 push        eax
+  0000001D: 8D 45 F4           lea         eax,[ebp-0Ch]
+  00000020: 64 A3 00 00 00 00  mov         dword ptr fs:[00000000h],eax
+  00000026: 89 65 F0           mov         dword ptr [ebp-10h],esp
+  00000029: 8B F1              mov         esi,ecx
+  0000002B: C7 45 FC 00 00 00  mov         dword ptr [ebp-4],0
+            00
+  00000032: 8B 06              mov         eax,dword ptr [esi]
+  00000034: 8B 40 04           mov         eax,dword ptr [eax+4]
+  00000037: 83 7C 30 0C 00     cmp         dword ptr [eax+esi+0Ch],0
+  0000003C: 75 25              jne         $LN9
+  0000003E: F6 44 30 14 02     test        byte ptr [eax+esi+14h],2
+  00000043: 74 1E              je          $LN9
+  00000045: 8B 4C 30 38        mov         ecx,dword ptr [eax+esi+38h]
+  00000049: 8B 01              mov         eax,dword ptr [ecx]
+  0000004B: FF 50 34           call        dword ptr [eax+34h]
+  0000004E: 83 F8 FF           cmp         eax,0FFFFFFFFh
+  00000051: 75 10              jne         $LN9
+  00000053: 6A 00              push        0
+  00000055: 6A 04              push        4
+  00000057: 8B 06              mov         eax,dword ptr [esi]
+  00000059: 8B 48 04           mov         ecx,dword ptr [eax+4]
+  0000005C: 03 CE              add         ecx,esi
+  0000005E: E8 00 00 00 00     call        ?setstate@?$basic_ios@DU?$char_traits@D@std@@@std@@QAEXH_N@Z
+$LN9:
+  00000063: C7 45 FC FF FF FF  mov         dword ptr [ebp-4],0FFFFFFFFh
+            FF
+  0000006A: 8B 4D F4           mov         ecx,dword ptr [ebp-0Ch]
+  0000006D: 64 89 0D 00 00 00  mov         dword ptr fs:[0],ecx
+            00
+  00000074: 59                 pop         ecx
+  00000075: 5F                 pop         edi
+  00000076: 5E                 pop         esi
+  00000077: 5B                 pop         ebx
+  00000078: 8B E5              mov         esp,ebp
+  0000007A: 5D                 pop         ebp
+  0000007B: C3                 ret
+__catch$?_Osfx@?$basic_ostream@DU?$char_traits@D@std@@@std@@QAEXXZ$0:
+  0000007C: B8 00 00 00 00     mov         eax,offset $LN9
+  00000081: C3                 ret
+
+__ehhandler$?_Osfx@?$basic_ostream@DU?$char_traits@D@std@@@std@@QAEXXZ:
+  00000000: 8B 54 24 08        mov         edx,dword ptr [esp+8]
+  00000004: 8D 42 0C           lea         eax,[edx+0Ch]
+  00000007: 8B 4A EC           mov         ecx,dword ptr [edx-14h]
+  0000000A: 33 C8              xor         ecx,eax
+  0000000C: E8 00 00 00 00     call        @__security_check_cookie@4
+  00000011: B8 00 00 00 00     mov         eax,offset __ehfuncinfo$?_Osfx@?$basic_ostream@DU?$char_traits@D@std@@@std@@QAEXXZ
+  00000016: E9 00 00 00 00     jmp         ___CxxFrameHandler3
+
+?_Pnavail@?$basic_streambuf@DU?$char_traits@D@std@@@std@@IBE_JXZ (protected: __int64 __thiscall std::basic_streambuf<char,struct std::char_traits<char> >::_Pnavail(void)const ):
+  00000000: 8B 41 20           mov         eax,dword ptr [ecx+20h]
+  00000003: 83 38 00           cmp         dword ptr [eax],0
+  00000006: 74 07              je          0000000F
+  00000008: 8B 41 30           mov         eax,dword ptr [ecx+30h]
+  0000000B: 8B 00              mov         eax,dword ptr [eax]
+  0000000D: 99                 cdq
+  0000000E: C3                 ret
+  0000000F: 33 C0              xor         eax,eax
+  00000011: 99                 cdq
+  00000012: C3                 ret
+
+?_Pninc@?$basic_streambuf@DU?$char_traits@D@std@@@std@@IAEPADXZ (protected: char * __thiscall std::basic_streambuf<char,struct std::char_traits<char> >::_Pninc(void)):
+  00000000: 8B 41 30           mov         eax,dword ptr [ecx+30h]
+  00000003: FF 08              dec         dword ptr [eax]
+  00000005: 8B 51 20           mov         edx,dword ptr [ecx+20h]
+  00000008: 8B 02              mov         eax,dword ptr [edx]
+  0000000A: 8D 48 01           lea         ecx,[eax+1]
+  0000000D: 89 0A              mov         dword ptr [edx],ecx
+  0000000F: C3                 ret
+
+?_Tidy@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEX_NI@Z (public: void __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::_Tidy(bool,unsigned int)):
+  00000000: 80 7C 24 04 00     cmp         byte ptr [esp+4],0
+  00000005: 56                 push        esi
+  00000006: 57                 push        edi
+  00000007: 8B 7C 24 10        mov         edi,dword ptr [esp+10h]
+  0000000B: 8B F1              mov         esi,ecx
+  0000000D: 74 26              je          00000035
+  0000000F: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  00000013: 72 20              jb          00000035
+  00000015: 53                 push        ebx
+  00000016: 8B 1E              mov         ebx,dword ptr [esi]
+  00000018: 85 FF              test        edi,edi
+  0000001A: 74 0B              je          00000027
+  0000001C: 57                 push        edi
+  0000001D: 53                 push        ebx
+  0000001E: 56                 push        esi
+  0000001F: E8 00 00 00 00     call        _memcpy
+  00000024: 83 C4 0C           add         esp,0Ch
+  00000027: 8B 46 14           mov         eax,dword ptr [esi+14h]
+  0000002A: 8B CE              mov         ecx,esi
+  0000002C: 40                 inc         eax
+  0000002D: 50                 push        eax
+  0000002E: 53                 push        ebx
+  0000002F: E8 00 00 00 00     call        ?deallocate@?$_Wrap_alloc@V?$allocator@D@std@@@std@@QAEXPADI@Z
+  00000034: 5B                 pop         ebx
+  00000035: C7 46 14 0F 00 00  mov         dword ptr [esi+14h],0Fh
+            00
+  0000003C: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  00000040: 89 7E 10           mov         dword ptr [esi+10h],edi
+  00000043: 72 0B              jb          00000050
+  00000045: 8B 06              mov         eax,dword ptr [esi]
+  00000047: C6 04 38 00        mov         byte ptr [eax+edi],0
+  0000004B: 5F                 pop         edi
+  0000004C: 5E                 pop         esi
+  0000004D: C2 08 00           ret         8
+  00000050: C6 04 3E 00        mov         byte ptr [esi+edi],0
+  00000054: 5F                 pop         edi
+  00000055: 5E                 pop         esi
+  00000056: C2 08 00           ret         8
+
+?_Xlen@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QBEXXZ (public: void __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::_Xlen(void)const ):
+  00000000: 68 00 00 00 00     push        offset ??_C@_0BA@JFNIOLAK@string?5too?5long?$AA@
+  00000005: E8 00 00 00 00     call        ?_Xlength_error@std@@YAXPBD@Z
+$LN3:
+  0000000A: CC                 int         3
+
+?_Xran@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QBEXXZ (public: void __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::_Xran(void)const ):
+  00000000: 68 00 00 00 00     push        offset ??_C@_0BI@CFPLBAOH@invalid?5string?5position?$AA@
+  00000005: E8 00 00 00 00     call        ?_Xout_of_range@std@@YAXPBD@Z
+$LN3:
+  0000000A: CC                 int         3
+
+?allocate@?$_Wrap_alloc@V?$allocator@D@std@@@std@@QAEPADI@Z (public: char * __thiscall std::_Wrap_alloc<class std::allocator<char> >::allocate(unsigned int)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: 85 C0              test        eax,eax
+  00000006: 75 03              jne         0000000B
+  00000008: C2 04 00           ret         4
+  0000000B: 3D 00 10 00 00     cmp         eax,1000h
+  00000010: 72 22              jb          00000034
+  00000012: 8D 48 23           lea         ecx,[eax+23h]
+  00000015: 3B C8              cmp         ecx,eax
+  00000017: 76 2A              jbe         00000043
+  00000019: 51                 push        ecx
+  0000001A: E8 00 00 00 00     call        ??2@YAPAXI@Z
+  0000001F: 8B C8              mov         ecx,eax
+  00000021: 83 C4 04           add         esp,4
+  00000024: 85 C9              test        ecx,ecx
+  00000026: 74 20              je          $LN21
+  00000028: 8D 41 23           lea         eax,[ecx+23h]
+  0000002B: 83 E0 E0           and         eax,0FFFFFFE0h
+  0000002E: 89 48 FC           mov         dword ptr [eax-4],ecx
+  00000031: C2 04 00           ret         4
+  00000034: 50                 push        eax
+  00000035: E8 00 00 00 00     call        ??2@YAPAXI@Z
+  0000003A: 83 C4 04           add         esp,4
+  0000003D: 85 C0              test        eax,eax
+  0000003F: 75 C7              jne         00000008
+  00000041: EB 0A              jmp         $LN22
+  00000043: E8 00 00 00 00     call        ?_Xbad_alloc@std@@YAXXZ
+$LN21:
+  00000048: E8 00 00 00 00     call        __invalid_parameter_noinfo_noreturn
+$LN22:
+  0000004D: E8 00 00 00 00     call        __invalid_parameter_noinfo_noreturn
+$LN16:
+  00000052: CC                 int         3
+
+?allocate@?$allocator@D@std@@QAEPADI@Z (public: char * __thiscall std::allocator<char>::allocate(unsigned int)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: 85 C0              test        eax,eax
+  00000006: 75 03              jne         0000000B
+  00000008: C2 04 00           ret         4
+  0000000B: 3D 00 10 00 00     cmp         eax,1000h
+  00000010: 72 22              jb          00000034
+  00000012: 8D 48 23           lea         ecx,[eax+23h]
+  00000015: 3B C8              cmp         ecx,eax
+  00000017: 76 2A              jbe         00000043
+  00000019: 51                 push        ecx
+  0000001A: E8 00 00 00 00     call        ??2@YAPAXI@Z
+  0000001F: 8B C8              mov         ecx,eax
+  00000021: 83 C4 04           add         esp,4
+  00000024: 85 C9              test        ecx,ecx
+  00000026: 74 20              je          $LN18
+  00000028: 8D 41 23           lea         eax,[ecx+23h]
+  0000002B: 83 E0 E0           and         eax,0FFFFFFE0h
+  0000002E: 89 48 FC           mov         dword ptr [eax-4],ecx
+  00000031: C2 04 00           ret         4
+  00000034: 50                 push        eax
+  00000035: E8 00 00 00 00     call        ??2@YAPAXI@Z
+  0000003A: 83 C4 04           add         esp,4
+  0000003D: 85 C0              test        eax,eax
+  0000003F: 75 C7              jne         00000008
+  00000041: EB 0A              jmp         $LN19
+  00000043: E8 00 00 00 00     call        ?_Xbad_alloc@std@@YAXXZ
+$LN18:
+  00000048: E8 00 00 00 00     call        __invalid_parameter_noinfo_noreturn
+$LN19:
+  0000004D: E8 00 00 00 00     call        __invalid_parameter_noinfo_noreturn
+$LN13:
+  00000052: CC                 int         3
+
+?append@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@ABV12@@Z (public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > & __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::append(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &)):
+  00000000: 6A FF              push        0FFFFFFFFh
+  00000002: 6A 00              push        0
+  00000004: FF 74 24 0C        push        dword ptr [esp+0Ch]
+  00000008: E8 00 00 00 00     call        ?append@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@ABV12@II@Z
+  0000000D: C2 04 00           ret         4
+
+?append@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@ABV12@II@Z (public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > & __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::append(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned int,unsigned int)):
+  00000000: 8B 54 24 08        mov         edx,dword ptr [esp+8]
+  00000004: 53                 push        ebx
+  00000005: 8B 5C 24 08        mov         ebx,dword ptr [esp+8]
+  00000009: 56                 push        esi
+  0000000A: 8B F1              mov         esi,ecx
+  0000000C: 8B 43 10           mov         eax,dword ptr [ebx+10h]
+  0000000F: 3B C2              cmp         eax,edx
+  00000011: 0F 82 BF 00 00 00  jb          000000D6
+  00000017: 8B 4E 10           mov         ecx,dword ptr [esi+10h]
+  0000001A: 2B C2              sub         eax,edx
+  0000001C: 55                 push        ebp
+  0000001D: 8B 6C 24 18        mov         ebp,dword ptr [esp+18h]
+  00000021: 3B E8              cmp         ebp,eax
+  00000023: 0F 47 E8           cmova       ebp,eax
+  00000026: 8B C1              mov         eax,ecx
+  00000028: F7 D0              not         eax
+  0000002A: 3B C5              cmp         eax,ebp
+  0000002C: 0F 86 AE 00 00 00  jbe         $LN164
+  00000032: 57                 push        edi
+  00000033: 8D 3C 29           lea         edi,[ecx+ebp]
+  00000036: 85 ED              test        ebp,ebp
+  00000038: 0F 84 8F 00 00 00  je          000000CD
+  0000003E: 83 FF FE           cmp         edi,0FFFFFFFEh
+  00000041: 0F 87 A3 00 00 00  ja          $LN165
+  00000047: 39 7E 14           cmp         dword ptr [esi+14h],edi
+  0000004A: 73 23              jae         0000006F
+  0000004C: 51                 push        ecx
+  0000004D: 57                 push        edi
+  0000004E: 8B CE              mov         ecx,esi
+  00000050: E8 00 00 00 00     call        ?_Copy@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEXII@Z
+  00000055: 8B 54 24 18        mov         edx,dword ptr [esp+18h]
+  00000059: 85 FF              test        edi,edi
+  0000005B: 74 70              je          000000CD
+  0000005D: 83 7B 14 10        cmp         dword ptr [ebx+14h],10h
+  00000061: 72 02              jb          00000065
+  00000063: 8B 1B              mov         ebx,dword ptr [ebx]
+  00000065: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  00000069: 72 2B              jb          00000096
+  0000006B: 8B 0E              mov         ecx,dword ptr [esi]
+  0000006D: EB 29              jmp         00000098
+  0000006F: 85 FF              test        edi,edi
+  00000071: 75 EA              jne         0000005D
+  00000073: 89 7E 10           mov         dword ptr [esi+10h],edi
+  00000076: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  0000007A: 72 0E              jb          0000008A
+  0000007C: 8B 06              mov         eax,dword ptr [esi]
+  0000007E: 5F                 pop         edi
+  0000007F: 5D                 pop         ebp
+  00000080: C6 00 00           mov         byte ptr [eax],0
+  00000083: 8B C6              mov         eax,esi
+  00000085: 5E                 pop         esi
+  00000086: 5B                 pop         ebx
+  00000087: C2 0C 00           ret         0Ch
+  0000008A: 5F                 pop         edi
+  0000008B: 8B C6              mov         eax,esi
+  0000008D: 5D                 pop         ebp
+  0000008E: 5E                 pop         esi
+  0000008F: 5B                 pop         ebx
+  00000090: C6 00 00           mov         byte ptr [eax],0
+  00000093: C2 0C 00           ret         0Ch
+  00000096: 8B CE              mov         ecx,esi
+  00000098: 85 ED              test        ebp,ebp
+  0000009A: 74 13              je          000000AF
+  0000009C: 8D 04 13           lea         eax,[ebx+edx]
+  0000009F: 55                 push        ebp
+  000000A0: 50                 push        eax
+  000000A1: 8B 46 10           mov         eax,dword ptr [esi+10h]
+  000000A4: 03 C1              add         eax,ecx
+  000000A6: 50                 push        eax
+  000000A7: E8 00 00 00 00     call        _memcpy
+  000000AC: 83 C4 0C           add         esp,0Ch
+  000000AF: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  000000B3: 89 7E 10           mov         dword ptr [esi+10h],edi
+  000000B6: 72 0F              jb          000000C7
+  000000B8: 8B 06              mov         eax,dword ptr [esi]
+  000000BA: C6 04 38 00        mov         byte ptr [eax+edi],0
+  000000BE: 8B C6              mov         eax,esi
+  000000C0: 5F                 pop         edi
+  000000C1: 5D                 pop         ebp
+  000000C2: 5E                 pop         esi
+  000000C3: 5B                 pop         ebx
+  000000C4: C2 0C 00           ret         0Ch
+  000000C7: 8B C6              mov         eax,esi
+  000000C9: C6 04 38 00        mov         byte ptr [eax+edi],0
+  000000CD: 5F                 pop         edi
+  000000CE: 5D                 pop         ebp
+  000000CF: 8B C6              mov         eax,esi
+  000000D1: 5E                 pop         esi
+  000000D2: 5B                 pop         ebx
+  000000D3: C2 0C 00           ret         0Ch
+  000000D6: 68 00 00 00 00     push        offset ??_C@_0BI@CFPLBAOH@invalid?5string?5position?$AA@
+  000000DB: E8 00 00 00 00     call        ?_Xout_of_range@std@@YAXPBD@Z
+$LN164:
+  000000E0: 68 00 00 00 00     push        offset ??_C@_0BA@JFNIOLAK@string?5too?5long?$AA@
+  000000E5: E8 00 00 00 00     call        ?_Xlength_error@std@@YAXPBD@Z
+$LN165:
+  000000EA: 68 00 00 00 00     push        offset ??_C@_0BA@JFNIOLAK@string?5too?5long?$AA@
+  000000EF: E8 00 00 00 00     call        ?_Xlength_error@std@@YAXPBD@Z
+$LN157:
+  000000F4: CC                 int         3
+
+?append@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@PBD@Z (public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > & __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::append(char const *)):
+  00000000: 56                 push        esi
+  00000001: 8B 74 24 08        mov         esi,dword ptr [esp+8]
+  00000005: 80 3E 00           cmp         byte ptr [esi],0
+  00000008: 75 0D              jne         00000017
+  0000000A: 33 D2              xor         edx,edx
+  0000000C: 52                 push        edx
+  0000000D: 56                 push        esi
+  0000000E: E8 00 00 00 00     call        ?append@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@PBDI@Z
+  00000013: 5E                 pop         esi
+  00000014: C2 04 00           ret         4
+  00000017: 8B D6              mov         edx,esi
+  00000019: 57                 push        edi
+  0000001A: 8D 7A 01           lea         edi,[edx+1]
+  0000001D: 0F 1F 00           nop         dword ptr [eax]
+  00000020: 8A 02              mov         al,byte ptr [edx]
+  00000022: 42                 inc         edx
+  00000023: 84 C0              test        al,al
+  00000025: 75 F9              jne         00000020
+  00000027: 2B D7              sub         edx,edi
+  00000029: 5F                 pop         edi
+  0000002A: 52                 push        edx
+  0000002B: 56                 push        esi
+  0000002C: E8 00 00 00 00     call        ?append@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@PBDI@Z
+  00000031: 5E                 pop         esi
+  00000032: C2 04 00           ret         4
+
+?append@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@PBDI@Z (public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > & __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::append(char const *,unsigned int)):
+  00000000: 53                 push        ebx
+  00000001: 8B 5C 24 08        mov         ebx,dword ptr [esp+8]
+  00000005: 56                 push        esi
+  00000006: 8B F1              mov         esi,ecx
+  00000008: 85 DB              test        ebx,ebx
+  0000000A: 74 57              je          00000063
+  0000000C: 8B 4E 14           mov         ecx,dword ptr [esi+14h]
+  0000000F: 83 F9 10           cmp         ecx,10h
+  00000012: 72 04              jb          00000018
+  00000014: 8B 06              mov         eax,dword ptr [esi]
+  00000016: EB 02              jmp         0000001A
+  00000018: 8B C6              mov         eax,esi
+  0000001A: 3B D8              cmp         ebx,eax
+  0000001C: 72 45              jb          00000063
+  0000001E: 83 F9 10           cmp         ecx,10h
+  00000021: 72 04              jb          00000027
+  00000023: 8B 16              mov         edx,dword ptr [esi]
+  00000025: EB 02              jmp         00000029
+  00000027: 8B D6              mov         edx,esi
+  00000029: 8B 46 10           mov         eax,dword ptr [esi+10h]
+  0000002C: 03 C2              add         eax,edx
+  0000002E: 3B C3              cmp         eax,ebx
+  00000030: 76 31              jbe         00000063
+  00000032: 83 F9 10           cmp         ecx,10h
+  00000035: 72 16              jb          0000004D
+  00000037: FF 74 24 10        push        dword ptr [esp+10h]
+  0000003B: 8B 06              mov         eax,dword ptr [esi]
+  0000003D: 8B CE              mov         ecx,esi
+  0000003F: 2B D8              sub         ebx,eax
+  00000041: 53                 push        ebx
+  00000042: 56                 push        esi
+  00000043: E8 00 00 00 00     call        ?append@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@ABV12@II@Z
+  00000048: 5E                 pop         esi
+  00000049: 5B                 pop         ebx
+  0000004A: C2 08 00           ret         8
+  0000004D: FF 74 24 10        push        dword ptr [esp+10h]
+  00000051: 8B C6              mov         eax,esi
+  00000053: 8B CE              mov         ecx,esi
+  00000055: 2B D8              sub         ebx,eax
+  00000057: 53                 push        ebx
+  00000058: 56                 push        esi
+  00000059: E8 00 00 00 00     call        ?append@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@ABV12@II@Z
+  0000005E: 5E                 pop         esi
+  0000005F: 5B                 pop         ebx
+  00000060: C2 08 00           ret         8
+  00000063: 8B 4E 10           mov         ecx,dword ptr [esi+10h]
+  00000066: 8B C1              mov         eax,ecx
+  00000068: 55                 push        ebp
+  00000069: 8B 6C 24 14        mov         ebp,dword ptr [esp+14h]
+  0000006D: F7 D0              not         eax
+  0000006F: 3B C5              cmp         eax,ebp
+  00000071: 0F 86 95 00 00 00  jbe         0000010C
+  00000077: 57                 push        edi
+  00000078: 8D 3C 29           lea         edi,[ecx+ebp]
+  0000007B: 85 ED              test        ebp,ebp
+  0000007D: 0F 84 80 00 00 00  je          00000103
+  00000083: 83 FF FE           cmp         edi,0FFFFFFFEh
+  00000086: 0F 87 8A 00 00 00  ja          $LN178
+  0000008C: 39 7E 14           cmp         dword ptr [esi+14h],edi
+  0000008F: 73 17              jae         000000A8
+  00000091: 51                 push        ecx
+  00000092: 57                 push        edi
+  00000093: 8B CE              mov         ecx,esi
+  00000095: E8 00 00 00 00     call        ?_Copy@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEXII@Z
+  0000009A: 85 FF              test        edi,edi
+  0000009C: 74 65              je          00000103
+  0000009E: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  000000A2: 72 2B              jb          000000CF
+  000000A4: 8B 0E              mov         ecx,dword ptr [esi]
+  000000A6: EB 29              jmp         000000D1
+  000000A8: 85 FF              test        edi,edi
+  000000AA: 75 F2              jne         0000009E
+  000000AC: 89 7E 10           mov         dword ptr [esi+10h],edi
+  000000AF: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  000000B3: 72 0E              jb          000000C3
+  000000B5: 8B 06              mov         eax,dword ptr [esi]
+  000000B7: 5F                 pop         edi
+  000000B8: 5D                 pop         ebp
+  000000B9: C6 00 00           mov         byte ptr [eax],0
+  000000BC: 8B C6              mov         eax,esi
+  000000BE: 5E                 pop         esi
+  000000BF: 5B                 pop         ebx
+  000000C0: C2 08 00           ret         8
+  000000C3: 5F                 pop         edi
+  000000C4: 8B C6              mov         eax,esi
+  000000C6: 5D                 pop         ebp
+  000000C7: 5E                 pop         esi
+  000000C8: 5B                 pop         ebx
+  000000C9: C6 00 00           mov         byte ptr [eax],0
+  000000CC: C2 08 00           ret         8
+  000000CF: 8B CE              mov         ecx,esi
+  000000D1: 85 ED              test        ebp,ebp
+  000000D3: 74 10              je          000000E5
+  000000D5: 8B 46 10           mov         eax,dword ptr [esi+10h]
+  000000D8: 55                 push        ebp
+  000000D9: 03 C1              add         eax,ecx
+  000000DB: 53                 push        ebx
+  000000DC: 50                 push        eax
+  000000DD: E8 00 00 00 00     call        _memcpy
+  000000E2: 83 C4 0C           add         esp,0Ch
+  000000E5: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  000000E9: 89 7E 10           mov         dword ptr [esi+10h],edi
+  000000EC: 72 0F              jb          000000FD
+  000000EE: 8B 06              mov         eax,dword ptr [esi]
+  000000F0: C6 04 38 00        mov         byte ptr [eax+edi],0
+  000000F4: 8B C6              mov         eax,esi
+  000000F6: 5F                 pop         edi
+  000000F7: 5D                 pop         ebp
+  000000F8: 5E                 pop         esi
+  000000F9: 5B                 pop         ebx
+  000000FA: C2 08 00           ret         8
+  000000FD: 8B C6              mov         eax,esi
+  000000FF: C6 04 38 00        mov         byte ptr [eax+edi],0
+  00000103: 5F                 pop         edi
+  00000104: 5D                 pop         ebp
+  00000105: 8B C6              mov         eax,esi
+  00000107: 5E                 pop         esi
+  00000108: 5B                 pop         ebx
+  00000109: C2 08 00           ret         8
+  0000010C: 68 00 00 00 00     push        offset ??_C@_0BA@JFNIOLAK@string?5too?5long?$AA@
+  00000111: E8 00 00 00 00     call        ?_Xlength_error@std@@YAXPBD@Z
+$LN178:
+  00000116: 68 00 00 00 00     push        offset ??_C@_0BA@JFNIOLAK@string?5too?5long?$AA@
+  0000011B: E8 00 00 00 00     call        ?_Xlength_error@std@@YAXPBD@Z
+$LN172:
+  00000120: CC                 int         3
+
+?assign@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@ABV12@II@Z (public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > & __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::assign(class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > const &,unsigned int,unsigned int)):
+  00000000: 53                 push        ebx
+  00000001: 8B 5C 24 08        mov         ebx,dword ptr [esp+8]
+  00000005: 55                 push        ebp
+  00000006: 8B 6C 24 10        mov         ebp,dword ptr [esp+10h]
+  0000000A: 56                 push        esi
+  0000000B: 8B 43 10           mov         eax,dword ptr [ebx+10h]
+  0000000E: 8B F1              mov         esi,ecx
+  00000010: 3B C5              cmp         eax,ebp
+  00000012: 0F 82 CD 00 00 00  jb          000000E5
+  00000018: 2B C5              sub         eax,ebp
+  0000001A: 57                 push        edi
+  0000001B: 8B 7C 24 1C        mov         edi,dword ptr [esp+1Ch]
+  0000001F: 3B F8              cmp         edi,eax
+  00000021: 0F 47 F8           cmova       edi,eax
+  00000024: 3B F3              cmp         esi,ebx
+  00000026: 75 2E              jne         00000056
+  00000028: 8D 04 2F           lea         eax,[edi+ebp]
+  0000002B: 39 46 10           cmp         dword ptr [esi+10h],eax
+  0000002E: 0F 82 BB 00 00 00  jb          $LN173
+  00000034: 89 46 10           mov         dword ptr [esi+10h],eax
+  00000037: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  0000003B: 72 02              jb          0000003F
+  0000003D: 8B 0E              mov         ecx,dword ptr [esi]
+  0000003F: 55                 push        ebp
+  00000040: C6 04 01 00        mov         byte ptr [ecx+eax],0
+  00000044: 8B CE              mov         ecx,esi
+  00000046: 6A 00              push        0
+  00000048: E8 00 00 00 00     call        ?erase@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@II@Z
+  0000004D: 5F                 pop         edi
+  0000004E: 8B C6              mov         eax,esi
+  00000050: 5E                 pop         esi
+  00000051: 5D                 pop         ebp
+  00000052: 5B                 pop         ebx
+  00000053: C2 0C 00           ret         0Ch
+  00000056: 83 FF FE           cmp         edi,0FFFFFFFEh
+  00000059: 0F 87 9A 00 00 00  ja          $LN174
+  0000005F: 39 7E 14           cmp         dword ptr [esi+14h],edi
+  00000062: 73 1F              jae         00000083
+  00000064: FF 76 10           push        dword ptr [esi+10h]
+  00000067: 57                 push        edi
+  00000068: E8 00 00 00 00     call        ?_Copy@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEXII@Z
+  0000006D: 85 FF              test        edi,edi
+  0000006F: 74 6B              je          000000DC
+  00000071: 83 7B 14 10        cmp         dword ptr [ebx+14h],10h
+  00000075: 72 02              jb          00000079
+  00000077: 8B 1B              mov         ebx,dword ptr [ebx]
+  00000079: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  0000007D: 72 2B              jb          000000AA
+  0000007F: 8B 0E              mov         ecx,dword ptr [esi]
+  00000081: EB 29              jmp         000000AC
+  00000083: 85 FF              test        edi,edi
+  00000085: 75 EA              jne         00000071
+  00000087: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  0000008B: 89 7E 10           mov         dword ptr [esi+10h],edi
+  0000008E: 72 0E              jb          0000009E
+  00000090: 8B 06              mov         eax,dword ptr [esi]
+  00000092: 5F                 pop         edi
+  00000093: C6 00 00           mov         byte ptr [eax],0
+  00000096: 8B C6              mov         eax,esi
+  00000098: 5E                 pop         esi
+  00000099: 5D                 pop         ebp
+  0000009A: 5B                 pop         ebx
+  0000009B: C2 0C 00           ret         0Ch
+  0000009E: 5F                 pop         edi
+  0000009F: 8B C6              mov         eax,esi
+  000000A1: 5E                 pop         esi
+  000000A2: 5D                 pop         ebp
+  000000A3: 5B                 pop         ebx
+  000000A4: C6 00 00           mov         byte ptr [eax],0
+  000000A7: C2 0C 00           ret         0Ch
+  000000AA: 8B CE              mov         ecx,esi
+  000000AC: 85 FF              test        edi,edi
+  000000AE: 74 0E              je          000000BE
+  000000B0: 57                 push        edi
+  000000B1: 8D 04 2B           lea         eax,[ebx+ebp]
+  000000B4: 50                 push        eax
+  000000B5: 51                 push        ecx
+  000000B6: E8 00 00 00 00     call        _memcpy
+  000000BB: 83 C4 0C           add         esp,0Ch
+  000000BE: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  000000C2: 89 7E 10           mov         dword ptr [esi+10h],edi
+  000000C5: 72 0F              jb          000000D6
+  000000C7: 8B 06              mov         eax,dword ptr [esi]
+  000000C9: C6 04 38 00        mov         byte ptr [eax+edi],0
+  000000CD: 8B C6              mov         eax,esi
+  000000CF: 5F                 pop         edi
+  000000D0: 5E                 pop         esi
+  000000D1: 5D                 pop         ebp
+  000000D2: 5B                 pop         ebx
+  000000D3: C2 0C 00           ret         0Ch
+  000000D6: 8B C6              mov         eax,esi
+  000000D8: C6 04 38 00        mov         byte ptr [eax+edi],0
+  000000DC: 5F                 pop         edi
+  000000DD: 8B C6              mov         eax,esi
+  000000DF: 5E                 pop         esi
+  000000E0: 5D                 pop         ebp
+  000000E1: 5B                 pop         ebx
+  000000E2: C2 0C 00           ret         0Ch
+  000000E5: 68 00 00 00 00     push        offset ??_C@_0BI@CFPLBAOH@invalid?5string?5position?$AA@
+  000000EA: E8 00 00 00 00     call        ?_Xout_of_range@std@@YAXPBD@Z
+$LN173:
+  000000EF: 68 00 00 00 00     push        offset ??_C@_0BI@CFPLBAOH@invalid?5string?5position?$AA@
+  000000F4: E8 00 00 00 00     call        ?_Xout_of_range@std@@YAXPBD@Z
+$LN174:
+  000000F9: 68 00 00 00 00     push        offset ??_C@_0BA@JFNIOLAK@string?5too?5long?$AA@
+  000000FE: E8 00 00 00 00     call        ?_Xlength_error@std@@YAXPBD@Z
+$LN166:
+  00000103: CC                 int         3
+
+?assign@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@PBD@Z (public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > & __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::assign(char const *)):
+  00000000: 56                 push        esi
+  00000001: 8B 74 24 08        mov         esi,dword ptr [esp+8]
+  00000005: 80 3E 00           cmp         byte ptr [esi],0
+  00000008: 75 0D              jne         00000017
+  0000000A: 33 D2              xor         edx,edx
+  0000000C: 52                 push        edx
+  0000000D: 56                 push        esi
+  0000000E: E8 00 00 00 00     call        ?assign@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@PBDI@Z
+  00000013: 5E                 pop         esi
+  00000014: C2 04 00           ret         4
+  00000017: 8B D6              mov         edx,esi
+  00000019: 57                 push        edi
+  0000001A: 8D 7A 01           lea         edi,[edx+1]
+  0000001D: 0F 1F 00           nop         dword ptr [eax]
+  00000020: 8A 02              mov         al,byte ptr [edx]
+  00000022: 42                 inc         edx
+  00000023: 84 C0              test        al,al
+  00000025: 75 F9              jne         00000020
+  00000027: 2B D7              sub         edx,edi
+  00000029: 5F                 pop         edi
+  0000002A: 52                 push        edx
+  0000002B: 56                 push        esi
+  0000002C: E8 00 00 00 00     call        ?assign@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@PBDI@Z
+  00000031: 5E                 pop         esi
+  00000032: C2 04 00           ret         4
+
+?assign@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@PBDI@Z (public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > & __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::assign(char const *,unsigned int)):
+  00000000: 53                 push        ebx
+  00000001: 8B 5C 24 08        mov         ebx,dword ptr [esp+8]
+  00000005: 56                 push        esi
+  00000006: 8B F1              mov         esi,ecx
+  00000008: 85 DB              test        ebx,ebx
+  0000000A: 74 57              je          00000063
+  0000000C: 8B 4E 14           mov         ecx,dword ptr [esi+14h]
+  0000000F: 83 F9 10           cmp         ecx,10h
+  00000012: 72 04              jb          00000018
+  00000014: 8B 06              mov         eax,dword ptr [esi]
+  00000016: EB 02              jmp         0000001A
+  00000018: 8B C6              mov         eax,esi
+  0000001A: 3B D8              cmp         ebx,eax
+  0000001C: 72 45              jb          00000063
+  0000001E: 83 F9 10           cmp         ecx,10h
+  00000021: 72 04              jb          00000027
+  00000023: 8B 16              mov         edx,dword ptr [esi]
+  00000025: EB 02              jmp         00000029
+  00000027: 8B D6              mov         edx,esi
+  00000029: 8B 46 10           mov         eax,dword ptr [esi+10h]
+  0000002C: 03 C2              add         eax,edx
+  0000002E: 3B C3              cmp         eax,ebx
+  00000030: 76 31              jbe         00000063
+  00000032: 83 F9 10           cmp         ecx,10h
+  00000035: 72 16              jb          0000004D
+  00000037: FF 74 24 10        push        dword ptr [esp+10h]
+  0000003B: 8B 06              mov         eax,dword ptr [esi]
+  0000003D: 8B CE              mov         ecx,esi
+  0000003F: 2B D8              sub         ebx,eax
+  00000041: 53                 push        ebx
+  00000042: 56                 push        esi
+  00000043: E8 00 00 00 00     call        ?assign@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@ABV12@II@Z
+  00000048: 5E                 pop         esi
+  00000049: 5B                 pop         ebx
+  0000004A: C2 08 00           ret         8
+  0000004D: FF 74 24 10        push        dword ptr [esp+10h]
+  00000051: 8B C6              mov         eax,esi
+  00000053: 8B CE              mov         ecx,esi
+  00000055: 2B D8              sub         ebx,eax
+  00000057: 53                 push        ebx
+  00000058: 56                 push        esi
+  00000059: E8 00 00 00 00     call        ?assign@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@ABV12@II@Z
+  0000005E: 5E                 pop         esi
+  0000005F: 5B                 pop         ebx
+  00000060: C2 08 00           ret         8
+  00000063: 57                 push        edi
+  00000064: 8B 7C 24 14        mov         edi,dword ptr [esp+14h]
+  00000068: 83 FF FE           cmp         edi,0FFFFFFFEh
+  0000006B: 77 79              ja          000000E6
+  0000006D: 39 7E 14           cmp         dword ptr [esi+14h],edi
+  00000070: 73 19              jae         0000008B
+  00000072: FF 76 10           push        dword ptr [esi+10h]
+  00000075: 8B CE              mov         ecx,esi
+  00000077: 57                 push        edi
+  00000078: E8 00 00 00 00     call        ?_Copy@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEXII@Z
+  0000007D: 85 FF              test        edi,edi
+  0000007F: 74 5D              je          000000DE
+  00000081: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  00000085: 72 29              jb          000000B0
+  00000087: 8B 06              mov         eax,dword ptr [esi]
+  00000089: EB 27              jmp         000000B2
+  0000008B: 85 FF              test        edi,edi
+  0000008D: 75 F2              jne         00000081
+  0000008F: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  00000093: 89 7E 10           mov         dword ptr [esi+10h],edi
+  00000096: 72 0D              jb          000000A5
+  00000098: 8B 06              mov         eax,dword ptr [esi]
+  0000009A: 5F                 pop         edi
+  0000009B: C6 00 00           mov         byte ptr [eax],0
+  0000009E: 8B C6              mov         eax,esi
+  000000A0: 5E                 pop         esi
+  000000A1: 5B                 pop         ebx
+  000000A2: C2 08 00           ret         8
+  000000A5: 8B C6              mov         eax,esi
+  000000A7: 5F                 pop         edi
+  000000A8: 5E                 pop         esi
+  000000A9: 5B                 pop         ebx
+  000000AA: C6 00 00           mov         byte ptr [eax],0
+  000000AD: C2 08 00           ret         8
+  000000B0: 8B C6              mov         eax,esi
+  000000B2: 85 FF              test        edi,edi
+  000000B4: 74 0B              je          000000C1
+  000000B6: 57                 push        edi
+  000000B7: 53                 push        ebx
+  000000B8: 50                 push        eax
+  000000B9: E8 00 00 00 00     call        _memcpy
+  000000BE: 83 C4 0C           add         esp,0Ch
+  000000C1: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  000000C5: 89 7E 10           mov         dword ptr [esi+10h],edi
+  000000C8: 72 0E              jb          000000D8
+  000000CA: 8B 06              mov         eax,dword ptr [esi]
+  000000CC: C6 04 38 00        mov         byte ptr [eax+edi],0
+  000000D0: 8B C6              mov         eax,esi
+  000000D2: 5F                 pop         edi
+  000000D3: 5E                 pop         esi
+  000000D4: 5B                 pop         ebx
+  000000D5: C2 08 00           ret         8
+  000000D8: 8B C6              mov         eax,esi
+  000000DA: C6 04 38 00        mov         byte ptr [eax+edi],0
+  000000DE: 5F                 pop         edi
+  000000DF: 8B C6              mov         eax,esi
+  000000E1: 5E                 pop         esi
+  000000E2: 5B                 pop         ebx
+  000000E3: C2 08 00           ret         8
+  000000E6: 68 00 00 00 00     push        offset ??_C@_0BA@JFNIOLAK@string?5too?5long?$AA@
+  000000EB: E8 00 00 00 00     call        ?_Xlength_error@std@@YAXPBD@Z
+$LN150:
+  000000F0: CC                 int         3
+
+?assign@?$char_traits@D@std@@SAXAADABD@Z (public: static void __cdecl std::char_traits<char>::assign(char &,char const &)):
+  00000000: 8B 44 24 08        mov         eax,dword ptr [esp+8]
+  00000004: 8A 08              mov         cl,byte ptr [eax]
+  00000006: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  0000000A: 88 08              mov         byte ptr [eax],cl
+  0000000C: C3                 ret
+
+?c_str@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QBEPBDXZ (public: char const * __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::c_str(void)const ):
+  00000000: 83 79 14 10        cmp         dword ptr [ecx+14h],10h
+  00000004: 72 03              jb          00000009
+  00000006: 8B 01              mov         eax,dword ptr [ecx]
+  00000008: C3                 ret
+  00000009: 8B C1              mov         eax,ecx
+  0000000B: C3                 ret
+
+?category@error_code@std@@QBEABVerror_category@2@XZ (public: class std::error_category const & __thiscall std::error_code::category(void)const ):
+  00000000: 8B 41 04           mov         eax,dword ptr [ecx+4]
+  00000003: C3                 ret
+
+?category@error_condition@std@@QBEABVerror_category@2@XZ (public: class std::error_category const & __thiscall std::error_condition::category(void)const ):
+  00000000: 8B 41 04           mov         eax,dword ptr [ecx+4]
+  00000003: C3                 ret
+
+?clear@?$basic_ios@DU?$char_traits@D@std@@@std@@QAEXH_N@Z (public: void __thiscall std::basic_ios<char,struct std::char_traits<char> >::clear(int,bool)):
+  00000000: 8B 54 24 04        mov         edx,dword ptr [esp+4]
+  00000004: FF 74 24 08        push        dword ptr [esp+8]
+  00000008: 83 CA 04           or          edx,4
+  0000000B: 83 79 38 00        cmp         dword ptr [ecx+38h],0
+  0000000F: 0F 45 54 24 08     cmovne      edx,dword ptr [esp+8]
+  00000014: 52                 push        edx
+  00000015: E8 00 00 00 00     call        ?clear@ios_base@std@@QAEXH_N@Z
+  0000001A: C2 08 00           ret         8
+
+?clear@ios_base@std@@QAEXH_N@Z (public: void __thiscall std::ios_base::clear(int,bool)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: 83 EC 14           sub         esp,14h
+  00000007: 83 E0 17           and         eax,17h
+  0000000A: 89 41 0C           mov         dword ptr [ecx+0Ch],eax
+  0000000D: 8B 49 10           mov         ecx,dword ptr [ecx+10h]
+  00000010: 23 C8              and         ecx,eax
+  00000012: 74 13              je          00000027
+  00000014: 80 7C 24 1C 00     cmp         byte ptr [esp+1Ch],0
+  00000019: 75 12              jne         0000002D
+  0000001B: F6 C1 04           test        cl,4
+  0000001E: 75 16              jne         $LN41
+  00000020: F6 C1 02           test        cl,2
+  00000023: 75 3E              jne         $LN42
+  00000025: EB 69              jmp         $LN43
+  00000027: 83 C4 14           add         esp,14h
+  0000002A: C2 08 00           ret         8
+  0000002D: 6A 00              push        0
+  0000002F: 6A 00              push        0
+  00000031: E8 00 00 00 00     call        __CxxThrowException@8
+$LN41:
+  00000036: E8 00 00 00 00     call        ??$_Immortalize@V_Iostream_error_category@std@@@std@@YAAAV_Iostream_error_category@0@XZ
+  0000003B: 68 00 00 00 00     push        offset ??_C@_0BF@PHHKMMFD@ios_base?3?3badbit?5set?$AA@
+  00000040: 50                 push        eax
+  00000041: 6A 01              push        1
+  00000043: 8D 4C 24 0C        lea         ecx,[esp+0Ch]
+  00000047: E8 00 00 00 00     call        ??0system_error@std@@QAE@Verror_code@1@PBD@Z
+  0000004C: 68 00 00 00 00     push        offset __TI5?AVfailure@ios_base@std@@
+  00000051: 8D 44 24 04        lea         eax,[esp+4]
+  00000055: C7 44 24 04 00 00  mov         dword ptr [esp+4],offset ??_7failure@ios_base@std@@6B@
+            00 00
+  0000005D: 50                 push        eax
+  0000005E: E8 00 00 00 00     call        __CxxThrowException@8
+$LN42:
+  00000063: E8 00 00 00 00     call        ??$_Immortalize@V_Iostream_error_category@std@@@std@@YAAAV_Iostream_error_category@0@XZ
+  00000068: 68 00 00 00 00     push        offset ??_C@_0BG@FMKFHCIL@ios_base?3?3failbit?5set?$AA@
+  0000006D: 50                 push        eax
+  0000006E: 6A 01              push        1
+  00000070: 8D 4C 24 0C        lea         ecx,[esp+0Ch]
+  00000074: E8 00 00 00 00     call        ??0system_error@std@@QAE@Verror_code@1@PBD@Z
+  00000079: 68 00 00 00 00     push        offset __TI5?AVfailure@ios_base@std@@
+  0000007E: 8D 44 24 04        lea         eax,[esp+4]
+  00000082: C7 44 24 04 00 00  mov         dword ptr [esp+4],offset ??_7failure@ios_base@std@@6B@
+            00 00
+  0000008A: 50                 push        eax
+  0000008B: E8 00 00 00 00     call        __CxxThrowException@8
+$LN43:
+  00000090: E8 00 00 00 00     call        ??$_Immortalize@V_Iostream_error_category@std@@@std@@YAAAV_Iostream_error_category@0@XZ
+  00000095: 68 00 00 00 00     push        offset ??_C@_0BF@OOHOMBOF@ios_base?3?3eofbit?5set?$AA@
+  0000009A: 50                 push        eax
+  0000009B: 6A 01              push        1
+  0000009D: 8D 4C 24 0C        lea         ecx,[esp+0Ch]
+  000000A1: E8 00 00 00 00     call        ??0system_error@std@@QAE@Verror_code@1@PBD@Z
+  000000A6: 68 00 00 00 00     push        offset __TI5?AVfailure@ios_base@std@@
+  000000AB: 8D 44 24 04        lea         eax,[esp+4]
+  000000AF: C7 44 24 04 00 00  mov         dword ptr [esp+4],offset ??_7failure@ios_base@std@@6B@
+            00 00
+  000000B7: 50                 push        eax
+  000000B8: E8 00 00 00 00     call        __CxxThrowException@8
+$LN35:
+  000000BD: CC                 int         3
+
+?copy@?$char_traits@D@std@@SAPADPADPBDI@Z (public: static char * __cdecl std::char_traits<char>::copy(char *,char const *,unsigned int)):
+  00000000: 8B 44 24 0C        mov         eax,dword ptr [esp+0Ch]
+  00000004: 85 C0              test        eax,eax
+  00000006: 75 05              jne         0000000D
+  00000008: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  0000000C: C3                 ret
+  0000000D: 89 44 24 0C        mov         dword ptr [esp+0Ch],eax
+  00000011: E9 00 00 00 00     jmp         _memcpy
+
+?deallocate@?$_Wrap_alloc@V?$allocator@D@std@@@std@@QAEXPADI@Z (public: void __thiscall std::_Wrap_alloc<class std::allocator<char> >::deallocate(char *,unsigned int)):
+  00000000: 81 7C 24 08 00 10  cmp         dword ptr [esp+8],1000h
+            00 00
+  00000008: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  0000000C: 72 19              jb          00000027
+  0000000E: A8 1F              test        al,1Fh
+  00000010: 75 1F              jne         00000031
+  00000012: 8B 48 FC           mov         ecx,dword ptr [eax-4]
+  00000015: 3B C8              cmp         ecx,eax
+  00000017: 73 1D              jae         $LN21
+  00000019: 2B C1              sub         eax,ecx
+  0000001B: 83 F8 04           cmp         eax,4
+  0000001E: 72 1B              jb          $LN22
+  00000020: 83 F8 23           cmp         eax,23h
+  00000023: 77 1B              ja          $LN23
+  00000025: 8B C1              mov         eax,ecx
+  00000027: 50                 push        eax
+  00000028: E8 00 00 00 00     call        ??3@YAXPAX@Z
+  0000002D: 59                 pop         ecx
+  0000002E: C2 08 00           ret         8
+  00000031: E8 00 00 00 00     call        __invalid_parameter_noinfo_noreturn
+$LN21:
+  00000036: E8 00 00 00 00     call        __invalid_parameter_noinfo_noreturn
+$LN22:
+  0000003B: E8 00 00 00 00     call        __invalid_parameter_noinfo_noreturn
+$LN23:
+  00000040: E8 00 00 00 00     call        __invalid_parameter_noinfo_noreturn
+$LN15:
+  00000045: CC                 int         3
+
+?deallocate@?$allocator@D@std@@QAEXPADI@Z (public: void __thiscall std::allocator<char>::deallocate(char *,unsigned int)):
+  00000000: 81 7C 24 08 00 10  cmp         dword ptr [esp+8],1000h
+            00 00
+  00000008: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  0000000C: 72 19              jb          00000027
+  0000000E: A8 1F              test        al,1Fh
+  00000010: 75 1F              jne         00000031
+  00000012: 8B 48 FC           mov         ecx,dword ptr [eax-4]
+  00000015: 3B C8              cmp         ecx,eax
+  00000017: 73 1D              jae         $LN18
+  00000019: 2B C1              sub         eax,ecx
+  0000001B: 83 F8 04           cmp         eax,4
+  0000001E: 72 1B              jb          $LN19
+  00000020: 83 F8 23           cmp         eax,23h
+  00000023: 77 1B              ja          $LN20
+  00000025: 8B C1              mov         eax,ecx
+  00000027: 50                 push        eax
+  00000028: E8 00 00 00 00     call        ??3@YAXPAX@Z
+  0000002D: 59                 pop         ecx
+  0000002E: C2 08 00           ret         8
+  00000031: E8 00 00 00 00     call        __invalid_parameter_noinfo_noreturn
+$LN18:
+  00000036: E8 00 00 00 00     call        __invalid_parameter_noinfo_noreturn
+$LN19:
+  0000003B: E8 00 00 00 00     call        __invalid_parameter_noinfo_noreturn
+$LN20:
+  00000040: E8 00 00 00 00     call        __invalid_parameter_noinfo_noreturn
+$LN12:
+  00000045: CC                 int         3
+
+?default_error_condition@error_category@std@@UBE?AVerror_condition@2@H@Z (public: virtual class std::error_condition __thiscall std::error_category::default_error_condition(int)const ):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: 8B 54 24 08        mov         edx,dword ptr [esp+8]
+  00000008: 89 10              mov         dword ptr [eax],edx
+  0000000A: 89 48 04           mov         dword ptr [eax+4],ecx
+  0000000D: C2 08 00           ret         8
+
+?empty@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QBE_NXZ (public: bool __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::empty(void)const ):
+  00000000: 83 79 10 00        cmp         dword ptr [ecx+10h],0
+  00000004: 0F 94 C0           sete        al
+  00000007: C3                 ret
+
+?eof@?$char_traits@D@std@@SAHXZ (public: static int __cdecl std::char_traits<char>::eof(void)):
+  00000000: 83 C8 FF           or          eax,0FFFFFFFFh
+  00000003: C3                 ret
+
+?eq_int_type@?$char_traits@D@std@@SA_NABH0@Z (public: static bool __cdecl std::char_traits<char>::eq_int_type(int const &,int const &)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: 8B 08              mov         ecx,dword ptr [eax]
+  00000006: 8B 44 24 08        mov         eax,dword ptr [esp+8]
+  0000000A: 3B 08              cmp         ecx,dword ptr [eax]
+  0000000C: 0F 94 C0           sete        al
+  0000000F: C3                 ret
+
+?equivalent@error_category@std@@UBE_NABVerror_code@2@H@Z (public: virtual bool __thiscall std::error_category::equivalent(class std::error_code const &,int)const ):
+  00000000: 8B 41 04           mov         eax,dword ptr [ecx+4]
+  00000003: 56                 push        esi
+  00000004: 8B 74 24 08        mov         esi,dword ptr [esp+8]
+  00000008: 8B 56 04           mov         edx,dword ptr [esi+4]
+  0000000B: 3B 42 04           cmp         eax,dword ptr [edx+4]
+  0000000E: 75 0E              jne         0000001E
+  00000010: 8B 06              mov         eax,dword ptr [esi]
+  00000012: 3B 44 24 0C        cmp         eax,dword ptr [esp+0Ch]
+  00000016: 75 06              jne         0000001E
+  00000018: B0 01              mov         al,1
+  0000001A: 5E                 pop         esi
+  0000001B: C2 08 00           ret         8
+  0000001E: 32 C0              xor         al,al
+  00000020: 5E                 pop         esi
+  00000021: C2 08 00           ret         8
+
+?equivalent@error_category@std@@UBE_NHABVerror_condition@2@@Z (public: virtual bool __thiscall std::error_category::equivalent(int,class std::error_condition const &)const ):
+  00000000: 8B 01              mov         eax,dword ptr [ecx]
+  00000002: 8D 54 24 F8        lea         edx,[esp-8]
+  00000006: 83 EC 08           sub         esp,8
+  00000009: 56                 push        esi
+  0000000A: FF 74 24 10        push        dword ptr [esp+10h]
+  0000000E: 52                 push        edx
+  0000000F: FF 50 0C           call        dword ptr [eax+0Ch]
+  00000012: 8B 74 24 14        mov         esi,dword ptr [esp+14h]
+  00000016: 8B 48 04           mov         ecx,dword ptr [eax+4]
+  00000019: 8B 56 04           mov         edx,dword ptr [esi+4]
+  0000001C: 8B 49 04           mov         ecx,dword ptr [ecx+4]
+  0000001F: 3B 4A 04           cmp         ecx,dword ptr [edx+4]
+  00000022: 75 0F              jne         00000033
+  00000024: 8B 00              mov         eax,dword ptr [eax]
+  00000026: 3B 06              cmp         eax,dword ptr [esi]
+  00000028: 75 09              jne         00000033
+  0000002A: B0 01              mov         al,1
+  0000002C: 5E                 pop         esi
+  0000002D: 83 C4 08           add         esp,8
+  00000030: C2 08 00           ret         8
+  00000033: 32 C0              xor         al,al
+  00000035: 5E                 pop         esi
+  00000036: 83 C4 08           add         esp,8
+  00000039: C2 08 00           ret         8
+
+?erase@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@I@Z (public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > & __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::erase(unsigned int)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: 39 41 10           cmp         dword ptr [ecx+10h],eax
+  00000007: 72 1F              jb          00000028
+  00000009: 89 41 10           mov         dword ptr [ecx+10h],eax
+  0000000C: 83 79 14 10        cmp         dword ptr [ecx+14h],10h
+  00000010: 72 0B              jb          0000001D
+  00000012: 8B 11              mov         edx,dword ptr [ecx]
+  00000014: C6 04 02 00        mov         byte ptr [edx+eax],0
+  00000018: 8B C1              mov         eax,ecx
+  0000001A: C2 04 00           ret         4
+  0000001D: 8B D1              mov         edx,ecx
+  0000001F: C6 04 02 00        mov         byte ptr [edx+eax],0
+  00000023: 8B C1              mov         eax,ecx
+  00000025: C2 04 00           ret         4
+  00000028: 68 00 00 00 00     push        offset ??_C@_0BI@CFPLBAOH@invalid?5string?5position?$AA@
+  0000002D: E8 00 00 00 00     call        ?_Xout_of_range@std@@YAXPBD@Z
+$LN30:
+  00000032: CC                 int         3
+
+?erase@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@II@Z (public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > & __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::erase(unsigned int,unsigned int)):
+  00000000: 56                 push        esi
+  00000001: 8B F1              mov         esi,ecx
+  00000003: 8B 4C 24 08        mov         ecx,dword ptr [esp+8]
+  00000007: 57                 push        edi
+  00000008: 8B 7E 10           mov         edi,dword ptr [esi+10h]
+  0000000B: 3B F9              cmp         edi,ecx
+  0000000D: 72 7B              jb          0000008A
+  0000000F: 8B 54 24 10        mov         edx,dword ptr [esp+10h]
+  00000013: 8B C7              mov         eax,edi
+  00000015: 2B C1              sub         eax,ecx
+  00000017: 3B C2              cmp         eax,edx
+  00000019: 77 21              ja          0000003C
+  0000001B: 89 4E 10           mov         dword ptr [esi+10h],ecx
+  0000001E: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  00000022: 72 0D              jb          00000031
+  00000024: 8B 06              mov         eax,dword ptr [esi]
+  00000026: 5F                 pop         edi
+  00000027: C6 04 08 00        mov         byte ptr [eax+ecx],0
+  0000002B: 8B C6              mov         eax,esi
+  0000002D: 5E                 pop         esi
+  0000002E: C2 08 00           ret         8
+  00000031: 8B C6              mov         eax,esi
+  00000033: 5F                 pop         edi
+  00000034: 5E                 pop         esi
+  00000035: C6 04 08 00        mov         byte ptr [eax+ecx],0
+  00000039: C2 08 00           ret         8
+  0000003C: 85 D2              test        edx,edx
+  0000003E: 74 43              je          00000083
+  00000040: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  00000044: 72 04              jb          0000004A
+  00000046: 8B 06              mov         eax,dword ptr [esi]
+  00000048: EB 02              jmp         0000004C
+  0000004A: 8B C6              mov         eax,esi
+  0000004C: 2B FA              sub         edi,edx
+  0000004E: 53                 push        ebx
+  0000004F: 8D 1C 08           lea         ebx,[eax+ecx]
+  00000052: 8B C7              mov         eax,edi
+  00000054: 2B C1              sub         eax,ecx
+  00000056: 74 0E              je          00000066
+  00000058: 50                 push        eax
+  00000059: 8D 04 13           lea         eax,[ebx+edx]
+  0000005C: 50                 push        eax
+  0000005D: 53                 push        ebx
+  0000005E: E8 00 00 00 00     call        _memmove
+  00000063: 83 C4 0C           add         esp,0Ch
+  00000066: 83 7E 14 10        cmp         dword ptr [esi+14h],10h
+  0000006A: 89 7E 10           mov         dword ptr [esi+10h],edi
+  0000006D: 5B                 pop         ebx
+  0000006E: 72 0D              jb          0000007D
+  00000070: 8B 06              mov         eax,dword ptr [esi]
+  00000072: C6 04 38 00        mov         byte ptr [eax+edi],0
+  00000076: 8B C6              mov         eax,esi
+  00000078: 5F                 pop         edi
+  00000079: 5E                 pop         esi
+  0000007A: C2 08 00           ret         8
+  0000007D: 8B C6              mov         eax,esi
+  0000007F: C6 04 38 00        mov         byte ptr [eax+edi],0
+  00000083: 5F                 pop         edi
+  00000084: 8B C6              mov         eax,esi
+  00000086: 5E                 pop         esi
+  00000087: C2 08 00           ret         8
+  0000008A: 68 00 00 00 00     push        offset ??_C@_0BI@CFPLBAOH@invalid?5string?5position?$AA@
+  0000008F: E8 00 00 00 00     call        ?_Xout_of_range@std@@YAXPBD@Z
+$LN75:
+  00000094: CC                 int         3
+
+?fill@?$basic_ios@DU?$char_traits@D@std@@@std@@QBEDXZ (public: char __thiscall std::basic_ios<char,struct std::char_traits<char> >::fill(void)const ):
+  00000000: 8A 41 40           mov         al,byte ptr [ecx+40h]
+  00000003: C3                 ret
+
+?flags@ios_base@std@@QBEHXZ (public: int __thiscall std::ios_base::flags(void)const ):
+  00000000: 8B 41 14           mov         eax,dword ptr [ecx+14h]
+  00000003: C3                 ret
+
+?flush@?$basic_ostream@DU?$char_traits@D@std@@@std@@QAEAAV12@XZ (public: class std::basic_ostream<char,struct std::char_traits<char> > & __thiscall std::basic_ostream<char,struct std::char_traits<char> >::flush(void)):
+  00000000: 83 EC 08           sub         esp,8
+  00000003: 56                 push        esi
+  00000004: 8B F1              mov         esi,ecx
+  00000006: 8B 06              mov         eax,dword ptr [esi]
+  00000008: 8B 40 04           mov         eax,dword ptr [eax+4]
+  0000000B: 83 7C 30 38 00     cmp         dword ptr [eax+esi+38h],0
+  00000010: 74 6C              je          0000007E
+  00000012: 56                 push        esi
+  00000013: 8D 4C 24 08        lea         ecx,[esp+8]
+  00000017: E8 00 00 00 00     call        ??0sentry@?$basic_ostream@DU?$char_traits@D@std@@@std@@QAE@AAV12@@Z
+  0000001C: 80 7C 24 08 00     cmp         byte ptr [esp+8],0
+  00000021: 74 33              je          00000056
+  00000023: 8B 06              mov         eax,dword ptr [esi]
+  00000025: 8B 40 04           mov         eax,dword ptr [eax+4]
+  00000028: 8B 4C 30 38        mov         ecx,dword ptr [eax+esi+38h]
+  0000002C: 8B 01              mov         eax,dword ptr [ecx]
+  0000002E: FF 50 34           call        dword ptr [eax+34h]
+  00000031: 83 F8 FF           cmp         eax,0FFFFFFFFh
+  00000034: 75 20              jne         00000056
+  00000036: 8B 06              mov         eax,dword ptr [esi]
+  00000038: 6A 00              push        0
+  0000003A: 8B 48 04           mov         ecx,dword ptr [eax+4]
+  0000003D: 03 CE              add         ecx,esi
+  0000003F: 8B 51 0C           mov         edx,dword ptr [ecx+0Ch]
+  00000042: 83 CA 04           or          edx,4
+  00000045: 83 79 38 00        cmp         dword ptr [ecx+38h],0
+  00000049: 0F 45 51 0C        cmovne      edx,dword ptr [ecx+0Ch]
+  0000004D: 83 CA 04           or          edx,4
+  00000050: 52                 push        edx
+  00000051: E8 00 00 00 00     call        ?clear@ios_base@std@@QAEXH_N@Z
+  00000056: E8 00 00 00 00     call        ?uncaught_exception@std@@YA_NXZ
+  0000005B: 84 C0              test        al,al
+  0000005D: 75 09              jne         00000068
+  0000005F: 8B 4C 24 04        mov         ecx,dword ptr [esp+4]
+  00000063: E8 00 00 00 00     call        ?_Osfx@?$basic_ostream@DU?$char_traits@D@std@@@std@@QAEXXZ
+  00000068: 8B 4C 24 04        mov         ecx,dword ptr [esp+4]
+  0000006C: 8B 01              mov         eax,dword ptr [ecx]
+  0000006E: 8B 40 04           mov         eax,dword ptr [eax+4]
+  00000071: 8B 4C 08 38        mov         ecx,dword ptr [eax+ecx+38h]
+  00000075: 85 C9              test        ecx,ecx
+  00000077: 74 05              je          0000007E
+  00000079: 8B 01              mov         eax,dword ptr [ecx]
+  0000007B: FF 50 08           call        dword ptr [eax+8]
+  0000007E: 8B C6              mov         eax,esi
+  00000080: 5E                 pop         esi
+  00000081: 83 C4 08           add         esp,8
+  00000084: C3                 ret
+
+?good@ios_base@std@@QBE_NXZ (public: bool __thiscall std::ios_base::good(void)const ):
+  00000000: 83 79 0C 00        cmp         dword ptr [ecx+0Ch],0
+  00000004: 0F 94 C0           sete        al
+  00000007: C3                 ret
+
+?iostream_category@std@@YAABVerror_category@1@XZ (class std::error_category const & __cdecl std::iostream_category(void)):
+  00000000: E9 00 00 00 00     jmp         ??$_Immortalize@V_Iostream_error_category@std@@@std@@YAAAV_Iostream_error_category@0@XZ
+
+?length@?$char_traits@D@std@@SAIPBD@Z (public: static unsigned int __cdecl std::char_traits<char>::length(char const *)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: 80 38 00           cmp         byte ptr [eax],0
+  00000007: 75 03              jne         0000000C
+  00000009: 33 C0              xor         eax,eax
+  0000000B: C3                 ret
+  0000000C: 8D 50 01           lea         edx,[eax+1]
+  0000000F: 90                 nop
+  00000010: 8A 08              mov         cl,byte ptr [eax]
+  00000012: 40                 inc         eax
+  00000013: 84 C9              test        cl,cl
+  00000015: 75 F9              jne         00000010
+  00000017: 2B C2              sub         eax,edx
+  00000019: C3                 ret
+
+?make_error_code@std@@YA?AVerror_code@1@W4io_errc@1@@Z (class std::error_code __cdecl std::make_error_code(enum std::io_errc)):
+  00000000: E8 00 00 00 00     call        ??$_Immortalize@V_Iostream_error_category@std@@@std@@YAAAV_Iostream_error_category@0@XZ
+  00000005: 8B 54 24 04        mov         edx,dword ptr [esp+4]
+  00000009: 8B 4C 24 08        mov         ecx,dword ptr [esp+8]
+  0000000D: 89 42 04           mov         dword ptr [edx+4],eax
+  00000010: 8B C2              mov         eax,edx
+  00000012: 89 0A              mov         dword ptr [edx],ecx
+  00000014: C3                 ret
+
+?max_size@?$_Wrap_alloc@V?$allocator@D@std@@@std@@QBEIU_Nil@2@@Z (public: unsigned int __thiscall std::_Wrap_alloc<class std::allocator<char> >::max_size(struct std::_Nil)const ):
+  00000000: 83 C8 FF           or          eax,0FFFFFFFFh
+  00000003: C2 04 00           ret         4
+
+?max_size@?$allocator@D@std@@QBEIXZ (public: unsigned int __thiscall std::allocator<char>::max_size(void)const ):
+  00000000: 83 C8 FF           or          eax,0FFFFFFFFh
+  00000003: C3                 ret
+
+?max_size@?$allocator_traits@V?$allocator@D@std@@@std@@SAIABV?$allocator@D@2@@Z (public: static unsigned int __cdecl std::allocator_traits<class std::allocator<char> >::max_size(class std::allocator<char> const &)):
+  00000000: 83 C8 FF           or          eax,0FFFFFFFFh
+  00000003: C3                 ret
+
+?max_size@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QBEIXZ (public: unsigned int __thiscall std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> >::max_size(void)const ):
+  00000000: B8 FE FF FF FF     mov         eax,0FFFFFFFEh
+  00000005: C3                 ret
+
+?message@_Generic_error_category@std@@UBE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@2@H@Z (public: virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __thiscall std::_Generic_error_category::message(int)const ):
+  00000000: 56                 push        esi
+  00000001: FF 74 24 0C        push        dword ptr [esp+0Ch]
+  00000005: E8 00 00 00 00     call        ?_Syserror_map@std@@YAPBDH@Z
+  0000000A: 8B 74 24 0C        mov         esi,dword ptr [esp+0Ch]
+  0000000E: 8B D0              mov         edx,eax
+  00000010: 83 C4 04           add         esp,4
+  00000013: C7 46 14 0F 00 00  mov         dword ptr [esi+14h],0Fh
+            00
+  0000001A: C7 46 10 00 00 00  mov         dword ptr [esi+10h],0
+            00
+  00000021: C6 06 00           mov         byte ptr [esi],0
+  00000024: 80 3A 00           cmp         byte ptr [edx],0
+  00000027: 75 11              jne         0000003A
+  00000029: 33 C9              xor         ecx,ecx
+  0000002B: 51                 push        ecx
+  0000002C: 52                 push        edx
+  0000002D: 8B CE              mov         ecx,esi
+  0000002F: E8 00 00 00 00     call        ?assign@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@PBDI@Z
+  00000034: 8B C6              mov         eax,esi
+  00000036: 5E                 pop         esi
+  00000037: C2 08 00           ret         8
+  0000003A: 8B CA              mov         ecx,edx
+  0000003C: 57                 push        edi
+  0000003D: 8D 79 01           lea         edi,[ecx+1]
+  00000040: 8A 01              mov         al,byte ptr [ecx]
+  00000042: 41                 inc         ecx
+  00000043: 84 C0              test        al,al
+  00000045: 75 F9              jne         00000040
+  00000047: 2B CF              sub         ecx,edi
+  00000049: 5F                 pop         edi
+  0000004A: 51                 push        ecx
+  0000004B: 52                 push        edx
+  0000004C: 8B CE              mov         ecx,esi
+  0000004E: E8 00 00 00 00     call        ?assign@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@PBDI@Z
+  00000053: 8B C6              mov         eax,esi
+  00000055: 5E                 pop         esi
+  00000056: C2 08 00           ret         8
+
+?message@_Iostream_error_category@std@@UBE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@2@H@Z (public: virtual class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __thiscall std::_Iostream_error_category::message(int)const ):
+  00000000: 8B 44 24 08        mov         eax,dword ptr [esp+8]
+  00000004: 56                 push        esi
+  00000005: 8B 74 24 08        mov         esi,dword ptr [esp+8]
+  00000009: 83 F8 01           cmp         eax,1
+  0000000C: 75 25              jne         00000033
+  0000000E: 6A 15              push        15h
+  00000010: C7 46 14 0F 00 00  mov         dword ptr [esi+14h],0Fh
+            00
+  00000017: 8B CE              mov         ecx,esi
+  00000019: C7 46 10 00 00 00  mov         dword ptr [esi+10h],0
+            00
+  00000020: 68 00 00 00 00     push        offset ??_C@_0BG@PADBLCHM@iostream?5stream?5error?$AA@
+  00000025: C6 06 00           mov         byte ptr [esi],0
+  00000028: E8 00 00 00 00     call        ?assign@?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@QAEAAV12@PBDI@Z
+  0000002D: 8B C6              mov         eax,esi
+  0000002F: 5E                 pop         esi
+  00000030: C2 08 00           ret         8
+  00000033: 50                 push        eax
+  00000034: 56                 push        esi
+  00000035: E8 00 00 00 00     call        ?message@_Generic_error_category@std@@UBE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@2@H@Z
+  0000003A: 8B C6              mov         eax,esi
+  0000003C: 5E                 pop         esi
+  0000003D: C2 08 00           ret         8
+
+?message@error_code@std@@QBE?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@2@XZ (public: class std::basic_string<char,struct std::char_traits<char>,class std::allocator<char> > __thiscall std::error_code::message(void)const ):
+  00000000: 8B 41 04           mov         eax,dword ptr [ecx+4]
+  00000003: FF 31              push        dword ptr [ecx]
+  00000005: 8B C8              mov         ecx,eax
+  00000007: FF 74 24 08        push        dword ptr [esp+8]
+  0000000B: 8B 10              mov         edx,dword ptr [eax]
+  0000000D: FF 52 08           call        dword ptr [edx+8]
+  00000010: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000014: C2 04 00           ret         4
+
+?move@?$char_traits@D@std@@SAPADPADPBDI@Z (public: static char * __cdecl std::char_traits<char>::move(char *,char const *,unsigned int)):
+  00000000: 8B 44 24 0C        mov         eax,dword ptr [esp+0Ch]
+  00000004: 85 C0              test        eax,eax
+  00000006: 75 05              jne         0000000D
+  00000008: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  0000000C: C3                 ret
+  0000000D: 89 44 24 0C        mov         dword ptr [esp+0Ch],eax
+  00000011: E9 00 00 00 00     jmp         _memmove
+
+?name@_Generic_error_category@std@@UBEPBDXZ (public: virtual char const * __thiscall std::_Generic_error_category::name(void)const ):
+  00000000: B8 00 00 00 00     mov         eax,offset ??_C@_07DCLBNMLN@generic?$AA@
+  00000005: C3                 ret
+
+?name@_Iostream_error_category@std@@UBEPBDXZ (public: virtual char const * __thiscall std::_Iostream_error_category::name(void)const ):
+  00000000: B8 00 00 00 00     mov         eax,offset ??_C@_08LLGCOLLL@iostream?$AA@
+  00000005: C3                 ret
+
+?pubsync@?$basic_streambuf@DU?$char_traits@D@std@@@std@@QAEHXZ (public: int __thiscall std::basic_streambuf<char,struct std::char_traits<char> >::pubsync(void)):
+  00000000: 8B 01              mov         eax,dword ptr [ecx]
+  00000002: FF 60 34           jmp         dword ptr [eax+34h]
+
+?rdbuf@?$basic_ios@DU?$char_traits@D@std@@@std@@QBEPAV?$basic_streambuf@DU?$char_traits@D@std@@@2@XZ (public: class std::basic_streambuf<char,struct std::char_traits<char> > * __thiscall std::basic_ios<char,struct std::char_traits<char> >::rdbuf(void)const ):
+  00000000: 8B 41 38           mov         eax,dword ptr [ecx+38h]
+  00000003: C3                 ret
+
+?rdstate@ios_base@std@@QBEHXZ (public: int __thiscall std::ios_base::rdstate(void)const ):
+  00000000: 8B 41 0C           mov         eax,dword ptr [ecx+0Ch]
+  00000003: C3                 ret
+
+?select_on_container_copy_construction@?$_Wrap_alloc@V?$allocator@D@std@@@std@@QBE?AU12@U_Nil@2@@Z (public: struct std::_Wrap_alloc<class std::allocator<char> > __thiscall std::_Wrap_alloc<class std::allocator<char> >::select_on_container_copy_construction(struct std::_Nil)const ):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: C2 08 00           ret         8
+
+?select_on_container_copy_construction@?$allocator_traits@V?$allocator@D@std@@@std@@SA?AV?$allocator@D@2@ABV32@@Z (public: static class std::allocator<char> __cdecl std::allocator_traits<class std::allocator<char> >::select_on_container_copy_construction(class std::allocator<char> const &)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: C3                 ret
+
+?setstate@?$basic_ios@DU?$char_traits@D@std@@@std@@QAEXH_N@Z (public: void __thiscall std::basic_ios<char,struct std::char_traits<char> >::setstate(int,bool)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: 85 C0              test        eax,eax
+  00000006: 74 1B              je          00000023
+  00000008: 8B 51 0C           mov         edx,dword ptr [ecx+0Ch]
+  0000000B: FF 74 24 08        push        dword ptr [esp+8]
+  0000000F: 0B D0              or          edx,eax
+  00000011: 8B C2              mov         eax,edx
+  00000013: 83 C8 04           or          eax,4
+  00000016: 83 79 38 00        cmp         dword ptr [ecx+38h],0
+  0000001A: 0F 45 C2           cmovne      eax,edx
+  0000001D: 50                 push        eax
+  0000001E: E8 00 00 00 00     call        ?clear@ios_base@std@@QAEXH_N@Z
+  00000023: C2 08 00           ret         8
+
+?sputc@?$basic_streambuf@DU?$char_traits@D@std@@@std@@QAEHD@Z (public: int __thiscall std::basic_streambuf<char,struct std::char_traits<char> >::sputc(char)):
+  00000000: 8B 41 20           mov         eax,dword ptr [ecx+20h]
+  00000003: 83 38 00           cmp         dword ptr [eax],0
+  00000006: 74 22              je          0000002A
+  00000008: 8B 51 30           mov         edx,dword ptr [ecx+30h]
+  0000000B: 8B 02              mov         eax,dword ptr [edx]
+  0000000D: 85 C0              test        eax,eax
+  0000000F: 7E 19              jle         0000002A
+  00000011: 48                 dec         eax
+  00000012: 89 02              mov         dword ptr [edx],eax
+  00000014: 8B 49 20           mov         ecx,dword ptr [ecx+20h]
+  00000017: 8B 11              mov         edx,dword ptr [ecx]
+  00000019: 8D 42 01           lea         eax,[edx+1]
+  0000001C: 89 01              mov         dword ptr [ecx],eax
+  0000001E: 8A 44 24 04        mov         al,byte ptr [esp+4]
+  00000022: 88 02              mov         byte ptr [edx],al
+  00000024: 0F B6 C0           movzx       eax,al
+  00000027: C2 04 00           ret         4
+  0000002A: 0F B6 44 24 04     movzx       eax,byte ptr [esp+4]
+  0000002F: 8B 11              mov         edx,dword ptr [ecx]
+  00000031: 89 44 24 04        mov         dword ptr [esp+4],eax
+  00000035: FF 62 0C           jmp         dword ptr [edx+0Ch]
+
+?sputn@?$basic_streambuf@DU?$char_traits@D@std@@@std@@QAE_JPBD_J@Z (public: __int64 __thiscall std::basic_streambuf<char,struct std::char_traits<char> >::sputn(char const *,__int64)):
+  00000000: FF 74 24 0C        push        dword ptr [esp+0Ch]
+  00000004: 8B 01              mov         eax,dword ptr [ecx]
+  00000006: FF 74 24 0C        push        dword ptr [esp+0Ch]
+  0000000A: FF 74 24 0C        push        dword ptr [esp+0Ch]
+  0000000E: 8B 40 24           mov         eax,dword ptr [eax+24h]
+  00000011: FF D0              call        eax
+  00000013: C2 0C 00           ret         0Ch
+
+?tie@?$basic_ios@DU?$char_traits@D@std@@@std@@QBEPAV?$basic_ostream@DU?$char_traits@D@std@@@2@XZ (public: class std::basic_ostream<char,struct std::char_traits<char> > * __thiscall std::basic_ios<char,struct std::char_traits<char> >::tie(void)const ):
+  00000000: 8B 41 3C           mov         eax,dword ptr [ecx+3Ch]
+  00000003: C3                 ret
+
+?to_int_type@?$char_traits@D@std@@SAHABD@Z (public: static int __cdecl std::char_traits<char>::to_int_type(char const &)):
+  00000000: 8B 44 24 04        mov         eax,dword ptr [esp+4]
+  00000004: 0F B6 00           movzx       eax,byte ptr [eax]
+  00000007: C3                 ret
+
+?value@error_code@std@@QBEHXZ (public: int __thiscall std::error_code::value(void)const ):
+  00000000: 8B 01              mov         eax,dword ptr [ecx]
+  00000002: C3                 ret
+
+?value@error_condition@std@@QBEHXZ (public: int __thiscall std::error_condition::value(void)const ):
+  00000000: 8B 01              mov         eax,dword ptr [ecx]
+  00000002: C3                 ret
+
+?what@exception@std@@UBEPBDXZ (public: virtual char const * __thiscall std::exception::what(void)const ):
+  00000000: 8B 49 04           mov         ecx,dword ptr [ecx+4]
+  00000003: B8 00 00 00 00     mov         eax,offset ??_C@_0BC@EOODALEL@Unknown?5exception?$AA@
+  00000008: 85 C9              test        ecx,ecx
+  0000000A: 0F 45 C1           cmovne      eax,ecx
+  0000000D: C3                 ret
+
+?width@ios_base@std@@QAE_J_J@Z (public: __int64 __thiscall std::ios_base::width(__int64)):
+  00000000: 8B 41 20           mov         eax,dword ptr [ecx+20h]
+  00000003: 8B 51 24           mov         edx,dword ptr [ecx+24h]
+  00000006: 56                 push        esi
+  00000007: 8B 74 24 08        mov         esi,dword ptr [esp+8]
+  0000000B: 89 71 20           mov         dword ptr [ecx+20h],esi
+  0000000E: 8B 74 24 0C        mov         esi,dword ptr [esp+0Ch]
+  00000012: 89 71 24           mov         dword ptr [ecx+24h],esi
+  00000015: 5E                 pop         esi
+  00000016: C2 08 00           ret         8
+
+?width@ios_base@std@@QBE_JXZ (public: __int64 __thiscall std::ios_base::width(void)const ):
+  00000000: 8B 41 20           mov         eax,dword ptr [ecx+20h]
+  00000003: 8B 51 24           mov         edx,dword ptr [ecx+24h]
+  00000006: C3                 ret
+
+  Summary
+
+           C .bss
+         114 .data$r
+         A40 .debug$F
+          80 .debug$S
+          C8 .drectve
+         143 .rdata
+         25C .rdata$r
+           C .sxdata
+        1AE4 .text$mn
+          51 .text$x
+           1 .text$yd
+         1F0 .xdata$x

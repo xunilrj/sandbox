@@ -1,0 +1,177 @@
+
+Dump of file .\main.obj
+
+File Type: COFF OBJECT
+
+?ReportSvcStatus@@YAXKKK@Z (void __cdecl ReportSvcStatus(unsigned long,unsigned long,unsigned long)):
+  0000000000000000: 44 89 44 24 18     mov         dword ptr [rsp+18h],r8d
+  0000000000000005: 89 54 24 10        mov         dword ptr [rsp+10h],edx
+  0000000000000009: 89 4C 24 08        mov         dword ptr [rsp+8],ecx
+  000000000000000D: 48 83 EC 28        sub         rsp,28h
+  0000000000000011: 8B 44 24 30        mov         eax,dword ptr [rsp+30h]
+  0000000000000015: 89 05 04 00 00 00  mov         dword ptr [?gSvcStatus@@3U_SERVICE_STATUS@@A+4],eax
+  000000000000001B: 8B 44 24 38        mov         eax,dword ptr [rsp+38h]
+  000000000000001F: 89 05 0C 00 00 00  mov         dword ptr [?gSvcStatus@@3U_SERVICE_STATUS@@A+0Ch],eax
+  0000000000000025: 8B 44 24 40        mov         eax,dword ptr [rsp+40h]
+  0000000000000029: 89 05 18 00 00 00  mov         dword ptr [?gSvcStatus@@3U_SERVICE_STATUS@@A+18h],eax
+  000000000000002F: 83 7C 24 30 02     cmp         dword ptr [rsp+30h],2
+  0000000000000034: 75 0C              jne         0000000000000042
+  0000000000000036: C7 05 08 00 00 00  mov         dword ptr [?gSvcStatus@@3U_SERVICE_STATUS@@A+8],0
+                    00 00 00 00
+  0000000000000040: EB 0A              jmp         000000000000004C
+  0000000000000042: C7 05 08 00 00 00  mov         dword ptr [?gSvcStatus@@3U_SERVICE_STATUS@@A+8],1
+                    01 00 00 00
+  000000000000004C: 83 7C 24 30 04     cmp         dword ptr [rsp+30h],4
+  0000000000000051: 74 07              je          000000000000005A
+  0000000000000053: 83 7C 24 30 01     cmp         dword ptr [rsp+30h],1
+  0000000000000058: 75 0C              jne         0000000000000066
+  000000000000005A: C7 05 14 00 00 00  mov         dword ptr [?gSvcStatus@@3U_SERVICE_STATUS@@A+14h],0
+                    00 00 00 00
+  0000000000000064: EB 1A              jmp         0000000000000080
+  0000000000000066: 8B 05 00 00 00 00  mov         eax,dword ptr [?dwCheckPoint@?1??ReportSvcStatus@@YAXKKK@Z@4KA]
+  000000000000006C: 89 05 14 00 00 00  mov         dword ptr [?gSvcStatus@@3U_SERVICE_STATUS@@A+14h],eax
+  0000000000000072: 8B 05 00 00 00 00  mov         eax,dword ptr [?dwCheckPoint@?1??ReportSvcStatus@@YAXKKK@Z@4KA]
+  0000000000000078: FF C0              inc         eax
+  000000000000007A: 89 05 00 00 00 00  mov         dword ptr [?dwCheckPoint@?1??ReportSvcStatus@@YAXKKK@Z@4KA],eax
+  0000000000000080: 48 8D 15 00 00 00  lea         rdx,[?gSvcStatus@@3U_SERVICE_STATUS@@A]
+                    00
+  0000000000000087: 48 8B 0D 00 00 00  mov         rcx,qword ptr [?gSvcStatusHandle@@3PEAUSERVICE_STATUS_HANDLE__@@EA]
+                    00
+  000000000000008E: FF 15 00 00 00 00  call        qword ptr [__imp_SetServiceStatus]
+  0000000000000094: 48 83 C4 28        add         rsp,28h
+  0000000000000098: C3                 ret
+  0000000000000099: CC                 int         3
+  000000000000009A: CC                 int         3
+  000000000000009B: CC                 int         3
+  000000000000009C: CC                 int         3
+  000000000000009D: CC                 int         3
+  000000000000009E: CC                 int         3
+  000000000000009F: CC                 int         3
+?SvcCtrlHandler@@YAXK@Z (void __cdecl SvcCtrlHandler(unsigned long)):
+  00000000000000A0: 89 4C 24 08        mov         dword ptr [rsp+8],ecx
+  00000000000000A4: 48 83 EC 38        sub         rsp,38h
+  00000000000000A8: 8B 44 24 40        mov         eax,dword ptr [rsp+40h]
+  00000000000000AC: 89 44 24 20        mov         dword ptr [rsp+20h],eax
+  00000000000000B0: 83 7C 24 20 01     cmp         dword ptr [rsp+20h],1
+  00000000000000B5: 74 02              je          00000000000000B9
+  00000000000000B7: EB 2C              jmp         00000000000000E5
+  00000000000000B9: 45 33 C0           xor         r8d,r8d
+  00000000000000BC: 33 D2              xor         edx,edx
+  00000000000000BE: B9 03 00 00 00     mov         ecx,3
+  00000000000000C3: E8 00 00 00 00     call        ?ReportSvcStatus@@YAXKKK@Z
+  00000000000000C8: 48 8B 0D 00 00 00  mov         rcx,qword ptr [?ghSvcStopEvent@@3PEAXEA]
+                    00
+  00000000000000CF: FF 15 00 00 00 00  call        qword ptr [__imp_SetEvent]
+  00000000000000D5: 45 33 C0           xor         r8d,r8d
+  00000000000000D8: 33 D2              xor         edx,edx
+  00000000000000DA: 8B 0D 04 00 00 00  mov         ecx,dword ptr [?gSvcStatus@@3U_SERVICE_STATUS@@A+4]
+  00000000000000E0: E8 00 00 00 00     call        ?ReportSvcStatus@@YAXKKK@Z
+  00000000000000E5: 48 83 C4 38        add         rsp,38h
+  00000000000000E9: C3                 ret
+  00000000000000EA: CC                 int         3
+  00000000000000EB: CC                 int         3
+  00000000000000EC: CC                 int         3
+  00000000000000ED: CC                 int         3
+  00000000000000EE: CC                 int         3
+  00000000000000EF: CC                 int         3
+main:
+  00000000000000F0: 48 89 54 24 10     mov         qword ptr [rsp+10h],rdx
+  00000000000000F5: 89 4C 24 08        mov         dword ptr [rsp+8],ecx
+  00000000000000F9: 57                 push        rdi
+  00000000000000FA: 48 83 EC 50        sub         rsp,50h
+  00000000000000FE: 48 8D 05 00 00 00  lea         rax,[$SG86009]
+                    00
+  0000000000000105: 48 89 44 24 28     mov         qword ptr [rsp+28h],rax
+  000000000000010A: 48 8D 44 24 20     lea         rax,[rsp+20h]
+  000000000000010F: 48 8B F8           mov         rdi,rax
+  0000000000000112: 33 C0              xor         eax,eax
+  0000000000000114: B9 01 00 00 00     mov         ecx,1
+  0000000000000119: F3 AA              rep stos    byte ptr [rdi]
+  000000000000011B: 48 8D 4C 24 20     lea         rcx,[rsp+20h]
+  0000000000000120: E8 00 00 00 00     call        ??B<lambda_b4e3b91986be99744ba420ea5cc38efa>@@QEBAP6AXKPEAPEAD@ZXZ
+  0000000000000125: 48 89 44 24 30     mov         qword ptr [rsp+30h],rax
+  000000000000012A: 48 C7 44 24 38 00  mov         qword ptr [rsp+38h],0
+                    00 00 00
+  0000000000000133: 48 C7 44 24 40 00  mov         qword ptr [rsp+40h],0
+                    00 00 00
+  000000000000013C: 48 8D 4C 24 28     lea         rcx,[rsp+28h]
+  0000000000000141: FF 15 00 00 00 00  call        qword ptr [__imp_StartServiceCtrlDispatcherA]
+  0000000000000147: 33 C0              xor         eax,eax
+  0000000000000149: 48 83 C4 50        add         rsp,50h
+  000000000000014D: 5F                 pop         rdi
+  000000000000014E: C3                 ret
+
+?<lambda_invoker_cdecl>@<lambda_b4e3b91986be99744ba420ea5cc38efa>@@CAXKPEAPEAD@Z (private: static void __cdecl <lambda_b4e3b91986be99744ba420ea5cc38efa>::<lambda_invoker_cdecl>(unsigned long,char * *)):
+  0000000000000000: 48 89 54 24 10     mov         qword ptr [rsp+10h],rdx
+  0000000000000005: 89 4C 24 08        mov         dword ptr [rsp+8],ecx
+  0000000000000009: 48 83 EC 28        sub         rsp,28h
+  000000000000000D: 4C 8B 44 24 38     mov         r8,qword ptr [rsp+38h]
+  0000000000000012: 8B 54 24 30        mov         edx,dword ptr [rsp+30h]
+  0000000000000016: 33 C9              xor         ecx,ecx
+  0000000000000018: E8 00 00 00 00     call        ??R<lambda_b4e3b91986be99744ba420ea5cc38efa>@@QEBAXKPEAPEAD@Z
+  000000000000001D: 48 83 C4 28        add         rsp,28h
+  0000000000000021: C3                 ret
+
+??B<lambda_b4e3b91986be99744ba420ea5cc38efa>@@QEBAP6AXKPEAPEAD@ZXZ (public: __cdecl <lambda_b4e3b91986be99744ba420ea5cc38efa>::operator void (__cdecl*)(unsigned long,char * *)(void)const ):
+  0000000000000000: 48 89 4C 24 08     mov         qword ptr [rsp+8],rcx
+  0000000000000005: 48 8D 05 00 00 00  lea         rax,[?<lambda_invoker_cdecl>@<lambda_b4e3b91986be99744ba420ea5cc38efa>@@CAXKPEAPEAD@Z]
+                    00
+  000000000000000C: C3                 ret
+
+??R<lambda_b4e3b91986be99744ba420ea5cc38efa>@@QEBAXKPEAPEAD@Z (public: void __cdecl <lambda_b4e3b91986be99744ba420ea5cc38efa>::operator()(unsigned long,char * *)const ):
+  0000000000000000: 4C 89 44 24 18     mov         qword ptr [rsp+18h],r8
+  0000000000000005: 89 54 24 10        mov         dword ptr [rsp+10h],edx
+  0000000000000009: 48 89 4C 24 08     mov         qword ptr [rsp+8],rcx
+  000000000000000E: 48 83 EC 28        sub         rsp,28h
+  0000000000000012: 45 33 C9           xor         r9d,r9d
+  0000000000000015: 45 33 C0           xor         r8d,r8d
+  0000000000000018: BA 01 00 00 00     mov         edx,1
+  000000000000001D: 33 C9              xor         ecx,ecx
+  000000000000001F: FF 15 00 00 00 00  call        qword ptr [__imp_CreateEventA]
+  0000000000000025: 48 89 05 00 00 00  mov         qword ptr [?ghSvcStopEvent@@3PEAXEA],rax
+                    00
+  000000000000002C: 48 8D 15 00 00 00  lea         rdx,[?SvcCtrlHandler@@YAXK@Z]
+                    00
+  0000000000000033: 48 8D 0D 00 00 00  lea         rcx,[??_C@_07HMHAPNIJ@SvcName?$AA@]
+                    00
+  000000000000003A: FF 15 00 00 00 00  call        qword ptr [__imp_RegisterServiceCtrlHandlerA]
+  0000000000000040: 48 89 05 00 00 00  mov         qword ptr [?gSvcStatusHandle@@3PEAUSERVICE_STATUS_HANDLE__@@EA],rax
+                    00
+  0000000000000047: C7 05 00 00 00 00  mov         dword ptr [?gSvcStatus@@3U_SERVICE_STATUS@@A],10h
+                    10 00 00 00
+  0000000000000051: C7 05 10 00 00 00  mov         dword ptr [?gSvcStatus@@3U_SERVICE_STATUS@@A+10h],0
+                    00 00 00 00
+  000000000000005B: 41 B8 B8 0B 00 00  mov         r8d,0BB8h
+  0000000000000061: 33 D2              xor         edx,edx
+  0000000000000063: B9 02 00 00 00     mov         ecx,2
+  0000000000000068: E8 00 00 00 00     call        ?ReportSvcStatus@@YAXKKK@Z
+  000000000000006D: 45 33 C0           xor         r8d,r8d
+  0000000000000070: 33 D2              xor         edx,edx
+  0000000000000072: B9 04 00 00 00     mov         ecx,4
+  0000000000000077: E8 00 00 00 00     call        ?ReportSvcStatus@@YAXKKK@Z
+  000000000000007C: 33 C0              xor         eax,eax
+  000000000000007E: 83 F8 01           cmp         eax,1
+  0000000000000081: 74 25              je          00000000000000A8
+  0000000000000083: BA FF FF FF FF     mov         edx,0FFFFFFFFh
+  0000000000000088: 48 8B 0D 00 00 00  mov         rcx,qword ptr [?ghSvcStopEvent@@3PEAXEA]
+                    00
+  000000000000008F: FF 15 00 00 00 00  call        qword ptr [__imp_WaitForSingleObject]
+  0000000000000095: 45 33 C0           xor         r8d,r8d
+  0000000000000098: 33 D2              xor         edx,edx
+  000000000000009A: B9 01 00 00 00     mov         ecx,1
+  000000000000009F: E8 00 00 00 00     call        ?ReportSvcStatus@@YAXKKK@Z
+  00000000000000A4: EB 02              jmp         00000000000000A8
+  00000000000000A6: EB D4              jmp         000000000000007C
+  00000000000000A8: 48 83 C4 28        add         rsp,28h
+  00000000000000AC: C3                 ret
+
+  Summary
+
+          30 .bss
+           4 .data
+          94 .debug$S
+          5D .drectve
+          3C .pdata
+          10 .rdata
+         22B .text$mn
+          28 .xdata

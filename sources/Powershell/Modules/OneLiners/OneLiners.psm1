@@ -185,3 +185,11 @@ function echo
     }
 }
 Remove-Item Alias:\echo -EA SilentlyContinue
+
+function split
+{
+    param([Parameter(Position=0)]$Separator,[Parameter(ValueFromPipeline=$true)]$Item)
+    process{
+        Write-Output ($Item -split $Separator)
+    }
+}

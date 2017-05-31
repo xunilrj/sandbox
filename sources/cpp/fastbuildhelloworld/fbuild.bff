@@ -1,0 +1,68 @@
+// HelloWorld
+//------------------------------------------------------------------------------
+
+// Windows Platform (VS 2013 Compiler, Windows 7.1A SDK)
+//------------------------------------------------------------------------------
+.VSBasePath         = 'C:\Program Files (x86)\Microsoft Visual Studio 14.0'
+.WindowsSDKBasePath = 'C:\Program Files (x86)\Windows Kits\10'
+
+// Settings
+//------------------------------------------------------------------------------
+Settings
+{
+    .Environment    = { "PATH=$VSBasePath$\Common7\IDE\;$VSBasePath$\VC\bin\",
+                        "TMP=C:\Windows\Temp",
+                        "SystemRoot=C:\Windows" }
+}
+
+// X86 ToolChain
+//------------------------------------------------------------------------------
+.Compiler           = '$VSBasePath$\VC\bin\cl.exe'
+.CompilerOptions    = '"%1"'           // Input
+                    + ' /Fo"%2"'       // Output
+                    + ' /Z7'           // Debug format (in .obj)
+                    + ' /c'            // Compile only
+                    + ' /nologo'       // No compiler spam
+                    + ' /W4'           // Warning level 4
+                    + ' /WX'           // Warnings as errors
+.Linker             = '$VSBasePath$\VC\bin\link.exe'
+.LinkerOptions      = ' /OUT:"%2"'     // Output
+                    + ' "%1"'          // Input
+                    + ' /WX'           // Warnings as errors
+                    + ' /NOLOGO'       // No linker spam
+                    + ' /DEBUG'        // Keep debug info when linking
+                    + ' /NODEFAULTLIB' // We'll specify the libs explicitly
+
+// Include paths
+//------------------------------------------------------------------------------
+.BaseIncludePaths   = ' /I"./"'
+                    + ' /I"$VSBasePath$/VC/include/"'
+                    + ' /I"$WindowsSDKBasePath$\Include\10.0.14393.0\ucrt"'
+.CompilerOptions    + .BaseIncludePaths
+
+// Library paths
+//------------------------------------------------------------------------------
+.LibPaths           = ' /LIBPATH:"$WindowsSDKBasePath$\Lib\10.0.14393.0\um\x64"'
+                    + ' /LIBPATH:"$WindowsSDKBasePath$\Lib\10.0.14393.0\ucrt\x64"'
+                    + ' /LIBPATH:"$VSBasePath$\VC\lib"'
+.LinkerOptions      + .LibPaths
+
+// HelloWorld
+//------------------------------------------------------------------------------
+ObjectList( 'HelloWorld-Lib' )
+{
+    .CompilerInputPath  = '\'
+    .CompilerOutputPath = 'Out\'
+}
+
+Executable( 'HelloWorld' )
+{
+    .Libraries          = { "HelloWorld-Lib" }
+    .LinkerOutput       = 'Out\HelloWorld.exe'
+    .LinkerOptions      + ' libucrt.lib'     // Std Lib (Multi-Threaded, Static, Release)
+                        + ' kernel32.lib'   // Kernel functions
+}
+
+// All
+//------------------------------------------------------------------------------
+Alias( 'all' ) { .Targets = { 'HelloWorld' } }
