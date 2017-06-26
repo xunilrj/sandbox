@@ -6,6 +6,7 @@
     [switch] $Append,
     [switch] $NoClobber,
     [AllowNull()] [int] $Width,
+    [switch]$NoNewLine,
     [Parameter(ValueFromPipeline)] $InputObject
   )
   [Environment]::CurrentDirectory = $PWD
@@ -20,7 +21,13 @@
     $htOutStringArgs += @{ Width = $Width }
   }
    try {
-    $Input | Out-String -Stream @htOutStringArgs | % { $sw.WriteLine($_) }
+    $Input | Out-String -Stream @htOutStringArgs | % {
+        if($NoNewLine.IsPresent){
+            $sw.Write($_)
+        }else{
+            $sw.WriteLine($_)
+        }
+    }    
   } finally {
     $sw.Dispose()
   }
