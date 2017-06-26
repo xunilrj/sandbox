@@ -1,0 +1,49 @@
+#!/bin/bash
+
+if [ "$1" == "new" ]
+then
+	cat > ./CMakeLists.txt << EOF
+cmake_minimum_required(VERSION 2.8)
+project ("${2}")
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
+include(\${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup()
+
+add_executable(${2} main.cxx)
+target_link_libraries(${2} \${CONAN_LIBS})
+EOF
+	cat > ./generate << EOF
+rm ./builds -rf
+mkdir ./builds
+cd ./builds
+mkdir ./unix-gcc-x64-debug
+cd ./unix-gcc-x64-debug
+conan install ../../ -s compiler="gcc" -s os="Linux" -s build_type=Debug --build=missing
+cmake -G "Unix Makefiles" ../../
+EOF
+	cat > ./build << EOF
+cd ./builds/unix-gcc-x64-debug
+conan install ../../ -s compiler="gcc" -s os="Linux" -s build_type=Debug --build=missing
+make
+EOF
+  cat > ./run << EOF
+./builds/unix-gcc-x64-debug/bin/${2}
+EOF
+  cat > ./conanfile.txt << EOF
+[requires]
+
+[generators]
+cmake
+EOF
+  cat > ./clean << EOF
+rm ./builds -rf
+EOF
+  cat > ./ctest << EOF
+while inotifywait -e close_write main.cxx; do ear && /build && ./run; done
+EOF
+fi
+
