@@ -1,6 +1,8 @@
 ﻿function Get-Handle($Path)
 {
-    E:\OneDrive\Apps\SysInternals\handle.exe $Path /accepteula | Select-String -Pattern "pid:" | %{
+    $exepath= "C:\ProgramData\chocolatey\lib\sysinternals\tools\handle.exe"
+    $chocoHandle = Test-Path C:\ProgramData\chocolatey\lib\sysinternals\tools\handle.exe -EA SilentlyContinue
+    & $exepath $Path /accepteula | Select-String -Pattern "pid:" | %{
         $result = $_.ToString().Split(" ", [System.StringSplitOptions]::RemoveEmptyEntries)
         New-Object PsCustomObject -Property @{
             ProcessName = $result[0];

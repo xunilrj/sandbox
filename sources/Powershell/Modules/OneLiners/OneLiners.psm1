@@ -12,7 +12,7 @@
 
 Set-Alias xml ConvertFrom-xml
 
-function %% {
+function %%% {
     param([Parameter(Position=0)]$Path,[Parameter(Position=1)][string[]]$Name,[Parameter(ValueFromPipeline=$true)]$Item)
     begin{
         $splittedProperties = [System.Collections.ArrayList]::new()
@@ -97,6 +97,22 @@ function ...
     $result
 }
 
+function union {
+    [CmdletBinding()]
+    param([Parameter(Position=0)]$List1, [Parameter(Position=1)]$List2, [Parameter(ValueFromPipeline=$true)]$Item)
+    process{
+        $_
+    }
+    end{
+        if($List1 -ne $null){
+            Write-Output $List1
+        }
+        if($List2 -ne $null){
+            Write-Output $List2
+        }
+    }
+}
+
 function trim
 {
     [CmdletBinding()]
@@ -140,6 +156,40 @@ function Enable-Streams([switch]$Verbose)
 
 }
 
-function Measure-Object
+function echo
 {
+    [CmdletBinding(DefaultParameterSetName="Normal")]
+    param([Parameter(Position = 0, ParameterSetName="Normal")]$Text, [Parameter(ParameterSetName="Normal")][switch]$Eval,[Parameter(Position=0, ParameterSetName="Interactive")]$End = [System.String]::Empty,[Parameter(ParameterSetName="Interactive")][Alias("i")][switch]$Interactive,[switch]$NoEval)
+    process{
+        if($Eval.IsPresent){
+            $Text = try{iex $Text}catch{$Text}
+        }
+        Write-Output $Text
+    }
+    end{
+        if($Interactive.IsPresent){
+            $eval = $NoEval.ToBool() -eq $false
+            while($true){
+                $str = Read-Host
+                if($eval){
+                    $str = try{iex $str}catch{$str}
+                }
+
+                if($str -eq $End){
+                    break;
+                }
+                
+                Write-Output ($str) -NoEnumerate
+            }
+        }
+    }
+}
+Remove-Item Alias:\echo -EA SilentlyContinue
+
+function split
+{
+    param([Parameter(Position=0)]$Separator,[Parameter(ValueFromPipeline=$true)]$Item)
+    process{
+        Write-Output ($Item -split $Separator)
+    }
 }

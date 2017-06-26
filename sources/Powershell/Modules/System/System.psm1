@@ -12,3 +12,17 @@ function Get-Wlan()
         }
     }
 }
+
+function Add-CurrentLocationToPath
+{
+	$oldPath=(Get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH).Path
+    $currentdir = ((gl).Path)
+    if($oldPath.Contains($currentdir) -eq $false){
+	    $newPath = $oldPath + ";" + $currentdir
+        Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Session Manager\Environment' -Name PATH –Value $newPath
+    }
+	
+    if((gi Env:\Path).Value.Contains($currentdir) -eq $false){
+        Set-Item -Path Env:\Path -Value ((gi Env:\Path).Value + ";" + ((gl).Path))
+    }
+}

@@ -1,0 +1,15 @@
+
+Dump of file .\main.obj
+
+File Type: COFF OBJECT
+
+_main:
+  00000000: 33 C0              xor         eax,eax
+  00000002: C3                 ret
+
+  Summary
+
+          10 .debug$F
+          94 .debug$S
+          36 .drectve
+           3 .text$mn
