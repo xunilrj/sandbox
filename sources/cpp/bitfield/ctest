@@ -1,0 +1,1 @@
+while inotifywait -e close_write main.cxx; do ./build && ./run; done

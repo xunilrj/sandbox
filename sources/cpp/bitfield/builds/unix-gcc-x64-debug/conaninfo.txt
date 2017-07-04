@@ -1,0 +1,40 @@
+[settings]
+    arch=x86_64
+    build_type=Debug
+    compiler=gcc
+    compiler.libcxx=libstdc++
+    compiler.version=4.8
+    os=Linux
+
+[requires]
+    gtest/1.Y.Z
+
+[options]
+
+
+[full_settings]
+    arch=x86_64
+    build_type=Debug
+    compiler=gcc
+    compiler.libcxx=libstdc++
+    compiler.version=4.8
+    os=Linux
+
+[full_requires]
+    gtest/1.8.0@lasote/stable:f275daa1df80eb173d418881c6b9b9a548f4fe88
+
+[full_options]
+    gtest:cygwin_msvc=False
+    gtest:fpic=False
+    gtest:no_gmock=False
+    gtest:no_main=False
+    gtest:shared=True
+
+[scope]
+    dev=True
+
+[recipe_hash]
+
+
+[env]
+

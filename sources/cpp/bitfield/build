@@ -1,0 +1,3 @@
+cd ./builds/unix-gcc-x64-debug
+conan install ../../ -s compiler="gcc" -s os="Linux" -s build_type=Debug --build=missing
+make
