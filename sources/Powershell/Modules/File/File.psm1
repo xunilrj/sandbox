@@ -77,4 +77,8 @@ function Watch-Item
     Unregister-Event = $event.Id
 }
 
+function Unmount-Drive($Drive)
+{
+    handle $Drive | % {$v = $_ -match "pid: (?<PID>\d+)";if($Matches) {$Matches.PID}} | Select -Unique | ogv -PassThru | % {Stop-Process $_ -Force}
+}
 Set-Alias xml ConvertFrom-xml

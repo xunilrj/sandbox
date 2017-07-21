@@ -31,6 +31,12 @@ function Get-CurrentBranch
     git branch | % { $result = $_ -match "^\*\s(?<MATCHNAME>.*)$"; if($result) {$Matches["MATCHNAME"]} }
 }
 
+function Set-CurrentBranch
+{
+    $newbranch = git branch | ogv -PassThru | % {$_.Trim()}
+    git checkout $newbranch
+}
+
 function Rebase-Work
 {
     $count = Add-Files
