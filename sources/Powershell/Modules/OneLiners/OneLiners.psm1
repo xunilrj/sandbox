@@ -46,13 +46,13 @@ function %%% {
             }
             else
             {
-                $result | Add-Member -Name ($Name[$i]) -MemberType NoteProperty -Value $currentValue | Out-Null
+               $result = $result | Add-Member -Name ($Name[$i]) -MemberType NoteProperty -Value $currentValue -PassThru
             }
             $i++
         }
 
         if($Name -ne $null){
-            $result      
+            Write-Output $result -NoEnumerate
         }
     }
 }
