@@ -1,0 +1,10 @@
+#!/bin/bash
+rm output.txt
+COUNTER=0
+cat sudokus_start.txt | \
+while read BOARD; do
+	echo $COUNTER - $BOARD
+	python3 driver_3.py $BOARD
+	let COUNTER++
+done
+

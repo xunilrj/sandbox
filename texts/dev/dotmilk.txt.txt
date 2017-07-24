@@ -1,0 +1,5 @@
+eu teria feito um monte de coisas diferentes... TypedDatasets2 unificando o TypedDataset com o esquema novo de Reflection; unificarion o System.ComponentModel com o MEF de maneira decente; Unificaria o LINQ com o RX; criaria o equivalente do Expression<> para statements; async/await seriam corotinas mesmo com providers; evoluiria os eventos para integrarem melhor com lambda; cast por tipo entre delegates e lambdas; implementacao de interface por field; teria evoluido o Webforms; teria lançado a Axum; melhor integração entre c#, f# e Axum etc...
+rsrs
+vou lançar o dotmilk: dotnet done right!
+
+o Oslo tb, com o MGrammar
