@@ -1,0 +1,31 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\author{Daniel Frederico Lins Leite}
+\title{Fibonnaci}
+\newcommand{\qed}{\hfill\blacksquare}
+\begin{document}
+	\maketitle	
+\begin{align*}
+	F_n >= 2^{n/2} &&\text{for $n >= 6$}
+\end{align*}
+\paragraph{Base}
+\paragraph{TODO. CALCULATE 6 AND 7 MANUALLY}
+\paragraph{Induction Step}
+\begin{align*}
+	F_n &>= 2^{n/2}\\
+	F_n &= F_{n-1}+F_{n-2}\\
+	&>= 2^{(n-1)/2} + 2^{(n-2)/2}\\
+	& &= (X+2^{(n-2)/2}) + 2^{(n-2)/2} &&\text{$X>0$}\\
+	& &= 2*2^{(n-2)/2}\\
+	&>= 2*2^{(n-2)/2}\\
+	& &=2^{\frac{n-2}{2}+1}\\
+	& &=2^{\frac{n-2}{2}+\frac{2}{2}}\\
+	& &=2^{\frac{n}{2}}\\
+	&>= 2^{n/2}\\
+	\qed
+\end{align*}
+\end{document}
