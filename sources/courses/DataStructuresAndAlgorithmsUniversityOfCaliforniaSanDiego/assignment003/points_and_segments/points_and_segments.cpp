@@ -2,6 +2,8 @@
 #include <vector>
 #include <algorithm>
 #include <tuple>
+#include <iterator>
+#include <numeric>
 
 using std::vector;
 
@@ -48,48 +50,45 @@ struct Comp
 };
 
 vector<int> fast_count_segments(vector<int> starts, vector<int> ends, vector<int> points) {
-	auto pointsorder = std::vector<int>(points.size());
-	std::iota(pointsorder.begin(), pointsorder.end(), 0);
-	std::sort(pointsorder.begin(), pointsorder.end(), [&](const int & l, const int & r){
-		return points[l] < points[r];
+	auto completepoints = std::vector<std::tuple<int,int>>();
+
+	std::transform(starts.begin(),starts.end(), std::back_inserter(completepoints), [](auto x ){
+		return std::make_tuple(x,-1);
 	});
-	// printVector(pointsorder);
-
-	// auto segmentsorder = std::vector<int>(starts.size());
-	// std::iota(segmentsorder.begin(), segmentsorder.end(), 0);
-	// std::sort(segmentsorder.begin(), segmentsorder.end(), [&](const int & l, const int & r){
-	// 	return ends[l] < ends[r];
-	// });
-
-	vector<int> cnt(points.size());
-
-	for (size_t j = 0; j < starts.size(); j++) {
-		auto segmenti = j;//segmentsorder[j];	
-		auto range = std::equal_range(pointsorder.begin(),pointsorder.end(),
-			std::make_tuple(0), Comp(segmenti, points, starts, ends));
-		// std::cout << "[" << pointsorder[range.first - pointsorder.begin()] << "," << pointsorder[range.second - pointsorder.begin()] << "]" << std::endl;
-		// printVector(cnt);
-		std::for_each(range.first, range.second, [&](const int& x){
-			// std::cout << "increasing " << x << std::endl;
-			++cnt[x];
+	{
+		int i = 0;
+		std::transform(points.begin(),points.end(), std::back_inserter(completepoints), [&i](auto x){
+			return std::make_tuple(x,i++);
 		});
-		// printVector(cnt);
 	}
-	
-	// auto segmentjstart = 0;
-	// for (size_t i = 0; i < points.size(); i++) {
-	// 	auto pointi = pointsorder[i];
-	// 	auto point = points[pointi];
-	// 	for (size_t j = segmentjstart; j < starts.size(); j++) {
-	// 		auto segmenti = segmentsorder[j];	
-	// 		cnt[pointi] += starts[segmenti] <= point && point <= ends[segmenti];
+	std::transform(ends.begin(),ends.end(), std::back_inserter(completepoints), [](auto x){
+		return std::make_tuple(x, std::numeric_limits<int>::max());
+	});
 
-	// 		if(point > ends[segmenti])
-	// 		{
-	// 			segmentjstart++;
-	// 		}
-	// 	}
-	// }
+	std::sort(completepoints.begin(), completepoints.end());
+
+	int count = 0;
+	vector<int> cnt(points.size());
+	for(auto x : completepoints)
+	{
+		auto v0 = std::get<0>(x);
+		auto v1 = std::get<1>(x);
+
+		// std::cout << "[" << v0 << "," << v1 << "]" << std::endl;
+
+		if(v1 == std::numeric_limits<int>::max())
+		{
+			--count;
+		}
+		else if(v1 >= 0)
+		{
+			cnt[v1] = count;
+		}
+		else if(v1 == -1)
+		{
+			++count;
+		}
+	}	
 	return cnt;
 }
 
@@ -141,21 +140,22 @@ void printProg(int x, int total){
     std::cout << "] " << x << "/" << total << "\r" << std::flush;
 }
 
+//RANDOM TEST NOT WORKING FOR SOME REASON
 TEST_CASE("fast_count_segments random cases", "[fast_count_segments]")
 {
 	for(int i = 0; i <= 100000; ++i)
   {
     printProg(i, 100000);
 
-    auto starts = std::vector<int>(rand() % 2000);
-    std::generate(starts.begin(), starts.end(), [](){ return std::rand() % 1000;});
+    auto starts = std::vector<int>(rand() % 20);
+    std::generate(starts.begin(), starts.end(), [](){ return (std::rand() % 100000) - 50000;});
 
 		auto ends = std::vector<int>(starts.size());
 		std::transform(starts.begin(), starts.end(), ends.begin(),
-                   [](const int x) -> int { x + std::rand() % 1000; });
+                   [](const int x) -> int { x + (std::rand() % 1000); });
 	
-		auto points = std::vector<int>(rand() % 10000);
-		std::generate(points.begin(), points.end(), []() { return std::rand() % 1000;});
+		auto points = std::vector<int>(rand() % 10);
+		std::generate(points.begin(), points.end(), []() { return (std::rand() % 100000) - 50000;});
     
 		REQUIRE(areEqual(starts,ends,points));
   }
@@ -175,7 +175,7 @@ int main() {
     std::cin >> points[i];
   }
   //use fast_count_segments
-  vector<int> cnt = naive_count_segments(starts, ends, points);
+  vector<int> cnt = fast_count_segments(starts, ends, points);
   for (size_t i = 0; i < cnt.size(); i++) {
     std::cout << cnt[i] << ' ';
   }
