@@ -7,22 +7,9 @@ public static class _
         return x => x;
     }
 
-    public static Func<T, T> Tap<T>(Action<T> action)
-    {
-        return (x) =>
-        {
-            action?.Invoke(x);
-            return x;
-        };
-    }
 
-    public static Func<T2, TR> PartialApply<T1, T2, TR>(Func<T1, T2, TR> f, T1 t1)
-    {
-        return (t2 =>
-        {
-            return f(t1, t2);
-        });
-    }
+
+
 
     public static Func<TIn, TOut> Pipe<TIn, TR1, TOut>(Func<TIn, TR1> f1, Func<TR1, TOut> f2)
     {
@@ -31,6 +18,8 @@ public static class _
             return f2(f1(x));
         });
     }
+
+
 }
 
 public struct Maybe<T>
@@ -74,19 +63,39 @@ public struct Maybe<T>
     }
 }
 
+public static class MaybeExtensions
+{
+    public static Func<Maybe<T1>, Maybe<T2>, Maybe<TR>> Maybeify<T1, T2, TR>(this Func<T1, T2, TR> f)
+    {
+        return (l, r) =>
+        {
+            return Maybe<TR>.Unwrap(l.Bind(lvalue => r.Bind(rvalue => f(lvalue, rvalue))));
+        };
+    }
+
+    public static Func<T2, TR> PartialApply<T1, T2, TR>(this Func<T1, T2, TR> f, T1 t1)
+    {
+        return (t2 =>
+        {
+            return f(t1, t2);
+        });
+    }
+
+    public static Func<T, T> Tap<T>(this Action<T> action)
+    {
+        return (x) =>
+        {
+            action?.Invoke(x);
+            return x;
+        };
+    }
+}
+
 public static class Program
 {
     static int Times(int a, int b)
     {
         return a * b;
-    }
-
-    static Maybe<int> Times(Maybe<int> a, Maybe<int> b)
-    {
-        return Maybe<int>.Unwrap(a.Bind(ax =>
-        {
-            return b.Bind(bx => Times(ax, bx));
-        }));
     }
 
     static Maybe<int> Division(int a, int b)
@@ -97,23 +106,27 @@ public static class Program
 
     public static int Main(string[] argv)
     {
+        // Traditional Monadic Approach for C#
+        var division = new Func<int, int, Maybe<int>>(Division);
+        var times = new Func<int, int, int>(Times).Maybeify();
+        var write = new Action<int>(x => Console.WriteLine(x.ToString()));
+        var writeChainable = write.Tap();
+
         var result = Division(5, 0);
-        result.Bind(_.Tap((int x) => { Console.WriteLine(x); }));
+        result.Bind(writeChainable); // Write here is never called!
 
         result = Division(5, 1);
-        result.Bind(_.Tap((int x) => { Console.WriteLine(x); }));
+        result.Bind(writeChainable);
 
-        result = Times(Division(5, 1), 10);
-        result.Bind(_.Tap((int x) => { Console.WriteLine(x); }));
+        result = times(Division(5, 1), 10);
+        result.Bind(writeChainable);
 
-        var f = _.Pipe(
-          _.PartialApply<int, int, Maybe<int>>(Division, 5),
-          _.PartialApply<Maybe<int>, Maybe<int>, Maybe<int>>(
-            Times, 10
-          )
-        );
+        var f = _.Pipe(division.PartialApply(5), times.PartialApply(10));
         result = f(1);
-        result.Bind(_.Tap((int x) => { Console.WriteLine(x); }));
+        result.Bind(writeChainable);
+
+        result = f(0);
+        result.Bind(writeChainable); // Write here is never called!
         return 0;
     }
 }
