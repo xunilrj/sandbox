@@ -1,6 +1,7 @@
 # To Test
 
 dotnet new console  
-wget https://github.com/xunilrj/sandbox/blob/master/sources/csharp/monadicsharp/Program.cs > Program.cs  
-dotnet restore
+wget http://raw.githubusercontent.com/xunilrj/sandbox/master/sources/csharp/monadicsharp/Program.cs -o Program.cs  
+dotnet restore  
 dotnet run  
+
