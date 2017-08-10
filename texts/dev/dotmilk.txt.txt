@@ -3,3 +3,45 @@ rsrs
 vou lançar o dotmilk: dotnet done right!
 
 o Oslo tb, com o MGrammar
+
+http://www.dummies.com/programming/java/how-to-use-an-anonymous-class-in-java/
+runnable é um interface no caso
+runnable r = new runnable()
+    {
+        public void run()
+        {
+            //code for the run method goes here
+        }
+    };
+isso evita Adapters entre frameworks por exemplo
+outra coisa que eu faria é satisfazer interface com um metodo só com Func/Action
+
+[16:45:06] Carlos Vitor Barros: interface 
+   void IWriter(byte[] data)
+
+gerado:
+ public class Generated : IWriter
+      ctor(Action<byte[]> algumaCoisa)
+
+      void Write(byte[] data)
+             algumaCoisa()
+[16:46:17 | Edited 16:46:35] Carlos Vitor Barros: chamada:
+
+public MinhaClasse(IWriter writer)
+
+var m = new MinhaClasse((byte[] data) => { ... })
+[16:47:20] Daniel Frederico Lins Leite: por ai
+[16:48:02] Daniel Frederico Lins Leite: outro coisa seria o compilador deduzir o byte[] do lambda
+[16:48:05] Daniel Frederico Lins Leite: c# nao faz isso ainda
+[16:48:09] Daniel Frederico Lins Leite: isso eh pessimo
+[16:48:24] Daniel Frederico Lins Leite: se nao passar... o compilador tem que fazer o melhor para tentar...
+[16:48:28] Daniel Frederico Lins Leite: vc so passa se qusier garantir
+[16:48:51] Daniel Frederico Lins Leite: que de fato a vantagem do f#
+[16:48:55] Daniel Frederico Lins Leite: deducao de tipo eh muito melhor
+[16:51:56] Daniel Frederico Lins Leite: outra coisa maneira seria initializers do c++11
+[16:52:09] Daniel Frederico Lins Leite: class Point { public Point(int x, int y) {} }
+[16:52:19] Daniel Frederico Lins Leite: public void render(Point p) { }
+[16:52:26] Daniel Frederico Lins Leite: ao inves de render(new Point(1,2))
+[16:52:32] Daniel Frederico Lins Leite: render({1,2})
+[16:52:43] Daniel Frederico Lins Leite: tá tudo tipadinho... tudo garantido
+[16:52:50] Daniel Frederico Lins Leite: só que o ocmpilador que escreve para voce
