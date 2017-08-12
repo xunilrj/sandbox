@@ -45,3 +45,9 @@ var m = new MinhaClasse((byte[] data) => { ... })
 [16:52:32] Daniel Frederico Lins Leite: render({1,2})
 [16:52:43] Daniel Frederico Lins Leite: tá tudo tipadinho... tudo garantido
 [16:52:50] Daniel Frederico Lins Leite: só que o ocmpilador que escreve para voce
+
+nos temos um modo facil de concatenar string
+$"adasdas {variable}" mas nao temos um modo facil de parsear strnigs.
+O mais facil é com regex, que nem possui um modo fácil de converter para um DTO
+Regex.Parse<DTO>("dasdasdasdas (?<PROPERTYNAME>.+");
+porem o ideal seria string.Parse<DTO>("asdasdas {property}");
