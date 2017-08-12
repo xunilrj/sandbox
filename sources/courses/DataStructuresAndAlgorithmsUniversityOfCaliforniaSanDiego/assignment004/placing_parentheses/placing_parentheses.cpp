@@ -6,6 +6,7 @@
 #include <stack>
 #include <algorithm>
 #include <functional>
+#include <tuple>
 
 using std::vector;
 using std::string;
@@ -94,11 +95,14 @@ std::ostream & operator << (std::ostream & o, Container<node,Allocator> nodes)
   return o << "]";
 }
 
-std::ostream & operator << (std::ostream & o, std::vector<int> order)
+template <template <typename, typename> class Container, 
+          typename Value,
+          typename Allocator=std::allocator<Value> >
+std::ostream & operator << (std::ostream & o, Container<Value,Allocator> v)
 {
   o << "[";
 
-  for(auto current : order)
+  for(auto current : v)
   {
     o << current << ",";
   }
@@ -149,6 +153,54 @@ long long evaluate(std::vector<char> problem, std::vector<int> order)
   return ops[0].number;
 }
 
+std::ostream & tab(int depth)
+{
+  return std::cout << std::string(depth, ' ');
+}
+
+std::tuple<int,int> get_maximum_value_naive_internal(std::vector<char> exp, int i, int j, int depth = 0)
+{
+  if(i > j)
+  {
+    tab(depth) << "ERROR!";
+    return std::make_tuple(0,0);
+  }
+  else if (i+1 == j)
+  {
+    auto v = (long long)(exp[i*2]-48);
+    tab(depth) << "digit " << i << " " << v << std::endl;
+    return std::make_tuple(v,v);
+  }
+
+  auto min = std::numeric_limits<long long>::max(),
+    max = std::numeric_limits<long long>::min();
+  for(int newi = i+1;newi < j;++newi)
+  {
+    auto op = exp[(2*newi)-1];
+    tab(depth) << "[" << i << "," << newi << "] " << op << " [" << newi << "," << j << "]" << std::endl;
+
+    int minl = 0, maxl = 0; 
+    std::tie(minl,maxl) = get_maximum_value_naive_internal(exp, i, newi, depth + 1);
+
+    int minr = 0, maxr = 0; 
+    std::tie(minr,maxr) = get_maximum_value_naive_internal(exp, newi, j, depth + 1);
+    
+    auto a = eval(minl, minr, op);
+    auto b = eval(minl, maxr, op);
+    auto c = eval(maxl, minr, op);
+    auto d = eval(maxl, maxr, op);
+    auto cmin = 0, cmax = 0;
+    std::tie(cmin,cmax) = std::minmax({a,b,c,d});
+
+    tab(depth) << "options {" << std::vector<long long>{a,b,c,d} << "}" << std::endl;
+
+    if(cmin < min) min = cmin;
+    if(cmax > max) max = cmax;
+  }
+
+  return std::make_tuple(min,max);
+}
+
 long long get_maximum_value_naive(string exp) {
   std::stringstream ss(exp);
   auto operators = std::vector<char>();
@@ -157,19 +209,13 @@ long long get_maximum_value_naive(string exp) {
     operators.push_back(c);
   }
 
-  auto order = std::vector<int>(operators.size()/2);
-  std::iota(order.begin(), order.end(), 0);
+  std::cout << operators << std::endl;
 
-  long long best = std::numeric_limits<int>::min();
-  permutations<int>(order, [&](std::vector<int> x){
-    std::cout << x << std::endl;
-    auto r = evaluate(operators, x);
-    if(r > best) best = r;
-  });
-
-  return best;
+  auto digit_count = (operators.size() / 2) + 1;
+  int min = 0, max = 0; 
+  std::tie(min,max) = get_maximum_value_naive_internal(operators, 0, digit_count, 0);
+  return max;
 }
-
 
 #ifdef UNITTESTS
 
@@ -179,6 +225,9 @@ long long get_maximum_value_naive(string exp) {
 TEST_CASE("get_maximum_value must work","get_maximum_value")
 {
   REQUIRE(get_maximum_value_naive("1 + 5") == 6);
+  REQUIRE(get_maximum_value_naive("1 + 5 + 2") == 8);
+  REQUIRE(get_maximum_value_naive("1 + 5 * 2") == 12);
+  REQUIRE(get_maximum_value_naive("1 - 5 * 2") == -8);
   REQUIRE(get_maximum_value_naive("5 - 8 + 7 * 4 - 8 + 9") == 200);
 }
 
