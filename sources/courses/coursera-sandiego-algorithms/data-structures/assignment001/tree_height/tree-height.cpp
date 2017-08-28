@@ -50,7 +50,19 @@ void printTree(Node * root, int depth)
   });
 }
 
-void buildTree(std::istream &in)
+int getHeight(Node * root, int depth = 0)
+{
+  int maxh = std::numeric_limits<int>::min();
+
+  root->forEachChildren([&](auto c){
+    auto h = getHeight(c, depth+1);
+    maxh = std::max(maxh,h);
+  });
+
+  return maxh;
+}
+
+Node * buildTree(std::istream &in)
 {
   int count = 0;
   in >> count;
@@ -81,6 +93,8 @@ void buildTree(std::istream &in)
   }
 
   printTree(root, 0);
+
+  return root;
 }
 
 #ifdef UNITTESTS
@@ -90,9 +104,11 @@ void buildTree(std::istream &in)
 
 TEST_CASE("a","a")
 {
-  //auto str = std::stringstream{"5 4 -1 4 1 1", std::ios_base::in | std::ios_base::out};
-  auto str = std::stringstream{"5\n-1 0 4 0 3", std::ios_base::in | std::ios_base::out};
-  buildTree(str);
+  auto str = std::stringstream{"5 4 -1 4 1 1", std::ios_base::in | std::ios_base::out};
+  //auto str = std::stringstream{"5\n-1 0 4 0 3", std::ios_base::in | std::ios_base::out};
+  auto root = buildTree(str);
+  auto height = getHeight(root);
+  REQUIRE(height == 2);
 }
 
 #else
