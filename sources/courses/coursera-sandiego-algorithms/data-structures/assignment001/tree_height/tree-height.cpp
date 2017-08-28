@@ -1,79 +1,105 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
-#if defined(__unix__) || defined(__APPLE__)
-#include <sys/resource.h>
-#endif
 
-class Node;
-
-class Node {
+class Node 
+{
 public:
-    int key;
-    Node *parent;
-    std::vector<Node *> children;
-
-    Node() {
-      this->parent = NULL;
+    friend std::ostream& operator<<(std::ostream &, const Node &);
+  
+    Node() : parent(nullptr)
+    {
     }
 
-    void setParent(Node *theParent) {
+    void setKey(int x)
+    {
+      key = x;
+    }
+
+    void setParent(Node *theParent) 
+    {
       parent = theParent;
       parent->children.push_back(this);
     }
+
+    template <typename F>
+    void forEachChildren(F f)
+    {
+      for(auto c : children)
+      {
+        f(c);
+      }
+    }
+
+  private:
+    int key;
+    Node *parent;
+    std::vector<Node *> children;
 };
 
-
-int main_with_large_stack_space() {
-  std::ios_base::sync_with_stdio(0);
-  int n;
-  std::cin >> n;
-
-  std::vector<Node> nodes;
-  nodes.resize(n);
-  for (int child_index = 0; child_index < n; child_index++) {
-    int parent_index;
-    std::cin >> parent_index;
-    if (parent_index >= 0)
-      nodes[child_index].setParent(&nodes[parent_index]);
-    nodes[child_index].key = child_index;
-  }
-
-  // Replace this code with a faster implementation
-  int maxHeight = 0;
-  for (int leaf_index = 0; leaf_index < n; leaf_index++) {
-    int height = 0;
-    for (Node *v = &nodes[leaf_index]; v != NULL; v = v->parent)
-      height++;
-    maxHeight = std::max(maxHeight, height);
-  }
-    
-  std::cout << maxHeight << std::endl;
-  return 0;
+std::ostream& operator<<(std::ostream &os, const Node &n)
+{
+    return os << n.key;
 }
+
+void printTree(Node * root, int depth)
+{
+  std::cout << std::string(depth*2, ' ') << *root << std::endl;
+  root->forEachChildren([=](auto c){
+    printTree(c, depth+1);
+  });
+}
+
+void buildTree(std::istream &in)
+{
+  int count = 0;
+  in >> count;
+
+  std::cout << "building " << count << " nodes." << std::endl;;
+  
+  Node * root = nullptr;
+  auto nodes = std::vector<Node*>(count);
+  for(auto i = 0; i < count; ++i) nodes[i] = new Node();
+
+  for(auto i = 0; i < count; ++i)
+  {
+    auto currentParent = 0;
+    in >> currentParent;
+
+    if(currentParent == -1)
+    {
+      std::cout << "root found!" << std::endl;
+      root = nodes[i];
+      root->setKey(i);
+    }
+    else
+    {
+      auto parent = nodes[currentParent];
+      nodes[i]->setParent(parent);
+      nodes[i]->setKey(i);
+    }
+  }
+
+  printTree(root, 0);
+}
+
+#ifdef UNITTESTS
+
+#define CATCH_CONFIG_MAIN
+#include "../../catch.hpp"
+
+TEST_CASE("a","a")
+{
+  //auto str = std::stringstream{"5 4 -1 4 1 1", std::ios_base::in | std::ios_base::out};
+  auto str = std::stringstream{"5\n-1 0 4 0 3", std::ios_base::in | std::ios_base::out};
+  buildTree(str);
+}
+
+#else
 
 int main (int argc, char **argv)
 {
-#if defined(__unix__) || defined(__APPLE__)
-  // Allow larger stack space
-  const rlim_t kStackSize = 16 * 1024 * 1024;   // min stack size = 16 MB
-  struct rlimit rl;
-  int result;
-
-  result = getrlimit(RLIMIT_STACK, &rl);
-  if (result == 0)
-  {
-      if (rl.rlim_cur < kStackSize)
-      {
-          rl.rlim_cur = kStackSize;
-          result = setrlimit(RLIMIT_STACK, &rl);
-          if (result != 0)
-          {
-              std::cerr << "setrlimit returned result = " << result << std::endl;
-          }
-      }
-  }
+  return 0;
+}
 
 #endif
-  return main_with_large_stack_space();
-}
