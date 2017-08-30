@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <iostream>
 #include <vector>
+#include <stack>
 
 class Node 
 {
@@ -44,20 +45,39 @@ std::ostream& operator<<(std::ostream &os, const Node &n)
 
 void printTree(Node * root, int depth)
 {
-  std::cout << std::string(depth*2, ' ') << *root << std::endl;
-  root->forEachChildren([=](auto c){
+  // std::cout << std::string(depth*2, ' ') << *root << std::endl;
+  root->forEachChildren([=](Node * c){
     printTree(c, depth+1);
   });
 }
 
-int getHeight(Node * root, int depth = 0)
+struct NodeDepth
 {
-  int maxh = std::numeric_limits<int>::min();
+  Node * node;
+  int depth;
 
-  root->forEachChildren([&](auto c){
-    auto h = getHeight(c, depth+1);
-    maxh = std::max(maxh,h);
-  });
+  NodeDepth(Node * node, int depth) : node(node), depth(depth)
+  {
+  }
+};
+
+int getHeight(Node * root)
+{
+  int maxh = std::numeric_limits<int>::min();;
+  auto stack = std::stack<NodeDepth>();
+  stack.emplace(root, 1);
+
+  while(stack.size() > 0)
+  {
+    auto current = stack.top();
+    stack.pop();
+
+    if(current.depth > maxh) maxh = current.depth;
+
+    current.node->forEachChildren([&](Node * c){
+      stack.emplace(c, current.depth+1);      
+    });
+  }
 
   return maxh;
 }
@@ -67,7 +87,7 @@ Node * buildTree(std::istream &in)
   int count = 0;
   in >> count;
 
-  std::cout << "building " << count << " nodes." << std::endl;;
+  // std::cout << "building " << count << " nodes." << std::endl;;
   
   Node * root = nullptr;
   auto nodes = std::vector<Node*>(count);
@@ -80,7 +100,7 @@ Node * buildTree(std::istream &in)
 
     if(currentParent == -1)
     {
-      std::cout << "root found!" << std::endl;
+      // std::cout << "root found!" << std::endl;
       root = nodes[i];
       root->setKey(i);
     }
@@ -92,7 +112,7 @@ Node * buildTree(std::istream &in)
     }
   }
 
-  printTree(root, 0);
+  // printTree(root, 0);
 
   return root;
 }
@@ -102,19 +122,46 @@ Node * buildTree(std::istream &in)
 #define CATCH_CONFIG_MAIN
 #include "../../catch.hpp"
 
-TEST_CASE("a","a")
+void test(const std::string &input, int expectedHeight)
 {
-  auto str = std::stringstream{"5 4 -1 4 1 1", std::ios_base::in | std::ios_base::out};
-  //auto str = std::stringstream{"5\n-1 0 4 0 3", std::ios_base::in | std::ios_base::out};
+  auto str = std::stringstream{input, std::ios_base::in | std::ios_base::out};
   auto root = buildTree(str);
   auto height = getHeight(root);
-  REQUIRE(height == 2);
+  REQUIRE(height == expectedHeight);
+}
+
+TEST_CASE("getHeight must work","getHeight")
+{
+  test("5 4 -1 4 1 1", 3);
+  test("5 -1 0 4 0 3", 4);
+}
+
+TEST_CASE("getHeight maximum depth","getHeight")
+{
+  int qtd = 100000;
+  auto tree = std::vector<int>(qtd);
+  auto start = 0;
+  auto begin = tree.begin();
+  ++begin;
+  std::generate(begin, tree.end(), [&](){return start++;});
+  tree[0] = -1;
+  auto ss = std::stringstream();
+  ss << qtd;
+  for(auto x : tree)
+  {
+    ss << x << " ";
+  }
+  auto str = ss.str();
+  test(str, qtd);
 }
 
 #else
 
 int main (int argc, char **argv)
 {
+  auto root = buildTree(std::cin);
+  auto height = getHeight(root);
+  std::cout << height;
   return 0;
 }
 

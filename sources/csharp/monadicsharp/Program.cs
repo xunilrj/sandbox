@@ -9,10 +9,6 @@ public static class _
         return x => x;
     }
 
-
-
-
-
     public static Func<TIn, TOut> Pipe<TIn, TR1, TOut>(Func<TIn, TR1> f1, Func<TR1, TOut> f2)
     {
         return (x =>
