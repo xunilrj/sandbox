@@ -38,6 +38,7 @@ namespace UnitTestProject1
 
             Assert.IsTrue(Point1);
             Assert.IsFalse(Point2);
+            Assert.IsNull(result);
         }
 
         [TestMethod]
@@ -59,6 +60,7 @@ namespace UnitTestProject1
             Assert.IsTrue(Point1);
             Assert.IsTrue(Point2);
             Assert.IsFalse(Point3);
+            Assert.IsNull(result);
         }
 
         [TestMethod]
@@ -70,6 +72,7 @@ namespace UnitTestProject1
                 var b = await GetNeverNull().Maybe();
                 return a + b;
             });
+
             Assert.AreEqual("xx", result);
         }
 
