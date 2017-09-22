@@ -33,7 +33,7 @@ namespace UnitTestProject1
                 var a = await GetAlwaysNull().Maybe();
                 //This line will never run because of the Maybe
                 Point2 = true;
-                return "x";
+                return a;
             });
 
             Assert.IsTrue(Point1);
@@ -53,7 +53,7 @@ namespace UnitTestProject1
                 var b = await GetAlwaysNull().Maybe();
                 //This line will never run because of the Maybe
                 Point3 = true;
-                return "x";
+                return a + b;
             });
 
             Assert.IsTrue(Point1);
@@ -68,9 +68,9 @@ namespace UnitTestProject1
             {
                 var a = await GetNeverNull().Maybe();
                 var b = await GetNeverNull().Maybe();
-                return "x";
+                return a + b;
             });
-            Assert.AreEqual("x", result);
+            Assert.AreEqual("xx", result);
         }
 
         Task<string> GetAlwaysNull()
