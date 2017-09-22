@@ -64,6 +64,46 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
+        public async Task MaybeMustBreakFunctionWhenNull3()
+        {
+            Reset();
+
+            var result = await await Task.Factory.StartNew(async () =>
+            {
+                Point1 = true;
+                var a = await GetNeverNull().Maybe(x => x == "x");
+                //This line will never run because of the Maybe
+                Point2 = true;
+                var b = await GetNeverNull().Maybe();
+                return a + b;
+            });
+
+            Assert.IsTrue(Point1);
+            Assert.IsFalse(Point2);
+            Assert.IsNull(result);
+        }
+
+        [TestMethod]
+        public async Task MaybeMustBreakFunctionWhenNull4()
+        {
+            Reset();
+
+            var result = await await Task.Factory.StartNew(async () =>
+            {
+                Point1 = true;
+                var a = await GetNeverNull().Maybe(x => x == "x", () => "default string");
+                //This line will never run because of the Maybe
+                Point2 = true;
+                var b = await GetNeverNull().Maybe();
+                return a + b;
+            });
+
+            Assert.IsTrue(Point1);
+            Assert.IsFalse(Point2);
+            Assert.AreEqual("default string", result);
+        }
+
+        [TestMethod]
         public async Task MustWork()
         {
             var result = await await Task.Factory.StartNew(async () =>
@@ -247,7 +287,7 @@ namespace UnitTestProject1
                 .GetField("<>t__builder", BindingFlags.Public | BindingFlags.Instance)
                 .GetValue(stateMachine);
 
-            builder.SetResult(default(T));
+            builder.SetResult(result);
         }
     }
 }
