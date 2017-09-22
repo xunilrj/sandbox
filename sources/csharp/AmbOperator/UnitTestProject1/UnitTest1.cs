@@ -73,14 +73,26 @@ namespace UnitTestProject1
             Assert.AreEqual("xx", result);
         }
 
-        Task<string> GetAlwaysNull()
+        async Task<string> GetAlwaysNull()
         {
-            return Task.FromResult<string>(null);
+            //First await lift string to Task<string>
+            //Second await unwrap the string to return it
+            return await await (string)null;
         }
 
-        Task<string> GetNeverNull()
+        async Task<string> GetNeverNull()
         {
-            return Task.FromResult<string>("x");
+            //First await lift string to Task<string>
+            //Second await unwrap the string to return it
+            return await await "x";
+        }
+    }
+
+    public static class AwaitLiftExtensions
+    {
+        public static TaskAwaiter<Task<T>> GetAwaiter<T>(this T value)
+        {
+            return Task.FromResult(Task.FromResult(value)).GetAwaiter();
         }
     }
 
