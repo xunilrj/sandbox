@@ -27,7 +27,14 @@ namespace UnitTestProject1
         {
             Reset();
 
-            var result = await Run1();
+            var result = await await Task.Factory.StartNew(async () =>
+            {
+                Point1 = true;
+                var a = await GetAlwaysNull().Maybe();
+                //This line will never run because of the Maybe
+                Point2 = true;
+                return "x";
+            });
 
             Assert.IsTrue(Point1);
             Assert.IsFalse(Point2);
@@ -38,7 +45,16 @@ namespace UnitTestProject1
         {
             Reset();
 
-            var result = await Run2();
+            var result = await await Task.Factory.StartNew(async () =>
+            {
+                Point1 = true;
+                var a = await GetNeverNull().Maybe();
+                Point2 = true;
+                var b = await GetAlwaysNull().Maybe();
+                //This line will never run because of the Maybe
+                Point3 = true;
+                return "x";
+            });
 
             Assert.IsTrue(Point1);
             Assert.IsTrue(Point2);
@@ -48,33 +64,13 @@ namespace UnitTestProject1
         [TestMethod]
         public async Task MustWork()
         {
-            var result = await Run3();
+            var result = await await Task.Factory.StartNew(async () =>
+            {
+                var a = await GetNeverNull().Maybe();
+                var b = await GetNeverNull().Maybe();
+                return "x";
+            });
             Assert.AreEqual("x", result);
-        }
-
-        async Task<string> Run1()
-        {
-            Point1 = true;
-            var a = await GetAlwaysNull().Maybe();
-            Point2 = true;
-            return "x";
-        }
-
-        async Task<string> Run2()
-        {
-            Point1 = true;
-            var a = await GetNeverNull().Maybe();
-            Point2 = true;
-            var b = await GetAlwaysNull().Maybe();
-            Point3 = true;
-            return "x";
-        }
-
-        async Task<string> Run3()
-        {
-            var a = await GetNeverNull().Maybe();
-            var b = await GetNeverNull().Maybe();
-            return "x";
         }
 
         Task<string> GetAlwaysNull()
