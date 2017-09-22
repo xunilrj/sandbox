@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Threading;
 using System.Reflection;
+using OOFunctional;
 
 namespace UnitTestProject1
 {
@@ -116,6 +117,25 @@ namespace UnitTestProject1
             Assert.AreEqual("xx", result);
         }
 
+        [TestMethod]
+        public async Task MustTreatAllCases()
+        {
+            var result = await await Task.Factory.StartNew(async () =>
+            {
+                var id = F.New((Exception x) => x);
+                var getValue = F.New((HttpResponse x) => x.Value);
+                var toString = F.New((object x) => x.ToString());
+
+                var a = await GetNeverNull().Maybe();
+                var b = await GetValueAlwaysOK().Either(
+                    getValue.Then(toString),
+                    ~id.Then(toString));
+                return a + b;
+            });
+
+            Assert.AreEqual("x11", result);
+        }
+
         async Task<string> GetAlwaysNull()
         {
             //First await lift string to Task<string>
@@ -129,7 +149,70 @@ namespace UnitTestProject1
             //Second await unwrap the string to return it
             return await await "x";
         }
+
+        public enum StatusCode
+        {
+            OK,
+            NotFound,
+            InternalError
+        }
+
+        public class HttpResponse
+        {
+            public StatusCode Status { get; set; }
+            public object Value { get; set; }
+        }
+
+        async Task<HttpResponse> GetValueAlwaysOK()
+        {
+            return await await new HttpResponse()
+            {
+                Status = StatusCode.OK,
+                Value = 11,
+            };
+        }
     }
+
+    public struct Either<T, TLeft, TRight>
+    {
+        Func<TLeft, T> _left;
+        Func<TRight, T> _right;
+
+        public void Bind(Func<TLeft, T> left, Func<TRight, T> right)
+        {
+            _left = left;
+            _right = right;
+        }
+
+        public T Run(TLeft value)
+        {
+            return _left(value);
+        }
+
+        public T Run(TRight value)
+        {
+            return _right(value);
+        }
+    }
+
+    public static class EitherExtensions
+    {
+        public static Task<TR> Either<T, TR>(this Task<T> task, Func<T, TR> left, Func<Exception, TR> right)
+        {
+            var either = new Either<TR, T, Exception>();
+            either.Bind(left, right);
+
+            var ct = task.ContinueWith(t =>
+            {
+                if (t.IsCanceled) return either.Run(t.Exception);
+                if (t.IsFaulted) return either.Run(t.Exception);
+                return either.Run(t.Result);
+            });
+
+            return ct;
+        }
+    }
+
 
     public static class AwaitLiftExtensions
     {

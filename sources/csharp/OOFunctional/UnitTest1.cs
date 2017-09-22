@@ -60,8 +60,8 @@ namespace OOFunctional
             var g = add.Then(timesf[2]);
             Assert.AreEqual(4, !g[1, 1]);
 
-            var genericadd = G.New((g a, g b) => a + b);
-            Assert.AreEqual(2, !genericadd[1, 1]);
+            //var genericadd = G.New((g a, g b) => a + b);
+            //Assert.AreEqual(2, !genericadd[1, 1]);
         }
     }
 
@@ -90,7 +90,7 @@ namespace OOFunctional
     public class gc
     {
         object Value;
-         
+
         public gc(object value)
         {
             Value = value;
@@ -102,7 +102,12 @@ namespace OOFunctional
         }
     }
 
-    public class F<TR>
+    public interface IF<out TR>
+    {
+
+    }
+
+    public class F<TR> : IF<TR>
     {
         System.Func<TR> Func;
 
@@ -126,13 +131,23 @@ namespace OOFunctional
             return f.Func();
         }
 
+        public static Func<TR> operator ~(F<TR> f)
+        {
+            return f.Func;
+        }
+
         public static implicit operator System.Func<TR>(F<TR> f)
         {
             return f.Func;
         }
     }
 
-    public class F<T1, TR>
+    public interface IF<in T1, out TR>
+    {
+        TR Invoke(T1 a);
+    }
+
+    public class F<T1, TR> : IF<T1, TR>
     {
         System.Func<T1, TR> Func;
 
@@ -159,7 +174,17 @@ namespace OOFunctional
             return Func(a);
         }
 
+        public F<T1, TR2> Then<TR2>(IF<TR, TR2> f)
+        {
+            return F.New((T1 a) => f.Invoke(Func(a)));
+        }
+
         public static implicit operator System.Func<T1, TR>(F<T1, TR> f)
+        {
+            return f.Func;
+        }
+
+        public static Func<T1, TR> operator ~(F<T1, TR> f)
         {
             return f.Func;
         }
@@ -216,6 +241,11 @@ namespace OOFunctional
         public F<T1, T2, TR2> Then<TR2>(F<TR, TR2> f)
         {
             return F.New((T1 a, T2 b) => f.Invoke(Func(a, b)));
+        }
+
+        public static Func<T1, T2, TR> operator ~(F<T1, T2, TR> f)
+        {
+            return f.Func;
         }
 
         public static implicit operator System.Func<T1, T2, TR>(F<T1, T2, TR> f)
@@ -334,11 +364,12 @@ namespace OOFunctional
     {
         protected override Expression VisitParameter(ParameterExpression node)
         {
-            if(node.Type == typeof(g))
-            {
-                return Expression.Parameter(typeof(gc), )
-            }
-            return base.VisitParameter(node);
+            throw new NotImplementedException();
+            //if (node.Type == typeof(g))
+            //{
+            //    return Expression.Parameter(typeof(gc), )
+            //}
+            //return base.VisitParameter(node);
         }
     }
 
