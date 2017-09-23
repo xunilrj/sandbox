@@ -1,0 +1,19 @@
+<package>
+  <description brief="project2_solution">
+
+     project2_solution
+
+  </description>
+  <author>Ubuntu</author>
+  <license>BSD</license>
+  <review status="unreviewed" notes=""/>
+  <url>http://ros.org/wiki/project2_solution</url>
+  <depend package="geometry_msgs"/>
+  <depend package="rospy"/>
+  <depend package="tf"/>
+  <depend package="tf2"/>
+  <depend package="tf2_ros"/>
+
+</package>
+
+
