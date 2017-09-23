@@ -1,5 +1,6 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -88,6 +89,24 @@ namespace OOFunctional
         public static (F<T1, TR1>, F<T2, TR2>, F<T3, TR3>, F<T4, TR4>) New<T1, TR1, T2, TR2, T3, TR3, T4, TR4>(Func<T1, TR1> f1, Func<T2, TR2> f2, Func<T3, TR3> f3, Func<T4, TR4> f4)
         {
             return (f1, f2, f3, f4);
+        }
+
+        public static Func<T1, TR2> Compose<T1, TR1, TR2>(Func<T1, TR1> f1, Func<TR1, TR2> f2)
+        {
+            var (ff1, ff2) = F.New(f1, f2);
+            return ff1.Then(ff2);
+        }
+
+        public static Func<T1, TR3> Compose<T1, TR1, TR2, TR3>(Func<T1, TR1> f1, Func<TR1, TR2> f2, Func<TR2, TR3> f3)
+        {
+            var (ff1, ff2, ff3) = F.New(f1, f2, f3);
+            return ff1.Then(ff2).Then(ff3);
+        }
+
+        public static Func<T1, TR4> Compose<T1, TR1, TR2, TR3, TR4>(Func<T1, TR1> f1, Func<TR1, TR2> f2, Func<TR2, TR3> f3, Func<TR3, TR4> f4)
+        {
+            var (ff1, ff2, ff3, ff4) = F.New(f1, f2, f3, f4);
+            return ff1.Then(ff2).Then(ff3).Then(ff4);
         }
     }
 
@@ -470,62 +489,180 @@ namespace OOFunctional
     }
 
 
+    public static class ExceptionsExtensions
+    {
+        public static IEnumerable<Exception> GetNonAggregated(this Exception agg)
+        {
+            var e = agg as AggregateException;
+
+            while (e != null)
+            {
+                if (e.InnerExceptions.Count == 1 && e.InnerExceptions[0] is AggregateException ae)
+                {
+                    e = ae;
+                }
+                else break;
+            }
+
+            return e?.InnerExceptions.AsEnumerable() ?? new Exception[] { };
+        }
+    }
+
     public static class AwaitLiftExtensions
     {
         public static TaskAwaiter<Task<T>> GetAwaiter<T>(this T value)
         {
             return Task.FromResult(Task.FromResult(value)).GetAwaiter();
         }
+
+        public static void Deconstruct<T>(this Task<T> task, out T result, out AggregateException e)
+        {
+            if (!task.IsCompleted)
+            {
+                throw new NotSupportedException();
+            }
+
+            if (task.IsFaulted)
+            {
+                result = default(T);
+                e = new AggregateException(task.Exception.GetNonAggregated());
+            }
+            else
+            {
+                result = task.Result;
+                e = null;
+            }
+        }
+
+        public static Task<Task<T>> Wrap<T>(this Task<T> t)
+        {
+            return t.ContinueWith(ct =>
+            {
+                return t;
+            });
+        }
     }
 
     public static class MaybeTaskExtensions
     {
-        public static MonadicTask<T> Maybe<T>(this Task<T> task)
+        public static MaybeTask<T> Maybe<T>(this Task<T> task)
         {
-            return new MonadicTask<T>(task);
+            return new MaybeTask<T>(task);
         }
 
-        public static MonadicTask<T> Maybe<T>(this Task<T> task, Func<T, bool> when)
+        public static MaybeTask<T> Maybe<T>(this Task<T> task, Func<T, bool> when)
         {
-            return new MonadicTask<T>(task, x => when(x.Result));
+            return new MaybeTask<T>(task, x => when(x.Result));
         }
 
-        public static MonadicTask<T> Maybe<T>(this Task<T> task, Func<T, bool> when, Func<T> returns)
+        public static MaybeTask<T> Maybe<T>(this Task<T> task, Func<T, bool> when, Func<T> returns)
         {
-            return new MonadicTask<T>(task).Map(when, returns);
+            return new MaybeTask<T>(task).Map(when, returns);
         }
 
-        public static MonadicTask<T> Maybe<T>(this Task<T> task, Func<T, bool> when, Func<T, T> returns)
+        public static MaybeTask<T> Maybe<T>(this Task<T> task, Func<T, bool> when, Func<T, T> returns)
         {
-            return new MonadicTask<T>(task, x => when(x.Result), x => returns(x.Result));
+            return new MaybeTask<T>(task, x => when(x.Result), x => returns(x.Result));
         }
 
-        public static MonadicTask<T> Maybe<T>(this Task<T> task, Func<Task<T>, bool> when, Func<T> returns)
+        public static MaybeTask<T> Maybe<T>(this Task<T> task, Func<Task<T>, bool> when, Func<T> returns)
         {
-            return new MonadicTask<T>(task, when, x => returns());
+            return new MaybeTask<T>(task, when, x => returns());
         }
 
-        public static MonadicTask<T> Maybe<T>(this Task<T> task, Func<Task<T>, bool> when, Func<T, T> returns)
+        public static MaybeTask<T> Maybe<T>(this Task<T> task, Func<Task<T>, bool> when, Func<T, T> returns)
         {
-            return new MonadicTask<T>(task, when, x => returns(x.Result));
+            return new MaybeTask<T>(task, when, x => returns(x.Result));
         }
 
-        public static MonadicTask<T> Maybe<T>(this Task<T> task, Func<T, bool> when, Func<Task<T>, T> returns)
+        public static MaybeTask<T> Maybe<T>(this Task<T> task, Func<T, bool> when, Func<Task<T>, T> returns)
         {
-            return new MonadicTask<T>(task).Map(when, returns);
+            return new MaybeTask<T>(task).Map(when, returns);
         }
 
         public static MonadicTask<T> Maybe<T>(this Task<T> task, Func<Task<T>, bool> when, Func<Task<T>, T> returns)
         {
-            return new MonadicTask<T>(task, when, returns);
+            return new MaybeTask<T>(task, when, returns);
         }
     }
+
+    public static class Maybe
+    {
+        public static MaybeTask<(T1, T2)> Join<T1, T2>(MaybeTask<T1> a, MaybeTask<T2> b)
+        {
+            var ta = unwrap(a);
+            var tb = unwrap(b);
+            var twa = Task.WhenAll(ta, tb);
+            return twa.ContinueWith<MaybeTask<(T1, T2)>>(ct =>
+            {
+                if (ta.IsFaulted && tb.IsFaulted) return new AggregateException(ta.Exception.GetNonAggregated().Union(tb.Exception.GetNonAggregated()));
+                if (ta.IsFaulted) return ta.Exception;
+                if (tb.IsFaulted) return tb.Exception;
+                return (ta.Result, tb.Result);
+            }).Result;
+            async Task<T> unwrap<T>(MaybeTask<T> m) => await m;
+        }
+    }
+
+
+    public class MaybeTask<T> : MonadicTask<T>
+    {
+        public MaybeTask(Task<T> task) : base(task)
+        {
+        }
+
+        public MaybeTask(Task<T> task, Func<Task<T>, bool> when = null, Func<Task<T>, T> returns = null) : base(task, when, returns)
+        {
+        }
+
+        public MaybeTask<T> Map(Func<Task<T>, bool> when, Func<Task<T>, T> returns = null)
+        {
+            _when = when;
+            _returns = returns;
+            return this;
+        }
+
+        public MaybeTask<T> Map(Func<T, bool> when, Func<Task<T>, T> returns)
+        {
+            _when = x => !x.IsCanceled && !x.IsFaulted && when(x.Result);
+            if (returns != null) _returns = returns;
+            return this;
+        }
+
+        public MaybeTask<T> Map(Func<T, bool> when, Func<T> returns = null)
+        {
+            _when = x => !x.IsCanceled && !x.IsFaulted && when(x.Result);
+            if (returns != null) _returns = x => returns();
+            return this;
+        }
+
+        public static MaybeTask<(T,T)> operator +(MaybeTask<T> l, MaybeTask<T> r)
+        {
+            return Maybe.Join(l, r);
+        }
+
+        public static implicit operator MaybeTask<T>(Task<T> value)
+        {
+            return new MaybeTask<T>(value);
+        }
+
+        public static implicit operator MaybeTask<T>(T value)
+        {
+            return new MaybeTask<T>(Task.FromResult(value));
+        }
+
+        public static implicit operator MaybeTask<T>(Exception value)
+        {
+            return new MaybeTask<T>(Task.FromException<T>(value));
+        }
+    }
+
 
     public class MonadicTask<T>
     {
         private readonly Task<T> _task;
-        private Func<Task<T>, bool> _when;
-        private Func<Task<T>, T> _returns;
+        protected Func<Task<T>, bool> _when;
+        protected Func<Task<T>, T> _returns;
 
         public MonadicTask(Task<T> task, Func<Task<T>, bool> when = null, Func<Task<T>, T> returns = null)
         {
@@ -539,26 +676,6 @@ namespace OOFunctional
             _task = task;
         }
 
-        public MonadicTask<T> Map(Func<Task<T>, bool> when, Func<Task<T>, T> returns = null)
-        {
-            _when = when;
-            _returns = returns;
-            return this;
-        }
-
-        public MonadicTask<T> Map(Func<T, bool> when, Func<Task<T>, T> returns)
-        {
-            _when = x => !x.IsCanceled && !x.IsFaulted && when(x.Result);
-            if(returns != null) _returns = returns;
-            return this;
-        }
-
-        public MonadicTask<T> Map(Func<T, bool> when, Func<T> returns = null)
-        {
-            _when = x => !x.IsCanceled && !x.IsFaulted && when(x.Result);
-            if(returns != null) _returns = x => returns();
-            return this;
-        }
 
         public MonadicAwaiter<T> GetAwaiter()
         {
@@ -583,7 +700,7 @@ namespace OOFunctional
         {
             _task = task;
             //compiler does not accept x == default(T)
-            _when = when ?? (x => System.Collections.Generic.EqualityComparer<T>.Default.Equals(x.Result, default(T)));
+            _when = when ?? (x => !x.IsCanceled && !x.IsFaulted && System.Collections.Generic.EqualityComparer<T>.Default.Equals(x.Result, default(T)));
             _returns = returns ?? ((x) => default(T));
         }
 
@@ -658,6 +775,17 @@ namespace OOFunctional
                 .GetValue(stateMachine);
 
             builder.SetResult(result);
+        }
+    }
+
+    public static class ObjectF
+    {
+        public new static Func<object, string> ToString
+        {
+            get
+            {
+                return x => x.ToString();
+            }
         }
     }
 }
