@@ -2,6 +2,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 
 namespace OOFunctional
 {
@@ -69,7 +72,23 @@ namespace OOFunctional
     {
         public static F<TR> New<TR>(Func<TR> f) => new F<TR>(f);
         public static F<T1, TR> New<T1, TR>(Func<T1, TR> f) => new F<T1, TR>(f);
+        public static F<T1, TR> New1<T1, TR>(Func<T1, TR> f) => new F<T1, TR>(f);
         public static F<T1, T2, TR> New<T1, T2, TR>(Func<T1, T2, TR> f) => new F<T1, T2, TR>(f);
+
+        public static (F<T1, TR1>, F<T2, TR2>) New<T1, TR1, T2, TR2>(Func<T1, TR1> f1, Func<T2, TR2> f2)
+        {
+            return (f1, f2);
+        }
+
+        public static (F<T1, TR1>, F<T2, TR2>, F<T3, TR3>) New<T1, TR1, T2, TR2, T3, TR3>(Func<T1, TR1> f1, Func<T2, TR2> f2, Func<T3, TR3> f3)
+        {
+            return (f1, f2, f3);
+        }
+
+        public static (F<T1, TR1>, F<T2, TR2>, F<T3, TR3>, F<T4, TR4>) New<T1, TR1, T2, TR2, T3, TR3, T4, TR4>(Func<T1, TR1> f1, Func<T2, TR2> f2, Func<T3, TR3> f3, Func<T4, TR4> f4)
+        {
+            return (f1, f2, f3, f4);
+        }
     }
 
     public static class G
@@ -184,6 +203,11 @@ namespace OOFunctional
             return f.Func;
         }
 
+        public static implicit operator F<T1, TR>(System.Func<T1, TR> f)
+        {
+            return new F<T1, TR>(f);
+        }
+
         public static Func<T1, TR> operator ~(F<T1, TR> f)
         {
             return f.Func;
@@ -274,6 +298,11 @@ namespace OOFunctional
         }
 
         public static F<T1, T2, TR> operator |(F<T1, T2, TR> l, F<TR, TR> r)
+        {
+            return new F<T1, T2, TR>((a, b) => r.Invoke(l.Invoke(a, b)));
+        }
+
+        public static F<T1, T2, TR> operator |(F<T1, T2, TR> l, IF<TR, TR> r)
         {
             return new F<T1, T2, TR>((a, b) => r.Invoke(l.Invoke(a, b)));
         }
@@ -397,6 +426,238 @@ namespace OOFunctional
         {
             if (IsFirst(node)) return Expression.Constant(new gc(NewValue));
             return node;
+        }
+    }
+
+    public struct Either<T, TLeft, TRight>
+    {
+        Func<TLeft, T> _left;
+        Func<TRight, T> _right;
+
+        public void Bind(Func<TLeft, T> left, Func<TRight, T> right)
+        {
+            _left = left;
+            _right = right;
+        }
+
+        public T Run(TLeft value)
+        {
+            return _left(value);
+        }
+
+        public T Run(TRight value)
+        {
+            return _right(value);
+        }
+    }
+
+    public static class EitherExtensions
+    {
+        public static Task<TR> Either<T, TR>(this Task<T> task, Func<T, TR> left, Func<Exception, TR> right)
+        {
+            var either = new Either<TR, T, Exception>();
+            either.Bind(left, right);
+
+            var ct = task.ContinueWith(t =>
+            {
+                if (t.IsCanceled) return either.Run(t.Exception);
+                if (t.IsFaulted) return either.Run(t.Exception);
+                return either.Run(t.Result);
+            });
+
+            return ct;
+        }
+    }
+
+
+    public static class AwaitLiftExtensions
+    {
+        public static TaskAwaiter<Task<T>> GetAwaiter<T>(this T value)
+        {
+            return Task.FromResult(Task.FromResult(value)).GetAwaiter();
+        }
+    }
+
+    public static class MaybeTaskExtensions
+    {
+        public static MonadicTask<T> Maybe<T>(this Task<T> task)
+        {
+            return new MonadicTask<T>(task);
+        }
+
+        public static MonadicTask<T> Maybe<T>(this Task<T> task, Func<T, bool> when)
+        {
+            return new MonadicTask<T>(task, x => when(x.Result));
+        }
+
+        public static MonadicTask<T> Maybe<T>(this Task<T> task, Func<T, bool> when, Func<T> returns)
+        {
+            return new MonadicTask<T>(task).Map(when, returns);
+        }
+
+        public static MonadicTask<T> Maybe<T>(this Task<T> task, Func<T, bool> when, Func<T, T> returns)
+        {
+            return new MonadicTask<T>(task, x => when(x.Result), x => returns(x.Result));
+        }
+
+        public static MonadicTask<T> Maybe<T>(this Task<T> task, Func<Task<T>, bool> when, Func<T> returns)
+        {
+            return new MonadicTask<T>(task, when, x => returns());
+        }
+
+        public static MonadicTask<T> Maybe<T>(this Task<T> task, Func<Task<T>, bool> when, Func<T, T> returns)
+        {
+            return new MonadicTask<T>(task, when, x => returns(x.Result));
+        }
+
+        public static MonadicTask<T> Maybe<T>(this Task<T> task, Func<T, bool> when, Func<Task<T>, T> returns)
+        {
+            return new MonadicTask<T>(task).Map(when, returns);
+        }
+
+        public static MonadicTask<T> Maybe<T>(this Task<T> task, Func<Task<T>, bool> when, Func<Task<T>, T> returns)
+        {
+            return new MonadicTask<T>(task, when, returns);
+        }
+    }
+
+    public class MonadicTask<T>
+    {
+        private readonly Task<T> _task;
+        private Func<Task<T>, bool> _when;
+        private Func<Task<T>, T> _returns;
+
+        public MonadicTask(Task<T> task, Func<Task<T>, bool> when = null, Func<Task<T>, T> returns = null)
+        {
+            _task = task;
+            _when = when;
+            _returns = returns;
+        }
+
+        public MonadicTask(Task<T> task)
+        {
+            _task = task;
+        }
+
+        public MonadicTask<T> Map(Func<Task<T>, bool> when, Func<Task<T>, T> returns = null)
+        {
+            _when = when;
+            _returns = returns;
+            return this;
+        }
+
+        public MonadicTask<T> Map(Func<T, bool> when, Func<Task<T>, T> returns)
+        {
+            _when = x => !x.IsCanceled && !x.IsFaulted && when(x.Result);
+            if(returns != null) _returns = returns;
+            return this;
+        }
+
+        public MonadicTask<T> Map(Func<T, bool> when, Func<T> returns = null)
+        {
+            _when = x => !x.IsCanceled && !x.IsFaulted && when(x.Result);
+            if(returns != null) _returns = x => returns();
+            return this;
+        }
+
+        public MonadicAwaiter<T> GetAwaiter()
+        {
+            return new MonadicAwaiter<T>(_task, _when, _returns);
+        }
+
+        public static implicit operator MonadicTask<T>(Task<T> t)
+        {
+            return new MonadicTask<T>(t);
+        }
+    }
+
+    public class MonadicAwaiter<T> : INotifyCompletion, ICriticalNotifyCompletion
+    {
+        public bool IsCompleted => false;
+
+        Task<T> _task;
+        Func<Task<T>, bool> _when;
+        Func<Task<T>, T> _returns;
+
+        public MonadicAwaiter(Task<T> task, Func<Task<T>, bool> when, Func<Task<T>, T> returns)
+        {
+            _task = task;
+            //compiler does not accept x == default(T)
+            _when = when ?? (x => System.Collections.Generic.EqualityComparer<T>.Default.Equals(x.Result, default(T)));
+            _returns = returns ?? ((x) => default(T));
+        }
+
+        public T GetResult()
+        {
+            return _task.Result;
+        }
+
+        void INotifyCompletion.OnCompleted(Action continuation)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ICriticalNotifyCompletion.UnsafeOnCompleted(Action continuation)
+        {
+            var stateMachine = GetStateMachine(continuation);
+
+            if (stateMachine == null)
+            {
+                _task.ContinueWith(t =>
+                {
+                    continuation();
+                });
+            }
+            else
+            {
+                _task.ContinueWith(t =>
+                {
+                    if (_when(t))
+                    {
+                        var result = _returns(t);
+                        stateMachine.SetResult<T>(result);
+                    }
+                    else
+                    {
+                        continuation();
+                    }
+                });
+            }
+        }
+
+        private IAsyncStateMachine GetStateMachine(Action continuation)
+        {
+            var target = continuation.Target;
+            object moveNextRunner = target;
+
+            if (target.GetType().Name == "ContinuationWrapper")
+            {
+                var continurationActionField = target?.GetType()
+                ?.GetField("m_continuation", BindingFlags.NonPublic | BindingFlags.Instance);
+                var continuationAction = continurationActionField?.GetValue(target) as Action;
+                moveNextRunner = continuationAction?.Target;
+            }
+
+            var stateMachine = (IAsyncStateMachine)moveNextRunner?.GetType()
+                ?.GetField("m_stateMachine", BindingFlags.NonPublic | BindingFlags.Instance)
+                .GetValue(moveNextRunner);
+
+            return stateMachine;
+        }
+    }
+
+    public static class AsyncStateMachineExtensions
+    {
+        public static void SetResult<T>(this IAsyncStateMachine stateMachine, T result)
+        {
+            stateMachine.GetType()
+                .GetField("<>1__state", BindingFlags.Public | BindingFlags.Instance)
+                .SetValue(stateMachine, -2);
+            var builder = (AsyncTaskMethodBuilder<T>)stateMachine.GetType()
+                .GetField("<>t__builder", BindingFlags.Public | BindingFlags.Instance)
+                .GetValue(stateMachine);
+
+            builder.SetResult(result);
         }
     }
 }
