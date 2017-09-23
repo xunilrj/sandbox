@@ -12,6 +12,12 @@ using CustomerEmail = System.String;
 
 namespace UnitTestProject1
 {
+    /// <summary>
+    /// Another interesting approach
+    /// https://github.com/louthy/csharp-monad
+    /// but it demands a different mindset. I would like
+    /// to develop as close as possible to vanilla c# code
+    /// </summary>
     [TestClass]
     public class UnitTest1
     {
