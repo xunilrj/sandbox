@@ -1,0 +1,20 @@
+﻿@page
+@model WebApplication3.Pages.IndexPageModel
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, WebApplication3
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <form method="post">
+        <div></div>
+        @*<vc:my-button></vc:my-button>*@
+        <node subscribe="A,B,C" publish="A,B,C">
+            @await Component.InvokeAsync("Button", "increase")
+        </node>
+    </form>
+</body>
+</html>
