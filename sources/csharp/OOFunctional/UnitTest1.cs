@@ -448,45 +448,96 @@ namespace OOFunctional
         }
     }
 
-    public struct Either<T, TLeft, TRight>
+    public struct EitherTask<TLeft, TRight>
     {
-        Func<TLeft, T> _left;
-        Func<TRight, T> _right;
+        bool IsLeft;
+        TLeft LValue;
+        TRight RValue;
 
-        public void Bind(Func<TLeft, T> left, Func<TRight, T> right)
+        public EitherTask(TLeft value)
         {
-            _left = left;
-            _right = right;
+            IsLeft = true;
+            LValue = value;
+            RValue = default(TRight);
         }
 
-        public T Run(TLeft value)
+        public EitherTask(TRight value)
         {
-            return _left(value);
+            IsLeft = false;
+            LValue = default(TLeft);
+            RValue = value;
         }
 
-        public T Run(TRight value)
+        public T Match<T>(Func<TLeft, T> left, Func<TRight, T> right)
         {
-            return _right(value);
-        }
-    }
-
-    public static class EitherExtensions
-    {
-        public static Task<TR> Either<T, TR>(this Task<T> task, Func<T, TR> left, Func<Exception, TR> right)
-        {
-            var either = new Either<TR, T, Exception>();
-            either.Bind(left, right);
-
-            var ct = task.ContinueWith(t =>
+            if (IsLeft)
             {
-                if (t.IsCanceled) return either.Run(t.Exception);
-                if (t.IsFaulted) return either.Run(t.Exception);
-                return either.Run(t.Result);
-            });
+                return left(LValue);
+            }
+            else
+            {
+                return right(RValue);
+            }
+        }
 
-            return ct;
+        public static implicit operator EitherTask<TLeft, TRight>(TLeft left)
+        {
+            return new EitherTask<TLeft, TRight>();
+        }
+
+        public static implicit operator EitherTask<TLeft, TRight>(TRight right)
+        {
+            return new EitherTask<TLeft, TRight>();
         }
     }
+
+    public static class Either
+    {
+        public static EitherTask<(T1, T2), TR> Join<T1, T2, TR>(EitherTask<T1, TR> l, EitherTask<T2, TR> r)
+        {
+            return l.Match(
+                left: (ll) =>
+                {
+                    return r.Match(left: (rl) =>
+                    {
+                        return new EitherTask<(T1, T2), TR>((ll, rl));
+                    }, right: (rr) =>
+                    {
+                        return new EitherTask<(T1, T2), TR>(rr);
+                    });
+                },
+                right: (lr) =>
+                {
+                    return r.Match(left: (rl) =>
+                    {
+                        return new EitherTask<(T1, T2), TR>(lr);
+                    }, right: (rr) =>
+                     {
+                         //TODO
+                         return new EitherTask<(T1, T2), TR>(lr);
+                     });
+                }
+            );
+        }
+    }
+
+    //public static class EitherExtensions
+    //{
+    //    public static Task<TR> Either<T, TR>(this Task<T> task, Func<T, TR> left, Func<Exception, TR> right)
+    //    {
+    //        var either = new EitherTask<TR, T, Exception>();
+    //        either.Bind(left, right);
+
+    //        var ct = task.ContinueWith(t =>
+    //        {
+    //            if (t.IsCanceled) return either.Run(t.Exception);
+    //            if (t.IsFaulted) return either.Run(t.Exception);
+    //            return either.Run(t.Result);
+    //        });
+
+    //        return ct;
+    //    }
+    //}
 
 
     public static class ExceptionsExtensions
@@ -636,7 +687,7 @@ namespace OOFunctional
             return this;
         }
 
-        public static MaybeTask<(T,T)> operator +(MaybeTask<T> l, MaybeTask<T> r)
+        public static MaybeTask<(T, T)> operator +(MaybeTask<T> l, MaybeTask<T> r)
         {
             return Maybe.Join(l, r);
         }
@@ -786,6 +837,124 @@ namespace OOFunctional
             {
                 return x => x.ToString();
             }
+        }
+    }
+
+    public class HandleApplicationException<TR, TMe, T1>
+           where TMe : ApplicationException<TMe, T1>
+           where T1 : Exception
+    {
+        public HandleApplicationException(ApplicationException<TMe, T1> app)
+        {
+        }
+
+        public EndClass When(Func<T1> handle)
+        {
+            return new EndClass();
+        }
+
+        public class EndClass
+        {
+            public TR End()
+            {
+                return default(TR);
+            }
+        }
+    }
+
+    public class HandleApplicationException<TR, TMe, T1, T2>
+        where TMe : ApplicationException<TMe, T1, T2>
+        where T1 : Exception
+        where T2 : Exception
+    {
+        ApplicationException<TMe, T1, T2> App;
+
+        public HandleApplicationException(ApplicationException<TMe, T1, T2> app)
+        {
+            App = app;
+        }
+
+        public ContinueT2 When(Func<T1, TR> handle)
+        {
+            return new ContinueT2();
+        }
+
+        public class ContinueT2
+        {
+            public EndClass When(Func<T2, TR> handle)
+            {
+                return new EndClass();
+            }
+        }
+
+        public class EndClass
+        {
+            public TR End()
+            {
+                return default(TR);
+            }
+        }
+    }
+
+
+
+    public class ApplicationException<TMe, T1> : Exception
+        where TMe : ApplicationException<TMe, T1>
+        where T1 : Exception
+    {
+        protected ApplicationException(Exception e) : base("", e)
+        {
+        }
+
+        public HandleApplicationException<TR, TMe, T1> StartHandle<TR>()
+        {
+            return new HandleApplicationException<TR, TMe, T1>(this);
+        }
+
+        public static implicit operator ApplicationException<TMe, T1>(T1 e)
+        {
+            return new ApplicationException<TMe, T1>(e);
+        }
+
+        public static TMe Throw(T1 exception)
+        {
+            return (TMe)Activator.CreateInstance(typeof(TMe), new object[] { exception });
+        }
+
+    }
+
+    public class ApplicationException<TMe, T1, T2> : Exception
+        where TMe : ApplicationException<TMe, T1, T2>
+        where T1 : Exception
+        where T2 : Exception
+    {
+        protected ApplicationException(Exception e) : base("", e)
+        {
+        }
+
+        public HandleApplicationException<TR, TMe, T1, T2> StartHandle<TR>()
+        {
+            return new HandleApplicationException<TR, TMe, T1, T2>(this);
+        }
+
+        public static implicit operator ApplicationException<TMe, T1, T2>(T1 e)
+        {
+            return new ApplicationException<TMe, T1, T2>(e);
+        }
+
+        public static implicit operator ApplicationException<TMe, T1, T2>(T2 e)
+        {
+            return new ApplicationException<TMe, T1, T2>(e);
+        }
+
+        public static TMe Throw(T1 exception)
+        {
+            return (TMe)Activator.CreateInstance(typeof(TMe), new object[] { exception });
+        }
+
+        public static TMe Throw(T2 exception)
+        {
+            return (TMe)Activator.CreateInstance(typeof(TMe), new object[] { exception });
         }
     }
 }

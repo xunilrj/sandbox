@@ -1,5 +1,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace CSharpFeatures
@@ -51,7 +53,7 @@ namespace CSharpFeatures
 
             Assert.ThrowsException<NotSupportedException>(() =>
             {
-               var (value3, error3) = RealAsync();
+                var (value3, error3) = RealAsync();
             });
 
             var (value4, error4) = await RealAsync().Wrap();
@@ -121,6 +123,62 @@ namespace CSharpFeatures
         {
             await Task.Yield();
             return 1;
+        }
+
+
+        [TestMethod]
+        public async Task A()
+        {
+            var ids = Task.FromResult(new[] { 1, 2, 3 });
+            var needPermissions = await ids.SelectAsync(async x => new
+            {
+                Id = x,
+                Can = await canView(x)
+            }).WhereAsync(x => x.Can == false);
+
+            foreach (var item in needPermissions)
+            {
+                await givePermission(item.Id);
+            }
+
+            Task<bool> canView(int id)
+            {
+                return Task.FromResult(false);
+            }
+            Task givePermission(int id)
+            {
+                return Task.FromResult(0);
+            }
+        }
+    }
+
+    public static class AsyncLinqExtensions
+    {
+        public static async Task<IEnumerable<T1>> WhereAsync<T1>(this Task<IEnumerable<T1>> items, Func<T1, bool> f)
+        {
+            var list = new List<T1>();
+
+            foreach (var item in (await items))
+            {
+                if (f(item))
+                {
+                    list.Add(item);
+                }
+            }
+
+            return list;
+        }
+
+        public static async Task<IEnumerable<T2>> SelectAsync<T1, T2>(this Task<T1[]> items, Func<T1, Task<T2>> f)
+        {
+            var list = new List<T2>();
+
+            foreach (var item in (await items))
+            {
+                list.Add(await f(item));
+            }
+
+            return list;
         }
     }
 

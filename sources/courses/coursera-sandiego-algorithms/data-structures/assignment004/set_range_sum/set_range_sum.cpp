@@ -8,9 +8,11 @@ std::ostream& DebugStream()
     return *debugStream;
 }
 
+bool runPrintTree = true;
 std::ofstream nullStream;
 void BeQuiet()
 {
+    runPrintTree = false;
     debugStream = &nullStream;
 }
 
@@ -32,30 +34,33 @@ struct Vertex {
 
 void printTree(const Vertex * current, int depth = 0)
 {
-  if(current == nullptr) return;
+  return;
 
-  DebugStream() << std::string(depth * 2, ' ') << current->key << ":" << current-> sum;
+  // if(runPrintTree == false) return;
+  // if(current == nullptr) return;
 
-  if(current->parent != nullptr) DebugStream() << " (" << current->parent->key << ")";
-  DebugStream() << std::endl;
+  // DebugStream() << std::string(depth * 2, ' ') << current->key << ":" << current-> sum;
 
-  auto l = current->left;
-  if(l != nullptr)
-  {
-    printTree(l, depth+1);
-  }
+  // if(current->parent != nullptr) DebugStream() << " (" << current->parent->key << ")";
+  // DebugStream() << std::endl;
 
-  auto r = current->right;
-  if(r != nullptr)
-  {
-    printTree(r, depth+1);
-  }
+  // auto l = current->left;
+  // if(l != nullptr)
+  // {
+  //   printTree(l, depth+1);
+  // }
+
+  // auto r = current->right;
+  // if(r != nullptr)
+  // {
+  //   printTree(r, depth+1);
+  // }
 }
 
 void update(Vertex* v) {
-  DebugStream() << "    updating ";
+  // DebugStream() << "    updating ";
   if (v == NULL) return;
-  DebugStream() << v->key << std::endl;
+  // DebugStream() << v->key << std::endl;
 
   v->sum = v->key + (v->left != NULL ? v->left->sum : 0ll) + (v->right != NULL ? v->right->sum : 0ll);
   if (v->left != NULL) {
@@ -80,9 +85,9 @@ void small_rotation(Vertex* v) {
 vl   m                  m  pr
   */
   if (parent->left == v) {
-    DebugStream() << "      small rotate right" << std::endl;
-    DebugStream() << "      before----------------------" << std::endl;
-    printTree(parent, 4);
+    // DebugStream() << "      small rotate right" << std::endl;
+    // DebugStream() << "      before----------------------" << std::endl;
+    // printTree(parent, 4);
 
     Vertex* m = v->right;
 
@@ -93,8 +98,8 @@ vl   m                  m  pr
     parent->left = m;
     if(m != nullptr) m->parent = parent;
 
-    DebugStream() << "      after----------------------" << std::endl;
-    printTree(v, 4);
+    // DebugStream() << "      after----------------------" << std::endl;
+    // printTree(v, 4);
   } 
   /*
     p                   v
@@ -104,7 +109,7 @@ vl   m                  m  pr
     m  vr           pl  m
   */
   else {
-    DebugStream() << "      small rotate left" << std::endl;
+    // DebugStream() << "      small rotate left" << std::endl;
     Vertex* m = v->left;
     v->left = parent;
     parent->right = m;
@@ -140,26 +145,26 @@ void big_rotation(Vertex* v) {
 // Makes splay of the given vertex and makes
 // it the new root.
 void splay(Vertex*& root, Vertex* v) {
-  DebugStream() << "    splaying ";  
+  // DebugStream() << "    splaying ";  
   if (v == NULL) return;
 
-  DebugStream() << v->key << " on top of ";
-  if(root != nullptr)
-  {
-    DebugStream() << root-> key << std::endl;
-  }
+  // DebugStream() << v->key << " on top of ";
+  // if(root != nullptr)
+  // {
+    // DebugStream() << root-> key << std::endl;
+  // }
 
   while (v->parent != NULL) {
     if (v->parent->parent == NULL) {
-      DebugStream() << "    small_rotation" << std::endl;
+      // DebugStream() << "    small_rotation" << std::endl;
       small_rotation(v);
       break;
     }
-    DebugStream() << "    big_rotation" << std::endl;
+    // DebugStream() << "    big_rotation" << std::endl;
     big_rotation(v);
   }
 
-  DebugStream() << "    changing root" << std::endl;
+  // DebugStream() << "    changing root" << std::endl;
   root = v;
 }
 
@@ -171,9 +176,11 @@ void splay(Vertex*& root, Vertex* v) {
 // If the key is bigger than all keys in the tree, 
 // returns NULL.
 Vertex* find(Vertex*& root, int key) {
-  DebugStream() << "    finding " << key << std::endl;
-  DebugStream() << "        before----------------------" << std::endl;
-  printTree(root, 4);
+  // DebugStream() << "    finding " << key << std::endl;
+  // DebugStream() << "        before----------------------" << std::endl;
+  // printTree(root, 4);
+
+  if( root!= nullptr && root->key == key) return root;
 
   Vertex* v = root;
   Vertex* last = root;
@@ -192,20 +199,20 @@ Vertex* find(Vertex*& root, int key) {
       v = v->left;
     }
   }
-  if( last != nullptr) DebugStream() << "    last is " << last->key <<std::endl;
+  // if( last != nullptr) DebugStream() << "    last is " << last->key <<std::endl;
   splay(root, last);
-  DebugStream() << "      after----------------------" << std::endl;
-  printTree(root, 4);
+  // DebugStream() << "      after----------------------" << std::endl;
+  // printTree(root, 4);
 
   return next;
 }
 
 void split(Vertex* root, int key, Vertex*& left, Vertex*& right) {
-  DebugStream() << "    splitting " << key << std::endl;
+  // DebugStream() << "    splitting " << key << std::endl;
   right = find(root, key);
   splay(root, right);
   if (right == NULL) {
-    DebugStream() << "    right is null " << std::endl;
+    // DebugStream() << "    right is null " << std::endl;
     left = root;
     return;
   }
@@ -219,11 +226,11 @@ void split(Vertex* root, int key, Vertex*& left, Vertex*& right) {
 }
 
 Vertex* merge(Vertex* left, Vertex* right) {
-  DebugStream() << "    merging" << std::endl;
-  DebugStream() << "        before left----------------------" << std::endl;
-  printTree(left, 4);
-  DebugStream() << "        before right----------------------" << std::endl;
-  printTree(right, 4);
+  // DebugStream() << "    merging" << std::endl;
+  // DebugStream() << "        before left----------------------" << std::endl;
+  // printTree(left, 4);
+  // DebugStream() << "        before right----------------------" << std::endl;
+  // printTree(right, 4);
 
   if (left == NULL) return right;
   if (right == NULL) return left;
@@ -236,8 +243,8 @@ Vertex* merge(Vertex* left, Vertex* right) {
   right->left = left;
   update(right);
 
-  DebugStream() << "        after right----------------------" << std::endl;
-  printTree(right, 4);
+  // DebugStream() << "        after right----------------------" << std::endl;
+  // printTree(right, 4);
   return right;
 }
 
@@ -246,7 +253,7 @@ Vertex* merge(Vertex* left, Vertex* right) {
 Vertex* root = NULL;
 
 void insert(int x) {
-  DebugStream() << "insert " << x << std::endl;
+  // DebugStream() << "insert " << x << std::endl;
 
   Vertex* left = NULL;
   Vertex* right = NULL;
@@ -263,7 +270,7 @@ void insert(int x) {
 //  Splay(N)
 //  Delete(N)
 void erase(int x) {    
-  DebugStream() << "erase " << x;            
+  // DebugStream() << "erase " << x;            
   // Implement erase yourself
   
   if(root == nullptr) return;
@@ -272,7 +279,7 @@ void erase(int x) {
 
   if(node == nullptr)
   {
-    DebugStream() << std::endl;
+    // DebugStream() << std::endl;
     return;
   } 
 
@@ -287,15 +294,15 @@ void erase(int x) {
       if(root != nullptr) root->parent = nullptr;
   }
 
-  DebugStream() << " ok" << std::endl;
+  // DebugStream() << " ok" << std::endl;
 }
 
 bool find(int x) {  
-  std::cout << "find " << x; 
+  // DebugStream() << "find " << x; 
   
   if(root == nullptr)
   {
-    DebugStream() << " not found" << std::endl;
+    // DebugStream() << " not found" << std::endl;
     return false;
   }
   
@@ -303,26 +310,24 @@ bool find(int x) {
 
   if(node == nullptr)
   {
-    DebugStream() << " not found" << std::endl;
+    // DebugStream() << " not found" << std::endl;
     return false;
   }
 
   if(node->key == x)
   {
-    DebugStream() << " found" << std::endl;
+    // DebugStream() << " found" << std::endl;
     return true;
   }
   else
   {
-    DebugStream() << " not found" << std::endl;
+    // DebugStream() << " not found" << std::endl;
     return false;
   }
 }
 
-
-
 long long sum(int from, int to) {
-  DebugStream() << "sum " << from << " " << to << std::endl;;
+  // DebugStream() << "sum " << from << " " << to << std::endl;;
 
   Vertex* left = NULL;
   Vertex* middle = NULL;
@@ -330,9 +335,9 @@ long long sum(int from, int to) {
   split(root, from, left, middle);
   split(middle, to + 1, middle, right);
 
-  DebugStream() << "middle ---------------------" <<std::endl;
-  printTree(middle);
-  DebugStream() << "---------------------" <<std::endl;
+  // DebugStream() << "middle ---------------------" <<std::endl;
+  // printTree(middle);
+  // DebugStream() << "---------------------" <<std::endl;
 
   long long ans = 0;
   if(middle != nullptr)
@@ -341,7 +346,7 @@ long long sum(int from, int to) {
   }
 
   root = merge(merge(left, middle), right);
-  DebugStream() << " result " << ans << std::endl;
+  // DebugStream() << " result " << ans << std::endl;
   return ans;  
 }
 
@@ -354,9 +359,9 @@ void run(std::istream& in, std::ostream& out)
   // scanf("%d", &n);
   int last_sum_result = 0;
   for (int i = 0; i < n; i++) {
-    DebugStream() << "tree --------------------------------" << std::endl;
-    printTree(root);
-    DebugStream() << "--------------------------------" << std::endl;
+    // DebugStream() << "tree --------------------------------" << std::endl;
+    // printTree(root);
+    // DebugStream() << "--------------------------------" << std::endl;
     // char buffer[10];
     // scanf("%s", buffer);
     std::string buffer;
@@ -396,49 +401,56 @@ void run(std::istream& in, std::ostream& out)
     }
   }
 
-  DebugStream() << "tree --------------------------------" << std::endl;
-  printTree(root);
-  DebugStream() << "--------------------------------" << std::endl;
+  // DebugStream() << "tree --------------------------------" << std::endl;
+  // printTree(root);
+  // DebugStream() << "--------------------------------" << std::endl;
 }
 
 #ifdef UNITTESTS
-
 #define CATCH_CONFIG_MAIN
 #include "../../catch.hpp"
+
+//#define BENCHPRESS_CONFIG_MAIN
+//#include "../../../benchpress.hpp"
 
 void test(std::string fileName)
 {
   BeQuiet();
-
-  root = nullptr;
-  std::ifstream fin{fileName};
-  std::ifstream fexpectedOut{fileName + ".a"};
-
-  std::stringstream out;
-
-  run(fin, out);
-  out.seekg(0);
-
-  std::string actual, expected;
-  while (std::getline(fexpectedOut, expected))
-  {
-    std::getline(out, actual);
-    // DebugStream() << "expected: " << expected <<std::endl;
-    // DebugStream() << expected << " - " << actual << std::endl;
-    // DebugStream() << expected << " == " << actual << std::endl;
-    REQUIRE(expected == actual);    
-  }
+  
+      root = nullptr;
+      std::ifstream fin{fileName};
+      std::ifstream fexpectedOut{fileName + ".a"};    
+      std::stringstream out;
+      run(fin, out);
+       out.seekg(0);
+       std::string actual, expected;
+       while (std::getline(fexpectedOut, expected))
+       {
+         std::getline(out, actual);
+         REQUIRE(expected == actual);    
+      }
 }
 
 TEST_CASE("","")
 {
-  // test("./tests/01");
+  //test("./tests/01");
   // test("./tests/04");
   // test("./tests/05");
   // test("./tests/20");
   // test("./tests/36");
   test("./tests/83");
 }
+
+// BENCHMARK("file", [&](benchpress::context* ctx) {
+//   for (size_t i = 0; i < ctx->num_iterations(); ++i) {    
+//     root = nullptr;
+//     std::string fileName{"./tests/01"};
+//     std::ifstream fin{fileName};
+//     std::ifstream fexpectedOut{fileName + ".a"};    
+//     std::stringstream out;
+//     run(fin, out);    
+//   }
+// })    
 
 #else
 
