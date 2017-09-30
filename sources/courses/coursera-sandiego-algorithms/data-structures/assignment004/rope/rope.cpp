@@ -6,6 +6,7 @@
 #include <functional>
 #include <sstream>
 #include <algorithm>
+#include <queue>
 
 std::ostream* debugStream(&std::cout);
 std::ostream& DebugStream()
@@ -507,15 +508,17 @@ struct range
 struct tree_node
 {
 	range this_node;
-	range children;
-
 	range original;
+	int size;
 
 	tree_node * parent;
 	tree_node * left;
 	tree_node * right;
 
-	tree_node(int start, int end) : this_node({ start,end }), children({ start,end }), original({ start,end }),
+	tree_node(int start, int end) : this_node({ 0, end - start }),
+		//children({ 0, end - start }),
+		original({ start,end }),
+		size(end-start),
 		left(nullptr), right(nullptr), parent(nullptr)
 	{
 	}
@@ -528,7 +531,9 @@ struct tree_node
 		left->parent = nullptr;
 		this->left = nullptr;
 
-		this->children.start = this->this_node.start;
+		auto length = this_node.end - this_node.start;
+		this->this_node = { 0, length };
+		this->size -= left->size;
 
 		return left;
 	}
@@ -541,7 +546,7 @@ struct tree_node
 		right->parent = nullptr;
 		this->right = nullptr;
 
-		this->children.end = this->this_node.end;
+		this->size -= right->size;
 
 		return right;
 	}
@@ -554,7 +559,10 @@ struct tree_node
 		if (newLeft != nullptr)
 		{
 			newLeft->parent = this;
-			this->children.start = newLeft->children.start;
+
+			auto myLength = this_node.end - this_node.start;
+			this->this_node = { newLeft->size, newLeft->size + myLength };
+			this->size += newLeft->size;
 		}
 
 		return oldLeft;
@@ -568,44 +576,11 @@ struct tree_node
 		if (newRight != nullptr)
 		{
 			newRight->parent = this;
-			this->children.end = newRight->children.end;
+
+			this->size += newRight->size;
 		}
 
 		return oldRight;
-	}
-
-	//before                          nll is bigger than left              nll is smaller than left  
-	//         this                        this					                this
-	//       /    \         =>          /      \				 =>          /      \
-	//     left  right             newLeft     right			        newLeft     right
-	//     / \                     /    \						        /    \
-	//   ll  lr                  nll    nlr						      nll    nlr
-	//                          /   \							     /   \
-	//   newleft              left  ...							   left  ...
-	//    /   \               /  \								   /  \
-	// nll     nlr          ll    lr							 ll    lr
-	void push_left(tree_node * newLeft)
-	{
-		if (newLeft == nullptr) return;
-
-		auto left = this->pop_left();
-		newLeft->push_left(left);
-		this->replace_left(newLeft);
-	}
-
-	//before
-	//    this                        this
-	//   /    \         =>          /      \
-	// left  right                left    newRight
-	//                                       \
-	// newRight                              right
-	void push_right(tree_node * newRight)
-	{
-		if (newRight == nullptr) return;
-
-		auto right = this->pop_right();
-		newRight->push_right(right);
-		this->replace_right(newRight);
 	}
 
 	//When split this node is the right
@@ -621,12 +596,17 @@ struct tree_node
 			auto newLength = r.end - r.start;
 			auto slide = originalLength - newLength;
 
-			this->this_node = r;
-			this->original = range{ original.start + slide, original.end };
+			auto thisLeft = this->pop_left();
 
-			auto newNode = new tree_node{ l.start,l.end };
-			newNode->original = range{ original.start - slide, original.end - newLength };
-			this->push_left(newNode);
+			this->this_node = range{ this->this_node.start, this->this_node.end - slide };
+			this->original = range{ original.start + slide, original.end };
+			this->size -= slide;
+
+			auto newNode = new tree_node{ original.start - slide, original.start };
+			newNode->replace_left(thisLeft);
+
+			this->replace_left(newNode);
+
 			return true;
 		}
 		else
@@ -643,33 +623,36 @@ struct tree_node
 		else return 1;
 	}
 
-	tree_node* find(int index) {
-		tree_node* last = this;
+	bool find(int index, tree_node*& last) {
+		last = this;
 		bool cont = true;
 		while (cont && last != nullptr) {
 			auto dir = last->get_direction(index);
 			switch (dir)
 			{
 			case -1:
-				if (last->left == nullptr) return last;
+				if (last->left == nullptr) return false;
 				last = last->left;
 				break;
 			case 0:
 				last->split_at(index);
-				return last;
+				return true;
 			case 1:
-				if (last->right == nullptr) return last;
+				if (last->right == nullptr) return false;
+				index -= last->this_node.end;
 				last = last->right;
 				break;
 			}
 		}
 
-		return last;
+		return false;
 	}
 
 	//ROTATIONS
 	//small rotation right
 	/*
+		  ^                  ^
+		  |                  |
 		  D                  B
 		 / \               /  \
   (this)B   E       =>    A    D
@@ -679,12 +662,32 @@ struct tree_node
 	void small_rotation_right()
 	{
 		if (this->parent == nullptr) return;
-		auto B = this;
-		auto C = this->pop_right();
-		auto D = this->parent;
-		B = D->pop_left();
+
+		auto iamatleft = true;
+		tree_node* D;
+
+		auto grandparent = this->parent->parent;
+		if (grandparent != nullptr)
+		{
+			iamatleft = grandparent->left == this->parent;
+			if (iamatleft) D = grandparent->pop_left();
+			else D = grandparent->pop_right();
+		}
+		else
+		{
+			D = this->parent;
+		}
+
+		auto B = D->pop_left();
+		auto C = B->pop_right();
 		D->replace_left(C);
 		B->replace_right(D);
+
+		if (grandparent != nullptr)
+		{
+			if (iamatleft) grandparent->replace_left(B);
+			else grandparent->replace_right(B);
+		}
 	}
 
 	//small rotation left
@@ -697,12 +700,33 @@ struct tree_node
 		*/
 	void small_rotation_left()
 	{
-		auto D = this;
-		auto C = this->pop_left();
-		auto B = this->parent;
-		D = B->pop_right();
+		if (this->parent == nullptr) return;
+
+		auto iamatleft = false;
+		tree_node* B;
+
+		auto grandparent = this->parent->parent;
+		if (grandparent != nullptr)
+		{
+			iamatleft = grandparent->left == this->parent;
+			if (iamatleft) B = grandparent->pop_left();
+			else B = grandparent->pop_right();;
+		}
+		else
+		{
+			B = this->parent;
+		}
+
+		auto D = B->pop_right();
+		auto C = D->pop_left();
 		B->replace_right(C);
 		D->replace_left(B);
+
+		if (grandparent != nullptr)
+		{
+			if (iamatleft) grandparent->replace_left(D);
+			else grandparent->replace_right(D);
+		}
 	}
 
 	void small_rotation()
@@ -727,7 +751,20 @@ struct tree_node
 
 		if (this->parent->left == this && this->parent->parent->left == this->parent)
 		{
-			// Zig-zig
+			// Zig-zig	
+			/*
+		   [   H   ]                     B
+		  /         \                  /   \
+		 D           L        =>      A     D
+	   /  \        /   \                  /   \
+	  B     F     J     N                C     H
+	 / \   / \   / \   / \                   /   \
+	A   C E   G I   K M   O                 F      L
+										   /  \   /  \
+										  E    G J    N
+												/ \  / \
+											   I   K M  O
+			*/
 			this->parent->small_rotation();
 			this->small_rotation();
 		}
@@ -757,10 +794,81 @@ struct tree_node
 			else
 			{
 				big_rotation();
-				break;
 			}
 		}
 	}
+
+
+	void inorder(std::function<bool(int, int, int)> f)
+	{
+		std::function<bool(tree_node*, int)> internal;
+		internal = [&](tree_node* current, int depth) {
+			if (current == nullptr) return false;
+			auto l = current->left;
+			if (l != nullptr)
+			{
+				auto cont = internal(l, depth + 1);
+				if (!cont) return false;
+			}
+
+			{
+				auto cont = f(depth, current->original.start, current->original.end);
+				if (!cont) return false;
+			}
+
+			auto r = current->right;
+			if (r != nullptr)
+			{
+				auto cont = internal(r, depth + 1);
+				if (!cont) return false;
+			}
+
+			return true;
+		};
+		internal(this, 0);
+	}
+
+	void preorder_thisnode(std::function<bool(int, char, int, int)> f)
+	{
+		std::function<bool(tree_node*, int)> internal;
+		internal = [&](tree_node* current, int depth) {
+			if (current == nullptr) return false;
+
+			{
+				char lr = 'l';
+				if (current->parent != nullptr && current->parent->right == current) lr = 'r';
+				auto cont = f(depth, lr, current->this_node.start, current->this_node.end);
+				if (!cont) return false;
+			}
+
+			auto l = current->left;
+			if (l != nullptr)
+			{
+				auto cont = internal(l, depth + 1);
+				if (!cont) return false;
+			}
+
+			auto r = current->right;
+			if (r != nullptr)
+			{
+				auto cont = internal(r, depth + 1);
+				if (!cont) return false;
+			}
+
+			return true;
+		};
+		internal(this, 0);
+	}
+
+	/*int size()
+	{
+		int s = 0;
+		inorder([&](const int& depth, const int& start, const int& end) {
+			s += end - start;
+			return true;
+		});
+		return s;
+	}*/
 };
 
 class tree
@@ -813,52 +921,88 @@ public:
 
 	void move(int from, int to, int insert_after)
 	{
+		//auto before_size = this->size();
+
 		//this = start -> from
 		auto from_to_tree = this->split_and_return_right(from);
-		auto to_end_tree = from_to_tree->split_and_return_right(to + 1);
+		auto to_end_tree = from_to_tree->split_and_return_right((to - from) + 1);
+
+		/*DebugStream() << "PRINTING TREES 1" << std::endl;
+		DebugStream() << "[0,from) --------------" << std::endl;
+		this->printTree();
+		DebugStream() << "[from,to+1) --------------" << std::endl;
+		from_to_tree->printTree();
+		DebugStream() << "[to+1, end) --------------" << std::endl;
+		to_end_tree->printTree();*/
+
+		/*auto after_cuts_size = this->size() + from_to_tree->size() + to_end_tree->size();
+		if (before_size != after_cuts_size)
+			throw 0;*/
 
 		//this = start -> from + to -> end
 		this->merge(to_end_tree);
+		/*if (before_size != (this->size() + from_to_tree->size()))
+			throw 0;*/
+
+		/*DebugStream() << "[0,end) minus [from,to] --------------" << std::endl;
+		this->printTree();*/
 
 		//this = start -> insert_after (without from -> to)
-		//insert_after == 0 actually means before the first
-		if (insert_after > 0)
-		{
-			insert_after++;
-		}
-
 		auto without_from_to_insert_point_end_tree = this->split_and_return_right(insert_after);
+
+		/*DebugStream() << "PRINTING TREES 3" << std::endl;
+		DebugStream() << "this --------------" << std::endl;
+		this->printTree();
+		DebugStream() << "from_tree --------------" << std::endl;
+		from_to_tree->printTree();
+		DebugStream() << "without_from_to_insert_point_end_tree --------------" << std::endl;
+		without_from_to_insert_point_end_tree->printTree();*/
 
 		//this -> start -> to (reordered)
 		this->merge(from_to_tree);
 		this->merge(without_from_to_insert_point_end_tree);
+
+		/*if (before_size != this->size())
+			throw 0;*/
 	}
 
 	tree_node* find(int index)
 	{
 		if (root == nullptr) return nullptr;
 
-		auto last = root->find(index);
-
-		if (last == nullptr) return nullptr;
+		tree_node* last = nullptr;
+		auto found = root->find(index, last);
+		if (found == false) return nullptr;
 
 		last->splay();
-
-		if (last->this_node.is_inside(index) == false) return nullptr;
 
 		return last;
 	}
 
 	tree* split_and_return_right(int index)
 	{
+		//auto before_size = this->size();
+
 		tree_node* right = find(index);
 		if (right == nullptr) return new tree{};
 
 		root = right->pop_left();
+		auto tree_right = new tree{ right };
 
-		return new tree{ right };
+		/*if (before_size != this->size() + tree_right->size())
+			throw 0;*/
+
+		return tree_right;
 	}
 
+	/*
+
+		  B        E                         D
+		 / \      / \          =>           / \
+		A   C    D   F                     B   E
+										  / \   \
+										 A	 C	 F
+	*/
 	void merge(tree* newRight)
 	{
 		if (newRight == nullptr) return;
@@ -867,40 +1011,24 @@ public:
 		if (min_right == nullptr) return;
 
 		min_right->splay();
-		min_right->push_left(root);
+		min_right->replace_left(root);
 
 		root = min_right;
 		newRight->root = nullptr;
 	}
 
-	void inorder(std::function<bool(int, int)> f)
+	/*int size()
 	{
-		std::function<bool(tree_node*)> internal;
-		internal = [&](tree_node* current) {
-			if (current == nullptr) return false;
-			auto l = current->left;
-			if (l != nullptr)
-			{
-				auto cont = internal(l);
-				if (!cont) return false;
-			}
+		return root->size();
+	}*/
 
-			{
-				auto cont = f(current->original.start, current->original.end);
-				if (!cont) return false;
-			}
-
-			auto r = current->right;
-			if (r != nullptr)
-			{
-				auto cont = internal(r);
-				if (!cont) return false;
-			}
-
-			return true;
-		};
-		internal(root);
-	}
+	//void printTree()
+	//{
+	//	root->preorder_thisnode([&](const int& depth, const char& lr, const int& start, const int& end) {
+	//		std::cout << std::string(depth * 3, '.') << lr << " [" << start << "," << end << "]" << std::endl;
+	//		return true;
+	//	});
+	//}
 };
 
 class Rope {
@@ -916,15 +1044,37 @@ public:
 		Tree.move(i, j, k);
 	}
 
+	void NaiveProcess(int i, int j, int k) {
+		// Replace this code with a faster implementation
+		std::string t = original.substr(0, i) + original.substr(j + 1);
+		original = t.substr(0, k) + original.substr(i, j - i + 1) + t.substr(k);
+	}
+
 	std::string result() {
 		std::stringstream ss{ "" };
-		Tree.inorder([&](const int& start, const int& end) {
+		Tree.root->inorder([&](const int& depth, const int& start, const int& end) {
 			ss << original.substr(start, end - start);
 			return true;
 		});
 		return ss.str();
 	}
+
+
 };
+
+
+//void prettyPrintStringDiff(const std::string& a, const std::string& b)
+//{
+//	std::cout << a << std::endl;
+//	std::cout << b << std::endl;
+//	for (int i = 0; i < std::min(a.size(), b.size()); ++i)
+//	{
+//		if (a[i] == b[i]) std::cout << " ";
+//		else std::cout << "^";
+//	}
+//
+//	std::cout << std::endl;
+//}
 
 void run(std::istream& in, std::ostream& out)
 {
@@ -932,13 +1082,20 @@ void run(std::istream& in, std::ostream& out)
 	in >> s;
 
 	Rope rope(s);
+	//Rope naive(s);
 
 	int actions;
 	in >> actions;
+	//std::cout << rope.result() << std::endl;
 	for (int action_index = 0; action_index < actions; ++action_index) {
 		int i, j, k;
 		in >> i >> j >> k;
+		//DebugStream() << i << " " << j << " " << k << std::endl;
+
 		rope.process(i, j, k);
+		//naive.NaiveProcess(i, j, k);
+
+		//prettyPrintStringDiff(naive.result(), rope.result());
 	}
 	out << rope.result() << std::endl;
 }
@@ -966,8 +1123,84 @@ void test(const std::string& inString, const std::string& expectedOutString)
 
 TEST_CASE("rope must suffle strings", "rope tests")
 {
-	//test("hlelowrold 2 1 1 2 6 6 7", "helloworld");
+	test("a 1 0 0 0", "a");
+	test("a 2 0 0 0 0 0 0", "a");
+	test("ab 1 0 0 0", "ab");
+	test("bc 1 1 1 0", "cb");
+	test("cd 1 1 1 1", "cd");
+	test("ef 1 0 1 0", "ef");
+	test("abc 1 0 0 2", "bca");
+	test("hlelowrold 2 1 1 2 6 6 7", "helloworld");
 	test("abcdef 2 0 1 1 4 5 0", "efcabd");
+	test("7409488245517115276142322168576189279543123 3 2 21 6 22 29 32 8 28 21", "7432210954361426857124882455171152761892793");
+}
+
+void printProg(int x, int total) {
+	int progress = ((double)x / total) * 100;
+	std::cout << "[";
+	for (int i = 1; i <= 100; i++) {
+		if (i < progress || progress == 100)
+			std::cout << "=";
+		else if (i == progress)
+			std::cout << ">";
+		else
+			std::cout << " ";
+	}
+
+	std::cout << "] " << x << "/" << total << "\r" << std::flush;
+
+}
+
+std::string random_string(size_t length)
+{
+	auto randdigit = []() -> char {
+		static const char digits[] = "0123456789";
+		const size_t max_index = (sizeof(digits) - 1);
+		return digits[rand() % max_index];
+	};
+	std::string str(length, 0);
+	for (int i = 0; i < str.size(); ++i) {
+		str[i] = randdigit();
+	}
+	return str;
+}
+
+TEST_CASE("random tests", "rope tests")
+{
+	for (int i = 0; i <= 1000000; ++i)
+	{
+		printProg(i, 1000000);
+		auto string_length = (rand() % 98) + 2;
+		auto x = random_string(string_length);
+
+		auto r1 = Rope{ x };
+		auto r2 = Rope{ x };
+
+		auto ops = rand() % 10;
+		auto opshist = std::vector<std::tuple<int, int, int>>();
+		for (int iops = 0; iops < ops; ++iops)
+		{
+			auto a = rand() % (string_length - 1);
+			auto b = rand() % (string_length - 1);
+			auto ii = std::min(a, b);
+			auto j = std::max(a, b);
+			auto k = rand() % (string_length - (j - ii + 1));
+
+			r1.process(ii, j, k);
+			r2.NaiveProcess(ii, j, k);
+
+			opshist.emplace_back(ii,j,k);
+		}
+
+		auto r1r = r1.result();
+		auto r2r = r2.result();
+		auto equal = r1r == r2r;
+		if (equal == false)
+		{
+			std::cout << r1r << "==" << r2r << std::endl;
+		}
+		REQUIRE(r1r == r2r);
+	}
 }
 
 TEST_CASE("range split when index in inside range", "range tests")
@@ -1027,33 +1260,34 @@ TEST_CASE("tree_node creation must keep ranges updated", "tree_node tests")
 {
 	auto x1 = tree_node{ 5, 10 };
 
-	REQUIRE(x1.this_node.start == 5);
-	REQUIRE(x1.this_node.end == 10);
-	REQUIRE(x1.children.start == 5);
-	REQUIRE(x1.children.end == 10);
+	REQUIRE(x1.this_node.start == 0);
+	REQUIRE(x1.this_node.end == 5);
+	//REQUIRE(x1.children.start == 0);
+	//REQUIRE(x1.children.end == 5);
+	REQUIRE(x1.original.start == 5);
+	REQUIRE(x1.original.end == 10);
 	REQUIRE(x1.left == nullptr);
 	REQUIRE(x1.right == nullptr);
 }
 
 TEST_CASE("tree_node split_at", "tree_node tests")
 {
-	auto x1 = tree_node{ 0, 10 };
-	x1.original = { 10, 20 };
+	auto x1 = tree_node{ 10, 20 };
 	x1.split_at(5);
 	tree_node& l = *x1.left;
 
 	REQUIRE(x1.this_node.start == 5);
 	REQUIRE(x1.this_node.end == 10);
-	REQUIRE(x1.children.start == 0);
-	REQUIRE(x1.children.end == 10);
+	//REQUIRE(x1.children.start == 0);
+	//REQUIRE(x1.children.end == 10);
 	REQUIRE(x1.original.start == 15);
 	REQUIRE(x1.original.end == 20);
 	REQUIRE(x1.right == nullptr);
 
 	REQUIRE(l.this_node.start == 0);
 	REQUIRE(l.this_node.end == 5);
-	REQUIRE(l.children.start == 0);
-	REQUIRE(l.children.end == 5);
+	//REQUIRE(l.children.start == 0);
+	//REQUIRE(l.children.end == 5);
 	REQUIRE(l.original.start == 10);
 	REQUIRE(l.original.end == 15);
 	REQUIRE(l.left == nullptr);
@@ -1068,10 +1302,18 @@ TEST_CASE("tree split_at", "tree_node tests")
 
 	{
 		auto& r = *x1.split_and_return_right(1);
+
+		//tree indices must start at zero
+		REQUIRE(x1.root->this_node.start == 0);
+		REQUIRE(x1.root->this_node.end == 1);
+
+		REQUIRE(r.root->this_node.start == 0);
+		REQUIRE(r.root->this_node.end == 9);
+
 		x1.merge(&r);
 
-		REQUIRE(x1.root->children.start == 0);
-		REQUIRE(x1.root->children.end == 10);
+		//REQUIRE(x1.root->children.start == 0);
+		//REQUIRE(x1.root->children.end == 10);
 
 		REQUIRE(x1.root->original.start == 1);
 		REQUIRE(x1.root->original.end == 10);
@@ -1085,29 +1327,33 @@ TEST_CASE("tree split_at", "tree_node tests")
 		x1.merge(&r);
 	}
 
-	REQUIRE(x1.root->children.start == 0);
-	REQUIRE(x1.root->children.end == 10);
+	//REQUIRE(x1.root->children.start == 0);
+	//REQUIRE(x1.root->children.end == 10);
 }
 
 //LEFT OPERATIONS
 TEST_CASE("tree_node pop_left must keep ranges updated", "tree_node tests")
 {
-	auto x1 = tree_node{ 5, 10 };
-	auto x2 = tree_node{ 0, 5 };
+	auto x1 = tree_node{ 15, 20 };
+	auto x2 = tree_node{ 10, 15 };
 	x1.replace_left(&x2);
 	auto left = *x1.pop_left();
 
-	REQUIRE(x1.this_node.start == 5);
-	REQUIRE(x1.this_node.end == 10);
-	REQUIRE(x1.children.start == 5);
-	REQUIRE(x1.children.end == 10);
+	REQUIRE(x1.this_node.start == 0);
+	REQUIRE(x1.this_node.end == 5);
+	//REQUIRE(x1.children.start == 0);
+	//REQUIRE(x1.children.end == 5);
+	REQUIRE(x1.original.start == 15);
+	REQUIRE(x1.original.end == 20);
 	REQUIRE(x1.left == nullptr);
 	REQUIRE(x1.right == nullptr);
 
 	REQUIRE(left.this_node.start == 0);
 	REQUIRE(left.this_node.end == 5);
-	REQUIRE(left.children.start == 0);
-	REQUIRE(left.children.end == 5);
+	//REQUIRE(left.children.start == 0);
+	//REQUIRE(left.children.end == 5);
+	REQUIRE(left.original.start == 10);
+	REQUIRE(left.original.end == 15);
 	REQUIRE(left.parent == nullptr);
 	REQUIRE(left.left == nullptr);
 	REQUIRE(left.right == nullptr);
@@ -1115,68 +1361,93 @@ TEST_CASE("tree_node pop_left must keep ranges updated", "tree_node tests")
 
 TEST_CASE("tree_node replace_left must update children aggregate", "tree_node tests")
 {
-	auto x1 = tree_node{ 5, 10 };
-	auto x2 = tree_node{ 0, 5 };
+	auto x1 = tree_node{ 15, 20 };
+	auto x2 = tree_node{ 10, 15 };
 	x1.replace_left(&x2);
 
 	REQUIRE(x1.this_node.start == 5);
 	REQUIRE(x1.this_node.end == 10);
-	REQUIRE(x1.children.start == 0);
-	REQUIRE(x1.children.end == 10);
+	//REQUIRE(x1.children.start == 0);
+	//REQUIRE(x1.children.end == 10);
+	REQUIRE(x1.original.start == 15);
+	REQUIRE(x1.original.end == 20);
 	REQUIRE(x1.left == &x2);
 	REQUIRE(x1.right == nullptr);
 
 	REQUIRE(x2.this_node.start == 0);
 	REQUIRE(x2.this_node.end == 5);
-	REQUIRE(x2.children.start == 0);
-	REQUIRE(x2.children.end == 5);
+	//REQUIRE(x2.children.start == 0);
+	//REQUIRE(x2.children.end == 5);
+	REQUIRE(x2.original.start == 10);
+	REQUIRE(x2.original.end == 15);
 	REQUIRE(x2.parent == &x1);
 	REQUIRE(x2.left == nullptr);
 	REQUIRE(x2.right == nullptr);
 }
 
-TEST_CASE("push_left must point to the new node", "tree_node tests")
+TEST_CASE("tree_node replace_left must update children aggregate2", "tree_node tests")
 {
-	auto x1 = tree_node{ 5, 10 };
-	auto x2 = tree_node{ 0, 5 };
-
+	auto x1 = tree_node{ 0, 3 };
+	auto x2 = tree_node{ 0, 4 };
+	auto x3 = tree_node{ 0, 4 };
+	x2.replace_right(&x3);
 	x1.replace_left(&x2);
 
-	x1.this_node.start = 7;
-	auto x3 = tree_node{ 5, 7 };
-	x1.push_left(&x3);
-
-	REQUIRE(x1.children.start == 0);
-	REQUIRE(x1.children.end == 10);
-	REQUIRE(x1.left == &x3);
-	REQUIRE(x1.left->left == &x2);
-
-	REQUIRE(x3.children.start == 0);
-	REQUIRE(x3.children.end == 7);
-	REQUIRE(x3.parent == &x1);
-
-	REQUIRE(x2.children.start == 0);
-	REQUIRE(x2.children.end == 5);
-	REQUIRE(x2.parent == &x3);
+	REQUIRE(x1.this_node.start == 8);
+	REQUIRE(x1.this_node.end == 11);
 }
 
-TEST_CASE("push_left must work with nullptr left", "tree_node tests")
-{
-	auto x1 = tree_node{ 5, 10 };
-	REQUIRE(x1.children.start == 5);
-	REQUIRE(x1.children.end == 10);
 
-	auto x3 = tree_node{ 0, 5 };
-	x1.push_left(&x3);
-	REQUIRE(x1.left == &x3);
-	REQUIRE(x1.left->left == nullptr);
-	REQUIRE(x1.children.start == 0);
-	REQUIRE(x1.children.end == 10);
+//TEST_CASE("push_left must point to the new node", "tree_node tests")
+//{
+//	auto x1 = tree_node{ 15, 20 };
+//	auto x2 = tree_node{ 5, 10 };
+//
+//	x1.replace_left(&x2);
+//
+//	auto x3 = tree_node{ 10, 15 };
+//	x1.push_left(&x3);
+//
+//	//CHILDREN ASSERTS
+//	REQUIRE(x1.this_node.start == 10);
+//	REQUIRE(x1.this_node.end == 15);
+//	REQUIRE(x3.this_node.start == 5);
+//	REQUIRE(x3.this_node.end == 10);
+//	REQUIRE(x2.this_node.start == 0);
+//	REQUIRE(x2.this_node.end == 5);
+//
+//	////CHILDREN ASSERTS
+//	//REQUIRE(x1.children.start == 0);
+//	//REQUIRE(x1.children.end == 15);
+//	//REQUIRE(x3.children.start == 0);
+//	//REQUIRE(x3.children.end == 10);
+//	//REQUIRE(x2.children.start == 0);
+//	//REQUIRE(x2.children.end == 5);
+//
+//	//POINTER ASSERTS
+//	REQUIRE(x1.left == &x3);
+//	REQUIRE(x1.left->left == &x2);
+//	REQUIRE(x3.parent == &x1);
+//	REQUIRE(x2.parent == &x3);
+//}
 
-	REQUIRE(x3.parent == &x1);
-	REQUIRE(x3.children.start == 0);
-	REQUIRE(x3.children.end == 5);
-}
+//TEST_CASE("push_left must work with nullptr left", "tree_node tests")
+//{
+//	auto x1 = tree_node{ 5, 10 };
+//	//REQUIRE(x1.children.start == 0);
+//	//REQUIRE(x1.children.end == 5);
+//
+//	auto x3 = tree_node{ 0, 5 };
+//	x1.push_left(&x3);
+//	REQUIRE(x1.left == &x3);
+//	REQUIRE(x1.left->left == nullptr);
+//	//REQUIRE(x1.children.start == 0);
+//	//REQUIRE(x1.children.end == 10);
+//
+//	REQUIRE(x3.parent == &x1);
+//	//REQUIRE(x3.children.start == 0);
+//	//REQUIRE(x3.children.end == 5);
+//}
 
 //RIGHT OPERATIONS
 
@@ -1185,22 +1456,22 @@ TEST_CASE("tree_node pop_right must keep ranges updated", "tree_node tests")
 	auto x1 = tree_node{ 5, 10 };
 	auto x2 = tree_node{ 10, 15 };
 	x1.replace_right(&x2);
-	auto left = *x1.pop_right();
+	auto right = *x1.pop_right();
 
-	REQUIRE(x1.this_node.start == 5);
-	REQUIRE(x1.this_node.end == 10);
-	REQUIRE(x1.children.start == 5);
-	REQUIRE(x1.children.end == 10);
+	REQUIRE(x1.this_node.start == 0);
+	REQUIRE(x1.this_node.end == 5);
+	//REQUIRE(x1.children.start == 0);
+	//REQUIRE(x1.children.end == 5);
 	REQUIRE(x1.left == nullptr);
 	REQUIRE(x1.right == nullptr);
 
-	REQUIRE(left.this_node.start == 10);
-	REQUIRE(left.this_node.end == 15);
-	REQUIRE(left.children.start == 10);
-	REQUIRE(left.children.end == 15);
-	REQUIRE(left.parent == nullptr);
-	REQUIRE(left.left == nullptr);
-	REQUIRE(left.right == nullptr);
+	REQUIRE(right.this_node.start == 0);
+	REQUIRE(right.this_node.end == 5);
+	//REQUIRE(right.children.start == 0);
+	//REQUIRE(right.children.end == 5);
+	REQUIRE(right.parent == nullptr);
+	REQUIRE(right.left == nullptr);
+	REQUIRE(right.right == nullptr);
 }
 
 TEST_CASE("tree_node replace_right must update children aggregate", "tree_node tests")
@@ -1209,49 +1480,48 @@ TEST_CASE("tree_node replace_right must update children aggregate", "tree_node t
 	auto x2 = tree_node{ 10, 15 };
 	x1.replace_right(&x2);
 
-	REQUIRE(x1.this_node.start == 5);
-	REQUIRE(x1.this_node.end == 10);
-	REQUIRE(x1.children.start == 5);
-	REQUIRE(x1.children.end == 15);
+	REQUIRE(x1.this_node.start == 0);
+	REQUIRE(x1.this_node.end == 5);
+	//REQUIRE(x1.children.start == 0);
+	//REQUIRE(x1.children.end == 10);
 	REQUIRE(x1.left == nullptr);
 	REQUIRE(x1.right == &x2);
 
-	REQUIRE(x2.this_node.start == 10);
-	REQUIRE(x2.this_node.end == 15);
-	REQUIRE(x2.children.start == 10);
-	REQUIRE(x2.children.end == 15);
+	REQUIRE(x2.this_node.start == 0);
+	REQUIRE(x2.this_node.end == 5);
+	//REQUIRE(x2.children.start == 0);
+	//REQUIRE(x2.children.end == 5);
 	REQUIRE(x2.parent == &x1);
 	REQUIRE(x2.left == nullptr);
 	REQUIRE(x2.right == nullptr);
 }
 
-TEST_CASE("push_right must point to the new node", "tree_node tests")
-{
-	auto x1 = tree_node{ 5, 10 };
-	auto x2 = tree_node{ 10, 15 };
-
-	x1.replace_right(&x2);
-
-	x1.this_node.end = 7;
-	auto x3 = tree_node{ 7, 10 };
-	x1.push_right(&x3);
-
-	REQUIRE(x1.children.start == 5);
-	REQUIRE(x1.children.end == 15);
-	REQUIRE(x1.right == &x3);
-	REQUIRE(x1.right->right == &x2);
-
-	REQUIRE(x3.children.start == 7);
-	REQUIRE(x3.children.end == 15);
-	REQUIRE(x3.parent == &x1);
-	REQUIRE(x3.right == &x2);
-
-	REQUIRE(x2.children.start == 10);
-	REQUIRE(x2.children.end == 15);
-	REQUIRE(x2.parent == &x3);
-	REQUIRE(x2.left == nullptr);
-	REQUIRE(x2.right == nullptr);
-}
+//TEST_CASE("push_right must point to the new node", "tree_node tests")
+//{
+//	auto x1 = tree_node{ 5, 10 };
+//	auto x2 = tree_node{ 15, 20 };
+//
+//	x1.replace_right(&x2);
+//
+//	auto x3 = tree_node{ 10, 15 };
+//	x1.push_right(&x3);
+//
+//	//REQUIRE(x1.children.start == 0);
+//	//REQUIRE(x1.children.end == 15);
+//	REQUIRE(x1.right == &x3);
+//	REQUIRE(x1.right->right == &x2);
+//
+//	//REQUIRE(x3.children.start == 0);
+//	//REQUIRE(x3.children.end == 10);
+//	REQUIRE(x3.parent == &x1);
+//	REQUIRE(x3.right == &x2);
+//
+//	//REQUIRE(x2.children.start == 0);
+//	//REQUIRE(x2.children.end == 5);
+//	REQUIRE(x2.parent == &x3);
+//	REQUIRE(x2.left == nullptr);
+//	REQUIRE(x2.right == nullptr);
+//}
 
 //SPLIT OPERATIONS
 TEST_CASE("tree_node split when index in inside range", "tree_node tests")
@@ -1262,13 +1532,13 @@ TEST_CASE("tree_node split when index in inside range", "tree_node tests")
 	REQUIRE(result == true);
 	REQUIRE(x.this_node.start == 5);
 	REQUIRE(x.this_node.end == 10);
-	REQUIRE(x.children.start == 0);
-	REQUIRE(x.children.end == 10);
+	//REQUIRE(x.children.start == 0);
+	//REQUIRE(x.children.end == 10);
 
 	REQUIRE(x.left->this_node.start == 0);
 	REQUIRE(x.left->this_node.end == 5);
-	REQUIRE(x.left->children.start == 0);
-	REQUIRE(x.left->children.end == 5);
+	//REQUIRE(x.left->children.start == 0);
+	//REQUIRE(x.left->children.end == 5);
 }
 
 TEST_CASE("tree_node split when index in left border", "tree_node tests")
@@ -1279,8 +1549,8 @@ TEST_CASE("tree_node split when index in left border", "tree_node tests")
 	REQUIRE(result == false);
 	REQUIRE(x.this_node.start == 0);
 	REQUIRE(x.this_node.end == 10);
-	REQUIRE(x.children.start == 0);
-	REQUIRE(x.children.end == 10);
+	//REQUIRE(x.children.start == 0);
+	//REQUIRE(x.children.end == 10);
 
 	REQUIRE(x.left == nullptr);
 }
@@ -1291,8 +1561,8 @@ TEST_CASE("tree_node directions", "tree_node tests")
 	auto root = tree_node{ 5, 10 };
 	auto l = tree_node{ 0, 5 };
 	auto r = tree_node{ 10, 15 };
-	root.left = &l;
-	root.right = &r;
+	root.replace_left(&l);
+	root.replace_right(&r);
 
 	REQUIRE(root.get_direction(4) == -1);
 	REQUIRE(root.get_direction(5) == 0);
@@ -1302,25 +1572,31 @@ TEST_CASE("tree_node directions", "tree_node tests")
 	REQUIRE(root.get_direction(11) == 1);
 }
 
+
+tree_node* rootfind(tree_node& node, int index) {
+	tree_node* last;
+	node.find(index, last);
+	return last;
+}
 //FIND OPERATIONS
 TEST_CASE("tree_node find", "tree_node tests")
 {
 	auto root = tree_node{ 5, 10 };
 	auto l = tree_node{ 0, 5 };
 	auto r = tree_node{ 10, 15 };
-	root.left = &l;
-	root.right = &r;
+	root.replace_left(&l);
+	root.replace_right(&r);
 
-	REQUIRE(root.find(-1) == &l); //last
-	REQUIRE(root.find(0) == &l);
-	REQUIRE(root.find(4) == &l);
-	REQUIRE(root.find(5) == &root);
-	REQUIRE(root.find(6) == &root);
-	REQUIRE(root.find(9) == &root);
-	REQUIRE(root.find(10) == &r);
-	REQUIRE(root.find(11) == &r);
-	REQUIRE(root.find(14) == &r);
-	REQUIRE(root.find(15) == &r); //last
+	REQUIRE(rootfind(root, -1) == &l); //last
+	REQUIRE(rootfind(root, 0) == &l);
+	REQUIRE(rootfind(root, 4) == &l);
+	REQUIRE(rootfind(root, 5) == &root);
+	REQUIRE(rootfind(root, 6) == &root);
+	REQUIRE(rootfind(root, 9) == &root);
+	REQUIRE(rootfind(root, 10) == &r);
+	REQUIRE(rootfind(root, 11) == &r);
+	REQUIRE(rootfind(root, 14) == &r);
+	REQUIRE(rootfind(root, 15) == &r); //last
 }
 
 //SMALL ROTATION
@@ -1340,14 +1616,15 @@ TEST_CASE("tree_node small rotation right", "tree_node tests")
 	auto D = tree_node{ 6, 8 };
 	auto E = tree_node{ 8, 10 };
 
-	D.replace_left(&B);
-	D.replace_right(&E);
 	B.replace_left(&A);
 	B.replace_right(&C);
+	D.replace_left(&B);
+	D.replace_right(&E);
 
 	B.small_rotation_right();
 
 	//TEST POINTERS
+#pragma region Region_1
 	REQUIRE(A.parent == &B);
 	REQUIRE(A.left == nullptr);
 	REQUIRE(A.right == nullptr);
@@ -1367,32 +1644,33 @@ TEST_CASE("tree_node small rotation right", "tree_node tests")
 	REQUIRE(E.parent == &D);
 	REQUIRE(E.left == nullptr);
 	REQUIRE(E.right == nullptr);
+#pragma endregion Region_1
 
 	//Test Ranges
 	REQUIRE(A.this_node.start == 0);
 	REQUIRE(A.this_node.end == 2);
-	REQUIRE(A.children.start == 0);
-	REQUIRE(A.children.end == 2);
+	//REQUIRE(A.children.start == 0);
+	//REQUIRE(A.children.end == 2);
 
 	REQUIRE(B.this_node.start == 2);
 	REQUIRE(B.this_node.end == 4);
-	REQUIRE(B.children.start == 0);
-	REQUIRE(B.children.end == 10);
+	//REQUIRE(B.children.start == 0);
+	//REQUIRE(B.children.end == 10);
 
-	REQUIRE(C.this_node.start == 4);
-	REQUIRE(C.this_node.end == 6);
-	REQUIRE(C.children.start == 4);
-	REQUIRE(C.children.end == 6);
+	REQUIRE(C.this_node.start == 0);
+	REQUIRE(C.this_node.end == 2);
+	//REQUIRE(C.children.start == 0);
+	//REQUIRE(C.children.end == 2);
 
-	REQUIRE(D.this_node.start == 6);
-	REQUIRE(D.this_node.end == 8);
-	REQUIRE(D.children.start == 4);
-	REQUIRE(D.children.end == 10);
+	REQUIRE(D.this_node.start == 2);
+	REQUIRE(D.this_node.end == 4);
+	//REQUIRE(D.children.start == 0);
+	//REQUIRE(D.children.end == 6);
 
-	REQUIRE(E.this_node.start == 8);
-	REQUIRE(E.this_node.end == 10);
-	REQUIRE(E.children.start == 8);
-	REQUIRE(E.children.end == 10);
+	REQUIRE(E.this_node.start == 0);
+	REQUIRE(E.this_node.end == 2);
+	//REQUIRE(E.children.start == 0);
+	//REQUIRE(E.children.end == 2);
 }
 
 //small rotation left
@@ -1418,6 +1696,7 @@ TEST_CASE("tree_node small rotation left", "tree_node tests")
 
 	D.small_rotation_left();
 
+#pragma region pointers
 	REQUIRE(A.parent == &B);
 	REQUIRE(A.left == nullptr);
 	REQUIRE(A.right == nullptr);
@@ -1437,49 +1716,55 @@ TEST_CASE("tree_node small rotation left", "tree_node tests")
 	REQUIRE(E.parent == &D);
 	REQUIRE(E.left == nullptr);
 	REQUIRE(E.right == nullptr);
+#pragma endregion pointers
 
 	//Test Ranges
 	REQUIRE(A.this_node.start == 0);
 	REQUIRE(A.this_node.end == 2);
-	REQUIRE(A.children.start == 0);
-	REQUIRE(A.children.end == 2);
+	//REQUIRE(A.children.start == 0);
+	//REQUIRE(A.children.end == 2);
 
 	REQUIRE(B.this_node.start == 2);
 	REQUIRE(B.this_node.end == 4);
-	REQUIRE(B.children.start == 0);
-	REQUIRE(B.children.end == 6);
+	//REQUIRE(B.children.start == 0);
+	//REQUIRE(B.children.end == 6);
 
-	REQUIRE(C.this_node.start == 4);
-	REQUIRE(C.this_node.end == 6);
-	REQUIRE(C.children.start == 4);
-	REQUIRE(C.children.end == 6);
+	REQUIRE(C.this_node.start == 0);
+	REQUIRE(C.this_node.end == 2);
+	//REQUIRE(C.children.start == 4);
+	//REQUIRE(C.children.end == 6);
 
 	REQUIRE(D.this_node.start == 6);
 	REQUIRE(D.this_node.end == 8);
-	REQUIRE(D.children.start == 0);
-	REQUIRE(D.children.end == 10);
+	//REQUIRE(D.children.start == 0);
+	//REQUIRE(D.children.end == 10);
 
-	REQUIRE(E.this_node.start == 8);
-	REQUIRE(E.this_node.end == 10);
-	REQUIRE(E.children.start == 8);
-	REQUIRE(E.children.end == 10);
+	REQUIRE(E.this_node.start == 0);
+	REQUIRE(E.this_node.end == 2);
+	//REQUIRE(E.children.start == 8);
+	//REQUIRE(E.children.end == 10);
 }
 
 //BIG ROTATION
 //Zig-Zig
 	/*
-		   [   H   ]                               [   B  ]
-		  /         \                            /         \
-		 D           L       <=                 A          [   D    ]
-	   /  \        /   \                                  C      H
-	  B     F     J     N                                    F        L
-	 / \   / \   / \   / \                                 / \      /   \
-	A   C E   G I   K M   O                              E   G    J       N
-																 /  \    / \
-																I    K  M   O
-		*/
+		   [   H   ]                     B
+		  /         \                  /   \
+		 D           L        =>      A     D
+	   /  \        /   \                  /   \
+	  B     F     J     N                C     H
+	 / \   / \   / \   / \                   /   \
+	A   C E   G I   K M   O                 F      L
+										   /  \   /  \
+										  E    G J    N
+												/ \  / \
+											   I   K M  O
+
+
+	*/
 TEST_CASE("tree_node big rotation left", "tree_node tests")
 {
+#pragma region treemake
 	auto A = tree_node{ 0, 2 };
 	auto B = tree_node{ 2, 4 };
 	auto C = tree_node{ 4, 6 };
@@ -1505,10 +1790,12 @@ TEST_CASE("tree_node big rotation left", "tree_node tests")
 	L.replace_left(&J); L.replace_right(&N);
 
 	H.replace_left(&D); H.replace_right(&L);
+#pragma endregion treemake
 
 	B.big_rotation();
 
 	//POINTERS
+#pragma region pointers
 	REQUIRE(B.parent == nullptr);
 	REQUIRE(B.left == &A);
 	REQUIRE(B.right == &D);
@@ -1568,32 +1855,34 @@ TEST_CASE("tree_node big rotation left", "tree_node tests")
 	REQUIRE(O.parent == &N);
 	REQUIRE(O.left == nullptr);
 	REQUIRE(O.right == nullptr);
+#pragma endregion pointers
 
 	//RANGES
-	REQUIRE(B.this_node.start == 2);
-	REQUIRE(B.this_node.end == 4);
-	REQUIRE(B.children.start == 0);
-	REQUIRE(B.children.end == 30);
-
 	REQUIRE(A.this_node.start == 0);
 	REQUIRE(A.this_node.end == 2);
-	REQUIRE(A.children.start == 0);
-	REQUIRE(A.children.end == 2);
+	REQUIRE(B.this_node.start == 2);
+	REQUIRE(B.this_node.end == 4);
+	REQUIRE(D.this_node.start == 2);
+	REQUIRE(D.this_node.end == 4);
 
-	REQUIRE(D.this_node.start == 6);
-	REQUIRE(D.this_node.end == 8);
-	REQUIRE(D.children.start == 4);
-	REQUIRE(D.children.end == 30);
+	REQUIRE(E.this_node.start == 0);
+	REQUIRE(E.this_node.end == 2);
+	REQUIRE(F.this_node.start == 2);
+	REQUIRE(F.this_node.end == 4);
+	REQUIRE(H.this_node.start == 6);
+	REQUIRE(H.this_node.end == 8);
 
-	REQUIRE(H.this_node.start == 14);
-	REQUIRE(H.this_node.end == 16);
-	REQUIRE(H.children.start == 8);
-	REQUIRE(H.children.end == 30);
+	REQUIRE(I.this_node.start == 0);
+	REQUIRE(I.this_node.end == 2);
+	REQUIRE(J.this_node.start == 2);
+	REQUIRE(J.this_node.end == 4);
+	REQUIRE(L.this_node.start == 6);
+	REQUIRE(L.this_node.end == 8);
 }
 
 //#define BACKWARD_HAS_BFD 1
-//#include "../../../backward.hpp"
-//namespace backward {backward::SignalHandling sh;}
+#include "../../../backward.hpp"
+namespace backward { backward::SignalHandling sh; }
 
 #else
 

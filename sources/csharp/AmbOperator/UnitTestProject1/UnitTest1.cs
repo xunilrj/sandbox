@@ -280,88 +280,88 @@ namespace UnitTestProject1
             }
         }
 
-        public class ValidationException : ApplicationException<ValidationException,
-            ArgumentException,
-            ArgumentOutOfRangeException
-            >
-        {
-            public ValidationException(Exception e) : base(e) { }
-        }
+        //public class ValidationException : ApplicationException<ValidationException,
+        //    ArgumentException,
+        //    ArgumentOutOfRangeException
+        //    >
+        //{
+        //    public ValidationException(Exception e) : base(e) { }
+        //}
 
-        [TestMethod]
-        public async Task ValidationExampleAsEither()
-        {
-            await Task.Yield();
-            //var (badCustomer, e1) = await CreateCustomerResultA(0, "").Wrap();
-            //Assert.AreEqual(0, badCustomer.Id);
-            //Assert.IsNull(badCustomer.Email);
-            //Assert.AreEqual(2, e1.InnerExceptions.Count);
-            //Assert.AreEqual("customerId", (e1.InnerExceptions[0] as ArgumentOutOfRangeException).ParamName);
-            //Assert.AreEqual("customerEmail", (e1.InnerExceptions[1] as ArgumentException).ParamName);
+        //[TestMethod]
+        //public async Task ValidationExampleAsEither()
+        //{
+        //    await Task.Yield();
+        //    //var (badCustomer, e1) = await CreateCustomerResultA(0, "").Wrap();
+        //    //Assert.AreEqual(0, badCustomer.Id);
+        //    //Assert.IsNull(badCustomer.Email);
+        //    //Assert.AreEqual(2, e1.InnerExceptions.Count);
+        //    //Assert.AreEqual("customerId", (e1.InnerExceptions[0] as ArgumentOutOfRangeException).ParamName);
+        //    //Assert.AreEqual("customerEmail", (e1.InnerExceptions[1] as ArgumentException).ParamName);
 
-            //var (goodCustomer, e2) = await CreateCustomerResultA(1, "good@email.com").Wrap();
-            //Assert.AreEqual(1, goodCustomer.Id);
-            //Assert.AreEqual("good@email.com", goodCustomer.Email);
-            //Assert.IsNull(e2);
+        //    //var (goodCustomer, e2) = await CreateCustomerResultA(1, "good@email.com").Wrap();
+        //    //Assert.AreEqual(1, goodCustomer.Id);
+        //    //Assert.AreEqual("good@email.com", goodCustomer.Email);
+        //    //Assert.IsNull(e2);
 
-            //let createCustomerId id =
-            //  if id > 0 then
-            //    Success(CustomerId id)
-            //  else
-            //    Failure["CustomerId must be positive"]
-            EitherTask<CustomerId, ValidationException> createCustomerId(int customerId)
-            {
-                if (customerId > 0) return customerId;
-                else return ValidationException.Throw(new ArgumentOutOfRangeException(nameof(customerId), "CustomerId must be positive"));
-            }
-            //let createEmailAddress str =
-            //  if System.String.IsNullOrEmpty(str) then
-            //      Failure["Email must not be empty"]
-            //  elif str.Contains("@") then
-            //      Success(EmailAddress str)
-            //  else
-            //      Failure["Email must contain @-sign"]
-            EitherTask<CustomerEmail, ValidationException> createEmailAddress(string customerEmail)
-            {
-                if (string.IsNullOrEmpty(customerEmail)) return ValidationException.Throw(new ArgumentException("Email must not be empty", nameof(customerEmail)));
-                else if (customerEmail.Contains("@")) return customerEmail;
-                else return ValidationException.Throw(new ArgumentException("Email must contain @", nameof(customerEmail)));
-            }
-            //let createCustomer customerId email =
-            //    { id=customerId; email = email }
-            CustomerInfo createCustomer(CustomerId id, CustomerEmail email)
-            {
-                return new CustomerInfo()
-                {
-                    Id = id,
-                    Email = email
-                };
-            }
-            //let createCustomerResultA id email =
-            //  let idResult = createCustomerId id
-            //  let emailResult = createEmailAddress email
-            //  createCustomer <!> idResult <*> emailResult
-            string CreateCustomerResultA(int id, string email)
-            {
-                var idResult = createCustomerId(id);
-                var emailResult = createEmailAddress(email);
-                return Either.Join(idResult, emailResult)
-                    .Match(runCreateCustomer, handleErrors);
-                string runCreateCustomer((int, string) result)
-                {
-                    var (validId, validEmail) = result;
-                    createCustomer(validId, validEmail);
-                    return "ok";
-                }
-                string handleErrors(ValidationException ex)
-                {
-                    return ex.StartHandle<string>()
-                        .When((ArgumentException e) => e.ToString())
-                        .When((ArgumentOutOfRangeException e) => e.ToString())
-                        .End();
-                }
-            }
-        }
+        //    //let createCustomerId id =
+        //    //  if id > 0 then
+        //    //    Success(CustomerId id)
+        //    //  else
+        //    //    Failure["CustomerId must be positive"]
+        //    EitherTask<CustomerId, ValidationException> createCustomerId(int customerId)
+        //    {
+        //        if (customerId > 0) return customerId;
+        //        else return ValidationException.Throw(new ArgumentOutOfRangeException(nameof(customerId), "CustomerId must be positive"));
+        //    }
+        //    //let createEmailAddress str =
+        //    //  if System.String.IsNullOrEmpty(str) then
+        //    //      Failure["Email must not be empty"]
+        //    //  elif str.Contains("@") then
+        //    //      Success(EmailAddress str)
+        //    //  else
+        //    //      Failure["Email must contain @-sign"]
+        //    EitherTask<CustomerEmail, ValidationException> createEmailAddress(string customerEmail)
+        //    {
+        //        if (string.IsNullOrEmpty(customerEmail)) return ValidationException.Throw(new ArgumentException("Email must not be empty", nameof(customerEmail)));
+        //        else if (customerEmail.Contains("@")) return customerEmail;
+        //        else return ValidationException.Throw(new ArgumentException("Email must contain @", nameof(customerEmail)));
+        //    }
+        //    //let createCustomer customerId email =
+        //    //    { id=customerId; email = email }
+        //    CustomerInfo createCustomer(CustomerId id, CustomerEmail email)
+        //    {
+        //        return new CustomerInfo()
+        //        {
+        //            Id = id,
+        //            Email = email
+        //        };
+        //    }
+        //    //let createCustomerResultA id email =
+        //    //  let idResult = createCustomerId id
+        //    //  let emailResult = createEmailAddress email
+        //    //  createCustomer <!> idResult <*> emailResult
+        //    string CreateCustomerResultA(int id, string email)
+        //    {
+        //        var idResult = createCustomerId(id);
+        //        var emailResult = createEmailAddress(email);
+        //        return Either.Join(idResult, emailResult)
+        //            .Match(runCreateCustomer, handleErrors);
+        //        string runCreateCustomer((int, string) result)
+        //        {
+        //            var (validId, validEmail) = result;
+        //            createCustomer(validId, validEmail);
+        //            return "ok";
+        //        }
+        //        string handleErrors(ValidationException ex)
+        //        {
+        //            return ex.StartHandle<string>()
+        //                .When((ArgumentException e) => e.ToString())
+        //                .When((ArgumentOutOfRangeException e) => e.ToString())
+        //                .End();
+        //        }
+        //    }
+        //}
 
         public struct CustomerInfo { public CustomerId Id; public CustomerEmail Email; };
 
