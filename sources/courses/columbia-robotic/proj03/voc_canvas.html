@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+
+<script src="https://s3.amazonaws.com/cdn.robotwebtools.org/threejs/current/three.js"></script>
+<script src="https://s3.amazonaws.com/cdn.robotwebtools.org/threejs/current/ColladaLoader.js"></script>
+<script src="https://s3.amazonaws.com/cdn.robotwebtools.org/threejs/current/STLLoader.js"></script>
+<script src="https://s3.amazonaws.com/cdn.robotwebtools.org/ColladaAnimationCompress/current/ColladaLoader2.js"></script>
+<script src="https://s3.amazonaws.com/cdn.robotwebtools.org/EventEmitter2/current/eventemitter2.min.js"></script>
+<script src="https://s3.amazonaws.com/cdn.robotwebtools.org/roslibjs/current/roslib.js"></script>
+<script src="https://s3.amazonaws.com/cdn.robotwebtools.org/ros3djs/current/ros3d.min.js"></script>
+
+<script src="https://labs.vocareum.com/shared/voc/proxy.js"></script>
+
+
+<script>
+  /**
+   * Setup all visualization elements when the page is loaded. 
+   */
+  function connect() {
+    // Connect to ROS.
+    var ws_url = VocProxy.ProxyWebSocketUrl();
+    var ros = new ROSLIB.Ros({
+      url : ws_url
+    });
+
+    ros.on('error', function(error) {
+      console.log('Error connecting to websocket server: ', error);
+      alert("Could not connect - is the WebSocket server running?");
+    });
+ 
+    ros.on('close', function() {
+      console.log('Connection to websocket server closed.');
+      alert("WebSocket connection closed");
+    });
+ 
+    // Create the main viewer.
+    var viewer = new ROS3D.Viewer({
+      divID : 'urdf',
+      width : 800,
+      height : 600,
+      antialias : true
+    });
+
+    // Add a grid.
+    viewer.addObject(new ROS3D.Grid());
+
+    // Setup a client to listen to TFs.
+    var tfClient = new ROSLIB.TFClient({
+      ros : ros,
+      angularThres : 0.01,
+      transThres : 0.01,
+      rate : 25.0,
+      fixedFrame : '/world_link'
+    });
+
+    // Setup the URDF client.
+    var urdfClient = new ROS3D.UrdfClient({
+      ros : ros,
+      tfClient : tfClient,
+      path : './',
+      rootObject : viewer.scene,
+      loader : ROS3D.COLLADA_LOADER
+    });
+
+    // Setup a topic listener in order to keep the connection from idling
+    var listener = new ROSLIB.Topic({
+      ros : ros,
+      name : '/ping',
+      messageType : 'std_msgs/Int8'
+    });
+    listener.subscribe(function(message){});
+  }
+ 
+  function init() {
+    var button = document.getElementById('button');
+    button.onclick = function () {
+      connect();
+      this.remove();
+    }
+  }
+
+</script>
+</head>
+
+<body onload="init()">
+  <div id="urdf"></div>
+  <input id="button" type="submit" value="Connect"></input>
+</body>
+
+</html>

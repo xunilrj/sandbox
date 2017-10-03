@@ -1,0 +1,8 @@
+prefix=/home/vagrant/proj03/catkin_ws/install
+
+Name: lwr_defs
+Description: Description of lwr_defs
+Version: 0.0.1
+Cflags: 
+Libs: -L/home/vagrant/proj03/catkin_ws/install/lib 
+Requires: xacro

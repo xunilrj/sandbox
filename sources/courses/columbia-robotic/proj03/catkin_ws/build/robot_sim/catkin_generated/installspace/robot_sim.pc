@@ -1,0 +1,8 @@
+prefix=/home/vagrant/proj03/catkin_ws/install
+
+Name: robot_sim
+Description: Description of robot_sim
+Version: 0.0.0
+Cflags: -I/home/vagrant/proj03/catkin_ws/install/include
+Libs: -L/home/vagrant/proj03/catkin_ws/install/lib -lrobot_sim
+Requires: roscpp sensor_msgs urdf

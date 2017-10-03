@@ -1,0 +1,8 @@
+prefix=/home/vagrant/proj03/catkin_ws/install
+
+Name: robot_mover
+Description: Description of robot_mover
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/vagrant/proj03/catkin_ws/install/lib 
+Requires: 

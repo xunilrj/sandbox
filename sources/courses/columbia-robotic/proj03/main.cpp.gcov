@@ -1,0 +1,28 @@
+        -:    0:Source:main.cpp
+        -:    0:Graph:main.gcno
+        -:    0:Data:main.gcda
+        -:    0:Runs:1
+        -:    0:Programs:1
+        -:    1:#define DEP
+        -:    2:
+    #####:    3:int function()
+    $$$$$:    3-block  0
+        -:    4:{
+    #####:    5:    return 5;
+    $$$$$:    5-block  0
+        -:    6:}
+        -:    7:
+        1:    8:int main(int argc, char **argv)
+        1:    8-block  0
+        -:    9:{    
+        1:   10:    int a = 1;
+        1:   11:    a = 2+2;
+        1:   12:    if(a == 3)
+        1:   12-block  0
+        -:   13:    {
+    #####:   14:        return 1;
+    $$$$$:   14-block  0
+        -:   15:    }
+        1:   16:    return a;
+        1:   16-block  0
+        -:   17:}
