@@ -1,0 +1,4 @@
+#!/bin/bash -x
+
+GDBTXT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)/gdb.txt"
+gdb $1 -x=$GDBTXT
