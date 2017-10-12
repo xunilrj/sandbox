@@ -5,6 +5,9 @@
 \allowdisplaybreaks[1]
 \usepackage{hyperref}
 \usepackage{pgfplots}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{fourier}
 
 \newtheorem{theorem}{Theorem}[section]
 \theoremstyle{definition}
@@ -52,15 +55,90 @@
 \section{Introduction}
 \maketitle
 
+\begin{theorem}[Squeeze theorem]\label{theorems:limits:squeeze}
+	\begin{align*}
+		\text{IF }& g(x) <= f(x) <= h(x)\\
+		\text{AND }& \lim_{x->a} {g(x)} = \lim_{x->a} {h(x)} = L\\
+		\text{THEN }& \lim_{x->a} {f(x)} = L
+	\end{align*}
+\end{theorem}
+\paragraph{Used by:}
+\begin{enumerate}
+	\item {Theorem \ref{theorems:limits:sinxoverx}}
+\end{enumerate}
+
+\clearpage
 \begin{theorem}[Limit of $sin(x)/x$]\label{theorems:limits:sinxoverx}
 	\begin{align*}
 	\lim_{x \to 0} \frac {sin(x)} {x} = 1
 	\end{align*}
 \end{theorem}
-\begin{proof}
-	\href{https://proofwiki.org/wiki/Limit_of_Sine_of_X_over_X}{see proof}
+\begin{proof}	
+	\text{Given that:}
+	\begin{align*}
+		\mu_1(\overline AB) = \text{LENGTH of } \overline AB\\
+		\mu_2(\bigtriangleup ABC) = \text{AREA of } \bigtriangleup ABC
+	\end{align*}
+	\text{We have from the figure that:}
+	\begin{align*}
+		\mu_2(\bigtriangleup ACE) <= \mu_2( \widearc{ACE}) &<= \mu_2( \bigtriangleup ACD)\\
+	\end{align*}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.25]{images/limsinxoverx.eps}
+	\end{figure}
+	\begin{align*}
+		\\
+		\mu_2(\bigtriangleup ACE) &= \frac{1}{2} * \mu_1(\overline{AC}) * \mu_1(\overline{BE})\\
+		\mu_2(\bigtriangleup ACE) &= \frac{1}{2} * 1 * \mu_1(\overline{BE})\\
+		\mu_2(\bigtriangleup ACE) &= \frac{1}{2} * 1 * |sin(\theta)|\\		
+		\mu_2(\bigtriangleup ACE) &= \frac{|sin(\theta)|}{2}\\
+		\\
+		\mu_2(\widearc {ACE}) &= \frac{|\theta|}{2*\pi} * \pi * r^2\\
+		\mu_2(\widearc {ACE}) &= \frac{|\theta|}{2*\pi} * \pi * 1^2\\		
+		\mu_2(\widearc {ACE}) &= \frac{|\theta|}{2*\pi} * \pi * 1\\		
+		\mu_2(\widearc {ACE}) &= \frac{|\theta|}{2*\pi} * \pi\\		
+		\mu_2(\widearc {ACE}) &= \frac{|\theta|}{2}\\		
+		\\
+		\mu_2( \bigtriangleup ACD) &= \frac{1}{2} * \mu_1(\overline{AC}) * \mu_1(\overline{CD})\\
+		\mu_2( \bigtriangleup ACD) &= \frac{1}{2} * 1 * \mu_1(\overline{CD})\\		
+		\mu_2( \bigtriangleup ACD) &= \frac{1}{2} * \mu_1(\overline{CD})\\		
+		\mu_2( \bigtriangleup ACD) &= \frac{1}{2} * |tan(\theta)|\\				
+		\mu_2( \bigtriangleup ACD) &= \frac{|tan(\theta)|}{2}\\		
+	\end{align*}
+	\text{So we have:}
+	\begin{align*}
+		\frac{|sin(\theta)|}{2} <=  \frac{|\theta|}{2} &<=  \frac{|tan(\theta)|}{2}\\
+		|sin(\theta)| <=  |\theta| &<=  |tan(\theta)|\\		
+		|sin(\theta)| <=  |\theta| &<=  \frac{|sin(\theta)|}{|cos(\theta)}\\				
+		|sin(\theta)|*\frac{1}{|sin(\theta)|} <=  |\theta|*\frac{1}{|sin(\theta)|} &<=  \frac{|sin(\theta)|}{|cos(\theta)}*\frac{1}{|sin(\theta)|}\\		
+		1 <=  \frac{|\theta|}{|sin(\theta)|} &<=  \frac{1}{|cos(\theta)|}\\
+		1 >=  \frac{|sin(\theta)|}{|\theta|} &<= |cos(\theta)|\\
+	\end{align*}
+	\paragraph{In the domain $\theta \in (\frac{\pi}{2},-\frac{\pi}{2})$, $cos(\theta) >= 0$ and $sin(\theta)$ and $\theta$ always have the same signal. So we can remove the modulus operator in both cases.}
+	\begin{align*}
+		1 &>=  \frac{sin(\theta)}{\theta} <= cos(\theta)\\
+		\lim_{\theta->0}{1} &>= \lim_{\theta->0}{\frac{sin(\theta)}{\theta}} <= \lim_{\theta->0}{cos(\theta)}\\
+	\end{align*}
+	\text{Given that}
+	\begin{align*}
+		\lim_{\theta->0}{1} = 1\\
+		\lim_{\theta->0}{cos(\theta)} = 1
+	\end{align*}
+	\text{and using the Squeeze Theorem}
+	\begin{align*}
+		\lim_{\theta->0}{\frac{sin(\theta)}{\theta}} = 1
+	\end{align*}
 \end{proof}
+\paragraph{See More:}
+\begin{enumerate}
+	\item {Proofwiki \\
+\url{https://proofwiki.org/wiki/Limit_of_Sine_of_X_over_X}}
+	\item {Khan Academy\\
+\url{https://www.khanacademy.org/math/ap-calculus-ab/ab-derivative-rules/ab-derivtive-rules-opt-vids/v/sinx-over-x-as-x-approaches-0}}
+\end{enumerate}
 
+\clearpage
 \begin{theorem}[Limit of $(cos(x)-1)/x$]\label{theorems:limits:cosxminusoneoverx}
 	\begin{align*}
 	\lim_{x \to 0} \frac {cos(x)-1} {x} = 0
@@ -249,7 +327,7 @@ $f(x)=sin(x)$ and $f'(x)=cos(x)$ \\
 \end{center}
 \begin{proof}
 	\begin{align*}
-		f(x) &= sin(x) \\
+		f(x) &= cos(x) \\
 		f'(x) &= \lim_{\Delta x \to 0} {\frac {f(x+\Delta x) - f(x)} {\Delta x}} \\
 		f'(x) &= \lim_{\Delta x \to 0} {\frac {cos(x+\Delta x) - cos(x)} {\Delta x}} \\		
 		f'(x) &= \lim_{\Delta x \to 0} {\frac {cos(x)cos(\Delta x) - sin(x)sin(\Delta x) - cos(x)} {\Delta x}} \\
