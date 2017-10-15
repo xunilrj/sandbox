@@ -136,7 +136,20 @@
 \url{https://proofwiki.org/wiki/Limit_of_Sine_of_X_over_X}}
 	\item {Khan Academy\\
 \url{https://www.khanacademy.org/math/ap-calculus-ab/ab-derivative-rules/ab-derivtive-rules-opt-vids/v/sinx-over-x-as-x-approaches-0}}
+	\item {MIT OpenCourse 18-01 Lecture 03 at 15:15\\
+	\url{https://youtu.be/kCPVBl953eY?t=915}}
 \end{enumerate}
+\paragraph{Remarks} I do not like to use the Proofwiki proof using the "definition" of $sin(x)$. We can see that this proof is using Binmore definition, that depends on the derivative of the $sin(x)$ and $cos(x)$. And that this limit is used to prove $sin'(x)$. Creating a circular proof.
+\\
+\\
+\textbf{"Mathematical Analysis: A Straightforward Approach, 2nd Edition" of K. G. Binmore - Chapter 16.2}\\
+"Suppose that the power series $f(x) = \sum_{n=0}^{\infty}{a_nx^n}$
+converges for all real values of $x$ and that $f''(x) + f'(x) = 0$.
+This recurrence relation is readily solved and we obtain
+$f(x) = a_0 \sum_{n=0}^{\infty}{(-1)^n \frac{x^{2n}}{(2n+1)!}} = x - \frac{x^3}{3!} ...$\\
+We want $sin(0) = 0$ and $ sin'(0) = cos(0) = 1$. We therefore define $sin(x)$ as
+$ sin(x) = \sum_{n=0}^{\infty}{(-1)^n \frac{x^{2n+1}}{(2n+1)!} = x - \frac{x^3}{3!} + ... } $ and
+$ cos(x) = \sum_{n=0}^{\infty}{(-1)^n \frac{x^{2n}}{(2n)!} = x - \frac{x^2}{2!} + ... } $"
 
 \clearpage
 \begin{theorem}[Limit of $(cos(x)-1)/x$]\label{theorems:limits:cosxminusoneoverx}
@@ -147,6 +160,11 @@
 \begin{proof}
 	\href{https://proofwiki.org/wiki/Limit_of_(Cosine_(X)_-_1)_over_X}{see proof}
 \end{proof}
+\paragraph{See More:}
+\begin{enumerate}
+	\item {MIT OpenCourse 18-01 Lecture 03 at 21:07\\
+\url{https://youtu.be/kCPVBl953eY?t=1267}}
+\end{enumerate}
 
 \begin{definition}[Derivative Definition]\label{definitions:derivative}
 \begin{align*}
@@ -309,6 +327,7 @@ f'(x) &= \lim_{\Delta x \to 0} {\frac {f(x+\Delta x) - f(x)} {\Delta x}} \\
 \end{align*}
 \end{proof}
 
+\clearpage
 \begin{theorem}[Derivative of $sin(x)$]\label{theorems:calculus:derivatives:sinx}
 	\begin{align*}
 	f(x) &= sin(x)\\
@@ -323,18 +342,27 @@ $f(x)=sin(x)$ and $f'(x)=cos(x)$ \\
 	\begin{align*}
 		f(x) &= sin(x) \\
 		f'(x) &= \lim_{\Delta x \to 0} {\frac {f(x+\Delta x) - f(x)} {\Delta x}} \\
-		&= \lim_{\Delta x \to 0} {\frac {sin(x+\Delta x) - sin(x)} {\Delta x}} \\
-		&= \lim_{\Delta x \to 0} {\frac {sin(x)cos(\Delta x) + cos(x)sin(\Delta x) - sin(x)} {\Delta x}} \\
+		&= \lim_{\Delta x \to 0} {\frac {\textcolor{blue}{sin(x+\Delta x)} - sin(x)} {\Delta x}} \\
+		&= \lim_{\Delta x \to 0} {\frac {\textcolor{blue}{sin(x)cos(\Delta x) + cos(x)sin(\Delta x)} - sin(x)} {\Delta x}} \\
 		&= \lim_{\Delta x \to 0} {\frac {sin(x)(cos(\Delta x) - 1) + cos(x)sin(\Delta x)} {\Delta x}} \\
 		&= \lim_{\Delta x \to 0} {\left[ \frac {sin(x)(cos(\Delta x) - 1)} {\Delta x} + \frac {cos(x)sin(\Delta x)} {\Delta x} \right]} \\
 		&= \lim_{\Delta x \to 0} {\left[ sin(x)*\frac {cos(\Delta x) - 1} {\Delta x} + cos(x)*\frac {sin(\Delta x)} {\Delta x} \right]} \\
 		&= \lim_{\Delta x \to 0} \left[ {sin(x)*\frac {cos(\Delta x) - 1} {\Delta x}} \right] + \lim_{\Delta x \to 0} \left[ {cos(x)*\frac {sin(\Delta x)} {\Delta x}} \right] \\
-		&= \lim_{\Delta x \to 0} \left[ {sin(x)*0} \right] + \lim_{\Delta x \to 0} \left[ {cos(x)*1} \right] && \text{see \ref{theorems:limits:cosxminusoneoverx}, \ref{theorems:limits:sinxoverx}} \\				
+		&=  \left[ \lim_{\Delta x \to 0} {sin(x)} \right] * \left[ \lim_{\Delta x \to 0} {\frac {cos(\Delta x) - 1} {\Delta x}} \right] + \left[ \lim_{\Delta x \to 0}{cos(x)} \right] * \left[ \lim_{\Delta x \to 0} {\frac {sin(\Delta x)} {\Delta x}} \right] \\
+		&= \left[ \lim_{\Delta x \to 0} {sin(x)} \right] * [0] + \left [ \lim_{\Delta x \to 0} {cos(x)} \right] * [1]  && \text{see \ref{theorems:limits:cosxminusoneoverx}, \ref{theorems:limits:sinxoverx}} \\				
 		&= \lim_{\Delta x \to 0} {cos(x)} \\
 		&= cos(x) \\
 	\end{align*}
 \end{proof}
+\paragraph{See More:}
+\begin{enumerate}
+	\item {Khan Academy\\
+\url{https://www.khanacademy.org/math/ap-calculus-ab/ab-derivative-rules/ab-derivtive-rules-opt-vids/v/derivative-of-sin-x}}
+	\item {MIT OpenCourse 18-01 Lecture 03 at 03:09\\
+\url{https://youtu.be/kCPVBl953eY?t=189}}
+\end{enumerate}
 
+\clearpage
 \begin{theorem}[Derivative of $cos(x)$]\label{theorems:calculus:derivatives:cosx}
 	\begin{align*}
 	f(x) &= cos(x)\\
@@ -354,9 +382,17 @@ $f(x)=sin(x)$ and $f'(x)=cos(x)$ \\
 		f'(x) &= \lim_{\Delta x \to 0} \left[ {\frac {cos(x)(cos(\Delta x) - 1)} {\Delta x} - \frac {sin(x)sin(\Delta x)} {\Delta x}} \right] \\
 		f'(x) &= \lim_{\Delta x \to 0} {\frac {cos(x)(cos(\Delta x) - 1)} {\Delta x}} - \lim_{\Delta x \to 0} {\frac {sin(x)sin(\Delta x)} {\Delta x}}  \\
 		f'(x) &= \lim_{\Delta x \to 0} \left[ {cos(x)*\frac {(cos(\Delta x) - 1)} {\Delta x}} \right] - \lim_{\Delta x \to 0} \left[ {sin(x)*\frac {sin(\Delta x)} {\Delta x}} \right] \\
-		f'(x) &= \lim_{\Delta x \to 0} \left[ cos(x)*0 \right] - \lim_{\Delta x \to 0} \left[ sin(x)*1 \right] && \text{see \ref{theorems:limits:cosxminusoneoverx}, \ref{theorems:limits:sinxoverx}} \\
+		f'(x) &= \left[ \lim_{\Delta x \to 0}{cos(x)} \right]*  \left[\lim_{\Delta x \to 0}{\frac {(cos(\Delta x) - 1)} {\Delta x}} \right] - \left[\lim_{\Delta x \to 0}{sin(x)} \right]*\left[\lim_{\Delta x \to 0}{\frac {sin(\Delta x)} {\Delta x}} \right] \\
+		f'(x) &=  \left[ \lim_{\Delta x \to 0}{cos(x)} \right] * [0] - \left[ \lim_{\Delta x \to 0}{  sin(x)}\right]*[1] && \text{see \ref{theorems:limits:cosxminusoneoverx}, \ref{theorems:limits:sinxoverx}} \\
 		f'(x) &= - \lim_{\Delta x \to 0} sin(x) \\
 		f'(x) &= -sin(x)
 	\end{align*}
 \end{proof}
+\paragraph{See More:}
+\begin{enumerate}
+	\item {Khan Academy\\
+\url{https://www.khanacademy.org/math/ap-calculus-ab/ab-derivative-rules/ab-derivtive-rules-opt-vids/v/derivative-of-cos-x}}
+	\item {MIT OpenCourse 18-01 Lecture 03 at 08:54\\
+\url{https://youtu.be/kCPVBl953eY?t=534}}
+\end{enumerate}
 \end{document}
