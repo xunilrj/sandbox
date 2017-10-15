@@ -190,6 +190,7 @@
 	\end{align*}
 \end{proof}
 
+\clearpage
 \begin{theorem}[Derivative of the multiplication]\label{theorems:calculus:derivatives:multiplication}
 	\begin{align*}
 	f(x)&=u(x)g(x)\\
@@ -201,14 +202,32 @@
 	f(x) &= u(x)g(x) \\
 	f'(x) &= \lim_{\Delta x \to 0} {\frac {f(x+\Delta x) - f(x)} {\Delta x}} \\
 	&= \lim_{\Delta x \to 0} {\frac {u(x+\Delta x)g(x+\Delta x) - u(x)g(x)} {\Delta x}} \\
-	&= \lim_{\Delta x \to 0} {\frac {u(x+\Delta x)g(x+\Delta x) + [u(x+\Delta x) - u(x)]g(x) - u(x+\Delta x)g(x) } {\Delta x}} \\
-	&= \lim_{\Delta x \to 0} {\frac {[u(x+\Delta x) - u(x)]g(x) + u(x+\Delta x)[g(x+\Delta x) - g(x)]} {\Delta x}} \\
+	&= \lim_{\Delta x \to 0} {\frac {u(x+\Delta x)g(x+\Delta x) - u(x)g(x) - u(x+\Delta x)g(x) + u(x+\Delta x)g(x) } {\Delta x}} \\
+	&= \lim_{\Delta x \to 0} {\frac { \textcolor{red}{u(x+\Delta x)g(x+\Delta x)} \textcolor{blue}{- u(x)g(x)}  \textcolor{red}{- u(x+\Delta x)g(x)} \textcolor{blue}{+ u(x+\Delta x)g(x)} } {\Delta x}} \\
+	&= \lim_{\Delta x \to 0} {\frac {\textcolor{blue}{[u(x+\Delta x) - u(x)]g(x)} + \textcolor{red}{ u(x+\Delta x)[g(x+\Delta x) - g(x)]}} {\Delta x}} \\
 	&= \lim_{\Delta x \to 0} {\frac {[u(x+\Delta x) - u(x)]g(x)} {\Delta x}} + \lim_{\Delta x \to 0} {\frac {u(x+\Delta x)[g(x+\Delta x) - g(x)]} {\Delta x}} \\
-	&= \lim_{\Delta x \to 0} {\frac {[u(x+\Delta x) - u(x)]g(x)} {\Delta x}} + \lim_{\Delta x \to 0} {\frac {u(x)[g(x+\Delta x) - g(x)]} {\Delta x}} \\
+	&= \lim_{\Delta x \to 0} {\frac {u(x+\Delta x) - u(x)} {\Delta x}} * \lim_{\Delta x} {g(x)} + \lim_{\Delta x \to 0} {u(x+\Delta x)} * \lim_{\Delta x \to 0} \frac{g(x+\Delta x) - g(x)} {\Delta x} \\
+	&= \lim_{\Delta x \to 0} {\frac {u(x+\Delta x) - u(x)} {\Delta x}} * g(x) + u(x) * \lim_{\Delta x \to 0} {\frac {g(x+\Delta x) - g(x)} {\Delta x}} \\
 	&= u'(x)g(x)+ u(x)g'(x) \\
 	\end{align*}
 \end{proof}
+\paragraph{See More:}
+\begin{enumerate}
+	\item {Product Rule:\\
+\url{https://proofwiki.org/wiki/Product_Rule_for_Derivatives}}
+	\item {Khan Academy:\\
+\url{https://www.khanacademy.org/math/ap-calculus-ab/ab-derivative-rules/ab-product-rule/a/proving-the-product-rule}}
+\end{enumerate}
+\paragraph{Product Rule and Leibniz}
+Men of Mathematics - Chapter 7 - Master of All Trades\\
+"Instead of the infinitesimals of Leibniz we shall use the rates discussed in the preceding chapter. If $u$ and $v$ are function of $x$, how shall the rate of change of $u*v$ with respect to $x$ be expressed in terms of the respective rates of change of $u$ and $v$ with respect to $x$?\\
+In symbols what is $\frac{d}{dx}(u*v)$ in terms of $\frac{d}{dx}u$ and $\frac{d}{dx}v$?\\
+Leibniz once thought it should be $\frac{d}{dx}u+\frac{d}{dx}v$ which is nothing like the correct\\
+\begin{align}
+	\frac{d}{dx}(u*v) = v\frac{d}{dx}u + u\frac{d}{dx}v
+\end{align}
 
+\clearpage
 \begin{theorem}
 	\begin{align*}
 	f(x)&=\frac {u(x)} {g(x)} \\
