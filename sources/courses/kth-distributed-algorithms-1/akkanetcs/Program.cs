@@ -3,6 +3,8 @@ using Akka;
 using Akka.Actor;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Threading;
+using System.Linq;
 
 namespace akkanetcs
 {
@@ -256,6 +258,108 @@ namespace akkanetcs
                 case DeliveredEvent e:
                     Console.WriteLine("FairLinkActor delivered.");
                     Context.Parent.Tell(e);
+                    break;
+            }
+        }
+    }
+
+    public class SubmitJobRequest
+    {
+        public Guid Id { get; set; }
+        public string Command { get; set; }
+        public string Args { get; set; }
+
+        public SubmitJobRequest()
+        {
+            Id = Guid.NewGuid();
+        }
+    }
+
+    public class AcceptedEvent
+    {
+        public Guid Id { get; set; }
+    }
+
+    public class OkEvent
+    {
+        public Guid Id { get; set; }
+    }
+
+    public class SynchronousJobHandler : UntypedActor
+    {
+        bool AutoKill;
+
+        public SynchronousJobHandler(bool autoKill)
+        {
+            AutoKill = autoKill;
+        }
+
+        protected override void OnReceive(object message)
+        {
+            switch (message)
+            {
+                case SubmitJobRequest command:
+                    Context.Parent.Tell(new AcceptedEvent()
+                    {
+                        Id = command.Id
+                    });
+
+                    //RUN
+                    //If the command run throws?
+                    Thread.Sleep(5000);
+
+                    Context.Parent.Tell(new OkEvent()
+                    {
+                        Id = command.Id
+                    });
+
+                    if (AutoKill) Context.Stop(Self);
+                    break;
+            }
+        }
+    }
+
+    public class AsynchronousJobHandler : UntypedActor
+    {
+        Queue<SubmitJobRequest> Jobs = new Queue<SubmitJobRequest>();
+        ICancelable Cancel;
+
+        public AsynchronousJobHandler()
+        {
+            Cancel = new Cancelable(Context.System.Scheduler);
+            Context.System.Scheduler.ScheduleTellRepeatedly(
+                TimeSpan.FromSeconds(3),
+                TimeSpan.FromSeconds(3),
+                Self,
+                new TimeoutMessage(),
+                ActorRefs.NoSender,
+                Cancel);
+        }
+
+        protected override void OnReceive(object message)
+        {
+            switch (message)
+            {
+                case TimeoutMessage t:
+                    // Only one Job at a time
+                    //need a better solution
+                    if (Jobs.Count != 0 && Context.GetChildren().Count() == 0)
+                    {
+                        var job = Jobs.Dequeue();
+                        var handler = Context.ActorOf(Props.Create<SynchronousJobHandler>(true));
+                        handler.Tell(job);
+                    }
+                    break;
+                case SubmitJobRequest command:
+                    Jobs.Enqueue(command);
+                    Context.Parent.Tell(new AcceptedEvent()
+                    {
+                        Id = command.Id
+                    });
+                    Self.Tell(new TimeoutMessage());
+                    break;
+                case OkEvent ok:
+                    Context.Parent.Tell(ok);
                     break;
             }
         }
