@@ -6,7 +6,8 @@ pushd (Split-Path $PSCommandPath -Parent)
 #q1 0 2 90
 #q2 0 0 90
 #0 q3 0 0
-.\sketch.robot.ps1 "q1 0 2 90 q2 0 0 90 0 q3 0 0" 0,0,0.5 | Out-FileUtf8NoBom ./robot.asy;
-asy ./robot.asy
+$DH = "q1 0 2 90 q2 0 0 90 0 q3 0 0"
+.\sketch.robot.ps1 $DH  0,0,0.5 | Out-FileUtf8NoBom ./robot.asy;
+.\foward.kinematics.robot.ps1 $DH | Out-FileUtf8NoBom ./foward.kinematics.m;
 
 popd
