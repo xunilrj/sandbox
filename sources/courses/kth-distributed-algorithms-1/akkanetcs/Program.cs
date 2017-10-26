@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
+using System.Collections;
 
 namespace akkanetcs
 {
@@ -29,7 +30,118 @@ namespace akkanetcs
             }).Unwrap();
 
             t.Wait();
+
+
+            var p1 = new ProcessInput();
+            var p2 = new ProcessInput();
+
+            Stubborn(p1, p2.Capture<DeliveredEvent>());
+            FairLink(p2, x => { });
+                
         }
+
+        public static async Task FairLink(ProcessInput inputs, Action<DeliveredEvent> raiseDeliveredEvent)
+        {
+            Random random = new Random();
+            double failure = 0.5;
+
+            inputs.When<SendRequest>(env =>
+                {
+                    var rv = random.NextDouble();
+                    if (rv > failure)
+                    {
+                        env.Target.Tell(env);
+                        Console.WriteLine("FairLinkActor ok!");
+                    }
+                    else
+                    {
+                        Console.WriteLine("FairLinkActor failed!");
+                    }
+                })
+                .When<DeliveredEvent>(e =>
+                {
+                    Console.WriteLine("FairLinkActor delivered.");
+                    raiseDeliveredEvent(e);
+                });
+            await inputs.Finished;
+        }
+
+        public static async Task Stubborn(ProcessInput inputs, Action<DeliveredEvent> raiseDelivered)
+        {
+            var buffer = new Dictionary<Guid, SendRequest>();
+
+            inputs.When<SendRequest>(request =>
+            {
+                buffer.Add(request.Id, request);
+                //Next.Tell(env);
+            })
+            .When<DeliveredEvent>(e =>
+            {
+                Console.WriteLine("StubbornActor delivered.");
+                buffer.Remove(e.Id);
+                raiseDelivered(e);
+            }).When(() => buffer.Count > 0, () =>
+            {
+                Console.WriteLine("StubbornActor buffer not empty. Sending again...");
+                foreach (var item in buffer)
+                {
+                    //Next.Tell(item.Value);
+                }
+                Console.WriteLine("StubbornActor buffer not empty. Done.");
+            });
+            await inputs.Finished;
+        }
+
+        public static async Task AsyncJobHandler(ProcessInput inputs,
+                    Action<AcceptedEvent> raiseAcceptedEvent,
+                    Action<OkEvent> raiseOk)
+        {
+            Queue<SubmitJobRequest> jobs = new Queue<SubmitJobRequest>();
+
+            inputs.When<SubmitJobRequest>(command =>
+                {
+                    jobs.Enqueue(command);
+                    raiseAcceptedEvent(new AcceptedEvent()
+                    {
+                        Id = command.Id
+                    });
+                })
+                .When<OkEvent>(raiseOk)
+                .When(() => jobs.Count != 0, () =>
+                {
+                });
+            await inputs.Finished;
+        }
+    }
+
+    public class ProcessInput : IEnumerable<Task<object>>
+    {
+        public ProcessInput When(Func<bool> f, Action run)
+        {
+            return this;
+        }
+
+        public ProcessInput When<T>(Action<T> run)
+        {
+            return this;
+        }
+
+        public IEnumerator<Task<object>> GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Action<T> Capture<T>()
+        {
+            return new Action<T>(x => { });
+        }
+
+        public Task Finished { get; }
     }
 
     public class BankAccountState
@@ -363,5 +475,7 @@ namespace akkanetcs
                     break;
             }
         }
+
+
     }
 }
