@@ -7,8 +7,6 @@ using std::vector;
 const int INF = std::numeric_limits<int>::max();
 const long long INFL = std::numeric_limits<long long>::max();
 
-//could be optimized taking into consideration that an iteration have
-//not changed anything.
 void bellmanford(vector<vector<int> > &adj,
     vector<vector<int> > &cost,
     std::vector<long long> &dist,
@@ -16,33 +14,29 @@ void bellmanford(vector<vector<int> > &adj,
     int source) {
       
     dist[source] = 0;
-    int V = adj.size();
+    int V = adj.size();    
     for(int i = 0;i <= (V-1);++i)
     {
-      // for(auto x : dist) std::cout << x << ",";
-      // std::cout << std::endl;
-  
-      // std::cout << "iteration " << i << std::endl;
+      bool anychange = false;
+
       for(int u = 0;u < adj.size(); ++u)
       {
-        // std::cout << "at " << u + 1 << " current cost " << dist[u] << std::endl;
         if(dist[u] == INFL) continue;
         auto edges = adj[u];
         for(int vi = 0;vi < edges.size();++vi)
         {
           int v = edges[vi];
           int wuv = cost[u][vi];
-          // std::cout << "    analysing " << v + 1 << " cost " << wuv << std::endl;  
           if(dist[v] > dist[u] + wuv)
           {
-            // std::cout << "      updating dist " << v + 1 << std::endl;
-            // std::cout << "      before " << dist[v] << std::endl;
-            // std::cout << "      after " << dist[u] + wuv << std::endl;
+            anychange = true;
             dist[v] = dist[u] + wuv;
             prev[v] = u;
           }
         }
       }
+
+      if(anychange == false) break;
     }
 }
 
