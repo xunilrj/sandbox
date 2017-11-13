@@ -31,6 +31,17 @@ let IsGroup dot zero inv =
     Check.Quick <| HasRightIdentity dot zero
     Check.Quick <| HasInverseElement dot inv zero
 
+type N = 
+    | INT of Int32 
+    | DECIMAL of Int32*Int32
+let add l r = match (l,r) with
+    | (INT ll, INT rr) -> INT (ll + rr)
+    | (INT ll, DECIMAL (n,d)) -> DECIMAL (ll*d+n,d)
+    | (DECIMAL (n,d), INT rr) -> DECIMAL (rr*d+n,d)
+    | (DECIMAL (nl,dl), DECIMAL(nr,dr)) -> DECIMAL (nl*dr+nr*dl,dl*dr)
+let x = INT 0 
+let x1 = DECIMAL (0,0)   
+
 module MonadI =
     type M<'a> = I of 'a
     let unitI = I
@@ -48,5 +59,7 @@ module MonadE =
 [<EntryPoint>]
 let main argv =
     IsGroup Number.addN Number.zeroN Number.invN
+
+    Check.Quick <| IsCommutative add
     // Check.QuickAll<AddSpecification>()
     0 // return an integer exit code
