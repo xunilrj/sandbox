@@ -1,0 +1,8 @@
+prefix=/home/ccc_v1_w_Mzg2N_83935/asn17214_Project_4/asn17215_Project_4/work/catkin_ws/install
+
+Name: cartesian_control
+Description: Description of cartesian_control
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/ccc_v1_w_Mzg2N_83935/asn17214_Project_4/asn17215_Project_4/work/catkin_ws/install/lib 
+Requires: interactive_markers rospy sensor_msgs tf urdfdom_py

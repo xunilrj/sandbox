@@ -25,12 +25,49 @@ def S_matrix(w):
 # This is the function that must be filled in as part of the Project.
 def cartesian_control(joint_transforms, b_T_ee_current, b_T_ee_desired,
                       red_control, q_current, q0_desired):
-    num_joints = len(joint_transforms)
-    dq = numpy.zeros(num_joints)
-    #-------------------- Fill in your code here ---------------------------
-
-    #----------------------------------------------------------------------
-    return dq
+	pos_threshold = 0.1
+	rot_threshold = 1.0   
+	pgain = 1
+	tgain = 2
+	rgain = 2
+    
+	num_joints = len(joint_transforms)
+	dq = numpy.zeros(num_joints) 
+    
+	currenteeTb = tf.transformations.inverse_matrix(b_T_ee_current)
+	
+	currenteeTdesiredee  = numpy.dot(currenteeTb, b_T_ee_desired)    
+	desired_pos_currentee = tf.transformations.translation_from_matrix(currenteeTdesiredee)
+	desired_rot_angle_currentee, desired_rot_axis_currentee = rotation_from_matrix(currenteeTdesiredee)    
+	desired_rot_currentee = numpy.dot(desired_rot_angle_currentee,desired_rot_axis_currentee)
+    
+	Vpos = scale_np_array(tgain * desired_pos_currentee, pos_threshold)
+	Vrot = scale_np_array(rgain * desired_rot_currentee, rot_threshold)    	
+	V_ee = numpy.concatenate([Vpos, Vrot], axis=0)
+    
+	J = numpy.empty((6, 0))
+	for j in range(num_joints):        
+		bTj = joint_transforms[j]        
+		jTb = tf.transformations.inverse_matrix(bTj)
+		jTee = numpy.dot(jTb, b_T_ee_current)        
+		eeTj = tf.transformations.inverse_matrix(jTee)        
+		eeRj = eeTj[:3,:3]
+		jTRee = tf.transformations.translation_from_matrix(jTee)
+		S = S_matrix(jTRee)
+		Vj = numpy.append(numpy.append(eeRj, numpy.dot(-eeRj, S),axis=1), numpy.append(numpy.zeros([3,3]), eeRj, axis=1), axis=0)        
+		J = numpy.column_stack((J, Vj[:,5])) 
+	Jplus = numpy.linalg.pinv(J, rcond=0.01)
+	dq = numpy.dot(Jplus, V_ee)   
+	dq[dq > 1] = 1
+	return dq
+   
+def scale_np_array(original_np_array, limit):
+	norm = numpy.linalg.norm(original_np_array)
+	if norm > limit:
+		scaled_np_array = original_np_array * (limit / norm)
+	else:
+		scaled_np_array = original_np_array
+	return scaled_np_array
     
 def convert_from_message(t):
     trans = tf.transformations.translation_matrix((t.translation.x,
@@ -42,6 +79,7 @@ def convert_from_message(t):
                                                 t.rotation.w))
     T = numpy.dot(trans,rot)
     return T
+
 
 # Returns the angle-axis representation of the rotation contained in the input matrix
 # Use like this:

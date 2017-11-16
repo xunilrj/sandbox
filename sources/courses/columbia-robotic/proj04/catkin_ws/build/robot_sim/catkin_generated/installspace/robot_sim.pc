@@ -1,0 +1,8 @@
+prefix=/home/ccc_v1_w_Mzg2N_83935/asn17214_Project_4/asn17215_Project_4/work/catkin_ws/install
+
+Name: robot_sim
+Description: Description of robot_sim
+Version: 0.0.0
+Cflags: -I/home/ccc_v1_w_Mzg2N_83935/asn17214_Project_4/asn17215_Project_4/work/catkin_ws/install/include
+Libs: -L/home/ccc_v1_w_Mzg2N_83935/asn17214_Project_4/asn17215_Project_4/work/catkin_ws/install/lib -lrobot_sim
+Requires: roscpp sensor_msgs urdf
