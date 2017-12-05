@@ -217,4 +217,39 @@ namespace CSharpFeatures
             return Task.FromResult(await t);
         }
     }
+
+    class Program2
+    {
+        static void Main2(string[] args)
+        {
+            var (id, name) = !Dto1.From((Guid.NewGuid(), ""));
+            //TODO: test serialization and deserialization
+        }
+    }
+
+
+    public class Dto1 : Record<Dto1, (Guid id, string Name)>{}
+
+
+    public class Record<T, TValues> where T : Record<T, TValues>
+    {
+        public static T From(TValues values)
+        {
+            dynamic instance = System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(T));
+            instance.Value = values;
+            return (T)instance;
+        }
+
+        protected TValues Value;
+
+        public static TValues operator !(Record<T, TValues> item)
+        {
+            return item.Value;
+        }
+
+        public static explicit operator Record<T, TValues>(TValues values)
+        {
+            return From(values);
+        }
+    }
 }
