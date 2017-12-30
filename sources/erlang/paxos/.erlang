@@ -1,0 +1,6 @@
+{ok, CurrentDirectory} = file:get_cwd().
+code:add_path(CurrentDirectory).
+compile:file(broadcast).
+compile:file(paxos).
+compile:file(start).
+start:start().
