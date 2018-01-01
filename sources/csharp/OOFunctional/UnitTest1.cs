@@ -66,8 +66,20 @@ namespace OOFunctional
 
             //var genericadd = G.New((g a, g b) => a + b);
             //Assert.AreEqual(2, !genericadd[1, 1]);
+
+            ActionExceptions.Throw().StartHandle().When(x => 1).When(x => 2).End();
+            var hhh = new ActionExceptions();
+            hhh
+                .When((NullReferenceException x) => { })
+                .When((DivideByZeroException x) => { })
+                .End();
         }
+
+        public class ActionExceptions : ApplicationException<ActionExceptions, 
+            DivideByZeroException,
+            NullReferenceException> { }
     }
+
 
     public static class F
     {

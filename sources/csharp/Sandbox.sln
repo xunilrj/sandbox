@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.16
+VisualStudioVersion = 15.0.27130.2003
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTestProject1", "AmbOperator\UnitTestProject1\UnitTestProject1.csproj", "{3F48CA01-24EB-4CD9-A320-42B49B117933}"
 EndProject
@@ -13,7 +13,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSharpFeatures", "CSharpFea
 EndProject
 Project("{778DAE3C-4631-46EA-AA77-85C1314464D9}") = "VBHtml", "VBHtml\VBHtml.vbproj", "{1BB5F79B-0043-49CD-86A1-AAADBCCBF578}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication3", "WebApplication3\WebApplication3.csproj", "{6EC929F1-AB62-4D29-8160-F4ECDB8FBAF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication3", "WebApplication3\WebApplication3.csproj", "{6EC929F1-AB62-4D29-8160-F4ECDB8FBAF7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TypedPaxos", "TypedPaxos\TypedPaxos.csproj", "{DF776A5C-DB3B-43EB-ADE4-E5E855522821}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaxosNode", "PaxosNode\PaxosNode.csproj", "{1A7C4456-54C2-4A5E-9E4D-09EDA503E9CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{6EC929F1-AB62-4D29-8160-F4ECDB8FBAF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6EC929F1-AB62-4D29-8160-F4ECDB8FBAF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6EC929F1-AB62-4D29-8160-F4ECDB8FBAF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF776A5C-DB3B-43EB-ADE4-E5E855522821}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF776A5C-DB3B-43EB-ADE4-E5E855522821}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF776A5C-DB3B-43EB-ADE4-E5E855522821}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF776A5C-DB3B-43EB-ADE4-E5E855522821}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A7C4456-54C2-4A5E-9E4D-09EDA503E9CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A7C4456-54C2-4A5E-9E4D-09EDA503E9CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A7C4456-54C2-4A5E-9E4D-09EDA503E9CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A7C4456-54C2-4A5E-9E4D-09EDA503E9CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

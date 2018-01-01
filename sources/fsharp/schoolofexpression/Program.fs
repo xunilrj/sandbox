@@ -1,6 +1,8 @@
 ﻿// Learn more about F# at http://fsharp.org
 
 open System
+open System.Security.Principal
+open System.Threading.Tasks
 
 [<Measure>] type Length;
 
@@ -66,13 +68,42 @@ let area = function
 //as positive if the x-coordinate increases, and negative if it decreases. The 
 //sum of these areas is then the area of the polygon. 
 
+module LinearAlgebra =
+    type Matrix = 
+        | Matrix of int * int * float list
+        | Column of int * float list
+        // | Row of int * float list        
+        | Identity
+        // | Diagonal of float list
+        // | UpperTriangular of float * float * float list
+    let show = function
+        | Matrix (n,m,values) -> values |> List.iter (printf "%f ")
+        | Column (n,values) -> values |> List.iter (printf "%f ")
+        | _ -> printfn ""
+    let at columns row column = (row*columns)+column
+    let (*) l r = 
+        match (l,r) with
+        | (Matrix (lrows,lcolumns,lvalues), Column (rm, rvalues)) ->
+            let at = at lcolumns
+            let r = Array.zeroCreate lrows
+            for i in 0..(lrows-1) do
+                for j in 0..(lcolumns-1) do
+                    r.[i] <- r.[i] + lvalues.[at i j]*rvalues.[j]
+            Column (lrows, List.ofArray r)
+        | _ -> Identity
 
 
-
+open LinearAlgebra
 
 [<EntryPoint>]
 let main argv =
     let a = area (Rectangle (m 1.0, m 1.0))
     let b = area (Rectangle (cm 1.0, cm 1.0))
     printfn "Hello World from F#!"
+    //LINEAR ALGEBRA
+    
+    let lmatrix = Matrix(2, 3, [1.0;2.0;3.0;4.0;5.0;6.0])
+    let rcolumn = Column (3, [7.0;8.0;9.0])
+    let result = lmatrix*rcolumn
+    show result
     0 // return an integer exit code
