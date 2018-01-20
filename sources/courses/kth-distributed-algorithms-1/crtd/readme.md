@@ -68,7 +68,7 @@ But have we another possible solution?
 
 CRDT in this context stands for Conflict-free Replicated Data Type. A fancy way of describing data structures in append-only ways and living with eventual consistency.
 
-The first time this data structures appeared in the current form was in the paper Conflict-free Replicated Data Types by Marc Shapiro, Nuno Preguiça, Carlos Baquero, Marek Zawirski  (see https://hal.inria.fr/inria-00609399/document).
+This data structures became famous because of the paper Conflict-free Replicated Data Types by Marc Shapiro, Nuno Preguiça, Carlos Baquero, Marek Zawirski  (see https://hal.inria.fr/inria-00609399/document).
 
 If you are a video person you can see Marc Shapiro and Nuno Preguiça presenting their finding at https://vimeo.com/144863140. If you a video person, please, starting becoming more a reading person. Use video only to aid your study. There is a reason why videos reference serious studies and serious studies does not reference videos.
 
