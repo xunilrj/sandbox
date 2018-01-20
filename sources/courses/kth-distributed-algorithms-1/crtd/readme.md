@@ -294,7 +294,8 @@ If we now analyze what it is written in the paper we will probably easily unders
     
     v ≤n v' ⇔ ∀j ∈ [0 ..n−1], v[i] ≤ v'[i].
     
-    A query invocation value() returns a copy of the local payload. An update inc(i) increments the payload entry at index i, that is,
+    A query invocation value() returns a copy of the local payload. An update inc(i)
+    increments the payload entry at index i, that is,
 
     s.inc(i)=[s0[0],...,s0[n−1]] 
         where s0[j] = s[j]+1 if i = j and s0[j] = s[j] otherwise. 
@@ -305,11 +306,16 @@ If we now analyze what it is written in the paper we will probably easily unders
     
     We omit the proof that it is a CRDT.
     
-    If each process pi is restricted to increment ing its own index inc(i), this is the well-known vector clock [11]. An increment-only integer counter is very similar; the only difference being that query invocation value() of a vector in state v returns
+    If each process pi is restricted to increment ing its own index inc(i), this is the
+    well-known vector clock [11]. An increment-only integer counter is very similar; the
+    only difference being that query invocation value() of a vector in state v returns
     
     |v| = SUM v[j].
     
-    We construct an integer counter that can be both incremented and decremented, by basically associating two increment-only counters I and D, where incrementing increments I and decrementing increments D, whereas value() returns |I| − |D|. The ordering method ≤ is defined as 
+    We construct an integer counter that can be both incremented and decremented, by
+    basically associating two increment-only counters I and D, where incrementing
+    increments I and decrementing increments D, whereas value() returns |I| − |D|.
+    The ordering method ≤ is defined as 
     
     (I,D) ≤ (I',D') = (I ≤n I') ∧ (D ≤n D')
 
