@@ -1,4 +1,5 @@
 #include <vector>
+#include <array>
 #include <algorithm>
 #include <functional>
 #include <SFML/Graphics.hpp>
@@ -29,11 +30,10 @@ private:
 };
 
 template<class T>
-UpdatableValue<T> make_updatableValue(const T& value, const std::function<void(const T&)>& f)
+UpdatableValue<T> make_updatableValue(const std::function<void(const T&)>& f)
 {
 	auto v = UpdatableValue<T>();
 	v.bind(f);
-	v = value;
 	return v;
 }
 
@@ -43,19 +43,73 @@ public:
 	std::function<void(const sf::Time&, const sf::Time&)> Update;
 };
 
+class BoardInitializer
+{
+public:
+	void Init(std::array<int, 8 * 8> cells) const
+	{
+		int classicCells[8 * 8] = {
+			1, 2, 3, 4, 5, 3, 2, 1,
+			4, 4, 4, 4, 4, 4, 4, 4,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			0, 0, 0, 0, 0, 0, 0, 0,
+			4, 4, 4, 4, 4, 4, 4, 4,
+			1, 2, 3, 4, 5, 3, 2, 1
+		};
+		std::copy(std::begin(classicCells), std::end(classicCells), std::begin(classicCells));
+	}
+};
+
+class Board
+{
+public:
+	Board() : Cells() {
+	}
+
+	void Init(const BoardInitializer& init) {
+		init.Init(Cells);
+	}
+private:
+	std::array<int, 8 * 8> Cells;
+};
+
+class Kernel
+{
+public:
+	Kernel()
+	{
+	}
+
+	Updatable& make_updatable()
+	{
+		Updatables.emplace_back();
+		return Updatables[Updatables.size() - 1];
+	}
+
+	void update(const sf::Time& fromStart, const sf::Time& elapsed)
+	{
+		std::for_each(std::begin(Updatables), std::end(Updatables), [&](auto& item) {
+			item.Update(fromStart, elapsed);
+		});
+	}
+private:
+	std::vector<Updatable> Updatables;
+};
+
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
 	sf::CircleShape shape(100.f);
 	shape.setFillColor(sf::Color::Green);
 
-	auto value = make_updatableValue<float>(50.0f, [&](auto v) {
+	auto value = make_updatableValue<float>([&](auto v) {
 		shape.setRadius(v);
 	});
+	value = 50.0f;
 
-	auto updatables = std::vector<Updatable>();
-	updatables.emplace_back();
-	auto& radius = updatables[updatables.size() - 1];
+	auto kernel = Kernel{};
+	auto& radius = kernel.make_updatable();
 	radius.Update = [&](const sf::Time& start, const sf::Time& elapsed) {
 		value = (std::sin(start.asSeconds()) + 1) * 50.0f;
 	};
@@ -76,9 +130,7 @@ int main()
 
 		sf::Time fromStart = start.getElapsedTime();
 		sf::Time elapsed = clock.restart();
-		std::for_each(std::begin(updatables), std::end(updatables), [&](auto& item) {
-			item.Update(fromStart, elapsed);
-		});
+		kernel.update(fromStart, elapsed);
 
 		window.clear();
 		window.draw(shape);
