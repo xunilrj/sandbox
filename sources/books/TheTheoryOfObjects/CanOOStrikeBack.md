@@ -204,7 +204,7 @@ everything "lazy by default". Haskell is a pure functional language, but "lazy b
 default" or a "call as lazy" is not a functional trait. OO languages could (should?)
 have this feature.
 
-#### Maplist Digression - Feel free to skip
+### Maplist
 
 Another set of inovations brought by LISP in the words of John McCarthy in person:
 
