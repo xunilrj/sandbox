@@ -23,6 +23,7 @@ void generate_rand(T& container)
         randf);
 }
 
+//n^3 flops
 void matrix_vector_mul(int N, const float * A,
     const float* b,
     float * c)
