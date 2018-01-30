@@ -2,99 +2,170 @@
 #include <array>
 #include <algorithm>
 #include <functional>
+#include <iostream>
+#include "plf_colony.h"
 #include <SFML/Graphics.hpp>
 
-template<class T>
-class UpdatableValue
+template <typename T>
+std::vector<T>& operator << (std::vector<T>& vector, const T& item)
 {
-public:
-	UpdatableValue()
-	{
-	}
-
-	void bind(const std::function<void(const T&)>& f)
-	{
-		Listeners.push_back(f);
-	}
-
-	void operator = (const T& value)
-	{
-		Value = value;
-		std::for_each(std::begin(Listeners), std::end(Listeners), [&](auto& f) {
-			f(Value);
-		});
-	}
-private:
-	T Value;
-	std::vector < std::function<void(const T&)> > Listeners;
-};
-
-template<class T>
-UpdatableValue<T> make_updatableValue(const std::function<void(const T&)>& f)
-{
-	auto v = UpdatableValue<T>();
-	v.bind(f);
-	return v;
+	vector.push_back(item);
+	return vector;
 }
 
-class Updatable
+template <typename T>
+class Stream
 {
 public:
-	std::function<void(const sf::Time&, const sf::Time&)> Update;
-};
-
-class BoardInitializer
-{
-public:
-	void Init(std::array<int, 8 * 8> cells) const
+	~Stream()
 	{
-		int classicCells[8 * 8] = {
-			1, 2, 3, 4, 5, 3, 2, 1,
-			4, 4, 4, 4, 4, 4, 4, 4,
-			0, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 0, 0,
-			0, 0, 0, 0, 0, 0, 0, 0,
-			4, 4, 4, 4, 4, 4, 4, 4,
-			1, 2, 3, 4, 5, 3, 2, 1
-		};
-		std::copy(std::begin(classicCells), std::end(classicCells), std::begin(classicCells));
-	}
-};
-
-class Board
-{
-public:
-	Board() : Cells() {
+		if (Type == 2) delete Function;
 	}
 
-	void Init(const BoardInitializer& init) {
-		init.Init(Cells);
+	Stream & operator = (std::vector<T>& vector)
+	{
+		Type = 3;
+		Vector = &vector;
+		return *this;
+	}
+
+	Stream& operator = (std::function<void(const T&)>& f)
+	{
+		Type = 1;
+		Function = &f;
+		return *this;
+	}
+
+	Stream& operator = (std::function<void(const T&)>&& f)
+	{
+		Type = 2;
+		Function = new std::function<void(const T&)>(f);
+		return *this;
+	}
+
+	Stream& operator << (const T& item)
+	{
+		switch (Type)
+		{
+		case 1:
+		case 2: {
+			(*Function)(item);
+			break;
+		}
+		case 3: {
+			(*Vector) << item;
+			break;
+		}
+		default:
+			break;
+		}
+		return *this;
 	}
 private:
-	std::array<int, 8 * 8> Cells;
+	char Type;
+	union {
+		std::vector<T>* Vector;
+		std::function<void(const T&)>* Function;
+		void* Value;
+	};
 };
 
-class Kernel
+
+template <typename T>
+class EventHandler
+{
+protected:
+	void Handle(const T& before, const T& after) const
+	{
+		std::cout << "Before: " << before << " after: " << after << std::endl;
+	}
+};
+template <typename T> class DoNothingBeforePolicy : protected EventHandler<T> {};
+template <typename T> class DoNothingAfterPolicy : protected EventHandler<T> {};
+
+template <typename T> class NotifyAfterPolicy
 {
 public:
-	Kernel()
+	virtual ~NotifyAfterPolicy()
 	{
 	}
 
-	Updatable& make_updatable()
+	template <typename TContainer>
+	void operator >> (TContainer& container)
 	{
-		Updatables.emplace_back();
-		return Updatables[Updatables.size() - 1];
+		Out = container;
 	}
-
-	void update(const sf::Time& fromStart, const sf::Time& elapsed)
+	void operator >> (std::function<void(const T&)>& f)
 	{
-		std::for_each(std::begin(Updatables), std::end(Updatables), [&](auto& item) {
-			item.Update(fromStart, elapsed);
-		});
+		Out = f;
+	}
+	void operator >> (std::function<void(const T&)>&& f)
+	{
+		Out = std::move(f);
+	}
+protected:
+	void Handle(const T& before, const T& after)
+	{
+		std::cout << "Propagating Before: " << before << " after: " << after << std::endl;
+		Out << after;
 	}
 private:
-	std::vector<Updatable> Updatables;
+	Stream<T> Out;
+};
+
+template <typename T,
+	typename TBeforeChange = DoNothingBeforePolicy<T>,
+	typename TAfterChange = DoNothingAfterPolicy<T>>
+	class Cell : public TBeforeChange, public TAfterChange
+{
+	using TComplete = Cell<T, TBeforeChange, TAfterChange>;
+public:
+	Cell() : Value()
+	{
+	}
+	Cell(const T& value) : Value(value)
+	{
+	}
+
+	Cell(TComplete&& other) {
+		std::swap(this->Value, other.Value);
+	}
+
+	~Cell()
+	{
+
+	}
+
+	TComplete& operator = (const T& value)
+	{
+		TBeforeChange::Handle(Value, value);
+		auto oldValue = Value;
+		Value = value;
+		TAfterChange::Handle(oldValue, Value);
+
+		return *this;
+	}
+
+	//Not copyable
+	Cell(const TComplete&) = delete;
+	TComplete& operator=(const TComplete&) = delete;
+private:
+	T Value;
+};
+
+template <typename T> using Cell_After = Cell<T, DoNothingBeforePolicy<T>, NotifyAfterPolicy<T>>;
+
+template <typename T>
+class CellContainer
+{
+	using TCell = Cell_After<T>;
+public:
+	TCell& new_cell()
+	{
+		return *Cells.emplace();
+	}
+private:
+	plf::colony<TCell> Cells;
 };
 
 int main()
@@ -103,16 +174,18 @@ int main()
 	sf::CircleShape shape(100.f);
 	shape.setFillColor(sf::Color::Green);
 
-	auto value = make_updatableValue<float>([&](auto v) {
-		shape.setRadius(v);
-	});
-	value = 50.0f;
 
-	auto kernel = Kernel{};
-	auto& radius = kernel.make_updatable();
-	radius.Update = [&](const sf::Time& start, const sf::Time& elapsed) {
-		value = (std::sin(start.asSeconds()) + 1) * 50.0f;
+	auto container = CellContainer<float>();
+
+	auto& radius = container.new_cell();
+	radius >> [&](auto value) {
+		shape.setRadius(value);
 	};
+	auto& fromStart = container.new_cell();
+	fromStart >> [&](auto value) {
+		radius = (std::sin(value) + 1.0f) * 50.0f;
+	};
+	auto& elapsed = container.new_cell();
 
 	sf::Clock start;
 	while (window.isOpen())
@@ -128,9 +201,13 @@ int main()
 			}
 		}
 
-		sf::Time fromStart = start.getElapsedTime();
-		sf::Time elapsed = clock.restart();
-		kernel.update(fromStart, elapsed);
+		sf::Time elapsedTimeFromStart = start.getElapsedTime();
+		sf::Time elapsedTimeFromLastFrame = clock.restart();
+		
+		fromStart = elapsedTimeFromStart.asSeconds();
+		elapsed = elapsedTimeFromLastFrame.asSeconds();
+
+		//kernel.update(fromStart, elapsed);
 
 		window.clear();
 		window.draw(shape);
