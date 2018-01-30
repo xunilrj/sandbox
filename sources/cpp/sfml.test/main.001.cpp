@@ -113,10 +113,19 @@ private:
 	Stream<T> Out;
 };
 
+class Object 
+{
+};
+
+struct ObjectP
+{
+	Object * Value;
+};
+
 template <typename T,
 	typename TBeforeChange = DoNothingBeforePolicy<T>,
 	typename TAfterChange = DoNothingAfterPolicy<T>>
-	class Cell : public TBeforeChange, public TAfterChange
+	class Cell : public TBeforeChange, public TAfterChange, public Object
 {
 	using TComplete = Cell<T, TBeforeChange, TAfterChange>;
 public:
@@ -155,17 +164,20 @@ private:
 
 template <typename T> using Cell_After = Cell<T, DoNothingBeforePolicy<T>, NotifyAfterPolicy<T>>;
 
-template <typename T>
 class CellContainer
 {
-	using TCell = Cell_After<T>;
+	template <typename T> using TReactiveCell = Cell_After<T>;
 public:
-	TCell& new_cell()
+	template <typename T>
+	TReactiveCell<T>& new_reactive_cell()
 	{
-		return *Cells.emplace();
+		auto& objp = *Cells.emplace();
+		objp.Value = new TReactiveCell<T>();
+		return *(TReactiveCell<T>*)objp.Value;
 	}
 private:
-	plf::colony<TCell> Cells;
+	//TODO: think a better alternative to different objects in this container
+	plf::colony<ObjectP> Cells;
 };
 
 int main()
@@ -175,17 +187,17 @@ int main()
 	shape.setFillColor(sf::Color::Green);
 
 
-	auto container = CellContainer<float>();
+	auto container = CellContainer();
 
-	auto& radius = container.new_cell();
+	auto& radius = container.new_reactive_cell<float>();
 	radius >> [&](auto value) {
 		shape.setRadius(value);
 	};
-	auto& fromStart = container.new_cell();
+	auto& fromStart = container.new_reactive_cell<float>();
 	fromStart >> [&](auto value) {
 		radius = (std::sin(value) + 1.0f) * 50.0f;
 	};
-	auto& elapsed = container.new_cell();
+	auto& elapsed = container.new_reactive_cell<float>();
 
 	sf::Clock start;
 	while (window.isOpen())
