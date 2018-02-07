@@ -1,15 +1,21 @@
 \documentclass[]{article}
 \usepackage{amsmath,amssymb,amsthm}
+\usepackage{hyperref}
 
 \begin{document}
 	
-	The notation (nk) for the binomial coefficient was introduced by Andreas Freiherr von Ettingshausen in his 1826 work Die combinatorische Analysis.
+	The notation $\binom{N}{K}$ for the binomial coefficient was introduced by Andreas Freiherr von Ettingshausen in his 1826 work "Die combinatorische Analysis".
 	
-	It appears to have become the de facto standard in recent years.
-
+	It appears to have become the de facto standard in recent years.\\
+	\\
+	Definition:
 \begin{align}
-	\binom{N}{K} &= \binom{N - 1}{K - 1} + \binom{N - 1}{K}\\ 
-	\binom{N}{0} &= 1
+	\binom{n}{k} &= \frac {n!}{k!(n-k)!}\\
+\end{align}
+	Recursive Definition:
+\begin{align}
+	\binom{n}{k} &= \binom{n - 1}{k - 1} + \binom{n - 1}{k}\\ 
+	\binom{n}{0} &= 1
 \end{align}
 
 Identities 
@@ -29,5 +35,11 @@ proof
 	&= \frac{n}{k} * \binom{u}{z}\\
 	&= \frac{n}{k} * \binom{n-1}{k-1}
 \end{align}
+
+
+See More:
+\url{https://www.khanacademy.org/math/precalculus/prob-comb/combinations/v/introduction-to-combinations}
+\url{https://www.khanacademy.org/math/algebra2/polynomial-functions/binomial-theorem/v/binomial-theorem}\\
+
 
 \end{document}
