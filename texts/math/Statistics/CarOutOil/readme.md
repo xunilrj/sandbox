@@ -26,7 +26,7 @@ Mr K. is a very methodical fellow. He monitor how much his car consume every sin
     >   plot(homeWork$day, homeWork$consumption)
     > dev.off()
 
-![Home-Work Consumption](/homeWork.plot.png)
+![Home-Work Consumption](/homeWork.plot.png?raw=true)
 
 Well, it is not hard to see that we do not have clear relationship between the day and the consumption, but maybe we can understand the data better looking to its histogram.
 
