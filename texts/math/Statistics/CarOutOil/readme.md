@@ -83,3 +83,5 @@ OK. First step done. We now have a model to Mr. K. home work consumption.
 We can even see how out model is compared to the real histogram. And one can easily see that we have a vary good model.
 
 ![Home-Work Consumption Histogram](homeWork.hist.model.png?raw=true)
+
+#To Be Continued...
