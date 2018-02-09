@@ -51,3 +51,8 @@ $"adasdas {variable}" mas nao temos um modo facil de parsear strnigs.
 O mais facil é com regex, que nem possui um modo fácil de converter para um DTO
 Regex.Parse<DTO>("dasdasdasdas (?<PROPERTYNAME>.+");
 porem o ideal seria string.Parse<DTO>("asdasdas {property}");
+
+como resolver os problemas mais comumns:
+1 - sql builder colocar o AND sem precisar de "1==1";
+2 - o mesmo ocorre montando querystring com o &;
+3 - monadic union;
