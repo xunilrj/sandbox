@@ -88,5 +88,5 @@ We can even see how out model is compared to the real histogram. And one can eas
 
 # Also See
 
-[Maximum Likelihood Estimation](../maximumlikelihood.pdf)
+[Maximum Likelihood Estimation](../maximumlikelihood.pdf)  
 [Geometric Interpretation of Covariance Matrix](../GeometricInterpretationOfCovarianceMatrix.pdf)
