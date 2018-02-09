@@ -85,3 +85,8 @@ We can even see how out model is compared to the real histogram. And one can eas
 ![Home-Work Consumption Histogram](homeWork.hist.model.png?raw=true)
 
 #To Be Continued...
+
+# Also See
+
+[Maximum Likelihood Estimation](../maximumlikelihood.pdf)
+[Geometric Interpretation of Covariance Matrix](../GeometricInterpretationOfCovarianceMatrix.pdf)
