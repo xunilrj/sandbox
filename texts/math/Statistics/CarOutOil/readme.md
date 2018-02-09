@@ -35,7 +35,7 @@ Well, it is not hard to see that we do not have clear relationship between the d
     >    hist(homeWork$consumption)
     > dev.off()
 
-![Home-Work Consumption Histogram](/homeWork.hist.png)
+![Home-Work Consumption Histogram](homeWork.hist.png?raw=true)
 
 hum... The resemblance with a normal distribution is almost perfect. Which is wonderful for us, because allows us to model the consumption using a simple normal distribution.
 
@@ -45,7 +45,7 @@ The graph below show the Normal Likelihood of the home-work data. We can see tha
     #plotMLE is our custom function (code is below)
     > plotMLE(homeWork$consumption, x=c(5,15),y=c(0,5), levels = 2000)
 
-![Home-Work Consumption Histogram](/homeWork.likelihood.png)
+![Home-Work Consumption Histogram](homeWork.likelihood.png?raw=true)
 
 We can ask R to give us the exact value using a numerical optimization algorithm.
 
@@ -72,7 +72,7 @@ So R is telling us that the optimal (as we defined, more on how we defined this 
     >    abline(v=10.01983, lty=2)
     > dev.off()
 
-![Home-Work Consumption Histogram](/homeWork.likelihood.withlines.png)
+![Home-Work Consumption Histogram](homeWork.likelihood.withlines.png?raw=true)
 
 OK. First step done. We now have a model to Mr. K. home work consumption.
 
@@ -82,4 +82,4 @@ OK. First step done. We now have a model to Mr. K. home work consumption.
 
 We can even see how out model is compared to the real histogram. And one can easily see that we have a vary good model.
 
-![Home-Work Consumption Histogram](/homeWork.hist.model.png)
+![Home-Work Consumption Histogram](homeWork.hist.model.png?raw=true)
