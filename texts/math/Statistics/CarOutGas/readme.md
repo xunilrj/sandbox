@@ -1,11 +1,13 @@
-# Car out of Oil, Likelihood and statistics using R
+# Car out of Gas, Likelihood and statistics using R
 
 problem based on:  
 https://www.khanacademy.org/math/statistics-probability/random-variables-stats-library/combine-random-variables/v/analyzing-distribution-of-sum-of-two-normally-distributed-random-variables
 
 ## Problem
 
-Mr K. is a very methodical fellow. He monitor how much his car consume every single day on his daily commute. This data is available on the consumption.csv on this folder.
+Mr K. is a very methodical fellow, but unfortunately today, Mr. K is in a rush he must go directly to work but he only has 25L in his car's tank. What is the probability that he will be able to go to work and return home without running out of gas.
+
+Luckily Mr K. has monitored how much his car consume every single day on his daily commute. This data is available on the consumption.csv on this folder.
 
 ## Making the premises explicit
  
@@ -21,7 +23,7 @@ Mr K. is a very methodical fellow. He monitor how much his car consume every sin
 
     #R
     > consumption <- read.csv("consumption.csv")
-    > homeWork <- consumption[comsumption$type == 1,]    
+    > homeWork <- consumption[consumption$type == 1,]    
     > png(filename="homeWork.plot.png")
     >   plot(homeWork$day, homeWork$consumption)
     > dev.off()
@@ -84,9 +86,72 @@ We can even see how out model is compared to the real histogram. And one can eas
 
 ![Home-Work Consumption Histogram](homeWork.hist.model.png?raw=true)
 
-#To Be Continued...
+## Analyzing the "Work-Home" commute
 
-# Also See
+Let us follow the same steps on the Work-Home commute.
+
+![Work-Home Consumption](workHome.plot.png?raw=true)
+![Work-Home Consumption](workHome.hist.png?raw=true)
+
+Now, plotting the MLE:
+
+![Work-Home Consumption](workHome.likelihood.png?raw=true)
+![Work-Home Consumption](workHome.likelihood.withlines.png?raw=true)
+
+The actual optimal value is:
+
+    > optim(c(12,4),normal.lik.muvar,y=workHome$consumption,method="BFGS")
+    $par
+    [1] 9.879261 1.727495
+    $value
+    [1] 1.96561
+    $counts
+    function gradient 
+      24       18 
+    $convergence
+    [1] 0
+    $message
+    NULL
+
+# One day consumption
+
+Well, now with these two model we can analyze Mr. K. daily consumption, that is, obviously, home to work plus work to home consumption.
+
+    D = HW + WH
+
+We know that when summing two normal distributed random variables both the mean and the standard deviation can be calculated by its sum.
+
+    mean(D) = mean(HW) + mean(WH)
+    sd(D) = sd(HW) + sd(WH)
+
+## Verifying theory
+
+Before continuing let us test the theory. First we will aggregate the consumption per day.
+
+![Work-Home Consumption](daily.plot.png?raw=true)
+![Work-Home Consumption](daily.hist.png?raw=true)
+
+As we can see, both mean and standard deviation are compliant with the theory and we still have the normal distribution as a good model.
+
+# Final Answer
+
+Now we are ready to answer the question. What is the probability of Mr. K. running out of gas if he has 25L in his tank.
+
+What we need to do know is draw the line corresponding 25L, and calculate the area under our normal distribution PDF from minus infinity until 25L. Which is the same as the CDF at 25 using out mean and standard deviation.
+
+    > pnorm(25, mean = 19.899697, sd = 2.421108)
+    [1] 0.9824238
+
+This give us the probability of Mr. K. being able to go to work and return home. We actually want the inverse of that. We must do:
+
+    > pnorm(25, mean = 19.899697, sd = 2.421108, lower.tail = FALSE)
+    [1] 0.01757619
+
+So we can, finally!, say that there is a 1.75% chance of Mr. K running out of gas returning home.
+
+# For More details see:
 
 [Maximum Likelihood Estimation](../maximumlikelihood.pdf)  
 [Geometric Interpretation of Covariance Matrix](../GeometricInterpretationOfCovarianceMatrix.pdf)
+
+# TODO ADVANCED PART
