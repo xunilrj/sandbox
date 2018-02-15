@@ -8,9 +8,9 @@
 ## Handouts
 [Log](texts/math/Handout.Log.pdf)  
 [Exponentials](texts/math/Handout.Exp.pdf)  
-[Binomial Coeffecient](texts/math/Handout.BinomialCoeffecient.pdf)  
+[Binomial Coefficient](texts/math/Handout.BinomialCoeffecient.pdf)  
 [Series](texts/math/Handout.Series.pdf)  
-[Fibonnaci Numbers](texts/math/Handout.Fibonnaci.pdf)  
+[Fibonacci Numbers](texts/math/Handout.Fibonnaci.pdf)  
 [Linear Regression](texts/math/Handout.LinearRegression.pdf)  
 [Probability](texts/math/Handout.Probability.pdf)  
 [Statistics](texts/math/Handout.Stats.pdf)  
