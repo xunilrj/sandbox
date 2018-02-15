@@ -1,0 +1,49 @@
+\documentclass[10pt,a4paper]{book}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+\author{Daniel Frederico Lins Leite}
+\title{Probability}
+\begin{document}
+	\section{Introduction}
+	$w$ is a "sample point".\\
+	$S$ is a "sample space" if\\
+		\tab $w$ is a "sample point and $w \in S$;\\
+		\tab and $\forall_{i,j}{(w_i \cap w_j = \emptyset \text{, if } i \neq j)}$;\\
+		\tab and $w_1 \cup w_2 \cup ... \cup w_n = S$.\\
+		A is a "family of events" if is a set of "sample points"\\
+		\tab $A = \{w\}$ where $w$ is a "sample point"\\
+		\tab $A^\complement = \{w : w \notin A\}$\\
+		\tab $A \cup B = \{w: w \in A \lor w \in B\}$\\
+		\tab $A \cap B = \{w: w \in A \land w \in B\}$\\
+		\tab $S^\complement = \emptyset$\\
+		\tab $A \cup A^\complement = S$\\
+		\tab $A \cap A^\complement = \emptyset$\\
+		\tab $A \cap S = A$\\
+		\tab $A \cup S = S$\\
+		\tab $A \cup \emptyset = A$\\
+		\tab $\cup$ is commutative, associative, distributive\\
+		\tab $\cap$ is commutative, associative, distributive\\
+		P is a "probability measure" if is a mapping between S and the "real numbers" with the following properties:\\
+		\tab $P = f: S \mapsto {\rm I\!R}$\\
+		\tab $P(A) = f(A)$\\
+		\tab $f(S) = \sum_{\forall i}{f(A_i)} = 1$\\
+		\tab $0 <= f(A) <= 1$\\
+		\tab if $A \cap B = \emptyset$ then $f(A \cup B) = f(A) + f(B).$\\
+		\\
+		The triplet (S,A,P) defines a "probability system", a consistent axiomatic theory of probability of finite "sample spaces".
+		\\
+		"Conditional probability" is the probability of "family of events" A, given that the "family of events B" occurred.\\
+		$$P(A|B) \triangleq \frac{P(A \cap B)}{P(B)}$$\\
+		$A$ and $B$ are "statistical independent" if:\\
+		$$P(A \cap B) = P(A)*P(B)$$
+		wich can be extended to:\\
+		$$ P\big(\bigcap_{\forall i}{ A_i}\big) = \prod_{\forall i}{P(A_i)} $$\\
+		Given the last two properties we have that the "conditional property" of two "statistical independent" "family of events" is:\\
+		$$ P(A|B) = \frac{P(A \cap B)}{P(B)} = \frac{P(A)*P(B)}{P(B)} = P(A) $$.
+		The "Theorem of total probability" states that:\\
+		$$P(B) = \sum_{\forall i}{P(A_i|B)}$$
+\end{document}
