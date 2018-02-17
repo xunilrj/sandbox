@@ -4,6 +4,7 @@
 ### Theory
 [Geometric Interpretation of Covariance](texts/math/Statistics/GeometricInterpretationOfCovarianceMatrix.pdf)   
 [Maximum Likelihood Estimation](texts/math/Statistics/maximumlikelihood.pdf)     
+[Probability as Set Measure](texts/math/probability)
 
 ## Handouts
 [Log](texts/math/Handout.Log.pdf)  
