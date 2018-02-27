@@ -1,0 +1,20 @@
+<scene>
+  <description text="Two similarly sized particles orbiting one another. Intended as a test when multiple particles are in motion."/>
+
+  <duration time="15.0"/>
+  <integrator type="symplectic-euler" dt="0.01"/>
+  <maxsimfreq max="500.0"/>
+
+  <particle m="1.0" px="-1.0" py="0.0" vx="0.0" vy="1.0" fixed="0" radius="0.02"/>
+  <particle m="1.0" px="1.0" py="0.0" vx="0.0" vy="-1.0" fixed="0" radius="0.02"/>
+
+  <gravitationalforce i="0" j="1" G="4.0"/>
+
+  <particlecolor i="0" r="0.96078431372549" g="0.0" b="0.47843137254902"/>
+  <particlecolor i="1" r="0.6" g="0.0" b="0.8"/>
+
+  <backgroundcolor r="0.0" g="0.0" b="0.0"/>
+
+  <particlepath i="0" duration="20.0" r="0.96078431372549" g="0.0" b="0.47843137254902"/>
+  <particlepath i="1" duration="20.0" r="0.6" g="0.0" b="0.8"/>
+</scene>

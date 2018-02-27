@@ -1,0 +1,8 @@
+#!/bin/bash
+clear
+pushd ../build
+make
+cd ./FOSSSim
+./FOSSSim -s $1 -o ./output.bin -d 0
+~/workspace/oracle/FOSSSimOracleT1M2 -s $1 -i ./output.bin -d 0
+popd

@@ -1,0 +1,4 @@
+rm compare.txt
+clear
+find $1 -name "*.xml" -type f | xargs -L 1 -I% bash -c "echo % && ./compare % >> compare.txt"
+cat compare.txt | grep Overall

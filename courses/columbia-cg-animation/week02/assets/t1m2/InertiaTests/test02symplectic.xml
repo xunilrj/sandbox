@@ -1,0 +1,13 @@
+<scene>
+  <description text="A single particle with a constant velocity and no forces. The particle should follow a straight path. Non-unit mass. Intended to verify that kinetic energy is conserved when no forces are active."/>
+
+  <duration time="10.0"/>
+  <integrator type="symplectic-euler" dt="0.1"/>
+  <maxsimfreq max="100.0"/>
+
+  <particle m="2.0" px="0.0" py="0.0" vx="0.1" vy="0.0" fixed="0" radius="0.04"/>
+
+  <particlecolor i="0" r="0.2" g="0.2" b="0.9"/>
+
+  <particlepath i="0" duration="10.0" r="0.2" g="0.2" b="0.9"/> 
+</scene>

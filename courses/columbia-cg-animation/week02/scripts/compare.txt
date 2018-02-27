@@ -1,0 +1,1862 @@
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SimpleGravityTests/test02symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mMany particles of different mass that should all pass the 'finish line' at roughly two seconds. Intended to verify that the acceleration due to gravity is independent of mass.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SimpleGravityTests/test02symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mMany particles of different mass that should all pass the 'finish line' at roughly two seconds. Intended to verify that the acceleration due to gravity is independent of mass.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 1.0842e-18   Passed.
+Accumulated Velocity Residual: 1.06859e-15   Passed.
+Maximum Position Residual: 2.1684e-19   Passed.
+Maximum Velocity Residual: 1.11022e-16   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SimpleGravityTests/test00symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mA single particle falling downwards under gravity. Intended to verify the basic functionality of simple gravity.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SimpleGravityTests/test00symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA single particle falling downwards under gravity. Intended to verify the basic functionality of simple gravity.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SimpleGravityTests/test01symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mA falling particle that should pass the 'finish line' at two roughly seconds. Intended to benchmark the basic functionality of simple gravity against an analytical result and to test behavior of fixed particles.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SimpleGravityTests/test01symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA falling particle that should pass the 'finish line' at two roughly seconds. Intended to benchmark the basic functionality of simple gravity against an analytical result and to test behavior of fixed particles.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SimpleGravityTests/test03symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mMany particles of different mass that should all pass the 'finish line' at roughly one second. Intended to verify that the acceleration due to gravity is independent of mass, and to test that the direction of gravity is not hardcoded.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SimpleGravityTests/test03symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mMany particles of different mass that should all pass the 'finish line' at roughly one second. Intended to verify that the acceleration due to gravity is independent of mass, and to test that the direction of gravity is not hardcoded.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 5.42101e-19   Passed.
+Accumulated Velocity Residual: 5.34295e-16   Passed.
+Maximum Position Residual: 1.0842e-19   Passed.
+Maximum Velocity Residual: 5.55112e-17   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/AccuracyTests/test00symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mOne particle orbiting a fixed point along an elliptical orbit. A special orbit will be displayed for the analytical solution for this scene. Observe how the simulation trajectory differs from the analytical solution, and change time steps to see how that affects the trajectory.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 500. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/AccuracyTests/test00symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mOne particle orbiting a fixed point along an elliptical orbit. A special orbit will be displayed for the analytical solution for this scene. Observe how the simulation trajectory differs from the analytical solution, and change time steps to see how that affects the trajectory.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 500. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/AccuracyTests/test00explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mDescription: [mOne particle orbiting a fixed point along an elliptical orbit. A special orbit will be displayed for the analytical solution for this scene. Observe how the simulation trajectory differs from the analytical solution, and change time steps to see how that affects the trajectory.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 250. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/AccuracyTests/test00explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mOne particle orbiting a fixed point along an elliptical orbit. A special orbit will be displayed for the analytical solution for this scene. Observe how the simulation trajectory differs from the analytical solution, and change time steps to see how that affects the trajectory.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 250. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SystemTests/CantileverSemiImplicit.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mA cantilever integrated with forward-backward-euler. Intended to test multiple springs acting on the same particle.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 50. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SystemTests/CantileverSemiImplicit.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA cantilever integrated with forward-backward-euler. Intended to test multiple springs acting on the same particle.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 50. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/LinearDragTests/test02explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mDescription: [mParticle should approach the finish line at y = 4 asymptotically. Intended to verify that the damping force works in all directions.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/LinearDragTests/test02explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mParticle should approach the finish line at y = 4 asymptotically. Intended to verify that the damping force works in all directions.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/LinearDragTests/test02symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mParticle should approach the finish line at y = 4 asymptotically. Intended to verify that the damping force works in all directions.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/LinearDragTests/test02symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mParticle should approach the finish line at y = 4 asymptotically. Intended to verify that the damping force works in all directions.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/LinearDragTests/test00symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mParticle should approach the finish line at x = 1 asymptotically. Intended to test the basic functionality of the drag force and to benchmark against an analytical solution.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/LinearDragTests/test00symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mParticle should approach the finish line at x = 1 asymptotically. Intended to test the basic functionality of the drag force and to benchmark against an analytical solution.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/LinearDragTests/test03explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mDescription: [mParticle should approach the finish line at y = 7.5 asymptotically. Intended to verify that the damping force works with different damping coefficients.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/LinearDragTests/test03explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mParticle should approach the finish line at y = 7.5 asymptotically. Intended to verify that the damping force works with different damping coefficients.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/LinearDragTests/test01symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mParticle should approach the finish line at x = 3 asymptotically. Intended to test the basic functionality of the drag force and to benchmark against an analytical solution.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/LinearDragTests/test01symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mParticle should approach the finish line at x = 3 asymptotically. Intended to test the basic functionality of the drag force and to benchmark against an analytical solution.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/LinearDragTests/test00explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mDescription: [mParticle should approach the finish line at x = 1 asymptotically. Intended to test the basic functionality of the drag force and to benchmark against an analytical solution.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/LinearDragTests/test00explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mParticle should approach the finish line at x = 1 asymptotically. Intended to test the basic functionality of the drag force and to benchmark against an analytical solution.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/LinearDragTests/test03symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mParticle should approach the finish line at y = 7.5 asymptotically. Intended to verify that the damping force works with different damping coefficients.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/LinearDragTests/test03symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mParticle should approach the finish line at y = 7.5 asymptotically. Intended to verify that the damping force works with different damping coefficients.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/LinearDragTests/test01explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mDescription: [mParticle should approach the finish line at x = 3 asymptotically. Intended to test the basic functionality of the drag force and to benchmark against an analytical solution.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/LinearDragTests/test01explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mParticle should approach the finish line at x = 3 asymptotically. Intended to test the basic functionality of the drag force and to benchmark against an analytical solution.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringTests/test02explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mDescription: [mMultiple springs with increasing ratio of k/m. Springs beside each other horizontally have the same ratio of k/m, but achieved using a different combination of k and m. Intended as a test of the spring force's scaling with stiffness. Observe the instabilities with explicit euler.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 30. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringTests/test02explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mMultiple springs with increasing ratio of k/m. Springs beside each other horizontally have the same ratio of k/m, but achieved using a different combination of k and m. Intended as a test of the spring force's scaling with stiffness. Observe the instabilities with explicit euler.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 30. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringTests/test02symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mMultiple springs with increasing ratio of k/m. Springs beside each other horizontally have the same ratio of k/m, but achieved using a different combination of k and m. Intended as a test of the spring force's scaling with stiffness. Observe that the magnitudes of oscialltions with forward-backward Euler remain bounded.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 30. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringTests/test02symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mMultiple springs with increasing ratio of k/m. Springs beside each other horizontally have the same ratio of k/m, but achieved using a different combination of k and m. Intended as a test of the spring force's scaling with stiffness. Observe that the magnitudes of oscialltions with forward-backward Euler remain bounded.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 30. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringTests/test00symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mA single spring, oriented along the vertical, slightly stretched from its rest length. Intended as a basic test of the spring force's functionality.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 50. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringTests/test00symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA single spring, oriented along the vertical, slightly stretched from its rest length. Intended as a basic test of the spring force's functionality.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 50. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringTests/test03explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mDescription: [mMultiple springs with decreasing rest length. Intended to verify the behavior of the rest length parameter. Observe the instabilities with explicit Euler.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 50. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringTests/test03explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mMultiple springs with decreasing rest length. Intended to verify the behavior of the rest length parameter. Observe the instabilities with explicit Euler.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 50. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringTests/test01symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mA single spring, oriented along the horizontal, slightly stretched from its rest length. Intended as a basic test of the spring force's functionality in a non-vertical orientation.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 50. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringTests/test01symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA single spring, oriented along the horizontal, slightly stretched from its rest length. Intended as a basic test of the spring force's functionality in a non-vertical orientation.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 50. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringTests/test00explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mDescription: [mA single spring, oriented along the vertical, slightly stretched from its rest length. Intended as a basic test of the spring force's functionality.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 50. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringTests/test00explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA single spring, oriented along the vertical, slightly stretched from its rest length. Intended as a basic test of the spring force's functionality.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 50. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringTests/test03symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mMultiple springs with decreasing rest length. Intended to verify the behavior of the rest length parameter. Observe the stable oscillations with forward-backward Euler.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 50. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringTests/test03symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mMultiple springs with decreasing rest length. Intended to verify the behavior of the rest length parameter. Observe the stable oscillations with forward-backward Euler.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 50. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringTests/test01explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mDescription: [mA single spring, oriented along the horizontal, slightly stretched from its rest length. Intended as a basic test of the spring force's functionality in a non-vertical orientation.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 50. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringTests/test01explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA single spring, oriented along the horizontal, slightly stretched from its rest length. Intended as a basic test of the spring force's functionality in a non-vertical orientation.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 50. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/GravityTests/test00symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mThe earth orbiting the sun. In these units, one simulation second corresponds to one real year. Intended to benchmark the simulation against an analytical solution, to provide a basic test of the gravitational force, and to highlight differences between explicit, forward-backward, and implicit Euler. Notice how the orbit remains stable with forward backward Euler.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/GravityTests/test00symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mThe earth orbiting the sun. In these units, one simulation second corresponds to one real year. Intended to benchmark the simulation against an analytical solution, to provide a basic test of the gravitational force, and to highlight differences between explicit, forward-backward, and implicit Euler. Notice how the orbit remains stable with forward backward Euler.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 5.94536e-25   Passed.
+Accumulated Velocity Residual: 3.24361e-20   Passed.
+Maximum Position Residual: 2.06795e-25   Passed.
+Maximum Velocity Residual: 6.77626e-21   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/GravityTests/test01symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mTwo similarly sized particles orbiting one another. Intended as a test when multiple particles are in motion.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 15. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/GravityTests/test01symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mTwo similarly sized particles orbiting one another. Intended as a test when multiple particles are in motion.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 15. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/GravityTests/test00explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mDescription: [mThe earth orbiting the sun. In these units, one simulation second corresponds to one real year. Intended to benchmark the simulation against an analytical solution, to provide a basic test of the gravitational force, and to highlight differences between explicit, forward-backward, and implicit Euler. Notice how the orbit spirals outward with explicit Euler.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/GravityTests/test00explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mThe earth orbiting the sun. In these units, one simulation second corresponds to one real year. Intended to benchmark the simulation against an analytical solution, to provide a basic test of the gravitational force, and to highlight differences between explicit, forward-backward, and implicit Euler. Notice how the orbit spirals outward with explicit Euler.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/GravityTests/test01explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mDescription: [mTwo similarly sized particles orbiting one another. Intended as a test when multiple particles are in motion.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 15. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/GravityTests/test01explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mTwo similarly sized particles orbiting one another. Intended as a test when multiple particles are in motion.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 15. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/InertiaTests/test02symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mA single particle with a constant velocity and no forces. The particle should follow a straight path. Non-unit mass. Intended to verify that kinetic energy is conserved when no forces are active.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/InertiaTests/test02symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA single particle with a constant velocity and no forces. The particle should follow a straight path. Non-unit mass. Intended to verify that kinetic energy is conserved when no forces are active.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/InertiaTests/test00symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mA single particle with no velocity and no forces. The particle should not move. Intended as a 'null test' of the integrator.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/InertiaTests/test00symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA single particle with no velocity and no forces. The particle should not move. Intended as a 'null test' of the integrator.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/InertiaTests/test01symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mA single particle with a constant velocity and no forces. The particle should follow a straight path. Intended to verify that kinetic energy is conserved when no forces are active.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/InertiaTests/test01symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA single particle with a constant velocity and no forces. The particle should follow a straight path. Intended to verify that kinetic energy is conserved when no forces are active.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringDampingTests/test02explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mDescription: [mA single spring with a non-zero damping coefficient that is oriented along a diagonal and slightly stretched from its rest length. The amplitude of osciallations should quickly damp out. Intended as a test of basic spring damping.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringDampingTests/test02explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA single spring with a non-zero damping coefficient that is oriented along a diagonal and slightly stretched from its rest length. The amplitude of osciallations should quickly damp out. Intended as a test of basic spring damping.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringDampingTests/test02symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mA single spring with a non-zero damping coefficient that is oriented along a diagonal and slightly stretched from its rest length. The amplitude of osciallations should quickly damp out. Intended as a test of basic spring damping.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringDampingTests/test02symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA single spring with a non-zero damping coefficient that is oriented along a diagonal and slightly stretched from its rest length. The amplitude of osciallations should quickly damp out. Intended as a test of basic spring damping.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringDampingTests/test00symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mA single spring with a non-zero damping coefficient that is oriented along the vertical and slightly stretched from its rest length. The amplitude of osciallations should quickly damp out. Intended as a test of basic spring damping.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringDampingTests/test00symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA single spring with a non-zero damping coefficient that is oriented along the vertical and slightly stretched from its rest length. The amplitude of osciallations should quickly damp out. Intended as a test of basic spring damping.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringDampingTests/test03explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mDescription: [mMultiple springs with increasing damping coefficients oriented along the horizontal and slightly stretched from their rest lengths. Intended to test the behavior of increasing the damping coefficient.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringDampingTests/test03explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mMultiple springs with increasing damping coefficients oriented along the horizontal and slightly stretched from their rest lengths. Intended to test the behavior of increasing the damping coefficient.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 5.63785e-17   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 1.38778e-17   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringDampingTests/test01symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mA single spring with a non-zero damping coefficient that is oriented along the horizontal and slightly stretched from its rest length. The amplitude of osciallations should quickly damp out. Intended as a test of basic spring damping.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringDampingTests/test01symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA single spring with a non-zero damping coefficient that is oriented along the horizontal and slightly stretched from its rest length. The amplitude of osciallations should quickly damp out. Intended as a test of basic spring damping.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringDampingTests/test00explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mDescription: [mA single spring with a non-zero damping coefficient that is oriented along the vertical and slightly stretched from its rest length. The amplitude of osciallations should quickly damp out. Intended as a test of basic spring damping.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringDampingTests/test00explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA single spring with a non-zero damping coefficient that is oriented along the vertical and slightly stretched from its rest length. The amplitude of osciallations should quickly damp out. Intended as a test of basic spring damping.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringDampingTests/test03symplectic.xml
+[34;1mIntegrator: [mSymplectic Euler
+[34;1mDescription: [mMultiple springs with increasing damping coefficients oriented along the horizontal and slightly stretched from their rest lengths. Intended to test the behavior of increasing the damping coefficient.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringDampingTests/test03symplectic.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mMultiple springs with increasing damping coefficients oriented along the horizontal and slightly stretched from their rest lengths. Intended to test the behavior of increasing the damping coefficient.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 6.78685e-20   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 2.71051e-20   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+Calling loadSceneTag
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringDampingTests/test01explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mDescription: [mA single spring with a non-zero damping coefficient that is oriented along the horizontal and slightly stretched from its rest length. The amplitude of osciallations should quickly damp out. Intended as a test of basic spring damping.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m2/SpringDampingTests/test01explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA single spring with a non-zero damping coefficient that is oriented along the horizontal and slightly stretched from its rest length. The amplitude of osciallations should quickly damp out. Intended as a test of basic spring damping.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts

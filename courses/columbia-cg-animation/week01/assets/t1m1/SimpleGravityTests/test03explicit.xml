@@ -1,0 +1,25 @@
+<!-- Many particles of different mass that should all pass the 'finish line' at roughly one second -->
+
+<scene>
+  <duration time="4.0"/>
+  <integrator type="explicit-euler" dt="0.01"/>
+
+  <particle m="1.0"  px="0.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="2.0"  px="1.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="3.0"  px="2.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="4.0"  px="3.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="5.0"  px="4.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="6.0"  px="5.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="7.0"  px="6.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="8.0"  px="7.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="9.0"  px="8.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="10.0" px="9.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+
+  <particle m="1.0" px="-0.5" py="2.4525" vx="0.0" vy="0.0" fixed="1"/>
+  <particle m="1.0" px=" 9.5" py="2.4525" vx="0.0" vy="0.0" fixed="1"/>
+
+  <simplegravity fx="0.0" fy="4.905"/>
+
+  <edge i="10" j="11"/>
+</scene>
+

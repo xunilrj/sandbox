@@ -1,0 +1,22 @@
+<scene>
+    <description text="One particle orbiting a fixed point along an elliptical orbit. A special orbit will be displayed for the analytical solution for this scene. Observe how the simulation trajectory differs from the analytical solution, and change time steps to see how that affects the trajectory."/>
+    <scenetag tag="AccuracyTestScene"/>
+
+    <duration time="500.0"/>
+    <integrator type="symplectic-euler" dt="0.1"/>
+    <maxsimfreq max="500.0"/>
+    
+    <!-- The sun -->
+    <particle m="1.0" px="0.0" py="0.0" vx="0.0" vy="0.0" fixed="1" radius="0.06"/>
+    <!-- Earth -->
+    <particle m="1.0" px="8.0" py="0.0" vx="0.0" vy="2.236050808" fixed="0" radius="0.06"/>
+    
+    <gravitationalforce i="0" j="1" G="100"/>
+    
+    <particlecolor i="0" r="1.0" g="1.0" b="0.2"/>
+    <particlecolor i="1" r="0.0" g="0.8" b="0.4"/>
+    
+    <backgroundcolor r="0.0" g="0.0" b="0.0"/>
+    
+    <particlepath i="1" duration="250.0" r="0.0" g="0.8" b="0.4"/>
+</scene>

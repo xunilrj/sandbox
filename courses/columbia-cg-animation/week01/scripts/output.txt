@@ -1,0 +1,423 @@
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/SimpleGravityTests/test02explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/SimpleGravityTests/test02explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mNo description specified.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 1.91984e-14   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 7.10543e-15   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/SimpleGravityTests/test03explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/SimpleGravityTests/test03explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mNo description specified.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 9.5992e-15   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 3.55271e-15   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/SimpleGravityTests/test00explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/SimpleGravityTests/test00explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mNo description specified.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/SimpleGravityTests/test01explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/SimpleGravityTests/test01explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mNo description specified.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/SystemTests/ProjectileRainbowExplicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 50. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/SystemTests/ProjectileRainbowExplicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mNo description specified.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 50. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/StarterTests/helloworld.xml
+[34;1mIntegrator: [mExplicit Euler
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/StarterTests/helloworld.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mNo description specified.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/InertiaTests/test02explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/InertiaTests/test02explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mNo description specified.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/InertiaTests/test00explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/InertiaTests/test00explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mNo description specified.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/InertiaTests/test01explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................
+[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t1m1/InertiaTests/test01explicit.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mNo description specified.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts

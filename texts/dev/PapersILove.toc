@@ -36,7 +36,8 @@
 \contentsline {subsection}{\numberline {2.2}Linear Algebra}{8}{subsection.2.2}
 \contentsline {subsection}{\numberline {2.3}Real Analysis}{9}{subsection.2.3}
 \contentsline {subsection}{\numberline {2.4}Statistics}{9}{subsection.2.4}
-\contentsline {subsection}{\numberline {2.5}Forecast}{9}{subsection.2.5}
+\contentsline {subsection}{\numberline {2.5}Differential Equations}{9}{subsection.2.5}
+\contentsline {subsection}{\numberline {2.6}Forecast}{9}{subsection.2.6}
 \contentsline {section}{\numberline {3}Science}{9}{section.3}
 \contentsline {subsection}{\numberline {3.1}Research}{9}{subsection.3.1}
 \contentsline {section}{\numberline {4}Physics}{10}{section.4}

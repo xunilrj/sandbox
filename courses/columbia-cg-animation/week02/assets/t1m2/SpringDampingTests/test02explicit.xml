@@ -1,0 +1,13 @@
+<scene>
+  <description text="A single spring with a non-zero damping coefficient that is oriented along a diagonal and slightly stretched from its rest length. The amplitude of osciallations should quickly damp out. Intended as a test of basic spring damping."/>
+
+  <duration time="20.0"/>
+  <integrator type="explicit-euler" dt="0.01"/>
+  <maxsimfreq max="500.0"/>
+
+  <particle m="1.0" px="0.3000"  py="0.5196"  vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="-0.3000" py="-0.5196" vx="0.0" vy="0.0" fixed="0"/>
+
+  <edge i="0" j="1"/>
+  <springforce edge="0" k="1.0" l0="1.0" b="0.5"/>
+</scene>

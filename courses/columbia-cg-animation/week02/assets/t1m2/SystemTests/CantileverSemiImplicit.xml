@@ -1,0 +1,190 @@
+<scene>
+  <description text="A cantilever integrated with forward-backward-euler. Intended to test multiple springs acting on the same particle."/>
+
+  <maxsimfreq max="500.0"/>
+  <duration time="50.0"/>
+  <integrator type="symplectic-euler" dt="0.01"/>
+  <particle m="1.0" px="0.0" py="0.0" vx="0.0" vy="0.0" fixed="1"/>
+  <particle m="1.0" px="0.0" py="-1.0" vx="0.0" vy="0.0" fixed="1"/>
+  <particle m="1.0" px="1.0" py="0.0" vx="0.0" vy="0.0" fixed="1"/>
+  <particle m="1.0" px="1.0" py="-1.0" vx="0.0" vy="0.0" fixed="1"/>
+  <particle m="1.0" px="2.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="2.0" py="-1.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="3.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="3.0" py="-1.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="4.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="4.0" py="-1.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="5.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="5.0" py="-1.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="6.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="6.0" py="-1.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="7.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="7.0" py="-1.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="8.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="8.0" py="-1.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="9.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="9.0" py="-1.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="10.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="10.0" py="-1.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="11.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="11.0" py="-1.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="12.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="12.0" py="-1.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="13.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="13.0" py="-1.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="14.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="14.0" py="-1.0" vx="0.0" vy="0.0" fixed="0"/>
+  <simplegravity fx="0.0" fy="-2.0"/>
+  <!-- Vertical edges -->
+  <edge i="0" j="1"/>
+  <edge i="2" j="3"/>
+  <edge i="4" j="5"/>
+  <edge i="6" j="7"/>
+  <edge i="8" j="9"/>
+  <edge i="10" j="11"/>
+  <edge i="12" j="13"/>
+  <edge i="14" j="15"/>
+  <edge i="16" j="17"/>
+  <edge i="18" j="19"/>
+  <edge i="20" j="21"/>
+  <edge i="22" j="23"/>
+  <edge i="24" j="25"/>
+  <edge i="26" j="27"/>
+  <edge i="28" j="29"/>
+  <!-- Horizontal edges, top -->
+  <edge i="0" j="2"/>
+  <edge i="2" j="4"/>
+  <edge i="4" j="6"/>
+  <edge i="6" j="8"/>
+  <edge i="8" j="10"/>
+  <edge i="10" j="12"/>
+  <edge i="12" j="14"/>
+  <edge i="14" j="16"/>
+  <edge i="16" j="18"/>
+  <edge i="18" j="20"/>
+  <edge i="20" j="22"/>
+  <edge i="22" j="24"/>
+  <edge i="24" j="26"/>
+  <edge i="26" j="28"/>
+  <!-- Horizontal edges, bottom -->
+  <edge i="1" j="3"/>
+  <edge i="3" j="5"/>
+  <edge i="5" j="7"/>
+  <edge i="7" j="9"/>
+  <edge i="9" j="11"/>
+  <edge i="11" j="13"/>
+  <edge i="13" j="15"/>
+  <edge i="15" j="17"/>
+  <edge i="17" j="19"/>
+  <edge i="19" j="21"/>
+  <edge i="21" j="23"/>
+  <edge i="23" j="25"/>
+  <edge i="25" j="27"/>
+  <edge i="27" j="29"/>
+  <!-- -45 degree diagonal edges -->
+  <edge i="0" j="3"/>
+  <edge i="2" j="5"/>
+  <edge i="4" j="7"/>
+  <edge i="6" j="9"/>
+  <edge i="8" j="11"/>
+  <edge i="10" j="13"/>
+  <edge i="12" j="15"/>
+  <edge i="14" j="17"/>
+  <edge i="16" j="19"/>
+  <edge i="18" j="21"/>
+  <edge i="20" j="23"/>
+  <edge i="22" j="25"/>
+  <edge i="24" j="27"/>
+  <edge i="26" j="29"/>
+  <!-- 45 degree diagonal edges -->
+  <edge i="1" j="2"/>
+  <edge i="3" j="4"/>
+  <edge i="5" j="6"/>
+  <edge i="7" j="8"/>
+  <edge i="9" j="10"/>
+  <edge i="11" j="12"/>
+  <edge i="13" j="14"/>
+  <edge i="15" j="16"/>
+  <edge i="17" j="18"/>
+  <edge i="19" j="20"/>
+  <edge i="21" j="22"/>
+  <edge i="23" j="24"/>
+  <edge i="25" j="26"/>
+  <edge i="27" j="28"/>
+  <!-- Vertical springs -->
+  <springforce edge="0" k="2000.0" l0="1.0" />
+  <springforce edge="1" k="2000.0" l0="1.0" />
+  <springforce edge="2" k="2000.0" l0="1.0" />
+  <springforce edge="3" k="2000.0" l0="1.0" />
+  <springforce edge="4" k="2000.0" l0="1.0" />
+  <springforce edge="5" k="2000.0" l0="1.0" />
+  <springforce edge="6" k="2000.0" l0="1.0" />
+  <springforce edge="7" k="2000.0" l0="1.0" />
+  <springforce edge="8" k="2000.0" l0="1.0" />
+  <springforce edge="9" k="2000.0" l0="1.0" />
+  <springforce edge="10" k="2000.0" l0="1.0" />
+  <springforce edge="11" k="2000.0" l0="1.0" />
+  <springforce edge="12" k="2000.0" l0="1.0" />
+  <springforce edge="13" k="2000.0" l0="1.0" />
+  <springforce edge="14" k="2000.0" l0="1.0" />
+  <!-- Horizontal springs, top -->
+  <springforce edge="15" k="2000.0" l0="1.0" />
+  <springforce edge="16" k="2000.0" l0="1.0" />
+  <springforce edge="17" k="2000.0" l0="1.0" />
+  <springforce edge="18" k="2000.0" l0="1.0" />
+  <springforce edge="19" k="2000.0" l0="1.0" />
+  <springforce edge="20" k="2000.0" l0="1.0" />
+  <springforce edge="21" k="2000.0" l0="1.0" />
+  <springforce edge="22" k="2000.0" l0="1.0" />
+  <springforce edge="23" k="2000.0" l0="1.0" />
+  <springforce edge="24" k="2000.0" l0="1.0" />
+  <springforce edge="25" k="2000.0" l0="1.0" />
+  <springforce edge="26" k="2000.0" l0="1.0" />
+  <springforce edge="27" k="2000.0" l0="1.0" />
+  <springforce edge="28" k="2000.0" l0="1.0" />
+  <!-- Horizontal springs, bottom -->
+  <springforce edge="29" k="2000.0" l0="1.0" />
+  <springforce edge="30" k="2000.0" l0="1.0" />
+  <springforce edge="31" k="2000.0" l0="1.0" />
+  <springforce edge="32" k="2000.0" l0="1.0" />
+  <springforce edge="33" k="2000.0" l0="1.0" />
+  <springforce edge="34" k="2000.0" l0="1.0" />
+  <springforce edge="35" k="2000.0" l0="1.0" />
+  <springforce edge="36" k="2000.0" l0="1.0" />
+  <springforce edge="37" k="2000.0" l0="1.0" />
+  <springforce edge="38" k="2000.0" l0="1.0" />
+  <springforce edge="39" k="2000.0" l0="1.0" />
+  <springforce edge="40" k="2000.0" l0="1.0" />
+  <springforce edge="41" k="2000.0" l0="1.0" />
+  <springforce edge="42" k="2000.0" l0="1.0" />
+  <!-- -45 degree diagonal springs -->
+  <springforce edge="43" k="2000.0" l0="1.41421356237" />
+  <springforce edge="44" k="2000.0" l0="1.41421356237" />
+  <springforce edge="45" k="2000.0" l0="1.41421356237" />
+  <springforce edge="46" k="2000.0" l0="1.41421356237" />
+  <springforce edge="47" k="2000.0" l0="1.41421356237" />
+  <springforce edge="48" k="2000.0" l0="1.41421356237" />
+  <springforce edge="49" k="2000.0" l0="1.41421356237" />
+  <springforce edge="50" k="2000.0" l0="1.41421356237" />
+  <springforce edge="51" k="2000.0" l0="1.41421356237" />
+  <springforce edge="52" k="2000.0" l0="1.41421356237" />
+  <springforce edge="53" k="2000.0" l0="1.41421356237" />
+  <springforce edge="54" k="2000.0" l0="1.41421356237" />
+  <springforce edge="55" k="2000.0" l0="1.41421356237" />
+  <springforce edge="56" k="2000.0" l0="1.41421356237" />
+  <!-- 45 degree diagonal springs -->
+  <springforce edge="57" k="2000.0" l0="1.41421356237" />
+  <springforce edge="58" k="2000.0" l0="1.41421356237" />
+  <springforce edge="59" k="2000.0" l0="1.41421356237" />
+  <springforce edge="60" k="2000.0" l0="1.41421356237" />
+  <springforce edge="61" k="2000.0" l0="1.41421356237" />
+  <springforce edge="62" k="2000.0" l0="1.41421356237" />
+  <springforce edge="63" k="2000.0" l0="1.41421356237" />
+  <springforce edge="64" k="2000.0" l0="1.41421356237" />
+  <springforce edge="65" k="2000.0" l0="1.41421356237" />
+  <springforce edge="66" k="2000.0" l0="1.41421356237" />
+  <springforce edge="67" k="2000.0" l0="1.41421356237" />
+  <springforce edge="68" k="2000.0" l0="1.41421356237" />
+  <springforce edge="69" k="2000.0" l0="1.41421356237" />
+  <springforce edge="70" k="2000.0" l0="1.41421356237" />
+</scene>

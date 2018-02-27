@@ -1,0 +1,77 @@
+<scene>
+  <description text="Multiple springs with increasing ratio of k/m. Springs beside each other horizontally have the same ratio of k/m, but achieved using a different combination of k and m. Intended as a test of the spring force's scaling with stiffness. Observe that the magnitudes of oscialltions with forward-backward Euler remain bounded."/>
+
+  <duration time="30.0"/>
+  <integrator type="symplectic-euler" dt="0.01"/>
+  <maxsimfreq max="500.0"/>
+
+  <particle m="1.0" px="-1.6" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="-0.4" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <edge i="0" j="1"/>
+  <springforce edge="0" k="1.0" l0="1.0" />
+
+  <particle m="1.0" px="0.4" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="1.6" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <edge i="2" j="3"/>
+  <springforce edge="1" k="1.0" l0="1.0" />
+
+  <particle m="1.0" px="-1.6" py="0.2" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="-0.4" py="0.2" vx="0.0" vy="0.0" fixed="0"/>
+  <edge i="4" j="5"/>
+  <springforce edge="2" k="2.0" l0="1.0" />
+
+  <particle m="0.5" px="0.4" py="0.2" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="0.5" px="1.6" py="0.2" vx="0.0" vy="0.0" fixed="0"/>
+  <edge i="6" j="7"/>
+  <springforce edge="3" k="1.0" l0="1.0" />
+
+  <particle m="1.0" px="-1.6" py="0.4" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="-0.4" py="0.4" vx="0.0" vy="0.0" fixed="0"/>
+  <edge i="8" j="9"/>
+  <springforce edge="4" k="4.0" l0="1.0" />
+
+  <particle m="0.25" px="0.4" py="0.4" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="0.25" px="1.6" py="0.4" vx="0.0" vy="0.0" fixed="0"/>
+  <edge i="10" j="11"/>
+  <springforce edge="5" k="1.0" l0="1.0" />
+
+  <particle m="1.0" px="-1.6" py="-0.2" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="-0.4" py="-0.2" vx="0.0" vy="0.0" fixed="0"/>
+  <edge i="12" j="13"/>
+  <springforce edge="6" k="0.5" l0="1.0" />
+
+  <particle m="2.0" px="0.4" py="-0.2" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="2.0" px="1.6" py="-0.2" vx="0.0" vy="0.0" fixed="0"/>
+  <edge i="14" j="15"/>
+  <springforce edge="7" k="1.0" l0="1.0" />
+
+  <particle m="1.0" px="-1.6" py="-0.4" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="-0.4" py="-0.4" vx="0.0" vy="0.0" fixed="0"/>
+  <edge i="16" j="17"/>
+  <springforce edge="8" k="0.25" l0="1.0" />
+
+  <particle m="4.0" px="0.4" py="-0.4" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="4.0" px="1.6" py="-0.4" vx="0.0" vy="0.0" fixed="0"/>
+  <edge i="18" j="19"/>
+  <springforce edge="9" k="1.0" l0="1.0" />
+
+  <particle m="1.0" px="-1.6" py="-0.6" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="-0.4" py="-0.6" vx="0.0" vy="0.0" fixed="0"/>
+  <edge i="20" j="21"/>
+  <springforce edge="10" k="0.125" l0="1.0" />
+
+  <particle m="8.0" px="0.4" py="-0.6" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="8.0" px="1.6" py="-0.6" vx="0.0" vy="0.0" fixed="0"/>
+  <edge i="22" j="23"/>
+  <springforce edge="11" k="1.0" l0="1.0" />
+
+  <particle m="1.0" px="-1.6" py="0.6" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="-0.4" py="0.6" vx="0.0" vy="0.0" fixed="0"/>
+  <edge i="24" j="25"/>
+  <springforce edge="12" k="8.0" l0="1.0" />
+
+  <particle m="0.125" px="0.4" py="0.6" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="0.125" px="1.6" py="0.6" vx="0.0" vy="0.0" fixed="0"/>
+  <edge i="26" j="27"/>
+  <springforce edge="13" k="1.0" l0="1.0" />
+</scene>
