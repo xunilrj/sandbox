@@ -1,0 +1,99 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<script>
+    function fetchAndInstantiate(url, importObject) {
+        return fetch(url).then(response =>
+            response.arrayBuffer()
+        ).then(bytes =>
+            WebAssembly.instantiate(bytes, importObject)
+            ).then(results =>
+                results.instance
+            );
+    }
+
+    var table = {};
+    var unloader = {};
+
+
+
+    function exec(elem, module, name) {
+        var A, B;
+        var p = new Promise(function (a, b) {
+            A = a;
+            B = b;
+        });
+        var event = new CustomEvent('exec', {
+            bubbles: true,
+            cancelable: true,
+            detail: {
+                promise: p,
+                resolve: A,
+                reject: B,
+                module: module,
+                name: name,
+                arguments: []
+            }
+        });
+        var cancelled = !elem.dispatchEvent(event);
+        if (!cancelled) return p;
+        else return Promise.reject();
+    }
+    function unload(module) {
+        (unloader[module] || function () { })();
+    }
+    function attach(module, name) {
+        var elem = document.currentScript.previousElementSibling;
+        document.addEventListener("exec", function (e) {
+            if ((e.detail.module == module) && (e.detail.name == name)) {
+                e.detail.arguments.push(parseInt(elem.value));
+            }
+        });
+    }
+    function result(module, name, f) {
+        var elem = document.currentScript.previousElementSibling;
+        document.addEventListener("exec", function (e) {
+            if ((e.detail.module == module) && (e.detail.name == name)) {
+                e.detail.promise.then(function (x) {
+                    f(elem, x);
+                });
+            }
+        });
+    }
+    function resultHtml(module, name) {
+        result(module, name, function (item, r) { item.innerHTML = r; })
+    }
+</script>
+
+<button onclick="exec(this,'simple','add',1,2)">Run</button>
+<button onclick="unload('simple')">Unload</button>
+
+<input type="number" name="p1" value="1" /><script>attach("simple", "add")</script>
+<input type="number" name="p2" value="2" /><script>attach("simple", "add")</script>
+
+<div></div><script>resultHtml("simple","add")</script>
+
+<script>
+    document.addEventListener("exec", function (e) {
+        var name = e.detail.name;
+        var module = e.detail.module;
+        if (!unloader[module]) {
+            return fetchAndInstantiate(module + '.wasm').then(function (instance) {
+                unloader[module] = function () {
+                    Object.keys(instance.exports).forEach(function (x) {
+                        delete table[x];
+                    });
+                    delete unloader[module];
+                }
+                table = Object.assign({}, table, instance.exports);
+            }).then(function () {
+                e.detail.resolve(table[name].apply(null, e.detail.arguments));
+            })
+        }
+        else {
+            e.detail.resolve(table[name].apply(null, e.detail.arguments));
+        }
+    }, false);
+</script>
