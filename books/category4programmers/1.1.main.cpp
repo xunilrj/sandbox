@@ -55,6 +55,8 @@ F<T1,TR,1> make_f(Func<T1,TR> f)
     return {f};
 }
 
+template <typename T> T id(T x) { return x; }
+
 int main()
 {
     std::cout << g_after_f(12.0) << std::endl;
@@ -64,5 +66,12 @@ int main()
     auto og = make_f(g);
     auto composed = of|og;
 
-    std::cout << composed(24.0) << std::endl;
+    // std::cout << composed(24.0) << std::endl;
+
+    std::cout << id(10) << std::endl;
+
+    auto f1 = compose(f,id<int>);
+    auto f2 = compose(id<double>,f);
+
+    //randomly call f1,f2,f and check for equal
 }
