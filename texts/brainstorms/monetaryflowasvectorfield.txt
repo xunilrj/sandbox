@@ -1,0 +1,5 @@
+Probably the best way to understand if multiple currencies would improve the just wealth of smaller and weaker populations would be to model currency flow as vector fields. I would expect to see bigger cities forming "convergencies" sinks. With less currency (M1 and M2?), smaller cities carry stronger purchase power with the tradeoff of having less busy economies.
+
+Allows states and cities to have its own currencies, would giver power to smaller cities to be its own convergence sinks and power them to fight welath avoidance to bigger cities and capitals.
+
+proposal: model currency flow as vector field and use statistical calculus to forecast "where" a money bill will befound to rove that bigger cities uses its political power to sink wealth. Perturbing the normal economical flow of wealth.
