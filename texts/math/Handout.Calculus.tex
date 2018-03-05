@@ -395,4 +395,28 @@ $f(x)=sin(x)$ and $f'(x)=cos(x)$ \\
 	\item {MIT OpenCourse 18-01 Lecture 03 at 08:54\\
 \url{https://youtu.be/kCPVBl953eY?t=534}}
 \end{enumerate}
+
+\clearpage
+Laplace Transform
+\begin{theorem}
+	\begin{align*}
+		\mathcal{L}(f(t)) = \int_{0}^{\infty}{e^{-st}f(t)dt}
+	\end{align*}
+\end{theorem}
+\clearpage
+\begin{theorem}[Lagrange of 1]
+	\begin{align*}
+		\mathcal{L}(1) &= \frac{1}{s}\\
+		\mathcal{L}(1) &=\int_{0}^{\infty}{e^{-st}1dt}\\
+		&=\int_{0}^{\infty}{e^{-st}dt}\\
+		&=\lim_{x \to \infty}{\int_{0}^{x}{e^{-st}dt}}\\
+		&=\lim_{x \to \infty}{\frac{e^{-st}}{-s}} \bigg\rvert_{0}^{x}\\
+		&=\lim_{x \to \infty}\bigg[{\frac{e^{-sx}}{-s} - \frac{e^{-s0}}{-s}}\bigg]\\
+		&=\lim_{x \to \infty}\bigg[{\frac{e^{-sx}}{-s} - \frac{1}{-s}}\bigg]\\
+		&=\lim_{x \to \infty}\bigg[{\frac{e^{-sx}}{-s}\bigg] - \frac{1}{-s}}\\
+		&=0 - \frac{1}{-s}\\
+		&=-\frac{1}{-s}\\
+		&=\frac{1}{s}\\
+	\end{align*}
+\end{theorem}
 \end{document}

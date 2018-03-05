@@ -2,6 +2,7 @@
 #include <sstream>
 #include <iostream>
 #include <functional>
+#include <mutex>
 
 int f (double x){ return x; }
 std::string g(int x) { 
@@ -57,6 +58,27 @@ F<T1,TR,1> make_f(Func<T1,TR> f)
 
 template <typename T> T id(T x) { return x; }
 
+template <typename T, typename F>
+class Memoize
+{
+    std::mutex mutex;
+    T Value;
+    F Function;
+    // Memoize(Memoize<T,F>&) = delete;
+    // Memoize(Memoize<T,F>&&) = delete;
+public:
+    Memoize(F f) : Function(f)
+    {        
+    }
+
+    T operator ()()
+    {
+        std::lock_guard<std::mutex> guard(mutex);
+        Value = Function();
+        return Value;
+    }
+};
+
 int main()
 {
     std::cout << g_after_f(12.0) << std::endl;
@@ -74,4 +96,9 @@ int main()
     auto f2 = compose(id<double>,f);
 
     //randomly call f1,f2,f and check for equal
+    auto f = []() {return 65;};
+    Memoize<int,int(*)(void)> mf {f};
+    auto v = mf();
+
+    std::cout << v << std::endl;
 }
