@@ -1,0 +1,13 @@
+<scene>
+  <description text="A moving vertex collides with a stationary one of the same size and mass at high speeds. The first vertex should stop moving, and the second one should begin moving in the same direction and at the same speed as the first one did."/>
+
+  <duration time="1.0"/>
+  <integrator type="explicit-euler" dt="0.01"/>
+  <collision type="continuous-time"/>
+  <viewport cx="0" cy="0" size="5"/>
+
+  <particle m="1.0" px="-4.5" py="0.0" vx="100.0" vy="0.0" fixed="0" radius="0.2"/>
+
+  <particle m="1.0" px="0.0" py="0.0" vx="0.0" vy="0.0" fixed="0" radius="0.2"/>
+
+</scene>

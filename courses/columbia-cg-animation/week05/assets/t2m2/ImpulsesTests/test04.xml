@@ -1,0 +1,15 @@
+<scene>
+  <description text="A moving vertex collides with a line of stationary particles, resulting in a simulatenous collision involving all of them. The whole line should stay stationary except the far right one, which starts moving at a constant velocity."/>
+
+  <duration time="2.0"/>
+  <integrator type="explicit-euler" dt="0.01"/>
+  <collision type="hybrid" maxiters="1000" k="0"/>
+
+  <particle m="1.0" px="-1.0" py="0.0" vx="1.0" vy="0.0" fixed="0" radius="0.2"/>
+
+  <particle m="1.0" px="0.0" py="0.0" vx="0.0" vy="0.0" fixed="0" radius="0.2"/>
+  <particle m="1.0" px="0.4" py="0.0" vx="0.0" vy="0.0" fixed="0" radius="0.2"/>
+  <particle m="1.0" px="0.8" py="0.0" vx="0.0" vy="0.0" fixed="0" radius="0.2"/>
+  <particle m="1.0" px="1.2" py="0.0" vx="0.0" vy="0.0" fixed="0" radius="0.2"/>
+
+</scene>

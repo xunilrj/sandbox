@@ -1,0 +1,33 @@
+<scene>
+  <description text="Example of vortex force."/>
+
+  <duration time="100.0"/>
+  <integrator type="symplectic-euler" dt="0.005"/>
+  <maxsimfreq max="5000.0"/>
+
+  <particle m="1000000000.0" px="0.0" py="0.0" vx="0.0" vy="0.0" fixed="0" radius="0.08"/>
+  
+  <particle m="1.0" px="2.0" py="0.0" vx="0.0" vy="0.0" fixed="0" radius="0.08"/>
+  <particle m="1.0" px="3.0" py="0.0" vx="0.0" vy="0.0" fixed="0" radius="0.08"/>
+  <particle m="1.0" px="4.0" py="0.0" vx="0.0" vy="0.0" fixed="0" radius="0.08"/>
+
+  <particle m="1000000000.0" px="0.0" py="5.0" vx="0.0" vy="0.0" fixed="0" radius="0.08"/>
+  
+  <vortexforce i="0" j="1" kbs="0.8" kvc="1000.0"/>
+  <vortexforce i="0" j="2" kbs="0.8" kvc="1000.0"/>
+  <vortexforce i="0" j="3" kbs="0.8" kvc="1000.0"/>
+
+  <vortexforce i="4" j="1" kbs="0.8" kvc="1000.0"/>
+  <vortexforce i="4" j="2" kbs="0.8" kvc="1000.0"/>
+  <vortexforce i="4" j="3" kbs="0.8" kvc="1000.0"/>
+
+  <particlecolor i="0" r="1.0" g="0.0" b="0.0"/>
+  <particlecolor i="1" r="0.0" g="0.0" b="1.0"/>
+  
+  <particlecolor i="4" r="1.0" g="0.0" b="0.0"/>
+
+  <particlepath i="0" duration="10.0" r="1.0" g="0.0" b="0.0"/>
+  <particlepath i="1" duration="10.0" r="0.0" g="0.0" b="1.0"/>
+  <particlepath i="2" duration="10.0" r="0.0" g="0.0" b="1.0"/>
+  <particlepath i="3" duration="10.0" r="0.0" g="0.0" b="1.0"/>
+</scene>

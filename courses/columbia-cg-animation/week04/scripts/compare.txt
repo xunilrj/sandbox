@@ -1,0 +1,1104 @@
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/PenaltyTests/test04.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA particle bounces around between some half-planes.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 5. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/PenaltyTests/test04.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA particle bounces around between some half-planes.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 5. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/PenaltyTests/test00.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA moving vertex collides with a stationary one of the same size and mass. The first vertex should stop moving, and the second one should begin moving in the same direction and at the same speed as the first one did.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 2. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/PenaltyTests/test00.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA moving vertex collides with a stationary one of the same size and mass. The first vertex should stop moving, and the second one should begin moving in the same direction and at the same speed as the first one did.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 2. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 4.52654e-19   Passed.
+Accumulated Velocity Residual: 8.56953e-16   Passed.
+Maximum Position Residual: 2.1684e-19   Passed.
+Maximum Velocity Residual: 1.11022e-16   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/PenaltyTests/test02.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA particle drops onto a floor. The particle should reverse direction.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 2. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/PenaltyTests/test02.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA particle drops onto a floor. The particle should reverse direction.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 2. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 1.06859e-15   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 1.11022e-16   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/PenaltyTests/test03.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA simulation of the classic Newton's Cradle toy. Only the first and last particle should move substantially.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/PenaltyTests/test03.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA simulation of the classic Newton's Cradle toy. Only the first and last particle should move substantially.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/PenaltyTests/test01.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA particle hits an edge at a right angle. The particle should reverse direction, and the edge should start moving downward without pivoting.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/PenaltyTests/test01.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mCollisions disabled
+[34;1mDescription: [mA particle hits an edge at a right angle. The particle should reverse direction, and the edge should start moving downward without pivoting.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 1.02088e-15   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 1.11022e-16   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/VertexEdgeTests/test02.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mTwo twirling batons collide in mid-air.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 3. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/VertexEdgeTests/test02.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mTwo twirling batons collide in mid-air.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 3. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/VertexEdgeTests/test03.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA particle hits an edge from the side.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/VertexEdgeTests/test03.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA particle hits an edge from the side.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/VertexEdgeTests/test01.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA particle hits an edge from the side. The particle should stop moving, and the edge should start moving to the right.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/VertexEdgeTests/test01.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA particle hits an edge from the side. The particle should stop moving, and the edge should start moving to the right.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/VertexEdgeTests/test00.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA particle hits an edge at a right angle. The particle should reverse direction, and the edge should start moving downward without pivoting.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/VertexEdgeTests/test00.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA particle hits an edge at a right angle. The particle should reverse direction, and the edge should start moving downward without pivoting.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/HalfplaneTests/test00.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA particle drops onto a floor. The particle should reverse direction.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 2. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/HalfplaneTests/test00.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA particle drops onto a floor. The particle should reverse direction.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 2. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/HalfplaneTests/test02.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA spring is trapped in a diamond box with gravity. The spring should bounce around erratically.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/HalfplaneTests/test02.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA spring is trapped in a diamond box with gravity. The spring should bounce around erratically.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 20. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/HalfplaneTests/test01.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA spring bounces between the floor and ceiling.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/HalfplaneTests/test01.xml
+[34;1mIntegrator: [mForward-Backward Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA spring bounces between the floor and ceiling.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 10. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/FixedTests/test00.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA moving particle collides with a fixed one. The moving one should reverse direction, and the fixed one should stay put.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 2. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/FixedTests/test00.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA moving particle collides with a fixed one. The moving one should reverse direction, and the fixed one should stay put.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 2. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/FixedTests/test02.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA particle hits a fixed edge from the side. The particle should reverse direction, and the edge should stay put.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/FixedTests/test02.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA particle hits a fixed edge from the side. The particle should reverse direction, and the edge should stay put.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/FixedTests/test03.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA particle hits an edge that pivots about one vertex.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/FixedTests/test03.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA particle hits an edge that pivots about one vertex.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 8. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/FixedTests/test01.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA particle hits a fixed edge at a right angle. The particle should reverse direction, and the edge should stay put.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/FixedTests/test01.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA particle hits a fixed edge at a right angle. The particle should reverse direction, and the edge should stay put.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/VertexVertexTests/test00.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA moving vertex collides with a stationary one of the same size and mass. The first vertex should stop moving, and the second one should begin moving in the same direction and at the same speed as the first one did.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 2. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/VertexVertexTests/test00.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA moving vertex collides with a stationary one of the same size and mass. The first vertex should stop moving, and the second one should begin moving in the same direction and at the same speed as the first one did.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 2. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/VertexVertexTests/test02.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mPool trick shot. There should be a chain reaction of collisions, with the bottom-left particle ending up moving to the left and slightly downward.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/VertexVertexTests/test02.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mPool trick shot. There should be a chain reaction of collisions, with the bottom-left particle ending up moving to the left and slightly downward.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 4. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/VertexVertexTests/test01.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mTwo moving vertices of different size and mass collide at a glancing angle. The small particle should get deflected quite a bit upwards, and the large particle a little bit to the right.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 2. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/VertexVertexTests/test01.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mTwo moving vertices of different size and mass collide at a glancing angle. The small particle should get deflected quite a bit upwards, and the large particle a little bit to the right.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 2. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/CORTests/test00.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mTwo twirling batons collide in mid-air, and stick.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 3. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/CORTests/test00.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mTwo twirling batons collide in mid-air, and stick.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 3. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/CORTests/test02.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [m9-ball break. The balls should scatter in many directions towards the top-right.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 2. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/CORTests/test02.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [m9-ball break. The balls should scatter in many directions towards the top-right.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 2. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/CORTests/test03.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA particle bounces down some half-planes with low COR. The particle should eventually roll to the bottom of the V.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 5. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/CORTests/test03.xml
+[34;1mIntegrator: [mExplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mA particle bounces down some half-planes with low COR. The particle should eventually roll to the bottom of the V.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 5. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts
+[H[2J~/workspace/build ~/workspace/scripts
+[100%] Built target FOSSSim
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/CORTests/test01.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mTwo moving vertices of different size and mass collide at a glancing angle, and should stick and move together due to 0 COR.
+[35;1mFOSSSim message: [mSaving simulation to: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 2. Exiting.
+[35;1mFOSSSim message: [mSaved simulation to file './output.bin'.
+[32;1m------------------------------------------    
+  _____ ___  ____ ____ ____  _                
+ |  ___/ _ \/ ___/ ___/ ___|(_)_ __ ___      
+ | |_ | | | \___ \___ \___ \| | '_ ` _ \ 
+ |  _|| |_| |___) |__) |__) | | | | | | |     
+ |_|   \___/|____/____/____/|_|_| |_| |_|    
+------------------------------------------    [m
+
+[34;1mFOSSSim Version: [mFall 2010 v.A
+[34;1mBuild type: [mRelease
+[34;1mVectorization: [mEnabled
+[34;1mScene: [m/home/codio/workspace/assets/t2m1/CORTests/test01.xml
+[34;1mIntegrator: [mImplicit Euler
+[34;1mCollision Handling: [mSimple Collision Handling
+[34;1mDescription: [mTwo moving vertices of different size and mass collide at a glancing angle, and should stick and move together due to 0 COR.
+[35;1mFOSSSim message: [mBenchmarking simulation in: ./output.bin
+[35;1mProgress: [m--------------------------------------------------
+          .................................................[35;1mFOSSSim message: [mSimulation complete at time 2. Exiting.
+[35;1mFOSSSim message: [mColsing benchmarked simulation file './output.bin'.
+Accumulated Position Residual: 0   Passed.
+Accumulated Velocity Residual: 0   Passed.
+Maximum Position Residual: 0   Passed.
+Maximum Velocity Residual: 0   Passed.
+Collisions Passed: Yes.
+Overall success: Passed.
+[35;1mFOSSSim message: [mSaved residual to residual.txt.
+~/workspace/scripts

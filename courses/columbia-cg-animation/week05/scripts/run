@@ -1,0 +1,4 @@
+#!/bin/bash
+pushd ..
+./build/FOSSSim/FOSSSim -s $1
+popd

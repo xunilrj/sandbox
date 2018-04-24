@@ -1,0 +1,15 @@
+<scene>
+  <description text="A particle bounces down some half-planes with low COR. The particle should eventually roll to the bottom of the V."/>
+
+  <duration time="5.0"/>
+  <integrator type="implicit-euler" dt="0.01"/>
+  <viewport cx="0" cy="0" size="5"/>
+  <collision type="continuous-time" COR="0.5"/>
+
+  <particle m="1.0" px="0.0" py="0.0" vx="2" vy="5" fixed="0" radius="0.2"/>
+  <halfplane px="-1" py="-1" nx="1" ny="1"/>
+  <halfplane px="1" py="-1" nx="-1" ny="1"/>
+  <halfplane px="0" py="-1.5" nx="0" ny="1"/>
+
+  <simplegravity fx="0" fy="-9.8"/>
+</scene>

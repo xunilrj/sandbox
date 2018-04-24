@@ -1,0 +1,6 @@
+It is very common to use differentiation dx/dt as a normal fraction.
+But for this to be done mathematically we need to define dx. One can do this using NSA (Non-Standard Analysis and hyperreals).
+
+Bu can we define dx actualy as the later part of a Taylor aproximation?
+
+f(x) ˜ f(a) + f'(a)(x - a) + 1/2f''(a)(x - a)^2 + 1/6f'''(a)(x - a)^3 + · · · + 1/m!df(m)/dxm(a)(x - a)^m.

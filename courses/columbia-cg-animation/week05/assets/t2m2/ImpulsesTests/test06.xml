@@ -1,0 +1,19 @@
+<scene>
+  <description text="9-ball break. The balls should scatter in many directions towards the top-right."/>
+
+  <duration time="2.0"/>
+  <integrator type="forward-backward-euler" dt="0.01"/>
+  <collision type="hybrid" maxiters="10000" k="0" COR="0.3"/>
+
+  <particle m="1.0" px="-3.0" py="-1.1" vx="6.0" vy="2.0" fixed="0" radius="0.1"/>
+
+  <particle m="1.0" px="0.0" py="0.0" vx="0.0" vy="0.0" fixed="0" radius="0.1"/>
+  <particle m="1.0" px="0.1733"  py="0.1" vx="0" vy="0" fixed="0" radius="0.1"/>
+  <particle m="1.0" px="0.1733" py="-0.1" vx="0" vy="0" fixed="0" radius="0.1"/>
+  <particle m="1.0" px="0.3467" py="0" vx="0"vy="0" fixed="0" radius="0.1"/>
+  <particle m="1.0" px="0.3467" py="0.2" vx="0" vy="0" fixed="0" radius="0.1"/>
+  <particle m="1.0" px="0.3467" py="-0.2" vx="0" vy="0" fixed="0" radius="0.1"/>
+  <particle m="1.0" px="0.52" py="0.1" vx="0" vy="0" fixed="0" radius="0.1"/>
+  <particle m="1.0" px="0.52" py="-0.1" vx="0" vy="0" fixed="0" radius="0.1"/>
+  <particle m="1.0" px="0.694" py="0" vx="0" vy="0" fixed="0" radius="0.1"/>
+</scene>

@@ -1,0 +1,22 @@
+file ./FOSSSim
+cd ..
+cd ..
+cd scripts
+cd gdb
+pwd
+
+python
+import sys
+sys.path.insert(0, '/home/codio/workspace/scripts/gdb')
+from printers import register_eigen_printers
+register_eigen_printers (None)
+end
+
+source 001.breakpoints.gdb
+source 002.run.gdb
+cd ..
+cd ..
+cd build
+cd FOSSSim
+pwd
+

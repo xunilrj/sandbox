@@ -1,0 +1,97 @@
+<scene>
+  <description text=""/>
+  <duration time="7.0"/>
+  <integrator type="linearized-implicit-euler" dt="0.001"/>  
+  <particle m="1" px="0.97000436" py="-0.24308753" vx="0.46620369" vy="0.43236573" fixed="0" radius="0.01"/>
+ <particlepath i="0" duration="5.0" r="0.0" g="0.8" b="0.4"/>
+ <particlepath i="0" duration="0.2" r="1.0" g="0.0" b="0.0"/>
+ <particle m="1" px="0" py="0" vx="-0.93240737" vy="-0.86473146" fixed="0" radius="0.01"/>
+ <particlepath i="1" duration="5.0" r="0.0" g="0.8" b="0.4"/>
+ <particlepath i="1" duration="0.2" r="1.0" g="0.0" b="0.0"/>
+ <particle m="1" px="-0.97000436" py="0.24308753" vx="0.46620369" vy="0.43236573" fixed="0" radius="0.01"/>
+ <particlepath i="2" duration="5.0" r="0.0" g="0.8" b="0.4"/>
+ <particlepath i="2" duration="0.2" r="1.0" g="0.0" b="0.0"/>
+ <particle m="1" px="5.382857" py="0" vx="0" vy="0.584873" fixed="0" radius="0.01"/>
+ <particlepath i="3" duration="5.0" r="0.0" g="0.8" b="0.4"/>
+ <particlepath i="3" duration="0.2" r="1.0" g="0.0" b="0.0"/>
+ <particle m="1" px="4" py="0.15703" vx="1.871935" vy="0" fixed="0" radius="0.01"/>
+ <particlepath i="4" duration="5.0" r="0.0" g="0.8" b="0.4"/>
+ <particlepath i="4" duration="0.2" r="1.0" g="0.0" b="0.0"/>
+ <particle m="1" px="2.617143" py="0" vx="0" vy="-0.584873" fixed="0" radius="0.01"/>
+ <particlepath i="5" duration="5.0" r="0.0" g="0.8" b="0.4"/>
+ <particlepath i="5" duration="0.2" r="1.0" g="0.0" b="0.0"/>
+ <particle m="1" px="4" py="-0.15703" vx="-1.871935" vy="0" fixed="0" radius="0.01"/>
+ <particlepath i="6" duration="5.0" r="0.0" g="0.8" b="0.4"/>
+ <particlepath i="6" duration="0.2" r="1.0" g="0.0" b="0.0"/>
+
+  <gravitationalforce i="0" j="1" G="1"/>
+ <gravitationalforce i="0" j="2" G="1"/>
+ <gravitationalforce i="1" j="2" G="1"/>
+
+  <gravitationalforce i="3" j="4" G="1"/>
+ <gravitationalforce i="3" j="5" G="1"/>
+ <gravitationalforce i="3" j="6" G="1"/>
+ <gravitationalforce i="4" j="5" G="1"/>
+ <gravitationalforce i="4" j="6" G="1"/>
+ <gravitationalforce i="5" j="6" G="1"/>
+    
+    <!-- RIGHT HAIR -->
+  <particle m="1.0" px="0.0" py="-1.0" vx="0.0" vy="0.0" fixed="1" radius="0.15"/>
+  <particle m="1.0" px="0.15" py="-0.85" vx="0.0" vy="0.0" fixed="1" radius="0.01"/>
+  <particle m="1.0" px="0.2" py="-1.0" vx="0.0" vy="0.0" fixed="0" radius="0.01"/>
+  <particle m="1.0" px="0.3" py="-1.0" vx="0.0" vy="0.0" fixed="0" radius="0.01"/>
+  <particle m="1.0" px="0.4" py="-1.0" vx="0.0" vy="0.0" fixed="0" radius="0.01"/>
+  <particle m="1.0" px="0.5" py="-1.0" vx="0.0" vy="0.0" fixed="0" radius="0.01"/>
+  <particle m="1.0" px="0.6" py="-1.0" vx="0.0" vy="0.0" fixed="0" radius="0.01"/>
+  <particle m="10000" px="0" py="-4" vx="0" vy="0" fixed="1" radius="0.001"/>
+  
+    <edge i="7" j="8" radius="0.025"/>
+  <edge i="8" j="9" radius="0.025"/>
+  <edge i="9" j="10" radius="0.025"/>
+  <edge i="10" j="11" radius="0.025"/>
+  <edge i="11" j="12" radius="0.025"/>
+  <edge i="12" j="13" radius="0.025"/>
+    
+  <springforce edge="0" k="1000000.0" l0="0.1" b="10" />
+  <springforce edge="1" k="1000000.0" l0="0.1" b="10" />
+  <springforce edge="2" k="1000000.0" l0="0.1" b="10" />
+  <springforce edge="3" k="1000000.0" l0="0.1" b="10" />
+  <springforce edge="4" k="1000000.0" l0="0.1" b="10" />
+  <springforce edge="5" k="1000000.0" l0="0.1" b="10" />
+    
+    <gravitationalforce i="10" j="14" G="4.0"/>
+    <gravitationalforce i="11" j="14" G="4.0"/>
+    <gravitationalforce i="12" j="14" G="4.0"/>
+    <gravitationalforce i="13" j="14" G="4.0"/>
+    
+    
+    <!-- LEFT HAIR -->
+  <particle m="1.0" px="0.0" py="-1.0" vx="0.0" vy="0.0" fixed="1" radius="0.15"/>
+  <particle m="1.0" px="-0.15" py="-0.85" vx="0.0" vy="0.0" fixed="1" radius="0.01"/>
+  <particle m="1.0" px="-0.2" py="-1.0" vx="0.0" vy="0.0" fixed="0" radius="0.01"/>
+  <particle m="1.0" px="-0.3" py="-1.0" vx="0.0" vy="0.0" fixed="0" radius="0.01"/>
+  <particle m="1.0" px="-0.4" py="-1.0" vx="0.0" vy="0.0" fixed="0" radius="0.01"/>
+  <particle m="1.0" px="-0.5" py="-1.0" vx="0.0" vy="0.0" fixed="0" radius="0.01"/>
+  <particle m="1.0" px="-0.6" py="-1.0" vx="0.0" vy="0.0" fixed="0" radius="0.01"/>
+  
+  
+    <edge i="15" j="16" radius="0.025"/>
+  <edge i="16" j="17" radius="0.025"/>
+  <edge i="17" j="18" radius="0.025"/>
+  <edge i="18" j="19" radius="0.025"/>
+  <edge i="19" j="20" radius="0.025"/>
+  <edge i="20" j="21" radius="0.025"/>
+    
+  <springforce edge="6" k="1000000.0" l0="0.1" b="10" />
+  <springforce edge="7" k="1000000.0" l0="0.1" b="10" />
+  <springforce edge="8" k="1000000.0" l0="0.1" b="10" />
+  <springforce edge="9" k="1000000.0" l0="0.1" b="10" />
+  <springforce edge="10" k="1000000.0" l0="0.1" b="10" />
+  <springforce edge="11" k="1000000.0" l0="0.1" b="10" />
+    
+    <gravitationalforce i="18" j="14" G="4.0"/>
+    <gravitationalforce i="19" j="14" G="4.0"/>
+    <gravitationalforce i="20" j="14" G="4.0"/>
+    <gravitationalforce i="21" j="14" G="4.0"/>
+
+</scene>

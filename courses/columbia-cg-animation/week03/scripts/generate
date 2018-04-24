@@ -1,0 +1,6 @@
+#!/bin/bash
+pushd ..
+mkdir build
+cd build
+cmake ..
+popd

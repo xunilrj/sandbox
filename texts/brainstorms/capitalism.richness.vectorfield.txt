@@ -1,0 +1,20 @@
+A good experiement would be to model economy as a vector field and important points:
+1 - farms
+2 - industries
+3 - shops
+4 - banks
+5 - governments
+6 - houses
+
+modeleds as areas in a vector fields and understand each role in the economy using divergence theory.
+
+https://www.khanacademy.org/math/multivariable-calculus/multivariable-derivatives
+
+A profit company would be a divergent area in utility.
+Farms would also be divergent in utility, but also materially.
+House would be convergent but they consume more than they produce.
+
+We would have two dual fields.
+One mapping the flow of utility. One mapping the flow of cash/money.
+
+This explain the so called accumulation of richness. It is just one side of the "coin".

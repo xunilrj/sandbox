@@ -1,0 +1,55 @@
+<!-- A pendulum composed of multiple point masses connected by springs -->
+
+<scene>
+  <duration time="50.0"/>
+  <integrator type="implicit-euler" dt="0.01"/>
+  <maxsimfreq max="100.0"/>
+
+  <particle m="1.0" px="0.0" py="0.0" vx="0.0" vy="0.0" fixed="1" radius="0.2"/>
+  <particle m="1.0" px="1.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="2.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="3.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="4.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="5.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+  <particle m="1.0" px="6.0" py="0.0" vx="0.0" vy="0.0" fixed="0"/>
+
+  <edge i="0" j="1" radius="0.025"/>
+  <edge i="1" j="2" radius="0.025"/>
+  <edge i="2" j="3" radius="0.025"/>
+  <edge i="3" j="4" radius="0.025"/>
+  <edge i="4" j="5" radius="0.025"/>
+  <edge i="5" j="6" radius="0.025"/>
+
+  <springforce edge="0" k="10000.0" l0="1.0" />
+  <springforce edge="1" k="10000.0" l0="1.0" />
+  <springforce edge="2" k="10000.0" l0="1.0" />
+  <springforce edge="3" k="10000.0" l0="1.0" />
+  <springforce edge="4" k="10000.0" l0="1.0" />
+  <springforce edge="5" k="10000.0" l0="1.0" />
+
+  <simplegravity fx="0.0" fy="-9.81"/>
+  
+  <particlecolor i="0" r="0.3" g="0.2" b="0.6"/>
+  <particlecolor i="1" r="1.0" g="0.25" b="0.25"/>
+  <particlecolor i="2" r="0.6" g="0.5" b="0.25"/>
+  <particlecolor i="3" r="1.0" g="0.5" b="0.2"/>
+  <particlecolor i="4" r="1.0" g="0.5" b="0.8"/>
+  <particlecolor i="5" r="1.0" g="0.9" b="0.25"/>
+  <particlecolor i="6" r="0.1" g="0.5" b="0.25"/>
+  
+  <edgecolor i="0" r="0.3" g="0.2" b="0.6"/>
+  <edgecolor i="1" r="1.0" g="0.25" b="0.25"/>
+  <edgecolor i="2" r="0.6" g="0.5" b="0.25"/>
+  <edgecolor i="3" r="1.0" g="0.5" b="0.2"/>
+  <edgecolor i="4" r="1.0" g="0.5" b="0.8"/>
+  <edgecolor i="5" r="1.0" g="0.9" b="0.25"/>
+  
+  <particlepath i="1" duration="2.0" r="1.0" g="0.25" b="0.25"/>
+  <particlepath i="2" duration="2.0" r="0.6" g="0.5" b="0.25"/>
+  <particlepath i="3" duration="2.0" r="1.0" g="0.5" b="0.2"/>
+  <particlepath i="4" duration="2.0" r="1.0" g="0.5" b="0.8"/>
+  <particlepath i="5" duration="2.0" r="1.0" g="0.9" b="0.25"/>
+  <particlepath i="6" duration="2.0" r="0.1" g="0.5" b="0.25"/>
+  
+  <backgroundcolor r="0.0" g="0.0" b="0.0"/>
+</scene>

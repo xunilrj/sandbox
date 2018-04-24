@@ -1,0 +1,75 @@
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/codio/workspace/build
+[100%] Built target FOSSSim
+
+==============================================================================
+  Running Scenes:
+==============================================================================
+
+    [34mt2m2/ContinuousTimeTests/test00.xml[0m                                 [DONE]
+    [34mt2m2/ContinuousTimeTests/test01.xml[0m                                 [DONE]
+    [34mt2m2/ContinuousTimeTests/test02.xml[0m                                 [DONE]
+    [34mt2m2/ContinuousTimeTests/test03.xml[0m                                 [DONE]
+    [34mt2m2/ContinuousTimeTests/test04.xml[0m                                 [DONE]
+    [34mt2m2/ContinuousTimeTests/test05.xml[0m                                 [DONE]
+    [34mt2m2/ContinuousTimeTests/test06.xml[0m                                 [DONE]
+    [34mt2m2/ContinuousTimeTests/test07.xml[0m                                 [DONE]
+    [34mt2m2/ContinuousTimeTests/test08.xml[0m                                 [DONE]
+    [34mt2m2/GeometricTests/test00.xml[0m                                      [DONE]
+    [34mt2m2/GeometricTests/test01.xml[0m                                      [DONE]
+    [34mt2m2/GeometricTests/test02.xml[0m                                      [DONE]
+    [34mt2m2/GeometricTests/test03.xml[0m                                      [DONE]
+    [34mt2m2/GeometricTests/test04.xml[0m                                      [DONE]
+    [34mt2m2/GeometricTests/test05.xml[0m                                      [DONE]
+    [34mt2m2/GeometricTests/test06.xml[0m                                      [DONE]
+    [34mt2m2/GeometricTests/test07.xml[0m                                      [DONE]
+    [34mt2m2/HolisticTests/test00.xml[0m                                       [DONE]
+    [34mt2m2/HolisticTests/test01.xml[0m                                       [DONE]
+    [34mt2m2/HolisticTests/test02.xml[0m                                       [DONE]
+    [34mt2m2/HolisticTests/test03.xml[0m                                       [DONE]
+    [34mt2m2/ImpulsesTests/test00.xml[0m                                       [DONE]
+    [34mt2m2/ImpulsesTests/test01.xml[0m                                       [DONE]
+    [34mt2m2/ImpulsesTests/test02.xml[0m                                       [DONE]
+    [34mt2m2/ImpulsesTests/test03.xml[0m                                       [DONE]
+    [34mt2m2/ImpulsesTests/test04.xml[0m                                       [DONE]
+    [34mt2m2/ImpulsesTests/test05.xml[0m                                       [DONE]
+    [34mt2m2/ImpulsesTests/test06.xml[0m                                       [DONE]
+
+==============================================================================
+  Results:
+==============================================================================
+
+    [34mt2m2/ContinuousTimeTests/test00.xml[0m                                 [1m[32m[ OK ]
+[0m[0m    [34mt2m2/ContinuousTimeTests/test01.xml[0m                                 [1m[32m[ OK ]
+[0m[0m    [34mt2m2/ContinuousTimeTests/test02.xml[0m                                 [1m[32m[ OK ]
+[0m[0m    [34mt2m2/ContinuousTimeTests/test03.xml[0m                                 [1m[32m[ OK ]
+[0m[0m    [34mt2m2/ContinuousTimeTests/test04.xml[0m                                 [1m[32m[ OK ]
+[0m[0m    [34mt2m2/ContinuousTimeTests/test05.xml[0m                                 [1m[32m[ OK ]
+[0m[0m    [34mt2m2/ContinuousTimeTests/test06.xml[0m                                 [1m[32m[ OK ]
+[0m[0m    [34mt2m2/ContinuousTimeTests/test07.xml[0m                                 [1m[32m[ OK ]
+[0m[0m    [34mt2m2/ContinuousTimeTests/test08.xml[0m                                 [1m[32m[ OK ]
+[0m[0m    [34mt2m2/GeometricTests/test00.xml[0m                                      [1m[32m[ OK ]
+[0m[0m    [34mt2m2/GeometricTests/test01.xml[0m                                      [1m[32m[ OK ]
+[0m[0m    [34mt2m2/GeometricTests/test02.xml[0m                                      [1m[32m[ OK ]
+[0m[0m    [34mt2m2/GeometricTests/test03.xml[0m                                      [1m[32m[ OK ]
+[0m[0m    [34mt2m2/GeometricTests/test04.xml[0m                                      [1m[32m[ OK ]
+[0m[0m    [34mt2m2/GeometricTests/test05.xml[0m                                      [1m[32m[ OK ]
+[0m[0m    [34mt2m2/GeometricTests/test06.xml[0m                                      [1m[32m[ OK ]
+[0m[0m    [34mt2m2/GeometricTests/test07.xml[0m                                      [1m[32m[ OK ]
+[0m[0m    [34mt2m2/HolisticTests/test00.xml[0m                                       [1m[32m[ OK ]
+[0m[0m    [34mt2m2/HolisticTests/test01.xml[0m                                       [1m[32m[ OK ]
+[0m[0m    [34mt2m2/HolisticTests/test02.xml[0m                                       [1m[32m[ OK ]
+[0m[0m    [34mt2m2/HolisticTests/test03.xml[0m                                       [1m[32m[ OK ]
+[0m[0m    [34mt2m2/ImpulsesTests/test00.xml[0m                                       [1m[32m[ OK ]
+[0m[0m    [34mt2m2/ImpulsesTests/test01.xml[0m                                       [1m[32m[ OK ]
+[0m[0m    [34mt2m2/ImpulsesTests/test02.xml[0m                                       [1m[32m[ OK ]
+[0m[0m    [34mt2m2/ImpulsesTests/test03.xml[0m                                       [1m[32m[ OK ]
+[0m[0m    [34mt2m2/ImpulsesTests/test04.xml[0m                                       [1m[32m[ OK ]
+[0m[0m    [34mt2m2/ImpulsesTests/test05.xml[0m                                       [1m[32m[ OK ]
+[0m[0m    [34mt2m2/ImpulsesTests/test06.xml[0m                                       [1m[32m[ OK ]
+[0m[0m
+==============================================================================
+
+Passed [1m[32m28[0m[0m / [1m28[0m required tests and [1m[32m0[0m[0m extra credit tests for a grade of [1m[34m100.0[0m[0m% (lateness penalty [1m[31m0.0[0m[0m% included).
+

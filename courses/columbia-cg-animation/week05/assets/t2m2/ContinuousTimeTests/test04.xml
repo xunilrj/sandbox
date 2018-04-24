@@ -1,0 +1,15 @@
+<scene>
+  <description text="A particle hits an edge at a right angle and at high speed. The particle should reverse direction, and the edge should start moving downward without pivoting."/>
+
+  <duration time="4.0"/>
+  <integrator type="explicit-euler" dt="0.01"/>
+  <collision type="continuous-time"/>
+  <viewport cx="0" cy="0" size="3"/>
+
+  <particle m="1.0" px="0.0" py="3.0" vx="0.0" vy="-100.0" fixed="0" radius="0.2"/>
+
+  <particle m="1.0" px="-1.0" py="-1.0" vx="0.0" vy="0.0" fixed="0" radius="0.2"/>
+  <particle m="1.0" px=" 1.0" py="-1.0" vx="0.0" vy="0.0" fixed="0" radius="0.2"/>
+
+  <edge i="1" j="2" radius="0.075"/>
+</scene>

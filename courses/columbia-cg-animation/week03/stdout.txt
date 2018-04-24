@@ -1,0 +1,114 @@
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/codio/workspace/build
+Scanning dependencies of target FOSSSim
+[ 14%] [ 28%] [ 42%] Building CXX object FOSSSim/CMakeFiles/FOSSSim.dir/Force.cpp.o
+Building CXX object FOSSSim/CMakeFiles/FOSSSim.dir/GravitationalForce.cpp.o
+[ 57%] Building CXX object FOSSSim/CMakeFiles/FOSSSim.dir/SimpleGravityForce.cpp.o
+[ 71%] Building CXX object FOSSSim/CMakeFiles/FOSSSim.dir/SpringForce.cpp.o
+[ 85%] Building CXX object FOSSSim/CMakeFiles/FOSSSim.dir/DragDampingForce.cpp.o
+[100%] Building CXX object FOSSSim/CMakeFiles/FOSSSim.dir/LinearizedImplicitEuler.cpp.o
+Building CXX object FOSSSim/CMakeFiles/FOSSSim.dir/ImplicitEuler.cpp.o
+Linking CXX executable FOSSSim
+[100%] Built target FOSSSim
+
+==============================================================================
+  Running Scenes:
+==============================================================================
+
+    [34mt1m3/GravityTests/test00linearizedimplicit.xml[0m                      [DONE]
+    [34mt1m3/GravityTests/test01linearizedimplicit.xml[0m                      [DONE]
+    [34mt1m3/InertiaTests/test00linearizedimplicit.xml[0m                      [DONE]
+    [34mt1m3/InertiaTests/test01linearizedimplicit.xml[0m                      [DONE]
+    [34mt1m3/InertiaTests/test02linearizedimplicit.xml[0m                      [DONE]
+    [34mt1m3/LinearDragTests/test00linearizedimplicit.xml[0m                   [DONE]
+    [34mt1m3/LinearDragTests/test01linearizedimplicit.xml[0m                   [DONE]
+    [34mt1m3/LinearDragTests/test02linearizedimplicit.xml[0m                   [DONE]
+    [34mt1m3/LinearDragTests/test03linearizedimplicit.xml[0m                   [DONE]
+    [34mt1m3/SimpleGravityTests/test00linearizedimplicit.xml[0m                [DONE]
+    [34mt1m3/SimpleGravityTests/test01linearizedimplicit.xml[0m                [DONE]
+    [34mt1m3/SimpleGravityTests/test02linearizedimplicit.xml[0m                [DONE]
+    [34mt1m3/SimpleGravityTests/test03linearizedimplicit.xml[0m                [DONE]
+    [34mt1m3/SpringDampingTests/test00linearizedimplicit.xml[0m                [DONE]
+    [34mt1m3/SpringDampingTests/test01linearizedimplicit.xml[0m                [DONE]
+    [34mt1m3/SpringDampingTests/test02linearizedimplicit.xml[0m                [DONE]
+    [34mt1m3/SpringDampingTests/test03linearizedimplicit.xml[0m                [DONE]
+    [34mt1m3/SpringTests/test00linearizedimplicit.xml[0m                       [DONE]
+    [34mt1m3/SpringTests/test01linearizedimplicit.xml[0m                       [DONE]
+    [34mt1m3/SpringTests/test02linearizedimplicit.xml[0m                       [DONE]
+    [34mt1m3/SpringTests/test03linearizedimplicit.xml[0m                       [DONE]
+    [34mt1m3/SystemTests/MultiplePendulumLinearizedImplicit.xml[0m             [DONE]
+    [34mt1m3_extra_credit/GravityTests/test00implicit.xml[0m                   [DONE]
+    [34mt1m3_extra_credit/GravityTests/test01implicit.xml[0m                   [DONE]
+    [34mt1m3_extra_credit/InertiaTests/test00implicit.xml[0m                   [DONE]
+    [34mt1m3_extra_credit/InertiaTests/test01implicit.xml[0m                   [DONE]
+    [34mt1m3_extra_credit/InertiaTests/test02implicit.xml[0m                   [DONE]
+    [34mt1m3_extra_credit/LinearDragTests/test00implicit.xml[0m                [DONE]
+    [34mt1m3_extra_credit/LinearDragTests/test01implicit.xml[0m                [DONE]
+    [34mt1m3_extra_credit/LinearDragTests/test02implicit.xml[0m                [DONE]
+    [34mt1m3_extra_credit/LinearDragTests/test03implicit.xml[0m                [DONE]
+    [34mt1m3_extra_credit/SimpleGravityTests/test00implicit.xml[0m             [DONE]
+    [34mt1m3_extra_credit/SimpleGravityTests/test01implicit.xml[0m             [DONE]
+    [34mt1m3_extra_credit/SimpleGravityTests/test02implicit.xml[0m             [DONE]
+    [34mt1m3_extra_credit/SpringDampingTests/test00implicit.xml[0m             [DONE]
+    [34mt1m3_extra_credit/SpringDampingTests/test01implicit.xml[0m             [DONE]
+    [34mt1m3_extra_credit/SpringDampingTests/test02implicit.xml[0m             [DONE]
+    [34mt1m3_extra_credit/SpringDampingTests/test03implicit.xml[0m             [DONE]
+    [34mt1m3_extra_credit/SpringTests/test00implicit.xml[0m                    [DONE]
+    [34mt1m3_extra_credit/SpringTests/test01implicit.xml[0m                    [DONE]
+    [34mt1m3_extra_credit/SpringTests/test02implicit.xml[0m                    [DONE]
+    [34mt1m3_extra_credit/SpringTests/test03implicit.xml[0m                    [DONE]
+    [34mt1m3_extra_credit/SystemTests/MultiplePendulumImplicit.xml[0m          [DONE]
+
+==============================================================================
+  Results:
+==============================================================================
+
+    [34mt1m3/GravityTests/test00linearizedimplicit.xml[0m                      [1m[32m[ OK ]
+[0m[0m    [34mt1m3/GravityTests/test01linearizedimplicit.xml[0m                      [1m[32m[ OK ]
+[0m[0m    [34mt1m3/InertiaTests/test00linearizedimplicit.xml[0m                      [1m[32m[ OK ]
+[0m[0m    [34mt1m3/InertiaTests/test01linearizedimplicit.xml[0m                      [1m[32m[ OK ]
+[0m[0m    [34mt1m3/InertiaTests/test02linearizedimplicit.xml[0m                      [1m[32m[ OK ]
+[0m[0m    [34mt1m3/LinearDragTests/test00linearizedimplicit.xml[0m                   [1m[32m[ OK ]
+[0m[0m    [34mt1m3/LinearDragTests/test01linearizedimplicit.xml[0m                   [1m[32m[ OK ]
+[0m[0m    [34mt1m3/LinearDragTests/test02linearizedimplicit.xml[0m                   [1m[32m[ OK ]
+[0m[0m    [34mt1m3/LinearDragTests/test03linearizedimplicit.xml[0m                   [1m[32m[ OK ]
+[0m[0m    [34mt1m3/SimpleGravityTests/test00linearizedimplicit.xml[0m                [1m[32m[ OK ]
+[0m[0m    [34mt1m3/SimpleGravityTests/test01linearizedimplicit.xml[0m                [1m[32m[ OK ]
+[0m[0m    [34mt1m3/SimpleGravityTests/test02linearizedimplicit.xml[0m                [1m[32m[ OK ]
+[0m[0m    [34mt1m3/SimpleGravityTests/test03linearizedimplicit.xml[0m                [1m[32m[ OK ]
+[0m[0m    [34mt1m3/SpringDampingTests/test00linearizedimplicit.xml[0m                [1m[32m[ OK ]
+[0m[0m    [34mt1m3/SpringDampingTests/test01linearizedimplicit.xml[0m                [1m[32m[ OK ]
+[0m[0m    [34mt1m3/SpringDampingTests/test02linearizedimplicit.xml[0m                [1m[32m[ OK ]
+[0m[0m    [34mt1m3/SpringDampingTests/test03linearizedimplicit.xml[0m                [1m[32m[ OK ]
+[0m[0m    [34mt1m3/SpringTests/test00linearizedimplicit.xml[0m                       [1m[32m[ OK ]
+[0m[0m    [34mt1m3/SpringTests/test01linearizedimplicit.xml[0m                       [1m[32m[ OK ]
+[0m[0m    [34mt1m3/SpringTests/test02linearizedimplicit.xml[0m                       [1m[32m[ OK ]
+[0m[0m    [34mt1m3/SpringTests/test03linearizedimplicit.xml[0m                       [1m[32m[ OK ]
+[0m[0m    [34mt1m3/SystemTests/MultiplePendulumLinearizedImplicit.xml[0m             [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/GravityTests/test00implicit.xml[0m                   [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/GravityTests/test01implicit.xml[0m                   [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/InertiaTests/test00implicit.xml[0m                   [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/InertiaTests/test01implicit.xml[0m                   [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/InertiaTests/test02implicit.xml[0m                   [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/LinearDragTests/test00implicit.xml[0m                [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/LinearDragTests/test01implicit.xml[0m                [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/LinearDragTests/test02implicit.xml[0m                [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/LinearDragTests/test03implicit.xml[0m                [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/SimpleGravityTests/test00implicit.xml[0m             [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/SimpleGravityTests/test01implicit.xml[0m             [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/SimpleGravityTests/test02implicit.xml[0m             [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/SpringDampingTests/test00implicit.xml[0m             [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/SpringDampingTests/test01implicit.xml[0m             [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/SpringDampingTests/test02implicit.xml[0m             [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/SpringDampingTests/test03implicit.xml[0m             [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/SpringTests/test00implicit.xml[0m                    [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/SpringTests/test01implicit.xml[0m                    [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/SpringTests/test02implicit.xml[0m                    [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/SpringTests/test03implicit.xml[0m                    [1m[32m[ OK ]
+[0m[0m    [34mt1m3_extra_credit/SystemTests/MultiplePendulumImplicit.xml[0m          [1m[32m[ OK ]
+[0m[0m
+==============================================================================
+
+Passed [1m[32m22[0m[0m / [1m22[0m required tests and [1m[32m21[0m[0m extra credit tests for a grade of [1m[34m100.0[0m[0m% (lateness penalty [1m[31m0.0[0m[0m% included).
+

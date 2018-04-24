@@ -1,0 +1,41 @@
+<scene>
+  <description text="Many objects fall into a 'V' under gravity. They should all stack up at the bottom of the 'V'."/>
+
+  <duration time="4.0"/>
+  <viewport cx="0" cy="0" size="4"/>
+  <integrator type="forward-backward-euler" dt="0.005"/>
+  <collision type="hybrid" maxiters="0" k="50" COR="0"/>
+  <maxsimfreq max="500"/>
+
+  <particle m="1.0" px="-1.0" py="0.0" vx="1.0" vy="0.0" fixed="0" radius="0.2"/>
+
+  <particle m="1.0" px="0.0" py="0.0" vx="0.0" vy="0.0" fixed="0" radius="0.3"/>
+
+  <particle m="1.0" px="2" py="2" vx="0" vy="0" fixed="0" radius="0.1"/>
+  <particle m="1.0" px="2.3" py="2.4" vx="0" vy="0" fixed="0" radius="0.1"/>
+ 
+  <edge i="2" j="3" radius="0.08"/>
+  <springforce edge="0" l0="0.5" k="1000"/>
+
+  <particle m="1.0" px="-1" py="2" vx="0" vy="0" fixed="0" radius="0.1"/>
+  <particle m="1.0" px="-1" py="3" vx="0" vy="0" fixed="0" radius="0.1"/>
+  <particle m="1.0" px="-2" py="3" vx="0" vy="0" fixed="0" radius="0.1"/>
+ 
+  <edge i="4" j="5" radius="0.08"/>
+  <edge i="5" j="6" radius="0.08"/>
+
+  <springforce edge="1" l0="1" k="10000"/>
+  <springforce edge="2" l0="1" k="10000"/>
+
+  <halfplane px="-2" py="0" nx="2" ny="1"/>
+  <halfplane px="2" py="0" nx="-2" ny="1"/>
+  <particle m="1.0" px="2.0" py="3.0" vx="-1.0" vy="1.0" fixed="0" radius="0.2"/>
+
+  <particle m="1.0" px="0.7" py="1.0" vx="0.0" vy="0.0" fixed="0" radius="0.3"/>
+  <particle m="1.0" px="1.0" py="4.0" vx="0.0" vy="0.0" fixed="0" radius="0.2"/>
+
+  <particle m="1.0" px="-3" py="4.0" vx="0.0" vy="0.0" fixed="0" radius="0.3"/>
+
+  <simplegravity fx="0" fy="-9.8"/>
+
+</scene>

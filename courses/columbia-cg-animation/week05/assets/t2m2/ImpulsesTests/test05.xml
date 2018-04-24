@@ -1,0 +1,33 @@
+<scene>
+  <description text="A simulation of the classic Newton's Cradle toy. Only the first and last particle should move substantially."/>
+
+  <viewport cx="0" cy="0" size="5"/>
+
+  <duration time="10.0"/>
+  <integrator type="forward-backward-euler" dt="0.01"/>
+  <collision type="hybrid" k="10" maxiters="10000" thickness="0.01"/>
+
+  <particle m="1" px="0" py="5" vx="0" vy="0" fixed="1" radius="0.1"/>
+  <particle m="1" px="0" py="0" vx="0" vy="0" fixed="0" radius="0.5"/>
+
+  <particle m="1" px="1" py="5" vx="0" vy="0" fixed="1" radius="0.1"/>
+  <particle m="1" px="1" py="0" vx="0" vy="0" fixed="0" radius="0.5"/>
+
+  <particle m="1" px="-1" py="5" vx="0" vy="0" fixed="1" radius="0.1"/>
+  <particle m="1" px="-1" py="0" vx="0" vy="0" fixed="0" radius="0.5"/>
+
+  <particle m="1" px="-2" py="5" vx="0" vy="0" fixed="1" radius="0.1"/>
+  <particle m="1" px="-7" py="5" vx="0" vy="0" fixed="0" radius="0.5"/>
+
+  <edge i="0" j="1" radius="0.1"/>
+  <edge i="2" j="3" radius="0.1"/>
+  <edge i="4" j="5" radius="0.1"/>
+  <edge i="6" j="7" radius="0.1"/>
+
+  <simplegravity fx="0" fy="-9.8"/>
+  <springforce edge="0" k="10000" l0="5"/>
+  <springforce edge="1" k="10000" l0="5"/>
+  <springforce edge="2" k="10000" l0="5"/>
+  <springforce edge="3" k="10000" l0="5"/>
+
+</scene>
