@@ -269,3 +269,4 @@ sources/Powershell/Modules/Flyway/Flyway/
 jspm_packages/
 /sources/cousera-datascience/capstone/final/
 /sources/cousera-datascience/capstone/temp/
+/.build
