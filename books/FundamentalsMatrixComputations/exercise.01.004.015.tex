@@ -1,0 +1,155 @@
+\documentclass{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{systeme}
+\usepackage{hyperref}
+\begin{document}
+	Exercise 1.4.15\\
+	Let\\
+	\begin{align*}
+	A &= \begin{bmatrix}
+		4 & 0\\
+		0 & 9\\
+		\end{bmatrix}
+	\end{align*}
+	(a) Prove that A is positive definite,\\
+	(b) Calculate the Cholesky factor of $A$,\\
+	(c) Find three other upper triangular matrices $R$ such that $A = R^TR$,\\
+	(d) Let A be any $n \times n$ positive definite matrix. How many upper-triangular matrices $R$ such that $A = R^TR$ are there?\\
+	\\
+	Based on the work of \url{https://en.wikipedia.org/wiki/Andr\%C3\%A9-Louis_Cholesky}\\
+	\\
+	Proofs:\\
+	(a)\\
+	\begin{align*}
+	x^TAx &= \begin{bmatrix}
+	x_{11} & x_{21}\\
+	\end{bmatrix} * \begin{bmatrix}
+	4 & 0\\
+	0 & 9\\
+	\end{bmatrix} * \begin{bmatrix}
+	x_{11}\\
+	x_{21}\\
+	\end{bmatrix}\\
+	&= \begin{bmatrix}
+	x_{11}*4 + x_{21}*0 & x_{11}*0 + x_{21}*9\\
+	\end{bmatrix} * \begin{bmatrix}
+	x_{11}\\
+	x_{21}\\
+	\end{bmatrix}\\
+	&= \begin{bmatrix}
+	x_{11}*4 & x_{21}*9\\
+	\end{bmatrix} * \begin{bmatrix}
+	x_{11}\\
+	x_{21}\\
+	\end{bmatrix}\\
+	&= \begin{bmatrix}
+	x_{11}*4*x_{11} & x_{21}*9*x_{21}\\
+	\end{bmatrix}\\	
+	&= \begin{bmatrix}
+	4x_{11}^2 & 9x_{21}^2\\
+	\end{bmatrix} \text{ necessarily} > 0\\	
+	\end{align*}
+	\\
+	(b)\\
+	\begin{align*}
+		R &= \begin{bmatrix}
+			r_{11} & r_{12}\\
+			0 & r_{22}\\
+			\end{bmatrix}\\
+		A &= \begin{bmatrix}
+		4 & 0\\
+		0 & 9\\
+		\end{bmatrix}\\
+		R^TR &= A\\
+		\begin{bmatrix}
+		r_{11} & 0\\
+		r_{12} & r_{22}\\
+		\end{bmatrix} \begin{bmatrix}
+		r_{11} & r_{12}\\
+		0 & r_{22}\\
+		\end{bmatrix} &= \begin{bmatrix}
+		4 & 0\\
+		0 & 9\\
+		\end{bmatrix}\\
+		\begin{bmatrix}
+		r_{11}*r_{11}+0*0 & r_{11}*r_{12} + 0*r_{22}\\
+		r_{12}*r_{11}+r_{22}*0 & r_{12}*r_{12} + r_{22}*r_{22}\\
+		\end{bmatrix} &= \begin{bmatrix}
+		4 & 0\\
+		0 & 9\\
+		\end{bmatrix}\\
+		\\
+		r_{11}*r_{11}+0*0 = 4\\
+		r_{11}*r_{12} + 0*r_{22} = 0\\
+		r_{12}*r_{11}+r_{22}*0 = 0\\
+		r_{12}*r_{12} + r_{22}*r_{22} = 9\\
+		\\
+		r_{11}^2 = 4\\
+		r_{11}*r_{12} = 0\\
+		r_{12}*r_{11} = 0\\
+		r_{12}^2 + r_{22}^2 = 9\\
+		\\
+		r_{11} = 2\\
+		r_{11}*r_{12} = 0\\
+		r_{12}*r_{11} = 0\\
+		r_{12}^2 + r_{22}^2 = 9\\
+		\\
+		r_{11} = 2\\
+		2*r_{12} = 0\\
+		r_{12}*2 = 0\\
+		r_{12}^2 + r_{22}^2 = 9\\	
+	\end{align*}
+	\begin{align*}
+		r_{11} = 2\\
+		r_{12} = 0\\
+		r_{12} = 0\\
+		r_{12}^2 + r_{22}^2 = 9\\
+\\		
+		r_{11} = 2\\
+		r_{12} = 0\\
+		r_{12} = 0\\
+		0^2 + r_{22}^2 = 9\\
+		\\
+		r_{11} = 2\\
+		r_{12} = 0\\
+		r_{12} = 0\\
+		r_{22}^2 = 9\\
+		\\
+		r_{11} = 2\\
+		r_{12} = 0\\
+		r_{12} = 0\\
+		r_{22} = 3\\
+		\\
+		R = \begin{bmatrix}
+			2 & 0\\
+			0 & 3\\
+		\end{bmatrix}\\
+	\end{align*}
+	\\
+	(c)\\
+	\\
+	The Cholesky Factor must have all its diagonal entries greater than zero. That is what allowed us in (b) to choose $2$ and $3$ instead of $-2$ and $-3$ when finding the squares roots.\\
+	But we can still find other matrices that satisfy the proposition $A=R^TR$ using this negative roots.\\
+	\begin{align*}
+		R = \begin{bmatrix}
+		-2 & 0\\
+		0 & 3\\
+		\end{bmatrix}\\
+		\\
+		R = \begin{bmatrix}
+		2 & 0\\
+		0 & -3\\
+		\end{bmatrix}\\
+		R = \begin{bmatrix}
+		-2 & 0\\
+		\color{red}{0} & -3\\
+		\end{bmatrix}
+	\end{align*}
+	All of them when "squared" generate the ogirinal matrix.\\
+	\\
+	(d) We can genralize this idea. For $A= n \times n$ matrix we can always find $N$ matrices where each one of them came from a permutation of the "signals". Given that we have $n$ elements in the diagonal and each of then can have 2 possible signals, we have $2^n$ possible matrices.
+\end{document}

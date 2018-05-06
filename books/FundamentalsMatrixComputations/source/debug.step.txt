@@ -1,0 +1,7 @@
+.echo ----------START
+pr
+k
+dv /i /t /V 
+.echo ----------END
+z( (unsigned char*)@rip != 0xc3)
+q

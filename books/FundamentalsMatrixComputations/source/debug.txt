@@ -1,0 +1,11 @@
+ld la
+bm la!ma::math::algebra::linear::Matrix<float,4,4,ma::math::algebra::linear::NONE>::factorCholesky
+g
+.echo 1---------START
+.echo 2---------START k
+k
+.echo 2---------END k
+.echo 2---------START dv /i /t /V 
+dv /i /t /V 
+.echo 2---------end dv /i /t /V 
+.echo 1---------END

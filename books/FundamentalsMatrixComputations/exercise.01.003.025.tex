@@ -1,0 +1,25 @@
+\documentclass{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{xcolor}
+    \begin{document}
+    Write down the numbers $1, 2, 3, ..., n-1$ on a line. Immediately below 
+   these, write down the numbers $n - 1, n - 2, n - 3,..., 1$. Add these numbers up by 
+   summing column-wise first. Conclude that 
+   $$2*(1 + 2 + ... + n - 1) = n(n - 1)$$
+   
+   \begin{align*}
+	A & = 1+2+3+...+(n-1)\\
+	B &= (n-1) + (n-2) + (n-3) + ... + 1\\
+	A + B &= [1 + (n - 1)] + [2 + (n-2)] + ... + [(n-1) + 1]\\
+	A + B &= \sum_{i=1}^{n-1}{[i+(n-i)]}\\
+	A + B &= \sum_{i=1}^{n-1}{n}\\
+	A + B &= n*\sum_{i=1}^{n-1}{1}\\	
+	A + B &= n*(n-1)\\
+   \end{align*}
+   	
+    
+    \end{document}

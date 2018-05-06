@@ -1,0 +1,50 @@
+\documentclass{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\begin{document}
+	Exercise 1.3.23\\
+	Prove that if $G$ is triangular, then $det(G) = g_{11}*g_{22}*...*g_{NN}$\\
+	\\
+	Definition:\\
+	\\
+	\begin{align*}
+		S_{N} = \text{All permutations of 1..N}\\
+		\det(A)=\sum _{\sigma \in S_{N}}\left(\operatorname {sgn}(\sigma )\prod _{i=1}^{n}a_{i,\sigma _{i}}\right)
+	\end{align*}
+	\\
+	Case 1: Lower Triangular
+	\begin{align*}
+	G &= \begin{bmatrix}
+	x_{11} & 0      & 0      & \dots  & 0 \\
+	x_{21} & x_{22} & 0      & \dots  & 0 \\
+	x_{31} & x_{32} & x_{33} & \dots  & 0 \\
+	\vdots & \vdots & \vdots & \ddots & \vdots \\
+	x_{N1} & x_{N2} & x_{N3} & \dots  & x_{dN}
+	\end{bmatrix}\\
+	det(G) &= \sum _{\sigma \in S_{N}}\left(\operatorname {sgn}(\sigma )\prod _{i=1}^{n}g_{i,\sigma _{i}}\right)\\	
+	\end{align*}
+	but 
+	\begin{align*}
+		A_{ij} &= 0 \text{ if } j > i \text{ (Lower Triangular definition) }\\
+		\forall{(\sigma_{i} > i)} &\prod _{i=1}^{n}g_{i,\sigma _{i}} = 0\\
+	\end{align*}
+	So we can remove these elements of $S_n$ because they will nullify the product.\\
+	\begin{align*}	
+		\omega &= S_n - \{\sigma | \sigma_i > i\}\\
+		&= \{[1...N]\}
+	\end{align*}
+	so
+	\begin{align*}
+		det(G) &= \sum _{\sigma \in \omega}\left(\operatorname {sgn}(\sigma )\prod _{i=1}^{n}g_{i,\sigma _{i}}\right)\\
+		&= \left(\operatorname {sgn}( [1...N] ) \prod _{i=1}^{n}g_{i,i}\right)\\	
+		&= \left(1 * \prod _{i=1}^{n}g_{i,i}\right)\\
+		&= g_{11}*g_{22}*...*g_{NN}
+	\end{align*}
+	
+	Case 2: Upper Triangular\\
+	Exactly the same as the Lower Triangular.\\
+
+\end{document}

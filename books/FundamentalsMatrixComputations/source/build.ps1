@@ -3,8 +3,8 @@ param([Switch]$Clean)
 $currentDir = Split-Path $PSCommandPath -Parent
 pushd $currentDir
 
-$binFolder = "build"
-
+$binFolder = ".build"
+ 
 set-alias vcpkg C:\github\vcpkg\vcpkg.exe
 vcpkg install catch2:x64-windows-static
 
