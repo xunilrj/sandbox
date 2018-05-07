@@ -1,0 +1,34 @@
+\documentclass{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\begin{document}
+	Proposition 1.4.53\\
+	Let A be "Positive Definite", and consider a partition 
+	$$A = \begin{Bmatrix}
+	A_{11}&A_{12}\\
+	A_{21}&A_{22}\\
+	\end{Bmatrix}$$
+	in which $A_{11}$ and $A_{22}$ are square. Then $A_{11}$ and $A_{22}$ are Positive Definite.\\ 
+	Exercise 1.4.54\\
+	Prove Proposition 1.4.53. As in the previous exercise, do not use the Cholesky 
+	decomposition in your proof; use the fact that $x^TAx > 0$ for all nonzero x.\\
+	\\
+	Proof:\\
+	\\
+	\begin{align*}
+		x^TAx = \begin{Bmatrix} x1^T & 0\end{Bmatrix}*\begin{Bmatrix}
+			A_{11} & A_{12}\\
+			A_{21} & A_{22}
+		\end{Bmatrix}*\begin{Bmatrix} x1 \\ 0\end{Bmatrix}\\
+		x^TAx = \begin{Bmatrix}
+			x_1^T*A_{11} & x_1^T*A_{22}
+		\end{Bmatrix}*\begin{Bmatrix} x1 \\ 0\end{Bmatrix}\\		
+		x^TAx = x_1^T*A_{11}*x_1
+	\end{align*}
+	But given that A is "Positive Definite" it is necessary that $x^TAx >0$, but this imply that it is also necessary that $x^TA_{11}x > 0$.
+	$$\square$$	
+\end{document}
