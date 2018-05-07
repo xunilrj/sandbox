@@ -336,6 +336,11 @@ namespace ma
 						}
 						return out;
 					}
+					bool isPositiveDefinite() const noexcept
+					{
+						auto[r, R] = factorCholeskyErasure();
+						return r;
+					}
 				private:
 					Matrix()
 					{

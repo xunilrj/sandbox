@@ -1,0 +1,60 @@
+\documentclass{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\begin{document}
+	Proposition 1.4.51\\
+	If A is positive definite, then $a_{ii} > 0$ for $i = 1,..., n$. 
+	\\
+	Exercise 1.4.52\\
+	Prove Proposition 1.4.51. Do not use the Cholesky decomposition in your 
+	proof; we want to use this result to prove that the Cholesky decomposition exists.\\ 
+	(Hint: Find a nonzero vector $x$ such that $x^TAx = a_{ii}$.)\\ 
+	\\
+	Proof:\\
+	If $A$ is Positive Definite, then $x^TAx > 0$ for all $x$.
+	\begin{align*}
+		x^TAx = \begin{Bmatrix}x_1&x_2&...&x_n\end{Bmatrix}*\begin{Bmatrix}
+		a_{11} & ... & a{1n}\\
+		... & & ...\\
+		a_{n1} & ... & a{nn}		
+		\end{Bmatrix}*\begin{Bmatrix}x_1\\x_2\\...\\x_n\end{Bmatrix}
+	\end{align*}
+	But we know that "line vector and matrix multipliction" when the "line vector" is $e_i$ just selects one of the rows of the matrix.\\
+	For example
+	\begin{align*}
+		e_1 = \begin{Bmatrix}1\\0\\...\\0\end{Bmatrix}\\
+		e_1^T*\begin{Bmatrix}
+		a_{11} & ... & a_{1n}\\
+		... & & ...\\
+		a_{n1} & ... & a_{nn}		
+		\end{Bmatrix} = \begin{Bmatrix}a_{11} & ... & a_{1n} \end{Bmatrix}
+	\end{align*}
+	On the other hand, "matrix and column vector multiplication", when the "column vector" is $e_i$ we choose a column of $A$;
+	\begin{align*}
+	e_1 = \begin{Bmatrix}1\\0\\...\\0\end{Bmatrix}\\
+	\begin{Bmatrix}
+	a_{11} & ... & a_{1n}\\
+	... & & ...\\
+	a_{n1} & ... & a_{nn}		
+	\end{Bmatrix}*e_i = \begin{Bmatrix}a_{11} \\ ... \\ a_{n1} \end{Bmatrix}
+	\end{align*}
+	So we can "choose" a element of the matrix by doing:
+	\begin{align*}
+		e_i^TAe_j = a_{ij}
+	\end{align*}
+	So we can easily "choose" the diagonal elements by doing:
+	\begin{align*}
+	e_i^TAe_i = a_{ii}
+	\end{align*}
+	But, given that A is "Positive Definite" this expression is always positive.
+	So we have:\\
+	\begin{align*}
+	e_i^TAe_i > 0\\
+	a_{ii} > 0\\
+	\square	
+	\end{align*}
+\end{document}

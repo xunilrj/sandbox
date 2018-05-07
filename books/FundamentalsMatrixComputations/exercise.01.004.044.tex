@@ -1,0 +1,22 @@
+\documentclass{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\begin{document}
+	Exercise 1.4.44\\
+	Let C be any nonsingular matrix. Show that $(C^{-1})^T = (C^T)^{-1}$. 
+	\begin{align*}
+		C*C^{-1}&=I\\	
+		(C*C^{-1})^T&=I^T\\
+		C^T*(C^{-1})^T&=I^T\\		
+		(C^T)^{-1}C^T*(C^{-1})^T&=(C^T)^{-1}*I^T\\		
+		I*(C^{-1})^T&=(C^T)^{-1}*I^T\\	
+		I*(C^{-1})^T&=(C^T)^{-1}*I\\
+		(C^{-1})^T&=(C^T)^{-1}*I\\		
+		(C^{-1})^T&=(C^T)^{-1}\\		
+		\square
+	\end{align*}
+\end{document}

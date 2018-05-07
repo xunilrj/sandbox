@@ -1,0 +1,102 @@
+\documentclass{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\begin{document}
+	Exercise 1.4.21\\
+	Let 
+	$$A = \begin{Bmatrix}
+	16 & 4 & 8 & 4\\ 
+	4 & 10 & 8 & 4\\
+	8 & 8 & 12 & 10\\ 
+	4 & 4 & 10 & 12\\ 
+	\end{Bmatrix}$$	
+	and 
+	$$b = \begin{Bmatrix}32\\26\\38\\30\end{Bmatrix}$$\\	 
+	Notice that A is symmetric,\\
+	(a) Use the inner-product formulation of Cholesky's  method to show that A is positive definite and compute its Cholesky factor,\\
+	(b) Use forward and back substitution to solve the linear system $Ax = b$.
+	\\
+	Answers:\\
+	(a)\\
+	Using octave:\\
+	octave:1> A =[16,4,8,4;4,10,8,4;8,8,12,10;4,4,10,12]\\
+	A =\\
+	\\
+	16    4    8    4\\
+	4   10    8    4\\
+	8    8   12   10\\
+	4    4   10   12\\
+	\\
+	octave:2> chol(A)\\
+	ans =\\
+	\\
+	4   1   2   1\\
+	0   3   2   1\\
+	0   0   2   3\\
+	0   0   0   1\\
+	\\
+	(b)\\
+	\begin{align*}
+		A = R^TR\\
+		Ax = b\\
+		R^TRx=b
+		\\
+		y = Rx\\
+		R^Ty=b
+	\end{align*}\\
+	Using octave\\
+	octave:1> A = [16,4,8,4;4,10,8,4;8,8,12,10;4,4,10,12]\\
+	A =\\
+	\\
+	16    4    8    4\\
+	4   10    8    4\\
+	8    8   12   10\\
+	4    4   10   12\\
+	\\
+	octave:2> R = chol(A)\\
+	R =\\
+	\\
+	4   1   2   1\\
+	0   3   2   1\\
+	0   0   2   3\\
+	0   0   0   1\\
+	\\
+	octave:3> b = [32;26;38;30]\\
+	b =\\
+	\\
+	32\\
+	26\\
+	38\\
+	30\\
+	\\
+	octave:4> y = R'\textbackslash b\\
+	y =\\
+	\\
+	8\\
+	6\\
+	5\\
+	1\\
+	\\
+	\begin{align*}
+		R^ty = b\\
+		y = \begin{Bmatrix}8\\6\\5\\1\end{Bmatrix}\\
+		Rx = y
+	\end{align*}
+	\\using octave\\
+	octave:6> x = R\textbackslash y\\
+	x =\\
+	\\
+	1\\
+	1\\
+	1\\
+	1\\
+	\\
+	\begin{align*}
+		x = \begin{Bmatrix}1\\1\\1\\1\end{Bmatrix}
+	\end{align*}
+	
+\end{document}
