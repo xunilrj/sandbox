@@ -1,6 +1,8 @@
+#include <vector>
 #include <functional>
 #include <initializer_list>
 #include <utility>
+#include <tuple>
 #include <iostream>
 
 namespace ma
@@ -15,7 +17,7 @@ namespace ma
 				using MatrixIndex = unsigned int;
 				class NONE {};
 				class IDENTITY {};
-				class CHOLESKYFACTOR {};
+				class UPPERTRIANGULAR {};
 				template <typename TNumber, NaturalNumber HEIGHT, NaturalNumber WIDTH, typename TAG = NONE> class Matrix;
 				template <NaturalNumber HEIGHT, NaturalNumber WIDTH, typename TAG = NONE> using Matrixf = Matrix<float, HEIGHT, WIDTH, TAG>;
 				template <typename TNumber, NaturalNumber HEIGHT> using MatrixIdentity = Matrix<TNumber, HEIGHT, HEIGHT, IDENTITY>;
@@ -74,43 +76,10 @@ namespace ma
 						//}
 					}
 
-					static Matrix<TNumber, WIDTH, HEIGHT, TAG> UpperTriangular(
+					static Matrix<TNumber, WIDTH, HEIGHT, UPPERTRIANGULAR> UpperTriangular(
 						float * l)
 					{
-						//if (traits == ByRow::None)
-						//{
-						//	Matrix<TNumber, HEIGHT, WIDTH, TAG> result(l);
-						//	return result.transpose();
-						//}
-						//else
-						//if (traits == ByRowTrait::UpperTriangular)
-						//{
-						//std::cout << "Upper Triangular" << std::endl;
-						int n = HEIGHT * WIDTH;
-						Matrix<TNumber, HEIGHT, WIDTH, NONE> result;
-						for (int i = 0; i < HEIGHT; ++i)
-						{
-							for (int j = 0; j < WIDTH; ++j)
-							{
-								if (i > j) result.at(i, j) = (TNumber)0;
-								else
-								{
-									int k = i + (j + 1)*j / 2;
-
-									//std::cout << "k = " << k << std::endl;
-									//std::cout << "----------------------------" << std::endl;
-									//result.print(std::cout, i, j);
-									//std::cout << "............................" << std::endl;
-
-									result.at(i, j) = l[k];
-
-									//result.print(std::cout, i, j);
-									//std::cout << "----------------------------" << std::endl;
-								}
-							}
-						}
-						return result;
-						//}
+						return { l };
 					}
 
 					Matrix(const std::initializer_list<TNumber>& l) {
@@ -258,12 +227,12 @@ namespace ma
 								aii -= aki * aki;
 							}
 							if (aii <= 0) return false;
-							std::cout << "----------------------------" << std::endl;
-							print(std::cout, i, i);
-							std::cout << "............................" << std::endl;
+							//std::cout << "----------------------------" << std::endl;
+							//print(std::cout, i, i);
+							//std::cout << "............................" << std::endl;
 							aii = sqrt(aii); //rii
-							print(std::cout, i, i);
-							std::cout << "----------------------------" << std::endl;
+							//print(std::cout, i, i);
+							//std::cout << "----------------------------" << std::endl;
 							for (int j = 0; j < i; ++j) at(i, j) = 0.0f;
 							for (int j = i + 1; j < HEIGHT; ++j)
 							{
@@ -271,31 +240,33 @@ namespace ma
 								{
 									at(i, j) -= at(k, i)*at(k, j);
 								}
-								std::cout << "----------------------------" << std::endl;
-								print(std::cout, i, j);
-								std::cout << "............................" << std::endl;
+								//std::cout << "----------------------------" << std::endl;
+								//print(std::cout, i, j);
+								//std::cout << "............................" << std::endl;
 								at(i, j) /= aii;
-								print(std::cout, i, j);
-								std::cout << "---------------------------" << std::endl;
+								//print(std::cout, i, j);
+								//std::cout << "---------------------------" << std::endl;
 							}
 						}
 
 						return true;
 					}
 
-					bool factorCholeskyErasure(float*& R) const noexcept
+					std::tuple<bool, Matrix<TNumber, HEIGHT, HEIGHT, UPPERTRIANGULAR>>
+						factorCholeskyErasure() const noexcept
 					{
 						int n = HEIGHT;
+						int Rsize = (((HEIGHT*WIDTH) - HEIGHT) / 2) + HEIGHT;
+						auto R = std::vector<TNumber>(Rsize);
 						auto get = [&](int i, int j) {
 							if (j >= i) {
 								int k = i + (j + 1)*j / 2;
 								return R[k];
 							}
-							else 
-							return at(i, j);
+							else
+								return at(i, j);
 						};
-						int Rsize = (((HEIGHT*WIDTH) - HEIGHT) / 2) + HEIGHT;
-						R = new float[Rsize];
+
 						//std::cout << "Init" << std::endl;
 						//std::cout << "--------" << std::endl;
 						for (int k = 0; k < Rsize; ++k) {
@@ -313,7 +284,9 @@ namespace ma
 								auto aki = get(k, i);
 								aii -= aki * aki;
 							}
-							if (aii <= 0) return false;
+							if (aii <= 0)
+								return std::make_tuple(false,
+									Matrix<TNumber, HEIGHT, HEIGHT, UPPERTRIANGULAR>());
 
 							/*std::cout << "----------------------------" << std::endl;
 							print(std::cout, i, i);
@@ -344,7 +317,8 @@ namespace ma
 								//std::cout << "----------------------------" << std::endl;
 							}
 						}
-						return true;
+						return std::make_tuple(true,
+							Matrix<TNumber, HEIGHT, HEIGHT, UPPERTRIANGULAR>{&R[0]});
 					}
 
 					std::ostream& print(std::ostream& out, MatrixIndex cx, MatrixIndex cy) const noexcept
@@ -416,6 +390,69 @@ namespace ma
 					}
 				};
 
+				template <typename TNumber, NaturalNumber HEIGHT>
+				class Matrix<TNumber, HEIGHT, HEIGHT, UPPERTRIANGULAR>
+				{
+				public:
+					Matrix() {}
+					Matrix(const TNumber* l)
+					{
+						std::copy_n(l, Size(), std::begin(Items));
+					}
+
+					template <typename RTAG>
+					void zip(
+						const Matrix<TNumber, HEIGHT, HEIGHT, RTAG>& m,
+						std::function<void(MatrixIndex i, MatrixIndex j, TNumber, TNumber)> f) const noexcept
+					{
+						for (int i = 0; i < HEIGHT; ++i)
+						{
+							for (int j = 0; j < HEIGHT; ++j)
+							{
+								if (i == j) f(i, j, at(i, j), m.at(i, j));
+								else f(i, j, at(i, j), m.at(i, j));
+							}
+						}
+					}
+
+					std::ostream& print(std::ostream& out, MatrixIndex cx, MatrixIndex cy) const noexcept
+					{
+						for (int i = 0; i < HEIGHT; i++) {
+							for (int j = 0; j < HEIGHT; j++) {
+								if (i == cx & j == cy) {
+									out << "[" << std::setprecision(5) << std::setw(5) << at(i, j) << "] ";
+								}
+								else {
+									out << std::setprecision(5) << std::setw(5) << at(i, j) << " ";
+								}
+							}
+							out << std::endl;
+						}
+						return out;
+					}
+				private:
+					static unsigned int constexpr Size() { return (((HEIGHT*HEIGHT) - HEIGHT) / 2.0) + HEIGHT; }
+					TNumber at(MatrixIndex i, MatrixIndex j) const noexcept
+					{
+						if (i > j) return (TNumber)0;
+						else
+						{
+							//todo why?
+							int k = i + (j + 1)*j / 2;
+							return Items[k];
+						}
+					}
+					TNumber& at(MatrixIndex i, MatrixIndex j)
+					{
+						//cant change lower part
+						assert(i > j);
+
+						//todo why?
+						int k = i + (j + 1)*j / 2;
+						return Items[k];
+					}
+					TNumber Items[Size()];
+				};
 
 
 
