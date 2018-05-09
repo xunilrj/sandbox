@@ -1,0 +1,40 @@
+\documentclass{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\begin{document}
+	Theorem 1.4.4\\
+	Let $M$ be any $n\times n$ nonsingular matrix, and let $A = M^TM$. Then 
+	$A$ is positive definite.\\
+	\\	
+	Proposition 1.4.55\\
+	If $A$ and $X$ are $n \times n$, A is "Positive Definite", and $X$ is nonsingular 
+	then the matrix $B = X^TAX$ is also "Positive Definite".\\ 
+	Considering the special case $A = I$ (which is clearly "Positive Definite"), we see that 
+	this proposition is a generalization of Theorem 1.4.4.\\ 
+	\\
+	Exercise 1.4.56\\
+	Prove Proposition 1.4.55.\\
+	\\
+	Proof:\\
+	\\
+	\begin{align*}
+		z^TAz > 0 & \text { because A is "PD"}\\
+		\\
+		Xy=z\\
+		(Xy)^TA(Xy)>0\\
+		y^TX^TAXy>0\\
+		y^TBy>0 & \text{ if } y > 0
+	\end{align*}
+	We already know that $z>0$ because of the "Positive Difiniteness" of A. So we need:
+	\begin{align*}
+		Xy=z\\
+		z>0\\
+		y>0\\
+		Xy>0
+	\end{align*}
+	But if X is "Singular" it is possible that a $y>0$ that $Xy=0$. So to guarantee that $y>0$ and $Xy>0$ we need that $X$ be "NonSingular".
+\end{document}

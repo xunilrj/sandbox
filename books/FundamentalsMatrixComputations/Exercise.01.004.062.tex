@@ -1,0 +1,24 @@
+\documentclass{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\begin{document}
+	Exercise 1.4.62\\
+	Prove that if A is positive definite, then $det(A) > 0$.\\
+	\\
+	Proof:\\
+	\\
+	\begin{align*}
+		A &= R^TT\\
+		det(A) &= det(R^TR)\\
+		det(A) &= det(R^T)det(R)\\		
+		det(A) &= det(R^T)\prod{a_{ii}}\\		
+		det(A) &= \prod{a_{ii}}\prod{a_{ii}}\\				
+		det(A) &= (\prod{a_{ii}})^2\\			
+		det(A) &> 0\\					
+		\square
+	\end{align*}
+\end{document}

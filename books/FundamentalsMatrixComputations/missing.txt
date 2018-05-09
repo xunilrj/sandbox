@@ -27,3 +27,11 @@ Block Cholesky Factorization
 1.4.48
 1.4.49
 1.4.50
+Proof Cholesky
+1.4.59
+1.4.60
+1.4.61
+Additional Exercises
+1.4.66
+1.4.67
+1.4.68

@@ -1,0 +1,134 @@
+\documentclass{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\begin{document}
+	Proposition 1.4.53\\
+	Let $A$ be positive definite, and consider a partition 
+	$$A = \begin{bmatrix}	A_{11}&A_{12}\\A_{21}&A_{22}\end{bmatrix}$$ in which $A_{11}$ and $A_{22}$ are square. Then $A_{11}$ and $A_{22}$ are positive definite. 
+	\\
+	Equation 1.4.57\\
+	\begin{align*}
+		A = \begin{bmatrix}a_{11}&b^T\\b&\hat{A}\end{bmatrix}
+	\end{align*}
+	Proposition 1.4.51\\
+	guarantees that $a_{11} > 0$. Using 1.4.27 and 1.4.28 as a guide, define 
+	\begin{align*}
+	r_{11} &= +\sqrt{a_{11}}\\
+	s &= r_{11}^{-1}b\\ 
+	\tilde{A} &= \hat{A}-ss^T
+	\end{align*}
+	
+	Then, as one easily checks, 
+	
+	\begin{align*}
+	A=\begin{bmatrix}r_{11}&0\\s&I\end{bmatrix}\begin{bmatrix}1&0\\0&\tilde{A}\end{bmatrix}\begin{bmatrix}r_{11}&s^T\\0&I\end{bmatrix}
+	\end{align*}
+	\\
+	Exercise 1.4.58\\
+	Let $$A = \begin{bmatrix}A_{11} & A_{12}\\A_{21}&A_{22}\end{bmatrix}$$ be "Positive Definite", and suppose $A_{11}$ is $j \times j$ and 
+	$A_{22}$ is $k \times k$.\\
+	By Proposition 1.4.53, $A_{11}$ is "Positive Definite".\\
+	Let $R_{11}$ be the Cholesky factor of $A_{11}$, let $R_{12} = 
+	 R_{11}^{-T}A_{12}$, and let $\tilde{A}_{22} = A_{22} - R_{12}^TR_{12}$.\\
+	The matrix $\tilde{A}_{22}$ is called the "Schur Complement" of $A_{11}$ in $A$.\\ 
+	(a) Show that $\tilde{A}_{22} = A_{22} - A_{21}A_{11}^{-1}A_{12}$.\\ 
+	(b) Establish a decomposition of A that is similar to 1.4.57 and involves $\tilde{A}_{22}$\\ 
+	(c) Prove that $\tilde{A}_{22}$ is "Positive Definite".\\	
+	\\
+	Proof:\\
+	(a)\\
+	\begin{align*}
+		\tilde{A}_{22} &= A_{22} - R_{12}^TR_{12}\\
+		\\
+		R_{12} &= R_{11}^{-T}A_{12}\\
+		R_{12}^T &= A_{12}^TR_{11}^{-TT}\\
+		&= A_{12}^{T}R_{11}^{-1}\\
+		\\
+		\tilde{A}_{22} &= A_{22} - (A_{12}^{T}R_{11}^{-1})(R_{11}^{-T}A_{12})\\
+		\tilde{A}_{22} &= A_{22} - A_{12}^{T}R_{11}^{-1}R_{11}^{-T}A_{12}\\		
+		\\
+		A_{11} &= R_{11}^TR_{11}\\
+		A_{11}^{-1} &= (R_{11}^TR_{11})^{-1}\\
+		A_{11}^{-1} &= R_{11}^{-1}R_{11}^{-T}\\		
+	\end{align*}	
+	\begin{align*}
+		\tilde{A}_{22} &= A_{22} - A_{12}^{T}A_{11}^{-1}A_{12}\\
+		\\
+		A_{21} &= A_{12}^T\\
+		\\
+		\tilde{A}_{22} &= A_{22} - A_{21}A_{11}^{-1}A_{12}\\
+		\square
+	\end{align*}
+	(b)\\
+	\begin{align*}
+	A &= \begin{bmatrix}A_{11} & A_{12}\\A_{21}&A_{22}\end{bmatrix}\\
+	\text{ using 1.4.57 }\\
+	A&=X^TBX\\
+	A&=\begin{bmatrix}R_{11}^T&0\\s&I\end{bmatrix}\begin{bmatrix}I&0\\0&\tilde{A}\end{bmatrix}\begin{bmatrix}R_{11}&s^T\\0&I\end{bmatrix}\\	
+	&=\begin{bmatrix}R_{11}^T*I+0*0&R_{11}^T*0+0*\tilde{A}\\s*I+I*0&s*0+I*\tilde{A}\end{bmatrix}\begin{bmatrix}R_{11}&s^T\\0&I\end{bmatrix}\\
+	&=\begin{bmatrix}R_{11}^T&0\\s&\tilde{A}\end{bmatrix}\begin{bmatrix}R_{11}&s^T\\0&I\end{bmatrix}\\	
+	&=\begin{bmatrix}R_{11}^T*R_{11}+0*0&R_{11}^T*s^T+0*I\\s*R_{11}+\tilde{A}*0&s*s^T+\tilde{A}*I\end{bmatrix}\\
+	&=\begin{bmatrix}R_{11}^TR_{11}&R_{11}^Ts^T\\sR_{11}&ss^T+\tilde{A}\end{bmatrix}\\
+	\end{align*}
+	\begin{align*}
+	A_{11} &= R_{11}^TR_{11}\\
+	A_{12} &= R_{11}^Ts^T\\
+	A_{21} &= sR_{11}\\
+	A_{22} &= ss^T+\tilde{A}\\
+	\\
+	A_{21} &= sR_{11}\\
+	A_{21}R_{11}^{-1} &= sR_{11}R_{11}^{-1}\\	
+	A_{21}R_{11}^{-1} &= sI\\	
+	s &= A_{21}R_{11}^{-1}\\		
+	s^T &= R_{11}^{-T}A_{21}^T\\			
+	\\
+	A_{22} &= ss^T+\tilde{A}\\
+	-\tilde{A} &= ss^T-A_{22}\\
+	\tilde{A} &= -ss^T+A_{22}\\	
+	\tilde{A} &= A_{22} - ss^T\\
+	\tilde{A} &= A_{22} - (A_{21}R_{11}^{-1})(R_{11}^{-T}A_{21}^T)\\
+	...\\
+	\tilde{A} &= A_{22} - A_{21}A_{11}^{-1}A_{12}\\	
+	\\
+	A&=\begin{bmatrix}R_{11}^T&0\\A_{21}R_{11}^{-1}&I\end{bmatrix}\begin{bmatrix}I&0\\0&A_{22} - A_{21}A_{11}^{-1}A_{12}\end{bmatrix}\begin{bmatrix}R_{11}&R_{11}^{-T}A_{21}^T\\0&I\end{bmatrix}\\
+	&=\begin{bmatrix}R_{11}^TR_{11}&R_{11}^TR_{11}^{-T}A_{21}^T\\ A_{21}R_{11}^{-1}R_{11}&A_{21}R_{11}^{-1}R_{11}^{-T}A_{21}^T+A_{22} - (A_{21}R_{11}^{-1})(R_{11}^{-T}A_{21}^T)\end{bmatrix}\\
+	&=\begin{bmatrix}R_{11}^TR_{11}&{-T}A_{21}^T\\ A_{21}&A_{21}R_{11}^{-1}R_{11}^{-T}A_{21}^T+A_{22} - (A_{21}R_{11}^{-1})(R_{11}^{-T}A_{21}^T)\end{bmatrix}\\
+	\end{align*}
+	\\
+	(c)\\
+	\\
+	We know that $A = X^TBX$ is "Positive Definite", so if $B$ is "Positive Definite", $\tilde{A}$ will be "Positive Definite". To prove that $B$ is "Positive Definite" we need to prove that $X$ is nonsingular.\\
+	So we need to prove that X is nonsingular and that B is "Positive Definite".\\
+	\\
+	(c.1) X is nonsingular\\
+	\\
+	\begin{align*}
+		X &= \begin{bmatrix}R_{11}&s^T\\0&I\end{bmatrix}\\
+		det(X) &= \prod{x_{ii}} \text { because X is Upper Triangular }\\
+		x_{ii} &> 0\\
+		det(x) &> 0\\
+		\square
+	\end{align*}\\
+	\\
+	(c.2) B is "Positive Definite".\\
+	\\
+	\begin{align*}
+		A &= X^TBX\\
+		AX^{-1} &= X^TBXX^{-1}\\
+		AX^{-1} &= X^TBI\\		
+		AX^{-1} &= X^TB\\				
+		X^{-T}AX^{-1} &= X^{-T}X^TB\\						
+		X^{-T}AX^{-1} &= IB\\		
+		X^{-T}AX^{-1} &= B\\				
+		B &= X^{-T}AX^{-1}\\
+		\\
+		Y = X^{-1}
+		\\
+		B &= Y^TAY\\
+		\square
+	\end{align*}
+\end{document}
