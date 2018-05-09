@@ -1,0 +1,118 @@
+\documentclass{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\begin{document}
+	Exercise 1.4.69\\
+	Let $v$ be a vector whose entries represent some statistical data. For example, $v$ could be a vector with 365 entries representing the high temperature in Seattle on 365 consecutive days.\\
+	\\
+	We can normalize this vector by computing its mean and subtracting the mean from each of the entries to obtain a new vector with mean zero.\\
+	\\ 
+	Suppose now we have such a normalized vector. Then the variance of $v$ is 
+	$$\sum_{i=1}^{n}{v_i^2}$$.\\
+	This nonnegative number gives a measure of the variation in the data.\\
+	\\
+	Notice that if we think of $v$ as a column vector, the variance can be expressed as $v^Tv$.\\
+	\\
+	Now let $v$ and $w$ be two vectors with mean zero and variance (normalized to be) one. Then the correlation of $v$ and $w$ is defined to be 
+	$$\sum_{i=1}^{n}{v_iw_i}=w^Tv=v^Tw$$\\
+	\\
+	This number, which can be positive or negative, measures whether the data in $v$ and $w$ vary with or against one another. For example, the temperatures in Seattle and Tacoma should have a positive correlation, while the temperatures in Seattle and Hobart, Tasmania, should have a negative correlation.\\
+	\\
+	Now consider $k$ vectors $v_1, ... , v_k$ with mean zero and variance one. The correlation matrix $C$ of the data $v_i, ..., v_k$ is the $k \times k$ matrix whose $(i,j)$ entry is $c_{ij} = v_j^Tv_i$ the correlation of $v_i$ with $v_j$.\\
+	\\
+	(a) Show that $C$ is a symmetric matrix whose main-diagonal entries are all ones.\\
+	\\
+	(b) Show that $C = V^TV$ for some appropriately constructed (nonsquare) matrix V.\\
+	\\
+	(c) Show that $C$ is positive definite if the vectors $v_i, ..., v_k$ are linearly independent.\\
+	\\
+	(d) Show that if $v_i,..., v_k$ are linearly dependent, then $C$ is not positive definite, but it is positive semidefinite, i.e. $x^TCx \ge 0$ for all x.\\
+	\\
+	Answers:\\
+	\\
+	(a.1) C is symmetric\\
+	\\
+	\begin{align*}
+		c_{ij} = v_j^Tv_i
+	\end{align*}
+	Which is a line-column vector multiplication. Which is commutative. So:\\
+	\begin{align*}
+	c_{ij} = v_j^Tv_i = v_i^Tv_j = c_{ji}\\
+	\square
+	\end{align*}
+	\\
+	(a.2) $c_{ii} = 1$\\
+	\\
+	\begin{align*}
+		c_{ii} = v_i^Tv_i
+	\end{align*}
+	But $v_i^Tv_i$ is the variance of $v$. Which we know is $1$ because the dataset was normalized to be so.
+	\begin{align*}
+		c_{ii} = v_i^Tv_i = \text{var}(v) = 1\\
+		\square
+	\end{align*}
+	\\
+	(b)\\
+	\\
+	We can define "Matrix Product" as:\\
+	\begin{align*}
+		C = A*B\\
+		c_{ij} = \text{row}_i(a)*\text{col}_j(b)
+	\end{align*}
+	Given that covariance matrix $C$ is:
+	\begin{align*}
+		c_{ij} = v_j^Tv_i
+	\end{align*}
+	We can arrange a matrix $V$ such that:
+	\begin{align*}
+		C &= V^TV\\
+		c_{ij} &= v_j^Tv_i\\
+		c_{ij} &= v_i^Tv_j\\
+		c_{ij} &= \text{row}_i(V^T)*\text{col}_j(V)\\
+		c_{ij} &= \text{col}_i(V)*\text{col}_j(V)
+	\end{align*}
+	Which gives me that the covariance is just the dot-product of columns of $V$. So I can arrange the $V$ matrix as:
+	\begin{align*}
+	V &= 
+	\begin{bmatrix}
+		\begin{bmatrix}a_1\\b_1\\\vdots\end{bmatrix}&
+		\begin{bmatrix}a_2\\b_2\\\vdots\end{bmatrix}&
+		...&
+		\begin{bmatrix}a_3\\b_3\\\vdots\end{bmatrix}
+	\end{bmatrix}\\
+	\square
+	\end{align*}
+	\\
+	(c) and (d)\\
+	\\
+	\begin{align*}
+		C&=V^TV\\
+		x^TCx&=x^TV^TVx\\
+		\\
+		x^TV^T &= \begin{bmatrix}
+		x_1a_1+x_2a_2+...+x_na_n&
+		x_1b_1+x_2b_2+...+x_nb_n&
+		...
+		\end{bmatrix}\\
+		Vx &= \begin{bmatrix}
+		 a_1x_1+a_2x_2+...+a_nx_x\\		 
+		 b_1x_1+b_2x_2+...+b_nx_x\\
+		 \vdots
+		\end{bmatrix}\\
+		\\
+		x^TV^TVx &= (x_1a_1+x_2a_2+...+x_na_n)*(a_1x_1+a_2x_2+...+a_nx_x)\\
+			&+(x_1b_1+x_2b_2+...+x_nb_n)*(b_1x_1+b_2x_2+...+b_nx_x)\\
+			&...\\
+		 &= (x_1a_1+x_2a_2+...+x_na_n)^2\\
+		&+(x_1b_1+x_2b_2+...+x_nb_n)^2\\
+		&...\\
+	\end{align*}
+	Which will be positive because is a summation of positive values.\\
+	With the addition that $C$ is square and symmetric, we can affirm that $C$ is "Positive Definite".\\
+	The unique caveat is that if the $v_i$ are linear dependent, there are at least one $x$ that $$Vx=0$$\\
+	In this particular case the summation above is not greater than zero, it is exactly zero. That is why we need that $v_i$s to be linear independent to $C$ be "Positive "Definite" and if $v_i$s are linear dependent $C$ is "Positive Semidefinite".\\
+\end{document}
