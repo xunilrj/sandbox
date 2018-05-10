@@ -1,5 +1,12 @@
 #include <cstddef>
 
+template <typename T>
+struct Result
+{
+    bool Success;
+    T Result;
+}
+
 struct Block
 {
     void* Pointer;
