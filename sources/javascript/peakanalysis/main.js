@@ -9,7 +9,14 @@ p = [1,1,1.1,1,0.9,1,1,1.1,1,0.9,1, 1.1,1,1,0.9,1,1,1.1,1,1,1,1,1.1,0.9, 1,1.1,1
         let m = mean(x,s,e);  
       let v = x.slice(s,e).reduce((acc,i) => acc + ((i-m)*(i-m)),0);
       return Math.sqrt(v/(e-s-1));
-    } 
+    }
+    const axpy = (a,x,y) => {
+        let r = new Array(x.length).fill(0)
+      for(var i = 0;i < x.length; ++i){
+          r[i] = a*x[i]+y[i];
+      }
+      return r;
+    }
     const movingMean = (x, lag) => {
         var means = [];
         var current = 0;
@@ -61,21 +68,19 @@ p = [1,1,1.1,1,0.9,1,1,1.1,1,0.9,1, 1.1,1,1,0.9,1,1,1.1,1,1,1,1,1.1,0.9, 1,1.1,1
       }
       return [signals, meanx, stdx];
     }
-    let signals = smoothedZscore(p, 5, 3.5, 0.5);
+    let signals = smoothedZscore(p, 30, 5.0, 0.0);
+    let lower = axpy(-1, signals[2], signals[1]);
+    let higher = axpy(1, signals[1], signals[2]);
     var chart = c3.generate({
         data: {
             columns: [
-                ['data', ...p],
-                //['movingMean', ...movingMean(p, 5)],
-                ['smoothedZscore-signal', ...signals[0]],
-                ['smoothedZscore-mean', ...signals[1]],
-                //['smoothedZscore-sd', ...signals[2]],
+                ['data', ...p],            
+                ['smoothedZscore-signal', ...signals[0]],            
+                ['smoothedZscore-sd-lower', ...lower],
+                            ['smoothedZscore-sd-higher', ...higher],            
             ],
             types: {
-                //'smoothedZscore-signal':'step',
-              //'smoothedZscore-mean': 'area-spline',
-              'smoothedZscore-sd': 'area-spline'
+                'smoothedZscore-signal':'step',
             },
-            groups: [['smoothedZscore-mean', 'smoothedZscore-sd']]
         }
     });
