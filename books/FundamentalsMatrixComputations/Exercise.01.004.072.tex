@@ -1,0 +1,66 @@
+\documentclass{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{pgfplots}
+\begin{document}
+	Exercise 1.4.72\\
+	Figure out what the following MATLAB code does. 
+	\begin{verbatim}
+	n = 1000; 
+	for jay = 1:4 
+		if jay > 1; oldtime = time; end;
+		M = randn(n); 
+		A = M'*M; 
+		t = cputime; 
+		R = chol(A); 
+		matrixsize = n
+		time = cputime - t
+		if time == 0; time = 1; end;
+		if jay > 1; ratio = time/oldtime; end;
+		n = 2*n; 
+	end 	
+	\end{verbatim}		
+	If you put these instructions into a file named, say, zap.m, you can run the program by 
+	typing zap from the MATLAB command line. The functions randn, cputime, 
+	and chol are built-in MATLAB functions, so you can learn about them by typing 
+	help randn, etc. You might find it useful to type more on before typing help 
+	{topic}.\\ 
+	(a) Does the code produce reasonable values of ratio when you run it? What 
+	value would you expect in theory? Depending on the speed of the machine on 
+	which you are running MATLAB, you may want to adjust $n$ or the number of 
+	times the j ay loop is executed.\\ 
+	(b) Why is the execution time of this code (i.e. the time you sit waiting for the 
+	answers) so much longer than the times that are printed out?\\ 
+	\\
+	Execution:
+	\begin{verbatim}
+	> octave .\exercise.01.004.0072.m
+	matrixsize =  1000
+	time = 0
+	matrixsize =  2000
+	time =  1.0625
+	matrixsize =  4000
+	time =  10.125
+	matrixsize =  8000
+	time =  81.406
+	\end{verbatim}
+	Answers:\\
+	\\
+	(a) First we need to adjust $n$, because it is instantaneous to matrices smaller than 1000.\\
+	By Proposition 1.4.24, the Cholesky decomposition should increase by $O(n^3)$.\\
+	\\
+	Proposition 1.4.24 Cholesky's algorithm 1.4.17 applied to an $n \times n$ matrix performs about $\frac{n^3}{3}$ flops.\\ 
+	\\
+	Which was exactly what happedned:\\
+	\begin{verbatim}
+	> 10.125 / 1.0625
+	9.52941176470588
+	> 81.406 / 10.150
+	8.02029556650246
+	\end{verbatim}
+	(b) Because we are not counting the time spent generating $M$ and the time multiplying $M^TM$. Time needed to guarantee that we will pass a valid matrix to the "chol" method.
+\end{document}
