@@ -35,3 +35,7 @@ Additional Exercises
 1.4.66
 1.4.67
 1.4.68
+Banded Positive
+1.5.3
+1.5.4
+1.5.6
