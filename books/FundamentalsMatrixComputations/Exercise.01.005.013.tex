@@ -1,0 +1,25 @@
+\documentclass{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{pgfplots}
+\begin{document}
+	Exercise 1.5.13\\
+	In the previous exercise, the matrix $A^{-1}$ is full; none of its entries are zero.\\ 
+	(a) What is the physical significance of this fact? (Think of the equation $x = A^{-1}b$, 
+	especially in the case where only one entry, say the jth, of b is nonzero. If the 
+	(i,j) entry of $A^{-1}$ were zero, what would this imply? Does this make physical 
+	sense?)\\ 
+	(b) The entries of $A^{-1}$ decrease in magnitude as we move away from the main 
+	diagonal? What does this mean physically?\\	
+	\\
+	Answers:\\
+	(a) $x = A^{-1}b$ means that $x_{i}$ is the inner product $\text{row}_i(A).b_i$ which means that the i-th displacement is the linear combination of a non-zeros coefficients and the applied forces, which means that every displacement influence every cart.\\
+	In this special case that b is zero in all but one place, we would have only one force applied, and this force will cause a particular displacement in each cart.\\
+	If for some reason the (in) entry of A were zero, that would mean that somehow a force applied to the j-th cart would not affect the i-th spring. Maybe they are not connected, so the energy apllied could not flow to that spring. One can easily see this imagining a extra, and disconnected, spring that will have its "influence factors" all zeroed beecaused it does not makes "part" of the system.\\
+	\\
+	(b) Yes! And this means that the displacement at the i-th cart will be more affected by the i-th force.
+\end{document}

@@ -22,8 +22,8 @@ template <typename T>
 void assertIsIdentity(const T& m)
 {
 	m.map([](auto i, auto j, auto x) {
-		if (i == j) REQUIRE(x == 1);
-		else REQUIRE(x != 1);
+		if (i == j) REQUIRE(equal(x, 1.0f, 0.0001f));
+		else REQUIRE(equal(x, 0.0f, 0.0001f));
 	});
 }
 
@@ -31,7 +31,7 @@ template <typename T>
 void assertEqual(const T& actual, const T& expected)
 {
 	actual.zip(expected, [&](auto i, auto j, auto lx, auto rx) {
-		if (!equal(lx, rx, 0.0001)) {
+		if (!equal(lx, rx, 0.0001f)) {
 			std::cout << "Actual" << std::endl;
 			std::cout << "------" << std::endl;
 			actual.print(std::cout, i, j);
@@ -40,9 +40,9 @@ void assertEqual(const T& actual, const T& expected)
 			std::cout << "------" << std::endl;
 			expected.print(std::cout, i, j);
 
-			REQUIRE(equal(lx, rx, 0.0001));
+			REQUIRE(equal(lx, rx, 0.0001f));
 		}
-		else REQUIRE(equal(lx, rx, 0.0001));
+		else REQUIRE(equal(lx, rx, 0.0001f));
 	});
 }
 
@@ -50,7 +50,7 @@ template <typename T1, typename T2>
 void assertEqual(const T1& actual, const T2& expected)
 {
 	actual.zip(expected, [&](auto i, auto j, auto lx, auto rx) {
-		if (!equal(lx, rx, 0.0001)) {
+		if (!equal(lx, rx, 0.0001f)) {
 			std::cout << "Actual" << std::endl;
 			std::cout << "------" << std::endl;
 			actual.print(std::cout, i, j);
@@ -59,11 +59,27 @@ void assertEqual(const T1& actual, const T2& expected)
 			std::cout << "------" << std::endl;
 			expected.print(std::cout, i, j);
 
-			equal(lx, rx, 0.0001);
+			equal(lx, rx, 0.0001f);
 		}
-		else equal(lx, rx, 0.0001);
+		else equal(lx, rx, 0.0001f);
 	});
 }
+
+#include <chrono>
+
+template<typename TimeT = std::chrono::milliseconds>
+struct measure
+{
+	template<typename F, typename ...Args>
+	static typename TimeT execution(F&& func, Args&&... args)
+	{
+		auto start = std::chrono::steady_clock::now();
+		std::forward<decltype(func)>(func)(std::forward<Args>(args)...);
+		auto duration = std::chrono::duration_cast<TimeT>
+			(std::chrono::steady_clock::now() - start);
+		return duration;
+	}
+};
 
 TEST_CASE("matrix.identity.construction.staticmethod", "[ma.math.algebra.linear]") {
 	assertIsIdentity(Matrixf<1, 1>::Identity());
@@ -206,14 +222,14 @@ TEST_CASE("matrix.solve.foward.substituition", "[ma.math.algebra.linear]") {
 
 	//row oriented
 	auto b = Vectorf<4>{ 2.0f, 3.0f, 2.0f, 9.0f };
-	auto r = A.solve(b, SolveAlgorithm::row_oriented);
+	auto r = A.solve(b, SolveAlgorithm::forward_row_oriented);
 	auto expected = Vectorf<4>{ 1.0f, 2.0f, 3.0f, 4.0f };
 	REQUIRE(r == true);
 	assertEqual(b, expected);
 
 	//column oriented
 	b = Vectorf<4>{ 2.0f, 3.0f, 2.0f, 9.0f };
-	r = A.solve(b, SolveAlgorithm::column_oriented);
+	r = A.solve(b, SolveAlgorithm::forward_column_oriented);
 	expected = Vectorf<4>{ 1.0f, 2.0f, 3.0f, 4.0f };
 	REQUIRE(r == true);
 	assertEqual(b, expected);
@@ -229,14 +245,14 @@ TEST_CASE("matrix.solve.foward.substituition.zero.prelude", "[ma.math.algebra.li
 
 	//row oriented
 	auto b = Vectorf<5>{ 0.0f, 2.0f, 3.0f, 2.0f, 9.0f };
-	auto r = A.solve(b, SolveAlgorithm::row_oriented);
+	auto r = A.solve(b, SolveAlgorithm::forward_row_oriented);
 	auto expected = Vectorf<5>{ 0.0f, 1.0f, 2.0f, 3.0f, 4.0f };
 	REQUIRE(r == true);
 	assertEqual(b, expected);
 
 	//column oriented
 	b = Vectorf<5>{ 0.0f, 2.0f, 3.0f, 2.0f, 9.0f };
-	r = A.solve(b, SolveAlgorithm::column_oriented);
+	r = A.solve(b, SolveAlgorithm::forward_column_oriented);
 	expected = Vectorf<5>{ 0.0f, 1.0f, 2.0f, 3.0f, 4.0f };
 	REQUIRE(r == true);
 	assertEqual(b, expected);
@@ -252,7 +268,7 @@ TEST_CASE("matrix.solve.backward.substitution", "[ma.math.algebra.libear]")
 
 	//row oriented
 	auto b = Vectorf<4>{ -10.0f,10.0f, 1.0f,12.0f };
-	auto r = A.solve(b, SolveAlgorithm::row_backward_substitution);
+	auto r = A.solve(b, SolveAlgorithm::backward_row_substitution);
 	auto expected = Vectorf<4>{ -3.0f, -1.0f, 1.0f, 3.0f };
 	REQUIRE(r == true);
 	assertEqual(b, expected);
@@ -265,7 +281,6 @@ TEST_CASE("matrix.solve.backward.substitution", "[ma.math.algebra.libear]")
 	//assertEqual(b, expected);
 }
 
-
 TEST_CASE("matrix.factor.cholesky.example1", "[ma.math.algebra.linear]") {
 	auto A = Matrixf<2, 2>::ByRow({
 		4.0f, 0.0f,
@@ -273,7 +288,7 @@ TEST_CASE("matrix.factor.cholesky.example1", "[ma.math.algebra.linear]") {
 	auto expected = Matrixf<2, 2>{ 2.0f, 0.0f, 0.0f, 3.0f };
 
 	//row oriented
-	auto r = A.factorCholesky();
+	auto r = A.choleskyFactor();
 	REQUIRE(r == true);
 	assertEqual(A, expected);
 }
@@ -292,7 +307,7 @@ TEST_CASE("matrix.factor.cholesky.example2", "[ma.math.algebra.linear]") {
 		});
 
 	//row oriented
-	auto r = A.factorCholesky();
+	auto r = A.choleskyFactor();
 	REQUIRE(r == true);
 	assertEqual(A, expected);
 
@@ -314,12 +329,115 @@ TEST_CASE("matrix.factor.cholesky.erasure", "[ma.math.algebra.linear]") {
 		});
 
 	//row oriented
-	auto[result, R] = A.factorCholeskyErasure();
+	auto[result, R] = A.getCholeskyFactor();
 	REQUIRE(result == true);
 	assertEqual(R, expected);
 	//verify
 
 	//multiply R^T*R and test if it is equal to A
+}
+
+TEST_CASE("matrix.banded.envelope.2x2", "[ma.math.algebra.linear]")
+{
+	BandedSchemeArray<float> array1(2, 2, {
+		1.0f, 2.0f,
+		2.0f, 3.0f
+		});
+	REQUIRE(array1.getIndex(0, 0) == -1);
+	REQUIRE(array1.getIndex(1, 0) == -1);
+	REQUIRE(array1.getIndex(1, 1) == -1);
+
+	REQUIRE(array1.getIndex(0, 1) == 0);
+}
+
+TEST_CASE("matrix.banded.envelope.3x3", "[ma.math.algebra.linear]")
+{
+	BandedSchemeArray<float> array2(3, 3, {
+		1.0f, 2.0f, 3.0f,
+		2.0f, 5.0f, 6.0f,
+		3.0f, 6.0f, 9.0f
+		});
+	REQUIRE(array2.getIndex(0, 0) == -1);
+	REQUIRE(array2.getIndex(1, 1) == -1);
+	REQUIRE(array2.getIndex(2, 2) == -1);
+
+	REQUIRE(array2.getIndex(0, 1) == +0);
+	REQUIRE(array2.getIndex(0, 2) == +1);
+	REQUIRE(array2.getIndex(1, 2) == +2);
+
+	REQUIRE(array2.getIndex(1, 0) == -1);
+	REQUIRE(array2.getIndex(2, 0) == -1);
+	REQUIRE(array2.getIndex(2, 1) == -1);
+}
+
+TEST_CASE("matrix.banded.cholesky.example1", "[ma.math.algebra.linear]") {
+	auto A = make_banded2f({
+		4.0f, 0.0f,
+		0.0f, 9.0f });
+	auto expected = make_col2f({ 2.0f, 0.0f, 0.0f, 3.0f });
+
+	//row oriented
+	auto[r, R] = A.getCholeskyFactor();
+	REQUIRE(r == true);
+	assertEqual(R, expected);
+}
+
+TEST_CASE("matrix.cholesky.example2", "[ma.math.algebra.linear]") {
+	auto A = make_rowf(5, 5, {
+		4.0f, 0.0f, 6.0f, 0.0f, 2.0f,
+		0.0f, 1.0f, 3.0f, 0.0f, 2.0f,
+		6.0f, 3.0f,19.0f, 2.0f, 6.0f,
+		0.0f, 0.0f, 2.0f, 5.0f,-5.0f,
+		2.0f, 2.0f, 6.0f,-5.0f,16.0f,
+		});
+	auto expected = make_rowf(5, 5, {
+		2.0f, 0.0f, 3.0f, 0.0f, 1.0f,
+		0.0f, 1.0f, 3.0f, 0.0f, 2.0f,
+		0.0f, 0.0f, 1.0f, 2.0f,-3.0f,
+		0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+		0.0f, 0.0f, 0.0f, 0.0f, 1.0f });
+
+	auto[r, R] = A.getCholeskyFactor();
+	REQUIRE(r == true);
+	assertEqual(R, expected);
+}
+
+TEST_CASE("matrix.cholesky.example3", "[ma.math.algebra.linear]") {
+	auto A = make_rowf(5, 5, {
+		1.0f, 2.0f, 4.0f,
+		2.0f,13.0f,16.0f,
+		4.0f,16.0f,10.0f
+		});
+
+	REQUIRE(A.isPositiveDefinite() == false);
+}
+
+TEST_CASE("matrix.cholesky.inverse", "[ma.math.algebra.linear]") {
+	auto A = make_rowf<3,3>({
+		1.0f / 1.0f, 1.0f / 2.0f, 1.0f / 3.0f,
+		1.0f / 2.0f, 1.0f / 3.0f, 1.0f / 4.0f,
+		1.0f / 3.0f, 1.0f / 4.0f, 1.0f / 5.0f
+		});
+	auto A1 = A.inverse();
+
+	auto I = A * A1;
+	assertIsIdentity(I);	
+}
+
+TEST_CASE("matrix.banded.cholesky.performance", "[ma.math.algebra.linear][.]") {
+	//TODO we should assert performance gain here using a banded scheme
+	//the real problem is that we make too many copies of the buffer,
+	//what makes the "fast" algorithm to be much slower!
+
+	auto A = make_toeplitzf(5000, { 1.0f, 2.0f, 3.0f, 3.0f });
+	std::cout << "Time: " << measure<>::execution([&]() {
+		auto[r, R] = A.getCholeskyFactor();
+	}).count() << std::endl;
+
+	auto banded = A.asBanded();
+	std::cout << "Time: " << measure<>::execution([&]() {
+		auto[r, R] = banded.getCholeskyFactor();
+	}).count() << std::endl;
 }
 
 #include <tuple>
@@ -418,10 +536,29 @@ TEST_CASE("matrix.cholesky.solve.example2", "[ma.math.algebra.linear]") {
 		1, 2, 2, 2, 2,
 		1, 2, 3, 3, 3,
 		1, 2, 3, 4, 4,
-		1, 2, 3, 4, 5});
+		1, 2, 3, 4, 5 });
 	auto b = Matrixf<5, 1>::ByRow({ 5, 9, 12, 14, 15 });
 	auto expected = Matrixf<5, 1>::ByRow({ 1, 1, 1, 1, 1 });
 
 	A.solve(b, SolveAlgorithm::cholesky);
 	assertEqual(expected, b);
+}
+
+TEST_CASE("matrix.toeplitz.2.2", "[ma.math.algebra.linear]")
+{
+	auto A = make_toeplitzf<2>({ 1.0f });
+	auto expected = make_col2f({ 1.0f, 0.0f, 0.0f, 1.0f });
+	assertEqual(A, expected);
+}
+
+TEST_CASE("matrix.toeplitz.4.4", "[ma.math.algebra.linear]")
+{
+	auto A = make_toeplitzf<4>({ 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f });
+	auto expected = make_rowf<4, 4>({
+		1.0f, 2.0f, 4.0f, 6.0f,
+		3.0f, 1.0f, 2.0f, 4.0f,
+		5.0f, 3.0f, 1.0f, 2.0f,
+		7.0f, 5.0f, 3.0f, 1.0f,
+		});
+	assertEqual(A, expected);
 }
