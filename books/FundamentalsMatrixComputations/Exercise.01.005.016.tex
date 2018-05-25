@@ -1,0 +1,57 @@
+\documentclass{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{pgfplots}
+\begin{document}
+	Exercise 1.5.16\\
+	(d)\\
+	\\
+	Think about how your subroutines could be used to calculate the inverse of a 
+	positive definite matrix. Calculate $A^{-1}$, where 
+	\begin{align*}
+	A = \begin{bmatrix}
+	1 & 1/2 & 1/3 \\
+	1/2 & 1/3 & 1/4\\ 
+	1/3 & 1/4 & 1/5\\ 
+	\end{bmatrix}	
+	\end{align*}
+	It turns out that the entries of $A^{-1}$ are all integers. Notice that your computed 
+	solution suffers from significant roundoff errors. This is because A is (mildly) 
+	ill conditioned. This is the 3x3 member of a famous family of ill-conditioned 
+	matrices called Hilbert matrices; the condition gets rapidly worse as the size 
+	of the matrix increases. We will discuss ill-conditioned matrices in Chapter 2.
+	\\
+	Answers\\
+	\\
+	We can calculate a inverse matrix using Cholesky factorization because:
+	\begin{align*}
+		A &= R^TR\\
+		A*A^{-1} &= R^TR*A^{-1}\\
+		I &= R^TR*A^{-1}\\
+		\begin{bmatrix}
+			e_1\\e_2\\\vdots\\e_n
+		\end{bmatrix} &= R^TR*A^{-1}\\
+		\begin{bmatrix}
+		e_1\\e_2\\\vdots\\e_n
+		\end{bmatrix} &= R^TR*\begin{bmatrix}
+			a^{-1}_{1} &
+			a^{-1}_{2} &
+			... &
+			a^{-1}_{n}
+		\end{bmatrix}
+	\end{align*}	
+	Which can be simplified as:
+	\begin{align*}
+		\begin{bmatrix}
+			e_1 = R^TR*a^{-1}_{1}\\
+			e_2 = R^TR*a^{-1}_{2}\\
+			\vdots \\
+			e_n = R^TR*a^{-1}_{n}
+		\end{bmatrix}\\		
+	\end{align*}
+	In this way we can find the inverse of a Matrix with $n$ "solves" using Cholesky. Each Cholesky solve makes one backward substitution and one foward substitution. They have the same complexity: $n^2$. Which gives us a solution in $n^3$.	
+\end{document}

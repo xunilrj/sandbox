@@ -1,0 +1,67 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\author{Daniel Frederico Lins Leite}
+\begin{document}
+	We will transform the system by means of elementary operations of three types:\\ 
+	1. Add a multiple of one equation to another equation.\\ 
+	2. Interchange two equations.\\ 
+	3. Multiply an equation by a nonzero constant.\\ 
+	\\
+	Exercise 1.7.2:\\
+	\\
+	Proposition 1.7.1\\
+	If Ax = b is obtained from Ax = b by an elementary operation of type 1, 2, or 3, then the systems Ax = b and Ax = b are equivalent.\\
+	\\
+	Exercise 1.7.2\\
+	Prove Proposition 1.7.1.\\
+	Discussion: Suppose the system $Ax = b$ is transformed to $\hat{A}x = \hat{b}$ by an operation of type 1. You must show that\\
+	(a) every solution of $Ax = b$ is a solution of $\hat{A}x = \hat{b}$ and\\
+	(b) every solution of $\hat{A}x = \hat{b}$ is a solution of $Ax = b$.\\
+	\\
+	Part (a) should be easy. Part (b) becomes easy when you realize that $Ax = b$ can be recovered from $\hat{A}x = \hat{b}$ by an operation of type 1: If $\hat{A}x = b$ was obtained from $Ax = b$ by adding m times the j-th row to the i-th row, then $Ax = b$ can be recovered from $\hat{A}x = b$ by adding $-m$ times the j-th row to the i-th row. Analogous remarks apply to operations of types 2 and 3.\\
+	\\
+	Answers:\\
+	\\
+	(a)\\
+	\\
+	\begin{align*}
+		Ax = b\\
+		\forall{j} \big[ \text{row}_j(A) * x = b_j \big]\\
+		\\
+		\hat{A} = A + m*\text{row}_j(A)\\
+		\hat{b} = b + m*b_j\\	
+	\end{align*}
+	\begin{align*}	
+		Ax = b\\
+		Ax + m*\text{row}_j(A)*x = b + m*\text{row}_j(A)*x\\		
+		Ax + m*\text{row}_j(A)*x = b + m*b_j\\
+		(A + m*\text{row}_j(A))*x = b + m*b_j\\
+		(A + m*\text{row}_j(A))*x = \hat{b}\\
+		\hat{A}*x = \hat{b}\\		
+		\square
+	\end{align*} 	
+	\\
+	(b)\\
+	\\
+	\begin{align*}
+	Ax = b\\
+	\forall{j} \big[ \text{row}_j(A) * x = b_j \big]\\
+	\\
+	\hat{A} = A + m*\text{row}_j(A)\\
+	\hat{b} = b + m*b_j\\	
+	\\
+	\hat{A}x = \hat{b}\\
+	(A + m*\text{row}_j(A))*x = b + m*b_j\\
+	A*x + m*\text{row}_j(A)*x = b + m*b_j\\
+	b + m*\text{row}_j(A)*x = b + m*b_j\\
+	m*\text{row}_j(A)*x = b + m*b_j - b\\
+	m*\text{row}_j(A)*x = m*b_j\\		
+	\text{row}_j(A)*x = b_j\\
+	\square	
+	\end{align*} 	
+\end{document}

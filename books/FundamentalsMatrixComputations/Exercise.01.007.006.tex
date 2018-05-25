@@ -1,0 +1,63 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\author{Daniel Frederico Lins Leite}
+\begin{document}	
+	$ m_{i1} = a_{i1}/a_{11} i = 2, ..., n$\\
+	\\	
+	Exercise 1.7.6\\
+	\\
+	Verify that if $m_{i1}$ times the first row is subtracted from the i-th row of $[A | b]$, the resulting array has a zero in the ($i, 1)$ position.\\
+	\\
+	\begin{align*}
+		col_1(A) / a_{11} &= \begin{bmatrix}
+			a_{11}\\a_{21}\\ \vdots \\a_{n1} 
+		\end{bmatrix} / a_{11} = \begin{bmatrix}
+		a_{11} / a_{11}\\a_{21} / a_{11}\\ \vdots \\a_{n1} / a_{11} 
+		\end{bmatrix} = M\\
+		\\
+		M*row_1(A) &= \begin{bmatrix}
+			a_{11} / a_{11} * a_{11} & 	a_{11} / a_{11} * a_{12} & ... & a_{11} / a_{11} * a_{1n}\\
+			a_{21} / a_{11} * a_{11} & 	a_{21} / a_{11} * a_{12} & ... & a_{21} / a_{11} * a_{1n}\\
+			\vdots & \vdots & \ddots & \vdots \\
+			a_{n1} / a_{11} * a_{11} & 	a_{n1} / a_{11} * a_{12} & ... & a_{n1} / a_{11} * a_{1n}\\
+		\end{bmatrix} = S\\
+		\\
+		A_i &= A - S\\
+		&= \begin{bmatrix}
+		a_{11} & a_{12} & ... & a_{1n}\\
+		a_{21} & a_{22} & ... & a_{2n}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		a_{n1} & a_{n2} & ... & a_{nn}\\
+		\end{bmatrix} -  \begin{bmatrix}
+		a_{11} / a_{11} * a_{11} & 	a_{11} / a_{11} * a_{12} & ... & a_{11} / a_{11} * a_{1n}\\
+		a_{21} / a_{11} * a_{11} & 	a_{21} / a_{11} * a_{12} & ... & a_{21} / a_{11} * a_{1n}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		a_{n1} / a_{11} * a_{11} & 	a_{n1} / a_{11} * a_{12} & ... & a_{n1} / a_{11} * a_{1n}\\
+		\end{bmatrix}\\
+		&= \begin{bmatrix}
+		a_{11} - a_{11} / a_{11} * a_{11} & a_{12} - a_{11} / a_{11} * a_{12} & ... & a_{1n} - a_{11} / a_{11} * a_{1n}\\
+		a_{21} - a_{21} / a_{11} * a_{11} & a_{22} - a_{21} / a_{11} * a_{12} & ... & a_{2n} - a_{21} / a_{11} * a_{1n}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		a_{n1} - a_{n1} / a_{11} * a_{11} & a_{n2} - a_{n1} / a_{11} * a_{12} & ... & a_{nn} - a_{n1} / a_{11} * a_{1n}\\
+		\end{bmatrix}\\
+		&= \begin{bmatrix}
+		a_{11} - a_{11} & a_{12} - a_{11} / a_{11} * a_{12} & ... & a_{1n} - a_{11} / a_{11} * a_{1n}\\
+		a_{21} - a_{21} & a_{22} - a_{21} / a_{11} * a_{12} & ... & a_{2n} - a_{21} / a_{11} * a_{1n}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		a_{n1} - a_{n1} & a_{n2} - a_{n1} / a_{11} * a_{12} & ... & a_{nn} - a_{n1} / a_{11} * a_{1n}\\
+		\end{bmatrix}\\
+		&= \begin{bmatrix}
+		0 & a_{12} - a_{11} / a_{11} * a_{12} & ... & a_{1n} - a_{11} / a_{11} * a_{1n}\\
+		0 & a_{22} - a_{21} / a_{11} * a_{12} & ... & a_{2n} - a_{21} / a_{11} * a_{1n}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		0 & a_{n2} - a_{n1} / a_{11} * a_{12} & ... & a_{nn} - a_{n1} / a_{11} * a_{1n}\\
+		\end{bmatrix}\\
+		\square
+	\end{align*}
+		In the Gaussian Elimination, we do not want to "zero" the first row, so we will not apply this tranformation to the first row.
+\end{document}

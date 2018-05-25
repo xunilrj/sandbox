@@ -1,0 +1,145 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\author{Daniel Frederico Lins Leite}
+\begin{document}	
+	Exercise 1.7.10\\
+	Let\\
+	\begin{align*}
+		A = \begin{bmatrix}
+		2&1&-1&3\\-2&0&0&0\\4&1&-2&6\\-6&-1&2&-3
+		\end{bmatrix}
+	\end{align*}	
+	\\
+	(a) Calculate the appropriate (four) determinants to show that A can be transformed to (nonsingular) upper-triangular form by operations of type 1 only. (By the way, this is strictly an academic exercise. In practice one never calculates these determinants in advance.)\\ 
+	\\
+	(b) Carry out the row operations of type 1 to transform the system $Ax = b$ to an equivalent system Ux = y, where U is upper triangular. Save the multipliers 
+	for use in Exercise 1.7.18.\\
+	\\
+	(c) Carry out the back substitution on the system $Ux = y$ to obtain the solution of $Ax = b$. Don't forget to check your work.\\
+	\\
+	Answers:\\
+	\\
+	(a)
+	\begin{verbatim}
+	octave:1> A = [2,1,-1,3;-2,0,0,0;4,1,-2,6;-6,-1,2,-3]
+	A =	
+	 2   1  -1   3
+	-2   0   0   0
+	 4   1  -2   6
+	-6  -1   2  -3	
+	octave:2> det(A(1:1,1:1))
+	ans =  2
+	octave:3> det(A(1:2,1:2))
+	ans =  2
+	octave:4> det(A(1:3,1:3))
+	ans = -2
+	octave:5> det(A(1:4,1:4))
+	ans = -6
+	\end{verbatim}
+	Given that all determinants are non-zero, all sub-matrices are non-singular.\\
+	\\ \\ \\ \\ \\ \\ \\ \\ \\ \\ \\
+	(b)
+	\\
+	\begin{verbatim}
+	octave:1> A = [2,1,-1,3;-2,0,0,0;4,1,-2,6;-6,-1,2,-3]
+	A =
+	
+	 2   1  -1   3
+	-2   0   0   0
+	 4   1  -2   6
+	-6  -1   2  -3	
+		
+	octave:2> b = [13;-2;24;-14]
+	b =
+	
+	13
+	-2
+	24
+	-14
+	
+	octave:3> AUG=[A,b]
+	AUG =
+	
+	 2    1   -1    3   13
+	-2    0    0    0   -2
+	 4    1   -2    6   24
+	-6   -1    2   -3  -14
+	
+	octave:4> L1 = [0,0,0,0,0;-1,0,0,0,0;2,0,0,0,0;-3,0,0,0,0]
+	L1 =
+	
+	 0   0   0   0   0
+	-1   0   0   0   0
+	 2   0   0   0   0
+	-3   0   0   0   0
+
+	octave:5> AUG1 = AUG - L1*AUG
+	AUG1 =
+	
+	2    1   -1    3   13
+	0    1   -1    3   11
+	0   -1    0    0   -2
+	0    2   -1    6   25
+	
+	octave:6> L2 = [0,0,0,0;0,0,0,0;0,-1,0,0;0,2,0,0]
+	L2 =
+	
+	0   0   0   0
+	0   0   0   0
+	0  -1   0   0
+	0   2   0   0
+	
+	octave:7> AUG2 = AUG1 - L2*AUG1
+	AUG2 =
+	
+	2    1   -1    3   13
+	0    1   -1    3   11
+	0    0   -1    3    9
+	0    0    1    0    3
+	
+	octave:8> L3 = [0,0,0,0;0,0,0,0;0,0,0,0;0,0,-1,0]
+	L3 =
+	
+	0   0   0   0
+	0   0   0   0
+	0   0   0   0
+	0   0  -1   0
+	
+	octave:9> AUG3 = AUG2 - L3*AUG2
+	AUG3 =
+	
+	2    1   -1    3   13
+	0    1   -1    3   11
+	0    0   -1    3    9
+	0    0    0    3   12
+	\end{verbatim}
+	
+	(c)
+	
+	\begin{verbatim}	
+	octave:10> AUG3(1:4,1:4)\AUG3(1:4,5:5)
+	ans =
+	
+	1
+	2
+	3
+	4
+	\end{verbatim}
+	
+	Checking:
+	
+	\begin{verbatim}
+	octave:11> A\b
+	ans =
+	
+	1.0000
+	2.0000
+	3.0000
+	4.0000	
+	\end{verbatim}
+\end{document}
