@@ -1,0 +1,108 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\author{Daniel Frederico Lins Leite}
+\begin{document}
+	Exercise 1.7.34\\
+	\\
+	In this exercise you will show that performing an elementary row operation of type 1 is equivalent to left multiplication by a matrix of a special type. Suppose $A$ is obtained from $A$ by adding $m$ times the j-th row to the i-th row.
+	\\
+	\\
+	(a) Show that $\hat{A} = MA$, where $M$ is the triangular matrix obtained from the 
+	identity matrix by replacing the zero by an $m$ in the $(i, j)$ position. For example, when $i > j$, $M$ has the form 
+	$$
+	\begin{bmatrix}
+		1&0&0&0&0&...&0\\
+		0&1&0&0&0&...&0\\
+		0&0&1&0&0&...&0\\
+		\vdots&\vdots&\vdots&\ddots&\vdots&\vdots&\vdots\\
+		0&0&m&...&1&...&0\\
+		\vdots&\vdots&\vdots&\vdots&\vdots&\ddots&\vdots\\		
+		0&0&0&0&0&...&1
+	\end{bmatrix}
+	$$ 
+	Notice that this is the matrix obtained by applying the type 1 row operation 
+	directly to the identity matrix. We call $M$ an elementary matrix of type 1.\\
+	\\
+	(b) Show that $det(M) = 1$ and $det(\hat{A}) = det(A)$. Thus we see (again) that $\hat{A}$ is nonsingular if and only if A is. \\
+	\\
+	(c) Show that $M^{-1}$ differs from $M$ only in that it has $-m$ instead of m in the (i, j) 
+	position. $M^{-1}$ is also an elementary matrix of type 1. To which elementary 
+	operation does it correspond?\\
+	\\
+	(a)\\
+	\\
+	\begin{align*}
+	\begin{bmatrix}
+		1&...&0&...&0&...&0\\
+		\vdots&\ddots&\vdots&\vdots&\vdots&\vdots&\vdots\\
+		0&...&1&...&0&...&0\\
+		\vdots&\vdots&\vdots&\ddots&\vdots&\vdots&\vdots\\
+		0&...&m_{ab}&...&1&...&0\\
+		\vdots&\vdots&\vdots&\vdots&\vdots&\ddots&\vdots\\		
+		0&...&0&...&0&...&1
+	\end{bmatrix} * \begin{bmatrix}
+		a_{11}&...&a_{1j}&...&a_{1c}&...&a_{1n}\\
+		\vdots&\ddots&\vdots&\vdots&\vdots&\vdots&\vdots\\
+		a_{b1}&...&a_{bj}&...&a_{bc}&...&a_{bn}\\		
+		\vdots&\vdots&\vdots&\ddots&\vdots&\vdots&\vdots\\
+		a_{i1}&...&a_{ij}&...&a_{ic}&...&a_{in}\\		
+		\vdots&\vdots&\vdots&\vdots&\vdots&\ddots&\vdots\\		
+		a_{n1}&...&a_{nj}&...&a_{nc}&...&a_{nn}\\		
+	\end{bmatrix} \\ = \begin{bmatrix}
+		a_{11}&...&a_{1j}&...&a_{15}&...&a_{1n}\\
+		\vdots&\ddots&\vdots&\vdots&\vdots&\vdots&\vdots\\
+		\vdots&\vdots&\ddots&\vdots&\vdots&\vdots&\vdots\\		
+		\vdots&\vdots&\vdots&\ddots&\vdots&\vdots&\vdots\\
+		m_{ab}a_{b1}+a_{i1}&...&m_{ab}a_{bj}+a_{ij}&...&m_{ab}a_{bc}+a_{ic}&...&m_{ab}a_{bi}+a_{in}\\		
+		\vdots&\vdots&\vdots&\vdots&\vdots&\ddots&\vdots\\		
+		a_{n1}&...&a_{nj}&...&a_{n5}&...&a_{nn}\\		
+	\end{bmatrix}
+	\end{align*}
+	 \\
+	 (b)\\
+	 \\
+	 The unique multiplication that is not zero is the mais diagonal, so the determinant is 1.\\
+	 \\
+	 \begin{align*}
+	 	det(A) = 1
+	 \end{align*}
+	 The determinant will be a multiplication of n-terms, one of each line.
+	 For example, diagonal:
+	 \begin{align*}
+	 	det(A) &= ... + a_{11}a_{22}...a_{ii}...a_{nn} + ...\\
+	 	det(\hat{A}) &= ... + a_{11}a_{22}...(m_{ab}a_{bc}+a_{ii})...a_{nn} + ...\\	 	
+	 	&= ... + (a_{11}a_{22}...m_{ab}a_{bc}...a_{nn})+(a_{11}a_{22}...a_{ii}...a_{nn}) + ...\\	 	
+	 \end{align*}
+	 Which will give a term with $m_{ab}$ and term without. The sum of terms without will give the $det(A)$. The terms with $m_{ab}$ will appear in pairs, one positive and one negative, so the sum will be zero. Which will give us the $det(\hat{A})=det(A)$ $\square$.\\
+	 \\
+	 (c)\\
+	 \\
+	 From (a) we see that $\hat{A}$ is a copy of $A$ but on line $a$, so, if we want $\hat{A}$ as $I$, $A$ will be $I$ but on line $a$. This line will be the multiplication of line $a$ of M and all columns of $A$. This multiplication will be all zero but in two cases:\\
+	 (1) when $m_{ab}$ is multiplied by the $1$ on the diagonal, and the $a_{ij}$ will be multiplied by the $1$ of that row, generating $m_{ab}+a_{ij}$. But we want this multiplication to be zero, because it is outside the diagonal. So we will have
+	 $$
+	 m_{ab}+a_{ij} = 0\\
+	 m_{ab}=-a_{ij}
+	 $$
+	 Which will give us that in the posijion $(i,j)$ of the matrix $A$ in the same position that we have $m$ in the $M$ matrix in $A$ we will have $-m$.\\
+	 \\
+	 (2) The second multiplication will be in the main-diagonal entry of this line, we will have $m_{ab}$ multiplied by zero plus the entry $a_{ii}$ which will need to be $1$
+	 \\
+	 In conjuction we will have that $A$ will be:
+	 \begin{align*}
+	 	\begin{bmatrix}
+		 1&...&0&...&0&...&0\\
+		 \vdots&\ddots&\vdots&\vdots&\vdots&\vdots&\vdots\\
+		 0&...&1&...&0&...&0\\
+		 \vdots&\vdots&\vdots&\ddots&\vdots&\vdots&\vdots\\
+		 0&...&-m_{ab}&...&1&...&0\\
+		 \vdots&\vdots&\vdots&\vdots&\vdots&\ddots&\vdots\\		
+		 0&...&0&...&0&...&1
+		 \end{bmatrix}\\
+		 \square
+	 \end{align*}
+\end{document}

@@ -1,0 +1,54 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\author{Daniel Frederico Lins Leite}
+\begin{document}
+	Proposition 1.4.55\\
+	If $A$ and $X$ are $n \times n$, $A$ is positive definite and $X$ is nonsingular, then the matrix $B = X^TAX$ is also positive definite.\\
+	\\
+	Theorem 1.7.31\\
+	Let A be positive definite. Then A can be expressed in exactly one 
+	way as a product $A = LDL^T$, such that L is unit lower triangular, and D is a 
+	diagonal matrix whose main-diagonal entries are positive. \\
+	\\
+	Exercise 1.7.32\\
+	Prove Theorem 1.7.31.\\
+	\\
+	To this end it suffices to show that A is positive definite if and only if the main-diagonal entries of D are positive. See Proposition 1.4.55.\\
+	\\
+	Proof:\\
+	\\
+	Part 1: If A is "Positive Definite" then main-diagonal entries of D are positive.
+	\begin{align*}
+		X^TAX = B\\
+		X^{-T}X^TAXX^{-1} = X^{-T}BX^{-1}\\
+		A = X^{-T}BX^{-1}\\
+		\\
+		L = X^{-1}\\
+		\\
+		A = L^TBL
+	\end{align*}
+	By the uniqueness of the factorization there is only one factorization of the form $A = L^TDL$. Which makes $B=D$. But from the "Positive Definiteness" of the matrix, $B$, and off course $D$ are "Positive Definite".
+	Which implies that the main-diagonal entries of the matrix are positive $\square$.
+	\\
+	\\
+	Part 2: If main-diagonal entries of D are positive then A is "Positive Definite"\\	
+	\\
+	If D is a diagonal matrix with  main-diagonal entries then D is "Positive Definite".
+	\begin{align*}			
+		B &= X^TDX\\
+		\\
+		L &= X\\
+		\\
+		B &= L^TDL\\
+	\end{align*}	
+	Again, by uniqueness of factorization, $B=A$, and given that $B$ is "Positive Definite", we conclude that $A$ is "Positive Definite". $\square$
+\end{document}
+
+
+
+

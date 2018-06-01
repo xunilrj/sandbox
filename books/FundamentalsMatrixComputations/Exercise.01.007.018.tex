@@ -1,0 +1,61 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\author{Daniel Frederico Lins Leite}
+\begin{document}	
+	Exercise 1.7.18\\
+	Solve the linear system $Ax = \hat{b}$, where $A$ is as in Exercise 1.7.10 and $\hat{b} = [12, -8, 21, -26]^T$. Use the $L$ and $U$ that you calculated in Exercise 1.7.10.\\
+	\\
+	Answer\\
+	\\
+	\begin{align*}
+	U = \begin{bmatrix}	
+	2  &  1 &  -1  &  3\\
+	0  &  1 &  -1  &  3\\
+	0  &  0 &  -1  &  3\\
+	0  &  0 &   0  &  3\\
+	\end{bmatrix}\\
+	L = \begin{bmatrix}	
+	 1 & 0 & 0 & 0\\
+	-1 & 1 & 0 & 0\\
+	 2 & -1 & 1 & 0\\
+	-3 &  2 & -1 & 1\\
+	\end{bmatrix}\\
+	\\
+	L*U = \begin{bmatrix}
+	2 &  1 & -1 &  3\\
+	-2 &  0 &  0 &  0\\
+	4  & 1 & -2  & 6\\
+	-6 & -1 &  2 & -3\\	
+	\end{bmatrix} = A
+	\end{align*}	
+	Original problem\\
+	\begin{align*}
+		Ax = b\\
+		LUx = b\\
+		Ux = y\\
+		\\
+		Ly = b\\
+		y = \begin{bmatrix}13 \\ 11  \\ 9 \\ 12 \end{bmatrix}\\
+		\\
+		Ux = \begin{bmatrix}13 \\ 11  \\ 9 \\ 12 \end{bmatrix}\\
+		x = \begin{bmatrix}1\\2\\3\\4\end{bmatrix}\\
+	\end{align*}
+	New Problem
+	\begin{align*}
+	A\hat{x} = \hat{b}\\
+	LU\hat{x} = \hat{b}\\
+	U\hat{x} = \hat{y}\\
+	\\
+	L\hat{y} = \hat{b}\\
+	\hat{y} = \begin{bmatrix}12 \\ 4  \\ 1 \\ 3 \end{bmatrix}\\
+	\\
+	U\hat{x} = \begin{bmatrix}12 \\ 4  \\ 1 \\ 3 \end{bmatrix}\\
+	\hat{x} = \begin{bmatrix}4\\3\\2\\1\end{bmatrix}\\
+	\square
+	\end{align*}
+\end{document}

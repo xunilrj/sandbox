@@ -840,6 +840,7 @@ namespace ma
 				using UpperMatrix = Matrix<TNumber, HEIGHT, HEIGHT, UPPER>;
 				template <typename TNumber, NaturalNumber HEIGHT>
 				using UpperBandedMatrix = Matrix<TNumber, HEIGHT, HEIGHT, UPPERBANDED>;
+				using DMatrixf = DMatrix<float, NONE>;
 
 				enum class SolveAlgorithm
 				{

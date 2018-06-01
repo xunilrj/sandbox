@@ -43,3 +43,33 @@ Banded Positive
 Sparse Positive Definite Systems
 1.6.4
 1.6.5
+Gaussian Elimination and the LU Decomposition
+1.7.26
+1.7.27
+1.7.35
+1.7.36
+1.7.37
+1.7.38
+1.7.39
+1.7.40
+1.7.41
+1.7.42
+1.7.43
+1.7.44
+1.7.45
+1.7.46
+1.7.47
+1.7.48
+1.7.49
+1.7.50
+1.7.51
+1.7.52
+1.7.53
+1.7.54
+1.7.55
+1.8 GAUSSIAN ELIMINATION WITH PIVOTING 
+1.8.1
+1.8.4
+1.8.6
+1.8.7
+1.8.9
