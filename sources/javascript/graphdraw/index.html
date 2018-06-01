@@ -21,17 +21,97 @@
   <script src="https://d3js.org/d3.v4.min.js"></script>
 </head>
 <body>
-  <textarea cols="50" rows="20"></textarea>  
+  <textarea cols="50" rows="20">objframework objprocess
+objframework objrisk
+objframework objaccount
+objframework objobjective
+objframework objproduct
+objframework objcontrols
+objaccount objaccount_group
+objproduct objproduct_category
+objdata_fields objdata_category
+objdata_fields objERMControl
+objdata_field objdata_category
+objprocessing_activity objdata_category
+objprocessing_activity objdata_fields
+objobjective objobjective_category
+objobligation objrisk
+objrisk_category_2 objrisk_category
+objrisk_category objrisk_category
+objrisk_appetite_statement objrisk_appetite_statement_cate
+objrisk objrisk_category
+objrisk objobjective
+objrisk objcontrols
+objindicator_value objIndicatorCategories
+objindicator_value objindicator
+objcontrols objcontrol_categories
+objsubject_rights_requests objprocessing_activity
+objprocess objprocess_category
+objindicator objIndicatorCategories
+objcorrective_action_plan objcontrols
+objFrameworkNG.Entities.Organization.Asset objdata_fields
+objpolicies objERMControl
+objERMRisk objrisk_appetite_statement
+ruleAnton Example Rule objconflict_of_interest
+modConsent objdata_subject
+modConsent objlearner
+modAction Management objcorrective_action_plan
+modFrameworks objframework
+modLibraries objrisk_appetite_statement
+modLibraries objrisk_appetite_statement_cate
+modLibraries objobligation
+modLibraries objattestation
+modLibraries objprocess_category
+modLibraries objobjective
+modLibraries objcontrols
+modLibraries objrisk_category
+modLibraries objrisk
+modLibraries objprocess
+modLibraries objobjective_category
+modLibraries objcontrol_categories
+modCompliance objregulator
+modDocuments objdocuments
+modIndicators objIndicatorCategories
+modIndicators objindicator
+modIndicators objindicator_value
+modGDPR objcorrespondence_register
+modGDPR objsubject_rights_requests
+modGDPR objdata_access
+modGDPR objdata_flow
+modGDPR objprojects
+modGDPR objvendor
+modGDPR objprocessing_activity
+modGDPR objapplicationsystem
+modGDPR objdata_category
+modGDPR objdata_field
+modGDPR objproduct
+</textarea>  
   <br/>
-  <svg width="300" height="300"></svg>
+  <svg width="10000" height="10000"></svg>
   <script>
-    var area = document.querySelector('textarea');
-    area.addEventListener('input', function(e) {
-      var svg = e.target;
+    var simulation = null;
+    function dragstarted(d) {
+      if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x;
+      d.fy = d.y;
+    };
+    function dragged(d) {
+      d.fx = d3.event.x;
+      d.fy = d3.event.y;
+    };
+    function dragended(d) {
+      if (!d3.event.active) simulation.alphaTarget(0);
+      d.fx = null;
+      d.fy = null;
+    };
+    
+    var drawGraph = function(area) {      
       d3.select("svg").selectAll("*").remove();
-      var graph = e.target.value;    
+      
+      var graph = area.value;    
       var vertices = [];
       var edges = []
+      
       var lines = graph.split('\n');    
       lines.forEach(x =>{
         var items = x.split(" ");      
@@ -42,7 +122,9 @@
       vertices = [...new Set(vertices)].map(function(x){
         return {id: x, group:1};
       });
+      
       var jsonmis = { nodes: vertices, links: edges};
+      console.log(jsonmis);
     
       var svg = d3.select("svg"),
       width = +svg.attr("width"),
@@ -50,8 +132,10 @@
       
       var color = d3.scaleOrdinal(d3.schemeCategory20);
 
-      var simulation = d3.forceSimulation()
-        .force("link", d3.forceLink().id(function(d) { return d.id; }))
+      simulation = d3.forceSimulation()
+        .force("link", d3.forceLink()
+               .id(function(d) { return d.id; })
+              .distance(function(d){return 400;}))
         .force("charge", d3.forceManyBody())
         .force("center", d3.forceCenter(width / 2, height / 2));
       
@@ -59,64 +143,49 @@
         .attr("class", "links")
         .selectAll("line")
         .data(jsonmis.links)
-        .enter().append("line")
-        .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
+        .enter()
+          .append("line")
+          .attr("stroke-width", function(d) { return Math.sqrt(d.value); });
       
-      var node = svg.append("g")
+      var nodeEnter = svg
+        .append("g")
         .attr("class", "nodes")
-        .selectAll("circle")
+        .selectAll("g")
         .data(jsonmis.nodes)
-        .enter().append("circle")
-          .attr("r", 5)
-          .attr("fill", function(d) { return color(d); })
-          .call(d3.drag()
+        .enter()
+          .append("g")
+          .attr("class", "node-group")
+      nodeEnter.append("circle")
+        .attr("r", function(d) { return 10;})
+        .attr("fill", function(d) { return color(d); })
+      nodeEnter.append("text").text(function(d){return d.id;});
+      
+      nodeEnter.call(d3.drag()
             .on("start", dragstarted)
             .on("drag", dragged)
             .on("end", dragended));
       
-      node.append("title")
-        .text(function(d) { return d.id; });
-
-        simulation
-        .nodes(jsonmis.nodes)
-        .on("tick", ticked);
-
-      simulation.force("link")
-        .links(jsonmis.links);
+      simulation.nodes(jsonmis.nodes).on("tick", ticked);
+      simulation.force("link").links(jsonmis.links);     
       
-      
-  function ticked() {
-    link
-        .attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
+      function ticked() {
+          link
+              .attr("x1", function(d) { return d.source.x; })
+              .attr("y1", function(d) { return d.source.y; })
+              .attr("x2", function(d) { return d.target.x; })
+              .attr("y2", function(d) { return d.target.y; });
 
-    node
-        .attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
-  
-};
-    });
+          nodeEnter
+            .attr("transform", function(d) {
+              return "translate(" + d.x + ","+ d.y+ ")";
+            });
+      };
+    };
+    var area = document.querySelector('textarea');
+    area.addEventListener('input', function (e) {drawGraph(e.target);});    
+    drawGraph(area);
     
 
-
-function dragstarted(d) {
-  if (!d3.event.active) simulation.alphaTarget(0.3).restart();
-  d.fx = d.x;
-  d.fy = d.y;
-}
-
-function dragged(d) {
-  d.fx = d3.event.x;
-  d.fy = d3.event.y;
-}
-
-function dragended(d) {
-  if (!d3.event.active) simulation.alphaTarget(0);
-  d.fx = null;
-  d.fy = null;
-}
   </script>
 </body>
 </html>
