@@ -1,0 +1,41 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{pdfpages}
+\title{2D Graphics with Asymptote}
+\author{The Asymptote Project}
+\newcommand{\insertrep}[1]{%
+	\hspace*{-2.4cm}
+	\fbox{\includegraphics[page=1,scale=1]{#1}}
+
+}
+\begin{document}
+
+Describe geometrically (line, plane, or all of $R^3$) all linear combinations of:\\\\
+Linear combination is $a*A+b*B$ where $a \in R$ and $b \in R$.\\
+\\
+(a) $A = \begin{bmatrix}1\\2\\3\end{bmatrix}$ and $B = \begin{bmatrix}3\\6\\9\end{bmatrix}$\\
+\\
+Both points are on the same line, so their linear combination can only express a line. The blue line is the line that is formed by all linear combinations of $A$ and $B$. The red points are random linear combinations of $A$ and $B$ that we confirm that fall all in the line.\\
+\begin{center}
+\insertrep{exercise01001a.pdf}
+\end{center}
+\newpage
+(b)  $A = \begin{bmatrix}1\\0\\0\end{bmatrix}$ and $B = \begin{bmatrix}0\\2\\3\end{bmatrix}$\\
+It is obvious that we cannot have one line passing throught $(0,0,0)$ that also passes throught $(1,0,0)$ and $(0,2,3)$. So, the linear combinations of theses points forms a plane.\\
+The blue plane represents all linear combinations of $A$ and $B$.\\
+The red poins are, again, random linear combinations of $A$ and $B$. We can see in the second figure how all points fall perfectly in the plane.
+\begin{center}
+\insertrep{exercise01001b1.pdf}
+\end{center}
+\begin{center}
+	\insertrep{exercise01001b2.pdf}
+\end{center}
+\newpage
+(c) $\begin{bmatrix}2\\0\\0\end{bmatrix}$ and $\begin{bmatrix}0\\2\\2\end{bmatrix}$ and $\begin{bmatrix}2\\2\\3\end{bmatrix}$\\
+\begin{center}
+	\insertrep{exercise01001c1.pdf}
+\end{center}
+\begin{center}
+	\insertrep{exercise01001c2.pdf}
+\end{center}
+\end{document}
