@@ -1,0 +1,37 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{pdfpages}
+\title{2D Graphics with Asymptote}
+\author{The Asymptote Project}
+\newcommand{\insertrep}[1]{%
+	\hspace*{-2.4cm}
+	\fbox{\includegraphics[page=1,scale=1]{#1}}
+}
+\begin{document}
+Exercise 3:\\
+Draw $v+w=\begin{bmatrix}5\\1\end{bmatrix}$ and $v-w=\begin{bmatrix}1\\5\end{bmatrix}$, compute and draw $v$ and $w$\\
+\begin{align*}
+	v+w=\begin{bmatrix}5\\1\end{bmatrix}\\
+	v-w=\begin{bmatrix}1\\5\end{bmatrix}\\
+	\\
+	v_1+w_1&=5\\
+	v_2+w_2&=1\\
+	v_1-w_1&=1\\
+	v_2-w_2&=5\\
+	\\
+	v_1+w_1&=5\\
+	v_1-w_1&=1\\
+	2v_1&=6\\
+	v_1&=3\\
+	w_1&=2\\
+	\\
+	v_2+w_2&=1\\
+	v_2-w_2&=5\\
+	2v_2&=6\\
+	v_2&=3\\
+	w_2&=-2
+\end{align*}
+\begin{center}
+	\insertrep{exercise01003.pdf}
+\end{center}
+\end{document}

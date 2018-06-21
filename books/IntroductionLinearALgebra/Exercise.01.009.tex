@@ -1,0 +1,36 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{pdfpages}
+\usepackage{lscape}
+\title{2D Graphics with Asymptote}
+\author{The Asymptote Project}
+\newcommand{\insertrep}[1]{%
+	\hspace*{-2.4cm}
+	\fbox{\includegraphics[page=1,scale=0.6]{#1}}
+}
+\begin{document}
+	Exercise 9:\\
+	If three corners of a parallelogram are $(1,1)$, $(4,2)$ and $(1,3)$ what are all three of the possible fourth corners? Draw two of them.\\
+	\\
+	This question is a little bit tricky. If you have three points of a parallelogram, we definitely know the forth point. But with three points and no specific order, you actually have three possible orders, with means that you have actually three possible parallelograms.\\
+	For example, we have $A$, $B$ and $C$, so wue actually have "partial-parallelograms": $ABC$, $ACB$, and $CAB$. We actually have six permutations: $3!=3*2*1=6$, but some permutation are actually the same. For example: $BAC$ and $CAB$, $ABC$ and $CBA$, $BCA$ and $ACB$. If you look carefully, you will see that the order of the first and the third point does not matter in this case, just the "middle" point matters.\\
+	We can calculate one of the points using the pallelogram rule that its opposing sides are equal. In the parallelogram $ABCD$, we have that $AC=BD$. Others permutations will generate the other points.
+	\begin{align*}
+		C-A=D-B\\
+		\\
+		\begin{bmatrix}1\\3\end{bmatrix}-\begin{bmatrix}1\\1\end{bmatrix} = \begin{bmatrix}d_1\\d_2\end{bmatrix}-\begin{bmatrix}4\\2\end{bmatrix}\\
+		d_1 - 4 = 1 - 1\\
+		d_2 - 2 = 3 - 1\\
+		\\
+		d_1 - 4 = 0\\
+		d_2 - 2 = 2\\
+		\\
+		d_1 = 4\\
+		d_2 = 4\\
+	\end{align*}
+	\begin{landscape}
+		\begin{center}
+			\insertrep{exercise01009.pdf}
+		\end{center}
+	\end{landscape}
+\end{document}

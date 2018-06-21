@@ -1,0 +1,42 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{pdfpages}
+\title{2D Graphics with Asymptote}
+\author{The Asymptote Project}
+\newcommand{\insertrep}[1]{%
+	\hspace*{-2.4cm}
+	\fbox{\includegraphics[page=1,scale=2]{#1}}
+}
+\begin{document}
+Exercise 5:\\
+Compute $u+v+w$ and $2u+2v+w$. How do you know $u$, $v$, $w$ lie in a plane.\\
+$$u = \begin{bmatrix}1\\2\\3\end{bmatrix}$$
+$$v = \begin{bmatrix}-3\\1\\-2\end{bmatrix}$$
+$$w = \begin{bmatrix}2\\-3\\-1\end{bmatrix}$$
+One should expect that three vectors must awayls express any $R^3$ point as a linear combination, but in this example we can see, the linear combination of $u+v+w$ "only" express a plane.\\
+One hint is that summing all vector we have the zero vector. This means that the third vector does not increase the expressiveness of the linear combination.\\
+This happen because the vector $w$ can be written as a linear combination of $v$ and $w$.\\
+\\
+The following proof explains why $w$ does not increase the expressiveness of $u$ and $v$.
+\begin{align*}
+	u+v+w=0\\
+	u+v=-w\\
+	-u-v=w\\
+	\\
+	A = au + bv + cw\\
+	A = au + bv + c(-u-v)\\
+	A = au + bv - cu- cv\\	
+	A = (a-c)u + (b-c)v\\
+	A = a_2u + b_2v
+\end{align*}
+\newpage
+In this image, the blue plane represents all possible linear combinations of all three vectors. The red dots are random linear combinations.
+\begin{center}
+	\insertrep{exercise01005a.pdf}
+\end{center}
+\newpage
+In this image we see exactly how all random linear combinations fall in the plane.
+\begin{center}
+	\insertrep{exercise01005b.pdf}
+\end{center}
+\end{document}
