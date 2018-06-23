@@ -1,0 +1,41 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{pdfpages}
+\usepackage{lscape}
+\title{2D Graphics with Asymptote}
+\author{The Asymptote Project}
+\newcommand{\insertrep}[1]{%
+	\hspace*{-2.4cm}
+	\fbox{\includegraphics[page=1,scale=1]{#1}}
+}
+\begin{document}
+	Exercise 10:\\
+	Which point of the cube is $i+j$. Which point is the vector sum of $i=(1,0,0)$ and $j=(0,1,0)$ and $k=(0,0,1)$? Describe all points $(x,y,z)$ in the cube.\\
+	We will generate random points using three random values $a$, $b$ and $c$ as:
+	$$a*A+b*B+c*C$$
+	In this figure we try some random linear combinations using unbounded values for $a$, $b$, $c$. We see that points are spread both inside and outside the unit cube.\\
+	\begin{center}
+		\insertrep{exercise01010a.pdf}
+	\end{center}
+	In the second attemp we try to normalize the three weights as their sum in 1.\\
+	\begin{align*}
+		a + b + c = 1\\
+		\\
+		a = \frac{a}{a+b+c}\\
+		b = \frac{b}{a+b+c}\\
+		c = \frac{c}{a+b+c}\\				
+	\end{align*}
+	We can see that altought all random points fall inside the but they are not as spread as possible. We have a filling that they do no span all possible cubes. Which makes sense given that as $x$ and $y$ approaches $0.5$, $z$ converges to zero.	
+	\begin{center}
+		\insertrep{exercise01010b1.pdf}
+	\end{center}
+	This figure is the same as above but with more random points.
+	\begin{center}
+		\insertrep{exercise01010b2.pdf}
+	\end{center}
+	\newpage
+	And the following figure is when we bound the random points to the interval $[0,1]$.
+	\begin{center}
+		\insertrep{exercise01010c.pdf}
+	\end{center}	
+\end{document}
