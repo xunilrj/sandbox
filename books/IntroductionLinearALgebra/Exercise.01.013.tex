@@ -1,0 +1,29 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{pdfpages}
+\usepackage{lscape}
+\usepackage{hyperref}
+\title{2D Graphics with Asymptote}
+\author{The Asymptote Project}
+\newcommand{\insertrep}[1]{%
+	\hspace*{-2.4cm}
+	\fbox{\includegraphics[page=1,scale=0.5]{#1}}
+}
+\begin{document}
+	Exercise 13:\\
+	(a) What us the sum V if the twelve vectors that go from the center of a clock to the hours 01:00, 02:00, ..., 12:00?\\
+	(b) If the 02:00 vector is removed, why do the 11 remaining vectors add to0 8:00?\\
+	(c) What are the components of that 02:00 vector $v = (cos \theta, sin \theta)$?
+	\\
+	(a) The sum is the zero vector because of the symmetry.\\
+	(b) Because 08:00 is the vector that is symmetric to the 02:00 vector.\\
+	(c) Each hour is $-\frac{\pi}{12}$, but our zero is actually at 03:00. So 2:00 is $(cos(\frac{2\pi}{12}),sin(\frac{2\pi}{12}))$\\
+	\begin{align*}
+		cos(\frac{2\pi}{12}) &= 0.866025403784439\\
+		sin(\frac{2\pi}{12}) &= 0.5\\
+	\end{align*}
+	
+	\begin{center}
+		\insertrep{exercise01013.pdf}
+	\end{center}
+\end{document}
