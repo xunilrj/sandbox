@@ -104,4 +104,14 @@
 	\url{http://www.math.brown.edu/~banchoff/Beyond3d/chapter4/section05.html}
 	\\
 	\section{Faces}
+	The easiest way to calculate the quantity of faces of a 4D cube is to realize that from each vertex starts four edges and each face is a combination of two of theses edges. This gives us ${4 \choose 2}=6$ faces per vertex.\\
+	A 4D Cube has $2^4=16$ vertices each containing 6 faces. But this algotihm counts each face 4 times, so we actually have:
+	$$f(n) = \frac{2^n*{n \choose 2}}{4}$$
+	Which gives us the correct value for $R^4$, $\frac{2^4*{4 \choose 2}}{4}=24$.\\
+	\\	
+	Reference:\\
+	\begin{quote}
+		The hypercube is so highly symmetric that every vertex looks like every other vertex. If we know what happens at one vertex, we can figure out what is going to happen at all vertices. At each vertex there are as many square faces as there are ways to choose 2 edges from among the 4 edges at the point, namely 6. Since there are 16 vertices, we can multiply 6 by 16 to get 96, but this counts each square four times, once for each of its vertices. The correct number of squares in a hypercube is then 96/4, or 24.
+	\end{quote}
+	http://www.math.brown.edu/~banchoff/Beyond3d/chapter4/section07.html
 \end{document}
