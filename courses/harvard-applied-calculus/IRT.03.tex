@@ -1,0 +1,40 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\author{Daniel Frederico Lins Leite}
+\begin{document}
+	Question 03:
+	Which piece(s) of information guarantee that the graph of P is always increasing?\\
+	Answer:
+	\begin{align*}
+		\frac{d}{d\theta} {(1-c)} = 0\\
+		\\
+		{1+e^{-a(\theta-b)}} 
+		&= {1+e^{-a\theta+ab}} \\
+		&= {1+e^{-a\theta}e^{ab}} \\
+		\frac{d}{d\theta} \big[ {1+e^{-a\theta}e^{ab}} \big] &=
+		e^{ab}*-a*e^{-a\theta}\\
+		&= -ae^{ab}e^{-a\theta}\\
+		&= -ae^{a(b-\theta)}\\		
+		&= -ae^{-a(\theta-b)}\\				
+		\\
+		(1+e^{-a(\theta-b)})^2 &= (1^2 + 2*1*e^{-a\theta}e^{ab} + (e^{-a\theta}e^{ab})^2)\\
+		&= (1 + 2e^{-a\theta}e^{ab} + e^{-2a\theta}e^{ab})\\
+		\\
+		\frac{d}{d\theta} \big[ {c+\frac{1-c}{1+e^{-a(\theta-b)}}} \big] =\\
+		&= 0+\frac{d}{d\theta} \big[ {\frac{1-c}{1+e^{-a(\theta-b)}}} \big] =\\
+		&= 0+\frac{d}{d\theta} \big[ {\frac{1-c}{1+e^{-a(\theta-b)}}} \big] =\\
+		&= \frac{ -(1-c)(ae^{-a(\theta-b)}) + 0*(...) } {(1+e^{-a(\theta-b)})^2}\\		
+		&= \frac{ -(1-c)(-ae^{-a(\theta-b)})} {(1+e^{-a(\theta-b)})^2}\\
+		&= \frac{ a(1-c)e^{-a(\theta-b)}} {(1+e^{-a(\theta-b)})^2}\\
+		\\
+		P'(b) &= \frac{ a(1-c)e^{-a(b-b)}} {(1+e^{-a(b-b)})^2}\\		
+		= &\frac{ a(1-c)e^{-a(0)}} {(1+e^{-a(0)})^2}\\
+		= &\frac{ a(1-c)e^{0}} {(1+e^{0})^2}\\		
+		= &\frac{ a(1-c)} {(1+1)^2}\\				
+		= &\frac{ a(1-c)} {4}\\						
+	\end{align*}
+\end{document}

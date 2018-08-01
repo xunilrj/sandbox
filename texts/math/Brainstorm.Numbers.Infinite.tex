@@ -1,0 +1,54 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\author{Daniel Frederico Lins Leite}
+\begin{document}
+	Cantor's Diagonalization Proof start with the following assumptions.\\
+	1 - Every decimal representation of a real number is unique.\\
+	\\
+	Cantor's Proof needs this assumption because it generates a new decimal representation that is not present in the chosen/constructed set. If for some reason exists multiple representations for the same real number, as we have in the rational numbers, having a new decimal representation is not necessary to Cantor's proof. We should get this new representation, normalize it to its canonical representation and test its set "is in" relation.\\
+	For example, if we apply yhe Cantor's Diagonalization Proof for the canonized set of all rationals, a set that we know a bijection from the Natural numbers, we can find a evil twin that is not in the set using the generated representation, but we can use the rational normalization algorithm, to find its canonical representation and actually find the number in the list.	\\
+	\\
+	Example:\\
+	$$0.999... = 1$$
+	\\
+	2 - Every decimal representation of a real number is valid.\\
+	\\
+	This is obvious because the twin number must be a valid real number to be considered is the real number set, but Cantor does not give this proof, he only assumes that every decimal representation is valid, which is not the case.\\
+	\\
+	For example, we know that $0.999... = 1$, which implies that $0.00000...1$ does not exist.\\
+	A possible proof that $0.000...1$ does exist can be said that:\\
+	\begin{align*}
+		A &= 0.000...1\\
+		A &< 1/10\\
+		A &< 1/100\\
+		A &< 1/1000\\		
+		...
+	\end{align*}
+	//TODO improve this
+	Which is impossible.\\
+	If there is a representation of an impossible real number, the question is... is this the unique impossible number? Are all other representations following a same pattern?\\
+	\\
+	The question can be summarized as, is there a finite representations of irrational numbers? This is different than asking if there are infinite irrational numbers.\\
+	For example, we know that all roots, greater than one, of two are irrational.
+	Assume $\sqrt[x]{2}}$ is rational with $p$ and $q$ as coprimes (normalized rational representation).
+	\newpage
+	\begin{align*}
+		\sqrt[x]{2} &= \frac{q}{p}}\\
+		(\sqrt[x]{2})^n &= (\frac{q}{p}})^n\\
+		2 &= \frac{q^n}{p^n}}\\		
+		2p^n &= q^n\\	
+		2p^n &= (2k)^n\\		
+		2p^n &= 2^nk^n\\				
+		p^n &= \frac{2^nk^n}{2}\\						
+		p^n &= 2^{n-1}k^n\\								
+		p^n &= 2*2^{n-2}k^n\\										
+		p^n &= 2*X\\												
+	\end{align*}
+	Given that multiplication is closed on parity (odd times odd is odd, and even times even is even), we must have p as even. If p is even it is a multiple of two. If it is a multiple of two. If $p$ and $q$ are multiple of two are not coprimes.\\
+	If they are not coprimes we can reduce the original fraction and try again. Until we come to conclusion that the is no $q$ and $p$ that satisfy the assumption and that the root is not rational.\\
+	So we have infinite irrational numbers, but we must ask if they have infinite representations.
+\end{document}
