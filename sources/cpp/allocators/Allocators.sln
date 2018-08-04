@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27428.2037
+VisualStudioVersion = 15.0.27703.2042
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Allocators", "Allocators.vcxproj", "{6EBC0E49-3D97-45FE-99A7-F5E353610545}"
 EndProject
@@ -26,6 +26,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {8D58C135-C8D2-44D0-AF9D-8CF51C104DE0}
+		SolutionGuid = {6E723550-9407-4BA1-A9D2-BB800C8E67A5}
 	EndGlobalSection
 EndGlobal
