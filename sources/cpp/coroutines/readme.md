@@ -8,7 +8,7 @@ https://channel9.msdn.com/Events/GoingNative/2013/Bringing-await-to-Cpp
 C++ Coroutines: Understanding operator co_await  
 https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await  
   
-And there ar some libraries that simulates coroutines:  
+And we even have some libraries that simulates coroutines:  
   
 CO2 - A C++ await/yield emulation library for stackless coroutine   
 https://github.com/jamboree/co2  
