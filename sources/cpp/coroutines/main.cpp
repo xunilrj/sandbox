@@ -25,7 +25,7 @@ int main()
 {
 	auto alloc = StackAllocator<1024>();
 
-	auto comgr = CoManager(alloc);
+	auto comgr = CoManager(&alloc);
 	auto coroutine = comgr.make(average, 1, 3);
 
 	auto r = comgr.step(coroutine.index);

@@ -13,15 +13,15 @@ struct identity
 };
 
 template <class T>
-inline T&& forward(typename remove_reference<T>::type& t) noexcept
+inline T &&forward(typename remove_reference<T>::type &t) noexcept
 {
-    return static_cast<T&&>(t);
+	return static_cast<T &&>(t);
 }
 
 template <class T>
-inline T&& forward(typename remove_reference<T>::type&& t) noexcept
+inline T &&forward(typename remove_reference<T>::type &&t) noexcept
 {
-    return static_cast<T&&>(t);
+	return static_cast<T &&>(t);
 }
 
 class cocontinuation
@@ -112,13 +112,21 @@ class CoManager
 	int pos;
 	bool CoroutinesFree[SIZE];
 	coroutine Coroutines[SIZE];
-	TBuffer &Buffer;
+	TBuffer *Buffer;
 
   public:
-	CoManager(TBuffer &buffer) : Buffer(buffer)
+	CoManager() : pos(0), Buffer(nullptr)
 	{
-		pos = 0;
+		for (int i = 0; i < SIZE; ++i)
+			CoroutinesFree[i] = true;
 	}
+	CoManager(TBuffer *buffer) : pos(0), Buffer(buffer)
+	{
+		for (int i = 0; i < SIZE; ++i)
+			CoroutinesFree[i] = true;
+	}
+
+	void setBuffer(TBuffer *buffer) { Buffer = buffer; }
 
 	template <typename F>
 	using TFArg0 = unqualified_first_argument_of<F>;
@@ -127,20 +135,20 @@ class CoManager
 
 	template <typename F, typename... TArgs>
 	comakeresult<TFArgs0Template<F>>
-	make(F f, TArgs&&... args)
+	make(F f, TArgs &&... args)
 	{
 		auto sizeargs = sizeof(TFArg0<F>);
-		auto blk = Buffer.allocate(sizeargs);
+		auto blk = Buffer->allocate(sizeargs);
 
 		auto &costate = make_costate<
 			TFArgs0Template<F>,
 			TArgs...>(blk.Pointer, forward<TArgs>(args)...);
 
 		//find free slot
-		int stopAt = pos - 1;
+		int stopAt = (pos - 1) % SIZE;
 		while (!CoroutinesFree[pos] && pos != stopAt)
 		{
-			++pos;
+			pos = (pos + 1) % SIZE;
 		}
 		if (!CoroutinesFree[pos])
 			return {-1, coroutine{nullptr, Block::Null}};
@@ -164,7 +172,7 @@ class CoManager
 			return;
 
 		auto &coroutine = Coroutines[id];
-		Buffer.deallocate(coroutine.state);
+		Buffer->deallocate(coroutine.state);
 
 		coroutine.function = nullptr;
 		coroutine.state = ma::Block::Null;
