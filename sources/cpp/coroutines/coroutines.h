@@ -106,24 +106,31 @@ struct comakeresult
 	bool isOk() const { return index >= 0; }
 };
 
+void * memset ( void * ptr, int value, size_t num )
+{
+	auto ptr2 = (char*)ptr;
+	while(num > 0){
+		(*ptr2) = value;
+		++ptr2;
+		num--;
+	}
+	return ptr;
+} 
+
 template <typename TBuffer, unsigned int SIZE = 1024>
 class CoManager
 {
 	int pos;
-	bool CoroutinesFree[SIZE];
+	bool CoroutinesBusy[SIZE];
 	coroutine Coroutines[SIZE];
 	TBuffer *Buffer;
 
   public:
-	CoManager() : pos(0), Buffer(nullptr)
+	CoManager() : pos(0), Buffer(nullptr), CoroutinesBusy{0}
 	{
-		for (int i = 0; i < SIZE; ++i)
-			CoroutinesFree[i] = true;
 	}
-	CoManager(TBuffer *buffer) : pos(0), Buffer(buffer)
+	CoManager(TBuffer *buffer) : pos(0), Buffer(buffer), CoroutinesBusy{0}
 	{
-		for (int i = 0; i < SIZE; ++i)
-			CoroutinesFree[i] = true;
 	}
 
 	void setBuffer(TBuffer *buffer) { Buffer = buffer; }
@@ -144,13 +151,11 @@ class CoManager
 			TFArgs0Template<F>,
 			TArgs...>(blk.Pointer, forward<TArgs>(args)...);
 
-		//find free slot
+		//find free slot - bitmap would be faster?
 		int stopAt = (pos - 1) % SIZE;
-		while (!CoroutinesFree[pos] && pos != stopAt)
-		{
+		while (CoroutinesBusy[pos] && pos != stopAt)
 			pos = (pos + 1) % SIZE;
-		}
-		if (!CoroutinesFree[pos])
+		if (CoroutinesBusy[pos])
 			return {-1, coroutine{nullptr, Block::Null}};
 
 		auto oldpos = pos;
@@ -158,7 +163,7 @@ class CoManager
 		coroutine.function = (FUNCPTR)f;
 		coroutine.state = blk;
 
-		CoroutinesFree[oldpos] = false;
+		CoroutinesBusy[oldpos] = true;
 
 		++pos;
 		return {oldpos, coroutine};
@@ -177,7 +182,7 @@ class CoManager
 		coroutine.function = nullptr;
 		coroutine.state = ma::Block::Null;
 
-		CoroutinesFree[id] = true;
+		CoroutinesBusy[id] = false;
 		pos = id;
 	}
 

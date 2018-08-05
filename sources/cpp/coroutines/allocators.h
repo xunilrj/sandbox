@@ -1,10 +1,6 @@
 #ifndef ALLOCATORS_H
 #define ALLOCATORS_H
 
-//using size_t = unsigned long long;
-using uint8_t = unsigned char;
-using uint32_t = unsigned int;
-
 namespace ma
 {
 	// https://embeddedgurus.com/state-space/2014/09/fast-deterministic-and-portable-counting-leading-zeros/
