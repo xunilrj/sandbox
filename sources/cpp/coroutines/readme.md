@@ -54,3 +54,60 @@ Here I am also implementing everything. Appart from main.cpp we do not use stdli
     remove_ref
     tuple
     forward
+
+# Using it
+
+## Plain C/C++
+
+    We can easily use this coroutines in c/c++ like this:
+
+    int main()
+    {
+        auto alloc = StackAllocator<1024>();
+
+        auto comgr = CoManager(&alloc);
+        auto result = comgr.make(average, 1, 3);
+        auto coroutine = result.coroutine;
+
+        auto r = comgr.step(coroutine.id());
+        r = comgr.step(coroutine.id());
+
+        comgr.free(coroutine.id());
+
+        std::cout << "result is " << result.args().result;
+    }
+
+    The advantage here is that you can "step" your coroutine with just its id. This allows
+    you to bind the "step" in any event loop. For example WebAssembly and JS.
+
+    ## Using in WebAssembly and JS.
+
+    struct readFileArgs{int id;ui64 pos;int readCount;Block buffer;};
+    cocontinuation readFile(costate<readFileArgs> &args)
+    {
+        auto& [id, pos, readCount, buffer] = ARGS;
+        START_COROUTINE
+            buffer = allocator.allocate(1024);
+            do
+            {
+                readAsync(args.id(), id, pos, 1024, &readCount, buffer.Pointer);
+                YIELD;
+                pos += readCount;
+            } while(readCount > 0);
+        END_COROUTINE
+    }
+
+In the JS file you could do:
+
+    readAsync: function(coid, id, offset, size, readCountRef, bufferRef)
+    {
+        fetch(...).then(function(){
+            //write readCount to readCountRef
+            //write bytes to bufferRef
+            webasm.exports.step(coid);
+        })
+    }
+
+And you would have a complete coroutine that would completely read a file in 1024 bytes chunks.
+
+With a little bit MACRO magic you could even simplify the function creation in one line.
