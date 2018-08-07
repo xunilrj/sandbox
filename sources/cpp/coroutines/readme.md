@@ -59,7 +59,7 @@ Here I am also implementing everything. Appart from main.cpp we do not use stdli
 
 ## Plain C/C++
 
-    We can easily use this coroutines in c/c++ like this:
+We can easily use this coroutines in c/c++ like this:
 
     int main()
     {
@@ -77,10 +77,10 @@ Here I am also implementing everything. Appart from main.cpp we do not use stdli
         std::cout << "result is " << result.args().result;
     }
 
-    The advantage here is that you can "step" your coroutine with just its id. This allows
-    you to bind the "step" in any event loop. For example WebAssembly and JS.
+The advantage here is that you can "step" your coroutine with just its id. This allows
+you to bind the "step" in any event loop. For example WebAssembly and JS.
 
-    ## Using in WebAssembly and JS.
+## Using in WebAssembly and JS.
 
     struct readFileArgs{int id;ui64 pos;int readCount;Block buffer;};
     cocontinuation readFile(costate<readFileArgs> &args)
