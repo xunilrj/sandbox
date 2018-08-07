@@ -26,13 +26,13 @@ int main()
 	auto alloc = StackAllocator<1024>();
 
 	auto comgr = CoManager(&alloc);
-	auto coroutine = comgr.make(average, 1, 3);
+	auto result = comgr.make(average, 1, 3);
+	auto coroutine = result.coroutine;
 
-	auto r = comgr.step(coroutine.index);
-	r = comgr.step(coroutine.index);
-	auto args = coroutine.args();
+	auto r = comgr.step(coroutine.id());
+	r = comgr.step(coroutine.id());
 
-	comgr.free(coroutine.index);
+	comgr.free(coroutine.id());
 
-	std::cout << "result is " << args.result;
+	std::cout << "result is " << result.args().result;
 }

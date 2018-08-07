@@ -35,27 +35,30 @@ template <typename T>
 class costate
 {
   public:
-	costate(const T &args) : _state(0), state(args)
+	costate(int id, const T &args) : _id(id), _state(0), state(args)
 	{
 	}
 
 	template <typename... TArgs>
-	costate(TArgs &&... args) : _state(0), state({forward<TArgs>(args)...})
+	costate(int id, TArgs &&... args) : _id(id), _state(0), state({forward<TArgs>(args)...})
 	{
 	}
 
+	int _id;
 	int _state;
 	T state;
+
+	inline int id() const { return _id; }
 	bool isFinished(int i)
 	{
-		return true;
+		return _state == -1;
 	}
 };
 
 template <typename T, typename... TArgs>
-costate<T> &make_costate(void *ptr, TArgs &&... args)
+costate<T> &make_costate(int id, void *ptr, TArgs &&... args)
 {
-	return *(new (ptr) costate<T>(forward<TArgs>(args)...));
+	return *(new (ptr) costate<T>(id, forward<TArgs>(args)...));
 }
 
 #define START_COROUTINE  \
@@ -86,6 +89,7 @@ struct coroutine
 	FUNCPTR function;
 	ma::Block state;
 
+	int id() const { return *((int *)state.Pointer); }
 	cocontinuation step()
 	{
 		return function(state.Pointer);
@@ -95,27 +99,28 @@ struct coroutine
 template <typename T>
 struct comakeresult
 {
-	int index;
 	coroutine coroutine;
 
+	int id() const { return coroutine.id(); }
 	T &args() const
 	{
 		auto &cos = *((costate<T> *)coroutine.state.Pointer);
 		return cos.state;
 	}
-	bool isOk() const { return index >= 0; }
+	bool isOk() const { return coroutine.id() >= 0; }
 };
 
-void * memset ( void * ptr, int value, size_t num )
+void *memset(void *ptr, int value, size_t num)
 {
-	auto ptr2 = (char*)ptr;
-	while(num > 0){
+	auto ptr2 = (char *)ptr;
+	while (num > 0)
+	{
 		(*ptr2) = value;
 		++ptr2;
 		num--;
 	}
 	return ptr;
-} 
+}
 
 template <typename TBuffer, unsigned int SIZE = 1024>
 class CoManager
@@ -144,19 +149,19 @@ class CoManager
 	comakeresult<TFArgs0Template<F>>
 	make(F f, TArgs &&... args)
 	{
-		auto sizeargs = sizeof(TFArg0<F>);
-		auto blk = Buffer->allocate(sizeargs);
-
-		auto &costate = make_costate<
-			TFArgs0Template<F>,
-			TArgs...>(blk.Pointer, forward<TArgs>(args)...);
-
 		//find free slot - bitmap would be faster?
 		int stopAt = (pos - 1) % SIZE;
 		while (CoroutinesBusy[pos] && pos != stopAt)
 			pos = (pos + 1) % SIZE;
 		if (CoroutinesBusy[pos])
-			return {-1, coroutine{nullptr, Block::Null}};
+			return {coroutine{nullptr, Block::Null}};
+
+		auto sizeargs = sizeof(TFArg0<F>);
+		auto blk = Buffer->allocate(sizeargs);
+
+		auto &costate = make_costate<
+			TFArgs0Template<F>,
+			TArgs...>(pos, blk.Pointer, forward<TArgs>(args)...);
 
 		auto oldpos = pos;
 		auto &coroutine = Coroutines[oldpos];
@@ -166,7 +171,7 @@ class CoManager
 		CoroutinesBusy[oldpos] = true;
 
 		++pos;
-		return {oldpos, coroutine};
+		return {coroutine};
 	}
 
 	void free(int id)
