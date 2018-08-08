@@ -184,7 +184,7 @@ Now that we understand what is behind the curtain. Let us generate a real WebAss
 
 This will generate a binary version of the wasm. We can see the textual representation of the wasm file doing.
 
-    > C:\github\wasm-toolchain\binaryen\build\bin\wasm-dis.exe .\.bin\main.001.wasm
+    > .\binaryen\build\bin\wasm-dis.exe .\.bin\main.001.wasm
 
     (module
         (type $0 (func (result i32)))
