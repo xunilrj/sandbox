@@ -2,7 +2,7 @@
 
 Compression is one of those subjects that always scare developers. Specially those used to just use libraries. It is a set of black boxes that, hopefully, just works.
 
-This does not need to be the case. And to prove it we will implement here the most important (but not used anymore) of these algorithms, the LZ77. In 1977, two Israeli mathematicians/computer scientists created this algorithm:
+This does not need to be the case. And to prove it we will implement here the most important (but not used in its pure form anymore) of these algorithms, the LZ77. In 1977, two Israeli mathematicians/computer scientists created this algorithm:
 
 A Universal Algorithm for Sequential Data Compression  
 Jacob Ziv, Abraham Lempel  
