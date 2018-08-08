@@ -15,9 +15,9 @@ https://en.wikipedia.org/wiki/Abraham_Lempel
 
 The encoder/compressor will read the string/bytes to compress and will emit a series of tuples (B,L,C).
 
-B = Go back B bytes
-L = Append the next L bytes
-C = Append the byte C
+    B = Go back B bytes
+    L = Append the next L bytes
+    C = Append the byte C
 
 for example compress("abracadabrad") would generate.
 
