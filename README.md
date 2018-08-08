@@ -30,8 +30,8 @@
 
 ### Algorithms and Data Structures
 
-[Compression - LZ77](source/javascript/compression/)
-[CRTD - Conflict-free Replicated Data Type](courses/kth-distributed-algorithms-1/crtd)  
+[Compression - LZ77](sources/javascript/compression/)  
+[CRTD - Conflict-free Replicated Data Type](courses/kth-distributed-algorithms-1/crtd)    
 
 ### Linux
 
