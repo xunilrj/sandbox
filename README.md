@@ -24,11 +24,20 @@
 ## Computer Science
 
 [Server Architecture](texts/dev/ServerArchitectureWindowsAPIandASPNET.pdf)   
-[CRTD - Conflict-free Replicated Data Type](courses/kth-distributed-algorithms-1/crtd)  
+
 [Can OO Strike Back?](books/TheTheoryOfObjects/CanOOStrikeBack.md)  
 [Understanding SQL Server 2008 R2 Execution Plan - Part 1](texts/dev/Understanding%20SQL%20Server%202008%20R2%20Execution%20Plan%20-%20Part%201.pdf)   
+
+### Algorithms and Data Structures
+
+[Compression - LZ77](source/javascript/compression/)
+[CRTD - Conflict-free Replicated Data Type](courses/kth-distributed-algorithms-1/crtd)  
+
+### Linux
+
+[Linux Kernel Development](sources/unix/moddev/readme.md)    
 
 ### C/C++
 
 [C++ Coroutines (even for WebAssembly)](sources/cpp/coroutines/)  
-[Linux Kernel Development](sources/unix/moddev/readme.md)    
+
