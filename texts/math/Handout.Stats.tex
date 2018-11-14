@@ -335,9 +335,35 @@ var(X) &= E[X^2] - E[X]^2\\
 
 \pagebreak
 \section {Exponential Distribution}
+
 \subsection{PDF}
 \begin{align*}
-f_x(x) &= -\lambda e^{-\lambda x} && x >= 0
+f_x(x) &= \lambda e^{-\lambda x} && x >= 0
+\end{align*}
+
+\subsection{CDF}
+\begin{align*}
+	CDF(x) = \int_{-\infty}^{x} {f_xdx}\\
+	CDF(x) = \int_{-\infty}^{x} {\lambda e^{-\lambda x}dx}\\
+	\\
+	u = e^{-\lambda x}\\
+	\frac{du}{dx} = d[e^{-\lambda x}]\\
+	du = d[e^{-\lambda x}]*dx\\
+	du = [-\lambda * e^{-\lambda x}]*dx\\
+	du = -\lambda e^{-\lambda x}dx\\
+	\\
+	CDF(x) = \int_{-\infty}^{x} {\lambda e^{-\lambda x}dx}\\
+	CDF(x) = -1*\int_{-\infty}^{x} {-1*\lambda e^{-\lambda x}dx}\\
+	CDF(x) = -1*\int_{-\infty}^{x} {-\lambda e^{-\lambda x}dx}\\
+	CDF(x) = -1*\int_{-\infty}^{x} {du}\\
+	CDF(x) = -1*\int_{0}^{x} {du} && \text{by x bounds}\\
+	CDF(x) = -1*[u]_{0}^{x}\\
+	CDF(x) = -1*[e^{-\lambda x}]_{0}^{x}\\
+	CDF(x) = -1*[e^{-\lambda x} - e^{-\lambda 0}]\\
+	CDF(x) = -1*[e^{-\lambda x} - e^{0}]\\
+	CDF(x) = -1*[e^{-\lambda x} - 1]\\
+	CDF(x) = [1 - e^{-\lambda x}]\\
+	CDF(x) = 1 - e^{-\lambda x}\\
 \end{align*}
 
 \subsection{Expected Value}
