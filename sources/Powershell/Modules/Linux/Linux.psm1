@@ -67,6 +67,9 @@ function touch
     {
         New-Item $Path
     }
+    else {
+        (ls $Path).LastWriteTime = Get-Date
+    }
 }
 
 function head

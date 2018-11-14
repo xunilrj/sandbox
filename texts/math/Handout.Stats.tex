@@ -3,7 +3,7 @@
 \usepackage{amsmath,amssymb,amsthm}
 
 %opening
-\title{}
+\title{Probability and Statistics}
 \author{}
 
 \newcommand{\distas}[1]{\mathbin{\overset{#1}{\kern\z@\sim}}}%
@@ -17,7 +17,17 @@
 
 \begin{document}
 	
-Expected Value\\
+\maketitle
+	
+\setcounter{tocdepth}{1}
+\tableofcontents
+\newpage
+
+\chapter {Discrite Distributions}
+
+\section{Generic Formulas}
+
+\subsection{Expected Value}
 X is discrete random variable\\
 $g : \mathbf{R} \rightarrow \mathbf{R}$\\
 $\Omega X = Im(X)$\\
@@ -26,7 +36,7 @@ $\Omega X = Im(X)$\\
 	E[g(X)] &= \sum_{x \in \Omega X} {P(X=x)*g(x)}
 \end{align}
 
-Variance\\
+\subsection{Variance}
 
 \begin{align}
 	var(g(X)) &= E([g(X) - E(g(X))]^2)\\
@@ -40,7 +50,7 @@ Variance\\
 	\qed
 \end{align}
 
-Covariance Matrix
+\subsection{Covariance Matrix}
 
 \begin{align}
 cov(X) &= E[(X-E(X)]^2\\
@@ -55,12 +65,58 @@ cov(X) &= E[(X-E(X)]^2\\
 \qed
 \end{align}
 
-Variance of the Sample Mean
+\subsection{Variance of the Sample Mean}
 
 \begin{align}
-Var\left({\overline{X}}\right)&=Var\left( \frac{1}{n}\sum_{i=1}^nX_i\right)\\&= \frac{1}{n^2}Var\left( \sum_{i=1}^nX_i\right)\\&=\frac{1}{n^2}\sum_{i=1}^nVar(X_i), \text{ by independence}\\&= \frac{1}{n^2}\left[Var(X_1)+Var(X_2)+\ldots+Var(X_n) \right]\\&=\frac{1}{n^2}\left[\sigma^2+\sigma^2+\ldots+\sigma^2  \right], \text{ since the }X_i \text{ are identically distributed }\\&= \frac{1}{n^2}(n\sigma^2)\\&=\frac{\sigma^2}{n}\end{align}
+Var\left({\overline{X}}\right)&=Var\left( \frac{1}{n}\sum_{i=1}^nX_i\right)\\&= \frac{1}{n^2}Var\left( \sum_{i=1}^nX_i\right)\\&=\frac{1}{n^2}\sum_{i=1}^nVar(X_i), \text{ by independence}\\&= \frac{1}{n^2}\left[Var(X_1)+Var(X_2)+\ldots+Var(X_n) \right]\\&=\frac{1}{n^2}\left[\sigma^2+\sigma^2+\ldots+\sigma^2  \right], \text{ since the }X_i \text{ are identically distributed }\\&= \frac{1}{n^2}(n\sigma^2)\\&=\frac{\sigma^2}{n}
+\end{align}
 
-Binomial Distribution
+\subsection {Law of Iterated Expectation}
+\begin{align}
+	E[X] = E[ E[X|Y] ]
+\end{align}
+
+\subsection {Law of Total Variance}
+\begin{align}
+var(X) = E[ var(X|Y) ] + var( E[X|Y] )
+\end{align}
+
+\subsection{MSE}
+
+\begin{align}
+	\hat{\theta} &= \hat{\theta}(X) \text{ Random Variable}\\
+	E[\hat{\theta}] &= \text{constant}\\
+	\theta &= \text{true value, constant}\\
+	\\
+	MSE(\hat{\theta}) &= E[(\hat{\theta} - \theta)^2]\\
+	&= E[(\hat{\theta} - E[\hat{\theta}] + E[\hat{\theta}]) - \theta)^2]\\
+	&= E[([\hat{\theta} - E[\hat{\theta}]] + [E[\hat{\theta}] - \theta])^2]\\
+	&= E[(A + B)^2]\\
+	\\
+	& A = \hat{\theta} - E[\hat{\theta}]\\
+	& B = E[\hat{\theta}] - \theta\\
+	\\
+	&= E[A^2 + 2AB + B^2]\\
+	&= E[(\hat{\theta} - E[\hat{\theta}])^2 + 2(\hat{\theta} - E[\hat{\theta}])(E[\hat{\theta}] - \theta) + (E[\hat{\theta}] - \theta)^2]\\
+	&= E[(\hat{\theta} - E[\hat{\theta}])^2] + E[2(\hat{\theta} - E[\hat{\theta}])(E[\hat{\theta}] - \theta)] + E[(E[\hat{\theta}] - \theta)^2]\\
+	\\	
+	& C = E[\hat{\theta}]  - \theta \text{ is a constant}\\
+	\\
+	&= E[(\hat{\theta} - E[\hat{\theta}])^2] + E[2(\hat{\theta} - E[\hat{\theta}])(C)] + E[C^2]\\
+	&= E[(\hat{\theta} - E[\hat{\theta}])^2] + 2CE[\hat{\theta} - E[\hat{\theta}]] + C^2\\
+	&= E[(\hat{\theta} - E[\hat{\theta}])^2] + 2C(E[\hat{\theta}] - E[E[\hat{\theta}]]) + C^2\\
+	&= E[(\hat{\theta} - E[\hat{\theta}])^2] + 2C(E[\hat{\theta}] - E[\hat{\theta}]) + C^2\\	
+	&= E[(\hat{\theta} - E[\hat{\theta}])^2] + 2C(0) + C^2\\
+	&= E[(\hat{\theta} - E[\hat{\theta}])^2] + C^2\\
+	&= E[(\hat{\theta} - E[\hat{\theta}])^2] + (E[\hat{\theta}]  - \theta)^2\\	
+	\\
+	& var(\hat{\theta}) = E[(\hat{\theta} - E[\hat{\theta}])^2]\\
+	& bias(\hat{\theta}, \theta) = E[\hat{\theta}]  - \theta\\
+	\\
+	&= var(\hat{\theta}) + (bias(\hat{\theta}, \theta))^2\\	
+\end{align}
+
+\section{Binomial Distribution}
 
 PMF
 \begin{align}
@@ -71,7 +127,7 @@ P(X=k) &= \binom{n} {k} p^k (1-p)^{n-k}
 %prove the expected value
 %\paragraph{https://proofwiki.org/wiki/Expectation_of_Binomial_Distribution}
 
-Expected Value\\
+\subsection {Expected Value}
 
 $E[g(X)]$ when $g(X) = X$.
 
@@ -102,7 +158,8 @@ k>1&=(z+1)>1\\
 \qedsymbol
 \end{align}
 
-Variance\\
+\subsection {Variance}
+
 \begin{align}
 	Var(X) &= E(X^2) - E(X)^2 && \text{see Variance}\\
 	&= \sum_{k \geqslant 0} {[\binom{n} {k} p^k (1-p)^{n-k}]*k^2} - np && \text{see Binomial Expected Value}
@@ -146,7 +203,7 @@ k >= 1 &= (z+1) >=1\\
 \qed
 \end{align}
 
-Bernoulli Distribution
+\section {Bernoulli Distribution}
 
 The Bernoulli Distribution is a special case of the Binomial Distribution, where $$n=1$$.
 
@@ -156,7 +213,7 @@ P(X=k) &= \binom{1} {k} p^k (1-p)^{1-k}\\
 &=p^k (1-p)^{n-k}
 \end{align}
 
-Expected Value
+\subsection {Expected Value}
 \begin{align}
 	E(x) &= \sum_{k \geqslant 1} [\binom{n}{k} p^k (1-p)^{n-k}] * k\\
 	&= np && see BinomialDistribution\\
@@ -164,13 +221,13 @@ Expected Value
 	&= p
 \end{align}
 
-Variance
+\subsection {Variance}
 \begin{align}
 	Var(X) &= np*(1-p)\\
 	&= p*(1-p)\\
 \end{align}
 
-Likelihood of IID Bernoulli
+\subsection {Likelihood of IID Bernoulli}
 
 \begin{align}
 	x_i \overset{iid}{\sim} Bernoulli(p)\\
@@ -178,7 +235,7 @@ Likelihood of IID Bernoulli
 	&=p^S*(1-p)^{n-S}
  \end{align}
  
- Maximun Likelihood
+\subsection {Maximun Likelihood}
  
  \begin{align}
 	 \frac{d[L(x_i|p)]}{dp} &=\frac{d[p^S*(1-p)^{n-S}]}{dp}\\
@@ -201,12 +258,118 @@ Likelihood of IID Bernoulli
  	 \frac{S}{n} &= p\\
   	 p &= \frac{S}{n}\\
  \end{align}
+ 
+\section {Geometric Distribution}
 
-Normal Distribution
-Definition
+\subsection {CDF}
+
+\begin{align*}
+	P(X \le x) &=\\
+	CDF(X=x) &= \sum_{i=0}^{x}{(1-p)^ip} &\text{by geometric summation}\\
+	&= p\frac{1-(1-p)^x}{1-(1-p)}\\
+	&= p\frac{1-(1-p)^x}{1-1+p}\\
+	&= p\frac{1-(1-p)^x}{p}\\	
+	&= 1-(1-p)^x\\	
+	\qed\\
+	\\
+	P(X > x) &= 1 - CDF(X=x)\\
+	&= 1 - (1-(1-p)^x)\\
+	&= 1 - 1 +(1-p)^x\\	
+	&= (1-p)^x\\	
+	\qed
+\end{align*}
+
+\section {Normal Distribution}
+
+\subsection {Definition}
 
 \begin{align}
 pdf(x) &= \frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)
 \end{align}
+
+\chapter {Continuous Distributions}
+
+\section{Uniform Distribution}
+
+\subsection{PDF}
+\begin{align*}
+\int_{a}^{b} {kdx} &= 1\\
+&= k\int_{a}^{b} {dx}\\
+&= k[x|_{a}^{b}]\\
+&= k[b-a]\\	
+\\
+k[b-a] &= 1\\
+k &= \frac{1} {b-a}\\
+\end{align*}
+
+\subsection{Expected Value}
+\begin{align*}
+\int_{a}^{b} {x\big( \frac{1}{b-a} \big)dx} &= \\
+&= \int_{a}^{b} {x\big( \frac{1}{b-a} \big)dx}\\
+&= \frac{1}{b-a}\int_{a}^{b} {xdx}\\
+&= \frac{1}{b-a}\big[ \frac{x^2}{2}|_{a}^{b} \big]\\
+&= \frac{1}{b-a}\big[ \frac{b^2}{2} - \frac{a^2}{2} \big]\\
+&= \frac{1}{b-a}\big[ \frac{b^2-a^2}{2} \big]\\
+&= \frac{1}{b-a}\big[ \frac{(b+a)(b-a)}{2} \big]\\
+&= \frac{(b+a)(b-a)}{2(b-a)}\\
+&= \frac{b+a}{2}\\
+\end{align*}
+
+\subsection{Variance}
+\begin{align*}
+var(X) &= E[X^2] - E[X]^2\\
+&= [\int_{a}^{b} {x^2\big( \frac{1}{b-a} \big)dx}] - (\frac{b+a}{2})^2\\
+&= [\frac{1}{b-a}\int_{a}^{b} {x^2dx}] - (\frac{b+a}{2})^2\\
+&= [\frac{1}{b-a}\frac{x^3}{3}|_{a}^{b}] - (\frac{b+a}{2})^2\\
+&= \frac{1}{b-a}(\frac{b^3}{3}-\frac{a^3}{3}) - (\frac{b+a}{2})^2\\
+&= \frac{b^3-a^3}{3(b-a)} - \frac{(b+a)^2}{4}\\
+&= \frac{(b-a)(b^2-ab+a^2)}{3(b-a)} - \frac{(b+a)^2}{4}\\
+&= \frac{(b^2-ab+a^2)}{3} - \frac{(b+a)^2}{4}\\
+&= \frac{4(b^2-ab+a^2)}{12} - \frac{3(b+a)^2}{12}\\
+&= \frac{4b^2-4ab+4a^2}{12} - \frac{3(b^2+2ab+a^2)}{12}\\
+&= \frac{4b^2-4ab+4a^2}{12} - \frac{3b^2+6ab+3a^2}{12}\\
+&= \frac{4b^2-3b^2-4ab-6ab+4a^2-3a^2}{12}\\
+&= \frac{b^2-2ab+a^2}{12}\\
+&= \frac{(b-a)^2}{12}\\
+\end{align*}
+
+\pagebreak
+\section {Exponential Distribution}
+\subsection{PDF}
+\begin{align*}
+f_x(x) &= -\lambda e^{-\lambda x} && x >= 0
+\end{align*}
+
+\subsection{Expected Value}
+\begin{align*}
+f_x(x) &= \lambda e^{-\lambda x}\\
+\\
+E[x] &= \int {x*f_x(x)dx}\\
+E[x] &= \int {x*\lambda e^{-\lambda x}dx}\\
+\\
+	u = x\\
+	du = 1*dx\\
+	v = e^{-\lambda x}\\
+	dv = e^{-\lambda x}*-\lambda * dx\\
+	dv = -\lambda e^{-\lambda x}dx\\
+	\\
+E[x] &= \int {[x] [\lambda e^{-\lambda x}dx]}\\
+E[x] &= -1*\int {[x] [-1* \lambda e^{-\lambda x}dx]}\\
+E[x] &= -1*\int {[x] [-\lambda e^{-\lambda x}dx]}\\
+E[x] &= -1*\int {udv}\\
+E[x] &= -1*[uv|_{-\infty}^{\infty} - \int {vdu}]\\
+E[x] &= -1*[uv|_{0}^{\infty} - \int {vdu}] && \text{because x bounds}\\
+E[x] &= -1*[[xe^{-\lambda x}]_{0}^{\infty} - \int {e^{-\lambda x}dx}]\\
+\end{align*}
+\begin{align*}
+[xe^{-\lambda x}]_{0}^{\infty} &= \lim_{x->\infty}{[xe^{-\lambda x} - (0)e^{-\lambda (0)}]}\\
+&= \lim_{x->\infty}{[xe^{-\lambda x} + 0e^{0}]}\\
+&= \lim_{x->\infty}{[xe^{-\lambda x}]}\\
+&= 0\\
+\\
+E[x] &= -1 * - \int {e^{-\lambda x}dx}\\
+E[x] &= \frac{1}{\lambda} \int {\lambda e^{-\lambda x}dx}\\
+E[x] &= \frac{1}{\lambda}\\
+\end{align*}
 
 \end{document}

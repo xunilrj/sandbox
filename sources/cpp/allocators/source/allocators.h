@@ -1,7 +1,7 @@
 #ifndef ALLOCATORS_H
 #define ALLOCATORS_H
 
-//using size_t = unsigned long long;
+using size_t = unsigned long long;
 using uint8_t = unsigned char;
 using uint32_t = unsigned int;
 
