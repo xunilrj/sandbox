@@ -4,13 +4,13 @@
 
 Good sense dictates that one introduces a subject as gentle as possible for ones audience. That is not what we are going to do here.
 
-All possible tutorials for webassembly somehow start using scripten and porting normal c/c++ applications to webassembly. I very sage approach indeed, if you have already what to port. But here we will str from scratch. How much from scratch you ask? You will see from the next step.
+All possible tutorials for WebAssembly somehow start using [emscripten](https://github.com/kripken/emscripten) and porting normal C/C++ applications to WebAssembly. It is a very sage approach indeed, if you have already what to port. But here we will try to do everything from scratch. How much from the scratch you ask? You will see from the next step.
 
 ## Compiling the compiler (LLVM)
 
-Yes, you will compile your own c/c++ compiler. Later will become clearer every step needed to compile your c/c++ code to webassembly. But for now we need to prepare our tools.
+Yes, you will compile your own C/C++ compiler. Later will become clearer every step needed to compile your C/C++ code to WebAssembly. But for now we need to prepare our tools.
 
-There are various possible paths to compile LLVM and clang but here we will use the simplest possible for a Windows scenario.
+There are various possible paths to compile [LLVM](http://llvm.org/) and [clang](https://clang.llvm.org/) but here we will use the simplest possible for a Windows scenario.
 
 You will need:
 
