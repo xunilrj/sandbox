@@ -1,6 +1,8 @@
 # WebAssembly with C/C++
 
-Good sense dictates that one introduces a subject as gentle as possible for you audience. That is not what we are going to do here.
+[Series](./readme.md)
+
+Good sense dictates that one introduces a subject as gentle as possible for ones audience. That is not what we are going to do here.
 
 All possible tutorials for webassembly somehow start using scripten and porting normal c/c++ applications to webassembly. I very sage approach indeed, if you have already what to port. But here we will str from scratch. How much from scratch you ask? You will see from the next step.
 

@@ -1,5 +1,7 @@
 # Running Webassembly inside browsers
 
+[Series](./readme.md)
+
 In the [first part](./wasm.001.md) we saw how to compile and run WASM files outside the browser. Our intention here is to complete the build and run part of the workflow, but now running inside browsers.
 
 ## Creating host application
