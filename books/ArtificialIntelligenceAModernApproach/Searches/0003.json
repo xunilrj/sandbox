@@ -1,0 +1,7 @@
+{
+	"states": [
+		{"ID": 1, "initial": true, "actions": [2]},
+		{"ID": 2, "goal": true}
+	],
+	"expected": "true 1 2"
+}

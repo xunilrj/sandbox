@@ -207,3 +207,9 @@ To easily test our dummy wasm I created a very simple Wasm engine running on c# 
     0
 
 And the engine return our zero. Hardly impressive per se. But now we have a compiled C++ code running inside a sandboxed engine in a .NET application.
+
+# Using wasmer
+
+Another cool possibility is to use wasmer.
+
+    > wasmer run ./bin/main.001.wasm
