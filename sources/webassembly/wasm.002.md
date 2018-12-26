@@ -237,6 +237,6 @@ Now we are ready to answer why we need that "asm(...)" thing on our C++ code. Th
 
 "_ZN7browser7console3logEi" and "_Z3addii" are how the C++ compiler generates the name of our functions. This is called [name mangling](https://en.wikipedia.org/wiki/Name_mangling) and exists since the old-asm days. It is a fine thing to know since those days are coming back! Without the "asm(..)) you will need to correctly use these strange names when wiring the imports/exports.
 
-[img-parcel-001]: ./parcel001.png "ParcelJS error because of empty file"
-[img-parcel-002]: ./parceljs-001.gif "ParcelJS hot reload"
-[img-WASM-001]: ./wasm001.png "WASM opcodes"
+[img-parcel-001]: https://gitcdn.link/repo/xunilrj/sandbox/master/sources/webassembly/parcel001.PNG "ParcelJS error because of empty file"
+[img-parcel-002]: https://gitcdn.link/repo/xunilrj/sandbox/master/sources/webassembly/parceljs-001.gif "ParcelJS hot reload"
+[img-WASM-001]: https://gitcdn.link/repo/xunilrj/sandbox/master/sources/webassembly/wasm001.PNG "WASM opcodes"
