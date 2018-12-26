@@ -67,4 +67,33 @@
 
 [C++ Coroutines (even for WebAssembly)](sources/cpp/coroutines/)  
 
+# Stackoverflow Answers
+
+## C# and .NET
+
+### UnitOfWork, Repository Database Connection Issue  
+about IoC container Unity  
+https://stackoverflow.com/questions/39954586/unitofwork-repository-database-connection-issue/40418462#40418462  
+
+### Why does 'unbox.any' not provide a helpful exception text the way 'castclass' does?
+about how the .NET JIT works  
+https://stackoverflow.com/questions/39914845/why-does-unbox-any-not-provide-a-helpful-exception-text-the-way-castclass-do/40073409#40073409
+
+### Cancel Specific Task using CancellationToken
+How TPL works  
+https://stackoverflow.com/questions/35816146/cancel-specific-task-using-cancellationtoken/35817808#35817808
+
+## C++
+### iterator over non-existing sequence
+how to create C++ iterators  
+https://stackoverflow.com/questions/38730479/iterator-over-non-existing-sequence/38772065#38772065
+
+## SQL Server
+### Log file is growing with Simple Recovery mode
+how SQL Server internals works  
+https://stackoverflow.com/questions/38590066/log-file-is-growing-with-simple-recovery-mode/38592482#38592482
+
+## Theory
+### What's the difference between deadlock and livelock?
+https://stackoverflow.com/questions/6155951/whats-the-difference-between-deadlock-and-livelock/35129823#35129823
 
