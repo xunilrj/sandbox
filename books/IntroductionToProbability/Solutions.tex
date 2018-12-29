@@ -1,0 +1,254 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\author{Daniel Frederico Lins Leite}
+\begin{document}
+	
+\textbf{Introduction to Probability}\\
+Dimitri P. Bertsekas and John N. Tsitsiklis\\
+2nd edition\\
+2008\\
+ISBN: 9781886529236\\
+\\
+SECTION 5.1. Some Useful Inequalities\\
+Problem 1
+\paragraph{Problem 1.}	
+	 A statistician wants to estimate the mean height h (in meters) of a 
+	population, based on n independent samples $X_i, ... , X_n$, chosen uniformly from the 
+	entire population. He uses the sample mean $M_n = (X_1 + ... + X_n)/n$ as the estimate 
+	of h, and a rough guess of 1.0 meters for the standard deviation of the samples $X_i$.
+	\\
+	(a) How large should $n$ be so that the standard deviation of $M_n$ is at most 1 centimeter? 	
+	\\
+	(b) How large should $n$ be so that Chebyshev's inequality guarantees that the estimate is within 5 centimeters from $h$, with probability at least 0.99? 
+	\\
+	(c) The statistician realizes that all persons in the population have heights between 
+	1.4 and 2.0 meters, and revises the standard deviation figure that he uses based 
+	on the bound of Example 5.3. How should the values of n obtained in parts (a) 
+	and (b) be revised?\\
+	\\
+	\newpage
+	\textbf{Solution:}\\
+	\\
+	(a)
+	\begin{align*}
+		var[M_n] &= var \bigg[\frac{(X_1 + ... + X_n)}{n} \bigg] && \text{definition $X_n$}\\
+		&= \frac{1}{n^2} var [X_1 + ... + X_n ]\\
+		&= \frac{1}{n^2} \bigg[ var [X_1] + ... + var [X_n] \bigg]\\
+		&= \frac{1}{n^2} \bigg[ var [X_i] + ... + var [X_i] \bigg]\\
+		&= \frac{1}{n^2} \bigg[ n*var [X_i] \bigg]\\		
+		&= \frac{n*var [X_i]}{n^2}\\
+		var[M_n] &= \frac{var [X_i]}{n}\\
+		\\	
+		sd[M_n] &= \sqrt{var[M_n]}\\
+		&= \sqrt{ \frac{var [X_i]}{n} }\\
+		&= \frac{\sqrt{var [X_i]}}{\sqrt{n}}\\
+	\end{align*}
+	\begin{align*}
+		&= \frac{\sqrt{10.000cm^2}}{\sqrt{n}}\\
+		&= \frac{100cm}{\sqrt{n}}\\
+		\\		
+		\frac{100cm}{\sqrt{n}} &< 1cm\\
+		\frac{100cm}{1cm} &< \sqrt{n}\\
+		100 &< \sqrt{n}\\
+		\sqrt{n} &> 100\\
+		(\sqrt{n})^2 &> (100)^2\\
+		n &> 10.000\\
+	\end{align*}
+	\newpage
+	\textbf{Free Material:}\\
+	\\
+	\cite[section 19.3, page 798]{MIT6042}\\
+	\url{http://crosslinks.mit.edu/topic/variance/}\\
+	\\
+	\textbf{Books:}\\
+	\\
+	\cite[section 2.4, page 81]{dimitriIntro}\\
+	\cite[section 4.5, page 132]{sheldonrossIntroProb}\\
+	\\
+	(b)\\
+	Although the problem asks to use Chebyshev, we can start using Markov, just to see their difference. "Markov Inequality" states that:\\
+	\\
+	\begin{align*}
+		P(M_n \ge a) &\le \frac{E[M_n]}{a}\\
+		\\
+		E[M_n] &= E\bigg[\frac{(X_1 + ... + X_n)}{n} \bigg]\\
+		&= \frac{1}{n} E[X_1 + ... + X_n]\\
+		&= \frac{1}{n} \bigg[ E[X_1] + ... + E[X_n] \bigg]\\
+		&= \frac{1}{n} \bigg[ E[X_i] + ... + E[X_i] \bigg]\\
+		&= \frac{1}{n} \bigg[ n*E[X_i] \bigg]\\
+		&= \frac{n*E[X_i]}{n}\\
+		&= E[X_i]\\
+		\\
+		P(M_n \ge a) &\le \frac{E[X_i]}{a}\\
+	\end{align*}	
+	\\
+	Now it is clear that we cannot derivate anything using just the "Markov Inequality", because $E[M_n]$ does not depends on $n$. So let us try using "Chebyshev Inequality".\\
+	\newpage
+	\textbf{Expected Value:}\\
+	\\
+	\textbf{Free Material:}\\
+	\\
+	\cite[section 18.4, page 751]{MIT6042}\\
+	\url{http://crosslinks.mit.edu/topic/expected-value/}\\
+	\\
+	\textbf{Books:}\\
+	\\
+	\cite[section 2.4, page 81]{dimitriIntro}\\
+	\cite[section 4.4, page 128]{sheldonrossIntroProb}\\
+	\\
+	\textbf{Markov Inequality:}\\
+	\\
+	\textbf{Free Material:}\\
+	\\
+	\cite[section 19.1, page 789]{MIT6042}\\
+	\url{http://crosslinks.mit.edu/topic/markovs-theorem/}\\
+	\\
+	\textbf{Books:}\\
+	\\
+	\cite[section 5.1, page 265]{dimitriIntro}\\
+	\cite[section 8.2, page 388]{sheldonrossIntroProb}\\
+	\\	
+	"Chebyshev Inequality" is just a simple derivation from "Markov Inequality", but will help us in this problem.\\
+	\\
+	\begin{align*}
+	P(|M_n - E[M_n]| \ge a) &\le \frac{var[M_n]}{a^2}\\
+	& \le \frac{10000cm^2}{n} * \frac{1}{a^2}\\
+	\\
+	P(|M_n - E[M_n]| \ge 5cm) &\le \frac{10000cm^2}{n} * \frac{1}{(5cm)^2}\\
+	&\le \frac{10000cm^2}{n} * \frac{1}{25cm^2}\\
+	&\le \frac{10000cm^2}{25cm^2} * \frac{1}{n}\\
+	&\le 400 * \frac{1}{n}\\	
+	&\le \frac{400}{n}\\		
+	\end{align*}
+	
+	But the problem asks the probability of being withing 5cms and not outside. So we need to "invert" the probability. And we want this probability to be at least 0.99.
+	
+	\begin{align*}
+	P(|M_n - E[M_n]| \le 5cm) &= 1 - P(|M_n - E[M_n]| \ge 5cm)
+	\\
+	0.99 &<= P(|M_n - E[M_n]| \le 5cm)\\
+	0.99 &<= 1 - P(|M_n - E[M_n]| \ge 5cm)\\	
+	0.99 &\le 1 - \frac{400}{n}\\
+	0.99 - 1&\le [1 - \frac{400}{n}] - 1\\
+	-0.01 &\le -\frac{400}{n}\\
+	0.01 &\ge \frac{400}{n}\\	
+	n &\ge \frac{400}{0.01}\\	
+	n &\ge 40.000\\
+	\end{align*}
+	\\
+	\\
+	\textbf{Free Material:}\\
+	\\
+	\cite[section 19.2, page 792]{MIT6042}\\
+	\url{http://crosslinks.mit.edu/topic/chebyshevs-inequality/}\\
+	\\
+	\textbf{Books:}\\
+	\\
+	\cite[section 5.1, page 267]{dimitriIntro}\\
+	\cite[section 8.2, page 389]{sheldonrossIntroProb}\\
+	\\
+	(c)\\
+	Given that all sampled heights are bounded, we can use the "variance definition" to find a bound to the variance. If this bound is smaller than the initial variance of $1m^2$ maybe we can have a better approximation to the probability. We start with the "variance definition".\\
+	\\
+	Gamma ($\gamma$), in the following equations, has no special meaning, it is real number.\\
+	\\
+	\begin{align*}
+		E[(X-\gamma)^2] = E[X^2] - 2\gamma E[X] + \gamma^2
+	\end{align*}
+	We know that this equation is minimized when $\gamma=E[x]$. Wich means that when $\gamma$ is different than $E[x]$ the value of the equation is greater.
+	\begin{align*}
+		var[X] = E[(X-E[X])^2] \le E[(X-\gamma)^2]
+	\end{align*}
+	
+	If we choose $\gamma$ as $\frac{a+b}{2}$ with $a$ and $b$ as the lower and higher bounds.
+	
+	\begin{align*}
+	var[X] &= E[(X-E[X])^2] \le E \bigg[ \bigg(X-\frac{a+b}{2} \bigg)^2 \bigg]
+	\\
+	E \bigg[ \bigg(X-\frac{a+b}{2} \bigg)^2 \bigg] &= E \bigg[ X^2 - 2X\bigg( \frac{a+b}{2} \bigg) + \bigg(\frac{a+b}{2} \bigg)^2 \bigg]\\
+	&= E \bigg[ X^2 - 2X\frac{a}{2} -2X\frac{b}{2} + \bigg(\frac{a+b}{2} \bigg)^2 \bigg]\\
+	&= E \bigg[ X^2 -Xa -Xb + \bigg(\frac{a+b}{2} \bigg)^2 \bigg]\\
+	&= E \bigg[ X^2 -Xa -Xb + \bigg(\frac{a^2+2ab+b^2}{4} \bigg) \bigg]\\	
+	&= E \bigg[ X^2 -Xa -Xb + \frac{2ab}{4} + \bigg(\frac{a^2+b^2}{4} \bigg)\\
+	&= E \bigg[ X^2 -Xa -Xb + \frac{ab}{2} + \bigg(\frac{a^2+b^2}{4} \bigg)	 \bigg]\\		
+	&= E \bigg[ X^2 -Xa -Xb + \frac{ab}{2} + (\frac{ab}{2}) + \bigg(\frac{a^2+b^2}{4} \bigg) - (\frac{ab}{2}) \bigg]\\
+	\end{align*}
+	\begin{align*}
+	&= E \bigg[ X^2 -Xa -Xb + \frac{2ab}{2} + \bigg(\frac{a^2+b^2}{4} \bigg) - (\frac{2ab}{4}) \bigg]\\
+	&= E \bigg[ X^2 -Xa -Xb + ab + \bigg(\frac{a^2+b^2-2ab}{4} \bigg) \bigg]\\	
+	&= E \bigg[ X^2 -Xa -Xb + ab \bigg] + \bigg(\frac{a^2+b^2-2ab}{4} \bigg)\\	
+	&= E [ (X-a)(X-b) ] + \frac{(a-b)^2}{4}\\	
+	\end{align*}
+	The interesting part now is that $a$ and $b$ are the bounds of the variable. So $X-b$ is always negative, because $X$ must be smaller than $b$. Wich makes
+	$$(X-a)(X-b) < 0$$.
+	
+	And the expected value will be negative, which will always decrease $\frac{(a-b)^2}{4}$. Giving us.
+	
+	\begin{align*}
+		&= E [ (X-a)(X-b) ] + \frac{(a-b)^2}{4} \le \frac{(a-b)^2}{4}
+	\end{align*}
+	
+	Which gives us the expectacular result that:
+	\begin{align*}
+		var[x] \le \frac{(a-b)^2}{4}
+	\end{align*}
+	
+	Going back to the problem, the statistician realized that the bound is 1.4 and 2.0. So we have that the maximum possible variance is:
+	
+	\begin{align*}
+	var[X] \le \frac{(a-b)^2}{4} &= \frac{(1.4m-2.0m)^2}{4}\\
+	& = \frac{(0.6m)^2}{4}\\
+	& = \frac{0.36m^2}{4}\\	
+	& = 0.09m^2\\	
+	& = 900cm^2
+	\\
+	sd[x] &= \sqrt{var[X]}\\
+	&= \sqrt{900cm^2}\\
+	&= 30cm\\
+	\end{align*}
+	
+	Doing parts (a) and (b) again we have.
+
+	(new a)	
+	
+	\begin{align*}
+	\frac{30cm}{\sqrt{n}} &< 1cm\\
+	\frac{30cm}{1cm} &< \sqrt{n}\\
+	30 &< \sqrt{n}\\
+	(30)^2 &< n\\
+	n &> 900\\	
+	\end{align*}
+	
+	(new b)
+	
+	\begin{align*}
+		0.01 &\ge \frac{900cm^2}{25cm^2} * \frac{1}{n}\\
+		0.01 &\ge 36 * \frac{1}{n}\\		
+		n &\ge \frac{36}{0.01}\\		
+		n &\ge 3.600\\				
+	\end{align*}
+		
+	\begin{thebibliography}{9}		
+		\bibitem{dimitriIntro}
+		Dimitri P. Bertsekas and John N. Tsitsiklis,
+		Introduction to Probability,
+		2nd edition,
+		2008,
+		ISBN: 9781886529236,
+		\url{http://www.athenasc.com/probbook.html}
+		\bibitem{sheldonrossIntroProb}
+		Sheldon Ross
+		A First Course in Probability,
+		5th edition,
+		2012,
+		ISBN: 9780137463145	
+		\bibitem{MIT6042}
+		Mathematics for Computer Science,
+		\url{https://courses.csail.mit.edu/6.042/spring18/}
+	\end{thebibliography}
+\end{document}

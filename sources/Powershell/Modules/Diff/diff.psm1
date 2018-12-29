@@ -87,8 +87,8 @@ function SMS($DataA, $LowerA, $UpperA, $DataB, $LowerB, $UpperB, $DownVector, $U
       .{
           $MAX = $DataA.Length + $DataB.Length + 1;
 
-          $DownK = $LowerA - $LowerB; // the k-line to start the forward search
-          $UpK = $UpperA - $UpperB; // the k-line to start the reverse search
+          $DownK = $LowerA - $LowerB; #// the k-line to start the forward search
+          $UpK = $UpperA - $UpperB; #// the k-line to start the reverse search
 
           $Delta = ($UpperA - $LowerA) - ($UpperB - $LowerB);
           $oddDelta = $($Delta -band 1) -ne 0;
@@ -234,7 +234,7 @@ function LCS($DataA, $LowerA, $UpperA, $DataB, $LowerB, $UpperB, $DownVector, $U
 } 
 
 function DiffText($TextA, $TextB, $trimSpace, $ignoreSpace, $ignoreCase) {
-    $r
+    
     .{
       $h = [System.Collections.Hashtable]::new($TextA.Length + $TextB.Length);
 
@@ -256,6 +256,32 @@ function DiffText($TextA, $TextB, $trimSpace, $ignoreSpace, $ignoreCase) {
       
       $r = CreateDiffs $DataA $DataB
     } | Out-Null
+    $r
+}
+
+function WriteLine([int]$nr, $typ, $aText) {    
+  if ($nr -ge 0)
+  {
+    Write-Host "$(($nr+1).ToString("D4")) " -NoNewline
+  }
+  else
+  {
+    Write-Host "     " -NoNewline
+  }
+
+  if($typ -eq "d")
+  {
+    Write-Host $aText -ForegroundColor Red -NoNewline
+  }
+  elseif($typ -eq "i")
+  {
+    Write-Host $aText -ForegroundColor Green -NoNewline
+  }
+  else
+  { 
+    Write-Host $aText -ForegroundColor White -NoNewline
+  }
+  Write-Host ""
 }
 
 function Diff-Strings([string]$A,[string]$B)
@@ -267,5 +293,35 @@ function Diff-Strings([string]$A,[string]$B)
     ) 
     $Source = cat "$(Split-Path $PSCommandPath -Parent)/diff.cs" -Raw
     Add-Type -ReferencedAssemblies $Assem -TypeDefinition $Source -Language CSharp | Out-Null
-    [my.utils.Diff]::DiffText($A,$B,$false,$false,$false)
+    $f = [my.utils.Diff]::DiffText($A,$B,$false,$false,$false)
+
+    $aLines = $A.Split(@([System.Environment]::NewLine), "RemoveEmptyEntries");
+    $bLines = $B.Split(@([System.Environment]::NewLine), "RemoveEmptyEntries");
+
+    $n = 0;
+    for ($fdx = 0; $fdx -lt $f.Length; $fdx = $fdx + 1) {
+        $aItem = $f[$fdx];
+
+        while (($n -lt $aItem.StartB) -and ($n -lt $bLines.Length)) {
+            WriteLine $n $null $bLines[$n]
+            $n = $n+1;
+        } #// while
+
+        #// write deleted lines
+        for ($m = 0; $m -lt $aItem.deletedA; $m=$m+1) {
+          WriteLine -1 "d" $aLines[$aItem.StartA + $m]
+        } #// for
+
+        #// write inserted lines
+        while ($n -lt $aItem.StartB + $aItem.insertedB) {
+          WriteLine $n "i" $bLines[$n]
+          $n = $n + 1;
+        } #// while
+    } #// for
+  
+    #// write rest of unchanged lines
+    while ($n -lt $bLines.Length) {
+        WriteLine $n $null $bLines[$n]
+        $n = $n+ 1;
+    } #// while
 }
