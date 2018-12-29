@@ -12,11 +12,16 @@
 [Binomial Coefficient](texts/math/Handout.BinomialCoeffecient.pdf)  
 [Series](texts/math/Handout.Series.pdf)  
 [Fibonacci Numbers](texts/math/Handout.Fibonnaci.pdf)  
-[Linear Regression](texts/math/Handout.LinearRegression.pdf)  
-[Probability](texts/math/Handout.Probability.pdf)  
-[Statistics](texts/math/Handout.Stats.pdf)  
 [Calculus](texts/math/Handout.Calculus.pdf)  
 [Real Analysis](texts/math/realanalysis.pdf)  
+
+# Probability and Statistics
+
+[Probability](texts/math/Handout.Probability.pdf)  
+[Statistics](texts/math/Handout.Stats.pdf)  
+[Linear Regression](texts/math/Handout.LinearRegression.pdf)  
+
+[Introduction to Probability Solutions](books/IntroductionToProbability/Solutions.pdf)
 
 ### Problems
 [Car out of Gas, Likelihood and statistics using R](texts/math/Statistics/CarOutGas) 
