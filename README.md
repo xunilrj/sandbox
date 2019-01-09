@@ -16,7 +16,6 @@
 [Real Analysis](texts/math/realanalysis.pdf)  
 
 # Probability and Statistics
-
 [Probability](texts/math/Handout.Probability.pdf)  
 [Statistics](texts/math/Handout.Stats.pdf)  
 [Linear Regression](texts/math/Handout.LinearRegression.pdf)  
@@ -27,29 +26,22 @@
 [Car out of Gas, Likelihood and statistics using R](texts/math/Statistics/CarOutGas) 
 
 ## Computer Science
-
 [Server Architecture](texts/dev/ServerArchitectureWindowsAPIandASPNET.pdf)   
-
 [Can OO Strike Back?](books/TheTheoryOfObjects/CanOOStrikeBack.md)  
 [Understanding SQL Server 2008 R2 Execution Plan - Part 1](texts/dev/Understanding%20SQL%20Server%202008%20R2%20Execution%20Plan%20-%20Part%201.pdf)   
 
 ### Algorithms and Data Structures
-
 [Compression - LZ77](sources/javascript/compression/)  
 [CRTD - Conflict-free Replicated Data Type](courses/kth-distributed-algorithms-1/crtd)    
 
 ### Linux
-
 [Linux Kernel Development](sources/unix/moddev/readme.md)    
 
 ### C/C++
-
 [C++ Coroutines (even for WebAssembly)](sources/cpp/coroutines/)  
 
 ### WebAssembly
-
-### WebAssembly Series
-
+#### WebAssembly Series
 [Index](/sources/webassembly)  
 
 01 - [WebAssembly with C/C++](/sources/webassembly/wasm.001.md) 
@@ -73,9 +65,7 @@
 [C++ Coroutines (even for WebAssembly)](sources/cpp/coroutines/)  
 
 # Stackoverflow Answers
-
 ## C# and .NET
-
 ### UnitOfWork, Repository Database Connection Issue  
 about IoC container Unity  
 https://stackoverflow.com/questions/39954586/unitofwork-repository-database-connection-issue/40418462#40418462  
