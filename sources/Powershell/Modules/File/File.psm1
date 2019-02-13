@@ -82,3 +82,17 @@ function Unmount-Drive($Drive)
     handle $Drive | % {$v = $_ -match "pid: (?<PID>\d+)";if($Matches) {$Matches.PID}} | Select -Unique | ogv -PassThru | % {Stop-Process $_ -Force}
 }
 Set-Alias xml ConvertFrom-xml
+
+Function Remove-InvalidFileNameChars {
+  param(
+    [Parameter(Mandatory=$true,
+      Position=0,
+      ValueFromPipeline=$true,
+      ValueFromPipelineByPropertyName=$true)]
+    [String]$Name
+  )
+
+  $invalidChars = [IO.Path]::GetInvalidFileNameChars() -join ''
+  $re = "[{0}]" -f [RegEx]::Escape($invalidChars)
+  return ($Name -replace $re)
+}
