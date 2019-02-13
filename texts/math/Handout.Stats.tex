@@ -1,4 +1,4 @@
-\documentclass[]{article}
+\documentclass[]{book}
 \usepackage{graphicx}
 \usepackage{amsmath,amssymb,amsthm}
 
@@ -23,7 +23,7 @@
 \tableofcontents
 \newpage
 
-\chapter {Discrite Distributions}
+\chapter{Discrite Distributions}
 
 \section{Generic Formulas}
 
@@ -116,6 +116,112 @@ var(X) = E[ var(X|Y) ] + var( E[X|Y] )
 	&= var(\hat{\theta}) + (bias(\hat{\theta}, \theta))^2\\	
 \end{align}
 
+\section {Bernoulli Distribution}
+
+The Bernoulli Distribution is a special case of the Binomial Distribution, where $$n=1$$.
+
+\subsection{PMF}
+\begin{align}
+P(X=k) &= \binom{1} {k} p^k (1-p)^{1-k}\\
+&=p^k (1-p)^{n-k}
+\end{align}
+
+\subsection {Expected Value}
+\begin{align}
+E(x) &= \sum_{k \geqslant 1} [\binom{n}{k} p^k (1-p)^{n-k}] * k\\
+&= np && \text{see Binomial Distribution E[X]}\\
+&= 1*p\\
+&= p
+\end{align}
+
+\subsection {Variance}
+\begin{align}
+Var(X) &= np*(1-p)\\
+&= p*(1-p)\\
+\end{align}
+
+\subsection {Likelihood of IID Bernoulli}
+
+\begin{align}
+x_i \overset{iid}{\sim} Bernoulli(p)\\
+L(x_i|p)&=p(x_1,x_2,...,x_n|p)\\&=\prod_{n=1}^np(x_i|p)\\
+&=p^S*(1-p)^{n-S}
+\end{align}
+
+\subsection {Maximun Likelihood}
+
+\begin{align}
+\frac{d[L(x_i|p)]}{dp} &=\frac{d[p^S*(1-p)^{n-S}]}{dp}\\
+\frac{d[log(L(x_i|p))]}{dp} &=\frac{d[log(p^S*(1-p)^{n-S})]}{dp}\\
+&= \frac{d}{dp}*[log(p^S*(1-p)^{n-S})]\\
+&= \frac{d}{dp}[log(p^S)+log((1-p)^{n-S})]\\
+&= \frac{d}{dp}[S*log(p)+(n-S)*log(1-p)]\\
+&= S*\frac{d}{dp}[log(p)]+(n-S)*\frac{d}{dp}[log(1-p)]\\
+&= S*[\frac{1}{p}]+(n-S)*\frac{d}{dp}[log(1-p)] && \text{chain rule}\\
+&= S*\frac{1}{p}+(n-S)*\frac{1}{p-1}\\
+&= \frac{S}{p}+\frac{n-S}{p-1}\\
+&= \frac{S*(p-1)}{p*(p-1)}+\frac{p*(n-S)}{p*(p-1)}\\
+&= \frac{S*(p-1)+p*(n-S)}{p*(p-1)}\\
+&= \frac{S*p-S+p*n-p*S}{p*(p-1)}\\
+&= \frac{-S+p*n}{p*(p-1)}\\
+0 &= \frac{-S+p*n}{p*(p-1)}\\
+0*(p*(p-1)) &= -S+p*n\\
+0 &= -S+p*n\\
+S &= p*n\\
+\frac{S}{n} &= p\\
+p &= \frac{S}{n}\\
+\end{align}
+
+\subsection{MGF}
+
+\begin{align}
+	M(t) &= E[e^{tX}]\\
+	&= (1-p)e^{t*0} + pe^{t*1}\\
+	&= (1-p) + pe^{t}\\
+\end{align}
+
+\subsubsection{E[X] using MGF}
+
+\begin{align}
+E[X] &= \frac{d^1}{dt^1}[M(t)](0)\\
+\\
+M(t) &= (1-p) + pe^{t}\\
+\\
+E[X] &= \frac{d^1}{dt^1}[(1-p) + pe^{t}](0)\\
+&= [\frac{d^1}{dt^1}[(1-p)] + \frac{d^1}{dt^1}[pe^{t}]](0)\\
+&= [0 + \frac{d^1}{dt^1}[pe^{t}]](0)\\
+&= [\frac{d^1}{dt^1}[pe^{t}]](0)\\
+&= [pe^{t}](0)\\
+&= [pe^{0}]\\
+&= p*1\\
+&= p\\
+\end{align}
+
+\subsubsection{$E[X^2]$ using MGF}
+
+\begin{align}
+E[X^2] &= \frac{d^2}{dt^2}[M(t)](0)\\
+\\
+M(t) &= (1-p) + pe^{t}\\
+\\
+E[X^2] &= \frac{d^2}{dt^2}[(1-p) + pe^{t}](0)\\
+&= \frac{d^1}{dt^1}[pe^{t}](0) && \text{see E[X] using MGF}\\
+&= [pe^{t}](0)\\
+&= [pe^{0}]\\
+&= p*1\\
+&= p\\
+\end{align}
+
+And these values can be checked calculating the $var[X]$.
+
+\begin{align}
+	var[X] &= E[X^2] - E[X]^2\\
+	&= p - p^2\\
+	&= p*(1-p)\\
+	\qed
+\end{align}
+
+
 \section{Binomial Distribution}
 
 PMF
@@ -202,62 +308,6 @@ k >= 1 &= (z+1) >=1\\
 &= np*(1-p)\\
 \qed
 \end{align}
-
-\section {Bernoulli Distribution}
-
-The Bernoulli Distribution is a special case of the Binomial Distribution, where $$n=1$$.
-
-PMF
-\begin{align}
-P(X=k) &= \binom{1} {k} p^k (1-p)^{1-k}\\
-&=p^k (1-p)^{n-k}
-\end{align}
-
-\subsection {Expected Value}
-\begin{align}
-	E(x) &= \sum_{k \geqslant 1} [\binom{n}{k} p^k (1-p)^{n-k}] * k\\
-	&= np && see BinomialDistribution\\
-	&= 1*p\\
-	&= p
-\end{align}
-
-\subsection {Variance}
-\begin{align}
-	Var(X) &= np*(1-p)\\
-	&= p*(1-p)\\
-\end{align}
-
-\subsection {Likelihood of IID Bernoulli}
-
-\begin{align}
-	x_i \overset{iid}{\sim} Bernoulli(p)\\
-	L(x_i|p)&=p(x_1,x_2,...,x_n|p)\\&=\prod_{n=1}^np(x_i|p)\\
-	&=p^S*(1-p)^{n-S}
- \end{align}
- 
-\subsection {Maximun Likelihood}
- 
- \begin{align}
-	 \frac{d[L(x_i|p)]}{dp} &=\frac{d[p^S*(1-p)^{n-S}]}{dp}\\
-	 \frac{d[log(L(x_i|p))]}{dp} &=\frac{d[log(p^S*(1-p)^{n-S})]}{dp}\\
-	 &= \frac{d}{dp}*[log(p^S*(1-p)^{n-S})]\\
-	 &= \frac{d}{dp}[log(p^S)+log((1-p)^{n-S})]\\
-	 &= \frac{d}{dp}[S*log(p)+(n-S)*log(1-p)]\\
-	 &= S*\frac{d}{dp}[log(p)]+(n-S)*\frac{d}{dp}[log(1-p)]\\
-	 &= S*[\frac{1}{p}]+(n-S)*\frac{d}{dp}[log(1-p)] && \text{chain rule}\\
-	 &= S*\frac{1}{p}+(n-S)*\frac{1}{p-1}\\
- 	 &= \frac{S}{p}+\frac{n-S}{p-1}\\
- 	 &= \frac{S*(p-1)}{p*(p-1)}+\frac{p*(n-S)}{p*(p-1)}\\
- 	 &= \frac{S*(p-1)+p*(n-S)}{p*(p-1)}\\
- 	 &= \frac{S*p-S+p*n-p*S}{p*(p-1)}\\
- 	 &= \frac{-S+p*n}{p*(p-1)}\\
- 	 0 &= \frac{-S+p*n}{p*(p-1)}\\
-  	 0*(p*(p-1)) &= -S+p*n\\
-  	 0 &= -S+p*n\\
- 	 S &= p*n\\
- 	 \frac{S}{n} &= p\\
-  	 p &= \frac{S}{n}\\
- \end{align}
  
 \section {Geometric Distribution}
 
@@ -287,7 +337,7 @@ P(X=k) &= \binom{1} {k} p^k (1-p)^{1-k}\\
 pdf(x) &= \frac{1}{\sigma\sqrt{2\pi}}\exp\left(-\frac{(x-\mu)^2}{2\sigma^2}\right)
 \end{align}
 
-\chapter {Continuous Distributions}
+\chapter{Continuous Distributions}
 
 \section{Uniform Distribution}
 
