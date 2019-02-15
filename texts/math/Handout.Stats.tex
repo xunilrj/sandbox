@@ -116,6 +116,8 @@ var(X) = E[ var(X|Y) ] + var( E[X|Y] )
 	&= var(\hat{\theta}) + (bias(\hat{\theta}, \theta))^2\\	
 \end{align}
 
+\section {Uniform Random Variable}
+
 \section {Bernoulli Distribution}
 
 The Bernoulli Distribution is a special case of the Binomial Distribution, where $$n=1$$.
@@ -221,10 +223,19 @@ And these values can be checked calculating the $var[X]$.
 	\qed
 \end{align}
 
+\subsubsection{$E[X^n]$ using MGF}
+
+\begin{align}
+E[X^2] &= \frac{d^2}{dt^2}[M(t)](0)\\
+\\
+M(t) &= (1-p) + pe^{t}\\
+\\
+E[X^2] &= \frac{d^2}{dt^2}[(1-p) + pe^{t}](0)\\
+\end{align}
 
 \section{Binomial Distribution}
 
-PMF
+\subsection{PMF}
 \begin{align}
 P(X=k) &= \binom{n} {k} p^k (1-p)^{n-k}
 \end{align}
@@ -447,5 +458,11 @@ E[x] &= -1 * - \int {e^{-\lambda x}dx}\\
 E[x] &= \frac{1}{\lambda} \int {\lambda e^{-\lambda x}dx}\\
 E[x] &= \frac{1}{\lambda}\\
 \end{align*}
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=\textwidth]{Random Variables Relationships}
+\end{figure}
+
 
 \end{document}

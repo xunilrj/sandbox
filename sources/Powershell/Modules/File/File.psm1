@@ -96,3 +96,10 @@ Function Remove-InvalidFileNameChars {
   $re = "[{0}]" -f [RegEx]::Escape($invalidChars)
   return ($Name -replace $re)
 }
+
+$_myPath = Split-Path $PSCommandPath -Parent
+function Import-Html($Path)
+{
+    $dll = Join-Path $_myPath "HtmlAgilityPack.dll"
+    $asm = [System.Reflection.Assembly]::LoadFile($dll)
+}
