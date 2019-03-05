@@ -102,4 +102,6 @@ function Import-Html($Path)
 {
     $dll = Join-Path $_myPath "HtmlAgilityPack.dll"
     $asm = [System.Reflection.Assembly]::LoadFile($dll)
+
+    $doc = [HtmlAgilityPack.HtmlDocument]::new()
 }
