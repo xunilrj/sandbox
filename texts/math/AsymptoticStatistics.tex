@@ -34,7 +34,7 @@ or
 Here $P(x \in A) = \int_{A}{f(x)dx}$. The lower-case $f$ has a especial meaning because that is how we label the PDF of a distribution. We use upper-case $F$ to mean de CDF. We also know that to be a valid "random variable":
 
 \begin{align}
-	\int_{-\infty}^{\infty}{f(x)dx} = 1 && f(x) >= 0
+	\int_{-\infty}^{\infty}{f(x)dx} = 1 && f(x) \ge 0
 \end{align}
 
 Where $X_n$ means off course a "random variable", pure in the sense that is obeys a known distribution or a "transformed random variable". We will be interested to know if a "random variable" converge to a constant, to another "random variable" of if it diverge. Throughout this book we will see that we can conclude different things if any of these cases are proved as true.
@@ -91,7 +91,19 @@ or
 And this allows us to calculate the variance as, the "second moment" minus the square of the "first moment":
 
 \begin{align}
-	\text{VAR}[X] = E[X^2] - E[X]^2
+	\text{VAR}[X] = E[X^2] - E[X]^2\\
+\end{align}
+
+or 
+
+\begin{align}
+\text{VAR}[X] = E[(X-E[X])^2]
+\end{align}
+
+And we also have the "standard deviation".
+
+\begin{align}
+	\text{SD}[X] = \sqrt{\text{VAR}[X]}
 \end{align}
 
 \section{Markov's Inequality Intuition}
@@ -136,9 +148,9 @@ We know that this summuation is going to be greater than zero. Whick make the $E
 \begin{align*}
 	E[X] &= \sum_{i=1}^{6}{i*P(X=i)}\\
 	E[X] &= \sum_{i=1}^{5}{i*P(X=i)} + 6*P(X=6)\\
-	E[X] &>= 6*P(X=6)\\
-	\frac{E[X]}{6} &>= P(X=6)\\
-	P(X=6) &<= \frac{E[X]}{6}
+	E[X] &\ge 6*P(X=6)\\
+	\frac{E[X]}{6} &\ge P(X=6)\\
+	P(X=6) &\le \frac{E[X]}{6}
 \end{align*}
 
 Which is quite surprising if you think. But looking from another perspective, it is quite obvious that there is a relationship with the $P(X=6)$ and the "expected value".
@@ -172,7 +184,7 @@ We know that $\int_{0}^{a}{x*f(x)dx} > 0$, so
 	E[X] &= \int_{0}^{a}{x*f(x)dx} + \int_{a}^{\infty}{x*f(x)dx}\\
 	E[X] &= b + \int_{a}^{\infty}{x*f(x)dx} && b > 0\\
 	E[X] - b &= \int_{a}^{\infty}{x*f(x)dx}\\
-	E[X] &>= \int_{a}^{\infty}{x*f(x)dx} && b > 0\\
+	E[X] &\ge \int_{a}^{\infty}{x*f(x)dx} && b > 0\\
 \end{align*}
 
 Before the next step, we must realize that:
@@ -183,31 +195,121 @@ Before the next step, we must realize that:
 	&=\int_{a}^{\infty}{a*f(x)dx}+\int_{a}^{\infty}{(x-a)*f(x)dx}\\
 \end{align*}
 
-We must realize the in the second integration, $x>=a$ and $f(x) > 0$ which makes the second integration greater than or equal to zero. This allow us to:
+We must realize the in the second integration, $x \ge a$ and $f(x) > 0$ which makes the second integration greater than or equal to zero. This allow us to:
 
 \begin{align*}
 	\int_{a}^{\infty}{x*f(x)dx} &=\int_{a}^{\infty}{a*f(x)dx}+\int_{a}^{\infty}{(x-a)*f(x)dx}\\
 	\int_{a}^{\infty}{x*f(x)dx}	&=\int_{a}^{\infty}{a*f(x)dx}+c\\
 	\int_{a}^{\infty}{x*f(x)dx}	- c &=\int_{a}^{\infty}{a*f(x)dx}\\
-	\int_{a}^{\infty}{x*f(x)dx}	&>= \int_{a}^{\infty}{a*f(x)dx}\\	
+	\int_{a}^{\infty}{x*f(x)dx}	&\ge \int_{a}^{\infty}{a*f(x)dx}\\	
 \end{align*}
 
 We can use this fact with the fact that if $a>b$ and $b>c$ then $a>c$, and finish our proof
 
 \begin{align*}
-	E[X] &>= \int_{a}^{\infty}{x*f(x)dx} && b > 0\\
-	E[X] &>= \int_{a}^{\infty}{a*f(x)dx} && \text{see above}\\
-	E[X] &>= a*\int_{a}^{\infty}{f(x)dx}\\
-	E[X] &>= a*P(X>a)\\
-	\frac{E[X]}{a} &>= P(X>a)\\
+	E[X] &\ge \int_{a}^{\infty}{x*f(x)dx} && b > 0\\
+	E[X] &\ge \int_{a}^{\infty}{a*f(x)dx} && \text{see above}\\
+	E[X] &\ge a*\int_{a}^{\infty}{f(x)dx}\\
+	E[X] &\ge a*P(X \ge a)\\
+	\frac{E[X]}{a} &\ge P(X \ge a)\\
 \end{align*}
 \begin{align}
-	P(X>a) &<= \frac{E[X]}{a}	
+	P(X \ge a) &\le \frac{E[X]}{a}	
 \end{align}
 
 Which is the obivious generalization we did in the intuition section. But remember that we are studying "Asymptotic Statistics", this is useful for us, because in some cases, the right side will depend on $n$, and in the limit the right side will converge or diverge. This will give even more information about the "random variable". All of this with just its "expected value".
 		
-	\section{Chebyshev's Inequality}
+\section{Chebyshev's Inequality}
+
+One of the interesting aspects of the "Markov Inequality" is that it only contains two assumptions and both are very generic. It only depends on X being non-negative and a being nonnegative. We know that a nonnegative function, when sifted on the X-Axis is still nonnegative. So $X-a$ is still non-negative and the "Markov Inequality" still apllies.
+
+\begin{align*}
+P((X-b) \ge a) &\le \frac{E[X-b]}{a}	
+\end{align*}
+
+Another "transformation" that keeps the non-negativiness of the function is squaring its value.
+
+\begin{align*}
+P((X-b)^2 \ge a^2) &\le \frac{E[(X-b)^2]}{a^2}	
+\end{align*}
+
+But we do not have any restriction on $b$ here, and we can easily choose the "expected value" of $X$.
+
+\begin{align*}
+P((X-E[X])^2 \ge a^2) &\le \frac{E[(X-E[X])^2]}{a^2}
+\end{align*}
+
+Which gives us the $\text{VAR}[X]$. Although this inequality is often writen in a different form.
+
+\begin{align*}
+P((X-E[X])^2 \ge a^2) &\le \frac{\text{VAR}[X]}{a^2}\\	
+\end{align*}
+
+But this is still not the most "famous" way this formula is written, and the reason is going to be appear in future chapters. To derive the most famous form we are going to apply some transformations only to the left side, because they will not change the boundness of the inequality.
+
+\begin{align*}
+P(\sqrt{(X-E[X])^2}\ge\sqrt{a}) &\le \frac{\text{VAR}[X]}{a^2}\\
+P(|X-E[X]| \ge a) &\le \frac{\text{VAR}[X]}{a^2} && \text{ no modulus on a because } a>0
+\end{align*}
+
+\begin{align}
+	P(|X-E[X]| \ge a) &\le \frac{\text{VAR}[X]}{a^2}
+\end{align}
+
+Which is quite fascinating, because it gives you a know bound when you know the distribution "expected value" and "variance". This formula will demonstrate itself very powerfull and useful in the study of sampling and convergence.
+
+We can also interpret that it is "harder", less probable, of being $n$ "standard deviations" from the "expected value". What is very intuitive, if you stop to think about it. What you can not do, is forget the "standard deviation" and say that it is "harder" to be far from the "expected value". This is not true. Without the "standard deviation", or "variance" this phrase, does not make any send. Stop to think of a distribution with "infinite" "variance". It is very "easy" to be "infinitilly" far from the "expected value".
+
+\section{Markov's and Chebyshev's Inequalities}
+
+If you search you will probably find another formula for both inequalities. They are all equivalent, off course.
+
+\begin{align*}
+	P(X \ge a) \le \frac{E[X]}{a}\\	
+	P(X \ge a*E[X]) \le \frac{E[X]}{a*E[X]} && E[X] > 0
+\end{align*}
+\begin{align}
+	P(X \ge a*E[X]) \le \frac{1}{a}
+\end{align}
+
+\begin{align*}
+P((X-E[X])^2 \ge a^2) &\le \frac{E[(X-E[X])^2]}{a^2}\\
+P((X-E[X])^2 \ge a^2*\text{VAR}[X]) &\le \frac{E[(X-E[X])^2]}{a^2*\text{VAR}[X]}\\
+P((X-E[X])^2 \ge a^2*\text{VAR}[X]) &\le \frac{\text{VAR}[X]}{a^2*\text{VAR}[X]}\\
+P((X-E[X])^2 \ge a^2*\text{VAR}[X]) &\le \frac{1}{a^2}\\
+P(\sqrt{(X-E[X])^2}\ge\sqrt{a^2*\text{VAR}[X]}) &\le \frac{1}{a^2}\\
+\end{align*}
+\begin{align}
+P(|(X-E[X])| \ge a*\text{SD}[X]) &\le \frac{1}{a^2}
+\end{align}
+
+\section{68-95-99.7 rule}
+
+\section{Summary}
+
+\subsection{Markov's Inequality}
+
+\begin{align}
+P(X \ge a) &\le \frac{E[X]}{a}
+\end{align}
+
+or 
+
+\begin{align}
+P(X \ge aE[X]) &\le \frac{1}{a}
+\end{align}
+
+\subsection{Chebyshev's Inequality}
+
+\begin{align}
+P(|X - E[X] \ge a) &\le \frac{\text{VAR}[X]}{a^2}
+\end{align}
+
+or
+
+\begin{align}
+P(|X - E[X] \ge a*\text{SD}[X]) &\le \frac{1}{a^2}
+\end{align}
 
 	\chapter{Convergence}
 	\section{Convergence in probability of a random variable}
