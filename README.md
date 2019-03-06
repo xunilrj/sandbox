@@ -18,7 +18,7 @@
 # Probability and Statistics
 [Probability](texts/math/Handout.Probability.pdf)  
 [Statistics](texts/math/Handout.Stats.pdf)  
-[Asymptotic Statistics](texts/math/Asymptotic Statistics.pdf)  
+[Asymptotic Statistics](texts/math/Asymptotic\ Statistics.pdf)  
 [Linear Regression](texts/math/Handout.LinearRegression.pdf)  
 
 [Introduction to Probability Solutions](books/IntroductionToProbability/Solutions.pdf)
