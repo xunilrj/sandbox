@@ -1,0 +1,21 @@
+\contentsline {chapter}{\numberline {1}Introduction}{5}% 
+\contentsline {chapter}{\numberline {2}Asymptotic Behaviour of Estimators}{7}% 
+\contentsline {section}{\numberline {2.1}Introduction}{7}% 
+\contentsline {section}{\numberline {2.2}Markov's Inequality Intuition}{9}% 
+\contentsline {section}{\numberline {2.3}Markov's Inequality}{10}% 
+\contentsline {section}{\numberline {2.4}Chebyshev's Inequality}{12}% 
+\contentsline {chapter}{\numberline {3}Convergence}{13}% 
+\contentsline {section}{\numberline {3.1}Convergence in probability of a random variable}{13}% 
+\contentsline {section}{\numberline {3.2}Convergence in probability to a random variable}{13}% 
+\contentsline {section}{\numberline {3.3}Convergence in probability of a random variable to a constant}{13}% 
+\contentsline {section}{\numberline {3.4}Convergence in distribution of a random variable}{13}% 
+\contentsline {chapter}{\numberline {4}Characteristic Functions}{15}% 
+\contentsline {section}{\numberline {4.1}Introduction}{15}% 
+\contentsline {chapter}{\numberline {5}Weak Law of Large Numbers}{17}% 
+\contentsline {section}{\numberline {5.1}Introduction}{17}% 
+\contentsline {section}{\numberline {5.2}Proof of the weak law of large numbers}{17}% 
+\contentsline {section}{\numberline {5.3}Proof using characteristic functions}{17}% 
+\contentsline {chapter}{\numberline {6}Central Limit Theorems}{19}% 
+\contentsline {section}{\numberline {6.1}Introduction}{19}% 
+\contentsline {section}{\numberline {6.2}Proof}{19}% 
+\contentsline {section}{\numberline {6.3}The Characteristic Function of a Normal Random Variable}{19}% 
