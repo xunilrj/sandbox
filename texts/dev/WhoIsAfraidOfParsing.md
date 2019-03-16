@@ -42,20 +42,27 @@ Parcel now is watching your file modifications and started a simple HTTP server.
 In your index.html just type
 
 ```
-    <html>
-        <head>
-        </head>
-    <body>
-        <input id="code">
-        <div id="result>
-        </div>
-        <script>
-            import renderjson  from './renderjson.js';
-            import {parse, text, lang, nu} from 'bennu';
-            import {stream} from 'nu-stream';
-        </script>
-    <body>
-    </html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Monadic Parser Example</title>
+    <meta charset="UTF-8" />
+    <script src="https://www.gitcdn.xyz/repo/caldwell/renderjson/master/renderjson.js"></script>
+  </head>
+  <body>
+		<input id="code"/>
+        <div id="result">			
+		</div>
+    <script src="src/index.js"></script>
+  </body>
+</html>
+```
+
+and your index.js
+```
+import { parse, text, lang, nu } from "bennu";
+import { stream } from "nu-stream";
+const renderjson = window.renderjson;
 ```
 
 "renderjson" is the library that will display our parser result. It is simple but will put us directly on our job. "bennu" is the "monadic parser combinator" framework that we will use. "nu" is a lazy stream framework that "bennu" uses.
@@ -63,47 +70,187 @@ In your index.html just type
 Now let us create the code that will call our parser.
 
 ```
-    function parse(str)
-    {
-    	return {ok:true};
-    }
+function parseCode(str) {
+  return { ok: true };
+}
 
-    const render = renderjson
-        .set_icons('+', '-')
-        .set_show_to_level(10)
-        .set_max_string_length(100);
-    const elResult = document.getElementById('result');
-    const elCode = document.getElementById('code');
-    elCode.addEventListener('keyup'), x => {
-    	const ast= parse(str);
-    	elResult.innetHTML = render(ast);
-    });
+const render = renderjson
+  .set_icons("+", "-")
+  .set_show_to_level(10)
+  .set_max_string_length(100);
+const elResult = document.getElementById("result");
+const elCode = document.getElementById("code");
+elCode.addEventListener("keyup", e => {
+  const str = e.target.value;
+  const ast = parseCode(str);
+  elResult.innerHTML = "";
+  elResult.appendChild(render(ast));
+});
+```
+
+## Next, Enumeration and Bind
 
 And we are good to go! You can type your string to be parsed and immediately see the parse result. You will learn to appreciate this immediate feedback.
 
 Ok! Now we have to decide what to parse. Let us start simple. Let us parse a simple character. If you type 'a', we will return ok; otherwise, we will return an error.
 
 ```
-    function parse(str)
-    {
-    	const parser = text.character('a');
-    	const result = parse.run(parser, str);
-    	return {ok:true, ast: result};    
-    }
+function parseCode(str) {
+  const parser = text.character("a");
+  try {
+    const result = parse.run(parser, str);
+    return { ok: true, ast: result };
+  } catch (e) {
+    return { ok: false, error: e };
+  }
+}
+```
 
 And there you have it — your first parser. Not that bad, as advertised. Not very useful either, I assume. But this "pattern" has "combinators" in its name because it is supposedly easy to "combinate" parsers. But to "combinate" things you must have at least two things. So let us create another parser and see our first combination.
 
 ```
-    function parse(str)
-    {
-    	const parser1 = text.character('a');
-    	const parser2 = text.character('b');
-    	const parser = parse.then(parser1, parser2); // combination
+function parseCode(str) {
+  const pa = text.character('a');
+  const pb = text.character('b');
+  const parser = parse.next(pa, pb); // combination
 
-    	var result = parse.run(parser, str);
-    	return {ok:true, ast: result};    
+  try {
+    const result = parse.run(parser, str);
+    return { ok: true, ast: result };
+  } catch (e) {
+    return { ok: false, error: e };
+  }
+}
+```
+
+And this combines pa and pb as it reads. You first apply pa, and we expect to see an 'a'; then it applies the second parser, we expect to see a 'b'. In the end, we have parsed an 'ab'.
+
+Probably the first surprise is the generated "ast". 
+
+```
+-{
+    "ok": true,
+    "ast": "b"
+}
+```
+
+Why just "b" and not "ab" if we have parsed "ab"? The answers is that the ast is not what was parsed, but what the parse generated. If you go to bennu documentation you will find:
+
+parse.next(p, q), parse.concat(p, q)  
+Consumes p then q. Returns result from q  
+https://github.com/mattbierner/bennu/wiki/parse#parsenextp-q-parseconcatp-q
+
+Which explains why we are seeing just "b". To fix this let us first change the combination from "next" to "enumeration".
+
+```
+function parseCode(str) {
+  const pa = text.character('a');
+  const pb = text.character('b');
+  const parser = parse.enumeration(pa, pb); // combination
+
+  try {
+    const result = parse.run(parser, str);
+    return { ok: true, ast: result };
+  } catch (e) {
+    return { ok: false, error: e };
+  }
+}
+```
+
+Now our parse is working, but we are seeing a very strange result.
+
+```
+-{
+    "ok": true,
+    "ast": -{
+        "first": "a",
+        "rest": undefined
     }
+}
+```
 
-And this combines parser1 and parsers2 as it reads. You first apply parser1, and we expect to see an 'a'; then it applies the second parser, we expect to see a 'b'. In the end, we have parsed an 'ab'.
+What is this "first" and "rest". The issue here is that "bennu" is a lazy framework. the "enumeration" combination return the result of all its parsers (in our case pa and pb), but return as a lazy list. There a couple of ways to solve this.
 
-Please try. Remember that we are still not treating errors.
+The most useful way it to use a "decorator" parser, that allow us the transform the combined parse result to whatever result we want. We will face here some strange choices. Let us hope that they will make perfect sense after the explanation.
+
+```
+function parseCode(str) {
+  const pa = text.character('a');
+  const pb = text.character('b');
+  const parser = parse.binds(
+    parse.enumeration(pa, pb),
+    (a,b) => {    
+        const prod = a + b;
+        return parse.always(prod);
+    });
+
+  try {
+    const result = parse.run(parser, str);
+    return { ok: true, ast: result };
+  } catch (e) {
+    return { ok: false, error: e };
+  }
+}
+```
+
+We start by decorating our parser with the "binds". "binds" realize that our parser (the first argument) return a list with two values, then call the second argument with these two values. Remember that we had a lazy list, now we have this list materialized as the two parameters. 
+
+The value of these parameters are what you expect. They are "a" and "b". Now I can do whatever I want with them. I just append them in a new string called prod from production.
+
+Now comes the non expected part. One could be expecting that just returning the new production would suffice. Unfortunately this is not the case. This parser that is returned is the parser that will continue the parse process and not the result.
+
+The trick to generate the production that you want is to return a parser that never looks at the string being parsed and always returns one specific value. This is the "always" parser. 
+
+Like the parser "character", "always" generates a parser out of nowhere. It is important to realize that "parser.character("a")" and "parser.always("a")" are completely different. One looks at the string and search the character "a" and return "a" if found; the other ignores the string being parsed and always returns "a".
+
+Thw question, if we return the parser that will continue parsing the string, could we use bind to parse "a" then parse "b"? yes, we could.
+
+```
+function parseCode(str) {
+  const pa = text.character('a');
+  const pb = text.character('b');
+  const parser = parse.bind(
+    pa,
+    (x) => {
+      return pb;
+    });
+
+  try {
+    const result = parse.run(parser, str);
+    return { ok: true, ast: result };
+  } catch (e) {
+    return { ok: false, error: e };
+  }
+}
+```
+
+And if you run this code you will see:
+
+```
+-{
+    "ok": true,
+    "ast": "b"
+}
+```
+
+The exactly same result we have when using the "next" combinator.
+And if you see "bennu"'s source code that is exactly what you find:
+
+```
+/**
+ * Parse `p`, then `q`. Return value from `q`.
+ */
+next := \p q ->
+    bind(p, constant q);
+```
+https://github.com/mattbierner/bennu/blob/master/lib/parse.kep#L770
+
+Ok. Not exactly, given that "bennu" is not written in Javascript. But we can create out own next.
+
+```
+const next = (p,q) => parse.bind(p, x => q);
+```
+
+Now we understand why the next "throw away" the value of the first parse.
+
+# To be continued...
