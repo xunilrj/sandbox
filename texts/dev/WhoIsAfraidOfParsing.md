@@ -50,9 +50,9 @@ In your index.html just type
     <script src="https://www.gitcdn.xyz/repo/caldwell/renderjson/master/renderjson.js"></script>
   </head>
   <body>
-		<input id="code"/>
-        <div id="result">			
-		</div>
+        <input id="code"/>
+        <div id="result">            
+        </div>
     <script src="src/index.js"></script>
   </body>
 </html>
@@ -134,13 +134,13 @@ Probably the first surprise is the generated "ast".
 }
 ```
 
-Why just "b" and not "ab" if we have parsed "ab"? The answers is that the ast is not what was parsed, but what the parse generated. If you go to bennu documentation you will find:
+Why just "b" and not "ab" if we have parsed "ab"? The answer is that the AST is not what was parsed, but what the parse generated. If you go to "bennu's" documentation you will find:
 
 parse.next(p, q), parse.concat(p, q)  
 Consumes p then q. Returns result from q  
 https://github.com/mattbierner/bennu/wiki/parse#parsenextp-q-parseconcatp-q
 
-Which explains why we are seeing just "b". To fix this let us first change the combination from "next" to "enumeration".
+Which explains why we are seeing just "b" in the result. To fix this let us first change the combination from "next" to "enumeration".
 
 ```
 function parseCode(str) {
@@ -157,7 +157,7 @@ function parseCode(str) {
 }
 ```
 
-Now our parse is working, but we are seeing a very strange result.
+Now our parser is working, but we see a very strange result.
 
 ```
 -{
@@ -169,9 +169,9 @@ Now our parse is working, but we are seeing a very strange result.
 }
 ```
 
-What is this "first" and "rest". The issue here is that "bennu" is a lazy framework. the "enumeration" combination return the result of all its parsers (in our case pa and pb), but return as a lazy list. There a couple of ways to solve this.
+What is this "first" and "rest". The issue here is that "bennu" is a lazy framework. The "enumeration" combination do return the result of all its parsers (in our case pa and pb), but as a lazy list. There a couple of ways to solve this.
 
-The most useful way it to use a "decorator" parser, that allow us the transform the combined parse result to whatever result we want. We will face here some strange choices. Let us hope that they will make perfect sense after the explanation.
+The most useful way is to use a "decorator" parser, that allows us the transform the combined parse result to whatever result we want. We will face here some non-intuitive choices. Let us hope that they will make perfect sense after the explanation.
 
 ```
 function parseCode(str) {
@@ -193,17 +193,17 @@ function parseCode(str) {
 }
 ```
 
-We start by decorating our parser with the "binds". "binds" realize that our parser (the first argument) return a list with two values, then call the second argument with these two values. Remember that we had a lazy list, now we have this list materialized as the two parameters. 
+We start by decorating our parser with the "binds". "binds" realize that our parser (the first argument) returns a list with two values, then call the second argument with these two values. Remember that we had a lazy list, now we have this list materialized as the two parameters. 
 
-The value of these parameters are what you expect. They are "a" and "b". Now I can do whatever I want with them. I just append them in a new string called prod from production.
+The values of these parameters are what you expect. They are "a" and "b". Now I can do whatever I want with them. I chose to append them in a new string called "prod" from production.
 
-Now comes the non expected part. One could be expecting that just returning the new production would suffice. Unfortunately this is not the case. This parser that is returned is the parser that will continue the parse process and not the result.
+Now comes the non-intuitive part. One could be expecting that returning the new production would suffice. Unfortunately, this is not the case. We have to return a new parser, the one that will continue parsing the string.
 
-The trick to generate the production that you want is to return a parser that never looks at the string being parsed and always returns one specific value. This is the "always" parser. 
+The trick to generate the production that we want is to return a parser that never looks at the string being parsed and always returns one specific value. This is the "always" parser. 
 
 Like the parser "character", "always" generates a parser out of nowhere. It is important to realize that "parser.character("a")" and "parser.always("a")" are completely different. One looks at the string and search the character "a" and return "a" if found; the other ignores the string being parsed and always returns "a".
 
-Thw question, if we return the parser that will continue parsing the string, could we use bind to parse "a" then parse "b"? yes, we could.
+The question is: given that we return the parser that will continue parsing the string, could we have used "bind" to parse "a" then parse "b"? Yes, we could.
 
 ```
 function parseCode(str) {
@@ -233,8 +233,7 @@ And if you run this code you will see:
 }
 ```
 
-The exactly same result we have when using the "next" combinator.
-And if you see "bennu"'s source code that is exactly what you find:
+This exactly the same result we had when using the "next" combinator. And if you see "bennu's" source code, you will see that this is precisely how they implement "next".
 
 ```
 /**
@@ -245,12 +244,12 @@ next := \p q ->
 ```
 https://github.com/mattbierner/bennu/blob/master/lib/parse.kep#L770
 
-Ok. Not exactly, given that "bennu" is not written in Javascript. But we can create out own next.
+Well... Ok, not precisely. Specialy because "bennu" is not written in Javascript. But we can create our own "next" with just one line of code.
 
 ```
 const next = (p,q) => parse.bind(p, x => q);
 ```
 
-Now we understand why the next "throw away" the value of the first parse.
+Now we understand why the "next" combinator "throws away" the value of the first parse.
 
 # To be continued...
