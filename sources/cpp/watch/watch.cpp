@@ -98,14 +98,6 @@ namespace w32
 	//io
 	unique_handle CreateFile(_In_ LPCSTR lpFileName, _In_ DWORD dwDesiredAccess, _In_ DWORD dwShareMode, _In_opt_ LPSECURITY_ATTRIBUTES lpSecurityAttributes, _In_ DWORD dwCreationDisposition, _In_ DWORD dwFlagsAndAttributes, _In_opt_ HANDLE hTemplateFile){return ::CreateFileA(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile);}
 
-	//http
-	unique_handle WinHttpOpen(_In_opt_z_ LPCWSTR pszAgentW, _In_ DWORD dwAccessType, _In_opt_z_ LPCWSTR pszProxyW, _In_opt_z_ LPCWSTR pszProxyBypassW, _In_ DWORD dwFlags){return ::WinHttpOpen(pszAgentW, dwAccessType, pszProxyW, pszProxyBypassW, dwFlags); }
-	unique_handle WinHttpConnect(IN HINTERNET hSession, IN LPCWSTR pswzServerName, IN INTERNET_PORT nServerPort, IN DWORD dwReserved){return ::WinHttpConnect(hSession,pswzServerName, nServerPort, dwReserved);}
-	
-	//websocket
-	HRESULT WINAPI WebSocketCreateServerHandle(_In_reads_(ulPropertyCount) const PWEB_SOCKET_PROPERTY pProperties, _In_ ULONG ulPropertyCount, _Out_ WEB_SOCKET_HANDLE *phWebSocket) { return WebSocketCreateServerHandle(pProperties, ulPropertyCount, phWebSocket); }
-	DWORD WinHttpWebSocketReceive(_In_ HINTERNET hWebSocket, _Out_writes_bytes_to_(dwBufferLength, *pdwBytesRead) PVOID pvBuffer, _In_ DWORD dwBufferLength, _Out_range_(0, dwBufferLength) DWORD *pdwBytesRead, _Out_ WINHTTP_WEB_SOCKET_BUFFER_TYPE *peBufferType){return ::WinHttpWebSocketReceive(hWebSocket, pvBuffer, dwBufferLength, pdwBytesRead, peBufferType);}
-
 	struct OVERLAPPED
 	{
 		property<unique_handle, HANDLE> hEvent;
@@ -149,7 +141,6 @@ namespace w32x
 
 		std::set<std::wstring> modifications;
 
-		std::cout << "waiting..." << std::endl;
 		::ReadDirectoryChangesW(dirHandle,
 			(LPVOID)&strFileNotifyInfo,
 			sizeof(strFileNotifyInfo),
@@ -249,20 +240,9 @@ namespace w32x
 
 int main(int argc, char** argv)
 {
-	const WCHAR *pcwszServerName = L"localhost";
-	INTERNET_PORT Port = INTERNET_DEFAULT_HTTP_PORT;
-
-	auto session = WinHttpOpen(L"WebSocket sample",
-		WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
-		NULL,
-		NULL,
-		0);
-
-	WEB_SOCKET_HANDLE serverHandle = NULL;
-	auto hr = WebSocketCreateServerHandle(NULL, 0, &serverHandle);
-	
 	auto dir = argv[1];
 	w32x::Watch(dir, [](auto&& file) {
-		w32x::WriteConsole(file + L"\n");
+		//w32x::WriteConsole(file + L"\n");
+		std::wcout << file << std::endl;
 	});
 }

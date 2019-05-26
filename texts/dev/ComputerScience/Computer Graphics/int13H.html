@@ -1,0 +1,133 @@
+<script type="text/javascript" src="https://microsoft.github.io/monaco-editor/node_modules/monaco-editor/min/vs/loader.js""></script>
+<script>
+    var monacoElements = [];
+</script>
+<h1 class="header">int 13H</h1>
+<p class="paragraph">In the good old days of Computer Graphics all developers had access tho a contiguous memory array and writing a pixel as as simple as just MOVing a value to memory. Then came the "layers". Windows, DirectX, OpenGL etc... and the contiguous memory vanished. But we can bring it back!</p>
+<p class="paragraph">Off course I am being a little bit overdramatic. We can still do this in theses abstractions. And we ARE going to do this here in webGL + WASM.</p>
+<p class="paragraph">But first, let us reminder ourselves how things used to work:</p>
+<div class="code" data-language="c" style="height:200px">
+</div>
+<script>
+    var x = document.currentScript.previousElementSibling;
+    monacoElements.push({
+        value: "I2luY2x1ZGUgPGdvMzIuaD4NCiNpbmNsdWRlIDxzeXMvZmFycHRyLmg+DQoNCnZvaWQgcHV0cGl4ZWxfMTNoKGludCB4LCBpbnQgeSwgaW50IGNvbG9yKQ0Kew0KICAgIF9mYXJwb2tlYihfZG9zX2RzLCAweEEwMDAwK3kqMzIwK3gsIGNvbG9yKTsNCn0=",
+	    el: x,
+    });
+</script>
+<div class="link" style="border: solid 1px">
+    <h5>Guide: VGA mode 13h graphics</h5>
+    <p>One of the most widely used PC graphics modes, and certainly the easiest to program, is the VGA mode 13h. This is sized 320x200, can display up to 256 colors at any one time, and will work on any VGA compatible graphics card (it isn't supported by the EGA or CGA boards, but very few people are ru...</p>
+    <a href="http://www.delorie.com/djgpp/doc/ug/graphics/vga.html">http://www.delorie.com/djgpp/doc/ug/graphics/vga.html</a>
+</div>
+<p class="paragraph">This function will write pixel "color" in the "x" and "y" coordinates. The "0xA0000" is the standard address to access the VGA. In this case the function is hardcoded to 320x240. The important part is how to map from (x,y) to a contiguous memory array: using the function (x,y) -> start+(y*width)+x.</p>
+<div class="quoteLink" style="margin-left:100px">
+<p class="paragraph">The video memory of the VGA is mapped to the PC's memory via a window in the range between segments 0xA0000 and 0xBFFFF in the PC's real mode address space (A000:0000 and B000:FFFF in segment:offset notation). Typically, these starting segments are:</p>
+<p class="paragraph">0xA0000 for EGA/VGA graphics modes (64 KB)</p>
+<a href="https://en.wikipedia.org/wiki/Video_Graphics_Array">https://en.wikipedia.org/wiki/Video_Graphics_Array</a>
+</div>
+<p class="paragraph">To good news is that we can easily do this in every framework that exists: win32, GDI, DirectX, OpenGL, SDL etc... you name it, and we can do it. To prove, we are goind to do it inside webGL. Allowing us to write "directly" to the screen using Javascript and WASM. "Directly" was in quotes because, in reality, is as "directly" as possible. But the feeling is exactly the same.</p>
+<p class="paragraph">So let us begin!</p>
+<h2 class="header">Setup</h2>
+<p class="paragraph">Our first step is the start out HTML page and initialize WebGL. This tutorial does not intend to be an introduction to WebGL/OpenGL and/or 3D development, altough we will explain everything. WebGL is acessed throught the "canvas" element. We just need to get the "webgl" context. Much simpler than in Windows/Linux environment.</p>
+<div class="code" data-language="html" style="height:200px">
+</div>
+<script>
+    var x = document.currentScript.previousElementSibling;
+    monacoElements.push({
+        value: "PCFET0NUWVBFIGh0bWw+DQo8aHRtbD4NCjxib2R5Pg0KICAgIDxjYW52YXMgaWQ9InNjcmVlbiIgd2lkdGg9IjMyMCIgaGVpZ2h0PSIyNDAiPjwvY2FudmFzPg0KICAgIDxzY3JpcHQ+DQogICAgICAgIHZhciBjYW52YXMgPSBkb2N1bWVudC5nZXRFbGVtZW50c0J5SWQoInNjcmVlbiIpOw0KICAgICAgICB2YXIgZ2wgPSBjYW52YXMuZ2V0Q29udGV4dCgid2ViZ2wiKTsNCiAgICA8L3NjcmlwdD4NCjwvYm9keT4NCjwvaHRtbD4=",
+	    el: x,
+    });
+</script>
+<p class="paragraph">What we need to do now is not very intuitive. WebGL/OpenGL is aimed to drawing geometric figures, specially in 3D. What we want is a contiguous memory address to write our pixels. The easist way to achieve this in WebGL is:</p>
+<ol cl="ol">
+    <li>Draw a rectangle that fills 100% of the screen;</li>
+    <li>Apply a texture that is exactly the same size as the screen to this rectangle;</li>
+    <li>Get the address of this texture;</li>
+    <li>Write what we want to draw in this address;</li>
+    <li>Update the texture;</li>
+    <li>Update the screen;</li>
+</ol>
+<p class="paragraph">Steps 1,2,3 are setup and done only once in the initialization. Steps 5, 6 are generic. And step 4 is our code. What we will do is pass the texture address to a function that will ignore everything and just write to this memory.</p>
+<h2 class="header">Step 1 - Rectangle</h2>
+<p class="paragraph">WebGL/OpenGL aim is much complex cases than drawing rects. So it looks like a lot of work to draw a simple rectangle. But remember that we need to send everything to the video card, and then ask the WebGL/OpenGL/Video Card to draw what we created. So that is what we need to do:</p>
+<ol cl="ol">
+    <li>specify each vertice in a rectangle (there are four of them);</li>
+    <li>specify the triangles that forms the rectangle (WebGL/OpenGL love triangles) (there are two triangles);</li>
+    <li>draw them.</li>
+</ol>
+<p class="paragraph">The vertices are easy to understand. A rectangle contains four vertices. WebGL starts with the point (0,0) right in the middle of the screen with the top-left pixel being the (-1,-1) and the bottom right being (1,1).</p>
+<p class="paragraph">The triangles are specified by three integers that points to the vertice array.</p>
+<p class="paragraph">WebGL/OpenGL works always like this:</p>
+<ol cl="ol">
+    <li>Create an object. You receive a integer that "points" to the object (remember the object lives inside the Video Card);</li>
+    <li>Activate the buffer (tells WebGL/OpenGL that you will modify this object)</li>
+</ol>
+<p class="paragraph">We do not need to return the array with vertices and indices, because we copyed them to the video card. That is what the "verticesBuffer" and "indicesBuffer" mean.</p>
+<div class="code" data-language="javascript" style="height:200px">
+</div>
+<script>
+    var x = document.currentScript.previousElementSibling;
+    monacoElements.push({
+        value: "ZnVuY3Rpb24gY3JlYXRlUmVjdGFuZ2xlKCl7DQogICAgLy8gVmVydGljZXMNCiAgICB2YXIgcG9zaXRpb25zID0gbmV3IEZsb2F0MzJBcnJheShbDQogICAgICAgIC0xLjAsIC0xLjAsDQogICAgICAgICsxLjAsIC0xLjAsDQogICAgICAgICsxLjAsICsxLjAsDQogICAgICAgIC0xLjAsICsxLjAsDQogICAgXSk7DQogICAgdmFyIHZlcnRpY2VzQnVmZmVyID0gZ2wuY3JlYXRlQnVmZmVyKCk7DQogICAgZ2wuYmluZEJ1ZmZlcihnbC5BUlJBWV9CVUZGRVIsIHZlcnRpY2VzQnVmZmVyKTsNCiAgICBnbC5idWZmZXJEYXRhKGdsLkFSUkFZX0JVRkZFUiwgcG9zaXRpb25zLCBnbC5TVEFUSUNfRFJBVyk7DQoNCiAgICAvLyBUcmlhbmdsZXMNCiAgICB2YXIgaW5kaWNlcyA9IG5ldyBVaW50MTZBcnJheShbMCwgMSwgMiwgMCwgMiwgM10pOw0KICAgIHZhciBpbmRpY2VzQnVmZmVyID0gZ2wuY3JlYXRlQnVmZmVyKCk7DQogICAgZ2wuYmluZEJ1ZmZlcihnbC5FTEVNRU5UX0FSUkFZX0JVRkZFUiwgaW5kaWNlc0J1ZmZlcik7DQogICAgZ2wuYnVmZmVyRGF0YShnbC5FTEVNRU5UX0FSUkFZX0JVRkZFUiwgaW5kaWNlcywgZ2wuU1RBVElDX0RSQVcpOw0KICAgIHJldHVybiBbdmVydGljZXNCdWZmZXIsIGluZGljZXNCdWZmZXJdOw0KfQ0KDQpmdW5jdGlvbiBkcmF3KHZlcnRpY2llc0J1ZmZlciwgaW5kaWNlc0J1ZmZlcikgeyAgICANCiAgICBnbC5iaW5kQnVmZmVyKGdsLkFSUkFZX0JVRkZFUiwgdmVydGljaWVzQnVmZmVyKTsNCiAgICBnbC52ZXJ0ZXhBdHRyaWJQb2ludGVyKGFfY29vcmRzLCAyLCBnbC5GTE9BVCwgZmFsc2UsIDAsIDApOw0KICAgIGdsLmVuYWJsZVZlcnRleEF0dHJpYkFycmF5KGFfY29vcmRzKTsNCg0KICAgIGdsLmJpbmRCdWZmZXIoZ2wuRUxFTUVOVF9BUlJBWV9CVUZGRVIsIGluZGljZXNCdWZmZXIpOw0KICAgIGdsLmRyYXdFbGVtZW50cyhnbC5UUklBTkdMRVMsIDYsIGdsLlVOU0lHTkVEX1NIT1JULCAwKTsNCn0=",
+	    el: x,
+    });
+</script>
+<p class="paragraph">The draw code contains some mysterious variables, that we have not seen yet, but the general "geist" of the code is obvious. Activate the vertex buffer, the index buffer and them webGL to use them. This will give us a rectangle filling the entire screen.</p>
+<h2 class="header">Step 1 - Apply Texture</h2>
+<p class="paragraph">So our next step is to apply the texture. To apply a texture you need two things. A texture, a image and associate to each vertex a coordinate in the image. If you say that vertex 0 has texture coordinates (0,0) that means that when drawing that vertex, you draw the first pixel of the image. WebGL will interpolate the value between vertices. So our function now is:</p>
+<p class="paragraph">We will start with the second step. The texture coordinates creation.</p>
+<div class="code" data-language="javascript" style="height:200px">
+</div>
+<script>
+    var x = document.currentScript.previousElementSibling;
+    monacoElements.push({
+        value: "ZnVuY3Rpb24gY3JlYXRlUmVjdGFuZ2xlKCl7DQogICAgLy8gVmVydGljZXMNCiAgICB2YXIgcG9zaXRpb25zID0gbmV3IEZsb2F0MzJBcnJheShbDQogICAgICAgIC0xLjAsIC0xLjAsDQogICAgICAgICsxLjAsIC0xLjAsDQogICAgICAgICsxLjAsICsxLjAsDQogICAgICAgIC0xLjAsICsxLjAsDQogICAgXSk7DQogICAgdmFyIHZlcnRpY2VzQnVmZmVyID0gZ2wuY3JlYXRlQnVmZmVyKCk7DQogICAgZ2wuYmluZEJ1ZmZlcihnbC5BUlJBWV9CVUZGRVIsIHZlcnRpY2VzQnVmZmVyKTsNCiAgICBnbC5idWZmZXJEYXRhKGdsLkFSUkFZX0JVRkZFUiwgcG9zaXRpb25zLCBnbC5TVEFUSUNfRFJBVyk7DQoNCiAgICAvLyBUZXh0dXJlDQogICAgdmFyIHRleENvb3JkcyA9IG5ldyBGbG9hdDMyQXJyYXkoWw0KICAgICAgICArMC4wLCArMC4wLA0KICAgICAgICArMS4wLCArMC4wLA0KICAgICAgICArMS4wLCArMS4wLA0KICAgICAgICArMC4wLCArMS4wLA0KICAgIF0pOw0KICAgIHZhciB0ZXhDb29yZHNCdWZmZXIgPSBnbC5jcmVhdGVCdWZmZXIoKTsNCiAgICBnbC5iaW5kQnVmZmVyKGdsLkFSUkFZX0JVRkZFUiwgdGV4Q29vcmRzQnVmZmVyKTsNCiAgICBnbC5idWZmZXJEYXRhKGdsLkFSUkFZX0JVRkZFUiwgdGV4Q29vcmRzLCBnbC5TVEFUSUNfRFJBVyk7DQoNCiAgICAvLyBUcmlhbmdsZXMNCiAgICB2YXIgaW5kaWNlcyA9IG5ldyBVaW50MTZBcnJheShbMCwgMSwgMiwgMCwgMiwgM10pOw0KICAgIHZhciBpbmRpY2VzQnVmZmVyID0gZ2wuY3JlYXRlQnVmZmVyKCk7DQogICAgZ2wuYmluZEJ1ZmZlcihnbC5FTEVNRU5UX0FSUkFZX0JVRkZFUiwgaW5kaWNlc0J1ZmZlcik7DQogICAgZ2wuYnVmZmVyRGF0YShnbC5FTEVNRU5UX0FSUkFZX0JVRkZFUiwgaW5kaWNlcywgZ2wuU1RBVElDX0RSQVcpOw0KICAgIHJldHVybiBbdmVydGljZXNCdWZmZXIsIHRleENvb3Jkc0J1ZmZlciwgaW5kaWNlc0J1ZmZlcl07DQp9DQoNCmZ1bmN0aW9uIGRyYXcodmVydGljaWVzQnVmZmVyLCB0ZXhDb29yZEJ1ZmZlciwgaW5kaWNlc0J1ZmZlcikgew0KICAgIC8vIGFjdGl2YXRlIHZlcnRpY2VzDQogICAgZ2wuYmluZEJ1ZmZlcihnbC5BUlJBWV9CVUZGRVIsIHZlcnRpY2llc0J1ZmZlcik7DQogICAgZ2wudmVydGV4QXR0cmliUG9pbnRlcihhX2Nvb3JkcywgMiwgZ2wuRkxPQVQsIGZhbHNlLCAwLCAwKTsNCiAgICBnbC5lbmFibGVWZXJ0ZXhBdHRyaWJBcnJheShhX2Nvb3Jkcyk7DQoNCiAgICAvLyBhY3RpdmF0ZSB0ZXh0dXJlDQogICAgZ2wuYmluZEJ1ZmZlcihnbC5BUlJBWV9CVUZGRVIsIHRleENvb3JkQnVmZmVyKTsNCiAgICBnbC52ZXJ0ZXhBdHRyaWJQb2ludGVyKGFfdGV4Y29vcmRzLCAyLCBnbC5GTE9BVCwgZmFsc2UsIDAsIDApOw0KICAgIGdsLmVuYWJsZVZlcnRleEF0dHJpYkFycmF5KGFfdGV4Y29vcmRzKTsNCg0KICAgIC8vIGRyYXcgdHJpYW5nbGVzDQogICAgZ2wuYmluZEJ1ZmZlcihnbC5FTEVNRU5UX0FSUkFZX0JVRkZFUiwgaW5kaWNlc0J1ZmZlcik7DQogICAgZ2wuZHJhd0VsZW1lbnRzKGdsLlRSSUFOR0xFUywgNiwgZ2wuVU5TSUdORURfU0hPUlQsIDApOw0KfQ==",
+	    el: x,
+    });
+</script>
+<p class="paragraph">Now we create the texture. Normally one would read an image file like .bmp, .png etc... We will actually create an empty image. Because we want a way to write pixels and send to the video card. The way to do this is very simple. This function is going to receive the buffer, instead of creating, because we will use an existing buffer later on.</p>
+<p class="paragraph">There are a lot of parameters and details that we will skip here at this moment. The important thing here is how we create the texture and send the "buffer" to the video card and the texture pixels. We will do something very similar later on to update the texture.</p>
+<div class="code" data-language="javascript" style="height:200px">
+</div>
+<script>
+    var x = document.currentScript.previousElementSibling;
+    monacoElements.push({
+        value: "ZnVuY3Rpb24gY3JlYXRlRW1wdHlUZXh0dXJlKHdpZHRoLCBoZWlnaHQsIGJ1ZmZlcikgew0KICAgIHZhciBwaXhlbHMgPSBuZXcgVWludDhBcnJheShidWZmZXIpOyAgICAgDQoNCiAgICB2YXIgdGV4dHVyZSA9IGdsLmNyZWF0ZVRleHR1cmUoKTsgICAgICAgIA0KICAgIGdsLmJpbmRUZXh0dXJlKGdsLlRFWFRVUkVfMkQsIHRleHR1cmUpOw0KICAgIGdsLnRleFBhcmFtZXRlcmkoZ2wuVEVYVFVSRV8yRCwgZ2wuVEVYVFVSRV9NSU5fRklMVEVSLCBnbC5ORUFSRVNUKTsNCiAgICBnbC50ZXhQYXJhbWV0ZXJpKGdsLlRFWFRVUkVfMkQsIGdsLlRFWFRVUkVfV1JBUF9TLCBnbC5DTEFNUF9UT19FREdFKTsNCiAgICBnbC50ZXhQYXJhbWV0ZXJpKGdsLlRFWFRVUkVfMkQsIGdsLlRFWFRVUkVfV1JBUF9ULCBnbC5DTEFNUF9UT19FREdFKTsNCiAgICBnbC50ZXhJbWFnZTJEKGdsLlRFWFRVUkVfMkQsIDAsIGdsLlJHQkEsIHdpZHRoLCBoZWlnaHQsIDAsIGdsLlJHQkEsIGdsLlVOU0lHTkVEX0JZVEUsIHBpeGVscyk7DQoNCiAgICByZXR1cm4gW3RleHR1cmUsIHBpeGVsc107DQp9DQoNCmZ1bmN0aW9uIGRyYXcodGV4dHVyZSwgdmVydGljaWVzQnVmZmVyLCB0ZXhDb29yZEJ1ZmZlciwgaW5kaWNlc0J1ZmZlcikgew0KICAgIGdsLmFjdGl2ZVRleHR1cmUoZ2wuVEVYVFVSRTApOw0KICAgIGdsLmJpbmRUZXh0dXJlKGdsLlRFWFRVUkVfMkQsIHRleHR1cmUpOw0KDQogICAgLy8gLi4uIHNhbWUgYXMgYmVmb3JlDQp9",
+	    el: x,
+    });
+</script>
+<p class="paragraph">Now our rectangle has a texture. Given that out texture is empty, our rectangle is also empty. That is ok. because we are about to write something to it.</p>
+<script>
+  require.config({ paths: { 'vs': 'https://microsoft.github.io/monaco-editor/node_modules/monaco-editor/min/vs' }});
+  window.MonacoEnvironment = {
+    getWorkerUrl: function(workerId, label) {
+      return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
+        self.MonacoEnvironment = {
+          baseUrl: 'https://microsoft.github.io/monaco-editor/node_modules/monaco-editor/min'
+        };
+        importScripts('https://microsoft.github.io/monaco-editor/node_modules/monaco-editor/min/vs/base/worker/workerMain.js');`
+      )}`;
+    }
+  };
+
+  require(["vs/editor/editor.main"], function () {    
+    monacoElements.forEach(x => {
+        x.el.innerText = "";
+        var editor = monaco.editor.create(x.el, {
+            automaticLayout:true,
+	        value: window.atob(x.value),
+	        language: x.el.dataset.language,
+            scrollBeyondLastLine: false,
+            minimap: {
+	        	enabled: false
+	        }
+        });
+        x.el.style.height = 0;
+        editor.layout();
+        let height = editor.getScrollHeight();        
+        x.el.style.height = height + 20;
+        editor.layout();
+    });
+  });
+</script>

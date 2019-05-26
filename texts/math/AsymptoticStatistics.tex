@@ -1,5 +1,6 @@
 \documentclass[10pt,a4paper]{book}
-\usepackage[latin1]{inputenc}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -159,10 +160,10 @@ Which is quite surprising if you think. But looking from another perspective, it
 
 This relationship was discovered by two mathematicians:\\	
 Andrey Markov\\
-\includegraphics[width=50px]{AAMarkov}\\
+\includegraphics[width=2cm]{AAMarkov}\\
 
 and Pafnuty Chebyshev\\
-\includegraphics[width=50px]{Chebyshev}\\
+\includegraphics[width=2cm]{Chebyshev}\\
 
 And it is generalized as:
 \begin{itemize}
@@ -316,6 +317,26 @@ P(|X - E[X] \ge a*\text{SD}[X]) &\le \frac{1}{a^2}
 	\section{Convergence in probability to a random variable}
 	\section{Convergence in probability of a random variable to a constant}
 	\section{Convergence in distribution of a random variable}
+	\section{Slutsky's Theorem}
+	
+	Eugen Slutsky\\
+	\includegraphics[width=2cm]{EugenSlutsky}\\
+	
+	and Harald Cramér\\
+	\includegraphics[width=2cm]{HaraldCramer}\\
+	
+	If:
+	\begin{align}
+	X \sim P\\
+	c \in \rm I\!R\\
+	X_n \xrightarrow[]{d} X\\
+	Y_n \xrightarrow[]{d} c\\
+	\end{align}
+	then:
+	\begin{align}
+	X_n + Y_n \xrightarrow[]{d} X + c\\
+	X_n * Y_n \xrightarrow[]{d} X * c\\
+	\end{align}
 	
 	\chapter{Characteristic Functions}
 	\section{Introduction}
@@ -329,4 +350,34 @@ P(|X - E[X] \ge a*\text{SD}[X]) &\le \frac{1}{a^2}
 	\section{Introduction}
 	\section{Proof}
 	\section{The Characteristic Function of a Normal Random Variable}
+	
+	\chapter{Applications}
+	\section{Two-sided, Two-sample Tests}
+	
+	In the scenario:
+	\begin{align}
+		X_1,...,X_n \sim P_1\\
+		E[X_i] = \mu_1\\
+		VAR[X_i] = \sigma^2_1\\
+		\\
+		Y_1,...,Y_n \sim P_2\\
+		E[Y_i] = \mu_2\\
+		VAR[Y_i] = \sigma^2_2\\
+	\end{align}	
+	the test statistic $T_n$.
+	\begin{align}
+		\sqrt{n}\frac{(\overline{X}_n - \overline{Y}_n)}{\sqrt{\sigma^2_1+\sigma^2_2}} \sim N_{\mu,\sigma^2}(0,1)
+	\end{align}
+	If both variances $\sigma^2_1$ and $\sigma^2_2$ are unknown we can use the "Plug-In" method using "Slutsky Theorem here".\\
+	Given that $T_n$ converges to $N(0,1)$. We can use the fact that:
+	\begin{align}
+		\frac{\sqrt{\sigma^2_1+\sigma^2_2}}{\sqrt{\hat{\sigma}^2_1+\hat{\sigma}^2_2}} \xrightarrow[]{d} 1
+	\end{align}
+	and 
+	\begin{align}
+	\sqrt{n}\frac{(\overline{X}_n - \overline{Y}_n)}{\sqrt{\sigma^2_1+\sigma^2_2}} * \frac{\sqrt{\sigma^2_1+\sigma^2_2}}{\sqrt{\hat{\sigma}^2_1+\hat{\sigma}^2_2}} \sim N_{\mu,\sigma^2}(0,1) * 1\\
+	\sqrt{n}\frac{(\overline{X}_n - \overline{Y}_n)}{\sqrt{\hat{\sigma}^2_1+\hat{\sigma}^2_2}} * \frac{\sqrt{\sigma^2_1+\sigma^2_2}}{\sqrt{\sigma^2_1+\sigma^2_2}} \sim N_{\mu,\sigma^2}(0,1) * 1\\
+	\sqrt{n}\frac{(\overline{X}_n - \overline{Y}_n)}{\sqrt{\hat{\sigma}^2_1+\hat{\sigma}^2_2}} * 1 \sim N_{\mu,\sigma^2}(0,1) * 1\\
+	\sqrt{n}\frac{(\overline{X}_n - \overline{Y}_n)}{\sqrt{\hat{\sigma}^2_1+\hat{\sigma}^2_2}} \sim N_{\mu,\sigma^2}(0,1)
+	\end{align}
 \end{document}
