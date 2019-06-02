@@ -26,7 +26,17 @@ function tob64($text)
 
 function Parse($Path)
 {
-    $fileLines = cat $Path
+    [System.Environment]::CurrentDirectory = (gl).Path
+
+    $info = [System.IO.FileInfo]::new($Path)
+    [System.Environment]::CurrentDirectory = $info.Directory.FullName
+    cd $info.Directory.FullName
+
+    Write-Verbose $Path
+    Write-Verbose $info.Directory.FullName
+    Write-Verbose $info.FullName
+
+    $fileLines = [System.IO.File]::ReadAllLines($info.FullName)
 
     # 0 = waiting block
     # 1 = all lines until next #
@@ -80,9 +90,21 @@ function Parse($Path)
                 $lastBlock = New-Object PSCustomObject -Property @{
                     Name=$name;                    
                 } 
+            } elseif($name -eq "images"){                                             
+                $lines = @()
+                $lastBlock = New-Object PSCustomObject -Property @{
+                    Name=$name;                    
+                } 
             } elseif($name -eq "link"){
                 $selector = $params[2]                                            
                 $i = $params[3]
+                $lines = @()
+                $lastBlock = New-Object PSCustomObject -Property @{
+                    Name=$name;
+                    Selector = $selector;
+                    I = $i                  
+                } 
+            } elseif($name -eq "devenv"){
                 $lines = @()
                 $lastBlock = New-Object PSCustomObject -Property @{
                     Name=$name;
@@ -142,30 +164,61 @@ $code = $_.Lines -join [System.Environment]::NewLine
     var x = document.currentScript.previousElementSibling;
     monacoElements.push({
         value: "$(tob64 $code)",
-	    el: x,
+        el: x,
+        adjustHeight: true
     });
 </script>
 "@
 }
 
 function generateLink($block) {
-$get = wget $block.Lines[0]
-$NodeList = $get.ParsedHtml.querySelectorAll($block.Selector)
-$innerText = $NodeList.item($block.I).innerText
+    $block.Lines |% {        
+        $url = $_    
+        Write-Verbose $url
 
-$maxSize = 300
-if($innerText.Length -gt $maxSize) {
-    $innerText = $innerText.Substring(0, $maxSize-3) + "..."
-}
+        if ($url.StartsWith("//")){
 
-$code = ($_.Lines | %{$_.Replace("<","&lt;").Replace(">","&gt;")}) -join [System.Environment]::NewLine
+        } else {            
+            $get = wget $url
+            $innerText = ""
+            $img = ""
+    
+            if($url.StartsWith("https://www.amazon.com.br")) {
+                $get.Content -match "bookDescEncodedData = \`".*?\`""
+                $innerText = [System.Web.HttpUtility]::UrlDecode($Matches[0].Split(" ")[2].Trim('"'))
+        
+                $el = $get.ParsedHtml.getElementById("img-canvas")
+                $obj = $el.childNodes[0].attributes["data-a-dynamic-image"].value|ConvertFrom-Json
+                $imgs = $obj|gm |? MemberType -eq NoteProperty
+                $img = $imgs[0].Name
+            } elseif ([System.String]::IsNullOrEmpty($block.Selector) -eq $false) {
+                $get = wget $url
+                $NodeList = $get.ParsedHtml.querySelectorAll($block.Selector)
+                $innerText = $NodeList.item($block.I).innerText
+            } else {
+            }
+            
+            $maxSize = 300
+            if($innerText.Length -gt $maxSize) {
+                $innerText = $innerText.Substring(0, $maxSize-3) + "..."
+            }
+            
+            if([System.String]::IsNullOrEmpty($img) -eq $false) {
+                $innerText = "<div  style='display:inline-block'><img src='$img' width='120' /></div><div style='display:inline-block;width:90%'><p>$innerText</p></div>"
+            } else {
+                $innerText = "<p>$innerText</p>"
+            }
 @"
-<div class="link" style="border: solid 1px">
-    <h5>$($get.ParsedHtml.title)</h5>
-    <p>$innerText</p>
-    <a href="$($block.Lines[0])">$($block.Lines[0])</a>
-</div>
+    <div class="link" style="border: solid 1px">
+        <h5>$($get.ParsedHtml.title)</h5>    
+        $innerText
+        <a href="$url">$url</a>
+    </div>
 "@
+        }
+
+       
+    }    
 }
 
 function generateQuoteLink($block) {
@@ -201,6 +254,77 @@ $block.Lines |% {
 "@
 }
 
+function generateImages($block) {
+    $block.Lines |% {
+        Write-Verbose (gl).Path
+        Write-Verbose $_        
+        $files = ls $_
+        $files |% {
+            Write-Verbose $_
+            "<img src='$($_)' />"
+        }
+    }
+}
+
+function generateDevEnv($block) {    
+    $files = $block.Lines |? {[System.String]::IsNullOrEmpty($_) -eq $false}
+@"
+    <div>
+        <script>
+            var files = [
+            $($files |% {
+                $info = [System.IO.FileInfo]::new($_); 
+                $txt = [System.IO.File]::ReadAllText($_);
+                "{name:'$($info.Name)', value:'$(tob64 $txt)'},"
+            })
+            ];
+            var events = [];
+            var obj = {
+                name: files[0].name,
+                value: files[0].value,
+                adjustHeight: false,
+                onchange: {
+                    add: function(f) {
+                        events.push(f);
+                    },
+                    call: function(str) {
+                        events.forEach(function(f){
+                            f(str);
+                        });
+                    }
+                }
+            }
+            var editor = null;
+            function switchTo(name) {
+                files.forEach(function(x){
+                    if(x.name === name){
+                        var el = document.getElementById("code")
+                        obj.onchange.call(x);
+                    }
+                });
+            }
+           
+        </script>
+        <div>
+            $($files |% {
+                $info = [System.IO.FileInfo]::new($_);
+@"
+<button onclick="switchTo('$($info.Name)')">$($info.Name)</button>
+"@
+            })
+        </div>
+        <div id="code" style="width:600px;height:300px;display:inline-block">
+        </div>
+        <script>
+        obj.el = document.currentScript.previousElementSibling;
+        monacoElements.push(obj);
+        </script>
+        <iframe style="display:inline-block">
+        </iframe>        
+    </div>
+"@
+}
+
 function Generate($blocks)
 {
 @"
@@ -216,6 +340,8 @@ function Generate($blocks)
         if($_.Name -eq "link"){ generateLink $_ }
         if($_.Name -eq "quotelink"){ generateQuoteLink $_ }
         if($_.Name -eq "ol"){ generateOL $_ }
+        if($_.Name -eq "devenv"){ generateDevEnv $_ }
+        if($_.Name -eq "images"){ generateImages $_ }
     }
 @"
 <script>
@@ -233,21 +359,62 @@ function Generate($blocks)
 
   require(["vs/editor/editor.main"], function () {    
     monacoElements.forEach(x => {
+        function getLanguage(name) {
+            if(name) {
+                if(name.indexOf('.html') >= 0) return 'html';
+                if(name.indexOf('.js')  >= 0) return 'javascript';
+            }
+            return '';
+        }
+        
         x.el.innerText = "";
-        var editor = monaco.editor.create(x.el, {
-            automaticLayout:true,
-	        value: window.atob(x.value),
-	        language: x.el.dataset.language,
-            scrollBeyondLastLine: false,
-            minimap: {
-	        	enabled: false
-	        }
-        });
-        x.el.style.height = 0;
-        editor.layout();
-        let height = editor.getScrollHeight();        
-        x.el.style.height = height + 20;
-        editor.layout();
+        var language = getLanguage(x.name);
+        if(x.el.dataset.language) {
+            language = x.el.dataset.language;
+        }        
+        if(x.language) {
+            language = x.language;
+        }
+
+        var value = x.value;
+        var h = {editor: null};
+        function createEditor() {
+            if(h.editor){
+                var model = h.editor.getModel()
+                if(model)
+                    model.dispose();
+                    h.editor.dispose();
+            }
+            h.editor = null;
+            h.editor = monaco.editor.create(x.el, {
+                automaticLayout:true,
+                value: window.atob(value),
+                language: language,
+                scrollBeyondLastLine: false,
+                minimap: {
+                    enabled: false
+                }
+            });
+        }
+        createEditor();
+        function resizeEditor() {
+            if(x.adjustHeight) {
+                x.el.style.height = 0;
+                h.editor.layout();
+                let height = h.editor.getScrollHeight();        
+                x.el.style.height = height + 20;
+                h.editor.layout();
+            }
+        }        
+        resizeEditor();
+        if(x.onchange) {
+            x.onchange.add(function(xx){
+                value = xx.value;
+                language = getLanguage(xx.name);
+                createEditor();
+                resizeEditor();
+            });
+        }
     });
   });
 </script>
@@ -259,5 +426,22 @@ function Save($Path, $lines)
     [System.Environment]::CurrentDirectory = (gl).Path
     $info = [System.IO.FileInfo]::new($Path)
     mkdir $info.Directory.FullName -Force | Out-Null
-    [System.IO.File]::WriteAllLines($Path, $lines)
+    Write-Verbose "Saving to $($info.FullName)"
+    [System.IO.File]::WriteAllLines($info.FullName, $lines)
+}
+
+function ParseGenerateSave($From,$To)
+{
+    $glpath = (gl).Path
+    try
+    {
+        $blocks = Parse $From
+        $lines = Generate $blocks
+        $To |% {
+            Save $_ $lines    
+        }
+    } finally {
+        [System.Environment]::CurrentDirectory = $glpath
+        cd $glpath
+    }
 }

@@ -1,0 +1,78 @@
+<script type="text/javascript" src="https://microsoft.github.io/monaco-editor/node_modules/monaco-editor/min/vs/loader.js""></script>
+<script>
+    var monacoElements = [];
+</script>
+<script>
+  require.config({ paths: { 'vs': 'https://microsoft.github.io/monaco-editor/node_modules/monaco-editor/min/vs' }});
+  window.MonacoEnvironment = {
+    getWorkerUrl: function(workerId, label) {
+      return `data:text/javascript;charset=utf-8,${encodeURIComponent(`
+        self.MonacoEnvironment = {
+          baseUrl: 'https://microsoft.github.io/monaco-editor/node_modules/monaco-editor/min'
+        };
+        importScripts('https://microsoft.github.io/monaco-editor/node_modules/monaco-editor/min/vs/base/worker/workerMain.js');`
+      )}`;
+    }
+  };
+
+  require(["vs/editor/editor.main"], function () {    
+    monacoElements.forEach(x => {
+        function getLanguage(name) {
+            if(name) {
+                if(name.indexOf('.html') >= 0) return 'html';
+                if(name.indexOf('.js')  >= 0) return 'javascript';
+            }
+            return '';
+        }
+        
+        x.el.innerText = "";
+        var language = getLanguage(x.name);
+        if(x.el.dataset.language) {
+            language = x.el.dataset.language;
+        }        
+        if(x.language) {
+            language = x.language;
+        }
+
+        var value = x.value;
+        var h = {editor: null};
+        function createEditor() {
+            if(h.editor){
+                var model = h.editor.getModel()
+                if(model)
+                    model.dispose();
+                    h.editor.dispose();
+            }
+            h.editor = null;
+            h.editor = monaco.editor.create(x.el, {
+                automaticLayout:true,
+                value: window.atob(value),
+                language: language,
+                scrollBeyondLastLine: false,
+                minimap: {
+                    enabled: false
+                }
+            });
+        }
+        createEditor();
+        function resizeEditor() {
+            if(x.adjustHeight) {
+                x.el.style.height = 0;
+                h.editor.layout();
+                let height = h.editor.getScrollHeight();        
+                x.el.style.height = height + 20;
+                h.editor.layout();
+            }
+        }        
+        resizeEditor();
+        if(x.onchange) {
+            x.onchange.add(function(xx){
+                value = xx.value;
+                language = getLanguage(xx.name);
+                createEditor();
+                resizeEditor();
+            });
+        }
+    });
+  });
+</script>

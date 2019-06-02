@@ -53,8 +53,10 @@ Our first step is the start out HTML page and initialize WebGL. This tutorial do
 <body>
     <canvas id="screen" width="320" height="240"></canvas>
     <script>
-        var canvas = document.getElementsById("screen");
-        var gl = canvas.getContext("webgl");
+        function getGL() {
+            var canvas = document.getElementsById("screen");
+            return [canvas.getContext("webgl"), canvas.width, canvas.height];
+        }
     </script>
 </body>
 </html>
@@ -67,10 +69,7 @@ What we need to do now is not very intuitive. WebGL/OpenGL is aimed to drawing g
 
 Draw a rectangle that fills 100% of the screen;
 Apply a texture that is exactly the same size as the screen to this rectangle;
-Get the address of this texture;
-Write what we want to draw in this address;
 Update the texture;
-Update the screen;
 
 # paragraph
 
@@ -78,7 +77,7 @@ Steps 1,2,3 are setup and done only once in the initialization. Steps 5, 6 are g
 
 # header 2
 
-Step 1 - Rectangle
+Step 1 - Draw Rectangle
 
 # paragraph
 
@@ -128,10 +127,10 @@ function createRectangle(){
     return [verticesBuffer, indicesBuffer];
 }
 
-function draw(verticiesBuffer, indicesBuffer) {    
+function draw(verticiesBuffer, indicesBuffer, a_coords) {    
     gl.bindBuffer(gl.ARRAY_BUFFER, verticiesBuffer);
-    gl.vertexAttribPointer(a_coords, 2, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(a_coords);
+
+   
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indicesBuffer);
     gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
@@ -141,9 +140,64 @@ function draw(verticiesBuffer, indicesBuffer) {
 
 The draw code contains some mysterious variables, that we have not seen yet, but the general "geist" of the code is obvious. Activate the vertex buffer, the index buffer and them webGL to use them. This will give us a rectangle filling the entire screen.
 
+Before we can actually see the rectangle on the screen we still need to finish the WebGL configuration. We are still missing one very important step. Configuring the "shaders". Shaders are as simple as they are powerfull. You can imagine that shaders are scripts that compiles to function that will be ran for each vertex and each "pixel".
+
+The actual pipeline inside the video card is insanely complex. But we can simplify here as:
+
+# devenv
+
+./int13H.01.html
+./int13H.01.js
+
+# paragraph
+
+Here we basically fetch the shaders. Here they are embedded inside the HTML, but of course they can be anywhere you want.
+
+# code javascript
+function createShaders(gl, vname, fname) {
+    var vshader = document.getElementById("vshader").innerText;
+    var vsshader = gl.createShader(gl.VERTEX_SHADER);
+    gl.shaderSource(vsshader, vshader);
+    gl.compileShader(vsshader);
+    if (!gl.getShaderParameter(vsshader, gl.COMPILE_STATUS)) {
+        console.log(gl.getShaderInfoLog(vsshader));
+    }
+
+    var fshader = document.getElementById("fshader").innerText;
+    var fsshader = gl.createShader(gl.FRAGMENT_SHADER);
+    gl.shaderSource(fsshader, fshader);
+    gl.compileShader(fsshader);
+    if (!gl.getShaderParameter(fsshader, gl.COMPILE_STATUS)) {
+        console.log(gl.getShaderInfoLog(fsshader));
+    }
+
+    var shaderProgram = gl.createProgram();
+    gl.attachShader(shaderProgram, vsshader);
+    gl.attachShader(shaderProgram, fsshader);
+    gl.linkProgram(shaderProgram);
+    
+    var a_coords = gl.getAttribLocation(shaderProgram, 'a_coords');
+
+    return [vshader, fshader, a_coords];
+}
+
+function draw(gl, verticiesBuffer, indicesBuffer, shaderProgram, a_coords) {
+    gl.useProgram(shaderProgram);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, verticiesBuffer);
+    gl.vertexAttribPointer(a_coords, 2, gl.FLOAT, false, 0, 0);
+    gl.enableVertexAttribArray(a_coords);  
+
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indicesBuffer);
+    gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_SHORT, 0);
+}
+#####
+
+//TODO PUT A RUNNING DRAW HERE
+
 # header 2
 
-Step 1 - Apply Texture
+Step 2 - Apply Texture
 
 # paragraph
 
@@ -152,7 +206,7 @@ So our next step is to apply the texture. To apply a texture you need two things
 We will start with the second step. The texture coordinates creation.
 
 # code javascript
-function createRectangle(){
+function createRectangle(gl){
     // Vertices
     var positions = new Float32Array([
         -1.0, -1.0,
@@ -183,7 +237,31 @@ function createRectangle(){
     return [verticesBuffer, texCoordsBuffer, indicesBuffer];
 }
 
-function draw(verticiesBuffer, texCoordBuffer, indicesBuffer) {
+function createShaders(vname, fname) {
+    // ... same as above
+
+    var shaderProgram = gl.createProgram();
+    gl.attachShader(shaderProgram, vsshader);
+    gl.attachShader(shaderProgram, fsshader);
+    gl.linkProgram(shaderProgram);
+
+    var a_coords = gl.getAttribLocation(shaderProgram, 'a_coords');
+    var a_texcoords = gl.getAttribLocation(shaderProgram, 'a_texcoords');
+    var u_texture0 = gl.getUniformLocation(shaderProgram, 'u_texture0');
+
+    return [vshader, fshader, a_coords, a_texcoords, u_texture0];
+}
+
+function draw(gl, verticiesBuffer, texCoordBuffer, indicesBuffer, a_coords, a_texcoords) {
+   
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    gl.useProgram(shaderProgram);
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.uniform1i(u_texture0, 0);
+
     // activate vertices
     gl.bindBuffer(gl.ARRAY_BUFFER, verticiesBuffer);
     gl.vertexAttribPointer(a_coords, 2, gl.FLOAT, false, 0, 0);
@@ -206,7 +284,8 @@ Now we create the texture. Normally one would read an image file like .bmp, .png
 There are a lot of parameters and details that we will skip here at this moment. The important thing here is how we create the texture and send the "buffer" to the video card and the texture pixels. We will do something very similar later on to update the texture.
 
 # code javascript
-function createEmptyTexture(width, height, buffer) {
+function createEmptyTexture(width, height) {
+    var buffer = new ArrayBuffer(width * height * 32);
     var pixels = new Uint8Array(buffer);     
 
     var texture = gl.createTexture();        
@@ -219,7 +298,13 @@ function createEmptyTexture(width, height, buffer) {
     return [texture, pixels];
 }
 
-function draw(texture, verticiesBuffer, texCoordBuffer, indicesBuffer) {
+function updateTexture(texture, width, height, pixels)
+{
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, pixels);
+}
+
+function draw(texture, verticesBuffer, texCoordsBuffer, indicesBuffer) {
     gl.activeTexture(gl.TEXTURE0);
     gl.bindTexture(gl.TEXTURE_2D, texture);
 
@@ -229,3 +314,123 @@ function draw(texture, verticiesBuffer, texCoordBuffer, indicesBuffer) {
 # paragraph
 
 Now our rectangle has a texture. Given that out texture is empty, our rectangle is also empty. That is ok. because we are about to write something to it.
+
+//TODO PUT A RUNNING DRAW HERE
+
+# header 2
+
+Step 3 - Write to the texture
+
+# header 3
+
+Step 3.1 - Settting up WASM
+
+# paragraph
+
+But before writing into the texture we will setup the WASM environment. Although it is not necessary to run this code as a WASM module, I think is a nice touch. Maybe we can have the same code doing the same thing running on Windows/Linux. It will be a interesting experiment.
+
+The first thing you need is a very simple .cpp file that will be compiled to WASM. If you don't know how to compile C++ to WASM see here.
+
+Our c++ code is just a simple function that receives a pointer to the "screen" memory. We know that this memory actually points to the memory that will be send through the video memory bus and be used as the new texture, but we can think as it was the actual screen memory.
+
+# code c++
+#define EXPORT __attribute__((visibility("default")))
+
+EXPORT void writeScreen(int width, int height, uint32_t* ptr)
+{
+}
+#####
+# paragraph
+
+First thing we need now is fetch and instantiate our WASM module. The only thing that we need from the WASM module is the function pointer to "writeScreen". We will call this function inside a loop and update the screen every frame.
+
+# code javascript
+function getWASM(url) {
+    return fetch(url)
+        .then(response => response.arrayBuffer())
+        .then(bytes => WebAssembly.instantiate(bytes))
+        .then(wasm => {
+            screenMemory = wasm.instance.exports.memory;
+            return wasm.instance.exports.writeScreen;
+        });
+}
+#####
+
+After this we start our draw-to-screen loop using "requestAnimationFrame".
+
+# code javascript
+function start() {
+    var writeScreen = null;
+    getWASM().then(x => writeScreen = x);
+    var [gl, width, height] = getGL();    
+    var [verticesBuffer, texCoordsBuffer, indicesBuffer] = createRectangle(gl);
+    var [texture, pixels] = createEmptyTexture(width, height);
+
+    var render = function(timestamp) {
+
+        if(writeScreen)
+            writeScreen(width, height, pixels);
+        updateTexture(pixels.buffer, width, height);
+        draw(texture, verticesBuffer, texCoordsBuffer, indicesBuffer))
+
+        requestAnimationFrame(render);
+    };
+    requestAnimationFrame(render);
+}
+#####
+# paragraph
+
+//TODO PUT A RUNNING DRAW HERE
+# header 3
+
+Step 3.2 - Fill the texture with noise
+
+# paragraph 
+
+Now we are ready to write noise to our texture. We very simple do this in out C++ file as:
+
+#code c++
+#define EXPORT __attribute__((visibility("default")))
+
+EXPORT void writeScreen(int width, int height, uint32_t* ptr)
+{
+    for(int x = 0;x < width;++x){
+        for(int y = 0;y < height; ++y){
+            ptr[AT(w,x,y)] = RGBA(
+                rand() % 255, 
+                rand() % 255,
+                rand() % 255,
+                255);
+        }
+    }
+}
+#####
+
+We are not using any framework, not even the standard libraries, so we will need to define "RGBA" and "rand()" ourselves. 
+
+# code c++
+#define i8 char
+#define i16 short
+#define i32 int
+#define ui8 unsigned char
+#define ui16 unsigned short
+#define ui32 unsigned int
+
+#define RGBA(r, g, b, a) (((ui8)(a)) << 24 | ((ui16)((ui8)(b)) << 16) | (((ui16)(ui8)(g)) << 8) | (((ui16)(ui8)(r)) << 0))
+#define AT(w,x,y) (y*w+x)
+
+namespace rand_impl {
+    int seed = 123456789;
+    int m = 0x8000;
+    int a = 1103515245;
+    int c = 12345;
+    int rand()
+    {
+        seed = (a * seed + c) % m;
+        return seed;
+    }
+}
+int rand() { return rand_impl::rand(); }
+#####
+
+We can improve, a lot on this, using C++1x features, especially because a lot of features a free-abstractions, but for now we are fine.
