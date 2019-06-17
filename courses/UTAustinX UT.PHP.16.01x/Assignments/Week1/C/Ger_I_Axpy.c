@@ -8,5 +8,5 @@ void MyGer( int m, int n, double *x, int incx,
 		 double *y, int incy, double *A, int ldA )
 {
   for ( int i=0; i<m; i++ )
-    Axpy(  ,     ,    ,    ,      ,      );
+    Axpy( n, chi(i), y, incy, &alpha(i, 0), ldA);
 }

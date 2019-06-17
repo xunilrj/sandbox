@@ -8,5 +8,5 @@ void MyGemv( int m, int n, double *A, int ldA,
            double *x, int incx, double *y, int incy )
 {
   for ( int j=0; j<n; j++ )
-    Axpy(    ,      ,        ,    ,    ,       );
+    Axpy( m, chi(j), &alpha(0, j), 1, y, 1);
 }
