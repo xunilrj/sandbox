@@ -7,9 +7,9 @@
 
 #define min( x, y ) ( (x) < (y) ? (x) : (y) )
 
-#define MB 4
-#define NB 4
-#define KB 4
+#define MB 512
+#define NB 512
+#define KB 32
 
 void Gemm_PJI( int, int, int, double *, int, double *, int, double *, int );
 

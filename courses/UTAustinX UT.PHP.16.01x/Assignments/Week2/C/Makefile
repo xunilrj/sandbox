@@ -39,8 +39,8 @@ driver_JIP_PJI.x: $(OBJS_JIP_PJI) $(UTIL_OBJS)
 	$(LINKER) $(OBJS_JIP_PJI) $(UTIL_OBJS) $(BLAS_LIB) -o driver_JIP_PJI.x $(LDFLAGS) 
 
 JIP_PJI: driver_JIP_PJI.x
-	echo "$(NREPEATS) $(NFIRST) $(NLAST) $(NINC)" | ./driver_JIP_PJI.x > data/output_JIP_PJI.m 
-	tail data/output_JIP_PJI.m
+	echo "$(NREPEATS) $(NFIRST) $(NLAST) $(NINC)" | ./driver_JIP_PJI.x > data/output_JIP_PJI_512_32.m 
+	tail data/output_JIP_PJI_512_32.m
 
 # ---------------------
 
