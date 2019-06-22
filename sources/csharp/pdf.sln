@@ -3,9 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.168
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pdf", "pdf\pdf.csproj", "{810AFAAF-7B2C-4075-8354-10E59D960ED2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pdf.tests", "..\pdf.tests\pdf.tests.csproj", "{2A26862C-0D92-41E0-BE14-BDDEA4B96FDF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pdf", "pdf\pdf.csproj", "{5D3739F2-3C1A-4E93-B328-1D1DF1BC377E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -13,19 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{810AFAAF-7B2C-4075-8354-10E59D960ED2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{810AFAAF-7B2C-4075-8354-10E59D960ED2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{810AFAAF-7B2C-4075-8354-10E59D960ED2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{810AFAAF-7B2C-4075-8354-10E59D960ED2}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2A26862C-0D92-41E0-BE14-BDDEA4B96FDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A26862C-0D92-41E0-BE14-BDDEA4B96FDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2A26862C-0D92-41E0-BE14-BDDEA4B96FDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2A26862C-0D92-41E0-BE14-BDDEA4B96FDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D3739F2-3C1A-4E93-B328-1D1DF1BC377E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D3739F2-3C1A-4E93-B328-1D1DF1BC377E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D3739F2-3C1A-4E93-B328-1D1DF1BC377E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D3739F2-3C1A-4E93-B328-1D1DF1BC377E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {4CFE5F26-94ED-4C96-BDF0-9054583E64A3}
+		SolutionGuid = {F6B3EE4E-3EC5-4327-9C56-6B0A2598CDDD}
 	EndGlobalSection
 EndGlobal

@@ -74,7 +74,8 @@ function Parse($Path)
                 
             $name = $params[1]            
             if($name -eq "header"){
-                $level = $params[2]                              
+                $level = 1
+                if($params[2] -ne $null) { $level = $params[2] }                
                 $lines = @()
                 $lastBlock = New-Object PSCustomObject -Property @{
                     Name=$name;
@@ -128,6 +129,16 @@ function Parse($Path)
                 } 
             }
 
+            ## custom
+
+            if($name -eq "int13h.low"){
+                $linesRaw = $false
+                $lines = @()
+                $lastBlock = New-Object PSCustomObject -Property @{
+                    Name=$name;                                 
+                } 
+            }
+
             $definesEnd = ($params | select -Last 1).StartsWith("end=")
             if($definesEnd) {
                 $searchFor = ($params | select -Last 1).Split("=")[1]
@@ -137,6 +148,12 @@ function Parse($Path)
         }         
     }
     endBlock
+}
+
+function PreProcessTxt($txt) {
+    [System.Text.RegularExpressions.Regex]::Replace($txt,
+        "(?<ALL>(ht|f)tp(s?)\:\/\/[\~0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*(:(0-9)*)*(\/?)([\~a-zA-Z0-9\-\.\?\,\'\/\\\+&%\$#_]*)?)",
+        '<a href="${ALL}">${ALL}</a>')
 }
 
 function generateHeader($block) {
@@ -149,7 +166,7 @@ function generateParagraph($block) {
     $block.Lines |% {
         if([System.String]::IsNullOrEmpty($_) -eq $false){
 @"
-<p class="paragraph">$_</p>
+<p class="paragraph">$(PreProcessTxt $_)</p>
 "@
         }
     }
@@ -325,8 +342,72 @@ function generateDevEnv($block) {
 "@
 }
 
+## CUSTOM
+
+function generateint13hlow($block) {
+$name = $block.Lines[0];
+$cmd = $block.Lines[1];
+@"
+<script src="./int13h.js"></script>
+<script src="./allowCode.js"></script>
+<div style="width: calc(var(--max-width) + 400px)">
+    <div style="display:inline-block; width: var(--max-width);vertical-align:top;">
+        <div class="historyControls">
+        </div>
+        <div class="code" data-language="javascript" style="height: 310px">
+        </div>        
+    </div>
+    <div style="display:inline-block; width: 300px;vertical-align:top;">
+        <canvas width="310" height="310">
+        </canvas>
+    </div>
+    <div class="history">
+    </div>
+    <script>
+        var ctx = window.int13h.default(document.currentScript.parentNode);
+        window.allowCode.default(ctx, "drawLine", 
+            "function drawLine(x0, y0, x1, y1, f) {\n\n}\n",
+            document.currentScript.parentNode,
+            '$name'
+        );            
+        $($block.Lines[1])
+            
+        document.currentScript.parentNode
+            .addEventListener('datachanged', function(e) {
+            });
+    </script>
+</div>
+"@
+}
+
 function Generate($blocks)
 {
+@"
+<html>
+<head>
+<style>
+    :root {
+        --color-highlight-strong: red;
+        --color-highlight-weak: lightred;
+        --max-width: 500px;
+    }
+    .blocks {
+        margin-left: calc((100% - var(--max-width)) / 3);        
+        max-width: var(--max-width);
+    }
+    .blocks .header {
+        background: var(--color-highlight-strong);
+        padding: 5px;
+    }
+    .blocks .paragraph {
+        text-align: justify;
+    }
+    .monacoDebugging { background-color: lightgray; }
+</style>
+</head>
+<body>
+<div class="blocks">
+"@
 @"
 <script type="text/javascript" src="https://microsoft.github.io/monaco-editor/node_modules/monaco-editor/min/vs/loader.js""></script>
 <script>
@@ -342,6 +423,8 @@ function Generate($blocks)
         if($_.Name -eq "ol"){ generateOL $_ }
         if($_.Name -eq "devenv"){ generateDevEnv $_ }
         if($_.Name -eq "images"){ generateImages $_ }
+        ## custom
+        if($_.Name -eq "int13h.low"){ generateint13hlow $_ }
     }
 @"
 <script>
@@ -387,7 +470,7 @@ function Generate($blocks)
             }
             h.editor = null;
             h.editor = monaco.editor.create(x.el, {
-                automaticLayout:true,
+                automaticLayout: true,
                 value: window.atob(value),
                 language: language,
                 scrollBeyondLastLine: false,
@@ -418,6 +501,11 @@ function Generate($blocks)
     });
   });
 </script>
+"@
+@"
+</div>
+</body>
+</html>
 "@
 }
 
