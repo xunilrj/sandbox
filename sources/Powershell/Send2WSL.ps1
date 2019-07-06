@@ -1,3 +1,8 @@
+function Restart-WSL {
+    net stop LxssManager
+    net start LxssManager;
+}
+
 function send2bash ($name, $real)
 {
     if($real -eq $null) {

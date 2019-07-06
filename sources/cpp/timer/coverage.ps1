@@ -1,5 +1,10 @@
 Import-Module C:\tools\llvm\llvm.psm1 -Force -DisableNameChecking
-Set-llvm C:\tools\llvm\debug-x86_64-pc-windows-msvc
+Set-llvm C:\tools\llvm\v8.0.0
+
+clang++ -std=c++1z -fprofile-instr-generate -fcoverage-mapping  ./sources/main.cpp
+
+rm ./default.profdata
+rm ./default.profraw
 
 $obj = New-Object PSCustomObject
 ./a.exe -l | sls -Pattern "^\s\s[^\s]"|% {
@@ -46,6 +51,5 @@ $obj = New-Object PSCustomObject
         }
     }
 }
-
 
 $obj | ConvertTo-Json | Out-File ./decorations.json -Encoding utf8
