@@ -41,9 +41,9 @@
 
 ### C/C++
 
-[C++ Coroutines (even for WebAssembly)](sources/cpp/coroutines/)   
-[Command line Debugging](sources/cpp/CommandLineDebug.md)   
-[C++ Index](sources/cpp/readme.md)   
+[C++ Coroutines (even for WebAssembly)](sources/cpp/coroutines/)  
+[Command line Debugging](sources/cpp/CommandLineDebug.md)  
+[C++ Index](sources/cpp/readme.md)  
 
 ### R
 [Realtime London Underground Position](https://rstudio-pubs-static.s3.amazonaws.com/269780_73750785d8c04f9e968287701e22af30.html)
