@@ -1,5 +1,9 @@
 # Links and C/C++ Material
 
+## Native debugging
+
+![Command Line Debugging](.CommandLineDebug.md)
+
 ## Performance
 
 ### Intel Manuals
