@@ -54,7 +54,7 @@ However we can debug the application to understand what happened.
 
 To debug in Windows is very easy, one only need the cdb debugger. You can download the Windows SDK (https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk) or just the cdb.exe here (https://raw.githubusercontent.com/xunilrj/sandbox/master/sources/cpp/cdb.exe)
 
-    > wget https://raw.githubusercontent.com/xunilrj/sandbox/master/sources/cpp/cdb.exe
+    > wget https://raw.githubusercontent.com/xunilrj/sandbox/master/sources/cpp/cdb.exe -OutFile cdb.exe
     > Unblock-File cdb.exe
     > cdb main.exe
     Microsoft (R) Windows Debugger Version 10.0.15063.0 AMD64
