@@ -2,7 +2,7 @@
 
 ## Native debugging
 
-![Command Line Debugging](.CommandLineDebug.md)
+[Command Line Debugging](CommandLineDebug.md)
 
 ## Performance
 
