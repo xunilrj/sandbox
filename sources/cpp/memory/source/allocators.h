@@ -1,9 +1,18 @@
 #ifndef ALLOCATORS_H
 #define ALLOCATORS_H
 
-using size_t = unsigned long long;
+#include <Windows.h>
+
+//using size_t = unsigned long long;
 using uint8_t = unsigned char;
 using uint32_t = unsigned int;
+
+template <typename T>
+void* operator new(size_t size, T& allocator)
+{
+	auto block = allocator.allocate(size);
+	return block.Pointer;
+}
 
 namespace ma
 {
@@ -78,12 +87,33 @@ namespace ma
 		{
 		}
 
+		template <typename T, typename... TArgs>
+		T& emplace(TArgs... args)
+		{
+			return *(new (Pointer) T{ args... });
+		}
+
+		uint8_t* end() const { return (uint8_t*)Pointer + Size; }
+		template<typename T> bool owns(T* ptr) const { return (uint8_t*)ptr < ((uint8_t*)Pointer + Size); }
+		template<typename T> int position(T* ptr) const
+		{
+			auto p = (uint8_t*)ptr;
+			auto end = (uint8_t*)Pointer + Size;
+
+			if (p >= Pointer && p < end) return 0;
+			if (p >= end) return 1;
+			if (p <= Pointer) return -1;
+			return 0; //impossible
+		}
+
 		static const Block Null;
 	};
 	const Block Block::Null{ nullptr, 0 };
 
 	bool operator == (const Block& l, const Block& r) { return l.Pointer == r.Pointer; }
 	bool operator != (const Block& l, const Block& r) { return l.Pointer != r.Pointer; }
+
+	////////////////////////////////////////////////////////////////////////////////////// NULL ALLOCATOR
 
 	class NullAllocator
 	{
@@ -107,6 +137,8 @@ namespace ma
 			return Block::Null;
 		}
 	};
+	
+	////////////////////////////////////////////////////////////////////////////////////// FALLBACK ALLOCATOR
 
 	template <typename Primary, typename Fallback>
 	class FallbackAllocator : private Primary,
@@ -136,6 +168,8 @@ namespace ma
 				Fallback::deallocate(block);
 		}
 	};
+
+	////////////////////////////////////////////////////////////////////////////////////// STACK ALLOCATOR
 
 	template <size_t SIZE>
 	class StackAllocator
@@ -183,6 +217,8 @@ namespace ma
 		char *Top;
 	};
 
+	////////////////////////////////////////////////////////////////////////////////////// FREE LIST ALLOCATOR
+
 	template <class TFallback, size_t MIN, size_t MAX, size_t QTDMAX>
 	class FreeListAllocator
 	{
@@ -191,7 +227,7 @@ namespace ma
 			Node *Next;
 		};
 
-		TFallback Parent;
+		TFallback& Fallback;
 		Node *Root;
 		size_t Qtd;
 
@@ -199,6 +235,11 @@ namespace ma
 			return size >= MIN && size <= MAX;;
 		}
 	public:
+		FreeListAllocator(TFallback& fallback) : Fallback{ fallback }
+		{
+
+		}
+
 		inline size_t qtd() const { return Qtd; }
 		Block allocate(size_t size)
 		{
@@ -212,23 +253,23 @@ namespace ma
 					--Qtd;
 					return b;
 				}
-				else return Parent.allocate(MAX);
+				else return Fallback.allocate(MAX);
 			}
 			else
 			{
-				return Parent.allocate(size);
+				return Fallback.allocate(size);
 			}
 		}
 
 		bool owns(Block b)
 		{
-			return isMySize(b.Size) || Parent.owns(b);
+			return isMySize(b.Size) || Fallback.owns(b);
 		}
 
 		bool deallocate(Block b)
 		{
-			if (Qtd >= QTDMAX) return Parent.deallocate(b);
-			if (!isMySize(b.Size)) return Parent.deallocate(b);
+			if (Qtd >= QTDMAX) return Fallback.deallocate(b);
+			if (!isMySize(b.Size)) return Fallback.deallocate(b);
 
 			auto p = (Node*)b.Pointer;
 			p->Next = Root;
@@ -238,6 +279,20 @@ namespace ma
 		}
 	};
 
+	template <size_t MIN, size_t MAX, size_t QTDMAX>
+	struct FreeListAllocatorBuilder
+	{
+		template<typename T>
+		FreeListAllocator<T, MIN, MAX, QTDMAX> make(T& fallback) const { return { fallback }; }
+	};
+	template <class T, size_t MIN, size_t MAX, size_t QTDMAX>
+	auto operator << (T& a, const FreeListAllocatorBuilder<MIN,MAX,QTDMAX> &b) { return b.make(a); }
+	template <size_t MIN, size_t MAX, size_t QTDMAX>	
+	auto freeListAllocator() { return FreeListAllocatorBuilder<MIN,MAX,QTDMAX>{}; }
+
+	////////////////////////////////////////////////////////////////////////////////////// AFFIX ALLOCATOR
+
+	//TODO
 	template<typename A,
 		typename Prefix,
 		typename Suffix = void>
@@ -246,6 +301,8 @@ namespace ma
 
 	};
 
+	////////////////////////////////////////////////////////////////////////////////////// STATS ALLOCATOR
+	//TODO
 	template<typename A,
 		unsigned long flags>
 		class StatsAllocator
@@ -253,6 +310,8 @@ namespace ma
 
 	};
 
+
+	////////////////////////////////////////////////////////////////////////////////////// BITMAP ALLOCATOR
 	template <typename T, size_t SIZE>
 	class BitmapAllocator
 	{
@@ -340,22 +399,25 @@ namespace ma
 		}
 	};
 
+	////////////////////////////////////////////////////////////////////////////////////// CASCADING ALLOCATOR
+	//TODO
 	template <typename Creator>
 	class CascadingAllocator
 	{
 
 	};
 
+	////////////////////////////////////////////////////////////////////////////////////// SEGREGATOR ALLOCATOR
 	template <size_t THRESHOLD,
 		typename TSmall,
 		typename TLarge>
-		class SegregatorAllocator
+	class SegregatorAllocator
 	{
 		TSmall Small;
 		TLarge Large;
 	public:
-		const TSmall& small() const { return Small; }
-		const TLarge& large() const { return Large; }
+		const TSmall& smaller() const { return Small; }
+		const TLarge& larger() const { return Large; }
 		Block allocate(size_t s)
 		{
 			if (s == 0) return Block::Null;
@@ -376,6 +438,7 @@ namespace ma
 		}
 	};
 
+	////////////////////////////////////////////////////////////////////////////////////// STATIC BUFFER ALLOCATOR
 	class StaticBufferAllocator
 	{
 		bool IsFull;
@@ -422,6 +485,118 @@ namespace ma
 		}
 	};
 	Block StaticBufferAllocator::Buffer{ nullptr, 0 };
+	
+	////////////////////////////////////////////////////////////////////////////////////// RING BUFFER ALLOCATOR
+	template <typename TAllocator, size_t SIZE>
+	class RingBufferAllocator
+	{
+		struct info
+		{
+			unsigned int Free; //TODO should be aligned
+			size_t Size;
+			void reset(size_t size = 0)
+			{
+				Free = true;
+				Size = size;
+			}
+		};
+		TAllocator& Allocator;
+		Block Buffer;
+		uint8_t* Current;
+		bool ZeroNext;
+
+		info& getInfo(Block blk) { return *(info*)(((uint8_t*)blk.Pointer) - sizeof(info)); }
+		info& getInfo(uint8_t* ptr) { return *(info*)(ptr - sizeof(info)); }
+	public:
+		RingBufferAllocator(TAllocator& allocator) : 
+			Allocator{ allocator }, 
+			ZeroNext{ true }
+		{
+			Buffer = Allocator.allocate(SIZE);
+			Current = (uint8_t*) Buffer.Pointer;
+			getInfo(Current).reset();
+		}
+
+		bool owns(Block blk) const { return Buffer.owns(blk.Pointer); }
+
+		Block allocate(size_t s)
+		{
+			if (s == 0) return Block::Null;
+			if (Buffer == Block::Null) {
+				return Block::Null;
+			}
+			
+			bool restarted = false;
+			int p;
+			do
+			{
+				auto c = Current; //ATOMIC READ
+				auto realStart = c;
+				auto realSize = s + sizeof(info);
+				auto end = realStart + realSize;
+				p = Buffer.position(end);
+				if (p == 0)
+				{
+					auto& i = getInfo(c);
+					auto r = InterlockedCompareExchange(&i.Free, 0, 1);
+					if (r)
+					{
+						auto blockStart = c + sizeof(info);
+						auto block = Block{ blockStart, s };
+						//ATOMIC WRITE
+						Current = end;
+						//ATOMIC READ
+						if (ZeroNext)
+						{
+							i = getInfo(c);
+							//InterlockedGreaterThanExchange
+							if (i.Free > 1) InterlockedCompareExchange(&i.Free, 0, i.Free);
+						}
+					}
+						return block;
+					}
+					else 
+					{
+						InterlockedAdd(&Current, i.Size);
+					}
+				}
+				else
+				{
+					if (!restarted) {
+						restarted = true;
+						ZeroNext = false;
+						Current = (uint8_t*) Buffer.Pointer;
+						continue;
+					}
+					else break;
+				}
+			} while (p != 0);
+
+			return Block::Null;
+		}
+
+		bool deallocate(Block blk)
+		{
+			if (blk == Block::Null) return false;
+			if (owns(blk))
+			{
+				getInfo(blk).reset();
+				return true;
+			}
+			else return false;
+		}
+	};
+
+	template <size_t SIZE>
+	struct RingBufferAllocatorBuilder
+	{
+		template<typename T>
+		RingBufferAllocator<T, SIZE> make(T& fallback) const { return { fallback }; }
+	};
+	template <class T, size_t SIZE>
+	auto operator << (T& a, const RingBufferAllocatorBuilder<SIZE> &b) { return b.make(a); }
+	template <size_t SIZE>
+	auto ringBufferAllocator() { return RingBufferAllocatorBuilder<SIZE>{}; }
 }
 
 #endif

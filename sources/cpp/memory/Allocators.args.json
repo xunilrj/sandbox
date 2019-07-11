@@ -1,0 +1,14 @@
+{
+  "FileVersion": 2,
+  "Id": "6ebc0e49-3d97-45fe-99a7-f5e353610545",
+  "Items": [
+    {
+      "Id": "e590ea8b-57f8-476b-83d1-425153fe8cf9",
+      "Command": "--name \"RingBufferAllocator Tests\""
+    },
+    {
+      "Id": "54d07810-953d-4438-bf9a-0381568682da",
+      "Command": "--name \"WindowsTests\""
+    }
+  ]
+}

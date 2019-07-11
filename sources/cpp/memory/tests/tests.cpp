@@ -83,7 +83,8 @@ TEST_CASE("Stack Allocator Tests", "[StackAllocator]")
 
 TEST_CASE("FreeList Allocator Tests", "[FreeListAllocator]") 
 {
-	auto allocator = FreeListAllocator<StackAllocator<45>, 4, 8, 2>();
+	auto stack = StackAllocator<45>{};
+	auto allocator = stack << freeListAllocator<4, 8, 2>();
 
 	allocateSizeNOK(allocator, 0);
 
@@ -156,24 +157,24 @@ TEST_CASE("SegregatorAllocator Tests", "[SegregatorAllocator]")
 	allocateSizeNOK(allocator, 0);
 
 	auto blk1 = allocateSizeMustOK(allocator, 1);
-	REQUIRE(allocator.small().qtd() == 1);
-	REQUIRE(allocator.large().qtd() == 0);
+	REQUIRE(allocator.smaller().qtd() == 1);
+	REQUIRE(allocator.larger().qtd() == 0);
 
 	auto blk2 = allocateSizeMustOK(allocator, 5);
-	REQUIRE(allocator.small().qtd() == 1);
-	REQUIRE(allocator.large().qtd() == 1);
+	REQUIRE(allocator.smaller().qtd() == 1);
+	REQUIRE(allocator.larger().qtd() == 1);
 
 	ownsNOK(allocator, Block::Null);
 	ownsOK(allocator, blk1);
 	ownsOK(allocator, blk2);
 
 	deallocateOK(allocator, blk1);
-	REQUIRE(allocator.small().qtd() == 0);
-	REQUIRE(allocator.large().qtd() == 1);
+	REQUIRE(allocator.smaller().qtd() == 0);
+	REQUIRE(allocator.larger().qtd() == 1);
 
 	deallocateOK(allocator, blk2);
-	REQUIRE(allocator.small().qtd() == 0);
-	REQUIRE(allocator.large().qtd() == 0);
+	REQUIRE(allocator.smaller().qtd() == 0);
+	REQUIRE(allocator.larger().qtd() == 0);
 }
 
 
@@ -235,4 +236,44 @@ TEST_CASE("StaticBufferAllocator Tests", "[StaticBufferAllocator]")
 
 	deallocateOK(allocator, blk1);
 	REQUIRE(allocator.isEmpty());
+}
+
+TEST_CASE("RingBufferAllocator Tests", "[RingBufferAllocator]")
+{
+	auto stack = StackAllocator<1024 + 24>{};
+	auto allocator = stack << ringBufferAllocator<1024 + 24>();
+
+	auto b1 = allocateSizeMustOK(allocator, 10);
+	auto b2 = allocateSizeMustOK(allocator, 1014);
+	allocateSizeNOK(allocator, 10);
+
+	ownsOK(allocator, b1);
+	ownsOK(allocator, b2);
+
+	deallocateOK(allocator, b1);
+	deallocateOK(allocator, b2);
+}
+
+#include "../source/memory.h"
+Memory mem;
+
+struct Test
+{
+	int a;
+	float b;
+};
+
+TEST_CASE("WindowsTests", "[HeapTest]")
+{
+	auto h1 = mem.GetProcessHeap();
+
+	auto reserved = mem.reserve(1);
+	auto mem1 = reserved.commit();
+	auto freeList =  mem1.allocator() << freeListAllocator<1, 100, 1000>();
+	auto t = new (freeList) Test{ 5, 7.3f };
+
+	REQUIRE(t->a == 5);
+	REQUIRE(t->b == 7.3f);
+	
+	auto block2 = freeList.allocate(50);	
 }

@@ -8,7 +8,7 @@
 \contentsline {subsubsection}{\numberline {1.1.6}Computer Graphics}{3}{subsubsection.1.1.6}% 
 \contentsline {subsection}{\numberline {1.2}Architectures}{3}{subsection.1.2}% 
 \contentsline {subsubsection}{\numberline {1.2.1}Computer Architecture}{3}{subsubsection.1.2.1}% 
-\contentsline {subsubsection}{\numberline {1.2.2}Multi Tenancy}{3}{subsubsection.1.2.2}% 
+\contentsline {subsubsection}{\numberline {1.2.2}Multi Tenancy}{4}{subsubsection.1.2.2}% 
 \contentsline {subsubsection}{\numberline {1.2.3}REST}{4}{subsubsection.1.2.3}% 
 \contentsline {subsubsection}{\numberline {1.2.4}SEDA}{4}{subsubsection.1.2.4}% 
 \contentsline {subsubsection}{\numberline {1.2.5}Servers}{4}{subsubsection.1.2.5}% 
@@ -22,7 +22,7 @@
 \contentsline {subsection}{\numberline {1.3}Programming}{6}{subsection.1.3}% 
 \contentsline {subsubsection}{\numberline {1.3.1}Language Analysis}{6}{subsubsection.1.3.1}% 
 \contentsline {subsubsection}{\numberline {1.3.2}Process Theory}{6}{subsubsection.1.3.2}% 
-\contentsline {subsubsection}{\numberline {1.3.3}Object Oriented}{6}{subsubsection.1.3.3}% 
+\contentsline {subsubsection}{\numberline {1.3.3}Object Oriented}{7}{subsubsection.1.3.3}% 
 \contentsline {subsubsection}{\numberline {1.3.4}Generic Programming}{7}{subsubsection.1.3.4}% 
 \contentsline {subsubsection}{\numberline {1.3.5}Dynamic Dispatch}{7}{subsubsection.1.3.5}% 
 \contentsline {subsubsection}{\numberline {1.3.6}Functional Programming}{7}{subsubsection.1.3.6}% 
@@ -30,7 +30,7 @@
 \contentsline {subsection}{\numberline {1.5}Data Fusion}{8}{subsection.1.5}% 
 \contentsline {subsection}{\numberline {1.6}Artificial Intelligence}{8}{subsection.1.6}% 
 \contentsline {subsection}{\numberline {1.7}Text Mining}{8}{subsection.1.7}% 
-\contentsline {subsection}{\numberline {1.8}VIPs}{8}{subsection.1.8}% 
+\contentsline {subsection}{\numberline {1.8}VIPs}{9}{subsection.1.8}% 
 \contentsline {section}{\numberline {2}Mathematics}{9}{section.2}% 
 \contentsline {subsection}{\numberline {2.1}Geometry}{9}{subsection.2.1}% 
 \contentsline {subsection}{\numberline {2.2}Linear Algebra}{9}{subsection.2.2}% 
@@ -42,6 +42,6 @@
 \contentsline {section}{\numberline {3}Science}{10}{section.3}% 
 \contentsline {subsection}{\numberline {3.1}Research}{10}{subsection.3.1}% 
 \contentsline {section}{\numberline {4}Physics}{10}{section.4}% 
-\contentsline {section}{\numberline {5}Economy}{10}{section.5}% 
-\contentsline {subsection}{\numberline {5.1}Political Economy}{10}{subsection.5.1}% 
-\contentsline {subsubsection}{\numberline {5.1.1}Taxes}{10}{subsubsection.5.1.1}% 
+\contentsline {section}{\numberline {5}Economy}{11}{section.5}% 
+\contentsline {subsection}{\numberline {5.1}Political Economy}{11}{subsection.5.1}% 
+\contentsline {subsubsection}{\numberline {5.1.1}Taxes}{11}{subsubsection.5.1.1}% 

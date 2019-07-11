@@ -6,6 +6,11 @@
 
 ## Algorithms
 
+### Linked List
+
+Information Processing Language-V Manual
+Year: 1962
+
 ### Heap
 
 ALGORITHM 232: HEAPSORT  

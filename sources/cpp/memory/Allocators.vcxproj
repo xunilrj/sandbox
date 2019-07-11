@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="source\allocators.h" />
+    <ClInclude Include="source\memory.h" />
     <ClInclude Include="tests\catch.hpp" />
   </ItemGroup>
   <ItemGroup>
