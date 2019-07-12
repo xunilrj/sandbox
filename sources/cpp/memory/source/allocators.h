@@ -1,6 +1,8 @@
 #ifndef ALLOCATORS_H
 #define ALLOCATORS_H
 
+#include <tuple>
+#include <type_traits>
 #include <Windows.h>
 
 //using size_t = unsigned long long;
@@ -13,6 +15,12 @@ void* operator new(size_t size, T& allocator)
 {
 	auto block = allocator.allocate(size);
 	return block.Pointer;
+}
+
+template <typename T>
+void operator delete(void * ptr, T& allocator)
+{
+	allocator.deallocate({ptr, 0});
 }
 
 namespace ma
@@ -88,6 +96,10 @@ namespace ma
 		{
 		}
 
+		virtual ~Block()
+		{
+		}
+
 		template <typename T, typename... TArgs>
 		T& emplace(TArgs... args)
 		{
@@ -113,6 +125,36 @@ namespace ma
 
 	bool operator == (const Block& l, const Block& r) { return l.Pointer == r.Pointer; }
 	bool operator != (const Block& l, const Block& r) { return l.Pointer != r.Pointer; }
+
+	////////////////////////////////////////////////////////////////////////////////////// Auto block
+
+	template <typename T>
+	struct AutoBlock : public Block
+	{
+		T* Allocator;
+
+		AutoBlock(void* ptr, size_t size, T* allocator) :
+			Pointer{ ptr }, 
+			Size{ size },
+			Allocator{ allocator }
+		{
+		}
+
+		AutoBlock() : 
+			Pointer{ nullptr },
+			Size{ 0 },
+			Allocator{ nullptr }
+		{
+		}
+
+		~AutoBlock()
+		{
+			if (Allocator != nullptr)
+			{
+				Allocator.deallocate(this);
+			}
+		}
+	};
 
 	////////////////////////////////////////////////////////////////////////////////////// NULL ALLOCATOR
 
@@ -487,6 +529,27 @@ namespace ma
 	};
 	Block StaticBufferAllocator::Buffer{ nullptr, 0 };
 	
+
+	///////////////////////////////////////////////////////
+
+
+	template<class T>
+	constexpr auto hasAllocator(T x) -> decltype(x->Allocator, std::true_type{}) { return {}; }
+	constexpr auto hasAllocator(...) -> std::false_type { return {}; }
+
+	template <typename T, typename TAllocator> 
+	T makeBlock(uint8_t*ptr, size_t size, TAllocator* allocator)
+	{
+		if constexpr (hasAllocator(T{}))
+		{
+			return { ptr, size, allocator };
+		}
+		else
+		{
+			return { ptr, size };
+		}
+	}
+
 	////////////////////////////////////////////////////////////////////////////////////// RING BUFFER ALLOCATOR
 	template <typename TAllocator, size_t SIZE, size_t QTD>
 	class RingBufferSlicedAllocator
@@ -498,28 +561,34 @@ namespace ma
 
 		TAllocator& Allocator;
 		
-		Block MetadataBlock;
+		Block Blk;
 		info* Metadata;
-		Block Data;
+		uint8_t* Data;
 		
 		uint64_t Current;
 		uint64_t Allocated;
+
+		
 	public:
 		RingBufferSlicedAllocator(TAllocator& allocator) :
 			Allocator{ allocator },
 			Current{ 0 },
 			Allocated{ 0 }
 		{
-			Data = Allocator.allocate(SIZE * QTD);
-			MetadataBlock = Allocator.allocate(sizeof(info) * QTD);
-			Metadata = (info*)MetadataBlock.Pointer;
-			memset(Metadata, 0, MetadataBlock.Size);
+			auto metadataSize = sizeof(info) * QTD;
+			auto dataSize = SIZE * QTD;
+			Blk = Allocator.allocate(metadataSize + dataSize);
+
+			Metadata = (info*)Blk.Pointer;
+			memset(Metadata, 0, metadataSize);
+
+			Data = (uint8_t*)Blk.Pointer + metadataSize;
 		}
 
 		bool owns(Block blk) const
 		{
 			if (blk == Block::Null) return false;
-			return Data.owns(blk.Pointer);
+			return Blk.owns(blk.Pointer);
 		}
 
 		bool isFull()
@@ -528,7 +597,8 @@ namespace ma
 			return a >= QTD;
 		}
 
-		Block allocate(size_t s)
+		template<typename TBlock = Block>
+		TBlock allocate(size_t s)
 		{
 			if (s == 0) return Block::Null;
 
@@ -541,8 +611,8 @@ namespace ma
 				if (r == 0)
 				{
 					InterlockedIncrement(&Allocated);
-					auto at = (uint8_t*)Data.Pointer + (c * SIZE);
-					return { at, SIZE };
+					auto at = (uint8_t*)Data + (c * SIZE);
+					return makeBlock<TBlock>(at, SIZE, this);
 				}
 				else
 				{
@@ -556,10 +626,15 @@ namespace ma
 			return Block::Null;
 		}
 
+		bool deallocate(void* ptr)
+		{
+			return deallocate({ ptr, 0 });
+		}
+
 		bool deallocate(Block blk)
 		{
 			if (blk == Block::Null) return false;
-			auto delta = (uint8_t*)blk.Pointer - (uint8_t*)Data.Pointer;
+			auto delta = (uint8_t*)blk.Pointer - (uint8_t*)Data;
 			auto pos = delta / SIZE;
 
 			auto r = InterlockedCompareExchange(&Metadata[pos].Free, 0, 1);

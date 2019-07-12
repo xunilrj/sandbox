@@ -268,6 +268,11 @@ TEST_CASE("RingBufferSlicedAllocator Tests", "[RingBufferSlicedAllocator]")
 
 	deallocateOK(allocator, b1);
 	checkNotFull(allocator);
+
+	b1 = allocateSizeMustOK(allocator, 10);
+	checkIsFull(allocator);
+
+	deallocateOK(allocator, b1);
 	deallocateOK(allocator, b2);
 }
 
@@ -286,11 +291,11 @@ TEST_CASE("WindowsTests", "[HeapTest]")
 
 	auto reserved = mem.reserve(1);
 	auto mem1 = reserved.commit();
-	auto freeList =  mem1.allocator() << freeListAllocator<1, 100, 1000>();
-	auto t = new (freeList) Test{ 5, 7.3f };
+	auto buffer =  mem1.allocator() << ringBufferSlicedAllocator<1024, 10>();
+	auto t = new (buffer) Test{ 5, 7.3f };
 
 	REQUIRE(t->a == 5);
 	REQUIRE(t->b == 7.3f);
-	
-	auto block2 = freeList.allocate(50);	
+
+	buffer.deallocate(t);
 }
