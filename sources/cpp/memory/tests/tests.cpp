@@ -45,6 +45,20 @@ void deallocateOK(T& alloc, const Block& blk)
 	REQUIRE(r);
 }
 
+template <typename T>
+void checkIsFull(T& alloc)
+{
+	auto r = alloc.isFull();
+	REQUIRE(r);
+}
+
+template <typename T>
+void checkNotFull(T& alloc)
+{
+	auto r = alloc.isFull();
+	REQUIRE(!r);
+}
+
 TEST_CASE("Null Allocator Tests", "[NullAllocator]")
 {
 	auto allocator = NullAllocator();
@@ -238,19 +252,22 @@ TEST_CASE("StaticBufferAllocator Tests", "[StaticBufferAllocator]")
 	REQUIRE(allocator.isEmpty());
 }
 
-TEST_CASE("RingBufferAllocator Tests", "[RingBufferAllocator]")
+TEST_CASE("RingBufferSlicedAllocator Tests", "[RingBufferSlicedAllocator]")
 {
-	auto stack = StackAllocator<1024 + 24>{};
-	auto allocator = stack << ringBufferAllocator<1024 + 24>();
+	auto stack = StackAllocator<3096>{};
+	auto allocator = stack << ringBufferSlicedAllocator<1024, 2>();
 
 	auto b1 = allocateSizeMustOK(allocator, 10);
 	auto b2 = allocateSizeMustOK(allocator, 1014);
+	checkIsFull(allocator);
 	allocateSizeNOK(allocator, 10);
 
+	ownsNOK(allocator, Block::Null);
 	ownsOK(allocator, b1);
 	ownsOK(allocator, b2);
 
 	deallocateOK(allocator, b1);
+	checkNotFull(allocator);
 	deallocateOK(allocator, b2);
 }
 

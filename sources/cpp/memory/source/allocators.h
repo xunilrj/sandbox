@@ -6,6 +6,7 @@
 //using size_t = unsigned long long;
 using uint8_t = unsigned char;
 using uint32_t = unsigned int;
+using uint64_t = unsigned long long;
 
 template <typename T>
 void* operator new(size_t size, T& allocator)
@@ -487,116 +488,100 @@ namespace ma
 	Block StaticBufferAllocator::Buffer{ nullptr, 0 };
 	
 	////////////////////////////////////////////////////////////////////////////////////// RING BUFFER ALLOCATOR
-	template <typename TAllocator, size_t SIZE>
-	class RingBufferAllocator
+	template <typename TAllocator, size_t SIZE, size_t QTD>
+	class RingBufferSlicedAllocator
 	{
 		struct info
 		{
-			unsigned int Free; //TODO should be aligned
-			size_t Size;
-			void reset(size_t size = 0)
-			{
-				Free = true;
-				Size = size;
-			}
+			uint64_t Free;
 		};
-		TAllocator& Allocator;
-		Block Buffer;
-		uint8_t* Current;
-		bool ZeroNext;
 
-		info& getInfo(Block blk) { return *(info*)(((uint8_t*)blk.Pointer) - sizeof(info)); }
-		info& getInfo(uint8_t* ptr) { return *(info*)(ptr - sizeof(info)); }
+		TAllocator& Allocator;
+		
+		Block MetadataBlock;
+		info* Metadata;
+		Block Data;
+		
+		uint64_t Current;
+		uint64_t Allocated;
 	public:
-		RingBufferAllocator(TAllocator& allocator) : 
-			Allocator{ allocator }, 
-			ZeroNext{ true }
+		RingBufferSlicedAllocator(TAllocator& allocator) :
+			Allocator{ allocator },
+			Current{ 0 },
+			Allocated{ 0 }
 		{
-			Buffer = Allocator.allocate(SIZE);
-			Current = (uint8_t*) Buffer.Pointer;
-			getInfo(Current).reset();
+			Data = Allocator.allocate(SIZE * QTD);
+			MetadataBlock = Allocator.allocate(sizeof(info) * QTD);
+			Metadata = (info*)MetadataBlock.Pointer;
+			memset(Metadata, 0, MetadataBlock.Size);
 		}
 
-		bool owns(Block blk) const { return Buffer.owns(blk.Pointer); }
+		bool owns(Block blk) const
+		{
+			if (blk == Block::Null) return false;
+			return Data.owns(blk.Pointer);
+		}
+
+		bool isFull()
+		{
+			auto a = InterlockedCompareExchange(&Allocated, 0, 0);
+			return a >= QTD;
+		}
 
 		Block allocate(size_t s)
 		{
 			if (s == 0) return Block::Null;
-			if (Buffer == Block::Null) {
-				return Block::Null;
-			}
-			
-			bool restarted = false;
-			int p;
-			do
+
+			//todo do we need a fence here?
+			auto c = InterlockedCompareExchange(&Current, 0, 0 );
+			auto tries = QTD * 2;
+			while(tries > 0)
 			{
-				auto c = Current; //ATOMIC READ
-				auto realStart = c;
-				auto realSize = s + sizeof(info);
-				auto end = realStart + realSize;
-				p = Buffer.position(end);
-				if (p == 0)
+				auto r = InterlockedCompareExchange(&Metadata[c].Free, 1, 0);
+				if (r == 0)
 				{
-					auto& i = getInfo(c);
-					auto r = InterlockedCompareExchange(&i.Free, 0, 1);
-					if (r)
-					{
-						auto blockStart = c + sizeof(info);
-						auto block = Block{ blockStart, s };
-						//ATOMIC WRITE
-						Current = end;
-						//ATOMIC READ
-						if (ZeroNext)
-						{
-							i = getInfo(c);
-							//InterlockedGreaterThanExchange
-							if (i.Free > 1) InterlockedCompareExchange(&i.Free, 0, i.Free);
-						}
-					}
-						return block;
-					}
-					else 
-					{
-						InterlockedAdd(&Current, i.Size);
-					}
+					InterlockedIncrement(&Allocated);
+					auto at = (uint8_t*)Data.Pointer + (c * SIZE);
+					return { at, SIZE };
 				}
 				else
 				{
-					if (!restarted) {
-						restarted = true;
-						ZeroNext = false;
-						Current = (uint8_t*) Buffer.Pointer;
-						continue;
-					}
-					else break;
+					auto oldc = InterlockedCompareExchange(&Current, 0, 0);
+					auto newc = oldc + 1;
+					if (newc >= QTD) newc = 0;
+					c = InterlockedCompareExchange(&Current, newc, oldc);
 				}
-			} while (p != 0);
-
+				--tries;
+			}
 			return Block::Null;
 		}
 
 		bool deallocate(Block blk)
 		{
 			if (blk == Block::Null) return false;
-			if (owns(blk))
+			auto delta = (uint8_t*)blk.Pointer - (uint8_t*)Data.Pointer;
+			auto pos = delta / SIZE;
+
+			auto r = InterlockedCompareExchange(&Metadata[pos].Free, 0, 1);
+			if (r == 1)
 			{
-				getInfo(blk).reset();
+				InterlockedDecrement(&Allocated);
 				return true;
 			}
 			else return false;
 		}
 	};
 
-	template <size_t SIZE>
-	struct RingBufferAllocatorBuilder
+	template <size_t SIZE, size_t QTD>
+	struct RingBufferSlicedAllocatorBuilder
 	{
 		template<typename T>
-		RingBufferAllocator<T, SIZE> make(T& fallback) const { return { fallback }; }
+		RingBufferSlicedAllocator<T, SIZE, QTD> make(T& fallback) const { return { fallback }; }
 	};
-	template <class T, size_t SIZE>
-	auto operator << (T& a, const RingBufferAllocatorBuilder<SIZE> &b) { return b.make(a); }
-	template <size_t SIZE>
-	auto ringBufferAllocator() { return RingBufferAllocatorBuilder<SIZE>{}; }
+	template <class T, size_t SIZE, size_t QTD>
+	auto operator << (T& a, const RingBufferSlicedAllocatorBuilder<SIZE, QTD> &b) { return b.make(a); }
+	template <size_t SIZE, size_t QTD>
+	auto ringBufferSlicedAllocator() { return RingBufferSlicedAllocatorBuilder<SIZE, QTD>{}; }
 }
 
 #endif
