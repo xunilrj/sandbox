@@ -3,6 +3,7 @@
 
 #include <tuple>
 #include <type_traits>
+#include <utility>
 #include <Windows.h>
 
 //using size_t = unsigned long long;
@@ -83,20 +84,20 @@ namespace ma
 
 #define CLZ(x) CLZ1(x)
 
-	struct Block
+	struct BaseBlock
 	{
 		void *Pointer;
 		size_t Size;
 
-		Block(void* ptr, size_t size) :Pointer(ptr), Size(size)
+		BaseBlock(void* ptr, size_t size) : Pointer{ ptr }, Size{ size }
 		{
 		}
 
-		Block() : Pointer(nullptr), Size(0)
+		BaseBlock() : Pointer{ nullptr }, Size{ 0 }
 		{
 		}
 
-		virtual ~Block()
+		virtual ~BaseBlock()
 		{
 		}
 
@@ -118,8 +119,14 @@ namespace ma
 			if (p <= Pointer) return -1;
 			return 0; //impossible
 		}
+	};
 
+	struct Block : public BaseBlock
+	{
 		static const Block Null;
+		Block(void* ptr, size_t size) : BaseBlock ( ptr, size ) { }
+		Block() : BaseBlock( Pointer, Size ) { }
+		virtual ~Block() { }
 	};
 	const Block Block::Null{ nullptr, 0 };
 
@@ -129,32 +136,37 @@ namespace ma
 	////////////////////////////////////////////////////////////////////////////////////// Auto block
 
 	template <typename T>
-	struct AutoBlock : public Block
+	struct AutoBlock : public BaseBlock
 	{
+		static const AutoBlock Null;
+
 		T* Allocator;
 
-		AutoBlock(void* ptr, size_t size, T* allocator) :
-			Pointer{ ptr }, 
-			Size{ size },
+		AutoBlock(void* ptr, size_t size, T* allocator) : 
+			BaseBlock( ptr, size ),
 			Allocator{ allocator }
 		{
 		}
 
 		AutoBlock() : 
-			Pointer{ nullptr },
-			Size{ 0 },
+			BaseBlock( nullptr, 0 ),
 			Allocator{ nullptr }
 		{
 		}
 
 		~AutoBlock()
 		{
-			if (Allocator != nullptr)
-			{
-				Allocator.deallocate(this);
-			}
+			if (Allocator != nullptr) Allocator.deallocate(this);
 		}
 	};
+
+	template <typename T>
+	const AutoBlock<T> AutoBlock<T>::Null{ nullptr, 0, nullptr };
+
+	template <typename T>
+	bool operator == (const AutoBlock<T>& l, const AutoBlock<T>& r) { return l.Pointer == r.Pointer; }
+	template <typename T>
+	bool operator != (const AutoBlock<T>& l, const AutoBlock<T>& r) { return l.Pointer != r.Pointer; }
 
 	////////////////////////////////////////////////////////////////////////////////////// NULL ALLOCATOR
 
@@ -533,21 +545,18 @@ namespace ma
 	///////////////////////////////////////////////////////
 
 
-	template<class T>
-	constexpr auto hasAllocator(T x) -> decltype(x->Allocator, std::true_type{}) { return {}; }
-	constexpr auto hasAllocator(...) -> std::false_type { return {}; }
+	template<typename T>
+	constexpr auto hasAllocator() -> decltype(std::declval<T>()->Allocator, std::true_type{}) { return {}; }
+	template<typename T>
+	constexpr auto hasAllocator() -> std::false_type { return {}; }
 
 	template <typename T, typename TAllocator> 
 	T makeBlock(uint8_t*ptr, size_t size, TAllocator* allocator)
 	{
-		if constexpr (hasAllocator(T{}))
-		{
+		if constexpr (hasAllocator<T>())
 			return { ptr, size, allocator };
-		}
 		else
-		{
 			return { ptr, size };
-		}
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////// RING BUFFER ALLOCATOR
@@ -600,10 +609,9 @@ namespace ma
 		template<typename TBlock = Block>
 		TBlock allocate(size_t s)
 		{
-			if (s == 0) return Block::Null;
+			if (s == 0) return TBlock::Null;
 
-			//todo do we need a fence here?
-			auto c = InterlockedCompareExchange(&Current, 0, 0 );
+			auto c = InterlockedCompareExchange(&Current, 0, 0);
 			auto tries = QTD * 2;
 			while(tries > 0)
 			{
@@ -623,17 +631,19 @@ namespace ma
 				}
 				--tries;
 			}
-			return Block::Null;
+			return TBlock::Null;
 		}
 
-		bool deallocate(void* ptr)
+		template<typename T>
+		bool deallocate(T* ptr)
 		{
-			return deallocate({ ptr, 0 });
+			return deallocate<Block>({ ptr, 0 });
 		}
 
-		bool deallocate(Block blk)
+		template<typename TBlock = Block>
+		bool deallocate(TBlock blk)
 		{
-			if (blk == Block::Null) return false;
+			if (blk == TBlock::Null) return false;
 			auto delta = (uint8_t*)blk.Pointer - (uint8_t*)Data;
 			auto pos = delta / SIZE;
 

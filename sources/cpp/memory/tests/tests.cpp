@@ -283,6 +283,13 @@ struct Test
 {
 	int a;
 	float b;
+
+
+	Test(int a, float b) : 
+		a{ a }, 
+		b{ b }
+	{
+	}
 };
 
 TEST_CASE("WindowsTests", "[HeapTest]")
