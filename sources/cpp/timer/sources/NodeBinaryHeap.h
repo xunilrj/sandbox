@@ -175,16 +175,16 @@ class NodeBinaryHeap : protected TAlloc
 			|
 			p
 			/ \
-			pl  n
+		  pl    n
 				/ \
-			nl  nr
+			 nl    nr
 	*/
 	void RightSwap(Node*& parent, Node*& n)
 	{
-		auto pparent = parent->parent;
-		auto pleft = parent->left;
-		auto nleft = n->left;
-		auto nright = n->right;
+		Node* pparent = parent->parent;
+		Node* pleft = parent->left;
+		Node* nleft = n->left;
+		Node* nright = n->right;
 
 		n->parent = pparent;
 		n->right = parent;
@@ -265,7 +265,7 @@ class NodeBinaryHeap : protected TAlloc
 		return remove(id, n->right);
 	}
 public:
-	NodeBinaryHeap() : Size{0}, Root{nullptr} {	}
+	NodeBinaryHeap() : Size{0}, Root{nullptr}, Id {0} {	}
 
 	ui32 size() const {	return Size; }
 

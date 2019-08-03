@@ -33,11 +33,8 @@ void MyGemm( int m, int n, int k, double *A, int ldA,
     int pb = min( KC, k-p );        /* Last block may not be a full block */
     for ( int i=0; i<m; i+=MC ) {
       int ib = min( MC, m-i );        /* Last block may not be a full block */
-      for ( int j=0; j<n; j+=NC ) {
-        int jb = min( NC, n-j );        /* Last block may not be a full block */
         Gemm_JI_MRxNRKernel
-          ( ib, jb, pb, &alpha( i,p ), ldA, &beta( p,j ), ldB, &gamma( i,j ), ldC );
-      }
+          ( ib, n, pb, &alpha( i,p ), ldA, &beta( p,0 ), ldB, &gamma( i,0 ), ldC );
     }
   }
 }

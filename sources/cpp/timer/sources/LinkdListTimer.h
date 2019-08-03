@@ -17,9 +17,11 @@ class LinkedListTimer
 	};
 	ui32 Id;
 	LinkedList<TimerItem, TAlloc> List;
+	ui64 Now;
+
 	std::vector<ui32> expired;
 public:
-	LinkedListTimer() : Id{0}, List{}
+	LinkedListTimer() : Id{0}, List{}, Now{0}
 	{
 	}
 
@@ -36,11 +38,12 @@ public:
 		return qtd > 0;
 	}
 
-	const std::vector<ui32>& tick(ui64 now)
+	const std::vector<ui32>& tick(ui64 delta)
 	{
+		Now += delta;
 		this->expired.clear();
 		List.removeIf(
-			LAMBDA{ return x.when <= now; },
+			LAMBDA{ return x.when <= Now; },
 			LAMBDA{ this->expired.push_back(x.id); });
 		return expired;
 	}
