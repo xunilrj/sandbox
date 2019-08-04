@@ -6,7 +6,7 @@
 [Maximum Likelihood Estimation](texts/math/Statistics/maximumlikelihood.pdf)     
 [Probability as Set Measure](texts/math/probability)
 
-## Handouts
+### Handouts
 [Log](texts/math/Handout.Log.pdf)  
 [Exponentials](texts/math/Handout.Exp.pdf)  
 [Binomial Coefficient](texts/math/Handout.BinomialCoeffecient.pdf)  
@@ -15,13 +15,17 @@
 [Calculus](texts/math/Handout.Calculus.pdf)  
 [Real Analysis](texts/math/realanalysis.pdf)  
 
-# Probability and Statistics
+### Probability and Statistics
 [Probability](texts/math/Handout.Probability.pdf)  
 [Statistics](texts/math/Handout.Stats.pdf)  
 [Asymptotic Statistics](texts/math/AsymptoticStatistics.pdf)  
 [Linear Regression](texts/math/Handout.LinearRegression.pdf)  
 
 [Introduction to Probability Solutions](books/IntroductionToProbability/Solutions.pdf)
+
+### Linear Algebra
+
+[Singular Value Decomposition (SVD)](/texts/math/linearalgebra/svd.md)
 
 ### Problems
 [Car out of Gas, Likelihood and statistics using R](texts/math/Statistics/CarOutGas) 

@@ -2,9 +2,9 @@
 
 If you ask a mathematician to explain SVD (Singular Value Decomposition), or PCA (Principal Component Analysis), they will probably go around three rounds:
 
-    1 - First they will make a quick explanation using just layman terms;  
-    2 - they will very quickly get annoyed, but they own explanation and start over again using more mathematician lingo. You will probably get lost. This will lead to the third round;   
-    3 - the blackboard. Now you will get a whole course in Linear Algebra. You will likely find yourself in this situation.
+1. First they will make a quick explanation using just layman terms;  
+2. they will very quickly get annoyed, but they own explanation and start over again using more mathematician lingo. You will probably get lost. This will lead to the third round;   
+3. the blackboard. Now you will get a whole course in Linear Algebra. You will likely find yourself in this situation.
 
 Big Bang Theory Sheldon teaches Penny Physics short version  
 https://www.youtube.com/watch?v=sjHRdMCvUMA
@@ -226,3 +226,62 @@ Err... Well... we will have to use another method... and this method is: the SVD
 Not very impressive, but what would you expect with using just 1 of 1296 dimensions? This first best dimension corresponds to the first column of U, the first item in the diagonal of S and the first row of Vt. They are the "principal singular vectors" and the "principal singular value" of the "img" matrix.
 
 If we follow until the n-th column using this method, we get the "n" most important singular vector and singular values. We can call them the principal components of our original matrix, in our case, our image.
+
+## Complete Code
+
+    imgUrl = "https://static.thousandwonders.net/Cathedral.of.St..Michael.and.St..Gudula.original.28491.jpg";
+    urlwrite(imgUrl,"img.jpg");
+
+    % create grayscale image
+    img = imread("img.jpg");
+    imgR = img(:,:,1);
+    imgG = img(:,:,2);
+    imgB = img(:,:,3);
+    grayImg = imgR *0.30 + imgG*0.63 + imgB*0.07;
+    imwrite(grayImg, "gimg.jpg");
+
+    % run SVD
+    [U, S, V] = svd (grayImg);
+    Vt = V';
+
+    % checking theory
+    imgCheck = U*S*Vt
+    sum( (imgCheck - grayImg)(:) )
+
+    % generate img1
+    img1 = U(:,1)*S(1,1)*Vt(1,:);
+    imwrite(img1, "img1.jpg");
+    size(img1) == size(img(:,:,1)) % check size
+
+    % generate img500
+    
+    function retval = USV(i, U, S, Vt)
+        u = U(:,i);
+        s = S(i,i);
+        vt = Vt(i,:);
+        retval = u*s*vt;
+    endfunction
+
+    function retval = accumulateUSV(n, U, S, Vt)
+        retval = USV(1, U, S, Vt); % first step as we did above
+        for i = 2:n
+            imgI = USV(i, U, S, Vt); % current Rank-1 matrix
+            retval += imgI; % rank-1 update
+
+            imgParcial = retval / i; % only because image must be in [0, 255] range
+            %save the image
+            imwrite(imgParcial, strcat("img", num2str(i), ".jpg"));
+        endfor
+        retval /= n; % normalize result
+    endfunction
+
+    accumulateUSV(500, U, S, Vt);
+
+    % another possible implementation of img500
+
+    u500 = U(:,1:500);
+    s500 = S(1:500,1:500);
+    vt500 = Vt(1:500,:);
+    img500 = u500*s500*vt500 / 500;
+    imwrite(img500, "img500D.jpg");
+
