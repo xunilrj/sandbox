@@ -1,0 +1,29 @@
+h1, h2 {
+    font-family: Lato;
+  }
+  
+  .json-pretty {
+      padding-left: 30px;
+      padding-right: 30px;
+  }
+  .json-selected {
+      background-color: rgba(139, 191, 228, 0.19999999999999996);
+  }
+  
+  .json-string {
+      color: #6caedd;
+  }
+  
+  .json-key {
+      color: #ec5f67;
+  }
+  
+  .json-boolean {
+      color: #99c794;
+  }
+  
+  .json-number {
+      color: #99c794;
+  }
+
+/*# sourceMappingURL=/milkLanguage.e31bb0bc.css.map */
