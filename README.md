@@ -39,6 +39,9 @@
 ### Computer Graphics
 [Computer Graphics Guide](/texts/dev/ComputerScience/Computer%20Graphics)
 
+### Concurrency
+[Concurrency](/texts/dev/ComputerScience/Concurrency)
+
 ### Algorithms and Data Structures
 [Compression - LZ77](sources/javascript/compression/)  
 [CRTD - Conflict-free Replicated Data Type](courses/kth-distributed-algorithms-1/crt)  
