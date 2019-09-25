@@ -1,2 +1,4 @@
-[Guide to Computer Graphics](/Computer Graphics)
-[Guide toConcurrency](/Concurrency)
+# Guides
+
+[Guide to Computer Graphics](/Computer%20Graphics)  
+[Guide to Concurrency](/Concurrency)
