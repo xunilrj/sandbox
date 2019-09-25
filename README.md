@@ -34,11 +34,16 @@
 [Server Architecture](texts/dev/ServerArchitectureWindowsAPIandASPNET.pdf)   
 [Can OO Strike Back?](books/TheTheoryOfObjects/CanOOStrikeBack.md)  
 [Understanding SQL Server 2008 R2 Execution Plan - Part 1](texts/dev/Understanding%20SQL%20Server%202008%20R2%20Execution%20Plan%20-%20Part%201.pdf)   
-[Who is Afraid of Parsing](texts/dev/WhoIsAfraidOfParsing.md)  
+[Who is Afraid of Parsing](texts/dev/WhoIsAfraidOfParsing.md)
+
+### Computer Graphics
+[Computer Graphics Guide](/texts/dev/ComputerScience/Computer%20Graphics)
 
 ### Algorithms and Data Structures
 [Compression - LZ77](sources/javascript/compression/)  
-[CRTD - Conflict-free Replicated Data Type](courses/kth-distributed-algorithms-1/crtd)    
+[CRTD - Conflict-free Replicated Data Type](courses/kth-distributed-algorithms-1/crt)  
+[Bitfield](sources/cpp/bitfield)  
+[Memory Allocator](/sources/cpp/memory)
 
 ### Linux
 [Linux Kernel Development](sources/unix/moddev/readme.md)    
