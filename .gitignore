@@ -270,3 +270,8 @@ jspm_packages/
 /sources/cousera-datascience/capstone/final/
 /sources/cousera-datascience/capstone/temp/
 /.build
+
+.ionide/
+.cache/
+sources/javascript/catholicparser/scrapped/
+dist/

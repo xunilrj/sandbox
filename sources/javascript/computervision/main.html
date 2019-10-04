@@ -1,0 +1,162 @@
+<html>
+    <head>
+        
+        <style>
+.center {
+    margin: 0 auto;
+    width: 800px;
+}
+
+.content-center {
+    text-align: center;
+}
+
+.checkmark__circle {
+  stroke-dasharray: 166;
+  stroke-dashoffset: 166;
+  stroke-width: 2;
+  stroke-miterlimit: 10;
+  stroke: #7ac142;
+  fill: none;
+  animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+}
+
+.checkmark {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: inline;
+  stroke-width: 5;
+  stroke: #fff;
+  stroke-miterlimit: 10;
+  box-shadow: inset 0px 0px 0px #7ac142;
+  animation: fill .4s ease-in-out .4s forwards, scale .3s ease-in-out .9s both;
+}
+
+.checkmark__check {
+  transform-origin: 50% 50%;
+  stroke-dasharray: 48;
+  stroke-dashoffset: 48;
+  animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+}
+
+@keyframes stroke {
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes scale {
+  0%, 100% {
+    transform: none;
+  }
+  50% {
+    transform: scale3d(1.1, 1.1, 1);
+  }
+}
+@keyframes fill {
+  100% {
+    box-shadow: inset 0px 0px 0px 30px #7ac142;
+  }
+}
+
+li .checkmark { display: none }
+li.ok { color: green; }
+li.ok .checkmark { display: inline }
+li.nok { color: red; }
+
+canvas.panning {cursor: grabbing !im}
+        </style>
+    </head>
+    <body>
+        <script>
+            const callback = function(mutationsList, observer) {
+                for(let mutation of mutationsList) {
+                    if (mutation.type === 'attributes' && 
+                        mutation.attributeName == "class" &&
+                        mutation.oldValue != "") {
+                        var x = mutation.target.dataset.type +
+                            "_" +
+                            mutation.oldValue +
+                            "_" +
+                            mutation.target.className;
+                        if(window[x])
+                            window[x](mutation.target);
+                    }
+                }
+            };
+            const observer = new MutationObserver(callback);
+            const config = { 
+                attributes: true, 
+                attributeFilter: ["class"], 
+                attributeOldValue: true,
+            subtree: true };
+            observer.observe(document.getRootNode(), config);
+        </script>
+        <script>
+            function check_nok_ok(target) {
+                console.log(target);
+            }
+            function check_ok_nok(target) {
+                console.log(target);
+            }
+        </script>
+        <div class="center content-center">
+            <img id="imgExample" class="content-center" src="picture.jpg" width="600" />
+        </div>
+        <div class="center ">
+            <h1>Grayscale</h1>
+            <canvas id="grayscaleCanvas" width="800" height="300" style="border: 1px dashed">
+            </canvas>
+            <div>
+                <input id="grayscaleShowDiff" type="checkbox">Show difference between yours and the expected (everything black is good!)</input>
+            </div>
+            <div>Checks</div>
+            <ul>
+                    <li id="grayscalePixelsRead" data-type="check">
+                        <span>Each pixel must be read only once</span>
+                        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+                            <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/>
+                            <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+                        </svg>
+                    </li>
+                    <li id="grayscalePixelsWritten">Each pixel must be written only once</li>
+                <li id="grayscalePixelsCheck">Every pixel grayscale is correct</li>
+            </ul>
+            <div id="grayscaleEditor" style="height:300px">
+//Help
+// img.width
+// img.height
+// img.getPixel(x,y)
+// img.setPixel(x,y, color)
+//  color can be: [r,g,b,a], [r,g,b], or luminance (simple number)
+// use 3 decimal places for the color coefficients.
+function toGrayscale(img) {
+}
+            </div>
+            <script src="./grayscale.js"></script>
+        </div>
+        <div class="center ">
+            <h1>Simple Blur</h1>
+            <canvas id="simpleBlurCanvas" width="800" height="300" style="border: 1px dashed">
+            </canvas>
+            <div>Checks</div>
+            <ol>
+                <li id="grayscalePixelsCheck">Simple Blur pixels</li>
+            </ol>
+            <div id="simpleBlurEditor" style="height:200px">
+            </div>
+            <script src="./simpleBlur.js"></script>
+        </div>
+        <div>.</div>
+        <div>.</div>
+        <div>.</div>
+        <div>.</div>
+        <div>.</div>
+        <div>.</div>
+        <div>.</div>
+        <div>.</div>
+        <div>.</div>
+        <div>.</div>
+        <div>.</div>
+    </body>
+</html>

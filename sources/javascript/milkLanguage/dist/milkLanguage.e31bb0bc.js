@@ -2057,7 +2057,10 @@ var autoKeyword = _bennu.text.string('auto');
 var letterDigit = _bennu.parse.either(_bennu.text.letter, _bennu.text.digit);
 
 var identifier = _bennu.parse.bind(_bennu.parse.many(letterDigit), function (x) {
-  return p(toString(x));
+  return p({
+    type: "Identifier",
+    name: toString(x)
+  });
 });
 
 var propertyAcessor = _bennu.parse.bind(_bennu.parse.next(navigateOperator, identifier), function (a, b, c) {
@@ -2107,7 +2110,7 @@ var objectInstance = _bennu.parse.binds(_bennu.parse.enumeration(_bennu.parse.op
   });
 });
 
-var initVariable = _bennu.parse.binds(_bennu.parse.enumeration(autoKeyword, unlimitedSpace, identifier, unlimitedSpace, assignOperator, unlimitedSpace, objectInstance, endCommand), function (a, b, c, d, e, f, g) {
+var initVariable = _bennu.parse.binds(_bennu.parse.enumeration(autoKeyword, unlimitedSpace, identifier, unlimitedSpace, assignOperator, unlimitedSpace, objectInstance), function (a, b, c, d, e, f, g) {
   return p({
     type: "InitVariable",
     varType: "auto",
@@ -2136,7 +2139,9 @@ var typeDeclaration = _bennu.parse.binds(_bennu.parse.enumeration(typeKeyword, u
   }, 'typeDeclaration');
 });
 
-var functionCall = _bennu.parse.binds(_bennu.parse.enumeration(identifier, _bennu.text.character('('), _bennu.parse.eager(_bennu.lang.sepBy(_bennu.text.character(','), identifier)), _bennu.text.character(')')), function (a, b, c) {
+var functionCallArgument = _bennu.parse.choice(initVariable, identifier);
+
+var functionCall = _bennu.parse.binds(_bennu.parse.enumeration(identifier, _bennu.text.character('('), _bennu.parse.eager(_bennu.lang.sepBy(_bennu.text.character(','), functionCallArgument)), _bennu.text.character(')')), function (a, b, c) {
   return p({
     type: "FunctionCall",
     name: a,
@@ -2144,7 +2149,7 @@ var functionCall = _bennu.parse.binds(_bennu.parse.enumeration(identifier, _benn
   });
 });
 
-var expression = _bennu.parse.choice(initVariable, functionCall);
+var expression = _bennu.parse.choice(_bennu.lang.then(initVariable, endCommand), _bennu.lang.then(functionCall, endCommand));
 
 var start = _bennu.parse.eager(_bennu.lang.sepEndBy(unlimitedSpace, _bennu.parse.choice(typeDeclaration, expression)));
 
@@ -2158,19 +2163,19 @@ function toJS(AST) {
       code.push(r);
     });
   } else if (current.type == "TypeDeclaration") {
-    code.push("function ".concat(current.id, " () {\n"));
+    code.push("function ".concat(current.id.name, " () {\n"));
     current.fields.forEach(function (x) {
-      code.push("this.".concat(x.name, " = null;\n"));
+      code.push("this.".concat(x.name.name, " = null;\n"));
     });
     code.push("}\n");
   } else if (current.type == "InitVariable") {
     code.push("function f1 () {\n");
-    code.push("$result = {};\n");
+    code.push("var $return = {};\n");
     var initValue = toJS(current.init);
     code.push("".concat(initValue));
-    code.push("return $result;\n");
+    code.push("return $return;\n");
     code.push("}\n");
-    code.push("var ".concat(current.id, " = f1();\n"));
+    code.push("var ".concat(current.id.name, " = f1();\n"));
   } else if (current.type == "Object") {
     current.body.forEach(function (x) {
       var line = toJS(x);
@@ -2178,24 +2183,28 @@ function toJS(AST) {
     });
   } else if (current.type == "AssignmentExpression") {
     var initValue = toJS(current.init);
-    code.push("$return.".concat(current.id.id, " = ").concat(initValue));
+    code.push("$return.".concat(current.id.id.name, " = ").concat(initValue));
   } else if (current.type == "StringConstant") {
     return "'".concat(current.value, "'");
   } else if (current.type == "NumberConstant") {
     return current.value;
   } else if (current.type == "FunctionCall") {
-    code.push("".concat(current.name, "("));
+    var name = toJS(current.name);
+    var args = [];
 
     for (var i = 0; i < current.arguments.length; ++i) {
       var x = current.arguments[i];
-      code.push(x);
-
-      if (i < current.arguments.length - 1) {
-        code.push(',');
-      }
+      code.push("var a".concat(i, " = ").concat(toJS(x), ";\n"));
+      args.push("a".concat(i));
     }
 
     ;
+    code.push("".concat(name, "("));
+    code.push(args.join(","));
+    code.push(");\n");
+  } else if (current.type == "Identifier") {
+    if (current.name == "print") return "console.log";
+    return current.name;
   }
 
   return code.join("");
@@ -2218,6 +2227,8 @@ function parseCode() {
   var code = document.getElementById("code");
 
   try {
+    appDiv.innerHTML = "";
+
     var pr = _bennu.incremental.runInc(start);
 
     pr = _bennu.incremental.provideString(code.value, pr);
@@ -2225,7 +2236,9 @@ function parseCode() {
     var r = _bennu.incremental.finish(pr);
 
     appDiv.append(renderJson(r));
-    console.log(toJS(r));
+    var code = toJS(r);
+    console.log(code);
+    eval(code);
   } catch (e) {
     console.error(e);
     appDiv.append(renderJson(e));
@@ -2263,7 +2276,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53561" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54492" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

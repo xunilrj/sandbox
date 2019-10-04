@@ -442,9 +442,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-HWND createWindow(HINSTANCE hInstance, const std::wstring& className, int nCmdShow)
+HWND createWindow(HINSTANCE hInstance, const std::wstring& className, int nCmdShow,
+    uint32_t w = 640, uint32_t h = 480)
 {
-  WNDCLASSEXW wc;
+    WNDCLASSEXW wc;
 	wc.cbSize = sizeof(WNDCLASSEX);
 	wc.style = 0;
 	wc.lpfnWndProc = WndProc;
@@ -458,7 +459,6 @@ HWND createWindow(HINSTANCE hInstance, const std::wstring& className, int nCmdSh
 	wc.lpszClassName = className.c_str();
 	wc.hIconSm = LoadIcon(NULL, IDI_APPLICATION);
 	RegisterClassExW(&wc);
-
     
 	HWND hwnd = CreateWindowExW(
 		WS_EX_CLIENTEDGE,
@@ -471,15 +471,45 @@ HWND createWindow(HINSTANCE hInstance, const std::wstring& className, int nCmdSh
 	ShowWindow(hwnd, nCmdShow);
 	UpdateWindow(hwnd);
 
+    auto dwStyle = (DWORD)GetWindowLongPtrW(hwnd, GWL_STYLE) ;
+    auto dwExStyle = (DWORD)GetWindowLongPtrW(hwnd, GWL_EXSTYLE) ;
+    auto menu = GetMenu(hwnd) ;
+    auto rc = RECT{ 0, 0, (LONG)w, (LONG)h } ;
+
+    AdjustWindowRectEx(&rc, dwStyle, menu ? TRUE : FALSE, dwExStyle);
+    SetWindowPos(hwnd, NULL, 0, 0, 
+        rc.right - rc.left,
+        rc.bottom - rc.top,
+        SWP_NOZORDER | SWP_NOMOVE) ;
+
     return hwnd;
 }
 
+#include <functional>
+#include <chrono>
+template<typename TimeT = std::chrono::milliseconds, typename F, typename ...Args>
+auto duration(F&& func, Args&&... args)
+{
+    auto start = std::chrono::steady_clock::now();
+    auto r = std::invoke(std::forward<decltype(func)>(func), forward<Args>(args)...);
+    return std::make_tuple(
+        std::chrono::duration_cast<TimeT>(std::chrono::steady_clock::now()-start),
+        r);
+}
 
 struct LoopThreadParams
 {
     HINSTANCE hInstance;
 	HWND hwnd;
 };
+
+template <typename T>
+void SetWindowText(HWND hwnd, T value)
+{
+    std::wstringstream ss;
+    ss << value;
+    SetWindowTextW(hwnd, ss.str().c_str());
+}
 
 DWORD WINAPI LoopThread(LPVOID lpParam)
 {
@@ -504,7 +534,8 @@ DWORD WINAPI LoopThread(LPVOID lpParam)
 
     while(true) 
     {
-        auto imgIndex = waitAcquireNextImage(device, swapChain);
+        auto [dur, imgIndex] = duration([&]() { return waitAcquireNextImage(device, swapChain); });
+        SetWindowText(hwnd, std::chrono::duration_cast<std::chrono::milliseconds>(dur).count());
         queue << present(swapChain, imgIndex);        
     }
 }

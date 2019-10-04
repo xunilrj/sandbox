@@ -55,8 +55,12 @@ Tomas Akenine-Möller; Eric Haines; Naty Hoffman; Tomas Möller;
 http://www.realtimerendering.com/
 
 
-## Part 1 - Introduction
+## Why Use WebGL
 
+The Case for Teaching Computer Graphics with WebGL: A 25-Year Perspective
+https://ieeecs-media.computer.org/assets/pdf/mcg2017020106.pdf
+
+## Part 1 - Introduction
 
 To see:
 

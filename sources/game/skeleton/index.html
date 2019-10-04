@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8'>
+<style>
+    body {
+        background-color: white;
+    }
+</style>
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="//golden-layout.com/assets/js/goldenlayout.min.js"></script>
+<link type="text/css" rel="stylesheet" href="//golden-layout.com/assets/css/goldenlayout-base.css" />
+<link type="text/css" rel="stylesheet" href="//golden-layout.com/assets/css/goldenlayout-dark-theme.css" />
+</head>
+<body>
+<script id="vshader" type="webgl/vertexshader">
+        attribute vec2 a_coords;
+        attribute vec2 a_texcoords;
+        uniform mat3  u_matrix;
+
+        varying highp vec2 out_texcoords;
+        void main() {
+        vec3 pos = vec3(a_coords, 1.0) * u_matrix;
+        gl_Position = vec4(pos, 1.0);
+        out_texcoords = a_texcoords;
+        }
+    </script>
+    <script id="fshader" type="webgl/fragmentshader">
+        precision mediump float;
+
+        uniform sampler2D u_texture0;
+        varying highp vec2 out_texcoords;
+
+        void main() {
+        gl_FragColor = texture2D(u_texture0, out_texcoords);
+        }
+    </script>
+    <script src="./index.js"></script>
+</body>
+</html>

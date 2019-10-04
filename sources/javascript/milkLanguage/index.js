@@ -40,7 +40,7 @@ const letterDigit = parse.either(
     text.digit);
 const identifier = parse.bind(
     parse.many(letterDigit),
-    x => p(toString(x))
+    x => p({type:"Identifier", name: toString(x)})
 );
 
 const propertyAcessor = parse.bind(
@@ -112,8 +112,7 @@ const initVariable = parse.binds(
   unlimitedSpace,
   assignOperator,
   unlimitedSpace,
-  objectInstance,
-  endCommand
+  objectInstance
 ), (a,b,c,d,e,f,g) => p({
   type: "InitVariable",
   varType: "auto",
@@ -159,6 +158,10 @@ const typeDeclaration = parse.binds(
     fields: e
 }, 'typeDeclaration'));
 
+const functionCallArgument = parse.choice(
+    initVariable,
+    identifier,
+);
 const functionCall = parse.binds(
     parse.enumeration(
         identifier,
@@ -166,10 +169,10 @@ const functionCall = parse.binds(
         parse.eager(
             lang.sepBy(
                 text.character(','),
-                identifier
+                functionCallArgument
             )
         ),
-        text.character(')'),
+        text.character(')')
     ),
 (a,b,c) => p({
     type:"FunctionCall",
@@ -178,8 +181,8 @@ const functionCall = parse.binds(
 }));
 
 const expression = parse.choice(
-    initVariable,
-    functionCall
+    lang.then(initVariable, endCommand),
+    lang.then(functionCall, endCommand),
 );
 const start = parse.eager(
     lang.sepEndBy(unlimitedSpace,
@@ -203,20 +206,20 @@ function toJS(AST)
         });
     }
     else if(current.type == "TypeDeclaration") {
-        code.push(`function ${current.id} () {\n`);
+        code.push(`function ${current.id.name} () {\n`);
         current.fields.forEach(x => {
-            code.push(`this.${x.name} = null;\n`);
+            code.push(`this.${x.name.name} = null;\n`);
         });
         code.push("}\n");
     }
     else if(current.type == "InitVariable") {
         code.push("function f1 () {\n");
-        code.push(`$result = {};\n`);
+        code.push(`var $return = {};\n`);
         var initValue = toJS(current.init);
         code.push(`${initValue}`);
-        code.push("return $result;\n");
+        code.push("return $return;\n");
         code.push("}\n");
-        code.push(`var ${current.id} = f1();\n`);
+        code.push(`var ${current.id.name} = f1();\n`);
     }
     else if(current.type == "Object") {
         current.body.forEach(x => {
@@ -226,7 +229,7 @@ function toJS(AST)
     }
     else if(current.type == "AssignmentExpression") {
         var initValue = toJS(current.init);
-        code.push(`$return.${current.id.id} = ${initValue}`);
+        code.push(`$return.${current.id.id.name} = ${initValue}`);
     }
     else if (current.type == "StringConstant") {
         return `'${current.value}'`;
@@ -235,14 +238,23 @@ function toJS(AST)
         return current.value;
     }
     else if (current.type == "FunctionCall") {
-        code.push(`${current.name}(`);
+        var name = toJS(current.name);
+
+        var args = [];
         for(var i = 0;i < current.arguments.length; ++i) {
             var x = current.arguments[i];
-            code.push(x);
-            if(i < current.arguments.length - 1) {
-                code.push(',');
-            }
+            code.push(`var a${i} = ${toJS(x)};\n`);
+            args.push(`a${i}`);        
         };
+
+        code.push(`${name}(`);
+        code.push(args.join(","));
+        code.push(");\n");
+    }
+    else if (current.type == "Identifier") {
+        if(current.name == "print")
+            return "console.log";
+        return current.name;
     }
 
     return code.join("");
@@ -266,12 +278,15 @@ function parseCode() {
     var code = document.getElementById("code");
     try
     {
+        appDiv.innerHTML = "";
         var pr = incremental.runInc(start);        
         pr = incremental.provideString(code.value, pr);
         const r = incremental.finish(pr);
 
         appDiv.append(renderJson(r));
-        console.log(toJS(r));
+        var code = toJS(r);
+        console.log(code);
+        eval(code);
     }
     catch (e)
     {
