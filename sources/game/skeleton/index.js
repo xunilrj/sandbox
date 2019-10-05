@@ -1,6 +1,8 @@
 import spine from './spine.json';
 import {div, span, button} from 'hyperaxe';
 import atlas1 from './atlas1.png';
+import atlasTexture from './atlas1.txt';
+import 'babel-polyfill';
 
 function gen(i, f, j = "")
 {
@@ -34,7 +36,7 @@ ${gen(n, (i) => `\tvec3 pos${i} = ${vertexName}${i}.z * (vec3(${vertexName}${i}.
     out_texcoords = a_texcoords;
 }
 `;
-console.log(vshader);
+//console.log(vshader);
     const fshader = ` precision mediump float;
 uniform sampler2D u_texture0;
 varying highp vec2 out_texcoords;
@@ -79,7 +81,7 @@ void main() {
         );
     }
 
-    shader.fill = (bones, tex2f, indices) => {
+    shader.fill = (bones, tex2f, indices, texAtlas, texName) => {
         var instance = {
             n: n,
             positionBuffers: [],
@@ -88,9 +90,12 @@ void main() {
             qtd: indices.length, 
         };
 
+        var part = texAtlas.parts[texName];
         for(var i = 0;i < tex2f.length; i+=2)
         {
-            var [u,v] = adjustUV(tex2f[i+0], tex2f[i+1]);
+            var [u,v] = adjustUV(
+                texAtlas.size, part.xy, part.size,
+                tex2f[i+0], tex2f[i+1]);
             tex2f[i+0] = u;
             tex2f[i+1] = v;
         }
@@ -183,7 +188,7 @@ void main() {
         return instance;
     }
 
-    shader.render = (instance, bones) => {
+    shader.render = (instance, bones, texture) => {
         var {positionBuffers, 
             texCoordBuffer, 
             indexBuffer,
@@ -192,8 +197,8 @@ void main() {
         gl.useProgram(shaderProgram);
 
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, instance.texture0);
-        gl.uniform1i(shader.u_texture0, instance.texture0);
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.uniform1i(shader.u_texture0, texture);
 
         for(var i = 0; i < n; ++i)
         {
@@ -215,6 +220,8 @@ void main() {
 
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
         gl.drawElements(gl.TRIANGLES, qtd, gl.UNSIGNED_SHORT, 0);
+
+        gl.bindTexture(gl.TEXTURE_2D, gl.noTexture);
     }
 
     return shader;
@@ -311,26 +318,76 @@ function immediateMode2D(gl)
 
         let r = {texture: texture, ready: false};
 
-        const image = new Image();
-        image.onload = function() {
-            gl.bindTexture(gl.TEXTURE_2D, texture);
-            gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
+        r.p = new Promise((ok, rej) => {
+            const image = new Image();
+            image.onload = function() {
+                gl.bindTexture(gl.TEXTURE_2D, texture);
+                gl.texImage2D(gl.TEXTURE_2D, level, internalFormat,
                         srcFormat, srcType, image);
 
-            //if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
-                gl.generateMipmap(gl.TEXTURE_2D);
-            // } else {
-            //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-            //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-            //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-            // }
-
-            r.ready = true;
-        };
-        image.src = url;
+                //if (isPowerOf2(image.width) && isPowerOf2(image.height)) {
+                    gl.generateMipmap(gl.TEXTURE_2D);
+                // } else {
+                //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+                //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+                //     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+                // }
+                r.ready = true;
+                ok(image);
+            };
+            image.onerror = function(e) {
+                rej(e);
+            };
+            image.src = url;
+        });
 
         return r
     }
+
+    gl.newAtlasTexture = async (url, urls) => {        
+        var res = await fetch(url);
+        var txt = await res.text();
+        
+        var lines = txt.split("\n");
+        var iline = 0;
+        var file = {
+            parts: {}
+        };
+        file.name = lines[iline].trim(); ++iline;
+        var tex = gl.newTexture(urls[file.name]);
+        await tex.p;
+        file.texture = tex.texture;
+        while(lines[iline].indexOf(":") >= 0)
+        {
+            var propParts = lines[iline].split(":");                
+            file[propParts[0].trim()] = propParts[1].trim();
+
+            ++iline;
+        }
+        file.size = file.size.split(",").map(x => parseInt(x));
+
+        while(iline < lines.length)
+        {
+            var part = {};
+            part.name = lines[iline].trim(); ++iline;
+            file.parts[part.name] = part;
+            while(iline < lines.length && lines[iline].indexOf(":") >= 0)
+            {
+                var propParts = lines[iline].split(":");                
+                part[propParts[0].trim()] = propParts[1].trim();
+
+                ++iline;
+            }
+            part.xy = part.xy.split(",").map(x => parseInt(x));
+            part.size = part.size.split(",").map(x => parseInt(x));
+        }
+        
+        var atlas = {
+            files: [file]
+        };
+
+        return atlas;
+    };
     ////////////////////////////////////////// VERTICES
     
     positionBuffer = gl.createBuffer();
@@ -598,52 +655,43 @@ function drawNode(gl, node)
         drawNode(gl, x);
     });
 }
-var spineVertices = [];
-var spineBones = [];    
-function prepareModel()
-{
-    for(var i = 0; i < head.vertices.length; ++i)
-    {
-        var count = head.vertices[i]; ++i;
-        var bx = 0, by = 0;
-        var bones = [];
-        for(var j = 0; j < count; ++j)
-        {
-            var b = byName[
-                spine.spineboy.bones[
-                    head.vertices[i]
-                ].name]; ++i;
-            
-            var bbx = head.vertices[i]; ++i;
-            var bby = head.vertices[i]; ++i;
-            var w = head.vertices[i]; ++i;
-            bones.push([bbx, bby, b,w]);
 
-            bx += (b.worldx + bbx) * w;
-            by += (b.worldy + bby) * w;
-        }
-        --i;
-        spineVertices.push(bx);
-        spineVertices.push(by);
-        spineBones.push(bones);
+function prepareModel(model, name, shader, texture)
+{
+    console.log(texture);
+    var skin = {};
+    var instances = [];
+
+    var slotName = "spineboy/head";
+    var attachment = model.skins[name].head[slotName];
+    if(attachment.type === "mesh")
+    {
+        var i = shader.fill(
+            attachment.vertices,
+            attachment.uvs,
+            attachment.triangles,
+            texture,
+            slotName
+        );
+        instances.push(i);
     }
-    console.log(spine.spineboy);
-    console.log(spineBones);
+
+    skin.render = () =>
+    {
+        instances.forEach(x => {            
+            shader.render(x, tree.byIndex, texture.texture);
+        });        
+    }
+
+    return skin;
 }
 
-function adjustUV(u, v)
+function adjustUV(size, xy, wh, u, v)
 {
-// spineboy/head
-//   rotate: false
-//   xy: 571, 582
-//   size: 146, 161
-//   orig: 146, 161
-//   offset: 0, 0
-//   index: -1
-    var sx = 571/1024;
-    var sy = 582/1024;
+    var sx = xy[0]/size[0];
+    var sy = xy[1]/size[1];
 
-    return [sx + u*146/1024, sy + v*161/1024];
+    return [sx + u*wh[0]/size[0], sy + v*wh[1]/size[1]];
 }
 
 var atlas1Texture;
@@ -710,7 +758,7 @@ let startGLOK;
 const startGL = new Promise((ok) => {
     startGLOK = ok;
 });
-startGL.then(function (rootEl) {    
+startGL.then(async (rootEl) => {    
     var canvas = rootEl.querySelectorAll("canvas")[0];
 
     var zoomScale = 1;
@@ -760,12 +808,9 @@ startGL.then(function (rootEl) {
             lmousey = mousey;
         }
     }
-
     
     var gl = canvas.getContext("webgl");
     immediateMode2D(gl);
-
-    atlas1Texture = gl.newTexture(atlas1);
 
     ///////////////////////////////////////// DRAW
     var fps = rootEl.querySelectorAll("#fps")[0];
@@ -777,14 +822,16 @@ startGL.then(function (rootEl) {
     gl.matrixMode(gl.MODELVIEW);
     gl.identity2f();
     updateNode(gl, tree);
-    prepareModel();
-
+    
+    atlas1Texture = gl.newTexture(atlas1);
+    var atlas = await gl.newAtlasTexture(atlasTexture, {
+        "atlas1.png": atlas1
+    });
     var shader = createSkinnedShader(gl, 6);
-    var hi = shader.fill(
-        head.vertices,
-        head.uvs,
-        head.triangles
-    );
+    var skin = prepareModel(spine.spineboy, 
+        "default", 
+        shader, 
+        atlas.files[0]);
     
     function render(timestamp) {
         if (!lastTimestamp) lastTimestamp = timestamp - 16;
@@ -812,13 +859,8 @@ startGL.then(function (rootEl) {
         gl.matrixMode(gl.MODELVIEW);
         gl.identity2f();
         updateNode(gl, tree);
-        if(atlas1Texture.ready) {
-            hi.texture0 = atlas1Texture.texture            
-            shader.render(hi, tree.byIndex);
-            gl.bindTexture(gl.TEXTURE_2D, gl.noTexture);
-        }
+        skin.render();
         drawNode(gl, tree);
-
 
         tx += panx;
         ty += pany;
