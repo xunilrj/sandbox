@@ -81,7 +81,7 @@ void main() {
         );
     }
 
-    shader.fill = (bones, tex2f, indices, texAtlas, texName) => {
+    shader.fill = (vertices, tex2f, indices, texAtlas, texName) => {
         var instance = {
             n: n,
             positionBuffers: [],
@@ -114,12 +114,12 @@ void main() {
         var bones = [];
         var bonei = {};
 
-        for(var i = 0; i < head.vertices.length; ++i)
+        for(var i = 0; i < vertices.length; ++i)
         {
-            var count = head.vertices[i]; ++i;
+            var count = vertices[i]; ++i;
             for(var j = 0; j < count; ++j)
             {
-                var bi = head.vertices[i]; ++i;
+                var bi = vertices[i]; ++i;
                 if(!bonei[bi])
                 {
                     bones.push(bi)
@@ -134,23 +134,23 @@ void main() {
         if(bones.length > n) console.error("too many bones", bones);
         instance.bones = bones;    
         
-        for(var i = 0; i < head.vertices.length; ++i)
+        for(var i = 0; i < vertices.length; ++i)
         {
-            var count = head.vertices[i]; ++i;
+            var count = vertices[i]; ++i;
             var j = 0;
 
             var assignedBones = Array.from({length: n}, (el, index) => index);
             for(j = 0; j < count; ++j)
             {
-                var bi = bonei[head.vertices[i]]; ++i;
+                var bi = bonei[vertices[i]]; ++i;
                 if(!bi) console.error("bone index");
                 
                 var index = assignedBones.indexOf(bi);
                 if (index !== -1) assignedBones.splice(index, 1);
 
-                var bbx = head.vertices[i]; ++i;
-                var bby = head.vertices[i]; ++i;
-                var w = head.vertices[i]; ++i;
+                var bbx = vertices[i]; ++i;
+                var bby = vertices[i]; ++i;
+                var w = vertices[i]; ++i;
 
                 var buffer = vbuffer[bi];
                 buffer.push(bbx);
@@ -561,41 +561,6 @@ function immediateMode2D(gl)
     }
 }
 
-var tree = {};
-var byName = {};
-var bones = spine.spineboy.bones;
-bones.forEach((x,i) => {
-    var node
-    if(!x.parent) {
-        node = tree = {
-            bone: x,
-            children: [],
-            state: {},
-            byIndex: {}
-        };
-        
-        byName[x.name] = tree;
-    } else {
-        node = {
-            bone: x,
-            children: [],
-            state: {}
-        };
-        byName[x.name] = node;
-        byName[x.parent].children.push(node);
-    }
-
-    tree.byIndex[i] = node;
-    node.x = x.x || 0;
-    node.y = x.y || 0;    
-    node.sx = x.scaleX || 1;
-    node.sy = x.scaleY || 1;
-    node.angle = x.rotation*2*3.14159/360 || 0;
-    node.debugLength = x.length || 10;
-    node.selected = false;
-});
-var head = spine.spineboy.skins.default.head["spineboy/head"];
-
 function updateNode(gl, node)
 {
     gl.pushMatrix();        
@@ -656,7 +621,50 @@ function drawNode(gl, node)
     });
 }
 
-function prepareModel(model, name, shader, texture)
+function prepareSkeleton(model)
+{
+    var tree = {};
+    var byName = {};
+    var bones = model.bones;
+    bones.forEach((x,i) => {
+        var node
+        if(!x.parent) {
+            node = tree = {
+                bone: x,
+                children: [],
+                state: {},
+                byIndex: {}
+            };
+            
+            byName[x.name] = tree;
+        } else {
+            node = {
+                bone: x,
+                children: [],
+                state: {}
+            };
+            byName[x.name] = node;
+            byName[x.parent].children.push(node);
+        }
+
+        tree.byIndex[i] = node;
+        node.x = x.x || 0;
+        node.y = x.y || 0;    
+        node.sx = x.scaleX || 1;
+        node.sy = x.scaleY || 1;
+        node.angle = x.rotation*2*3.14159/360 || 0;
+        node.debugLength = x.length || 10;
+        node.selected = false;
+    });
+
+    return {
+        root: tree,
+        byName,
+        byIndex: tree.byIndex
+    };
+}
+
+function prepareModel(model, name, shader, texture, bonesByIndex)
 {
     console.log(texture);
     var skin = {};
@@ -679,7 +687,7 @@ function prepareModel(model, name, shader, texture)
     skin.render = () =>
     {
         instances.forEach(x => {            
-            shader.render(x, tree.byIndex, texture.texture);
+            shader.render(x, bonesByIndex, texture.texture);
         });        
     }
 
@@ -694,70 +702,11 @@ function adjustUV(size, xy, wh, u, v)
     return [sx + u*wh[0]/size[0], sy + v*wh[1]/size[1]];
 }
 
-var atlas1Texture;
-byName["head"].draw = (gl) => {
-    if(atlas1Texture.ready) {
-        gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, atlas1Texture.texture); 
-        
-        gl.pushMatrix();
-        gl.identity2f();
-        for(var i = 0; i < head.triangles.length; ++i)
-        {
-            var i0 = head.triangles[i]; ++i;
-            var i1 = head.triangles[i]; ++i;
-            var i2 = head.triangles[i];
-
-            var v0x = spineVertices[i0*2];
-            var v0y = spineVertices[i0*2+1];
-            var v1x = spineVertices[i1*2];
-            var v1y = spineVertices[i1*2+1];
-            var v2x = spineVertices[i2*2];
-            var v2y = spineVertices[i2*2+1];
-
-            var uv0x = head.uvs[i0*2];
-            var uv0y = head.uvs[i0*2+1];
-            var uv1x = head.uvs[i1*2];
-            var uv1y = head.uvs[i1*2+1];
-            var uv2x = head.uvs[i2*2];
-            var uv2y = head.uvs[i2*2+1];
-
-            var b0 = spineBones[i0];
-            var b1 = spineBones[i1];
-            var b2 = spineBones[i2];
-
-            const calc = (vx, vy, b) => {
-                b.forEach(x => {
-                    var [dx, dy] = gl.localToWorld(x[2].matrix, [x[0],x[1],1]);
-                    vx += dx * x[3];
-                    vy += dy * x[3];
-                });
-                return [vx, vy];
-            }
-            [v0x, v0y] = calc(0, 0, b0);
-            [v1x, v1y] = calc(0, 0, b1);
-            [v2x, v2y] = calc(0, 0, b2);
-
-            var uv0 = adjustUV(uv0x, uv0y);
-            var uv1 = adjustUV(uv1x, uv1y);
-            var uv2 = adjustUV(uv2x, uv2y);
-
-            gl.begin(gl.TRIANGLES);
-                gl.vertex2f(v0x,v0y); gl.texCoord2f(uv0[0],uv0[1]);
-                gl.vertex2f(v1x,v1y); gl.texCoord2f(uv1[0],uv1[1]);
-                gl.vertex2f(v2x,v2y); gl.texCoord2f(uv2[0],uv2[1]);
-            gl.end();
-        }
-        gl.popMatrix();
-        gl.bindTexture(gl.TEXTURE_2D, gl.noTexture);  
-    }
-};
-
-
 let startGLOK;
 const startGL = new Promise((ok) => {
     startGLOK = ok;
 });
+var skeleton = prepareSkeleton(spine.spineboy);
 startGL.then(async (rootEl) => {    
     var canvas = rootEl.querySelectorAll("canvas")[0];
 
@@ -821,17 +770,18 @@ startGL.then(async (rootEl) => {
 
     gl.matrixMode(gl.MODELVIEW);
     gl.identity2f();
-    updateNode(gl, tree);
+    updateNode(gl, skeleton.root);
     
-    atlas1Texture = gl.newTexture(atlas1);
     var atlas = await gl.newAtlasTexture(atlasTexture, {
         "atlas1.png": atlas1
     });
     var shader = createSkinnedShader(gl, 6);
+    
     var skin = prepareModel(spine.spineboy, 
         "default", 
         shader, 
-        atlas.files[0]);
+        atlas.files[0],
+        skeleton.byIndex);
     
     function render(timestamp) {
         if (!lastTimestamp) lastTimestamp = timestamp - 16;
@@ -858,9 +808,9 @@ startGL.then(async (rootEl) => {
         
         gl.matrixMode(gl.MODELVIEW);
         gl.identity2f();
-        updateNode(gl, tree);
+        updateNode(gl, skeleton.root);
         skin.render();
-        drawNode(gl, tree);
+        drawNode(gl, skeleton.root);
 
         tx += panx;
         ty += pany;
@@ -932,16 +882,15 @@ function renderItem(root, node, paddingLeft)
     });
     root.appendChild(item);
 
-    
-
     node.children.forEach(x => {
         renderItem(root, x, paddingLeft + 20);
     });
-}
-myLayout.registerComponent( 'tree', function( container, componentState ){
+};
+
+myLayout.registerComponent('tree', function( container, componentState ){
     var r = container.getElement().html("");
     r[0].style = "color: white; overflow-y: scroll";
-    renderItem(r[0], tree);
+    renderItem(r[0], skeleton.root);
 
     setInterval(function() {
         if(lastSelected)
@@ -950,6 +899,7 @@ myLayout.registerComponent( 'tree', function( container, componentState ){
         }
     }, 1000);
 });
+
 myLayout.registerComponent('renderCanvas', function( container, componentState ){
     var r = container.getElement().html(`<div>
     <div>
@@ -959,4 +909,5 @@ myLayout.registerComponent('renderCanvas', function( container, componentState )
 </div>` );
     startGLOK(r[0]);
 });
+
 myLayout.init();
