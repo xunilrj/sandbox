@@ -42,7 +42,7 @@ uniform sampler2D u_texture0;
 varying highp vec2 out_texcoords;
 
 void main() {
-    gl_FragColor = texture2D(u_texture0, out_texcoords);
+    gl_FragColor = texture2D(u_texture0, out_texcoords) + vec4(0.3, 0.3, 0.3, 0);
 }
 `;
 
@@ -81,7 +81,7 @@ void main() {
         );
     }
 
-    shader.fill = (vertices, tex2f, indices, texAtlas, texName) => {
+    shader.fill = (vertices, tex2f, indices, texAtlas, part) => {
         var instance = {
             n: n,
             positionBuffers: [],
@@ -90,12 +90,12 @@ void main() {
             qtd: indices.length, 
         };
 
-        var part = texAtlas.parts[texName];
         for(var i = 0;i < tex2f.length; i+=2)
         {
             var [u,v] = adjustUV(
                 texAtlas.size, part.xy, part.size,
-                tex2f[i+0], tex2f[i+1]);
+                tex2f[i+0], tex2f[i+1],
+                part.rotate);
             tex2f[i+0] = u;
             tex2f[i+1] = v;
         }
@@ -109,64 +109,91 @@ void main() {
             );
             vbuffer.push([]);
         }
-        
-        //adjust vertex buffer
-        var bones = [];
-        var bonei = {};
 
-        for(var i = 0; i < vertices.length; ++i)
+        if(vertices.length != tex2f.length)
         {
-            var count = vertices[i]; ++i;
-            for(var j = 0; j < count; ++j)
+            //adjust vertex buffer
+            var bones = [];
+            var bonei = {};
+
+            for(var i = 0; i < vertices.length; ++i)
             {
-                var bi = vertices[i]; ++i;
-                if(!bonei[bi])
+                var count = vertices[i]; ++i;
+                for(var j = 0; j < count; ++j)
                 {
-                    bones.push(bi)
-                    bi = bonei[bi] = bones.length - 1;
+                    var bi = vertices[i]; ++i;
+                    if(!bonei[bi])
+                    {
+                        bones.push(bi)
+                        bi = bonei[bi] = bones.length - 1;
+                    }
+
+                    ++i; ++i; ++i;
+                }
+                --i;
+            }
+
+            if(bones.length > n) console.error("too many bones", bones);
+            instance.bones = bones;    
+            
+            for(var i = 0; i < vertices.length; ++i)
+            {
+                var count = vertices[i]; ++i;
+                var j = 0;
+
+                var assignedBones = Array.from({length: n}, (el, index) => index);
+                for(j = 0; j < count; ++j)
+                {
+                    var bi = bonei[vertices[i]]; ++i;
+                    if(!bi) console.error("bone index");
+                    
+                    var index = assignedBones.indexOf(bi);
+                    if (index !== -1) assignedBones.splice(index, 1);
+
+                    var bbx = vertices[i]; ++i;
+                    var bby = vertices[i]; ++i;
+                    var w = vertices[i]; ++i;
+
+                    var buffer = vbuffer[bi];
+                    buffer.push(bbx);
+                    buffer.push(bby);
+                    buffer.push(w);
                 }
 
-                ++i; ++i; ++i;
+                assignedBones.forEach(j => {
+                    var buffer = vbuffer[j];
+                    buffer.push(0);
+                    buffer.push(0);
+                    buffer.push(0);
+                });
+                --i;
             }
-            --i;
         }
-
-        if(bones.length > n) console.error("too many bones", bones);
-        instance.bones = bones;    
-        
-        for(var i = 0; i < vertices.length; ++i)
+        else 
         {
-            var count = vertices[i]; ++i;
-            var j = 0;
-
-            var assignedBones = Array.from({length: n}, (el, index) => index);
-            for(j = 0; j < count; ++j)
+            var buffer = vbuffer[0];
+            for(var i = 0; i < vertices.length; ++i)
             {
-                var bi = bonei[vertices[i]]; ++i;
-                if(!bi) console.error("bone index");
-                
-                var index = assignedBones.indexOf(bi);
-                if (index !== -1) assignedBones.splice(index, 1);
-
                 var bbx = vertices[i]; ++i;
-                var bby = vertices[i]; ++i;
-                var w = vertices[i]; ++i;
-
-                var buffer = vbuffer[bi];
+                var bby = vertices[i];
                 buffer.push(bbx);
                 buffer.push(bby);
-                buffer.push(w);
+                buffer.push(1);
             }
 
-            assignedBones.forEach(j => {
+            for(var j = 1; j < vbuffer.length; ++j)
+            {
                 var buffer = vbuffer[j];
-                buffer.push(0);
-                buffer.push(0);
-                buffer.push(0);
-            });
-            --i;
-        }
+                for(var i = 0; i < vertices.length; ++i)
+                {
+                    buffer.push(0);
+                    buffer.push(0);
+                    buffer.push(0);
+                }
+            }
 
+            //instance.bones = [uniqueBone];
+        }
         //buffer data
 
         for(var i = 0; i < n; ++i)
@@ -218,9 +245,13 @@ void main() {
             gl.uniformMatrix3fv(shader.u_bone[i], false, bones[b].matrix);
         });
 
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
         gl.drawElements(gl.TRIANGLES, qtd, gl.UNSIGNED_SHORT, 0);
 
+        gl.disable(gl.BLEND);
         gl.bindTexture(gl.TEXTURE_2D, gl.noTexture);
     }
 
@@ -380,6 +411,7 @@ function immediateMode2D(gl)
             }
             part.xy = part.xy.split(",").map(x => parseInt(x));
             part.size = part.size.split(",").map(x => parseInt(x));
+            part.rotate = part.rotate.toLowerCase() == "true";
         }
         
         var atlas = {
@@ -541,6 +573,73 @@ function immediateMode2D(gl)
         }
     }
 
+    //https://math.stackexchange.com/questions/13150/extracting-rotation-scale-values-from-2d-transformation-matrix
+    function getTransformations(m)
+    {
+        var tx = m[2];
+        var ty = m[5];
+        
+        var sx = Math.sign(m[0]) * Math.sqrt(m[0]*m[0] + m[1]*m[1]);
+        var sy = Math.sign(m[4]) * Math.sqrt(m[3]*m[3] + m[4]*m[4]);
+
+        var angle = Math.atan2(m[3], m[4]);
+
+        return [tx, ty, sx, sy, angle];
+    }
+
+    gl.getTransformations = () => {
+        if(matrixmode == gl.MODELVIEW) {
+            return getTransformations(matrix33f);
+        } else if(matrixmode == gl.PROJECTION) {
+            return getTransformations(pmatrix33f);
+        }
+    }
+
+    gl.patchMatrix = (p) => {
+        if(!p) return;
+        
+        var m ;
+        if(matrixmode == gl.MODELVIEW) {
+            m = matrix33f;
+        } else if(matrixmode == gl.PROJECTION) {
+            m = pmatrix33f;
+        }
+        switch(p)
+        {
+            case "normal": return;
+            case "onlyTranslation": {
+                var tx = m[2];
+                var ty = m[5];
+                gl.loadMatrix3f([1, 0, tx, 0, 1, ty, 0, 0, 1]);
+                return;
+            };
+            case "noRotationOrReflection": {
+                var tx = m[2];
+                var ty = m[5];
+                var sx = Math.sign(m[0]) * Math.sqrt(m[0]*m[0] + m[1]*m[1]);
+                var sy = Math.sign(m[4]) * Math.sqrt(m[3]*m[3] + m[4]*m[4]);
+                gl.loadMatrix3f([sx, 0, tx, 0, sy, ty, 0, 0, 1]);
+                return;
+            };
+            case "noScale": {
+                var tx = m[2];
+                var ty = m[5];
+                var angle = Math.atan2(m[3], m[4]);
+                gl.loadMatrix3f([1, 0, tx, 0, 1, ty, 0, 0, 1]);
+                gl.rotate2f(angle);
+                return;
+            };
+            case "noScaleOrReflection": {
+                var tx = m[2];
+                var ty = m[5];
+                var angle = Math.atan2(m[3], m[4]);
+                gl.loadMatrix3f([1, 0, tx, 0, 1, ty, 0, 0, 1]);
+                gl.rotate2f(angle);
+                return;
+            }
+        }
+    }
+
    
 
     gl.localToWorld = (m, v) => {
@@ -564,8 +663,9 @@ function immediateMode2D(gl)
 function updateNode(gl, node)
 {
     gl.pushMatrix();        
+    gl.patchMatrix(node.bone.transform);
 
-    var {x,y,angle,sx,sy} = node;
+    var {x, y, angle, sx, sy} = node;
 
     gl.scale2f(sx, sy);
     gl.translate2f(x, y);
@@ -602,7 +702,7 @@ function drawBone(gl, l, s)
     s = s || 10;
     
     drawRectangleCenter(gl, 0, 0, s, s);
-    drawRectangleCenter(gl, l/2, 0, l, 3);
+    drawRectangleCenter(gl, l/2, 0, l, 3 * s/10);
 }
 
 function drawNode(gl, node)
@@ -648,6 +748,7 @@ function prepareSkeleton(model)
         }
 
         tree.byIndex[i] = node;
+        node.i = i;
         node.x = x.x || 0;
         node.y = x.y || 0;    
         node.sx = x.scaleX || 1;
@@ -664,42 +765,149 @@ function prepareSkeleton(model)
     };
 }
 
-function prepareModel(model, name, shader, texture, bonesByIndex)
+function prepareSlot(skeleton, model, name, shader, texAtlas, slot)
 {
-    console.log(texture);
-    var skin = {};
-    var instances = [];
+    var attachment = model.skins[name][slot.name][slot.attachment];
+    var tex = texAtlas.parts[slot.attachment];
+    if(!attachment.type) {
+        var x = attachment.x || 0;
+        var y = attachment.y || 0;
+        var sx = attachment.scaleX || 1;
+        var sy = attachment.scaleY || 1;
+        var rotation = attachment.rotation || 0;
+        var w = attachment.width;
+        var h = attachment.height;
+        var color = attachment.color;
 
-    var slotName = "spineboy/head";
-    var attachment = model.skins[name].head[slotName];
-    if(attachment.type === "mesh")
+        rotation *= 2*3.14159/360;
+
+        function transformedVertex([vx,vy])
+        {
+            //var ix = x*Math.cos(rotation) - y*Math.sin(rotation);
+            //var iy = x*Math.sin(rotation) + y*Math.cos(rotation);
+            var ix = x;
+            var iy = y;
+            
+            var ivx = (vx*w*sx)*Math.cos(rotation) - (vy*h*sy)*Math.sin(rotation);
+            var ivy = (vx*w*sx)*Math.sin(rotation) + (vy*h*sy)*Math.cos(rotation);
+            return [
+                ix + ivx,
+                iy + ivy
+            ];
+        }
+
+        var a = [-0.5,-0.5];
+        var b = [ 0.5,-0.5];
+        var c = [ 0.5, 0.5];
+        var d = [-0.5, 0.5];
+
+        // var a = [0,0];
+        // var b = [1,0];
+        // var c = [1,1];
+        // var d = [0,1];
+
+        var ta = transformedVertex(a);
+        var tb = transformedVertex(b);
+        var tc = transformedVertex(c);
+        var td = transformedVertex(d);
+
+        var vertices = [
+            ta[0], ta[1],
+            tb[0], tb[1],
+            tc[0], tc[1],
+            td[0], td[1],
+        ];
+        var uvs;
+        if(tex.rotate) {
+            // ok by gun attachment
+            uvs = [
+                1, 1,
+                1, 0,
+                0, 0,
+                0, 1,
+            ];
+        } else {
+            uvs = [
+                0, 1,
+                1, 1,
+                1, 0,
+                0, 0,
+            ];
+        }
+        var triangles = [0, 1, 2, 0, 2, 3];
+        var i = shader.fill(
+            vertices,
+            uvs,
+            triangles,
+            texAtlas,
+            tex,
+            slot,
+            attachment
+        );
+        if(!i.bones || i.bones.length == 0)
+            i.bones = [skeleton.byName[slot.bone].i];
+        return i;
+    }
+    else if(attachment.type === "mesh")
     {
         var i = shader.fill(
             attachment.vertices,
             attachment.uvs,
             attachment.triangles,
-            texture,
-            slotName
+            texAtlas,
+            tex,
+            slot,
+            attachment
         );
-        instances.push(i);
+        if(!i.bones || i.bones.length == 0)
+            i.bones = [skeleton.byName[slot.bone].i];
+        return i;
     }
+    else {
+        console.log("unknown attachment", slot, attachment)
+    }
+}
+
+function prepareModel(model, name, shader, texture, skeleton)
+{
+    var skin = {};
+    var instances = [];
+
+    const add = (skeleton, slot) =>
+    {
+        var i = prepareSlot(skeleton, model, name, shader, texture, slot);
+        if(i) instances.push(i);
+        return i;
+    };
+    
+    for(var i = 0;i < model.slots.length; ++i)
+    {
+        var slot = model.slots[i];
+        if(slot.attachment)
+            add(skeleton, slot);
+    }
+    //add(skeleton, model.slots[21]);
+    //add(skeleton, model.slots[24]);
+    //add(skeleton, model.slots[28]);
+    //add(skeleton, model.slots[31]);
 
     skin.render = () =>
     {
         instances.forEach(x => {            
-            shader.render(x, bonesByIndex, texture.texture);
+            shader.render(x, skeleton.byIndex, texture.texture);
         });        
     }
 
     return skin;
 }
 
-function adjustUV(size, xy, wh, u, v)
+function adjustUV(size, xy, wh, u, v, rotate)
 {
     var sx = xy[0]/size[0];
     var sy = xy[1]/size[1];
-
-    return [sx + u*wh[0]/size[0], sy + v*wh[1]/size[1]];
+    var uv = [sx + u*wh[0]/size[0], sy + v*wh[1]/size[1]];
+    return uv;
+    //return rotate ? uv : [uv[1], uv[0]];
 }
 
 let startGLOK;
@@ -707,6 +915,7 @@ const startGL = new Promise((ok) => {
     startGLOK = ok;
 });
 var skeleton = prepareSkeleton(spine.spineboy);
+console.log(spine);
 startGL.then(async (rootEl) => {    
     var canvas = rootEl.querySelectorAll("canvas")[0];
 
@@ -750,8 +959,9 @@ startGL.then(async (rootEl) => {
             var mousex = event.clientX - canvas.offsetLeft;
             var mousey = event.clientY - canvas.offsetTop;
 
-            panx = (mousex - lmousex) / zoomScale;
-            pany = -(mousey - lmousey) / zoomScale;
+            var scale = 1/zoomScale * 5;
+            panx = (mousex - lmousex) * scale;
+            pany = -(mousey - lmousey) * scale;
 
             lmousex = mousex;
             lmousey = mousey;
@@ -781,7 +991,7 @@ startGL.then(async (rootEl) => {
         "default", 
         shader, 
         atlas.files[0],
-        skeleton.byIndex);
+        skeleton);
     
     function render(timestamp) {
         if (!lastTimestamp) lastTimestamp = timestamp - 16;
@@ -875,7 +1085,7 @@ function renderItem(root, node, paddingLeft)
         if(lastSelected)
             lastSelected.selected = false;
         
-        lastSelected = byName[node.bone.name]
+        lastSelected = skeleton.byName[node.bone.name]
         lastSelected.selected = true;
 
         lastWorldX = worldX;
