@@ -1,8 +1,9 @@
 import spine from './spine.json';
-import {div, span, button} from 'hyperaxe';
+import {h3, h2, h1, div, span, button} from 'hyperaxe';
 import atlas1 from './atlas1.png';
 import atlasTexture from './atlas1.txt';
 import 'babel-polyfill';
+import '@babel/plugin-proposal-nullish-coalescing-operator';
 
 function gen(i, f, j = "")
 {
@@ -42,7 +43,7 @@ uniform sampler2D u_texture0;
 varying highp vec2 out_texcoords;
 
 void main() {
-    gl_FragColor = texture2D(u_texture0, out_texcoords) + vec4(0.3, 0.3, 0.3, 0);
+    gl_FragColor = texture2D(u_texture0, out_texcoords);// + vec4(0.3, 0.3, 0.3, 0);
 }
 `;
 
@@ -617,7 +618,9 @@ function immediateMode2D(gl)
                 var tx = m[2];
                 var ty = m[5];
                 var sx = Math.sign(m[0]) * Math.sqrt(m[0]*m[0] + m[1]*m[1]);
+                //if(sx < 0) sx = 0;
                 var sy = Math.sign(m[4]) * Math.sqrt(m[3]*m[3] + m[4]*m[4]);
+                //if(sy < 0) sy = 0;
                 gl.loadMatrix3f([sx, 0, tx, 0, sy, ty, 0, 0, 1]);
                 return;
             };
@@ -660,23 +663,77 @@ function immediateMode2D(gl)
     }
 }
 
-function updateNode(gl, node)
+function defaultNodeValues()
 {
-    gl.pushMatrix();        
-    gl.patchMatrix(node.bone.transform);
+    return {x:0, y: 0, angle: 0, sx: 1, sy:1}
+}
 
+function updateNode(gl, node, parent)
+{
+    var pworld = (parent && parent.world) || defaultNodeValues();
+    var px = pworld.x;
+    var py = pworld.y;
+    var psx = pworld.sx;
+    var psy = pworld.sy;
+    var pangle = pworld.angle;
+        
     var {x, y, angle, sx, sy} = node;
+    
+    var cangle = pangle;
+    var cosa = Math.cos(pangle);
+    var sina = Math.sin(pangle);
+    var ctx = px + (x*cosa - y*sina);
+    var cty = py + (x*sina + y*cosa);
 
-    gl.scale2f(sx, sy);
-    gl.translate2f(x, y);
-    gl.rotate2f(angle);
+    cangle = pangle + angle;
+    cosa = Math.cos(cangle);
+    sina = Math.sin(cangle);
 
-    node.matrix = gl.getFloatv(gl.MODELVIEW);
-    node.worldx = node.matrix[2];
-    node.worldy = node.matrix[5];
+    node.world = {
+        x: ctx,
+        y: cty,
+        angle: cangle,
+        sx: psx * sx,
+        sy: psy * sy
+    };
+
+    node.matrix = [
+        cosa, -sina, ctx,
+        sina,  cosa, cty,
+        0, 0, 1
+    ];
 
     node.children.forEach(x => {
-        updateNode(gl, x);
+        updateNode(gl, x, node);
+    });
+}
+
+function updateNode2(gl, node, parent)
+{
+    gl.pushMatrix();        
+    //gl.patchMatrix(node.bone.transform);
+
+    var {px = x, py = y, pangle = angle, psx = sx, psy = sy} 
+        = (node.parent && node.parent.world) || defaultNodeValues();
+    var {x, y, angle, sx, sy} = node;
+
+    node.world = {
+        x: px + x,
+        y: py + y,
+        angle: pangle + angle,
+        sx: px * sx,
+        sy: py * sy
+    };
+
+    //gl.scale2f(sx, sy);
+    gl.translate2f(x, y);
+    gl.rotate2f(angle);
+    
+
+    node.matrix = gl.getFloatv(gl.MODELVIEW);
+
+    node.children.forEach(x => {
+        updateNode(gl, x, node);
     });
     gl.popMatrix();
 }
@@ -713,7 +770,6 @@ function drawNode(gl, node)
     gl.pushMatrix();
     gl.loadMatrix3f(node.matrix);
     drawBone(gl, debugLength, s);
-    //if(node.draw) node.draw(gl);
     gl.popMatrix();
 
     node.children.forEach(x => {
@@ -753,7 +809,7 @@ function prepareSkeleton(model)
         node.y = x.y || 0;    
         node.sx = x.scaleX || 1;
         node.sy = x.scaleY || 1;
-        node.angle = x.rotation*2*3.14159/360 || 0;
+        node.angle = x.rotation*2*3.14159/360.0 || 0;
         node.debugLength = x.length || 10;
         node.selected = false;
     });
@@ -1046,38 +1102,71 @@ startGL.then(async (rootEl) => {
 });
 
 
+function localStorageObject(key) {
+    var item = localStorage.getItem(key) || "{}";
+    item = JSON.parse(item);
+    let normalObj = {
+        set: function(obj, prop, value) {
+            obj[prop] = value;
+
+            var json = JSON.stringify(item);
+            localStorage.setItem(key, json);
+
+            return true;
+        }
+    };
+    let proxy = {
+        set: function(obj, prop, value) {
+            obj[prop] = value;
+
+            var json = JSON.stringify(item);
+            localStorage.setItem(key, json);
+
+            return true;
+        },
+        get: function(obj, prop) {
+            var target = obj[prop];
+            if(!target) obj[prop] = target = {};
+
+            return new Proxy(target, normalObj);
+        }
+    };
+    return new Proxy(item, proxy);
+}
+
+var goldenLayoutStore = localStorageObject('goldenLayout');
 var config = {
     content: [{
         type: 'row',
         content:[{
             type: 'component',
             componentName: 'renderCanvas',
-            componentState: { label: 'A' }
         },{
             type: 'column',
             content:[{
                 type: 'component',
                 componentName: 'tree',
-                componentState: { label: 'B' }
+                componentState: { storeId: 'nodesTree' }
+            },{
+                type: 'component',
+                componentName: 'node',
+                componentState: { storeId: 'selectedNode' }
             }]
         }]
     }]
 };
 var myLayout = new GoldenLayout(config);
 var nodeData = {};
-var lastWorldX;
 var lastSelected;
-function renderItem(root, node, paddingLeft)
+function renderItem(root, node, paddingLeft, emitf, state)
 {
     paddingLeft = paddingLeft || 0;
     nodeData[node.bone.name] = {
         closed: true
     };
-    var worldX = span();
     var item = div(
         button("more", {style:"display:inline-block"}),
         div(node.bone.name, {style:"color:white;display:inline-block"}),
-        worldX,
         {style:`padding-left:${paddingLeft}px`}
     );
     item.addEventListener("click", (e) => {
@@ -1087,27 +1176,81 @@ function renderItem(root, node, paddingLeft)
         
         lastSelected = skeleton.byName[node.bone.name]
         lastSelected.selected = true;
+        state.lastSelected = lastSelected.i;
 
-        lastWorldX = worldX;
+        emitf("nodeSelected", lastSelected);
     });
     root.appendChild(item);
 
     node.children.forEach(x => {
-        renderItem(root, x, paddingLeft + 20);
+        renderItem(root, x, paddingLeft + 20, emitf, state);
     });
 };
 
 myLayout.registerComponent('tree', function( container, componentState ){
+    var state = goldenLayoutStore[componentState.storeId];
+
     var r = container.getElement().html("");
     r[0].style = "color: white; overflow-y: scroll";
-    renderItem(r[0], skeleton.root);
+    var h = container.layoutManager.eventHub;
+    renderItem(r[0], skeleton.root, null, (name, arg) => {
+        h.emit(name, arg);
+    }, state);
 
-    setInterval(function() {
-        if(lastSelected)
-        {
-            lastWorldX.innerText = ` ${lastSelected.worldx.toFixed(2)}; ${lastSelected.worldy.toFixed(2)}`;
+    
+});
+
+function when(container, eventName, f)
+{
+    var r = container.getElement().html("")[0];
+    var h = container.layoutManager.eventHub;
+    var lastArg;
+    var render = (arg) =>
+    {
+        lastArg = arg;
+        let els = f(arg);
+        
+        r.innerHTML = "";
+        r.append(...els);
+    }
+    var update = () => render(lastArg);
+    h.on("nodeSelected", render);
+    return {
+        root: r,
+        render,
+        update
+    };
+}
+
+myLayout.registerComponent('node', function(container, componentState) {
+    let {root, update} = when(container, "nodeSelected", function* (node) {        
+        state.current = node.i;
+        yield h3(node.bone.name);
+        yield h1("Local");
+        yield div(`x: ${node.x}`);
+        yield div(`y: ${node.y}`);
+        yield div(`scale x: ${node.sx}`);
+        yield div(`scale y: ${node.sy}`);
+        yield div(`angle: ${node.angle} (${node.angle * 180/3.14159})`);
+        if(node.world) {
+            yield h2("World");
+            yield div(`x: ${node.world.x}`);
+            yield div(`y: ${node.world.y}`);    
+            yield div(`angle: ${node.world.angle} (${node.world.angle * 180/3.14159})`);
         }
-    }, 1000);
+        if(node.matrix)
+        {
+            yield div(JSON.stringify(node.matrix, null, 4));
+        }
+    });
+    root.style = "color: white; overflow-y: scroll";
+
+    var state = goldenLayoutStore[componentState.storeId];
+    var node = skeleton.byIndex[state.current];
+    var h = container.layoutManager.eventHub;
+    h.emit("nodeSelected", node);
+
+    setInterval(update, 1000);
 });
 
 myLayout.registerComponent('renderCanvas', function( container, componentState ){
