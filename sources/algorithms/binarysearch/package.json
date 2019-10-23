@@ -1,0 +1,15 @@
+{
+  "name": "binarysearch",
+  "version": "1.0.0",
+  "description": "",
+  "main": "binarySearch.js",
+  "scripts": {
+    "test": "node binarySearch.tests.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "deadunit": "^5.2.1"
+  }
+}
