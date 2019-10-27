@@ -4,6 +4,7 @@ import atlas1 from './atlas1.png';
 import atlasTexture from './atlas1.txt';
 import 'babel-polyfill';
 import '@babel/plugin-proposal-nullish-coalescing-operator';
+import { SVD } from 'svd-js'
 
 function gen(i, f, j = "")
 {
@@ -744,6 +745,39 @@ function applyTransformConstraints(skeleton, obj)
     });
 }
 
+function applyIKConstraints(skeleton)
+{
+    skeleton.ikmodel.forEach(x => {
+        var tw = x.target.world;
+        var error = 0.1;
+        var iters = 10;
+
+        var lw = x.bones[x.bones.length-1].world;
+        var absx = Math.abs(tw.x - lw.x);
+        var absy = Math.abs(tw.y - lw.y);
+        while ((absx > error)||(absy > error))
+        {
+            if(iters<=0) break;
+            iters--;
+            var vx = tw.x - lw.x;
+            var vy = tw.y - lw.y;
+            var h = 0.000001;
+
+            
+            x.bones.forEach((xx,i) => {
+                var w = xx.world;
+                var jx = -(tw.y - w.y);
+                var jy = (tw.x - w.x);
+                xx.angle += (vx*jx+vy*jy)*h;
+            });
+            absx = Math.abs(tw.x - lw.x);
+            absy = Math.abs(tw.y - lw.y);
+        }
+    });
+
+    updateNode(null, skeleton.root, null);
+}
+
 function updateNode2(gl, node, parent)
 {
     gl.pushMatrix();        
@@ -786,6 +820,14 @@ function drawRectangle(gl, left, right, bottom, top) {
     gl.end();
 }
 
+function drawTriangle(gl, left, right, bottom, top) {
+    gl.begin(gl.TRIANGLES);
+        gl.vertex2f((left+right)/2,top); gl.texCoord2f(0, 1);
+        gl.vertex2f(right,bottom); gl.texCoord2f(1, 1);
+        gl.vertex2f(left,bottom); gl.texCoord2f(1, 0);
+    gl.end();
+}
+
 function drawRectangleCenter(gl, cx, cy, w, h) {
     drawRectangle(gl, cx - w/2, cx + w/2, cy - h/2, cy+h/2);
 }
@@ -805,12 +847,28 @@ function drawNode(gl, node)
 
     gl.pushMatrix();
     gl.loadMatrix3f(node.matrix);
-    drawBone(gl, debugLength, s);
+
+    if(node.ik) {
+        s *= 4;
+        drawTriangle(gl, 0, s, 0, s);
+    }
+    else drawBone(gl, debugLength, s);
+
     gl.popMatrix();
 
     node.children.forEach(x => {
         drawNode(gl, x);
     });
+}
+
+function getHierarchy(bone, items)
+{
+    if(!bone) return items;
+
+    items.push(bone);
+    getHierarchy(bone.parent, items);
+
+    return items;
 }
 
 function prepareSkeleton(model)
@@ -837,6 +895,7 @@ function prepareSkeleton(model)
             };
             byName[x.name] = node;
             byName[x.parent].children.push(node);
+            node.parent = byName[x.parent];
         }
 
         tree.byIndex[i] = node;
@@ -850,10 +909,21 @@ function prepareSkeleton(model)
         node.selected = false;
     });
 
+    var ikmodel = [];
+    model.ik.sort((a,b) => a.order == b.order ? 0 : (a.order > b.order) ? 1 : -1);
+    model.ik.forEach(x => {
+        var t = byName[x.target];
+        t.ik = x;
+        ikmodel.push({
+            bones: x.bones.map(x => byName[x]),
+            target: t,
+        });
+    });
     return {
         root: tree,
         byName,
-        byIndex: tree.byIndex
+        byIndex: tree.byIndex,
+        ikmodel
     };
 }
 
@@ -1008,6 +1078,7 @@ const startGL = new Promise((ok) => {
 });
 var skeleton = prepareSkeleton(spine.spineboy);
 console.log(spine);
+var lastSelected;
 startGL.then(async (rootEl) => {    
     var canvas = rootEl.querySelectorAll("canvas")[0];
 
@@ -1074,6 +1145,7 @@ startGL.then(async (rootEl) => {
     gl.identity2f();
     updateNode(gl, skeleton.root);
     applyTransformConstraints(skeleton, spine.spineboy);
+    console.log(skeleton);
     
     var atlas = await gl.newAtlasTexture(atlasTexture, {
         "atlas1.png": atlas1
@@ -1113,14 +1185,20 @@ startGL.then(async (rootEl) => {
         gl.identity2f();
         updateNode(gl, skeleton.root);
         applyTransformConstraints(skeleton, spine.spineboy);
+        applyIKConstraints(skeleton);
         skin.render();
         drawNode(gl, skeleton.root);
 
-        tx += panx;
-        ty += pany;
-        zoomScale += wheelValue;
+        if(!lastSelected) {
+            tx += panx;
+            ty += pany;
+            zoomScale += wheelValue;
+        } else {
+            lastSelected.x += panx/10;
+            lastSelected.y += pany/10;
+        }
 
-        if(panx || pany ||wheelValue)
+        if(panx || pany || wheelValue)
         {
             localStorage.setItem('viewConfig', JSON.stringify({
                 tx, ty, zoomScale
@@ -1195,7 +1273,7 @@ var config = {
 };
 var myLayout = new GoldenLayout(config);
 var nodeData = {};
-var lastSelected;
+
 function renderItem(root, node, paddingLeft, emitf, state)
 {
     paddingLeft = paddingLeft || 0;
