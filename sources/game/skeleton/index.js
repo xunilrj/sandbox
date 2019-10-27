@@ -668,6 +668,18 @@ function defaultNodeValues()
     return {x:0, y: 0, angle: 0, sx: 1, sy:1}
 }
 
+function inheritTransform(node)
+{
+    var bone = node.bone;
+    if(!bone.transform) return {noRotation: false};
+    if(bone.transform == "noRotationOrReflection")
+        return {noRotation: true}
+    else if(bone.transform == "onlyTranslation")
+        return {noRotation: true}
+
+    return {noRotation: false};
+}
+
 function updateNode(gl, node, parent)
 {
     var pworld = (parent && parent.world) || defaultNodeValues();
@@ -678,12 +690,15 @@ function updateNode(gl, node, parent)
     var pangle = pworld.angle;
         
     var {x, y, angle, sx, sy} = node;
+    var {noRotation} = inheritTransform(node);
     
     var cangle = pangle;
     var cosa = Math.cos(pangle);
     var sina = Math.sin(pangle);
     var ctx = px + (x*cosa - y*sina);
     var cty = py + (x*sina + y*cosa);
+
+    if(noRotation) pangle = 0;
 
     cangle = pangle + angle;
     cosa = Math.cos(cangle);
@@ -705,6 +720,27 @@ function updateNode(gl, node, parent)
 
     node.children.forEach(x => {
         updateNode(gl, x, node);
+    });
+}
+
+function applyTransformConstraints(skeleton, obj)
+{
+    obj.transform.forEach(x => {
+        var target = skeleton.byName[x.target];
+        var dx = x.x || 0;
+        var dy = x.y || 0;
+        x.bones.forEach(xx => {
+            var bone = skeleton.byName[xx];
+
+            bone.world.x = 
+                (1-x.translateMix)*(bone.world.x) +
+                x.translateMix*(target.world.x + dx);
+            bone.world.y = 
+                (1-x.translateMix)*(bone.world.y) +
+                x.translateMix*(target.world.y + dy);
+            bone.matrix[2] = bone.world.x;
+            bone.matrix[5] = bone.world.y;
+        });
     });
 }
 
@@ -1037,6 +1073,7 @@ startGL.then(async (rootEl) => {
     gl.matrixMode(gl.MODELVIEW);
     gl.identity2f();
     updateNode(gl, skeleton.root);
+    applyTransformConstraints(skeleton, spine.spineboy);
     
     var atlas = await gl.newAtlasTexture(atlasTexture, {
         "atlas1.png": atlas1
@@ -1075,6 +1112,7 @@ startGL.then(async (rootEl) => {
         gl.matrixMode(gl.MODELVIEW);
         gl.identity2f();
         updateNode(gl, skeleton.root);
+        applyTransformConstraints(skeleton, spine.spineboy);
         skin.render();
         drawNode(gl, skeleton.root);
 
@@ -1232,6 +1270,7 @@ myLayout.registerComponent('node', function(container, componentState) {
         yield div(`scale x: ${node.sx}`);
         yield div(`scale y: ${node.sy}`);
         yield div(`angle: ${node.angle} (${node.angle * 180/3.14159})`);
+        yield div(`transform: ${node.bone.transform}`);
         if(node.world) {
             yield h2("World");
             yield div(`x: ${node.world.x}`);

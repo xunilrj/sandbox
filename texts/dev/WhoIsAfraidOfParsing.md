@@ -253,3 +253,7 @@ const next = (p,q) => parse.bind(p, x => q);
 Now we understand why the "next" combinator "throws away" the value of the first parse.
 
 # To be continued...
+
+# Good Links
+
+https://www.youtube.com/playlist?list=PLP29wDx6QmW5yfO1LAgO8kU3aQEj8SIrU
