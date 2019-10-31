@@ -190,6 +190,26 @@ function instrumentCode (code) {
     return generate(p);
 }
 
+// This method will create and editor and and debugger
+// to allow the user to code. In summary you can
+// image something like:
+//
+// const editor = setUpEditorAr(el.querySelector(".code"));
+// const historyControls = setUpEditorAr(el.querySelector(".historyControls"));
+// const history = setUpEditorAr(el.querySelector(".history"));
+// editor.onKeyPress(code => localStorage[`allowCode.${name}.${ctxName}.code`] = code);
+// editor.onCompile(f => obj[name] = f);
+//
+// Currently only Javascript. But we will support other languages later.
+// 
+// obj - Object that will receive the function
+// name - Function name
+// def - default funtion code
+// el - root element that needs three children:
+//      el .code - where the code editor goes
+//      el .historyControls - where the step, play etc... controls go
+//      el .history - where the variable value historay table goes
+// ctxName - will form the localStorageKey where the code will be save on every keypress
 export default function(obj, name, def, el, ctxName) {
     if(typeof el === "string") {
         el = document.getElementById(el);
