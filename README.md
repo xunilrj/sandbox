@@ -84,6 +84,10 @@
 
 [C++ Coroutines (even for WebAssembly)](sources/cpp/coroutines/)  
 
+[WASM presentation](https://xunilrj.github.io/articles/dev/wasm001/WASM.htm)  
+[WASM presentation - PT/BR](https://www.youtube.com/watch?v=YYeqRMqn774)
+
+
 # Stackoverflow Answers
 ## C# and .NET
 ### UnitOfWork, Repository Database Connection Issue  
