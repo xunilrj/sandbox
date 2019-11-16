@@ -28,11 +28,12 @@
     <script id="fshader" type="webgl/fragmentshader">
         precision mediump float;
 
+        uniform highp vec4 u_color;
         uniform sampler2D u_texture0;
         varying highp vec2 out_texcoords;
 
         void main() {
-        gl_FragColor = texture2D(u_texture0, out_texcoords);
+            gl_FragColor = u_color;
         }
     </script>
     <script src="./index.js"></script>

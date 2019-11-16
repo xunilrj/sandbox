@@ -4,7 +4,15 @@ import atlas1 from './atlas1.png';
 import atlasTexture from './atlas1.txt';
 import 'babel-polyfill';
 import '@babel/plugin-proposal-nullish-coalescing-operator';
-import { SVD } from 'svd-js'
+import { Matrix, pseudoInverse } from 'ml-matrix'
+
+const onceSet = new Set();
+console.once = function(key, obj)
+{
+    if(onceSet.has(key)) return;
+    onceSet.add(key);
+    console.log(obj);
+}
 
 function gen(i, f, j = "")
 {
@@ -278,6 +286,7 @@ function immediateMode2D(gl)
     let a_coords;
     let a_texcoords;
     let u_texture0;
+    let u_color;
 
     gl.noTexture = null;
 
@@ -311,6 +320,7 @@ function immediateMode2D(gl)
     a_coords = gl.getAttribLocation(shaderProgram, 'a_coords');
     a_texcoords = gl.getAttribLocation(shaderProgram, 'a_texcoords');
     u_texture0 = gl.getUniformLocation(shaderProgram, 'u_texture0');
+    u_color = gl.getUniformLocation(shaderProgram, 'u_color');
 
     u_matrix = gl.getUniformLocation(shaderProgram, "u_matrix");
 
@@ -452,11 +462,22 @@ function immediateMode2D(gl)
         tex2f.push(t);
     }
 
+    var currentColor = [1,1,1,1];
+
+    gl.color3f = (r,g,b) => {
+        currentColor = [r,g,b,1];
+    };
+
+    gl.color4f = (r,g,b,a) => {
+        currentColor = [r,g,b,a];
+    };
+
     gl.end = () =>
     {
         gl.useProgram(shaderProgram);
        
         gl.uniform1i(u_texture0, 0);
+        gl.uniform4fv(u_color, currentColor);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
         gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertex2f), gl.DYNAMIC_DRAW);
@@ -477,7 +498,12 @@ function immediateMode2D(gl)
         var r = multiplyMatrices(pmatrix33f, matrix33f);
         gl.uniformMatrix3fv(u_matrix, false, r);
 
+        gl.enable(gl.BLEND);
+        gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
+
         gl.drawElements(mode, indices.length, gl.UNSIGNED_SHORT, 0);
+
+        gl.disable(gl.BLEND);
     };
 
     function multiplyMatrices(a, b) {
@@ -745,33 +771,73 @@ function applyTransformConstraints(skeleton, obj)
     });
 }
 
+var IKdeltas = [];
+
 function applyIKConstraints(skeleton)
 {
     skeleton.ikmodel.forEach(x => {
-        var tw = x.target.world;
-        var error = 0.1;
-        var iters = 10;
+        var target = x.target.world;
+        var error = 5;
+        var iters = 100;
+        var h = 0.0001;
 
-        var lw = x.bones[x.bones.length-1].world;
-        var absx = Math.abs(tw.x - lw.x);
-        var absy = Math.abs(tw.y - lw.y);
-        while ((absx > error)||(absy > error))
+        var lastBone = x.bones[x.bones.length-1];
+        var effector = lastBone.world;
+        var effx = effector.x + (lastBone.debugLength*Math.cos(effector.angle));
+        var effy = effector.y + (lastBone.debugLength*Math.sin(effector.angle));
+        var absx = target.x - effx;
+        var absy = target.y - effy;
+        var l = absx**2 + absy**2;
+        IKdeltas.push([effx, target.x, effy, target.y]);
+        
+        var j = Matrix.zeros(2, x.bones.length);
+        var thetas = Matrix.zeros(2, 1);
+        while ((Math.abs(absx) > error)||(Math.abs(absy) > error))
         {
             if(iters<=0) break;
             iters--;
-            var vx = tw.x - lw.x;
-            var vy = tw.y - lw.y;
-            var h = 0.000001;
 
+            var deltap = Matrix.zeros(2, 1);
+            deltap.set(0,0, absx);
+            deltap.set(1,0, absy);
             
+            var lx = 0;
+            var ly = 0;
+            var fangle = x.bones[0].world.angle;
+            for(var i = x.bones.length - 1; i >= 0; --i)
+            {
+                var xx = x.bones[i];
+                //var w = xx.world;
+                //var jx = -(tw.y - w.y);
+                //var jy = (tw.x - w.x);
+                //jacobian.push([jx, jy, 0]);
+                var cx = (+xx.debugLength*Math.cos(xx.world.angle)) + lx;
+                var cy = (-xx.debugLength*Math.sin(xx.world.angle)) + ly;
+                j.set(0, i, cx);
+                j.set(1, i, cy);
+                lx = cx;
+                ly = cy;
+                
+                thetas.set(i, 0, xx.angle);
+            }
+            
+            let pi = pseudoInverse(j);
+            //let pi = j.transpose();
+            const deltas = pi.mmul(deltap);
+
+            console.once(1, {pi, deltap, thetas, deltas});
+            //console.log(deltas);
+            let total = 0;
             x.bones.forEach((xx,i) => {
-                var w = xx.world;
-                var jx = -(tw.y - w.y);
-                var jy = (tw.x - w.x);
-                xx.angle += (vx*jx+vy*jy)*h;
+                var f = deltas.get(i,0) * h;
+                xx.angle += f;
+                total += f;
             });
-            absx = Math.abs(tw.x - lw.x);
-            absy = Math.abs(tw.y - lw.y);
+
+            if(total < 0.0001) break;
+            
+            absx = target.x - effx;
+            absy = target.y - effy;
         }
     });
 
@@ -843,16 +909,21 @@ function drawBone(gl, l, s)
 function drawNode(gl, node)
 {
     var {debugLength, selected} = node;
-    var s = selected ? 20 : 10;
+    var s = 10;
 
     gl.pushMatrix();
     gl.loadMatrix3f(node.matrix);
+
+    if(selected)
+        gl.color3f(1,0,0);
 
     if(node.ik) {
         s *= 4;
         drawTriangle(gl, 0, s, 0, s);
     }
     else drawBone(gl, debugLength, s);
+
+    gl.color4f(1,1,1);
 
     gl.popMatrix();
 
@@ -1185,17 +1256,23 @@ startGL.then(async (rootEl) => {
         gl.identity2f();
         updateNode(gl, skeleton.root);
         applyTransformConstraints(skeleton, spine.spineboy);
+        IKdeltas = [];
         applyIKConstraints(skeleton);
         skin.render();
         drawNode(gl, skeleton.root);
+        gl.color4f(0.3,0.3,0.3,0.3);
+        IKdeltas.forEach(x => {
+            drawRectangle(gl, x[0], x[1], x[2], x[3]);
+        });
+        gl.color4f(1,1,1,1);
 
         if(!lastSelected) {
             tx += panx;
             ty += pany;
             zoomScale += wheelValue;
         } else {
-            lastSelected.x += panx/10;
-            lastSelected.y += pany/10;
+            lastSelected.x += panx/3;
+            lastSelected.y += pany/3;
         }
 
         if(panx || pany || wheelValue)
