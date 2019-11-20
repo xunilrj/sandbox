@@ -36,6 +36,7 @@ function useRotation(x,y)
 
 
 let target = [200,-200];
+let realTarget = [200,-200];
 
 mouseCanvas(canvas)
     .toCanvas(toCanvas)    
@@ -56,8 +57,8 @@ mouseCanvas(canvas)
         mouseMove:e => {
             e.cursor = "grabbing";
             const [x,y] = fromCanvas(e.x,e.y);
-            target[0] = x;
-            target[1] = y;
+            realTarget[0] = target[0] = x;
+            realTarget[1] = target[1] = y;
         },
         mouseUp: e => {
             e.state = "select";
@@ -206,10 +207,16 @@ function drawPathTarget(bones, target)
     );
 }
 
-function drawTarget(target)
+function drawTarget(target, color)
 {
+    color = color || "black";
+    var strokeStyle = ctx.strokeStyle;
+    ctx.strokeStyle = color;
+
     drawCircle(target[0], target[1], 5);
     drawCross(target[0], target[1], 5);
+
+    ctx.strokeStyle = strokeStyle;
 }
 
 let bones = [
@@ -229,15 +236,32 @@ function updateJ()
     if(recordPath) jpath = [];
 
     let eff = bones.filter(x => x.isEffector)[0];
+    let maxLength = 400; //hardcoded
     //how much theta change, change effector pos?
 
+    realTarget[0] = target[0];
+    realTarget[1] = target[1];
+
+    let ox = bones[0].world.x;
+    let oy = bones[0].world.y;
+    let rayx = realTarget[0] - ox;
+    let rayy = realTarget[1] - oy;
+    let l = Math.sqrt(rayx**2+rayy**2);
+    if(l > maxLength)
+    {
+        realTarget[0] = ox + (rayx / l) * maxLength;
+        realTarget[1] = oy + (rayy / l) * maxLength;
+    }
+
     let steps = 10;
-    var deffx = target[0] - eff.effector_world.x;
-    var deffy = target[1] - eff.effector_world.y;
+    var deffx = realTarget[0] - eff.effector_world.x;
+    var deffy = realTarget[1] - eff.effector_world.y;
     var distance = Math.sqrt(
         deffx**2 +
         deffy**2
     );
+
+
     while(steps > 0 && Math.abs(distance) > 5) 
     {
         steps--;
@@ -258,8 +282,8 @@ function updateJ()
         // bonesx2
         let jPlus = pseudoInverse(j);
 
-        var deffx = target[0] - eff.effector_world.x;
-        var deffy = target[1] - eff.effector_world.y;
+        var deffx = realTarget[0] - eff.effector_world.x;
+        var deffy = realTarget[1] - eff.effector_world.y;
         //bonesx2 * 2x1 = bonesx1
         var dtheta = jPlus.mmul(new Matrix([[deffx],[deffy]]));
 
@@ -278,8 +302,8 @@ function updateJ()
 
         updateBones(skeleton, bones, {x:0,y:0,angle:0});
 
-        deffx = target[0] - eff.effector_world.x;
-        deffy = target[1] - eff.effector_world.y;
+        deffx = realTarget[0] - eff.effector_world.x;
+        deffy = realTarget[1] - eff.effector_world.y;
         distance = Math.sqrt(deffx**2 + deffy**2);
 
         
@@ -345,7 +369,9 @@ function render() {
     drawBones(bones);
     
     drawPathTarget(bones, target);
+    drawTarget(realTarget, "lightGray");
     drawTarget(target);
+    
 
     //draw state space    
     ctx.beginPath();
