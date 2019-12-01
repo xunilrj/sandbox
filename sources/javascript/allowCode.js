@@ -208,7 +208,7 @@ function instrumentCode (code) {
 // el - root element that needs three children:
 //      el .code - where the code editor goes
 //      el .historyControls - where the step, play etc... controls go
-//      el .history - where the variable value historay table goes
+//      el .history - where the variable value history table goes
 // ctxName - will form the localStorageKey where the code will be save on every keypress
 export default function(obj, name, def, el, ctxName) {
     if(typeof el === "string") {

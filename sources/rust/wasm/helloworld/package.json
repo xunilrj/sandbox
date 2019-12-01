@@ -1,0 +1,12 @@
+{
+  "name": "helloworld",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "wasm-pack build ./rust -d ../html/wasm --target web",
+    "run": "server.fs ./html"
+  },
+  "author": "",
+  "license": "ISC"
+}

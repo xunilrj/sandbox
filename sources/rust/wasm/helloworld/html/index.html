@@ -1,0 +1,17 @@
+<html>
+    <body>        
+        <script type="module">
+            import init, {
+                greet, greet_n
+            } from './wasm/helloworld.js';
+            async function start()
+            {
+                await init();
+                greet("Daniel1");
+                const r = greet_n([null]);
+                console.log(r);
+            }
+            start();
+        </script>
+    </body>
+</html>

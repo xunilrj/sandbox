@@ -2,6 +2,7 @@ const puppeteer = require('puppeteer'); // v 1.1.0
 const { URL } = require('url');
 const fse = require('fs-extra'); // v 5.0.0
 const path = require('path');
+const argv = require('yargs').argv;
 
 async function start(urlToFetch) {
     /* 1 */
@@ -48,6 +49,9 @@ async function start(urlToFetch) {
 
       process.stdout.write("\r " + (newTop / height));
     } while(newTop > oldTop)
+
+    await page.close();
+    await browser.close();
   }
   
-  start('https://books.google.co.uk/books?id=Z9SrLUzJgSwC&printsec=frontcover#v=onepage&q&f=false');
+  start(argv.url);
