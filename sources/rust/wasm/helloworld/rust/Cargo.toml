@@ -1,12 +1,33 @@
 [package]
-name = "helloworld"
+name = "rust_webgl"
 version = "0.1.0"
 authors = ["Daniel Frederico Lins Leite <xunilrj@hotmail.com>"]
 edition = "2018"
+build = "build.rs"
 
 [lib]
 crate-type = ["cdylib"]
 
+[build-dependencies]
+glsl = "3.0.0"
+
 [dependencies]
 wasm-bindgen = "0.2.54"
+wasm-bindgen-futures = "0.4.5"
 js-sys = "0.3.31"
+
+[dependencies.web-sys]
+version = "0.3.4"
+features = [
+  'Document',
+  'Request', 'RequestInit', 'RequestMode',
+  'Response',
+  'Headers',
+  'Element',
+  'HtmlCanvasElement',
+  'WebGlBuffer',
+  'WebGlRenderingContext',
+  'WebGlProgram',
+  'WebGlShader',
+  'Window',
+]

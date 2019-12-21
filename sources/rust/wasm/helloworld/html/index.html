@@ -1,15 +1,20 @@
 <html>
-    <body>        
+    <body>    
+        <canvas id="screen" width="640" height="480"></canvas>    
         <script type="module">
-            import init, {
-                greet, greet_n
-            } from './wasm/helloworld.js';
+            import init, { Game } from './wasm/rust_webgl.js';
             async function start()
             {
+                window.printArray = (x) => console.log(x);
                 await init();
-                greet("Daniel1");
-                const r = greet_n([null]);
-                console.log(r);
+
+                var game = new Game("screen");
+                game = await game.load();
+                const render = (timestamp) => {
+                    game.render(timestamp);
+                    requestAnimationFrame(render);
+                };
+                requestAnimationFrame(render);
             }
             start();
         </script>

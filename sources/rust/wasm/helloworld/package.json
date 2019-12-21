@@ -8,5 +8,8 @@
     "run": "server.fs ./html"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "httpserver": "^0.3.0"
+  }
 }
