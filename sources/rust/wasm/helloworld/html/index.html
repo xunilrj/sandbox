@@ -5,12 +5,50 @@
             import init, { Game } from './wasm/rust_webgl.js';
             async function start()
             {
-                window.printArray = (x) => console.log(x);
+                window.printArray = (x, t) => console.log(new window[t](x));
                 await init();
 
                 var game = new Game("screen");
                 game = await game.load();
+
+                window.addEventListener("keydown", e => {
+                    //console.log(e);
+                    game.set_key(e.keyCode, true);
+                });
+                window.addEventListener("keyup", e => {
+                    game.set_key(e.keyCode, false);
+                });
+                let screen = document.getElementById("screen");
+                screen.addEventListener("mousemove", e => {
+                        var r = screen.getBoundingClientRect();
+                        let x =  e.clientX - r.left;
+                        let y =  e.clientY - r.top;
+
+                        let lb = (e.buttons & 1) == 1;
+                        let rb = (e.buttons & 2) == 2;
+                        let mb = (e.buttons & 4) == 4;
+
+                        game.set_mouse(x, y,
+                            0,
+                            lb, rb, mb);
+                    });
+                screen.addEventListener("wheel", e => {
+                        var r = screen.getBoundingClientRect();
+                        let x =  e.clientX - r.left;
+                        let y =  e.clientY - r.top;
+                        let wheely = e.deltaY;
+
+                        let lb = (e.buttons & 1) == 1;
+                        let rb = (e.buttons & 2) == 2;
+                        let mb = (e.buttons & 4) == 4;
+
+                        game.set_mouse(x, y,
+                            wheely,
+                            lb, rb, mb);
+                    });
+
                 const render = (timestamp) => {
+                    game.update(timestamp);
                     game.render(timestamp);
                     requestAnimationFrame(render);
                 };

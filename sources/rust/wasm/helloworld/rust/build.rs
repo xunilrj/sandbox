@@ -5,13 +5,9 @@ use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 
-use glsl::parser::Parse;
-use glsl::syntax::ShaderStage;
-use glsl::syntax::{CompoundStatement, Expr, SingleDeclaration, 
-    Statement, TypeSpecifierNonArray, Identifier,
-    StorageQualifier, TypeQualifierSpec  };
-use glsl::visitor::{Host, Visit, Visitor};
-use std::iter::FromIterator;
+use glsl::syntax::{SingleDeclaration,    
+    StorageQualifier, TypeQualifierSpec };
+use glsl::visitor::{Visit, Visitor};
 
 struct Counter {
   var_nb: usize
