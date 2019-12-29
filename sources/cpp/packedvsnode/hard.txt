@@ -1,0 +1,1528 @@
+============ start debug info ============
+libhd version 21.23 (x86-64) [7688]
+using /var/lib/hardware
+kernel version is 4.4
+----- /proc/cmdline -----
+  BOOT_IMAGE=/kernel init=/init
+----- /proc/cmdline end -----
+debug = 0xff7ffff7
+probe = 0x15938fcdaa17fcf9fffe (+memory +pci +isapnp +net +floppy +misc +misc.serial +misc.par +misc.floppy +serial +cpu +bios +monitor +mouse +scsi +usb -usb.mods +modem +modem.usb +parallel +parallel.lp +parallel.zip -isa -isa.isdn +isdn +kbd +prom +sbus +int +braille +braille.alva +braille.fhp +braille.ht -ignx11 +sys -bios.vbe -isapnp.old -isapnp.new -isapnp.mod +braille.baum -manual +fb +pppoe -scan +pcmcia +fork -parallel.imm +s390 +cpuemu -sysfs -s390disks +udev +block +block.cdrom +block.part +edd +edd.mod -bios.ddc -bios.fb -bios.mode +input +block.mods +bios.vesa -cpuemu.debug -scsi.noserial +wlan -bios.crc -hal +bios.vram +bios.acpi -bios.ddc.ports=0 +modules.pata -net.eeprom +x86emu=dump -max -lxrc)
+shm: attached segment 0 at 0x7f56e78a0000
+>> hal.1: read hal data
+>> floppy.1: get nvram
+>> floppy.2: klog info
+>> bios.1: cmdline
+>> bios.1.1: apm
+>> bios.2: ram
+  bios: 0 disks
+>> bios.2: rom
+>> bios.3: smp
+----- BIOS data 0x00400 - 0x004ff -----
+  400  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  "................"
+  410  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  "................"
+  420  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  "................"
+  430  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  "................"
+  440  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  "................"
+  450  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  "................"
+  460  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  "................"
+  470  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  "................"
+  480  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  "................"
+  490  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  "................"
+  4a0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  "................"
+  4b0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  "................"
+  4c0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  "................"
+  4d0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  "................"
+  4e0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  "................"
+  4f0  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  "................"
+----- BIOS data end -----
+>> bios.4: vbe
+>> bios.4.1: vbe info
+=== bios setup ===
+failed to read /dev/mem
+x86emu: could not init vm
+>> bios.5: 32
+>> bios.6: acpi
+>> sys.1: cpu
+  vm check: vm_1 = 0, vm_2 = -1
+  is_vmware = 0, has_vmware_mouse = 0
+>> misc.9: kernel log
+>> misc.1: misc data
+>> misc.1.1: open serial
+>> misc.1.2: open parallel
+----- exec: "/sbin/modprobe parport " -----
+  modprobe: ERROR: ../libkmod/libkmod.c:586 kmod_search_moddep() could not open moddep file '/lib/modules/4.4.0-18362-Microsoft/modules.dep.bin'
+  modprobe: FATAL: Module parport not found in directory /lib/modules/4.4.0-18362-Microsoft
+----- return code: ? -----
+----- exec: "/sbin/modprobe parport_pc " -----
+  modprobe: ERROR: ../libkmod/libkmod.c:586 kmod_search_moddep() could not open moddep file '/lib/modules/4.4.0-18362-Microsoft/modules.dep.bin'
+  modprobe: FATAL: Module parport_pc not found in directory /lib/modules/4.4.0-18362-Microsoft
+----- return code: ? -----
+>> misc.2.1: io
+>> misc.2.2: dma
+>> misc.2.3: irq
+----- /proc/ioports -----
+----- /proc/ioports end -----
+----- /proc/interrupts -----
+----- /proc/interrupts end -----
+----- /proc/dma -----
+----- /proc/dma end -----
+>> misc.3: FPU
+>> misc.3.1: DMA
+>> misc.3.2: PIC
+>> misc.3.3: timer
+>> misc.3.4: RTC
+>> cpu.1: cpuinfo
+----- /proc/cpuinfo -----
+  processor	: 0
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 0
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 1
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 0
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 2
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 1
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 3
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 1
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 4
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 2
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 5
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 2
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 6
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 3
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 7
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 3
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 8
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 4
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 9
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 4
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 10
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 5
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 11
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 5
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 12
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 6
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 13
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 6
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 14
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 7
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 15
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 7
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+----- /proc/cpuinfo end -----
+>> memory.1: main memory size
+  kcore mem:  0x0
+  klog mem 0: 0x0
+  klog mem 1: 0x0
+  klog mem:   0x0
+  bios mem:   0x0
+  meminfo:    0x7fbc0d000
+  xen balloon:    0x0
+>> pci.1: sysfs drivers
+----- sysfs driver list (id 0x0000000000000000) -----
+----- sysfs driver list end -----
+>> pci.2: get sysfs pci data
+sysfs: no such bus: pci
+---------- PCI raw data ----------
+---------- PCI raw data end ----------
+>> pci.4: build list
+>> pci.3: macio
+sysfs: no such bus: macio
+>> pci.4: vio
+sysfs: no such bus: vio
+>> pci.5: xen
+sysfs: no such bus: xen
+>> pci.6: ps3
+sysfs: no such bus: ps3_system_bus
+>> pci.7: platform
+sysfs: no such bus: platform
+>> pci.8: of_platform
+sysfs: no such bus: of_platform
+>> pci.9: vm
+sysfs: no such bus: vm
+>> pci.10: virtio
+sysfs: no such bus: virtio
+>> pci.11: ibmebus
+sysfs: no such bus: ibmebus
+>> pci.12: uisvirtpci
+sysfs: no such bus: uisvirtpci
+>> monitor.1: ddc
+>> monitor.2: bios
+>> monitor.3: pci
+>> monitor.4: internal db
+>> monitor.5: prom
+>> pcmcia.1: sysfs drivers
+----- sysfs driver list (id 0x0000000000000000) -----
+----- sysfs driver list end -----
+>> pcmcia.2: pcmcia
+sysfs: no such bus: pcmcia
+>> pcmcia.3: pcmcia ctrl
+sysfs: no such class: pcmcia_socket
+>> serial.1: read info
+----- serial info -----
+----- serial info end -----
+>> serial.2: build list
+>> misc.5: misc data
+----- misc resources -----
+----- misc resources end -----
+>> parallel.1: pp mod
+----- exec: "/sbin/modprobe parport_pc" -----
+  modprobe: ERROR: ../libkmod/libkmod.c:586 kmod_search_moddep() could not open moddep file '/lib/modules/4.4.0-18362-Microsoft/modules.dep.bin'
+  modprobe: FATAL: Module parport_pc not found in directory /lib/modules/4.4.0-18362-Microsoft
+----- return code: ? -----
+----- exec: "/sbin/modprobe lp" -----
+  modprobe: ERROR: ../libkmod/libkmod.c:586 kmod_search_moddep() could not open moddep file '/lib/modules/4.4.0-18362-Microsoft/modules.dep.bin'
+  modprobe: FATAL: Module lp not found in directory /lib/modules/4.4.0-18362-Microsoft
+----- return code: ? -----
+>> parallel.2.1: lp read info
+>> parallel.2.2: lp read info
+>> parallel.2.3: lp read info
+----- parallel info -----
+----- parallel info end -----
+>> block.1: block modules
+----- exec: "/sbin/modprobe ide-cd_mod " -----
+  modprobe: ERROR: ../libkmod/libkmod.c:586 kmod_search_moddep() could not open moddep file '/lib/modules/4.4.0-18362-Microsoft/modules.dep.bin'
+  modprobe: FATAL: Module ide-cd_mod not found in directory /lib/modules/4.4.0-18362-Microsoft
+----- return code: ? -----
+----- exec: "/sbin/modprobe ide-disk " -----
+  modprobe: ERROR: ../libkmod/libkmod.c:586 kmod_search_moddep() could not open moddep file '/lib/modules/4.4.0-18362-Microsoft/modules.dep.bin'
+  modprobe: FATAL: Module ide-disk not found in directory /lib/modules/4.4.0-18362-Microsoft
+----- return code: ? -----
+----- exec: "/sbin/modprobe sr_mod " -----
+  modprobe: ERROR: ../libkmod/libkmod.c:586 kmod_search_moddep() could not open moddep file '/lib/modules/4.4.0-18362-Microsoft/modules.dep.bin'
+  modprobe: FATAL: Module sr_mod not found in directory /lib/modules/4.4.0-18362-Microsoft
+----- return code: ? -----
+----- exec: "/sbin/modprobe sd_mod " -----
+  modprobe: ERROR: ../libkmod/libkmod.c:586 kmod_search_moddep() could not open moddep file '/lib/modules/4.4.0-18362-Microsoft/modules.dep.bin'
+  modprobe: FATAL: Module sd_mod not found in directory /lib/modules/4.4.0-18362-Microsoft
+----- return code: ? -----
+----- exec: "/sbin/modprobe st " -----
+  modprobe: ERROR: ../libkmod/libkmod.c:586 kmod_search_moddep() could not open moddep file '/lib/modules/4.4.0-18362-Microsoft/modules.dep.bin'
+  modprobe: FATAL: Module st not found in directory /lib/modules/4.4.0-18362-Microsoft
+----- return code: ? -----
+>> block.2: sysfs drivers
+----- sysfs driver list (id 0x0000000000000000) -----
+----- sysfs driver list end -----
+>> block.3: cdrom
+>> block.4: partition
+>> block.5: get sysfs block dev data
+-----  lsscsi -----
+-----  lsscsi end -----
+sysfs: no such class: block
+>> scsi.1: scsi modules
+----- exec: "/sbin/modprobe sg " -----
+  modprobe: ERROR: ../libkmod/libkmod.c:586 kmod_search_moddep() could not open moddep file '/lib/modules/4.4.0-18362-Microsoft/modules.dep.bin'
+  modprobe: FATAL: Module sg not found in directory /lib/modules/4.4.0-18362-Microsoft
+----- return code: ? -----
+>> scsi.2: scsi tape
+sysfs: no such class: scsi_tape
+>> scsi.3: scsi generic
+sysfs: no such class: scsi_generic
+>> usb.1: sysfs drivers
+----- sysfs driver list (id 0x0000000000000000) -----
+----- sysfs driver list end -----
+>> usb.2: usb
+sysfs: no such bus: usb
+>> usb.3.1: joydev mod
+----- exec: "/sbin/modprobe joydev " -----
+  modprobe: ERROR: ../libkmod/libkmod.c:586 kmod_search_moddep() could not open moddep file '/lib/modules/4.4.0-18362-Microsoft/modules.dep.bin'
+  modprobe: FATAL: Module joydev not found in directory /lib/modules/4.4.0-18362-Microsoft
+----- return code: ? -----
+>> usb.3.2: evdev mod
+----- exec: "/sbin/modprobe evdev " -----
+  modprobe: ERROR: ../libkmod/libkmod.c:586 kmod_search_moddep() could not open moddep file '/lib/modules/4.4.0-18362-Microsoft/modules.dep.bin'
+  modprobe: FATAL: Module evdev not found in directory /lib/modules/4.4.0-18362-Microsoft
+----- return code: ? -----
+>> usb.3.3: input
+sysfs: no such class: input
+>> usb.3.4: lp
+sysfs: no such class: usb
+>> usb.3.5: serial
+sysfs: no such class: tty
+>> edd.1: edd mod
+----- exec: "/sbin/modprobe edd " -----
+  modprobe: ERROR: ../libkmod/libkmod.c:586 kmod_search_moddep() could not open moddep file '/lib/modules/4.4.0-18362-Microsoft/modules.dep.bin'
+  modprobe: FATAL: Module edd not found in directory /lib/modules/4.4.0-18362-Microsoft
+----- return code: ? -----
+>> edd.2: edd info
+>> modem.1: serial
+******  started child process 4534 (15s/120s)  ******
+******  stopped child process 4534 (120s)  ******
+>> mouse.2: serial
+******  started child process 4535 (20s/20s)  ******
+******  stopped child process 4535 (20s)  ******
+>> input.1: joydev mod
+----- exec: "/sbin/modprobe joydev " -----
+  modprobe: ERROR: ../libkmod/libkmod.c:586 kmod_search_moddep() could not open moddep file '/lib/modules/4.4.0-18362-Microsoft/modules.dep.bin'
+  modprobe: FATAL: Module joydev not found in directory /lib/modules/4.4.0-18362-Microsoft
+----- return code: ? -----
+>> input.1.1: evdev mod
+----- exec: "/sbin/modprobe evdev " -----
+  modprobe: ERROR: ../libkmod/libkmod.c:586 kmod_search_moddep() could not open moddep file '/lib/modules/4.4.0-18362-Microsoft/modules.dep.bin'
+  modprobe: FATAL: Module evdev not found in directory /lib/modules/4.4.0-18362-Microsoft
+----- return code: ? -----
+>> input.2: input
+----- /proc/bus/input/devices -----
+----- /proc/bus/input/devices end -----
+>> kbd.2: uml
+>> cpu.1: cpuinfo
+----- /proc/cpuinfo -----
+  processor	: 0
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 0
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 1
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 0
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 2
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 1
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 3
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 1
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 4
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 2
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 5
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 2
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 6
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 3
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 7
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 3
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 8
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 4
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 9
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 4
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 10
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 5
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 11
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 5
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 12
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 6
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 13
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 6
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 14
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 7
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+  processor	: 15
+  vendor_id	: AuthenticAMD
+  cpu family	: 23
+  model		: 1
+  model name	: AMD Ryzen 7 1700 Eight-Core Processor          
+  stepping	: 1
+  microcode	: 0xffffffff
+  cpu MHz		: 3000.000
+  cache size	: 512 KB
+  physical id	: 0
+  siblings	: 16
+  core id		: 7
+  cpu cores	: 8
+  apicid		: 0
+  initial apicid	: 0
+  fpu		: yes
+  fpu_exception	: yes
+  cpuid level	: 23
+  wp		: yes
+  flags		: fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe1gb rdtscp lm pni pclmulqdq ssse3 fma cx16 sse4_1 sse4_2 movbe popcnt aes xsave osxsave avx f16c rdrand hypervisor lahf_lm cmp_legacy cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw wdt topoext fsgsbase bmi1 avx2 smep bmi2 rdseed adx smap clflushopt sha_ni
+  bogomips	: 6000.00
+  clflush size	: 64
+  cache_alignment	: 64
+  address sizes	: 36 bits physical, 48 bits virtual
+  power management:
+  
+----- /proc/cpuinfo end -----
+>> kbd.3: serial console
+>> fb.1: read info
+>> net.1: get network data
+  net interface: name = eth0, path = /class/net/eth0
+    hw_addr = 10:7b:44:50:33:7c
+    GDRVINFO ethtool error: Invalid argument
+    GSSET_INFO ethtool error: Invalid argument
+  net interface: name = eth1, path = /class/net/eth1
+    hw_addr = 0a:00:27:00:00:15
+    GDRVINFO ethtool error: Invalid argument
+    GSSET_INFO ethtool error: Invalid argument
+  net interface: name = eth2, path = /class/net/eth2
+    hw_addr = 00:15:5d:73:03:a8
+    GDRVINFO ethtool error: Invalid argument
+    GSSET_INFO ethtool error: Invalid argument
+  net interface: name = eth3, path = /class/net/eth3
+    hw_addr = 0a:00:27:00:00:17
+    GDRVINFO ethtool error: Invalid argument
+    GSSET_INFO ethtool error: Invalid argument
+  net interface: name = eth4, path = /class/net/eth4
+    hw_addr = 02:00:4c:4f:4f:50
+    GDRVINFO ethtool error: Invalid argument
+    GSSET_INFO ethtool error: Invalid argument
+  net interface: name = eth5, path = /class/net/eth5
+    hw_addr = 00:15:5d:d9:81:02
+    GDRVINFO ethtool error: Invalid argument
+    GSSET_INFO ethtool error: Invalid argument
+  net interface: name = lo, path = /class/net/lo
+    hw_addr = 
+    GSSET_INFO ethtool error: Invalid argument
+  eth0: GLINK ethtool error: Invalid argument
+  eth1: GLINK ethtool error: Invalid argument
+  eth2: GLINK ethtool error: Invalid argument
+  eth3: GLINK ethtool error: Invalid argument
+  eth4: GLINK ethtool error: Invalid argument
+  eth5: GLINK ethtool error: Invalid argument
+  lo: GLINK ethtool error: Invalid argument
+>> pppoe.1: looking for pppoe
+>> pppoe.2: discovery
+eth0: socket failed: Address family not supported by protocol
+eth1: socket failed: Address family not supported by protocol
+eth2: socket failed: Address family not supported by protocol
+eth3: socket failed: Address family not supported by protocol
+eth4: socket failed: Address family not supported by protocol
+eth5: socket failed: Address family not supported by protocol
+>> wlan.1: detecting wlan features
+>> isdn.1: list
+>> dsl.1: list
+>> int.2: cdrom
+>> int.3: media
+>> int.4: floppy
+>> int.5: edd
+>> int.5.1: bios
+>> int.6: mouse
+----- sysfs driver list (id 0x0000000000000000) -----
+----- sysfs driver list end -----
+>> int.15: system info
+  system type:
+  acpi: 0
+>> int.7: hdb
+>> int.7.1: modules
+>> int.8: usbscsi
+>> int.9: hotplug
+>> int.10: modem
+>> int.11: wlan
+>> int.12: udev
+-----  udevinfo -----
+  P: /class/power_supply/ac
+  E: DEVPATH=/class/power_supply/ac
+  E: SUBSYSTEM=subsystem
+  
+  P: /class/power_supply/battery
+  E: DEVPATH=/class/power_supply/battery
+  E: SUBSYSTEM=subsystem
+  
+  P: /class/power_supply/usb
+  E: DEVPATH=/class/power_supply/usb
+  E: SUBSYSTEM=subsystem
+  
+-----  udevinfo end -----
+/class/power_supply/ac
+/class/power_supply/battery
+/class/power_supply/usb
+>> int.13: device names
+>> int.14: soft raid
+>> int.15: geo
+>> int.16: parent
+  prop read: rdCR.lZF+r4EgHp4 (failed)
+  old prop read: rdCR.lZF+r4EgHp4 (failed)
+  prop read: rdCR.n_7QNeEnh23 (failed)
+  old prop read: rdCR.n_7QNeEnh23 (failed)
+  prop read: rdCR.CxwsZFjVASF (failed)
+  old prop read: rdCR.CxwsZFjVASF (failed)
+  prop read: rdCR.j8NaKXDZtZ6 (failed)
+  old prop read: rdCR.j8NaKXDZtZ6 (failed)
+  prop read: wkFv.j8NaKXDZtZ6 (failed)
+  old prop read: wkFv.j8NaKXDZtZ6 (failed)
+  prop read: +rIN.j8NaKXDZtZ6 (failed)
+  old prop read: +rIN.j8NaKXDZtZ6 (failed)
+  prop read: 4zLr.j8NaKXDZtZ6 (failed)
+  old prop read: 4zLr.j8NaKXDZtZ6 (failed)
+  prop read: 94PJ.j8NaKXDZtZ6 (failed)
+  old prop read: 94PJ.j8NaKXDZtZ6 (failed)
+  prop read: EBSn.j8NaKXDZtZ6 (failed)
+  old prop read: EBSn.j8NaKXDZtZ6 (failed)
+  prop read: JIVF.j8NaKXDZtZ6 (failed)
+  old prop read: JIVF.j8NaKXDZtZ6 (failed)
+  prop read: OPYj.j8NaKXDZtZ6 (failed)
+  old prop read: OPYj.j8NaKXDZtZ6 (failed)
+  prop read: TWbB.j8NaKXDZtZ6 (failed)
+  old prop read: TWbB.j8NaKXDZtZ6 (failed)
+  prop read: Ydef.j8NaKXDZtZ6 (failed)
+  old prop read: Ydef.j8NaKXDZtZ6 (failed)
+  prop read: dkh7.j8NaKXDZtZ6 (failed)
+  old prop read: dkh7.j8NaKXDZtZ6 (failed)
+  prop read: hrkb.j8NaKXDZtZ6 (failed)
+  old prop read: hrkb.j8NaKXDZtZ6 (failed)
+  prop read: myn3.j8NaKXDZtZ6 (failed)
+  old prop read: myn3.j8NaKXDZtZ6 (failed)
+  prop read: r3rX.j8NaKXDZtZ6 (failed)
+  old prop read: r3rX.j8NaKXDZtZ6 (failed)
+  prop read: wAu+.j8NaKXDZtZ6 (failed)
+  old prop read: wAu+.j8NaKXDZtZ6 (failed)
+  prop read: +HxT.j8NaKXDZtZ6 (failed)
+  old prop read: +HxT.j8NaKXDZtZ6 (failed)
+  prop read: usDW.ndpeucax6V1 (failed)
+  old prop read: usDW.ndpeucax6V1 (failed)
+  prop read: L2Ua.ndpeucax6V1 (failed)
+  old prop read: L2Ua.ndpeucax6V1 (failed)
+  prop read: pDke.ndpeucax6V1 (failed)
+  old prop read: pDke.ndpeucax6V1 (failed)
+  prop read: GP_i.ndpeucax6V1 (failed)
+  old prop read: GP_i.ndpeucax6V1 (failed)
+  prop read: jaEn.ndpeucax6V1 (failed)
+  old prop read: jaEn.ndpeucax6V1 (failed)
+  prop read: AmUr.ndpeucax6V1 (failed)
+  old prop read: AmUr.ndpeucax6V1 (failed)
+  prop read: ZsBS.GQNx7L4uPNA (failed)
+  old prop read: ZsBS.GQNx7L4uPNA (failed)
+----- /proc/modules -----
+----- /proc/modules end -----
+  used irqs:
+=========== end debug info ============
+01: None 00.0: 10105 BIOS
+  [Created at bios.186]
+  Unique ID: rdCR.lZF+r4EgHp4
+  Hardware Class: bios
+  BIOS Keyboard LED Status:
+    Scroll Lock: off
+    Num Lock: off
+    Caps Lock: off
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+02: None 00.0: 10107 System
+  [Created at sys.63]
+  Unique ID: rdCR.n_7QNeEnh23
+  Hardware Class: system
+  Model: "System"
+  Formfactor: "desktop"
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+19: None 00.0: 10102 Main Memory
+  [Created at memory.74]
+  Unique ID: rdCR.CxwsZFjVASF
+  Hardware Class: memory
+  Model: "Main Memory"
+  Memory Range: 0x00000000-0x7fbc0cfff (rw)
+  Memory Size: 32 GB
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+20: None 00.0: 10103 CPU
+  [Created at cpu.460]
+  Unique ID: rdCR.j8NaKXDZtZ6
+  Hardware Class: cpu
+  Arch: X86-64
+  Vendor: "AuthenticAMD"
+  Model: 23.1.1 "AMD Ryzen 7 1700 Eight-Core Processor          "
+  Features: fpu,vme,de,pse,tsc,msr,pae,mce,cx8,apic,sep,mtrr,pge,mca,cmov,pat,pse36,clflush,mmx,fxsr,sse,sse2,ht,syscall,nx,mmxext,fxsr_opt,pdpe1gb,rdtscp,lm,pni,pclmulqdq,ssse3,fma,cx16,sse4_1,sse4_2,movbe,popcnt,aes,xsave,osxsave,avx,f16c,rdrand,hypervisor,lahf_lm,cmp_legacy,cr8_legacy,abm,sse4a,misalignsse,3dnowprefetch,osvw,wdt,topoext,fsgsbase,bmi1,avx2,smep,bmi2,rdseed,adx,smap,clflushopt,sha_ni
+  Clock: 3000 MHz
+  BogoMips: 6000.00
+  Cache: 512 kb
+  Units/Processor: 16
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+21: None 01.0: 10103 CPU
+  [Created at cpu.460]
+  Unique ID: wkFv.j8NaKXDZtZ6
+  Hardware Class: cpu
+  Arch: X86-64
+  Vendor: "AuthenticAMD"
+  Model: 23.1.1 "AMD Ryzen 7 1700 Eight-Core Processor          "
+  Features: fpu,vme,de,pse,tsc,msr,pae,mce,cx8,apic,sep,mtrr,pge,mca,cmov,pat,pse36,clflush,mmx,fxsr,sse,sse2,ht,syscall,nx,mmxext,fxsr_opt,pdpe1gb,rdtscp,lm,pni,pclmulqdq,ssse3,fma,cx16,sse4_1,sse4_2,movbe,popcnt,aes,xsave,osxsave,avx,f16c,rdrand,hypervisor,lahf_lm,cmp_legacy,cr8_legacy,abm,sse4a,misalignsse,3dnowprefetch,osvw,wdt,topoext,fsgsbase,bmi1,avx2,smep,bmi2,rdseed,adx,smap,clflushopt,sha_ni
+  Clock: 3000 MHz
+  BogoMips: 6000.00
+  Cache: 512 kb
+  Units/Processor: 16
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+22: None 02.0: 10103 CPU
+  [Created at cpu.460]
+  Unique ID: +rIN.j8NaKXDZtZ6
+  Hardware Class: cpu
+  Arch: X86-64
+  Vendor: "AuthenticAMD"
+  Model: 23.1.1 "AMD Ryzen 7 1700 Eight-Core Processor          "
+  Features: fpu,vme,de,pse,tsc,msr,pae,mce,cx8,apic,sep,mtrr,pge,mca,cmov,pat,pse36,clflush,mmx,fxsr,sse,sse2,ht,syscall,nx,mmxext,fxsr_opt,pdpe1gb,rdtscp,lm,pni,pclmulqdq,ssse3,fma,cx16,sse4_1,sse4_2,movbe,popcnt,aes,xsave,osxsave,avx,f16c,rdrand,hypervisor,lahf_lm,cmp_legacy,cr8_legacy,abm,sse4a,misalignsse,3dnowprefetch,osvw,wdt,topoext,fsgsbase,bmi1,avx2,smep,bmi2,rdseed,adx,smap,clflushopt,sha_ni
+  Clock: 3000 MHz
+  BogoMips: 6000.00
+  Cache: 512 kb
+  Units/Processor: 16
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+23: None 03.0: 10103 CPU
+  [Created at cpu.460]
+  Unique ID: 4zLr.j8NaKXDZtZ6
+  Hardware Class: cpu
+  Arch: X86-64
+  Vendor: "AuthenticAMD"
+  Model: 23.1.1 "AMD Ryzen 7 1700 Eight-Core Processor          "
+  Features: fpu,vme,de,pse,tsc,msr,pae,mce,cx8,apic,sep,mtrr,pge,mca,cmov,pat,pse36,clflush,mmx,fxsr,sse,sse2,ht,syscall,nx,mmxext,fxsr_opt,pdpe1gb,rdtscp,lm,pni,pclmulqdq,ssse3,fma,cx16,sse4_1,sse4_2,movbe,popcnt,aes,xsave,osxsave,avx,f16c,rdrand,hypervisor,lahf_lm,cmp_legacy,cr8_legacy,abm,sse4a,misalignsse,3dnowprefetch,osvw,wdt,topoext,fsgsbase,bmi1,avx2,smep,bmi2,rdseed,adx,smap,clflushopt,sha_ni
+  Clock: 3000 MHz
+  BogoMips: 6000.00
+  Cache: 512 kb
+  Units/Processor: 16
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+24: None 04.0: 10103 CPU
+  [Created at cpu.460]
+  Unique ID: 94PJ.j8NaKXDZtZ6
+  Hardware Class: cpu
+  Arch: X86-64
+  Vendor: "AuthenticAMD"
+  Model: 23.1.1 "AMD Ryzen 7 1700 Eight-Core Processor          "
+  Features: fpu,vme,de,pse,tsc,msr,pae,mce,cx8,apic,sep,mtrr,pge,mca,cmov,pat,pse36,clflush,mmx,fxsr,sse,sse2,ht,syscall,nx,mmxext,fxsr_opt,pdpe1gb,rdtscp,lm,pni,pclmulqdq,ssse3,fma,cx16,sse4_1,sse4_2,movbe,popcnt,aes,xsave,osxsave,avx,f16c,rdrand,hypervisor,lahf_lm,cmp_legacy,cr8_legacy,abm,sse4a,misalignsse,3dnowprefetch,osvw,wdt,topoext,fsgsbase,bmi1,avx2,smep,bmi2,rdseed,adx,smap,clflushopt,sha_ni
+  Clock: 3000 MHz
+  BogoMips: 6000.00
+  Cache: 512 kb
+  Units/Processor: 16
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+25: None 05.0: 10103 CPU
+  [Created at cpu.460]
+  Unique ID: EBSn.j8NaKXDZtZ6
+  Hardware Class: cpu
+  Arch: X86-64
+  Vendor: "AuthenticAMD"
+  Model: 23.1.1 "AMD Ryzen 7 1700 Eight-Core Processor          "
+  Features: fpu,vme,de,pse,tsc,msr,pae,mce,cx8,apic,sep,mtrr,pge,mca,cmov,pat,pse36,clflush,mmx,fxsr,sse,sse2,ht,syscall,nx,mmxext,fxsr_opt,pdpe1gb,rdtscp,lm,pni,pclmulqdq,ssse3,fma,cx16,sse4_1,sse4_2,movbe,popcnt,aes,xsave,osxsave,avx,f16c,rdrand,hypervisor,lahf_lm,cmp_legacy,cr8_legacy,abm,sse4a,misalignsse,3dnowprefetch,osvw,wdt,topoext,fsgsbase,bmi1,avx2,smep,bmi2,rdseed,adx,smap,clflushopt,sha_ni
+  Clock: 3000 MHz
+  BogoMips: 6000.00
+  Cache: 512 kb
+  Units/Processor: 16
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+26: None 06.0: 10103 CPU
+  [Created at cpu.460]
+  Unique ID: JIVF.j8NaKXDZtZ6
+  Hardware Class: cpu
+  Arch: X86-64
+  Vendor: "AuthenticAMD"
+  Model: 23.1.1 "AMD Ryzen 7 1700 Eight-Core Processor          "
+  Features: fpu,vme,de,pse,tsc,msr,pae,mce,cx8,apic,sep,mtrr,pge,mca,cmov,pat,pse36,clflush,mmx,fxsr,sse,sse2,ht,syscall,nx,mmxext,fxsr_opt,pdpe1gb,rdtscp,lm,pni,pclmulqdq,ssse3,fma,cx16,sse4_1,sse4_2,movbe,popcnt,aes,xsave,osxsave,avx,f16c,rdrand,hypervisor,lahf_lm,cmp_legacy,cr8_legacy,abm,sse4a,misalignsse,3dnowprefetch,osvw,wdt,topoext,fsgsbase,bmi1,avx2,smep,bmi2,rdseed,adx,smap,clflushopt,sha_ni
+  Clock: 3000 MHz
+  BogoMips: 6000.00
+  Cache: 512 kb
+  Units/Processor: 16
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+27: None 07.0: 10103 CPU
+  [Created at cpu.460]
+  Unique ID: OPYj.j8NaKXDZtZ6
+  Hardware Class: cpu
+  Arch: X86-64
+  Vendor: "AuthenticAMD"
+  Model: 23.1.1 "AMD Ryzen 7 1700 Eight-Core Processor          "
+  Features: fpu,vme,de,pse,tsc,msr,pae,mce,cx8,apic,sep,mtrr,pge,mca,cmov,pat,pse36,clflush,mmx,fxsr,sse,sse2,ht,syscall,nx,mmxext,fxsr_opt,pdpe1gb,rdtscp,lm,pni,pclmulqdq,ssse3,fma,cx16,sse4_1,sse4_2,movbe,popcnt,aes,xsave,osxsave,avx,f16c,rdrand,hypervisor,lahf_lm,cmp_legacy,cr8_legacy,abm,sse4a,misalignsse,3dnowprefetch,osvw,wdt,topoext,fsgsbase,bmi1,avx2,smep,bmi2,rdseed,adx,smap,clflushopt,sha_ni
+  Clock: 3000 MHz
+  BogoMips: 6000.00
+  Cache: 512 kb
+  Units/Processor: 16
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+28: None 08.0: 10103 CPU
+  [Created at cpu.460]
+  Unique ID: TWbB.j8NaKXDZtZ6
+  Hardware Class: cpu
+  Arch: X86-64
+  Vendor: "AuthenticAMD"
+  Model: 23.1.1 "AMD Ryzen 7 1700 Eight-Core Processor          "
+  Features: fpu,vme,de,pse,tsc,msr,pae,mce,cx8,apic,sep,mtrr,pge,mca,cmov,pat,pse36,clflush,mmx,fxsr,sse,sse2,ht,syscall,nx,mmxext,fxsr_opt,pdpe1gb,rdtscp,lm,pni,pclmulqdq,ssse3,fma,cx16,sse4_1,sse4_2,movbe,popcnt,aes,xsave,osxsave,avx,f16c,rdrand,hypervisor,lahf_lm,cmp_legacy,cr8_legacy,abm,sse4a,misalignsse,3dnowprefetch,osvw,wdt,topoext,fsgsbase,bmi1,avx2,smep,bmi2,rdseed,adx,smap,clflushopt,sha_ni
+  Clock: 3000 MHz
+  BogoMips: 6000.00
+  Cache: 512 kb
+  Units/Processor: 16
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+29: None 09.0: 10103 CPU
+  [Created at cpu.460]
+  Unique ID: Ydef.j8NaKXDZtZ6
+  Hardware Class: cpu
+  Arch: X86-64
+  Vendor: "AuthenticAMD"
+  Model: 23.1.1 "AMD Ryzen 7 1700 Eight-Core Processor          "
+  Features: fpu,vme,de,pse,tsc,msr,pae,mce,cx8,apic,sep,mtrr,pge,mca,cmov,pat,pse36,clflush,mmx,fxsr,sse,sse2,ht,syscall,nx,mmxext,fxsr_opt,pdpe1gb,rdtscp,lm,pni,pclmulqdq,ssse3,fma,cx16,sse4_1,sse4_2,movbe,popcnt,aes,xsave,osxsave,avx,f16c,rdrand,hypervisor,lahf_lm,cmp_legacy,cr8_legacy,abm,sse4a,misalignsse,3dnowprefetch,osvw,wdt,topoext,fsgsbase,bmi1,avx2,smep,bmi2,rdseed,adx,smap,clflushopt,sha_ni
+  Clock: 3000 MHz
+  BogoMips: 6000.00
+  Cache: 512 kb
+  Units/Processor: 16
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+30: None 0a.0: 10103 CPU
+  [Created at cpu.460]
+  Unique ID: dkh7.j8NaKXDZtZ6
+  Hardware Class: cpu
+  Arch: X86-64
+  Vendor: "AuthenticAMD"
+  Model: 23.1.1 "AMD Ryzen 7 1700 Eight-Core Processor          "
+  Features: fpu,vme,de,pse,tsc,msr,pae,mce,cx8,apic,sep,mtrr,pge,mca,cmov,pat,pse36,clflush,mmx,fxsr,sse,sse2,ht,syscall,nx,mmxext,fxsr_opt,pdpe1gb,rdtscp,lm,pni,pclmulqdq,ssse3,fma,cx16,sse4_1,sse4_2,movbe,popcnt,aes,xsave,osxsave,avx,f16c,rdrand,hypervisor,lahf_lm,cmp_legacy,cr8_legacy,abm,sse4a,misalignsse,3dnowprefetch,osvw,wdt,topoext,fsgsbase,bmi1,avx2,smep,bmi2,rdseed,adx,smap,clflushopt,sha_ni
+  Clock: 3000 MHz
+  BogoMips: 6000.00
+  Cache: 512 kb
+  Units/Processor: 16
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+31: None 0b.0: 10103 CPU
+  [Created at cpu.460]
+  Unique ID: hrkb.j8NaKXDZtZ6
+  Hardware Class: cpu
+  Arch: X86-64
+  Vendor: "AuthenticAMD"
+  Model: 23.1.1 "AMD Ryzen 7 1700 Eight-Core Processor          "
+  Features: fpu,vme,de,pse,tsc,msr,pae,mce,cx8,apic,sep,mtrr,pge,mca,cmov,pat,pse36,clflush,mmx,fxsr,sse,sse2,ht,syscall,nx,mmxext,fxsr_opt,pdpe1gb,rdtscp,lm,pni,pclmulqdq,ssse3,fma,cx16,sse4_1,sse4_2,movbe,popcnt,aes,xsave,osxsave,avx,f16c,rdrand,hypervisor,lahf_lm,cmp_legacy,cr8_legacy,abm,sse4a,misalignsse,3dnowprefetch,osvw,wdt,topoext,fsgsbase,bmi1,avx2,smep,bmi2,rdseed,adx,smap,clflushopt,sha_ni
+  Clock: 3000 MHz
+  BogoMips: 6000.00
+  Cache: 512 kb
+  Units/Processor: 16
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+32: None 0c.0: 10103 CPU
+  [Created at cpu.460]
+  Unique ID: myn3.j8NaKXDZtZ6
+  Hardware Class: cpu
+  Arch: X86-64
+  Vendor: "AuthenticAMD"
+  Model: 23.1.1 "AMD Ryzen 7 1700 Eight-Core Processor          "
+  Features: fpu,vme,de,pse,tsc,msr,pae,mce,cx8,apic,sep,mtrr,pge,mca,cmov,pat,pse36,clflush,mmx,fxsr,sse,sse2,ht,syscall,nx,mmxext,fxsr_opt,pdpe1gb,rdtscp,lm,pni,pclmulqdq,ssse3,fma,cx16,sse4_1,sse4_2,movbe,popcnt,aes,xsave,osxsave,avx,f16c,rdrand,hypervisor,lahf_lm,cmp_legacy,cr8_legacy,abm,sse4a,misalignsse,3dnowprefetch,osvw,wdt,topoext,fsgsbase,bmi1,avx2,smep,bmi2,rdseed,adx,smap,clflushopt,sha_ni
+  Clock: 3000 MHz
+  BogoMips: 6000.00
+  Cache: 512 kb
+  Units/Processor: 16
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+33: None 0d.0: 10103 CPU
+  [Created at cpu.460]
+  Unique ID: r3rX.j8NaKXDZtZ6
+  Hardware Class: cpu
+  Arch: X86-64
+  Vendor: "AuthenticAMD"
+  Model: 23.1.1 "AMD Ryzen 7 1700 Eight-Core Processor          "
+  Features: fpu,vme,de,pse,tsc,msr,pae,mce,cx8,apic,sep,mtrr,pge,mca,cmov,pat,pse36,clflush,mmx,fxsr,sse,sse2,ht,syscall,nx,mmxext,fxsr_opt,pdpe1gb,rdtscp,lm,pni,pclmulqdq,ssse3,fma,cx16,sse4_1,sse4_2,movbe,popcnt,aes,xsave,osxsave,avx,f16c,rdrand,hypervisor,lahf_lm,cmp_legacy,cr8_legacy,abm,sse4a,misalignsse,3dnowprefetch,osvw,wdt,topoext,fsgsbase,bmi1,avx2,smep,bmi2,rdseed,adx,smap,clflushopt,sha_ni
+  Clock: 3000 MHz
+  BogoMips: 6000.00
+  Cache: 512 kb
+  Units/Processor: 16
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+34: None 0e.0: 10103 CPU
+  [Created at cpu.460]
+  Unique ID: wAu+.j8NaKXDZtZ6
+  Hardware Class: cpu
+  Arch: X86-64
+  Vendor: "AuthenticAMD"
+  Model: 23.1.1 "AMD Ryzen 7 1700 Eight-Core Processor          "
+  Features: fpu,vme,de,pse,tsc,msr,pae,mce,cx8,apic,sep,mtrr,pge,mca,cmov,pat,pse36,clflush,mmx,fxsr,sse,sse2,ht,syscall,nx,mmxext,fxsr_opt,pdpe1gb,rdtscp,lm,pni,pclmulqdq,ssse3,fma,cx16,sse4_1,sse4_2,movbe,popcnt,aes,xsave,osxsave,avx,f16c,rdrand,hypervisor,lahf_lm,cmp_legacy,cr8_legacy,abm,sse4a,misalignsse,3dnowprefetch,osvw,wdt,topoext,fsgsbase,bmi1,avx2,smep,bmi2,rdseed,adx,smap,clflushopt,sha_ni
+  Clock: 3000 MHz
+  BogoMips: 6000.00
+  Cache: 512 kb
+  Units/Processor: 16
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+35: None 0f.0: 10103 CPU
+  [Created at cpu.460]
+  Unique ID: +HxT.j8NaKXDZtZ6
+  Hardware Class: cpu
+  Arch: X86-64
+  Vendor: "AuthenticAMD"
+  Model: 23.1.1 "AMD Ryzen 7 1700 Eight-Core Processor          "
+  Features: fpu,vme,de,pse,tsc,msr,pae,mce,cx8,apic,sep,mtrr,pge,mca,cmov,pat,pse36,clflush,mmx,fxsr,sse,sse2,ht,syscall,nx,mmxext,fxsr_opt,pdpe1gb,rdtscp,lm,pni,pclmulqdq,ssse3,fma,cx16,sse4_1,sse4_2,movbe,popcnt,aes,xsave,osxsave,avx,f16c,rdrand,hypervisor,lahf_lm,cmp_legacy,cr8_legacy,abm,sse4a,misalignsse,3dnowprefetch,osvw,wdt,topoext,fsgsbase,bmi1,avx2,smep,bmi2,rdseed,adx,smap,clflushopt,sha_ni
+  Clock: 3000 MHz
+  BogoMips: 6000.00
+  Cache: 512 kb
+  Units/Processor: 16
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+36: None 00.0: 10701 Ethernet
+  [Created at net.125]
+  Unique ID: usDW.ndpeucax6V1
+  SysFS ID: /class/net/eth0
+  Hardware Class: network interface
+  Model: "Ethernet network interface"
+  Device File: eth0
+  HW Address: 10:7b:44:50:33:7c
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+37: None 01.0: 10701 Ethernet
+  [Created at net.125]
+  Unique ID: L2Ua.ndpeucax6V1
+  SysFS ID: /class/net/eth1
+  Hardware Class: network interface
+  Model: "Ethernet network interface"
+  Device File: eth1
+  HW Address: 0a:00:27:00:00:15
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+38: None 02.0: 10701 Ethernet
+  [Created at net.125]
+  Unique ID: pDke.ndpeucax6V1
+  SysFS ID: /class/net/eth2
+  Hardware Class: network interface
+  Model: "Ethernet network interface"
+  Device File: eth2
+  HW Address: 00:15:5d:73:03:a8
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+39: None 03.0: 10701 Ethernet
+  [Created at net.125]
+  Unique ID: GP_i.ndpeucax6V1
+  SysFS ID: /class/net/eth3
+  Hardware Class: network interface
+  Model: "Ethernet network interface"
+  Device File: eth3
+  HW Address: 0a:00:27:00:00:17
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+40: None 04.0: 10701 Ethernet
+  [Created at net.125]
+  Unique ID: jaEn.ndpeucax6V1
+  SysFS ID: /class/net/eth4
+  Hardware Class: network interface
+  Model: "Ethernet network interface"
+  Device File: eth4
+  HW Address: 02:00:4c:4f:4f:50
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+41: None 05.0: 10701 Ethernet
+  [Created at net.125]
+  Unique ID: AmUr.ndpeucax6V1
+  SysFS ID: /class/net/eth5
+  Hardware Class: network interface
+  Model: "Ethernet network interface"
+  Device File: eth5
+  HW Address: 00:15:5d:d9:81:02
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
+
+42: None 00.0: 10700 Loopback
+  [Created at net.125]
+  Unique ID: ZsBS.GQNx7L4uPNA
+  SysFS ID: /class/net/lo
+  Hardware Class: network interface
+  Model: "Loopback network interface"
+  Device File: lo
+  Config Status: cfg=new, avail=yes, need=no, active=unknown
