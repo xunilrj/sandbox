@@ -35,6 +35,7 @@
 [Can OO Strike Back?](books/TheTheoryOfObjects/CanOOStrikeBack.md)  
 [Understanding SQL Server 2008 R2 Execution Plan - Part 1](texts/dev/Understanding%20SQL%20Server%202008%20R2%20Execution%20Plan%20-%20Part%201.pdf)   
 [Who is Afraid of Parsing](texts/dev/WhoIsAfraidOfParsing.md)
+[C++ Performance: Packed array and Valgrind](sources/cpp/packedvsnode/readme.md)
 
 ### Computer Graphics
 [Computer Graphics Guide](/texts/dev/ComputerScience/Computer%20Graphics)
