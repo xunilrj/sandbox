@@ -110,8 +110,8 @@ an LL miss can cost as much as 200 cycles, and a mispredicted branch
 costs in the region of 10 to 30 cycles. Detailed cache and branch 
 profiling can be very useful for understanding how your program 
 interacts with the machine and thus how to make it faster.
-https://valgrind.org/docs/manual/cg-manual.html
 ```
+https://valgrind.org/docs/manual/cg-manual.html
 
 If you do not remember, or do not know, what a cache miss is, let us make a quick recap first.
 
