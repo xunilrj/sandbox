@@ -111,7 +111,7 @@ costs in the region of 10 to 30 cycles. Detailed cache and branch
 profiling can be very useful for understanding how your program 
 interacts with the machine and thus how to make it faster.
 ```
-https://valgrind.org/docs/manual/cg-manual.html
+https://valgrind.org/docs/manual/cg-manual.html  
 
 If you do not remember, or do not know, what a cache miss is, let us make a quick recap first.
 
@@ -121,8 +121,8 @@ The way that CPUs work is through instructions. Each command is store in binary,
 
 ```asm
 ADD RAX, RBX
-https://www.felixcloutier.com/x86/add
 ```
+https://www.felixcloutier.com/x86/add  
 
 This instruction would just do "RAX += RBX". Where "RAX" and "RBX" are register inside the CPU. You can imagine CPU register as variables (in this case ints) that reside inside the CPU and so have "zero" cost of access.
 
@@ -132,16 +132,16 @@ Although it is insanely difficult to actually estimate the cost of an instructio
 Instruction Operands    Ops Latency
 ADD, SUB    r,r/i       1   1      
 page 28
-https://www.agner.org/optimize/instruction_tables.pdf
 ```
+https://www.agner.org/optimize/instruction_tables.pdf  
 
 So a computer with an 1GHz cpu would do 1 billion of "ADD"s like this one. The problem is, how do you put the values we want to sum inside the CPU registers. To do this you have to use another instruction:
 
 ```asm
 MOV RAX, [MEM ADDR]
 MOV RBX, [MEM ADDR]
-https://www.felixcloutier.com/x86/mov
 ```
+https://www.felixcloutier.com/x86/mov  
 
 So with these we move from some memory location to those registers. After this we can sum them. Let us ignore for now how do I know the address that I want to load from.
 
@@ -157,8 +157,8 @@ Moving cost a little more than summing two registers.
 Instruction Operands    Ops Latency
 MOV         r64,m64     1   3
 page 28
-https://www.agner.org/optimize/instruction_tables.pdf
 ```
+https://www.agner.org/optimize/instruction_tables.pdf  
 
 "Latency" three means that it takes, as the "Agner" documentations states, at  minimum three cycles to complete. In this particular case is the very-very-minimum, because as we saw in "Valgrind" manual, it can actually take hundreds of cycles. If you are really unlucky it can actually take thousands and thousand of cycles (some milliseconds, but let us ignore this for now).
 
