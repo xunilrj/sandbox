@@ -1,8 +1,8 @@
 # Introduction
 
 So here we are going to analyze the impact of data structure on a very simple example. In very broad terms, that is what we are doing.  
-1 - Sum a float array;
-2 - Sum the property "x" of a struct array.
+1 - Sum a float array;  
+2 - Sum the property "x" of a struct array.  
 
 We want to gather information if this only and small design difference can generate relevant performance impact.
 
@@ -76,8 +76,8 @@ The program will output a "CSV" table with the columns:
 1 - The arguments. One in each line;  
 2 - A csv table with three columns;  
 2.1 - Size of the array;  
-2.2 - Time to sum the "col" (float array);  
-2.3 - Time to sum the "row" (struct array);  
+2.2 - Time in seconds to sum the "col" (float array);  
+2.3 - Time in seconds to sum the "row" (struct array). 
 
 So, for example.
 
@@ -94,7 +94,7 @@ size;colunar;row
 10000000;0.068;0.684;
 ```
 
-Maybe this is a surprise for you, but the "col" case (float array) is 10 times faster! If you are surprised, and want to know what is happenning here, please continue reading.
+Maybe this is a surprise for you, but the "col" case (float array) is 10 times faster! It took 0.684 seconds agains 0.068. If you are surprised, and want to know what is happenning here, please continue reading.
 
 ## Valgrind
 
@@ -105,7 +105,11 @@ Valgrind is an virtual-machine that record information about memory read, write 
 But one of the reasons why we are investigating memory is stated inside the "Valgrind" manual.
 
 ```
-On a modern machine, an L1 miss will typically cost around 10 cycles, an LL miss can cost as much as 200 cycles, and a mispredicted branch costs in the region of 10 to 30 cycles. Detailed cache and branch profiling can be very useful for understanding how your program interacts with the machine and thus how to make it faster.
+On a modern machine, an L1 miss will typically cost around 10 cycles, 
+an LL miss can cost as much as 200 cycles, and a mispredicted branch 
+costs in the region of 10 to 30 cycles. Detailed cache and branch 
+profiling can be very useful for understanding how your program 
+interacts with the machine and thus how to make it faster.
 https://valgrind.org/docs/manual/cg-manual.html
 ```
 
@@ -122,7 +126,7 @@ https://www.felixcloutier.com/x86/add
 
 This instruction would just do "RAX += RBX". Where "RAX" and "RBX" are register inside the CPU. You can imagine CPU register as variables (in this case ints) that reside inside the CPU and so have "zero" cost of access.
 
-Altought it is insanely difficult to actually estimate the cost of an instruction, a "ADD" like this using only registers takes just one cycle.
+Although it is insanely difficult to actually estimate the cost of an instruction, a "ADD" like this using only registers takes just one cycle.
 
 ```
 Instruction Operands    Ops Latency
@@ -147,7 +151,7 @@ MOV RBX, [0x104]
 ADD RAX, RBX
 ```
 
-Moving cost a little more than suming two registers.
+Moving cost a little more than summing two registers.
 
 ```
 Instruction Operands    Ops Latency
@@ -156,9 +160,9 @@ page 28
 https://www.agner.org/optimize/instruction_tables.pdf
 ```
 
-"Latency" three means that it takes, as the "Agner" documentations states, at  minimum three cycles to complete. In this particular case is the very-very-minimum, because as we saw in "Valgrind" manual, it can actually take hundreads of cycles. If you are really unlucky it can actually take thousands and thousand of cycles (some milliseconds, but let us ignore this for now).
+"Latency" three means that it takes, as the "Agner" documentations states, at  minimum three cycles to complete. In this particular case is the very-very-minimum, because as we saw in "Valgrind" manual, it can actually take hundreds of cycles. If you are really unlucky it can actually take thousands and thousand of cycles (some milliseconds, but let us ignore this for now).
 
-Talling up how many cycles out little program would take, we have:
+Tallying up how many cycles out little program would take, we have:
 
 ```asm
 MOV RAX, [0x100]    # 200 cycles
@@ -168,7 +172,7 @@ ADD RAX, RBX        # 1 cycle
 
 401 cycles. But...
 
-Because acessing memory is to slow from the CPU perspective, CPU architects envisioned faster layers of memory to speed this access up. So instead of always going to the biggest/slowest memory, the CPU caches and tries to access the same information in faster memories. Today is common to have three levels of memory.
+Because accessing memory is to slow from the CPU perspective, CPU architects envisioned faster layers of memory to speed this access up. So instead of always going to the biggest/slowest memory, the CPU caches and tries to access the same information in faster memories. Today is common to have three levels of memory.
 
 These levels generate a pyramid of memory. At the very top are CPU registers, very fast, but very limited. Only 15 for integers; the second level is called L1. Is a very fast memory. Slower than registers, but almost as good. But they also small.
 
@@ -219,16 +223,16 @@ model name      : AMD Ryzen 7 1700 Eight-Core Processor
 ```
 
 You can read all at: https://en.wikichip.org/wiki/amd/microarchitectures/zen
-But for a more succint description, and what matters to us here you can just continue.
+But for a more succinct description, and what matters to us here you can just continue.
 
 ### Inside the CCX (Core Complex)
 
 Here we have a "photo" of chip, a part of the CPU. 
   
-1 - We are seing four cores;  
+1 - We are seeing four cores;  
 2 - Cache L3 is shared, and takes a lot of the CCX space;  
 3 - Cache L2 is not inside the core but is replicated to each core;  
-4 - We are not seing cache L1 because it sits inside the core.  
+4 - We are not seeing cache L1 because it sits inside the core.  
 
 Given that my computer has 8 physical cores, I have two of these. How they communicate is not important here.
   
@@ -247,7 +251,7 @@ The things to understand here are:
 6 - BPU is the chip that optimize decisions (if, for, function calls , jumps etc...);  
 7 - LSU is the chip that manage load/store from memory.
 7.1 - L$ is the store of what is inside the L1 cache;
-8 - "Decode" is the chip that decode the binary instructions to actual CPU comands;
+8 - "Decode" is the chip that decode the binary instructions to actual CPU commands;
 9 - "Schdlr" means scheduler and is the chip that organize everything.
   
 ![Core](core.png "Core")
@@ -348,19 +352,19 @@ This is our command line, off course. "./a.out" is our executable name. "col" me
 ==3987==
 ```
 
-Here valgrind is just confirming our command line. So far so good.
+Here "Valgrind" is just confirming our command line. So far so good.
 
 ```
 --3987-- warning: L3 cache found, using its data for the LL simulation.
 ```
 
-Ok, here we have the first important info. Valgrind identified that my computer have three levels of cache. These days, L1 and L2 are inside the core chip, therefore are faster.
+Ok, here we have the first important info. "Valgrind" identified that my computer have three levels of cache. These days, L1 and L2 are inside the core chip, therefore are faster.
 
 L3, level three, is shared between all cores.
 
 In a NUMA environment the L3 is not shared across NUMAs, just between cores of one of the NUMAs.
 
-The important part here is that L3 is being considered as LL, the "Last Level" of cache. We will see some statistica about this later.
+The important part here is that L3 is being considered as LL, the "Last Level" of cache. We will see some statistics about this later.
 
 ```
 ==3987== error calling PR_SET_PTRACER, vgdb might block
@@ -401,7 +405,7 @@ First two lines are the arguments passes. Confirming that we are running just th
 
 "LLi misses" is really THE problem when comes to instruction cache miss, because we failed to find our code on the "last cache". 
 
-"I1  miss rate" and "LLi miss rate" are probably the important ones here, because they summarize both misses in terms of how many instructions were read. In out case here, "0.00%" is an approximation because we had cache missess, off course, but they are negigable. In summary they are just ("I1  misses"/"I refs" and "LLi misses"/"I refs").
+"I1  miss rate" and "LLi miss rate" are probably the important ones here, because they summarize both misses in terms of how many instructions were read. In out case here, "0.00%" is an approximation because we had cache misses, off course, but they are negligible. In summary they are just ("I1  misses"/"I refs" and "LLi misses"/"I refs").
 
 On instructions I think we are fine for now.
 
@@ -421,7 +425,7 @@ On instructions I think we are fine for now.
 
 "LLd misses" is how many times we failed on the last level of cache. In terms of memory time cost, this is the big villain. Every time you magically decrease this number you will see improvements in performance.
 
-"D1  miss rate" and "LLd miss rate" are, off course, in comparison with the amount of memory read/writes. We are pretty good actually. And this is the whole point of this article. When we access data in a contigous array, as the "cache predictor" is expecting, we have very little L1 and L3 misses and this improves our performance A LOT. This, in a lot of cases, beats algorithmic complexity.
+"D1  miss rate" and "LLd miss rate" are, off course, in comparison with the amount of memory read/writes. We are pretty good actually. And this is the whole point of this article. When we access data in a contiguous array, as the "cache predictor" is expecting, we have very little L1 and L3 misses and this improves our performance A LOT. This, in a lot of cases, beats algorithmic complexity.
 
 ```
 ==3987== LL refs:           713,849  (   711,301 rd   +      2,548 wr)
@@ -435,7 +439,7 @@ The last section is just a summary.
 "LL misses" is the sum of "LLi misses" and "LLd misses".  
 "LL miss rate" is a misleading one. It is NOT "LL misses"/"LL refs" but "LL misses"/("I refs"+"D refs").  
 
-Now let us see how the "row" stands agains "valgrind".
+Now let us see how the "row" stands against "Valgrind".
 
 ## Valgrind about "row" execution
 
@@ -475,7 +479,7 @@ size;colunar;row
 ==4053== LL miss rate:          4.3% (       4.7%     +        0.0%  )
 ```
 
-This time we will not analyze the output line-by-line, off course. We will go directly to the values and compare them. First let us start with timing. We saw that "col" was much faster, let us see if valgrind preserve this.  
+This time we will not analyze the output line-by-line, off course. We will go directly to the values and compare them. First let us start with timing. We saw that "col" was much faster, let us see if "Valgrind" preserve this.  
 
 ```
 size;colunar;row
@@ -496,7 +500,7 @@ versus
 10000000;1.371;
 ```
 
-And yes, it is much worse. The absolute value here does not matter, because we are running a debug compilation using valgrind. But it is easy to see that "col" is much better. And this IS the reason of this article and let us see why now.
+And yes, it is much worse. The absolute value here does not matter, because we are running a debug compilation using "Valgrind". But it is easy to see that "col" is much better. And this IS the reason of this article and let us see why now.
 
 First let us see if the difference lies on number of instructions:
 
@@ -551,7 +555,7 @@ versus
 
 OK! It is pretty obvious that we are at the heart of the problem. Although the number of memory access are pretty much the same: 100M; the number of L1 and L3 misses ar insanely bigger for the "row" approach.
 
-Remember that cache misses are not free. Every one of them cost time. As "valgrind" documentation states, a L3 cache miss can cost 200 cycles. To better understand if this is the main cause of the performance problem here. Let us analyze is my case.
+Remember that cache misses are not free. Every one of them cost time. As "Valgrind" documentation states, a L3 cache miss can cost 200 cycles. To better understand if this is the main cause of the performance problem here. Let us analyze is my case.
 
 ```
 > cat  /proc/cpuinfo|grep MHz
@@ -753,4 +757,4 @@ Read f[9].x - 200
 ...
 ```
 
-So we have another advantage to having packed data. The "cache prefetcher" will antecipate our use.
+So we have another advantage to having packed data. The "cache prefetcher" will anticipate our use.
