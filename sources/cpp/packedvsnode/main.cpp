@@ -48,6 +48,7 @@ int main(int argc, char** argv)
             float accum = 0;
             for(int i = 0; i < size; ++i)
             {
+                
                 accum += arr[i].x;
             }
 

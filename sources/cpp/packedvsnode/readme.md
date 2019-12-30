@@ -41,7 +41,7 @@ int main(int argc, char** argv)
 }
 ```
 
-Our little program acceps two parameters: "col" and/or "row".
+Our little program accepts two parameters: "col" and/or "row".
 
 If we pass "col", it runs the "sum" on the float array.
 
@@ -758,3 +758,29 @@ Read f[9].x - 200
 ```
 
 So we have another advantage to having packed data. The "cache prefetcher" will anticipate our use.
+
+## Prefetch builtin
+
+In this simplistic scenario, we the "for" body is very small is hard to improve the situation of the "row" case. But one can always use some form of compiler intrinsics builtin to help the "cache prefetcher".
+
+```
+— Built-in Function: void __builtin_prefetch (const void *addr, ...)
+This function is used to minimize cache-miss latency by moving data 
+into a cache before it is accessed. 
+```
+https://gcc.gnu.org/onlinedocs/gcc-3.3.6/gcc/Other-Builtins.html
+
+```c++
+SomeData* arr = new SomeData[size];
+
+float accum = 0;
+for(int i = 0; i < size; ++i)
+{
+    accum += arr[i].x;
+    __builtin_prefetch(&(arr[i+1].x), 1);
+}
+
+delete[] arr;
+```
+
+In this case this not only does not improve the performance, but can actually decrease, because the calculation of the next address is almost as costly as the calculation we do inside the for, doubling our work.
