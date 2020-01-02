@@ -1,5 +1,22 @@
 # Links and C/C++ Material
 
+## Tutorials
+
+[C++ Coroutines (even for WebAssembly)](coroutines/)  
+[Command line Debugging](CommandLineDebug.md)  
+[C++ Performance: Packed array and Valgrind](packedvsnode/readme.md)  
+[WebAssembly Series](/sources/webassembly)  
+[Linux Kernel Development](sources/unix/moddev/readme.md)  
+[Bitfield](sources/cpp/bitfield)
+
+### iterator over non-existing sequence
+how to create C++ iterators  
+https://stackoverflow.com/questions/38730479/iterator-over-non-existing-sequence/38772065#38772065
+
+### Non-Copyable, Moveable only wrapper for OS handles
+Shoud Non-Copyable class have user conversion
+https://stackoverflow.com/questions/54963695/shoud-non-copyable-class-have-user-conversion#54963784
+
 ## Native debugging
 
 [Command Line Debugging](CommandLineDebug.md)
