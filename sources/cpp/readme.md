@@ -6,7 +6,7 @@
 [Command line Debugging](CommandLineDebug.md)  
 [C++ Performance: Packed array and Valgrind](packedvsnode/readme.md)  
 [WebAssembly Series](/sources/webassembly)  
-[Linux Kernel Development](sources/unix/moddev/readme.md)  
+[Linux Kernel Development](../sources/unix/moddev/readme.md)  
 [Bitfield](sources/cpp/bitfield)
 
 ### iterator over non-existing sequence
