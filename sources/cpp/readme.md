@@ -7,7 +7,7 @@
 [C++ Performance: Packed array and Valgrind](packedvsnode/readme.md)  
 [WebAssembly Series](/sources/webassembly)  
 [Linux Kernel Development](../sources/unix/moddev/readme.md)  
-[Bitfield](sources/cpp/bitfield)
+[Bitfield](bitfield)
 
 ### iterator over non-existing sequence
 how to create C++ iterators  
@@ -16,10 +16,6 @@ https://stackoverflow.com/questions/38730479/iterator-over-non-existing-sequence
 ### Non-Copyable, Moveable only wrapper for OS handles
 Shoud Non-Copyable class have user conversion
 https://stackoverflow.com/questions/54963695/shoud-non-copyable-class-have-user-conversion#54963784
-
-## Native debugging
-
-[Command Line Debugging](CommandLineDebug.md)
 
 ## Algorithms
 
