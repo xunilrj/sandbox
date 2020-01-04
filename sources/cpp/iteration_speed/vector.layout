@@ -1,0 +1,866 @@
+
+*** Dumping AST Record Layout
+         0 | struct std::piecewise_construct_t (empty)
+           | [sizeof=1, dsize=0, align=1,
+           |  nvsize=0, nvalign=1]
+
+*** Dumping AST Record Layout
+         0 | struct __gnu_cxx::__ops::_Iter_less_iter (empty)
+           | [sizeof=1, dsize=1, align=1,
+           |  nvsize=1, nvalign=1]
+
+*** Dumping AST Record Layout
+         0 | struct std::iterator<struct std::random_access_iterator_tag, _Bool, long, _Bool *, _Bool &> (empty)
+           | [sizeof=1, dsize=1, align=1,
+           |  nvsize=1, nvalign=1]
+
+*** Dumping AST Record Layout
+         0 | struct std::_Bit_iterator_base
+         0 |   struct std::iterator<struct std::random_access_iterator_tag, _Bool, long, _Bool *, _Bool &> (base) (empty)
+         0 |   std::_Bit_type * _M_p
+         8 |   unsigned int _M_offset
+           | [sizeof=16, dsize=12, align=8,
+           |  nvsize=12, nvalign=8]
+
+*** Dumping AST Record Layout
+         0 | struct std::_Bit_iterator
+         0 |   struct std::_Bit_iterator_base (base)
+         0 |     struct std::iterator<struct std::random_access_iterator_tag, _Bool, long, _Bool *, _Bool &> (base) (empty)
+         0 |     std::_Bit_type * _M_p
+         8 |     unsigned int _M_offset
+           | [sizeof=16, dsize=12, align=8,
+           |  nvsize=12, nvalign=8]
+
+*** Dumping AST Record Layout
+         0 | class __gnu_cxx::new_allocator<int> (empty)
+           | [sizeof=1, dsize=0, align=1,
+           |  nvsize=0, nvalign=1]
+
+*** Dumping AST Record Layout
+         0 | class std::allocator<int> (empty)
+         0 |   class __gnu_cxx::new_allocator<int> (base) (empty)
+           | [sizeof=1, dsize=0, align=1,
+           |  nvsize=1, nvalign=1]
+
+*** Dumping AST Record Layout
+         0 | struct std::_Vector_base<int, class std::allocator<int> >::_Vector_impl
+         0 |   class std::allocator<int> (base) (empty)
+         0 |     class __gnu_cxx::new_allocator<int> (base) (empty)
+         0 |   std::_Vector_base<int, class std::allocator<int> >::pointer _M_start
+         8 |   std::_Vector_base<int, class std::allocator<int> >::pointer _M_finish
+        16 |   std::_Vector_base<int, class std::allocator<int> >::pointer _M_end_of_storage
+           | [sizeof=24, dsize=24, align=8,
+           |  nvsize=24, nvalign=8]
+
+*** Dumping AST Record Layout
+         0 | struct std::_Vector_base<int, class std::allocator<int> >
+         0 |   struct std::_Vector_base<int, class std::allocator<int> >::_Vector_impl _M_impl
+         0 |     class std::allocator<int> (base) (empty)
+         0 |       class __gnu_cxx::new_allocator<int> (base) (empty)
+         0 |     std::_Vector_base<int, class std::allocator<int> >::pointer _M_start
+         8 |     std::_Vector_base<int, class std::allocator<int> >::pointer _M_finish
+        16 |     std::_Vector_base<int, class std::allocator<int> >::pointer _M_end_of_storage
+           | [sizeof=24, dsize=24, align=8,
+           |  nvsize=24, nvalign=8]
+
+*** Dumping AST Record Layout
+         0 | class std::vector<int, class std::allocator<int> >
+         0 |   struct std::_Vector_base<int, class std::allocator<int> > (base)
+         0 |     struct std::_Vector_base<int, class std::allocator<int> >::_Vector_impl _M_impl
+         0 |       class std::allocator<int> (base) (empty)
+         0 |         class __gnu_cxx::new_allocator<int> (base) (empty)
+         0 |       std::_Vector_base<int, class std::allocator<int> >::pointer _M_start
+         8 |       std::_Vector_base<int, class std::allocator<int> >::pointer _M_finish
+        16 |       std::_Vector_base<int, class std::allocator<int> >::pointer _M_end_of_storage
+           | [sizeof=24, dsize=24, align=8,
+           |  nvsize=24, nvalign=8]
+
+*** Dumping IRgen Record Layout
+Record: [0;1;32mClassTemplateSpecializationDecl[0m[0;33m 0x3863ab8[0m <[0;33m/usr/bin/../lib/gcc/x86_64-linux-gnu/6.5.0/../../../../include/c++/6.5.0/ext/new_allocator.h:57:3[0m, [0;33mline:135:5[0m> [0;33mline:58:11[0m class[0;1;36m new_allocator[0m definition
+[0;34m|-[0m[0;1;32mDefinitionData[0m empty standard_layout has_user_declared_ctor can_const_default_init
+[0;34m| |-[0m[0;1;32mDefaultConstructor[0m exists non_trivial user_provided defaulted_is_constexpr
+[0;34m| |-[0m[0;1;32mCopyConstructor[0m non_trivial user_declared has_const_param implicit_has_const_param
+[0;34m| |-[0m[0;1;32mMoveConstructor[0m
+[0;34m| |-[0m[0;1;32mCopyAssignment[0m trivial has_const_param implicit_has_const_param
+[0;34m| |-[0m[0;1;32mMoveAssignment[0m
+[0;34m| `-[0m[0;1;32mDestructor[0m non_trivial user_declared
+[0;34m|-[0mTemplateArgument type [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mCXXRecordDecl[0m[0;33m 0x3863d40[0m prev 0x3863ab8 <[0;33mcol:5[0m, [0;33mcol:11[0m> [0;33mcol:11[0m implicit class[0;1;36m new_allocator[0m
+[0;34m|-[0m[0;1;32mAccessSpecDecl[0m[0;33m 0x3863dc8[0m <[0;33mline:60:5[0m, [0;33mcol:11[0m> [0;33mcol:5[0m public
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3863df0[0m <[0;33mline:61:7[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m size_type[0m [0;32m'std::size_t':'unsigned long'[0m
+[0;34m| `-[0m[0;32mTypedefType[0m[0;33m 0x350cbe0[0m [0;32m'std::size_t'[0m sugar
+[0;34m|   |-[0m[0;1;32mTypedef[0m[0;33m 0x3435ed8[0m[0;1;36m 'size_t'[0m
+[0;34m|   `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6840[0m [0;32m'unsigned long'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3863e40[0m <[0;33mline:62:7[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m difference_type[0m [0;32m'std::ptrdiff_t':'long'[0m
+[0;34m| `-[0m[0;32mTypedefType[0m[0;33m 0x36439f0[0m [0;32m'std::ptrdiff_t'[0m sugar
+[0;34m|   |-[0m[0;1;32mTypedef[0m[0;33m 0x3435f40[0m[0;1;36m 'ptrdiff_t'[0m
+[0;34m|   `-[0m[0;32mBuiltinType[0m[0;33m 0x33f67a0[0m [0;32m'long'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3863ef8[0m <[0;33mline:63:7[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m pointer[0m [0;32m'int *'[0m
+[0;34m| `-[0m[0;32mPointerType[0m[0;33m 0x3863ec0[0m [0;32m'int *'[0m
+[0;34m|   `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x3863e90[0m [0;32m'int'[0m sugar
+[0;34m|     |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x3704870[0m [0;32m'_Tp'[0m dependent depth 0 index 0
+[0;34m|     | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x3704830[0m[0;1;36m '_Tp'[0m
+[0;34m|     `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6780[0m [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3863f88[0m <[0;33mline:64:7[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m const_pointer[0m [0;32m'const int *'[0m
+[0;34m| `-[0m[0;32mPointerType[0m[0;33m 0x3863f50[0m [0;32m'const int *'[0m
+[0;34m|   `-[0mQualType[0;33m 0x3863e91[0m [0;32m'const int'[0m const
+[0;34m|     `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x3863e90[0m [0;32m'int'[0m sugar
+[0;34m|       |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x3704870[0m [0;32m'_Tp'[0m dependent depth 0 index 0
+[0;34m|       | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x3704830[0m[0;1;36m '_Tp'[0m
+[0;34m|       `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6780[0m [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3864018[0m <[0;33mline:65:7[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m reference[0m [0;32m'int &'[0m
+[0;34m| `-[0m[0;32mLValueReferenceType[0m[0;33m 0x3863fe0[0m [0;32m'int &'[0m
+[0;34m|   `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x3863e90[0m [0;32m'int'[0m sugar
+[0;34m|     |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x3704870[0m [0;32m'_Tp'[0m dependent depth 0 index 0
+[0;34m|     | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x3704830[0m[0;1;36m '_Tp'[0m
+[0;34m|     `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6780[0m [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x38640a8[0m <[0;33mline:66:7[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m const_reference[0m [0;32m'const int &'[0m
+[0;34m| `-[0m[0;32mLValueReferenceType[0m[0;33m 0x3864070[0m [0;32m'const int &'[0m
+[0;34m|   `-[0mQualType[0;33m 0x3863e91[0m [0;32m'const int'[0m const
+[0;34m|     `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x3863e90[0m [0;32m'int'[0m sugar
+[0;34m|       |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x3704870[0m [0;32m'_Tp'[0m dependent depth 0 index 0
+[0;34m|       | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x3704830[0m[0;1;36m '_Tp'[0m
+[0;34m|       `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6780[0m [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3864108[0m <[0;33mline:67:7[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m value_type[0m [0;32m'int':'int'[0m
+[0;34m| `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x3863e90[0m [0;32m'int'[0m sugar
+[0;34m|   |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x3704870[0m [0;32m'_Tp'[0m dependent depth 0 index 0
+[0;34m|   | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x3704830[0m[0;1;36m '_Tp'[0m
+[0;34m|   `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6780[0m [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mClassTemplateDecl[0m[0;33m 0x3864268[0m <[0;33mline:69:7[0m, [0;33mline:70:16[0m> [0;33mcol:16[0m[0;1;36m rebind[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3864158[0m <[0;33mline:69:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _Tp1[0m
+[0;34m| `-[0m[0;1;32mCXXRecordDecl[0m[0;33m 0x38641e0[0m <[0;33mline:70:9[0m, [0;33mcol:16[0m> [0;33mcol:16[0m struct[0;1;36m rebind[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3864448[0m <[0;33mline:76:7[0m, [0;33mcol:30[0m> [0;33mcol:30[0m[0;1;36m propagate_on_container_move_assignment[0m [0;32m'std::true_type':'std::integral_constant<bool, true>'[0m
+[0;34m| `-[0m[0;32mElaboratedType[0m[0;33m 0x37054e0[0m [0;32m'std::true_type'[0m sugar
+[0;34m|   `-[0m[0;32mTypedefType[0m[0;33m 0x34fd610[0m [0;32m'std::true_type'[0m sugar
+[0;34m|     |-[0m[0;1;32mTypedef[0m[0;33m 0x34f69c8[0m[0;1;36m 'true_type'[0m
+[0;34m|     `-[0m[0;32mTemplateSpecializationType[0m[0;33m 0x34f68e0[0m [0;32m'integral_constant<bool, true>'[0m sugar integral_constant
+[0;34m|       |-[0mTemplateArgument type [0;32m'bool'[0m
+[0;34m|       |-[0mTemplateArgument expr
+[0;34m|       | `-[0m[0;1;35mConstantExpr[0m[0;33m 0x34f67b8[0m <[0;33m/usr/bin/../lib/gcc/x86_64-linux-gnu/6.5.0/../../../../include/c++/6.5.0/type_traits:87:35[0m> [0;32m'bool'[0m[0;36m[0m[0;36m[0m
+[0;34m|       |   `-[0m[0;1;35mCXXBoolLiteralExpr[0m[0;33m 0x34f6758[0m <[0;33mcol:35[0m> [0;32m'bool'[0m[0;36m[0m[0;36m[0m true
+[0;34m|       `-[0m[0;32mRecordType[0m[0;33m 0x34f68c0[0m [0;32m'std::integral_constant<bool, true>'[0m
+[0;34m|         `-[0m[0;1;32mClassTemplateSpecialization[0m[0;33m 0x34f67d0[0m[0;1;36m 'integral_constant'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x38644d0[0m <[0;33m/usr/bin/../lib/gcc/x86_64-linux-gnu/6.5.0/../../../../include/c++/6.5.0/ext/new_allocator.h:79:7[0m, [0;33mcol:47[0m> [0;33mcol:7[0m[0;1;36m new_allocator[0m [0;32m'void () noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x38646d0[0m <[0;33mline:81:7[0m, [0;33mcol:67[0m> [0;33mcol:7[0m[0;1;36m new_allocator[0m [0;32m'void (const __gnu_cxx::new_allocator<int> &) noexcept'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38645b8[0m <[0;33mcol:21[0m, [0;33mcol:40[0m> [0;33mcol:41[0m [0;32m'const __gnu_cxx::new_allocator<int> &'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3864a40[0m <[0;33mline:83:7[0m, [0;33mline:84:75[0m> [0;33mcol:9[0m[0;1;36m new_allocator[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3864788[0m <[0;33mline:83:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _Tp1[0m
+[0;34m| `-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x38649a0[0m <[0;33mline:84:9[0m, [0;33mcol:75[0m> [0;33mcol:9[0m[0;1;36m new_allocator[0m [0;32m'void (const new_allocator<_Tp1> &) noexcept'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38648c0[0m <[0;33mcol:23[0m, [0;33mcol:48[0m> [0;33mcol:49[0m [0;32m'const new_allocator<_Tp1> &'[0m
+[0;34m|-[0m[0;1;32mCXXDestructorDecl[0m[0;33m 0x3864b40[0m <[0;33mline:86:7[0m, [0;33mcol:48[0m> [0;33mcol:7[0m[0;1;36m ~new_allocator[0m [0;32m'void () noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3864d40[0m <[0;33mline:88:7[0m, [0;33mline:90:39[0m> [0;33mline:89:7[0m[0;1;36m address[0m [0;32m'__gnu_cxx::new_allocator<int>::pointer (__gnu_cxx::new_allocator<int>::reference) const noexcept'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3864c50[0m <[0;33mcol:15[0m, [0;33mcol:25[0m> [0;33mcol:25[0m[0;1;36m __x[0m [0;32m'__gnu_cxx::new_allocator<int>::reference':'int &'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3864f30[0m <[0;33mline:92:7[0m, [0;33mline:94:39[0m> [0;33mline:93:7[0m[0;1;36m address[0m [0;32m'__gnu_cxx::new_allocator<int>::const_pointer (__gnu_cxx::new_allocator<int>::const_reference) const noexcept'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3864e40[0m <[0;33mcol:15[0m, [0;33mcol:31[0m> [0;33mcol:31[0m[0;1;36m __x[0m [0;32m'__gnu_cxx::new_allocator<int>::const_reference':'const int &'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3865148[0m <[0;33mline:98:7[0m, [0;33mline:105:7[0m> [0;33mline:99:7[0m[0;1;36m allocate[0m [0;32m'__gnu_cxx::new_allocator<int>::pointer (__gnu_cxx::new_allocator::size_type, const void *)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3864fe0[0m <[0;33mcol:16[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m __n[0m [0;32m'__gnu_cxx::new_allocator::size_type':'unsigned long'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3865040[0m <[0;33mcol:31[0m, [0;33mcol:71[0m> [0;33mcol:43[0m [0;32m'const void *'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3865378[0m <[0;33mline:108:7[0m, [0;33mline:110:33[0m> [0;33mline:109:7[0m[0;1;36m deallocate[0m [0;32m'void (__gnu_cxx::new_allocator<int>::pointer, __gnu_cxx::new_allocator::size_type)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3865210[0m <[0;33mcol:18[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m __p[0m [0;32m'__gnu_cxx::new_allocator<int>::pointer':'int *'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3865270[0m <[0;33mcol:31[0m> [0;33mcol:40[0m [0;32m'__gnu_cxx::new_allocator::size_type':'unsigned long'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3865430[0m <[0;33mline:112:7[0m, [0;33mline:114:42[0m> [0;33mline:113:7[0m[0;1;36m max_size[0m [0;32m'__gnu_cxx::new_allocator::size_type () const noexcept'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3865860[0m <[0;33mline:117:7[0m, [0;33mline:120:60[0m> [0;33mline:119:9[0m[0;1;36m construct[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x38654d8[0m <[0;33mline:117:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _Up[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3865548[0m <[0;33mcol:30[0m, [0;33mcol:42[0m> [0;33mcol:42[0m typename depth 0 index 1 ...[0;1;36m _Args[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x38657c8[0m <[0;33mline:118:9[0m, [0;33mline:120:60[0m> [0;33mline:119:9[0m[0;1;36m construct[0m [0;32m'void (_Up *, _Args &&...)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3865618[0m <[0;33mcol:19[0m, [0;33mcol:24[0m> [0;33mcol:24[0m[0;1;36m __p[0m [0;32m'_Up *'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3865700[0m <[0;33mcol:29[0m, [0;33mcol:40[0m> [0;33mcol:40[0m[0;1;36m __args[0m [0;32m'_Args &&...'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3865b50[0m <[0;33mline:122:7[0m, [0;33mline:124:42[0m> [0;33mcol:9[0m[0;1;36m destroy[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3865940[0m <[0;33mline:122:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _Up[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3865ab8[0m <[0;33mline:123:9[0m, [0;33mline:124:42[0m> [0;33mcol:9[0m[0;1;36m destroy[0m [0;32m'void (_Up *)'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38659f8[0m <[0;33mcol:17[0m, [0;33mcol:22[0m> [0;33mcol:22[0m[0;1;36m __p[0m [0;32m'_Up *'[0m
+[0;34m`-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3867c38[0m <[0;33mline:58:11[0m> [0;33mcol:11[0m implicit[0;1;36m operator=[0m [0;32m'__gnu_cxx::new_allocator<int> &(const __gnu_cxx::new_allocator<int> &)'[0m inline default trivial noexcept-unevaluated 0x3867c38
+[0;34m  `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3867d38[0m <[0;33mcol:11[0m> [0;33mcol:11[0m [0;32m'const __gnu_cxx::new_allocator<int> &'[0m
+
+Layout: <CGRecordLayout
+  LLVMType:%"class.__gnu_cxx::new_allocator" = type { i8 }
+  NonVirtualBaseLLVMType:%"class.__gnu_cxx::new_allocator.base" = type {}
+  IsZeroInitializable:1
+  BitFields:[
+]>
+
+*** Dumping IRgen Record Layout
+Record: [0;1;32mClassTemplateSpecializationDecl[0m[0;33m 0x385bd48[0m <[0;33m/usr/bin/../lib/gcc/x86_64-linux-gnu/6.5.0/../../../../include/c++/6.5.0/bits/allocator.h:107:3[0m, [0;33mline:142:5[0m> [0;33mline:108:11[0m class[0;1;36m allocator[0m definition
+[0;34m|-[0m[0;1;32mDefinitionData[0m empty standard_layout has_user_declared_ctor can_const_default_init
+[0;34m| |-[0m[0;1;32mDefaultConstructor[0m exists non_trivial user_provided
+[0;34m| |-[0m[0;1;32mCopyConstructor[0m non_trivial user_declared has_const_param needs_overload_resolution implicit_has_const_param
+[0;34m| |-[0m[0;1;32mMoveConstructor[0m needs_overload_resolution
+[0;34m| |-[0m[0;1;32mCopyAssignment[0m trivial has_const_param implicit_has_const_param
+[0;34m| |-[0m[0;1;32mMoveAssignment[0m needs_overload_resolution
+[0;34m| `-[0m[0;1;32mDestructor[0m non_trivial user_declared needs_overload_resolution
+[0;34m|-[0mpublic [0;32m'__allocator_base<int>':'__gnu_cxx::new_allocator<int>'[0m
+[0;34m|-[0mTemplateArgument type [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mCXXRecordDecl[0m[0;33m 0x3865c58[0m prev 0x385bd48 <[0;33mcol:5[0m, [0;33mcol:11[0m> [0;33mcol:11[0m implicit class[0;1;36m allocator[0m
+[0;34m|-[0m[0;1;32mAccessSpecDecl[0m[0;33m 0x3865ce0[0m <[0;33mline:110:4[0m, [0;33mcol:10[0m> [0;33mcol:4[0m public
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3865d08[0m <[0;33mline:111:7[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m size_type[0m [0;32m'std::size_t':'unsigned long'[0m
+[0;34m| `-[0m[0;32mTypedefType[0m[0;33m 0x350cbe0[0m [0;32m'std::size_t'[0m sugar
+[0;34m|   |-[0m[0;1;32mTypedef[0m[0;33m 0x3435ed8[0m[0;1;36m 'size_t'[0m
+[0;34m|   `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6840[0m [0;32m'unsigned long'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3865d58[0m <[0;33mline:112:7[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m difference_type[0m [0;32m'std::ptrdiff_t':'long'[0m
+[0;34m| `-[0m[0;32mTypedefType[0m[0;33m 0x36439f0[0m [0;32m'std::ptrdiff_t'[0m sugar
+[0;34m|   |-[0m[0;1;32mTypedef[0m[0;33m 0x3435f40[0m[0;1;36m 'ptrdiff_t'[0m
+[0;34m|   `-[0m[0;32mBuiltinType[0m[0;33m 0x33f67a0[0m [0;32m'long'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3865de8[0m <[0;33mline:113:7[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m pointer[0m [0;32m'int *'[0m
+[0;34m| `-[0m[0;32mPointerType[0m[0;33m 0x3865db0[0m [0;32m'int *'[0m
+[0;34m|   `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x38639f0[0m [0;32m'int'[0m sugar
+[0;34m|     |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x370d9b0[0m [0;32m'_Tp'[0m dependent depth 0 index 0
+[0;34m|     | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x370d970[0m[0;1;36m '_Tp'[0m
+[0;34m|     `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6780[0m [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3865e78[0m <[0;33mline:114:7[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m const_pointer[0m [0;32m'const int *'[0m
+[0;34m| `-[0m[0;32mPointerType[0m[0;33m 0x3865e40[0m [0;32m'const int *'[0m
+[0;34m|   `-[0mQualType[0;33m 0x38639f1[0m [0;32m'const int'[0m const
+[0;34m|     `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x38639f0[0m [0;32m'int'[0m sugar
+[0;34m|       |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x370d9b0[0m [0;32m'_Tp'[0m dependent depth 0 index 0
+[0;34m|       | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x370d970[0m[0;1;36m '_Tp'[0m
+[0;34m|       `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6780[0m [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3865f08[0m <[0;33mline:115:7[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m reference[0m [0;32m'int &'[0m
+[0;34m| `-[0m[0;32mLValueReferenceType[0m[0;33m 0x3865ed0[0m [0;32m'int &'[0m
+[0;34m|   `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x38639f0[0m [0;32m'int'[0m sugar
+[0;34m|     |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x370d9b0[0m [0;32m'_Tp'[0m dependent depth 0 index 0
+[0;34m|     | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x370d970[0m[0;1;36m '_Tp'[0m
+[0;34m|     `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6780[0m [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3865fc8[0m <[0;33mline:116:7[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m const_reference[0m [0;32m'const int &'[0m
+[0;34m| `-[0m[0;32mLValueReferenceType[0m[0;33m 0x3865f90[0m [0;32m'const int &'[0m
+[0;34m|   `-[0mQualType[0;33m 0x38639f1[0m [0;32m'const int'[0m const
+[0;34m|     `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x38639f0[0m [0;32m'int'[0m sugar
+[0;34m|       |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x370d9b0[0m [0;32m'_Tp'[0m dependent depth 0 index 0
+[0;34m|       | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x370d970[0m[0;1;36m '_Tp'[0m
+[0;34m|       `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6780[0m [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3866028[0m <[0;33mline:117:7[0m, [0;33mcol:26[0m> [0;33mcol:26[0m referenced[0;1;36m value_type[0m [0;32m'int':'int'[0m
+[0;34m| `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x38639f0[0m [0;32m'int'[0m sugar
+[0;34m|   |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x370d9b0[0m [0;32m'_Tp'[0m dependent depth 0 index 0
+[0;34m|   | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x370d970[0m[0;1;36m '_Tp'[0m
+[0;34m|   `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6780[0m [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mClassTemplateDecl[0m[0;33m 0x3866188[0m <[0;33mline:119:7[0m, [0;33mline:120:16[0m> [0;33mcol:16[0m[0;1;36m rebind[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3866078[0m <[0;33mline:119:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _Tp1[0m
+[0;34m| `-[0m[0;1;32mCXXRecordDecl[0m[0;33m 0x3866100[0m <[0;33mline:120:9[0m, [0;33mcol:16[0m> [0;33mcol:16[0m struct[0;1;36m rebind[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3866368[0m <[0;33mline:126:7[0m, [0;33mcol:25[0m> [0;33mcol:25[0m[0;1;36m propagate_on_container_move_assignment[0m [0;32m'std::true_type':'std::integral_constant<bool, true>'[0m
+[0;34m| `-[0m[0;32mTypedefType[0m[0;33m 0x34fd610[0m [0;32m'std::true_type'[0m sugar
+[0;34m|   |-[0m[0;1;32mTypedef[0m[0;33m 0x34f69c8[0m[0;1;36m 'true_type'[0m
+[0;34m|   `-[0m[0;32mTemplateSpecializationType[0m[0;33m 0x34f68e0[0m [0;32m'integral_constant<bool, true>'[0m sugar integral_constant
+[0;34m|     |-[0mTemplateArgument type [0;32m'bool'[0m
+[0;34m|     |-[0mTemplateArgument expr
+[0;34m|     | `-[0m[0;1;35mConstantExpr[0m[0;33m 0x34f67b8[0m <[0;33m/usr/bin/../lib/gcc/x86_64-linux-gnu/6.5.0/../../../../include/c++/6.5.0/type_traits:87:35[0m> [0;32m'bool'[0m[0;36m[0m[0;36m[0m
+[0;34m|     |   `-[0m[0;1;35mCXXBoolLiteralExpr[0m[0;33m 0x34f6758[0m <[0;33mcol:35[0m> [0;32m'bool'[0m[0;36m[0m[0;36m[0m true
+[0;34m|     `-[0m[0;32mRecordType[0m[0;33m 0x34f68c0[0m [0;32m'std::integral_constant<bool, true>'[0m
+[0;34m|       `-[0m[0;1;32mClassTemplateSpecialization[0m[0;33m 0x34f67d0[0m[0;1;36m 'integral_constant'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x38663b8[0m <[0;33m/usr/bin/../lib/gcc/x86_64-linux-gnu/6.5.0/../../../../include/c++/6.5.0/bits/allocator.h:128:7[0m, [0;33mcol:25[0m> [0;33mcol:25[0m[0;1;36m is_always_equal[0m [0;32m'std::true_type':'std::integral_constant<bool, true>'[0m
+[0;34m| `-[0m[0;32mTypedefType[0m[0;33m 0x34fd610[0m [0;32m'std::true_type'[0m sugar
+[0;34m|   |-[0m[0;1;32mTypedef[0m[0;33m 0x34f69c8[0m[0;1;36m 'true_type'[0m
+[0;34m|   `-[0m[0;32mTemplateSpecializationType[0m[0;33m 0x34f68e0[0m [0;32m'integral_constant<bool, true>'[0m sugar integral_constant
+[0;34m|     |-[0mTemplateArgument type [0;32m'bool'[0m
+[0;34m|     |-[0mTemplateArgument expr
+[0;34m|     | `-[0m[0;1;35mConstantExpr[0m[0;33m 0x34f67b8[0m <[0;33m/usr/bin/../lib/gcc/x86_64-linux-gnu/6.5.0/../../../../include/c++/6.5.0/type_traits:87:35[0m> [0;32m'bool'[0m[0;36m[0m[0;36m[0m
+[0;34m|     |   `-[0m[0;1;35mCXXBoolLiteralExpr[0m[0;33m 0x34f6758[0m <[0;33mcol:35[0m> [0;32m'bool'[0m[0;36m[0m[0;36m[0m true
+[0;34m|     `-[0m[0;32mRecordType[0m[0;33m 0x34f68c0[0m [0;32m'std::integral_constant<bool, true>'[0m
+[0;34m|       `-[0m[0;1;32mClassTemplateSpecialization[0m[0;33m 0x34f67d0[0m[0;1;36m 'integral_constant'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x3866440[0m <[0;33m/usr/bin/../lib/gcc/x86_64-linux-gnu/6.5.0/../../../../include/c++/6.5.0/bits/allocator.h:131:7[0m, [0;33mcol:29[0m> [0;33mcol:7[0m referenced[0;1;36m allocator[0m [0;32m'void () throw()'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x38665e0[0m <[0;33mline:133:7[0m, [0;33mline:134:38[0m> [0;33mline:133:7[0m[0;1;36m allocator[0m [0;32m'void (const std::allocator<int> &) throw()'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3866500[0m <[0;33mcol:17[0m, [0;33mcol:34[0m> [0;33mcol:34[0m[0;1;36m __a[0m [0;32m'const std::allocator<int> &'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3866950[0m <[0;33mline:136:7[0m, [0;33mline:137:53[0m> [0;33mcol:9[0m[0;1;36m allocator[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3866698[0m <[0;33mline:136:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _Tp1[0m
+[0;34m| |-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x38668b0[0m <[0;33mline:137:9[0m, [0;33mcol:53[0m> [0;33mcol:9[0m[0;1;36m allocator[0m [0;32m'void (const allocator<_Tp1> &) throw()'[0m
+[0;34m| | `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38667d0[0m <[0;33mcol:19[0m, [0;33mcol:40[0m> [0;33mcol:41[0m [0;32m'const allocator<_Tp1> &'[0m
+[0;34m| `-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x38674e0[0m <[0;33mcol:9[0m, [0;33mcol:53[0m> [0;33mcol:9[0m[0;1;36m allocator[0m [0;32m'void (const allocator<int> &) throw()'[0m
+[0;34m|   |-[0mTemplateArgument type [0;32m'int'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3867420[0m <[0;33mcol:19[0m, [0;33mcol:40[0m> [0;33mcol:41[0m [0;32m'const allocator<int> &'[0m
+[0;34m|-[0m[0;1;32mCXXDestructorDecl[0m[0;33m 0x3866a50[0m <[0;33mline:139:7[0m, [0;33mcol:30[0m> [0;33mcol:7[0m referenced[0;1;36m ~allocator[0m [0;32m'void () throw()'[0m
+[0;34m`-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3867aa0[0m <[0;33mline:108:11[0m> [0;33mcol:11[0m implicit[0;1;36m operator=[0m [0;32m'std::allocator<int> &(const std::allocator<int> &)'[0m inline default trivial noexcept-unevaluated 0x3867aa0
+[0;34m  `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3867ba8[0m <[0;33mcol:11[0m> [0;33mcol:11[0m [0;32m'const std::allocator<int> &'[0m
+
+Layout: <CGRecordLayout
+  LLVMType:%"class.std::allocator" = type { i8 }
+  NonVirtualBaseLLVMType:%"class.std::allocator" = type { i8 }
+  IsZeroInitializable:1
+  BitFields:[
+]>
+
+*** Dumping IRgen Record Layout
+Record: [0;1;32mCXXRecordDecl[0m[0;33m 0x3862530[0m <[0;33m/usr/bin/../lib/gcc/x86_64-linux-gnu/6.5.0/../../../../include/c++/6.5.0/bits/stl_vector.h:79:7[0m, [0;33mline:107:7[0m> [0;33mline:79:14[0m struct[0;1;36m _Vector_impl[0m definition
+[0;34m|-[0m[0;1;32mDefinitionData[0m standard_layout has_user_declared_ctor can_const_default_init
+[0;34m| |-[0m[0;1;32mDefaultConstructor[0m exists non_trivial user_provided
+[0;34m| |-[0m[0;1;32mCopyConstructor[0m simple non_trivial has_const_param needs_overload_resolution implicit_has_const_param
+[0;34m| |-[0m[0;1;32mMoveConstructor[0m exists simple non_trivial needs_overload_resolution
+[0;34m| |-[0m[0;1;32mCopyAssignment[0m trivial has_const_param needs_implicit implicit_has_const_param
+[0;34m| |-[0m[0;1;32mMoveAssignment[0m exists simple trivial needs_overload_resolution
+[0;34m| `-[0m[0;1;32mDestructor[0m simple non_trivial needs_overload_resolution
+[0;34m|-[0mpublic [0;32m'std::_Vector_base<int, std::allocator<int> >::_Tp_alloc_type':'std::allocator<int>'[0m
+[0;34m|-[0m[0;1;32mCXXRecordDecl[0m[0;33m 0x3866b38[0m prev 0x3862530 <[0;33mcol:7[0m, [0;33mcol:14[0m> [0;33mcol:14[0m implicit struct[0;1;36m _Vector_impl[0m
+[0;34m|-[0m[0;1;32mFieldDecl[0m[0;33m 0x3866bf0[0m <[0;33mline:82:2[0m, [0;33mcol:10[0m> [0;33mcol:10[0m[0;1;36m _M_start[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::pointer':'int *'[0m
+[0;34m|-[0m[0;1;32mFieldDecl[0m[0;33m 0x3866c48[0m <[0;33mline:83:2[0m, [0;33mcol:10[0m> [0;33mcol:10[0m[0;1;36m _M_finish[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::pointer':'int *'[0m
+[0;34m|-[0m[0;1;32mFieldDecl[0m[0;33m 0x3866ca0[0m <[0;33mline:84:2[0m, [0;33mcol:10[0m> [0;33mcol:10[0m[0;1;36m _M_end_of_storage[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::pointer':'int *'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x3866d20[0m <[0;33mline:86:2[0m, [0;33mline:88:4[0m> [0;33mline:86:2[0m[0;1;36m _Vector_impl[0m [0;32m'void ()'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x3866ec0[0m <[0;33mline:90:2[0m, [0;33mline:92:4[0m> [0;33mline:90:2[0m[0;1;36m _Vector_impl[0m [0;32m'void (const std::_Vector_base<int, std::allocator<int> >::_Tp_alloc_type &) noexcept'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3866de0[0m <[0;33mcol:15[0m, [0;33mcol:37[0m> [0;33mcol:37[0m[0;1;36m __a[0m [0;32m'const std::_Vector_base<int, std::allocator<int> >::_Tp_alloc_type &'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x3867038[0m <[0;33mline:95:2[0m, [0;33mline:98:4[0m> [0;33mline:95:2[0m[0;1;36m _Vector_impl[0m [0;32m'void (std::_Vector_base<int, std::allocator<int> >::_Tp_alloc_type &&) noexcept'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3866f88[0m <[0;33mcol:15[0m, [0;33mcol:32[0m> [0;33mcol:32[0m[0;1;36m __a[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::_Tp_alloc_type &&'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3867220[0m <[0;33mline:101:2[0m, [0;33mline:106:2[0m> [0;33mline:101:7[0m[0;1;36m _M_swap_data[0m [0;32m'void (std::_Vector_base<int, std::allocator<int> >::_Vector_impl &) noexcept'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3867128[0m <[0;33mcol:20[0m, [0;33mcol:34[0m> [0;33mcol:34[0m[0;1;36m __x[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::_Vector_impl &'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x38675e0[0m <[0;33mline:79:14[0m> [0;33mcol:14[0m implicit[0;1;36m _Vector_impl[0m [0;32m'void (const std::_Vector_base<int, std::allocator<int> >::_Vector_impl &)'[0m inline default noexcept-unevaluated 0x38675e0
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38676e8[0m <[0;33mcol:14[0m> [0;33mcol:14[0m [0;32m'const std::_Vector_base<int, std::allocator<int> >::_Vector_impl &'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x38677b8[0m <[0;33mcol:14[0m> [0;33mcol:14[0m implicit[0;1;36m _Vector_impl[0m [0;32m'void (std::_Vector_base<int, std::allocator<int> >::_Vector_impl &&)'[0m inline default noexcept-unevaluated 0x38677b8
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38678c8[0m <[0;33mcol:14[0m> [0;33mcol:14[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::_Vector_impl &&'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3867930[0m <[0;33mcol:14[0m> [0;33mcol:14[0m implicit[0;1;36m operator=[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::_Vector_impl &(std::_Vector_base<int, std::allocator<int> >::_Vector_impl &&)'[0m inline default trivial noexcept-unevaluated 0x3867930
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3867a38[0m <[0;33mcol:14[0m> [0;33mcol:14[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::_Vector_impl &&'[0m
+[0;34m`-[0m[0;1;32mCXXDestructorDecl[0m[0;33m 0x3867db8[0m <[0;33mcol:14[0m> [0;33mcol:14[0m implicit[0;1;36m ~_Vector_impl[0m [0;32m'void ()'[0m inline default noexcept-unevaluated 0x3867db8
+
+Layout: <CGRecordLayout
+  LLVMType:%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl" = type { i32*, i32*, i32* }
+  NonVirtualBaseLLVMType:%"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl" = type { i32*, i32*, i32* }
+  IsZeroInitializable:1
+  BitFields:[
+]>
+
+*** Dumping IRgen Record Layout
+Record: [0;1;32mClassTemplateSpecializationDecl[0m[0;33m 0x385c238[0m <[0;33m/usr/bin/../lib/gcc/x86_64-linux-gnu/6.5.0/../../../../include/c++/6.5.0/bits/stl_vector.h:71:3[0m, [0;33mline:189:5[0m> [0;33mline:72:12[0m struct[0;1;36m _Vector_base[0m definition
+[0;34m|-[0m[0;1;32mDefinitionData[0m standard_layout has_user_declared_ctor can_const_default_init
+[0;34m| |-[0m[0;1;32mDefaultConstructor[0m exists non_trivial user_provided
+[0;34m| |-[0m[0;1;32mCopyConstructor[0m non_trivial has_const_param needs_overload_resolution implicit_has_const_param
+[0;34m| |-[0m[0;1;32mMoveConstructor[0m exists non_trivial user_declared
+[0;34m| |-[0m[0;1;32mCopyAssignment[0m trivial has_const_param needs_implicit implicit_has_const_param
+[0;34m| |-[0m[0;1;32mMoveAssignment[0m
+[0;34m| `-[0m[0;1;32mDestructor[0m non_trivial user_declared
+[0;34m|-[0mTemplateArgument type [0;32m'int'[0m
+[0;34m|-[0mTemplateArgument type [0;32m'std::allocator<int>'[0m
+[0;34m|-[0m[0;1;32mCXXRecordDecl[0m[0;33m 0x385c458[0m prev 0x385c238 <[0;33mcol:5[0m, [0;33mcol:12[0m> [0;33mcol:12[0m implicit struct[0;1;36m _Vector_base[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3862370[0m <[0;33mline:74:7[0m, [0;33mline:75:28[0m> [0;33mcol:28[0m referenced[0;1;36m _Tp_alloc_type[0m [0;32m'typename __gnu_cxx::__alloc_traits<allocator<int> >::rebind<int>::other':'std::allocator<int>'[0m
+[0;34m| `-[0m[0;32mElaboratedType[0m[0;33m 0x3862320[0m [0;32m'typename __gnu_cxx::__alloc_traits<allocator<int> >::rebind<int>::other'[0m sugar
+[0;34m|   `-[0m[0;32mTypedefType[0m[0;33m 0x3862300[0m [0;32m'__gnu_cxx::__alloc_traits<std::allocator<int> >::rebind<int>::other'[0m sugar
+[0;34m|     |-[0m[0;1;32mTypedef[0m[0;33m 0x3862290[0m[0;1;36m 'other'[0m
+[0;34m|     `-[0m[0;32mElaboratedType[0m[0;33m 0x3862220[0m [0;32m'typename _Base_type::rebind_alloc<int>'[0m sugar
+[0;34m|       `-[0m[0;32mTemplateSpecializationType[0m[0;33m 0x38621d0[0m [0;32m'rebind_alloc<int>'[0m sugar alias rebind_alloc
+[0;34m|         |-[0mTemplateArgument type [0;32m'int':'int'[0m
+[0;34m|         |-[0m[0;32mTemplateSpecializationType[0m[0;33m 0x3862160[0m [0;32m'allocator<int>'[0m sugar allocator
+[0;34m|         | |-[0mTemplateArgument type [0;32m'int':'int'[0m
+[0;34m|         | `-[0m[0;32mRecordType[0m[0;33m 0x385be20[0m [0;32m'std::allocator<int>'[0m
+[0;34m|         |   `-[0m[0;1;32mClassTemplateSpecialization[0m[0;33m 0x385bd48[0m[0;1;36m 'allocator'[0m
+[0;34m|         `-[0m[0;32mTemplateSpecializationType[0m[0;33m 0x3862160[0m [0;32m'allocator<int>'[0m sugar allocator
+[0;34m|           |-[0mTemplateArgument type [0;32m'int':'int'[0m
+[0;34m|           `-[0m[0;32mRecordType[0m[0;33m 0x385be20[0m [0;32m'std::allocator<int>'[0m
+[0;34m|             `-[0m[0;1;32mClassTemplateSpecialization[0m[0;33m 0x385bd48[0m[0;1;36m 'allocator'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x38624e0[0m <[0;33mline:76:7[0m, [0;33mline:77:9[0m> [0;33mcol:9[0m referenced[0;1;36m pointer[0m [0;32m'typename __gnu_cxx::__alloc_traits<_Tp_alloc_type>::pointer':'int *'[0m
+[0;34m| `-[0m[0;32mElaboratedType[0m[0;33m 0x3862490[0m [0;32m'typename __gnu_cxx::__alloc_traits<_Tp_alloc_type>::pointer'[0m sugar
+[0;34m|   `-[0m[0;32mTypedefType[0m[0;33m 0x385f5a0[0m [0;32m'__gnu_cxx::__alloc_traits<std::allocator<int> >::pointer'[0m sugar
+[0;34m|     |-[0m[0;1;32mTypedef[0m[0;33m 0x385ed10[0m[0;1;36m 'pointer'[0m
+[0;34m|     `-[0m[0;32mElaboratedType[0m[0;33m 0x385ecc0[0m [0;32m'typename _Base_type::pointer'[0m sugar
+[0;34m|       `-[0m[0;32mTypedefType[0m[0;33m 0x385d410[0m [0;32m'std::allocator_traits<std::allocator<int> >::pointer'[0m sugar
+[0;34m|         |-[0m[0;1;32mTypeAlias[0m[0;33m 0x385cc78[0m[0;1;36m 'pointer'[0m
+[0;34m|         `-[0m[0;32mPointerType[0m[0;33m 0x385cc40[0m [0;32m'int *'[0m
+[0;34m|           `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x385c920[0m [0;32m'int'[0m sugar
+[0;34m|             |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x373dca0[0m [0;32m'_Tp'[0m dependent depth 0 index 0
+[0;34m|             | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x373dc58[0m[0;1;36m '_Tp'[0m
+[0;34m|             `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6780[0m [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mCXXRecordDecl[0m[0;33m 0x3862530[0m <[0;33mline:79:7[0m, [0;33mline:107:7[0m> [0;33mline:79:14[0m struct[0;1;36m _Vector_impl[0m definition
+[0;34m| |-[0m[0;1;32mDefinitionData[0m standard_layout has_user_declared_ctor can_const_default_init
+[0;34m| | |-[0m[0;1;32mDefaultConstructor[0m exists non_trivial user_provided
+[0;34m| | |-[0m[0;1;32mCopyConstructor[0m simple non_trivial has_const_param needs_overload_resolution implicit_has_const_param
+[0;34m| | |-[0m[0;1;32mMoveConstructor[0m exists simple non_trivial needs_overload_resolution
+[0;34m| | |-[0m[0;1;32mCopyAssignment[0m trivial has_const_param needs_implicit implicit_has_const_param
+[0;34m| | |-[0m[0;1;32mMoveAssignment[0m exists simple trivial needs_overload_resolution
+[0;34m| | `-[0m[0;1;32mDestructor[0m simple non_trivial needs_overload_resolution
+[0;34m| |-[0mpublic [0;32m'std::_Vector_base<int, std::allocator<int> >::_Tp_alloc_type':'std::allocator<int>'[0m
+[0;34m| |-[0m[0;1;32mCXXRecordDecl[0m[0;33m 0x3866b38[0m prev 0x3862530 <[0;33mcol:7[0m, [0;33mcol:14[0m> [0;33mcol:14[0m implicit struct[0;1;36m _Vector_impl[0m
+[0;34m| |-[0m[0;1;32mFieldDecl[0m[0;33m 0x3866bf0[0m <[0;33mline:82:2[0m, [0;33mcol:10[0m> [0;33mcol:10[0m[0;1;36m _M_start[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::pointer':'int *'[0m
+[0;34m| |-[0m[0;1;32mFieldDecl[0m[0;33m 0x3866c48[0m <[0;33mline:83:2[0m, [0;33mcol:10[0m> [0;33mcol:10[0m[0;1;36m _M_finish[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::pointer':'int *'[0m
+[0;34m| |-[0m[0;1;32mFieldDecl[0m[0;33m 0x3866ca0[0m <[0;33mline:84:2[0m, [0;33mcol:10[0m> [0;33mcol:10[0m[0;1;36m _M_end_of_storage[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::pointer':'int *'[0m
+[0;34m| |-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x3866d20[0m <[0;33mline:86:2[0m, [0;33mline:88:4[0m> [0;33mline:86:2[0m[0;1;36m _Vector_impl[0m [0;32m'void ()'[0m
+[0;34m| |-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x3866ec0[0m <[0;33mline:90:2[0m, [0;33mline:92:4[0m> [0;33mline:90:2[0m[0;1;36m _Vector_impl[0m [0;32m'void (const std::_Vector_base<int, std::allocator<int> >::_Tp_alloc_type &) noexcept'[0m
+[0;34m| | `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3866de0[0m <[0;33mcol:15[0m, [0;33mcol:37[0m> [0;33mcol:37[0m[0;1;36m __a[0m [0;32m'const std::_Vector_base<int, std::allocator<int> >::_Tp_alloc_type &'[0m
+[0;34m| |-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x3867038[0m <[0;33mline:95:2[0m, [0;33mline:98:4[0m> [0;33mline:95:2[0m[0;1;36m _Vector_impl[0m [0;32m'void (std::_Vector_base<int, std::allocator<int> >::_Tp_alloc_type &&) noexcept'[0m
+[0;34m| | `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3866f88[0m <[0;33mcol:15[0m, [0;33mcol:32[0m> [0;33mcol:32[0m[0;1;36m __a[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::_Tp_alloc_type &&'[0m
+[0;34m| |-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3867220[0m <[0;33mline:101:2[0m, [0;33mline:106:2[0m> [0;33mline:101:7[0m[0;1;36m _M_swap_data[0m [0;32m'void (std::_Vector_base<int, std::allocator<int> >::_Vector_impl &) noexcept'[0m
+[0;34m| | `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3867128[0m <[0;33mcol:20[0m, [0;33mcol:34[0m> [0;33mcol:34[0m[0;1;36m __x[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::_Vector_impl &'[0m
+[0;34m| |-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x38675e0[0m <[0;33mline:79:14[0m> [0;33mcol:14[0m implicit[0;1;36m _Vector_impl[0m [0;32m'void (const std::_Vector_base<int, std::allocator<int> >::_Vector_impl &)'[0m inline default noexcept-unevaluated 0x38675e0
+[0;34m| | `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38676e8[0m <[0;33mcol:14[0m> [0;33mcol:14[0m [0;32m'const std::_Vector_base<int, std::allocator<int> >::_Vector_impl &'[0m
+[0;34m| |-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x38677b8[0m <[0;33mcol:14[0m> [0;33mcol:14[0m implicit[0;1;36m _Vector_impl[0m [0;32m'void (std::_Vector_base<int, std::allocator<int> >::_Vector_impl &&)'[0m inline default noexcept-unevaluated 0x38677b8
+[0;34m| | `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38678c8[0m <[0;33mcol:14[0m> [0;33mcol:14[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::_Vector_impl &&'[0m
+[0;34m| |-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3867930[0m <[0;33mcol:14[0m> [0;33mcol:14[0m implicit[0;1;36m operator=[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::_Vector_impl &(std::_Vector_base<int, std::allocator<int> >::_Vector_impl &&)'[0m inline default trivial noexcept-unevaluated 0x3867930
+[0;34m| | `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3867a38[0m <[0;33mcol:14[0m> [0;33mcol:14[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::_Vector_impl &&'[0m
+[0;34m| `-[0m[0;1;32mCXXDestructorDecl[0m[0;33m 0x3867db8[0m <[0;33mcol:14[0m> [0;33mcol:14[0m implicit[0;1;36m ~_Vector_impl[0m [0;32m'void ()'[0m inline default noexcept-unevaluated 0x3867db8
+[0;34m|-[0m[0;1;32mAccessSpecDecl[0m[0;33m 0x38625f0[0m <[0;33mline:109:5[0m, [0;33mcol:11[0m> [0;33mcol:5[0m public
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3862628[0m <[0;33mline:110:7[0m, [0;33mcol:22[0m> [0;33mcol:22[0m[0;1;36m allocator_type[0m [0;32m'std::allocator<int>':'std::allocator<int>'[0m
+[0;34m| `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x385c4e0[0m [0;32m'std::allocator<int>'[0m sugar
+[0;34m|   |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x376c4d0[0m [0;32m'_Alloc'[0m dependent depth 0 index 1
+[0;34m|   | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x376c488[0m[0;1;36m '_Alloc'[0m
+[0;34m|   `-[0m[0;32mRecordType[0m[0;33m 0x385be20[0m [0;32m'std::allocator<int>'[0m
+[0;34m|     `-[0m[0;1;32mClassTemplateSpecialization[0m[0;33m 0x385bd48[0m[0;1;36m 'allocator'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3862730[0m <[0;33mline:112:7[0m, [0;33mline:114:63[0m> [0;33mline:113:7[0m[0;1;36m _M_get_Tp_allocator[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::_Tp_alloc_type &() noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3862890[0m <[0;33mline:116:7[0m, [0;33mline:118:69[0m> [0;33mline:117:7[0m[0;1;36m _M_get_Tp_allocator[0m [0;32m'const std::_Vector_base<int, std::allocator<int> >::_Tp_alloc_type &() const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x38629e0[0m <[0;33mline:120:7[0m, [0;33mline:122:55[0m> [0;33mline:121:7[0m[0;1;36m get_allocator[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::allocator_type () const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x3862ac0[0m <[0;33mline:124:7[0m, [0;33mline:125:21[0m> [0;33mline:124:7[0m[0;1;36m _Vector_base[0m [0;32m'void ()'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x3862cc0[0m <[0;33mline:127:7[0m, [0;33mline:128:24[0m> [0;33mline:127:7[0m[0;1;36m _Vector_base[0m [0;32m'void (const std::_Vector_base<int, std::allocator<int> >::allocator_type &) noexcept'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3862ba8[0m <[0;33mcol:20[0m, [0;33mcol:42[0m> [0;33mcol:42[0m[0;1;36m __a[0m [0;32m'const std::_Vector_base<int, std::allocator<int> >::allocator_type &'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x3862e20[0m <[0;33mline:130:7[0m, [0;33mline:132:33[0m> [0;33mline:130:7[0m[0;1;36m _Vector_base[0m [0;32m'void (std::size_t)'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3862d78[0m <[0;33mcol:20[0m, [0;33mcol:27[0m> [0;33mcol:27[0m[0;1;36m __n[0m [0;32m'std::size_t':'unsigned long'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x3863078[0m <[0;33mline:134:7[0m, [0;33mline:136:33[0m> [0;33mline:134:7[0m[0;1;36m _Vector_base[0m [0;32m'void (std::size_t, const std::_Vector_base<int, std::allocator<int> >::allocator_type &)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3862ed8[0m <[0;33mcol:20[0m, [0;33mcol:27[0m> [0;33mcol:27[0m[0;1;36m __n[0m [0;32m'std::size_t':'unsigned long'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3862f48[0m <[0;33mcol:32[0m, [0;33mcol:54[0m> [0;33mcol:54[0m[0;1;36m __a[0m [0;32m'const std::_Vector_base<int, std::allocator<int> >::allocator_type &'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x38632c0[0m <[0;33mline:139:7[0m, [0;33mline:140:35[0m> [0;33mline:139:7[0m[0;1;36m _Vector_base[0m [0;32m'void (std::_Vector_base<int, std::allocator<int> >::_Tp_alloc_type &&) noexcept'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38631a8[0m <[0;33mcol:20[0m, [0;33mcol:37[0m> [0;33mcol:37[0m[0;1;36m __a[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::_Tp_alloc_type &&'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x38634d0[0m <[0;33mline:142:7[0m, [0;33mline:144:50[0m> [0;33mline:142:7[0m[0;1;36m _Vector_base[0m [0;32m'void (std::_Vector_base<int, std::allocator<int> > &&) noexcept'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38633b8[0m <[0;33mcol:20[0m, [0;33mcol:35[0m> [0;33mcol:35[0m[0;1;36m __x[0m [0;32m'std::_Vector_base<int, std::allocator<int> > &&'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x3863738[0m <[0;33mline:146:7[0m, [0;33mline:156:7[0m> [0;33mline:146:7[0m[0;1;36m _Vector_base[0m [0;32m'void (std::_Vector_base<int, std::allocator<int> > &&, const std::_Vector_base<int, std::allocator<int> >::allocator_type &)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3863598[0m <[0;33mcol:20[0m, [0;33mcol:35[0m> [0;33mcol:35[0m[0;1;36m __x[0m [0;32m'std::_Vector_base<int, std::allocator<int> > &&'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3863608[0m <[0;33mcol:40[0m, [0;33mcol:62[0m> [0;33mcol:62[0m[0;1;36m __a[0m [0;32m'const std::_Vector_base<int, std::allocator<int> >::allocator_type &'[0m
+[0;34m|-[0m[0;1;32mCXXDestructorDecl[0m[0;33m 0x3863820[0m <[0;33mline:159:7[0m, [0;33mline:161:36[0m> [0;33mline:159:7[0m[0;1;36m ~_Vector_base[0m [0;32m'void () noexcept'[0m
+[0;34m|-[0m[0;1;32mAccessSpecDecl[0m[0;33m 0x38638d8[0m <[0;33mline:163:5[0m, [0;33mcol:11[0m> [0;33mcol:5[0m public
+[0;34m|-[0m[0;1;32mFieldDecl[0m[0;33m 0x3867e90[0m <[0;33mline:164:7[0m, [0;33mcol:20[0m> [0;33mcol:20[0m[0;1;36m _M_impl[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::_Vector_impl'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3867fc8[0m <[0;33mline:166:7[0m, [0;33mline:171:7[0m> [0;33mline:167:7[0m[0;1;36m _M_allocate[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::pointer (std::size_t)'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3867ed8[0m <[0;33mcol:19[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m __n[0m [0;32m'std::size_t':'unsigned long'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x38681b8[0m <[0;33mline:173:7[0m, [0;33mline:179:7[0m> [0;33mline:174:7[0m[0;1;36m _M_deallocate[0m [0;32m'void (std::_Vector_base<int, std::allocator<int> >::pointer, std::size_t)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3868088[0m <[0;33mcol:21[0m, [0;33mcol:29[0m> [0;33mcol:29[0m[0;1;36m __p[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::pointer':'int *'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38680e8[0m <[0;33mcol:34[0m, [0;33mcol:41[0m> [0;33mcol:41[0m[0;1;36m __n[0m [0;32m'std::size_t':'unsigned long'[0m
+[0;34m|-[0m[0;1;32mAccessSpecDecl[0m[0;33m 0x3868270[0m <[0;33mline:181:5[0m, [0;33mcol:12[0m> [0;33mcol:5[0m private
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3868320[0m <[0;33mline:182:7[0m, [0;33mline:188:7[0m> [0;33mline:183:7[0m[0;1;36m _M_create_storage[0m [0;32m'void (std::size_t)'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3868298[0m <[0;33mcol:25[0m, [0;33mcol:32[0m> [0;33mcol:32[0m[0;1;36m __n[0m [0;32m'std::size_t':'unsigned long'[0m
+[0;34m`-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x38683f8[0m <[0;33mline:72:12[0m> [0;33mcol:12[0m implicit[0;1;36m _Vector_base[0m [0;32m'void (const std::_Vector_base<int, std::allocator<int> > &)'[0m inline default_delete noexcept-unevaluated 0x38683f8
+[0;34m  `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3868508[0m <[0;33mcol:12[0m> [0;33mcol:12[0m [0;32m'const std::_Vector_base<int, std::allocator<int> > &'[0m
+
+Layout: <CGRecordLayout
+  LLVMType:%"struct.std::_Vector_base" = type { %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl" }
+  NonVirtualBaseLLVMType:%"struct.std::_Vector_base" = type { %"struct.std::_Vector_base<int, std::allocator<int> >::_Vector_impl" }
+  IsZeroInitializable:1
+  BitFields:[
+]>
+
+*** Dumping IRgen Record Layout
+Record: [0;1;32mClassTemplateSpecializationDecl[0m[0;33m 0x385bef0[0m <[0;33m/usr/bin/../lib/gcc/x86_64-linux-gnu/6.5.0/../../../../include/c++/6.5.0/bits/stl_vector.h:213:3[0m, [0;33mline:1499:5[0m> [0;33mline:214:11[0m class[0;1;36m vector[0m definition
+[0;34m|-[0m[0;1;32mDefinitionData[0m standard_layout has_user_declared_ctor can_const_default_init
+[0;34m| |-[0m[0;1;32mDefaultConstructor[0m exists non_trivial user_provided
+[0;34m| |-[0m[0;1;32mCopyConstructor[0m non_trivial user_declared has_const_param needs_overload_resolution implicit_has_const_param
+[0;34m| |-[0m[0;1;32mMoveConstructor[0m exists non_trivial user_declared needs_overload_resolution
+[0;34m| |-[0m[0;1;32mCopyAssignment[0m non_trivial has_const_param user_declared implicit_has_const_param
+[0;34m| |-[0m[0;1;32mMoveAssignment[0m exists non_trivial user_declared needs_overload_resolution
+[0;34m| `-[0m[0;1;32mDestructor[0m non_trivial user_declared needs_overload_resolution
+[0;34m|-[0mprotected [0;32m'_Vector_base<int, std::allocator<int> >':'std::_Vector_base<int, std::allocator<int> >'[0m
+[0;34m|-[0mTemplateArgument type [0;32m'int'[0m
+[0;34m|-[0mTemplateArgument type [0;32m'std::allocator<int>'[0m
+[0;34m|-[0m[0;1;32mCXXRecordDecl[0m[0;33m 0x38685a0[0m prev 0x385bef0 <[0;33mcol:5[0m, [0;33mcol:11[0m> [0;33mcol:11[0m implicit class[0;1;36m vector[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x38686d0[0m <[0;33mline:217:7[0m, [0;33mcol:58[0m> [0;33mcol:58[0m[0;1;36m _Alloc_value_type[0m [0;32m'typename allocator<int>::value_type':'int'[0m
+[0;34m| `-[0m[0;32mElaboratedType[0m[0;33m 0x3868680[0m [0;32m'typename allocator<int>::value_type'[0m sugar
+[0;34m|   `-[0m[0;32mTypedefType[0m[0;33m 0x3868660[0m [0;32m'std::allocator<int>::value_type'[0m sugar
+[0;34m|     |-[0m[0;1;32mTypedef[0m[0;33m 0x3866028[0m[0;1;36m 'value_type'[0m
+[0;34m|     `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x38639f0[0m [0;32m'int'[0m sugar
+[0;34m|       |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x370d9b0[0m [0;32m'_Tp'[0m dependent depth 0 index 0
+[0;34m|       | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x370d970[0m[0;1;36m '_Tp'[0m
+[0;34m|       `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6780[0m [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x38687e0[0m <[0;33mline:223:7[0m, [0;33mcol:44[0m> [0;33mcol:44[0m[0;1;36m _Base[0m [0;32m'_Vector_base<int, std::allocator<int> >':'std::_Vector_base<int, std::allocator<int> >'[0m
+[0;34m| `-[0m[0;32mTemplateSpecializationType[0m[0;33m 0x3868740[0m [0;32m'_Vector_base<int, std::allocator<int> >'[0m sugar _Vector_base
+[0;34m|   |-[0mTemplateArgument type [0;32m'int':'int'[0m
+[0;34m|   |-[0mTemplateArgument type [0;32m'std::allocator<int>':'std::allocator<int>'[0m
+[0;34m|   `-[0m[0;32mRecordType[0m[0;33m 0x385c330[0m [0;32m'std::_Vector_base<int, std::allocator<int> >'[0m
+[0;34m|     `-[0m[0;1;32mClassTemplateSpecialization[0m[0;33m 0x385c238[0m[0;1;36m '_Vector_base'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x38688e0[0m <[0;33mline:224:7[0m, [0;33mcol:48[0m> [0;33mcol:48[0m[0;1;36m _Tp_alloc_type[0m [0;32m'typename _Base::_Tp_alloc_type':'std::allocator<int>'[0m
+[0;34m| `-[0m[0;32mElaboratedType[0m[0;33m 0x3868890[0m [0;32m'typename _Base::_Tp_alloc_type'[0m sugar
+[0;34m|   `-[0m[0;32mTypedefType[0m[0;33m 0x38623c0[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::_Tp_alloc_type'[0m sugar
+[0;34m|     |-[0m[0;1;32mTypedef[0m[0;33m 0x3862370[0m[0;1;36m '_Tp_alloc_type'[0m
+[0;34m|     `-[0m[0;32mElaboratedType[0m[0;33m 0x3862320[0m [0;32m'typename __gnu_cxx::__alloc_traits<allocator<int> >::rebind<int>::other'[0m sugar
+[0;34m|       `-[0m[0;32mTypedefType[0m[0;33m 0x3862300[0m [0;32m'__gnu_cxx::__alloc_traits<std::allocator<int> >::rebind<int>::other'[0m sugar
+[0;34m|         |-[0m[0;1;32mTypedef[0m[0;33m 0x3862290[0m[0;1;36m 'other'[0m
+[0;34m|         `-[0m[0;32mElaboratedType[0m[0;33m 0x3862220[0m [0;32m'typename _Base_type::rebind_alloc<int>'[0m sugar
+[0;34m|           `-[0m[0;32mTemplateSpecializationType[0m[0;33m 0x38621d0[0m [0;32m'rebind_alloc<int>'[0m sugar alias rebind_alloc
+[0;34m|             |-[0mTemplateArgument type [0;32m'int':'int'[0m
+[0;34m|             |-[0m[0;32mTemplateSpecializationType[0m[0;33m 0x3862160[0m [0;32m'allocator<int>'[0m sugar allocator
+[0;34m|             | |-[0mTemplateArgument type [0;32m'int':'int'[0m
+[0;34m|             | `-[0m[0;32mRecordType[0m[0;33m 0x385be20[0m [0;32m'std::allocator<int>'[0m
+[0;34m|             |   `-[0m[0;1;32mClassTemplateSpecialization[0m[0;33m 0x385bd48[0m[0;1;36m 'allocator'[0m
+[0;34m|             `-[0m[0;32mTemplateSpecializationType[0m[0;33m 0x3862160[0m [0;32m'allocator<int>'[0m sugar allocator
+[0;34m|               |-[0mTemplateArgument type [0;32m'int':'int'[0m
+[0;34m|               `-[0m[0;32mRecordType[0m[0;33m 0x385be20[0m [0;32m'std::allocator<int>'[0m
+[0;34m|                 `-[0m[0;1;32mClassTemplateSpecialization[0m[0;33m 0x385bd48[0m[0;1;36m 'allocator'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3868a10[0m <[0;33mline:225:7[0m, [0;33mcol:58[0m> [0;33mcol:58[0m[0;1;36m _Alloc_traits[0m [0;32m'__gnu_cxx::__alloc_traits<_Tp_alloc_type>':'__gnu_cxx::__alloc_traits<std::allocator<int> >'[0m
+[0;34m| `-[0m[0;32mElaboratedType[0m[0;33m 0x38689a0[0m [0;32m'__gnu_cxx::__alloc_traits<_Tp_alloc_type>'[0m sugar
+[0;34m|   `-[0m[0;32mTemplateSpecializationType[0m[0;33m 0x3868960[0m [0;32m'__alloc_traits<std::vector<int, std::allocator<int> >::_Tp_alloc_type>'[0m sugar __alloc_traits
+[0;34m|     |-[0mTemplateArgument type [0;32m'std::vector<int, std::allocator<int> >::_Tp_alloc_type':'std::allocator<int>'[0m
+[0;34m|     `-[0m[0;32mRecordType[0m[0;33m 0x385c5f0[0m [0;32m'__gnu_cxx::__alloc_traits<std::allocator<int> >'[0m
+[0;34m|       `-[0m[0;1;32mClassTemplateSpecialization[0m[0;33m 0x385c518[0m[0;1;36m '__alloc_traits'[0m
+[0;34m|-[0m[0;1;32mAccessSpecDecl[0m[0;33m 0x3868a60[0m <[0;33mline:227:5[0m, [0;33mcol:11[0m> [0;33mcol:5[0m public
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3868a98[0m <[0;33mline:228:7[0m, [0;33mcol:24[0m> [0;33mcol:24[0m[0;1;36m value_type[0m [0;32m'int':'int'[0m
+[0;34m| `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x385bd10[0m [0;32m'int'[0m sugar
+[0;34m|   |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x3775f10[0m [0;32m'_Tp'[0m dependent depth 0 index 0
+[0;34m|   | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x3775ed0[0m[0;1;36m '_Tp'[0m
+[0;34m|   `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6780[0m [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3868b60[0m <[0;33mline:229:7[0m, [0;33mcol:58[0m> [0;33mcol:58[0m[0;1;36m pointer[0m [0;32m'typename _Base::pointer':'int *'[0m
+[0;34m| `-[0m[0;32mElaboratedType[0m[0;33m 0x3868b10[0m [0;32m'typename _Base::pointer'[0m sugar
+[0;34m|   `-[0m[0;32mTypedefType[0m[0;33m 0x3866bc0[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::pointer'[0m sugar
+[0;34m|     |-[0m[0;1;32mTypedef[0m[0;33m 0x38624e0[0m[0;1;36m 'pointer'[0m
+[0;34m|     `-[0m[0;32mElaboratedType[0m[0;33m 0x3862490[0m [0;32m'typename __gnu_cxx::__alloc_traits<_Tp_alloc_type>::pointer'[0m sugar
+[0;34m|       `-[0m[0;32mTypedefType[0m[0;33m 0x385f5a0[0m [0;32m'__gnu_cxx::__alloc_traits<std::allocator<int> >::pointer'[0m sugar
+[0;34m|         |-[0m[0;1;32mTypedef[0m[0;33m 0x385ed10[0m[0;1;36m 'pointer'[0m
+[0;34m|         `-[0m[0;32mElaboratedType[0m[0;33m 0x385ecc0[0m [0;32m'typename _Base_type::pointer'[0m sugar
+[0;34m|           `-[0m[0;32mTypedefType[0m[0;33m 0x385d410[0m [0;32m'std::allocator_traits<std::allocator<int> >::pointer'[0m sugar
+[0;34m|             |-[0m[0;1;32mTypeAlias[0m[0;33m 0x385cc78[0m[0;1;36m 'pointer'[0m
+[0;34m|             `-[0m[0;32mPointerType[0m[0;33m 0x385cc40[0m [0;32m'int *'[0m
+[0;34m|               `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x385c920[0m [0;32m'int'[0m sugar
+[0;34m|                 |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x373dca0[0m [0;32m'_Tp'[0m dependent depth 0 index 0
+[0;34m|                 | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x373dc58[0m[0;1;36m '_Tp'[0m
+[0;34m|                 `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6780[0m [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3868c80[0m <[0;33mline:230:7[0m, [0;33mcol:58[0m> [0;33mcol:58[0m[0;1;36m const_pointer[0m [0;32m'typename _Alloc_traits::const_pointer':'const int *'[0m
+[0;34m| `-[0m[0;32mElaboratedType[0m[0;33m 0x3868c30[0m [0;32m'typename _Alloc_traits::const_pointer'[0m sugar
+[0;34m|   `-[0m[0;32mTypedefType[0m[0;33m 0x3868c10[0m [0;32m'__gnu_cxx::__alloc_traits<std::allocator<int> >::const_pointer'[0m sugar
+[0;34m|     |-[0m[0;1;32mTypedef[0m[0;33m 0x385edf0[0m[0;1;36m 'const_pointer'[0m
+[0;34m|     `-[0m[0;32mElaboratedType[0m[0;33m 0x385eda0[0m [0;32m'typename _Base_type::const_pointer'[0m sugar
+[0;34m|       `-[0m[0;32mTypedefType[0m[0;33m 0x385ed80[0m [0;32m'std::allocator_traits<std::allocator<int> >::const_pointer'[0m sugar
+[0;34m|         |-[0m[0;1;32mTypeAlias[0m[0;33m 0x385cd08[0m[0;1;36m 'const_pointer'[0m
+[0;34m|         `-[0m[0;32mPointerType[0m[0;33m 0x385ccd0[0m [0;32m'const int *'[0m
+[0;34m|           `-[0mQualType[0;33m 0x385c921[0m [0;32m'const int'[0m const
+[0;34m|             `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x385c920[0m [0;32m'int'[0m sugar
+[0;34m|               |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x373dca0[0m [0;32m'_Tp'[0m dependent depth 0 index 0
+[0;34m|               | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x373dc58[0m[0;1;36m '_Tp'[0m
+[0;34m|               `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6780[0m [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3868d60[0m <[0;33mline:231:7[0m, [0;33mcol:58[0m> [0;33mcol:58[0m[0;1;36m reference[0m [0;32m'typename _Alloc_traits::reference':'__gnu_cxx::__alloc_traits<std::allocator<int> >::value_type &'[0m
+[0;34m| `-[0m[0;32mElaboratedType[0m[0;33m 0x3868d10[0m [0;32m'typename _Alloc_traits::reference'[0m sugar
+[0;34m|   `-[0m[0;32mTypedefType[0m[0;33m 0x3868cf0[0m [0;32m'__gnu_cxx::__alloc_traits<std::allocator<int> >::reference'[0m sugar
+[0;34m|     |-[0m[0;1;32mTypedef[0m[0;33m 0x385f038[0m[0;1;36m 'reference'[0m
+[0;34m|     `-[0m[0;32mLValueReferenceType[0m[0;33m 0x385f000[0m [0;32m'__gnu_cxx::__alloc_traits<std::allocator<int> >::value_type &'[0m
+[0;34m|       `-[0m[0;32mTypedefType[0m[0;33m 0x385efe0[0m [0;32m'__gnu_cxx::__alloc_traits<std::allocator<int> >::value_type'[0m sugar
+[0;34m|         |-[0m[0;1;32mTypedef[0m[0;33m 0x385ec50[0m[0;1;36m 'value_type'[0m
+[0;34m|         `-[0m[0;32mElaboratedType[0m[0;33m 0x385ec00[0m [0;32m'typename _Base_type::value_type'[0m sugar
+[0;34m|           `-[0m[0;32mTypedefType[0m[0;33m 0x385ebe0[0m [0;32m'std::allocator_traits<std::allocator<int> >::value_type'[0m sugar
+[0;34m|             |-[0m[0;1;32mTypeAlias[0m[0;33m 0x385cbb8[0m[0;1;36m 'value_type'[0m
+[0;34m|             `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x385c920[0m [0;32m'int'[0m sugar
+[0;34m|               |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x373dca0[0m [0;32m'_Tp'[0m dependent depth 0 index 0
+[0;34m|               | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x373dc58[0m[0;1;36m '_Tp'[0m
+[0;34m|               `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6780[0m [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3868e40[0m <[0;33mline:232:7[0m, [0;33mcol:58[0m> [0;33mcol:58[0m[0;1;36m const_reference[0m [0;32m'typename _Alloc_traits::const_reference':'const __gnu_cxx::__alloc_traits<std::allocator<int> >::value_type &'[0m
+[0;34m| `-[0m[0;32mElaboratedType[0m[0;33m 0x3868df0[0m [0;32m'typename _Alloc_traits::const_reference'[0m sugar
+[0;34m|   `-[0m[0;32mTypedefType[0m[0;33m 0x3868dd0[0m [0;32m'__gnu_cxx::__alloc_traits<std::allocator<int> >::const_reference'[0m sugar
+[0;34m|     |-[0m[0;1;32mTypedef[0m[0;33m 0x385f0c8[0m[0;1;36m 'const_reference'[0m
+[0;34m|     `-[0m[0;32mLValueReferenceType[0m[0;33m 0x385f090[0m [0;32m'const __gnu_cxx::__alloc_traits<std::allocator<int> >::value_type &'[0m
+[0;34m|       `-[0mQualType[0;33m 0x385efe1[0m [0;32m'const __gnu_cxx::__alloc_traits<std::allocator<int> >::value_type'[0m const
+[0;34m|         `-[0m[0;32mTypedefType[0m[0;33m 0x385efe0[0m [0;32m'__gnu_cxx::__alloc_traits<std::allocator<int> >::value_type'[0m sugar
+[0;34m|           |-[0m[0;1;32mTypedef[0m[0;33m 0x385ec50[0m[0;1;36m 'value_type'[0m
+[0;34m|           `-[0m[0;32mElaboratedType[0m[0;33m 0x385ec00[0m [0;32m'typename _Base_type::value_type'[0m sugar
+[0;34m|             `-[0m[0;32mTypedefType[0m[0;33m 0x385ebe0[0m [0;32m'std::allocator_traits<std::allocator<int> >::value_type'[0m sugar
+[0;34m|               |-[0m[0;1;32mTypeAlias[0m[0;33m 0x385cbb8[0m[0;1;36m 'value_type'[0m
+[0;34m|               `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x385c920[0m [0;32m'int'[0m sugar
+[0;34m|                 |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x373dca0[0m [0;32m'_Tp'[0m dependent depth 0 index 0
+[0;34m|                 | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x373dc58[0m[0;1;36m '_Tp'[0m
+[0;34m|                 `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6780[0m [0;32m'int'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x38690c8[0m <[0;33mline:233:7[0m, [0;33mcol:61[0m> [0;33mcol:61[0m[0;1;36m iterator[0m [0;32m'__gnu_cxx::__normal_iterator<pointer, vector<int, allocator<int> > >':'__gnu_cxx::__normal_iterator<int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m| `-[0m[0;32mElaboratedType[0m[0;33m 0x3869040[0m [0;32m'__gnu_cxx::__normal_iterator<pointer, vector<int, allocator<int> > >'[0m sugar
+[0;34m|   `-[0m[0;32mTemplateSpecializationType[0m[0;33m 0x3868fe0[0m [0;32m'__normal_iterator<std::vector<int, std::allocator<int> >::pointer, std::vector<int, std::allocator<int> > >'[0m sugar __normal_iterator
+[0;34m|     |-[0mTemplateArgument type [0;32m'std::vector<int, std::allocator<int> >::pointer':'int *'[0m
+[0;34m|     |-[0mTemplateArgument type [0;32m'std::vector<int, std::allocator<int> >'[0m
+[0;34m|     `-[0m[0;32mRecordType[0m[0;33m 0x3868fc0[0m [0;32m'__gnu_cxx::__normal_iterator<int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m|       `-[0m[0;1;32mClassTemplateSpecialization[0m[0;33m 0x3868ed0[0m[0;1;36m '__normal_iterator'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3869358[0m <[0;33mline:234:7[0m, [0;33mline:235:7[0m> [0;33mcol:7[0m[0;1;36m const_iterator[0m [0;32m'__gnu_cxx::__normal_iterator<const_pointer, vector<int, allocator<int> > >':'__gnu_cxx::__normal_iterator<const int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m| `-[0m[0;32mElaboratedType[0m[0;33m 0x38692d0[0m [0;32m'__gnu_cxx::__normal_iterator<const_pointer, vector<int, allocator<int> > >'[0m sugar
+[0;34m|   `-[0m[0;32mTemplateSpecializationType[0m[0;33m 0x3869270[0m [0;32m'__normal_iterator<std::vector<int, std::allocator<int> >::const_pointer, std::vector<int, std::allocator<int> > >'[0m sugar __normal_iterator
+[0;34m|     |-[0mTemplateArgument type [0;32m'std::vector<int, std::allocator<int> >::const_pointer':'const int *'[0m
+[0;34m|     |-[0mTemplateArgument type [0;32m'std::vector<int, std::allocator<int> >'[0m
+[0;34m|     `-[0m[0;32mRecordType[0m[0;33m 0x3869250[0m [0;32m'__gnu_cxx::__normal_iterator<const int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m|       `-[0m[0;1;32mClassTemplateSpecialization[0m[0;33m 0x3869160[0m[0;1;36m '__normal_iterator'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3869590[0m <[0;33mline:236:7[0m, [0;33mcol:54[0m> [0;33mcol:54[0m[0;1;36m const_reverse_iterator[0m [0;32m'std::reverse_iterator<const_iterator>':'std::reverse_iterator<__gnu_cxx::__normal_iterator<const int *, std::vector<int, std::allocator<int> > > >'[0m
+[0;34m| `-[0m[0;32mElaboratedType[0m[0;33m 0x3869520[0m [0;32m'std::reverse_iterator<const_iterator>'[0m sugar
+[0;34m|   `-[0m[0;32mTemplateSpecializationType[0m[0;33m 0x38694e0[0m [0;32m'reverse_iterator<std::vector<int, std::allocator<int> >::const_iterator>'[0m sugar reverse_iterator
+[0;34m|     |-[0mTemplateArgument type [0;32m'std::vector<int, std::allocator<int> >::const_iterator':'__gnu_cxx::__normal_iterator<const int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m|     `-[0m[0;32mRecordType[0m[0;33m 0x38694c0[0m [0;32m'std::reverse_iterator<__gnu_cxx::__normal_iterator<const int *, std::vector<int, std::allocator<int> > > >'[0m
+[0;34m|       `-[0m[0;1;32mClassTemplateSpecialization[0m[0;33m 0x38693e0[0m[0;1;36m 'reverse_iterator'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x38697c0[0m <[0;33mline:237:7[0m, [0;33mcol:49[0m> [0;33mcol:49[0m[0;1;36m reverse_iterator[0m [0;32m'std::reverse_iterator<iterator>':'std::reverse_iterator<__gnu_cxx::__normal_iterator<int *, std::vector<int, std::allocator<int> > > >'[0m
+[0;34m| `-[0m[0;32mElaboratedType[0m[0;33m 0x3869750[0m [0;32m'std::reverse_iterator<iterator>'[0m sugar
+[0;34m|   `-[0m[0;32mTemplateSpecializationType[0m[0;33m 0x3869710[0m [0;32m'reverse_iterator<std::vector<int, std::allocator<int> >::iterator>'[0m sugar reverse_iterator
+[0;34m|     |-[0mTemplateArgument type [0;32m'std::vector<int, std::allocator<int> >::iterator':'__gnu_cxx::__normal_iterator<int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m|     `-[0m[0;32mRecordType[0m[0;33m 0x38696f0[0m [0;32m'std::reverse_iterator<__gnu_cxx::__normal_iterator<int *, std::vector<int, std::allocator<int> > > >'[0m
+[0;34m|       `-[0m[0;1;32mClassTemplateSpecialization[0m[0;33m 0x3869610[0m[0;1;36m 'reverse_iterator'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3869810[0m <[0;33mline:238:7[0m, [0;33mcol:27[0m> [0;33mcol:27[0m[0;1;36m size_type[0m [0;32m'std::size_t':'unsigned long'[0m
+[0;34m| `-[0m[0;32mTypedefType[0m[0;33m 0x350cbe0[0m [0;32m'std::size_t'[0m sugar
+[0;34m|   |-[0m[0;1;32mTypedef[0m[0;33m 0x3435ed8[0m[0;1;36m 'size_t'[0m
+[0;34m|   `-[0m[0;32mBuiltinType[0m[0;33m 0x33f6840[0m [0;32m'unsigned long'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x3869860[0m <[0;33mline:239:7[0m, [0;33mcol:30[0m> [0;33mcol:30[0m[0;1;36m difference_type[0m [0;32m'std::ptrdiff_t':'long'[0m
+[0;34m| `-[0m[0;32mTypedefType[0m[0;33m 0x36439f0[0m [0;32m'std::ptrdiff_t'[0m sugar
+[0;34m|   |-[0m[0;1;32mTypedef[0m[0;33m 0x3435f40[0m[0;1;36m 'ptrdiff_t'[0m
+[0;34m|   `-[0m[0;32mBuiltinType[0m[0;33m 0x33f67a0[0m [0;32m'long'[0m
+[0;34m|-[0m[0;1;32mTypedefDecl[0m[0;33m 0x38698c0[0m <[0;33mline:240:7[0m, [0;33mcol:48[0m> [0;33mcol:48[0m[0;1;36m allocator_type[0m [0;32m'std::allocator<int>':'std::allocator<int>'[0m
+[0;34m| `-[0m[0;32mSubstTemplateTypeParmType[0m[0;33m 0x385c200[0m [0;32m'std::allocator<int>'[0m sugar
+[0;34m|   |-[0m[0;32mTemplateTypeParmType[0m[0;33m 0x37760b0[0m [0;32m'_Alloc'[0m dependent depth 0 index 1
+[0;34m|   | `-[0m[0;1;32mTemplateTypeParm[0m[0;33m 0x3776068[0m[0;1;36m '_Alloc'[0m
+[0;34m|   `-[0m[0;32mRecordType[0m[0;33m 0x385be20[0m [0;32m'std::allocator<int>'[0m
+[0;34m|     `-[0m[0;1;32mClassTemplateSpecialization[0m[0;33m 0x385bd48[0m[0;1;36m 'allocator'[0m
+[0;34m|-[0m[0;1;32mAccessSpecDecl[0m[0;33m 0x3869910[0m <[0;33mline:242:5[0m, [0;33mcol:14[0m> [0;33mcol:5[0m protected
+[0;34m|-[0m[0;1;32mUsingDecl[0m[0;33m 0x3869958[0m <[0;33mline:243:7[0m, [0;33mcol:20[0m> [0;33mcol:20[0m _Base::_M_allocate
+[0;34m|-[0m[0;1;32mUsingShadowDecl[0m[0;33m 0x38699a8[0m <[0;33mcol:20[0m> [0;33mcol:20[0m implicit [0;1;32mCXXMethod[0m[0;33m 0x3867fc8[0m[0;1;36m '_M_allocate'[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::pointer (std::size_t)'[0m
+[0;34m|-[0m[0;1;32mUsingDecl[0m[0;33m 0x3869a10[0m <[0;33mline:244:7[0m, [0;33mcol:20[0m> [0;33mcol:20[0m _Base::_M_deallocate
+[0;34m|-[0m[0;1;32mUsingShadowDecl[0m[0;33m 0x3869a60[0m <[0;33mcol:20[0m> [0;33mcol:20[0m implicit [0;1;32mCXXMethod[0m[0;33m 0x38681b8[0m[0;1;36m '_M_deallocate'[0m [0;32m'void (std::_Vector_base<int, std::allocator<int> >::pointer, std::size_t)'[0m
+[0;34m|-[0m[0;1;32mUsingDecl[0m[0;33m 0x3869ac8[0m <[0;33mline:245:7[0m, [0;33mcol:20[0m> [0;33mcol:20[0m _Base::_M_impl
+[0;34m|-[0m[0;1;32mUsingShadowDecl[0m[0;33m 0x3869b18[0m <[0;33mcol:20[0m> [0;33mcol:20[0m implicit [0;1;32mField[0m[0;33m 0x3867e90[0m[0;1;36m '_M_impl'[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::_Vector_impl'[0m
+[0;34m|-[0m[0;1;32mUsingDecl[0m[0;33m 0x3869b80[0m <[0;33mline:246:7[0m, [0;33mcol:20[0m> [0;33mcol:20[0m _Base::_M_get_Tp_allocator
+[0;34m|-[0m[0;1;32mUsingShadowDecl[0m[0;33m 0x3869bd0[0m <[0;33mcol:20[0m> [0;33mcol:20[0m implicit [0;1;32mCXXMethod[0m[0;33m 0x3862730[0m[0;1;36m '_M_get_Tp_allocator'[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::_Tp_alloc_type &() noexcept'[0m
+[0;34m|-[0m[0;1;32mUsingShadowDecl[0m[0;33m 0x3869c18[0m <[0;33mcol:20[0m> [0;33mcol:20[0m implicit [0;1;32mCXXMethod[0m[0;33m 0x3862890[0m[0;1;36m '_M_get_Tp_allocator'[0m [0;32m'const std::_Vector_base<int, std::allocator<int> >::_Tp_alloc_type &() const noexcept'[0m
+[0;34m|-[0m[0;1;32mAccessSpecDecl[0m[0;33m 0x3869c60[0m <[0;33mline:248:5[0m, [0;33mcol:11[0m> [0;33mcol:5[0m public
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x3869ce8[0m <[0;33mline:255:7[0m, [0;33mline:259:19[0m> [0;33mline:255:7[0m used[0;1;36m vector[0m [0;32m'void () noexcept(is_nothrow_default_constructible<allocator<int> >::value)'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x3869fa0[0m <[0;33mline:265:7[0m, [0;33mline:267:22[0m> [0;33mline:266:7[0m[0;1;36m vector[0m [0;32m'void (const std::vector<int, std::allocator<int> >::allocator_type &) noexcept'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3869e38[0m <[0;33mcol:14[0m, [0;33mcol:36[0m> [0;33mcol:36[0m[0;1;36m __a[0m [0;32m'const std::vector<int, std::allocator<int> >::allocator_type &'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x386a1b8[0m <[0;33mline:278:7[0m, [0;33mline:281:37[0m> [0;33mline:279:7[0m[0;1;36m vector[0m [0;32m'void (std::vector::size_type, const std::vector<int, std::allocator<int> >::allocator_type &)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386a058[0m <[0;33mcol:14[0m, [0;33mcol:24[0m> [0;33mcol:24[0m[0;1;36m __n[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386a0c8[0m <[0;33mcol:29[0m, [0;33mcol:72[0m> [0;33mcol:51[0m[0;1;36m __a[0m [0;32m'const std::vector<int, std::allocator<int> >::allocator_type &'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x386a4e8[0m <[0;33mline:291:7[0m, [0;33mline:294:43[0m> [0;33mline:291:7[0m[0;1;36m vector[0m [0;32m'void (std::vector::size_type, const std::vector<int, std::allocator<int> >::value_type &, const std::vector<int, std::allocator<int> >::allocator_type &)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386a278[0m <[0;33mcol:14[0m, [0;33mcol:24[0m> [0;33mcol:24[0m[0;1;36m __n[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386a338[0m <[0;33mcol:29[0m, [0;33mcol:47[0m> [0;33mcol:47[0m[0;1;36m __value[0m [0;32m'const std::vector<int, std::allocator<int> >::value_type &'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386a3a8[0m <[0;33mline:292:7[0m, [0;33mcol:50[0m> [0;33mcol:29[0m[0;1;36m __a[0m [0;32m'const std::vector<int, std::allocator<int> >::allocator_type &'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x386a6c8[0m <[0;33mline:320:7[0m, [0;33mline:327:7[0m> [0;33mline:320:7[0m[0;1;36m vector[0m [0;32m'void (const std::vector<int, std::allocator<int> > &)'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386a5e8[0m <[0;33mcol:14[0m, [0;33mcol:28[0m> [0;33mcol:28[0m[0;1;36m __x[0m [0;32m'const std::vector<int, std::allocator<int> > &'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x386a8d0[0m <[0;33mline:337:7[0m, [0;33mline:338:33[0m> [0;33mline:337:7[0m[0;1;36m vector[0m [0;32m'void (std::vector<int, std::allocator<int> > &&) noexcept'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386a7b8[0m <[0;33mcol:14[0m, [0;33mcol:23[0m> [0;33mcol:23[0m[0;1;36m __x[0m [0;32m'std::vector<int, std::allocator<int> > &&'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x386ab38[0m <[0;33mline:341:7[0m, [0;33mline:347:7[0m> [0;33mline:341:7[0m[0;1;36m vector[0m [0;32m'void (const std::vector<int, std::allocator<int> > &, const std::vector<int, std::allocator<int> >::allocator_type &)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386a998[0m <[0;33mcol:14[0m, [0;33mcol:28[0m> [0;33mcol:28[0m[0;1;36m __x[0m [0;32m'const std::vector<int, std::allocator<int> > &'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386aa08[0m <[0;33mcol:33[0m, [0;33mcol:55[0m> [0;33mcol:55[0m[0;1;36m __a[0m [0;32m'const std::vector<int, std::allocator<int> >::allocator_type &'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x386adb8[0m <[0;33mline:350:7[0m, [0;33mline:362:7[0m> [0;33mline:350:7[0m[0;1;36m vector[0m [0;32m'void (std::vector<int, std::allocator<int> > &&, const std::vector<int, std::allocator<int> >::allocator_type &)'[0m noexcept-uninstantiated 0x3778b40
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386ac08[0m <[0;33mcol:14[0m, [0;33mcol:23[0m> [0;33mcol:23[0m[0;1;36m __rv[0m [0;32m'std::vector<int, std::allocator<int> > &&'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386ac78[0m <[0;33mcol:29[0m, [0;33mcol:51[0m> [0;33mcol:51[0m[0;1;36m __m[0m [0;32m'const std::vector<int, std::allocator<int> >::allocator_type &'[0m
+[0;34m|-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x386b1d8[0m <[0;33mline:375:7[0m, [0;33mline:381:7[0m> [0;33mline:375:7[0m[0;1;36m vector[0m [0;32m'void (initializer_list<std::vector<int, std::allocator<int> >::value_type>, const std::vector<int, std::allocator<int> >::allocator_type &)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386b040[0m <[0;33mcol:14[0m, [0;33mcol:43[0m> [0;33mcol:43[0m[0;1;36m __l[0m [0;32m'initializer_list<std::vector<int, std::allocator<int> >::value_type>':'std::initializer_list<int>'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386b0b0[0m <[0;33mline:376:7[0m, [0;33mcol:50[0m> [0;33mcol:29[0m[0;1;36m __a[0m [0;32m'const std::vector<int, std::allocator<int> >::allocator_type &'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x386bab8[0m <[0;33mline:401:7[0m, [0;33mline:406:68[0m> [0;33mline:403:9[0m[0;1;36m vector[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x386b298[0m <[0;33mline:401:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _InputIterator[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x386b308[0m <[0;33mline:402:9[0m, [0;33m<scratch space>:133:1[0m> [0;33m/usr/bin/../lib/gcc/x86_64-linux-gnu/6.5.0/../../../../include/c++/6.5.0/bits/stl_vector.h:402:9[0m typename depth 0 index 1
+[0;34m| | `-[0mTemplateArgument type [0;32m'std::_RequireInputIter<_InputIterator>':'typename enable_if<is_convertible<typename iterator_traits<type-parameter-0-0>::iterator_category, input_iterator_tag>::value>::type'[0m
+[0;34m| `-[0m[0;1;32mCXXConstructorDecl[0m[0;33m 0x386ba18[0m <[0;33mline:403:9[0m, [0;33mline:406:68[0m> [0;33mline:403:9[0m[0;1;36m vector[0m [0;32m'void (_InputIterator, _InputIterator, const std::vector<int, std::allocator<int> >::allocator_type &)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386b800[0m <[0;33mcol:16[0m, [0;33mcol:31[0m> [0;33mcol:31[0m[0;1;36m __first[0m [0;32m'_InputIterator'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386b870[0m <[0;33mcol:40[0m, [0;33mcol:55[0m> [0;33mcol:55[0m[0;1;36m __last[0m [0;32m'_InputIterator'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386b8e0[0m <[0;33mline:404:9[0m, [0;33mcol:52[0m> [0;33mcol:31[0m[0;1;36m __a[0m [0;32m'const std::vector<int, std::allocator<int> >::allocator_type &'[0m
+[0;34m|-[0m[0;1;32mCXXDestructorDecl[0m[0;33m 0x386bbc8[0m <[0;33mline:425:7[0m, [0;33mline:427:33[0m> [0;33mline:425:7[0m used[0;1;36m ~vector[0m [0;32m'void () noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386bd78[0m <[0;33mline:437:7[0m, [0;33mline:438:34[0m> [0;33mcol:7[0m[0;1;36m operator=[0m [0;32m'std::vector<int, std::allocator<int> > &(const std::vector<int, std::allocator<int> > &)'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386bcb8[0m <[0;33mcol:17[0m, [0;33mcol:31[0m> [0;33mcol:31[0m[0;1;36m __x[0m [0;32m'const std::vector<int, std::allocator<int> > &'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386bf38[0m <[0;33mline:449:7[0m, [0;33mline:457:7[0m> [0;33mline:450:7[0m[0;1;36m operator=[0m [0;32m'std::vector<int, std::allocator<int> > &(std::vector<int, std::allocator<int> > &&)'[0m noexcept-uninstantiated 0x3779ce0
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386be38[0m <[0;33mcol:17[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m __x[0m [0;32m'std::vector<int, std::allocator<int> > &&'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386c198[0m <[0;33mline:470:7[0m, [0;33mline:475:7[0m> [0;33mline:471:7[0m[0;1;36m operator=[0m [0;32m'std::vector<int, std::allocator<int> > &(initializer_list<std::vector<int, std::allocator<int> >::value_type>)'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386c0b0[0m <[0;33mcol:17[0m, [0;33mcol:46[0m> [0;33mcol:46[0m[0;1;36m __l[0m [0;32m'initializer_list<std::vector<int, std::allocator<int> >::value_type>':'std::initializer_list<int>'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386c3c8[0m <[0;33mline:488:7[0m, [0;33mline:490:37[0m> [0;33mline:489:7[0m[0;1;36m assign[0m [0;32m'void (std::vector::size_type, const std::vector<int, std::allocator<int> >::value_type &)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386c248[0m <[0;33mcol:14[0m, [0;33mcol:24[0m> [0;33mcol:24[0m[0;1;36m __n[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386c2b8[0m <[0;33mcol:29[0m, [0;33mcol:47[0m> [0;33mcol:47[0m[0;1;36m __val[0m [0;32m'const std::vector<int, std::allocator<int> >::value_type &'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x386cb80[0m <[0;33mline:505:7[0m, [0;33mline:509:64[0m> [0;33mline:508:9[0m[0;1;36m assign[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x386c480[0m <[0;33mline:505:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _InputIterator[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x386c4e8[0m <[0;33mline:506:9[0m, [0;33m<scratch space>:134:1[0m> [0;33m/usr/bin/../lib/gcc/x86_64-linux-gnu/6.5.0/../../../../include/c++/6.5.0/bits/stl_vector.h:506:9[0m typename depth 0 index 1
+[0;34m| | `-[0mTemplateArgument type [0;32m'std::_RequireInputIter<_InputIterator>':'typename enable_if<is_convertible<typename iterator_traits<type-parameter-0-0>::iterator_category, input_iterator_tag>::value>::type'[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386cae8[0m <[0;33mline:507:9[0m, [0;33mline:509:64[0m> [0;33mline:508:9[0m[0;1;36m assign[0m [0;32m'void (_InputIterator, _InputIterator)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386c9b0[0m <[0;33mcol:16[0m, [0;33mcol:31[0m> [0;33mcol:31[0m[0;1;36m __first[0m [0;32m'_InputIterator'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386ca20[0m <[0;33mcol:40[0m, [0;33mcol:55[0m> [0;33mcol:55[0m[0;1;36m __last[0m [0;32m'_InputIterator'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386cdc8[0m <[0;33mline:533:7[0m, [0;33mline:535:47[0m> [0;33mline:534:7[0m[0;1;36m assign[0m [0;32m'void (initializer_list<std::vector<int, std::allocator<int> >::value_type>)'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386cce0[0m <[0;33mcol:14[0m, [0;33mcol:43[0m> [0;33mcol:43[0m[0;1;36m __l[0m [0;32m'initializer_list<std::vector<int, std::allocator<int> >::value_type>':'std::initializer_list<int>'[0m
+[0;34m|-[0m[0;1;32mUsingDecl[0m[0;33m 0x386ce98[0m <[0;33mline:539:7[0m, [0;33mcol:20[0m> [0;33mcol:20[0m _Base::get_allocator
+[0;34m|-[0m[0;1;32mUsingShadowDecl[0m[0;33m 0x386cee8[0m <[0;33mcol:20[0m> [0;33mcol:20[0m implicit [0;1;32mCXXMethod[0m[0;33m 0x38629e0[0m[0;1;36m 'get_allocator'[0m [0;32m'std::_Vector_base<int, std::allocator<int> >::allocator_type () const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386cfb0[0m <[0;33mline:547:7[0m, [0;33mline:549:50[0m> [0;33mline:548:7[0m[0;1;36m begin[0m [0;32m'std::vector<int, std::allocator<int> >::iterator () noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386d0e0[0m <[0;33mline:556:7[0m, [0;33mline:558:56[0m> [0;33mline:557:7[0m[0;1;36m begin[0m [0;32m'std::vector<int, std::allocator<int> >::const_iterator () const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386d1b0[0m <[0;33mline:565:7[0m, [0;33mline:567:51[0m> [0;33mline:566:7[0m[0;1;36m end[0m [0;32m'std::vector<int, std::allocator<int> >::iterator () noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386d280[0m <[0;33mline:574:7[0m, [0;33mline:576:57[0m> [0;33mline:575:7[0m[0;1;36m end[0m [0;32m'std::vector<int, std::allocator<int> >::const_iterator () const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386d3d0[0m <[0;33mline:583:7[0m, [0;33mline:585:41[0m> [0;33mline:584:7[0m[0;1;36m rbegin[0m [0;32m'std::vector<int, std::allocator<int> >::reverse_iterator () noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386d520[0m <[0;33mline:592:7[0m, [0;33mline:594:47[0m> [0;33mline:593:7[0m[0;1;36m rbegin[0m [0;32m'std::vector<int, std::allocator<int> >::const_reverse_iterator () const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386d5f0[0m <[0;33mline:601:7[0m, [0;33mline:603:43[0m> [0;33mline:602:7[0m[0;1;36m rend[0m [0;32m'std::vector<int, std::allocator<int> >::reverse_iterator () noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386d6c0[0m <[0;33mline:610:7[0m, [0;33mline:612:49[0m> [0;33mline:611:7[0m[0;1;36m rend[0m [0;32m'std::vector<int, std::allocator<int> >::const_reverse_iterator () const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386d790[0m <[0;33mline:620:7[0m, [0;33mline:622:56[0m> [0;33mline:621:7[0m[0;1;36m cbegin[0m [0;32m'std::vector<int, std::allocator<int> >::const_iterator () const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386d860[0m <[0;33mline:629:7[0m, [0;33mline:631:57[0m> [0;33mline:630:7[0m[0;1;36m cend[0m [0;32m'std::vector<int, std::allocator<int> >::const_iterator () const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386d930[0m <[0;33mline:638:7[0m, [0;33mline:640:47[0m> [0;33mline:639:7[0m[0;1;36m crbegin[0m [0;32m'std::vector<int, std::allocator<int> >::const_reverse_iterator () const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386da00[0m <[0;33mline:647:7[0m, [0;33mline:649:49[0m> [0;33mline:648:7[0m[0;1;36m crend[0m [0;32m'std::vector<int, std::allocator<int> >::const_reverse_iterator () const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386daa8[0m <[0;33mline:654:7[0m, [0;33mline:656:77[0m> [0;33mline:655:7[0m[0;1;36m size[0m [0;32m'std::vector::size_type () const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386db50[0m <[0;33mline:659:7[0m, [0;33mline:661:64[0m> [0;33mline:660:7[0m[0;1;36m max_size[0m [0;32m'std::vector::size_type () const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386dc80[0m <[0;33mline:673:7[0m, [0;33mline:680:7[0m> [0;33mline:674:7[0m[0;1;36m resize[0m [0;32m'void (std::vector::size_type)'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386dbf8[0m <[0;33mcol:14[0m, [0;33mcol:24[0m> [0;33mcol:24[0m[0;1;36m __new_size[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386de30[0m <[0;33mline:693:7[0m, [0;33mline:700:7[0m> [0;33mline:694:7[0m[0;1;36m resize[0m [0;32m'void (std::vector::size_type, const std::vector<int, std::allocator<int> >::value_type &)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386dd30[0m <[0;33mcol:14[0m, [0;33mcol:24[0m> [0;33mcol:24[0m[0;1;36m __new_size[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386dda0[0m <[0;33mcol:36[0m, [0;33mcol:54[0m> [0;33mcol:54[0m[0;1;36m __x[0m [0;32m'const std::vector<int, std::allocator<int> >::value_type &'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386dee8[0m <[0;33mline:725:7[0m, [0;33mline:727:29[0m> [0;33mline:726:7[0m[0;1;36m shrink_to_fit[0m [0;32m'void ()'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386dfb0[0m <[0;33mline:734:7[0m, [0;33mline:737:32[0m> [0;33mline:735:7[0m[0;1;36m capacity[0m [0;32m'std::vector::size_type () const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386e058[0m <[0;33mline:743:7[0m, [0;33mline:745:34[0m> [0;33mline:744:7[0m[0;1;36m empty[0m [0;32m'bool () const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386e188[0m <[0;33mline:764:7[0m, [0;33mline:765:28[0m> [0;33mcol:7[0m[0;1;36m reserve[0m [0;32m'void (std::vector::size_type)'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386e100[0m <[0;33mcol:15[0m, [0;33mcol:25[0m> [0;33mcol:25[0m[0;1;36m __n[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386e350[0m <[0;33mline:779:7[0m, [0;33mline:781:49[0m> [0;33mline:780:7[0m[0;1;36m operator[][0m [0;32m'std::vector<int, std::allocator<int> >::reference (std::vector::size_type) noexcept'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386e260[0m <[0;33mcol:18[0m, [0;33mcol:28[0m> [0;33mcol:28[0m[0;1;36m __n[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386e510[0m <[0;33mline:794:7[0m, [0;33mline:796:49[0m> [0;33mline:795:7[0m[0;1;36m operator[][0m [0;32m'std::vector<int, std::allocator<int> >::const_reference (std::vector::size_type) const noexcept'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386e420[0m <[0;33mcol:18[0m, [0;33mcol:28[0m> [0;33mcol:28[0m[0;1;36m __n[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m|-[0m[0;1;32mAccessSpecDecl[0m[0;33m 0x386e5c0[0m <[0;33mline:798:5[0m, [0;33mcol:14[0m> [0;33mcol:5[0m protected
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386e670[0m <[0;33mline:800:7[0m, [0;33mline:808:7[0m> [0;33mline:801:7[0m[0;1;36m _M_range_check[0m [0;32m'void (std::vector::size_type) const'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386e5e8[0m <[0;33mcol:22[0m, [0;33mcol:32[0m> [0;33mcol:32[0m[0;1;36m __n[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m|-[0m[0;1;32mAccessSpecDecl[0m[0;33m 0x386e720[0m <[0;33mline:810:5[0m, [0;33mcol:11[0m> [0;33mcol:5[0m public
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386e808[0m <[0;33mline:822:7[0m, [0;33mline:827:7[0m> [0;33mline:823:7[0m[0;1;36m at[0m [0;32m'std::vector<int, std::allocator<int> >::reference (std::vector::size_type)'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386e748[0m <[0;33mcol:10[0m, [0;33mcol:20[0m> [0;33mcol:20[0m[0;1;36m __n[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386e978[0m <[0;33mline:840:7[0m, [0;33mline:845:7[0m> [0;33mline:841:7[0m[0;1;36m at[0m [0;32m'std::vector<int, std::allocator<int> >::const_reference (std::vector::size_type) const'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386e8b8[0m <[0;33mcol:10[0m, [0;33mcol:20[0m> [0;33mcol:20[0m[0;1;36m __n[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386eab0[0m <[0;33mline:851:7[0m, [0;33mline:853:26[0m> [0;33mline:852:7[0m[0;1;36m front[0m [0;32m'std::vector<int, std::allocator<int> >::reference () noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386ebe0[0m <[0;33mline:859:7[0m, [0;33mline:861:26[0m> [0;33mline:860:7[0m[0;1;36m front[0m [0;32m'std::vector<int, std::allocator<int> >::const_reference () const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386ecb0[0m <[0;33mline:867:7[0m, [0;33mline:869:30[0m> [0;33mline:868:7[0m[0;1;36m back[0m [0;32m'std::vector<int, std::allocator<int> >::reference () noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386ed80[0m <[0;33mline:875:7[0m, [0;33mline:877:30[0m> [0;33mline:876:7[0m[0;1;36m back[0m [0;32m'std::vector<int, std::allocator<int> >::const_reference () const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386eee0[0m <[0;33mline:887:7[0m, [0;33mline:892:53[0m> [0;33mline:891:7[0m[0;1;36m data[0m [0;32m'int *() noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386f040[0m <[0;33mline:895:7[0m, [0;33mline:900:53[0m> [0;33mline:899:7[0m[0;1;36m data[0m [0;32m'const int *() const noexcept'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386f1e8[0m <[0;33mline:913:7[0m, [0;33mline:928:7[0m> [0;33mline:914:7[0m[0;1;36m push_back[0m [0;32m'void (const std::vector<int, std::allocator<int> >::value_type &)'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386f0f8[0m <[0;33mcol:17[0m, [0;33mcol:35[0m> [0;33mcol:35[0m[0;1;36m __x[0m [0;32m'const std::vector<int, std::allocator<int> >::value_type &'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386f3f8[0m <[0;33mline:931:7[0m, [0;33mline:933:39[0m> [0;33mline:932:7[0m[0;1;36m push_back[0m [0;32m'void (std::vector<int, std::allocator<int> >::value_type &&)'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386f308[0m <[0;33mcol:17[0m, [0;33mcol:30[0m> [0;33mcol:30[0m[0;1;36m __x[0m [0;32m'std::vector<int, std::allocator<int> >::value_type &&'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x386f790[0m <[0;33mline:935:7[0m, [0;33mline:937:39[0m> [0;33mcol:9[0m[0;1;36m emplace_back[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x386f4a8[0m <[0;33mline:935:16[0m, [0;33mcol:28[0m> [0;33mcol:28[0m typename depth 0 index 0 ...[0;1;36m _Args[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386f6f8[0m <[0;33mline:936:9[0m, [0;33mline:937:39[0m> [0;33mcol:9[0m[0;1;36m emplace_back[0m [0;32m'void (_Args &&...)'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386f610[0m <[0;33mcol:22[0m, [0;33mcol:33[0m> [0;33mcol:33[0m[0;1;36m __args[0m [0;32m'_Args &&...'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386f868[0m <[0;33mline:949:7[0m, [0;33mline:954:7[0m> [0;33mline:950:7[0m[0;1;36m pop_back[0m [0;32m'void () noexcept'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x386fc20[0m <[0;33mline:969:7[0m, [0;33mline:971:61[0m> [0;33mcol:9[0m[0;1;36m emplace[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x386f910[0m <[0;33mline:969:16[0m, [0;33mcol:28[0m> [0;33mcol:28[0m typename depth 0 index 0 ...[0;1;36m _Args[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386fb88[0m <[0;33mline:970:9[0m, [0;33mline:971:61[0m> [0;33mcol:9[0m[0;1;36m emplace[0m [0;32m'std::vector<int, std::allocator<int> >::iterator (std::vector<int, std::allocator<int> >::const_iterator, _Args &&...)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386f9a0[0m <[0;33mcol:17[0m, [0;33mcol:32[0m> [0;33mcol:32[0m[0;1;36m __position[0m [0;32m'std::vector<int, std::allocator<int> >::const_iterator':'__gnu_cxx::__normal_iterator<const int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386fa80[0m <[0;33mcol:44[0m, [0;33mcol:55[0m> [0;33mcol:55[0m[0;1;36m __args[0m [0;32m'_Args &&...'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x386fe88[0m <[0;33mline:984:7[0m, [0;33mline:985:62[0m> [0;33mcol:7[0m[0;1;36m insert[0m [0;32m'std::vector<int, std::allocator<int> >::iterator (std::vector<int, std::allocator<int> >::const_iterator, const std::vector<int, std::allocator<int> >::value_type &)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386fd10[0m <[0;33mcol:14[0m, [0;33mcol:29[0m> [0;33mcol:29[0m[0;1;36m __position[0m [0;32m'std::vector<int, std::allocator<int> >::const_iterator':'__gnu_cxx::__normal_iterator<const int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386fd80[0m <[0;33mcol:41[0m, [0;33mcol:59[0m> [0;33mcol:59[0m[0;1;36m __x[0m [0;32m'const std::vector<int, std::allocator<int> >::value_type &'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x38700c8[0m <[0;33mline:1014:7[0m, [0;33mline:1016:53[0m> [0;33mline:1015:7[0m[0;1;36m insert[0m [0;32m'std::vector<int, std::allocator<int> >::iterator (std::vector<int, std::allocator<int> >::const_iterator, std::vector<int, std::allocator<int> >::value_type &&)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386ff50[0m <[0;33mcol:14[0m, [0;33mcol:29[0m> [0;33mcol:29[0m[0;1;36m __position[0m [0;32m'std::vector<int, std::allocator<int> >::const_iterator':'__gnu_cxx::__normal_iterator<const int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x386ffc0[0m <[0;33mcol:41[0m, [0;33mcol:54[0m> [0;33mcol:54[0m[0;1;36m __x[0m [0;32m'std::vector<int, std::allocator<int> >::value_type &&'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3870378[0m <[0;33mline:1031:7[0m, [0;33mline:1033:66[0m> [0;33mline:1032:7[0m[0;1;36m insert[0m [0;32m'std::vector<int, std::allocator<int> >::iterator (std::vector<int, std::allocator<int> >::const_iterator, initializer_list<std::vector<int, std::allocator<int> >::value_type>)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3870190[0m <[0;33mcol:14[0m, [0;33mcol:29[0m> [0;33mcol:29[0m[0;1;36m __position[0m [0;32m'std::vector<int, std::allocator<int> >::const_iterator':'__gnu_cxx::__normal_iterator<const int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3870270[0m <[0;33mcol:41[0m, [0;33mcol:70[0m> [0;33mcol:70[0m[0;1;36m __l[0m [0;32m'initializer_list<std::vector<int, std::allocator<int> >::value_type>':'std::initializer_list<int>'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3870628[0m <[0;33mline:1051:7[0m, [0;33mline:1057:7[0m> [0;33mline:1052:7[0m[0;1;36m insert[0m [0;32m'std::vector<int, std::allocator<int> >::iterator (std::vector<int, std::allocator<int> >::const_iterator, std::vector::size_type, const std::vector<int, std::allocator<int> >::value_type &)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3870440[0m <[0;33mcol:14[0m, [0;33mcol:29[0m> [0;33mcol:29[0m[0;1;36m __position[0m [0;32m'std::vector<int, std::allocator<int> >::const_iterator':'__gnu_cxx::__normal_iterator<const int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38704a0[0m <[0;33mcol:41[0m, [0;33mcol:51[0m> [0;33mcol:51[0m[0;1;36m __n[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3870510[0m <[0;33mcol:56[0m, [0;33mcol:74[0m> [0;33mcol:74[0m[0;1;36m __x[0m [0;32m'const std::vector<int, std::allocator<int> >::value_type &'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3870eb0[0m <[0;33mline:1093:7[0m, [0;33mline:1103:2[0m> [0;33mline:1096:9[0m[0;1;36m insert[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x38706e8[0m <[0;33mline:1093:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _InputIterator[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3870758[0m <[0;33mline:1094:9[0m, [0;33m<scratch space>:135:1[0m> [0;33m/usr/bin/../lib/gcc/x86_64-linux-gnu/6.5.0/../../../../include/c++/6.5.0/bits/stl_vector.h:1094:9[0m typename depth 0 index 1
+[0;34m| | `-[0mTemplateArgument type [0;32m'std::_RequireInputIter<_InputIterator>':'typename enable_if<is_convertible<typename iterator_traits<type-parameter-0-0>::iterator_category, input_iterator_tag>::value>::type'[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3870e18[0m <[0;33mline:1095:9[0m, [0;33mline:1103:2[0m> [0;33mline:1096:9[0m[0;1;36m insert[0m [0;32m'std::vector<int, std::allocator<int> >::iterator (std::vector<int, std::allocator<int> >::const_iterator, _InputIterator, _InputIterator)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3870c20[0m <[0;33mcol:16[0m, [0;33mcol:31[0m> [0;33mcol:31[0m[0;1;36m __position[0m [0;32m'std::vector<int, std::allocator<int> >::const_iterator':'__gnu_cxx::__normal_iterator<const int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3870c90[0m <[0;33mcol:43[0m, [0;33mcol:58[0m> [0;33mcol:58[0m[0;1;36m __first[0m [0;32m'_InputIterator'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3870d00[0m <[0;33mline:1097:9[0m, [0;33mcol:24[0m> [0;33mcol:24[0m[0;1;36m __last[0m [0;32m'_InputIterator'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3871098[0m <[0;33mline:1145:7[0m, [0;33mline:1148:61[0m> [0;33mline:1147:7[0m[0;1;36m erase[0m [0;32m'std::vector<int, std::allocator<int> >::iterator (std::vector<int, std::allocator<int> >::const_iterator)'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3870fa8[0m <[0;33mcol:13[0m, [0;33mcol:28[0m> [0;33mcol:28[0m[0;1;36m __position[0m [0;32m'std::vector<int, std::allocator<int> >::const_iterator':'__gnu_cxx::__normal_iterator<const int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x38712d8[0m <[0;33mline:1172:7[0m, [0;33mline:1179:7[0m> [0;33mline:1174:7[0m[0;1;36m erase[0m [0;32m'std::vector<int, std::allocator<int> >::iterator (std::vector<int, std::allocator<int> >::const_iterator, std::vector<int, std::allocator<int> >::const_iterator)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3871158[0m <[0;33mcol:13[0m, [0;33mcol:28[0m> [0;33mcol:28[0m[0;1;36m __first[0m [0;32m'std::vector<int, std::allocator<int> >::const_iterator':'__gnu_cxx::__normal_iterator<const int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38711c8[0m <[0;33mcol:37[0m, [0;33mcol:52[0m> [0;33mcol:52[0m[0;1;36m __last[0m [0;32m'std::vector<int, std::allocator<int> >::const_iterator':'__gnu_cxx::__normal_iterator<const int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3871490[0m <[0;33mline:1194:7[0m, [0;33mline:1200:7[0m> [0;33mline:1195:7[0m[0;1;36m swap[0m [0;32m'void (std::vector<int, std::allocator<int> > &) noexcept'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38713a0[0m <[0;33mcol:12[0m, [0;33mcol:20[0m> [0;33mcol:20[0m[0;1;36m __x[0m [0;32m'std::vector<int, std::allocator<int> > &'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3871540[0m <[0;33mline:1208:7[0m, [0;33mline:1210:50[0m> [0;33mline:1209:7[0m[0;1;36m clear[0m [0;32m'void () noexcept'[0m
+[0;34m|-[0m[0;1;32mAccessSpecDecl[0m[0;33m 0x38715e8[0m <[0;33mline:1212:5[0m, [0;33mcol:14[0m> [0;33mcol:5[0m protected
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3871920[0m <[0;33mline:1217:7[0m, [0;33mline:1234:2[0m> [0;33mline:1219:9[0m[0;1;36m _M_allocate_and_copy[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3871610[0m <[0;33mline:1217:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _ForwardIterator[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3871888[0m <[0;33mline:1218:9[0m, [0;33mline:1234:2[0m> [0;33mline:1219:9[0m[0;1;36m _M_allocate_and_copy[0m [0;32m'std::vector<int, std::allocator<int> >::pointer (std::vector::size_type, _ForwardIterator, _ForwardIterator)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3871690[0m <[0;33mcol:30[0m, [0;33mcol:40[0m> [0;33mcol:40[0m[0;1;36m __n[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3871700[0m <[0;33mline:1220:9[0m, [0;33mcol:26[0m> [0;33mcol:26[0m[0;1;36m __first[0m [0;32m'_ForwardIterator'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3871770[0m <[0;33mcol:35[0m, [0;33mcol:52[0m> [0;33mcol:52[0m[0;1;36m __last[0m [0;32m'_ForwardIterator'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3871d20[0m <[0;33mline:1243:7[0m, [0;33mline:1251:2[0m> [0;33mline:1245:9[0m[0;1;36m _M_initialize_dispatch[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3871a08[0m <[0;33mline:1243:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _Integer[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3871c88[0m <[0;33mline:1244:9[0m, [0;33mline:1251:2[0m> [0;33mline:1245:9[0m[0;1;36m _M_initialize_dispatch[0m [0;32m'void (_Integer, _Integer, std::__true_type)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3871aa0[0m <[0;33mcol:32[0m, [0;33mcol:41[0m> [0;33mcol:41[0m[0;1;36m __n[0m [0;32m'_Integer'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3871b10[0m <[0;33mcol:46[0m, [0;33mcol:55[0m> [0;33mcol:55[0m[0;1;36m __value[0m [0;32m'_Integer'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3871b70[0m <[0;33mcol:64[0m> [0;33mcol:75[0m [0;32m'std::__true_type'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3872590[0m <[0;33mline:1254:7[0m, [0;33mline:1262:2[0m> [0;33mline:1256:9[0m[0;1;36m _M_initialize_dispatch[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3871e08[0m <[0;33mline:1254:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _InputIterator[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x38724f8[0m <[0;33mline:1255:9[0m, [0;33mline:1262:2[0m> [0;33mline:1256:9[0m[0;1;36m _M_initialize_dispatch[0m [0;32m'void (_InputIterator, _InputIterator, std::__false_type)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3871ea0[0m <[0;33mcol:32[0m, [0;33mcol:47[0m> [0;33mcol:47[0m[0;1;36m __first[0m [0;32m'_InputIterator'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3871f10[0m <[0;33mcol:56[0m, [0;33mcol:71[0m> [0;33mcol:71[0m[0;1;36m __last[0m [0;32m'_InputIterator'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38723e0[0m <[0;33mline:1257:11[0m> [0;33mcol:23[0m [0;32m'std::__false_type'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3872990[0m <[0;33mline:1265:7[0m, [0;33mline:1281:2[0m> [0;33mline:1267:2[0m[0;1;36m _M_range_initialize[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3872678[0m <[0;33mline:1265:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _InputIterator[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x38728f8[0m <[0;33mline:1266:2[0m, [0;33mline:1281:2[0m> [0;33mline:1267:2[0m[0;1;36m _M_range_initialize[0m [0;32m'void (_InputIterator, _InputIterator, std::input_iterator_tag)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3872710[0m <[0;33mcol:22[0m, [0;33mcol:37[0m> [0;33mcol:37[0m[0;1;36m __first[0m [0;32m'_InputIterator'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3872780[0m <[0;33mcol:46[0m, [0;33mcol:61[0m> [0;33mcol:61[0m[0;1;36m __last[0m [0;32m'_InputIterator'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38727e0[0m <[0;33mline:1268:8[0m, [0;33mcol:13[0m> [0;33mcol:31[0m [0;32m'std::input_iterator_tag':'std::input_iterator_tag'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3872d90[0m <[0;33mline:1284:7[0m, [0;33mline:1296:2[0m> [0;33mline:1286:2[0m[0;1;36m _M_range_initialize[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3872a78[0m <[0;33mline:1284:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _ForwardIterator[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3872cf8[0m <[0;33mline:1285:2[0m, [0;33mline:1296:2[0m> [0;33mline:1286:2[0m[0;1;36m _M_range_initialize[0m [0;32m'void (_ForwardIterator, _ForwardIterator, std::forward_iterator_tag)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3872b10[0m <[0;33mcol:22[0m, [0;33mcol:39[0m> [0;33mcol:39[0m[0;1;36m __first[0m [0;32m'_ForwardIterator'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3872b80[0m <[0;33mcol:48[0m, [0;33mcol:65[0m> [0;33mcol:65[0m[0;1;36m __last[0m [0;32m'_ForwardIterator'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3872be0[0m <[0;33mline:1287:8[0m, [0;33mcol:13[0m> [0;33mcol:33[0m [0;32m'std::forward_iterator_tag':'std::forward_iterator_tag'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3872f78[0m <[0;33mline:1300:7[0m, [0;33mline:1306:7[0m> [0;33mline:1301:7[0m[0;1;36m _M_fill_initialize[0m [0;32m'void (std::vector::size_type, const std::vector<int, std::allocator<int> >::value_type &)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3872e78[0m <[0;33mcol:26[0m, [0;33mcol:36[0m> [0;33mcol:36[0m[0;1;36m __n[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3872ee8[0m <[0;33mcol:41[0m, [0;33mcol:59[0m> [0;33mcol:59[0m[0;1;36m __value[0m [0;32m'const std::vector<int, std::allocator<int> >::value_type &'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x38730b8[0m <[0;33mline:1310:7[0m, [0;33mline:1316:7[0m> [0;33mline:1311:7[0m[0;1;36m _M_default_initialize[0m [0;32m'void (std::vector::size_type)'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3873030[0m <[0;33mcol:29[0m, [0;33mcol:39[0m> [0;33mcol:39[0m[0;1;36m __n[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3873440[0m <[0;33mline:1326:7[0m, [0;33mline:1329:39[0m> [0;33mline:1328:9[0m[0;1;36m _M_assign_dispatch[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3873168[0m <[0;33mline:1326:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _Integer[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x38733a8[0m <[0;33mline:1327:9[0m, [0;33mline:1329:39[0m> [0;33mline:1328:9[0m[0;1;36m _M_assign_dispatch[0m [0;32m'void (_Integer, _Integer, std::__true_type)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3873200[0m <[0;33mcol:28[0m, [0;33mcol:37[0m> [0;33mcol:37[0m[0;1;36m __n[0m [0;32m'_Integer'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3873270[0m <[0;33mcol:42[0m, [0;33mcol:51[0m> [0;33mcol:51[0m[0;1;36m __val[0m [0;32m'_Integer'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38732d0[0m <[0;33mcol:58[0m> [0;33mcol:69[0m [0;32m'std::__true_type'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3873800[0m <[0;33mline:1332:7[0m, [0;33mline:1340:2[0m> [0;33mline:1334:9[0m[0;1;36m _M_assign_dispatch[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3873528[0m <[0;33mline:1332:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _InputIterator[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3873768[0m <[0;33mline:1333:9[0m, [0;33mline:1340:2[0m> [0;33mline:1334:9[0m[0;1;36m _M_assign_dispatch[0m [0;32m'void (_InputIterator, _InputIterator, std::__false_type)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38735c0[0m <[0;33mcol:28[0m, [0;33mcol:43[0m> [0;33mcol:43[0m[0;1;36m __first[0m [0;32m'_InputIterator'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3873630[0m <[0;33mcol:52[0m, [0;33mcol:67[0m> [0;33mcol:67[0m[0;1;36m __last[0m [0;32m'_InputIterator'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3873690[0m <[0;33mline:1335:7[0m> [0;33mcol:19[0m [0;32m'std::__false_type'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3873bc0[0m <[0;33mline:1343:7[0m, [0;33mline:1346:32[0m> [0;33mline:1345:9[0m[0;1;36m _M_assign_aux[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x38738e8[0m <[0;33mline:1343:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _InputIterator[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3873b28[0m <[0;33mline:1344:9[0m, [0;33mline:1346:32[0m> [0;33mline:1345:9[0m[0;1;36m _M_assign_aux[0m [0;32m'void (_InputIterator, _InputIterator, std::input_iterator_tag)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3873980[0m <[0;33mcol:23[0m, [0;33mcol:38[0m> [0;33mcol:38[0m[0;1;36m __first[0m [0;32m'_InputIterator'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38739f0[0m <[0;33mcol:47[0m, [0;33mcol:62[0m> [0;33mcol:62[0m[0;1;36m __last[0m [0;32m'_InputIterator'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3873a50[0m <[0;33mline:1346:9[0m, [0;33mcol:14[0m> [0;33mcol:32[0m [0;32m'std::input_iterator_tag':'std::input_iterator_tag'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3873f80[0m <[0;33mline:1349:7[0m, [0;33mline:1352:34[0m> [0;33mline:1351:9[0m[0;1;36m _M_assign_aux[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3873ca8[0m <[0;33mline:1349:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _ForwardIterator[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3873ee8[0m <[0;33mline:1350:9[0m, [0;33mline:1352:34[0m> [0;33mline:1351:9[0m[0;1;36m _M_assign_aux[0m [0;32m'void (_ForwardIterator, _ForwardIterator, std::forward_iterator_tag)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3873d40[0m <[0;33mcol:23[0m, [0;33mcol:40[0m> [0;33mcol:40[0m[0;1;36m __first[0m [0;32m'_ForwardIterator'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3873db0[0m <[0;33mcol:49[0m, [0;33mcol:66[0m> [0;33mcol:66[0m[0;1;36m __last[0m [0;32m'_ForwardIterator'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3873e10[0m <[0;33mline:1352:9[0m, [0;33mcol:14[0m> [0;33mcol:34[0m [0;32m'std::forward_iterator_tag':'std::forward_iterator_tag'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3874168[0m <[0;33mline:1356:7[0m, [0;33mline:1357:60[0m> [0;33mcol:7[0m[0;1;36m _M_fill_assign[0m [0;32m'void (std::vector::size_type, const std::vector<int, std::allocator<int> >::value_type &)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3874068[0m <[0;33mcol:22[0m, [0;33mcol:32[0m> [0;33mcol:32[0m[0;1;36m __n[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38740d8[0m <[0;33mcol:37[0m, [0;33mcol:55[0m> [0;33mcol:55[0m[0;1;36m __val[0m [0;32m'const std::vector<int, std::allocator<int> >::value_type &'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x38745c0[0m <[0;33mline:1366:7[0m, [0;33mline:1370:46[0m> [0;33mline:1368:9[0m[0;1;36m _M_insert_dispatch[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3874220[0m <[0;33mline:1366:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _Integer[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3874528[0m <[0;33mline:1367:9[0m, [0;33mline:1370:46[0m> [0;33mline:1368:9[0m[0;1;36m _M_insert_dispatch[0m [0;32m'void (std::vector<int, std::allocator<int> >::iterator, _Integer, _Integer, std::__true_type)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38742b0[0m <[0;33mcol:28[0m, [0;33mcol:37[0m> [0;33mcol:37[0m[0;1;36m __pos[0m [0;32m'std::vector<int, std::allocator<int> >::iterator':'__gnu_cxx::__normal_iterator<int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3874320[0m <[0;33mcol:44[0m, [0;33mcol:53[0m> [0;33mcol:53[0m[0;1;36m __n[0m [0;32m'_Integer'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3874390[0m <[0;33mcol:58[0m, [0;33mcol:67[0m> [0;33mcol:67[0m[0;1;36m __val[0m [0;32m'_Integer'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38743f0[0m <[0;33mline:1369:7[0m> [0;33mcol:18[0m [0;32m'std::__true_type'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3874a50[0m <[0;33mline:1373:7[0m, [0;33mline:1381:2[0m> [0;33mline:1375:9[0m[0;1;36m _M_insert_dispatch[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x38746b0[0m <[0;33mline:1373:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _InputIterator[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x38749b8[0m <[0;33mline:1374:9[0m, [0;33mline:1381:2[0m> [0;33mline:1375:9[0m[0;1;36m _M_insert_dispatch[0m [0;32m'void (std::vector<int, std::allocator<int> >::iterator, _InputIterator, _InputIterator, std::__false_type)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3874740[0m <[0;33mcol:28[0m, [0;33mcol:37[0m> [0;33mcol:37[0m[0;1;36m __pos[0m [0;32m'std::vector<int, std::allocator<int> >::iterator':'__gnu_cxx::__normal_iterator<int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38747b0[0m <[0;33mcol:44[0m, [0;33mcol:59[0m> [0;33mcol:59[0m[0;1;36m __first[0m [0;32m'_InputIterator'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3874820[0m <[0;33mline:1376:7[0m, [0;33mcol:22[0m> [0;33mcol:22[0m[0;1;36m __last[0m [0;32m'_InputIterator'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3874880[0m <[0;33mcol:30[0m> [0;33mcol:42[0m [0;32m'std::__false_type'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3874ee0[0m <[0;33mline:1384:7[0m, [0;33mline:1387:50[0m> [0;33mline:1386:9[0m[0;1;36m _M_range_insert[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3874b40[0m <[0;33mline:1384:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _InputIterator[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3874e48[0m <[0;33mline:1385:9[0m, [0;33mline:1387:50[0m> [0;33mline:1386:9[0m[0;1;36m _M_range_insert[0m [0;32m'void (std::vector<int, std::allocator<int> >::iterator, _InputIterator, _InputIterator, std::input_iterator_tag)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3874bd0[0m <[0;33mcol:25[0m, [0;33mcol:34[0m> [0;33mcol:34[0m[0;1;36m __pos[0m [0;32m'std::vector<int, std::allocator<int> >::iterator':'__gnu_cxx::__normal_iterator<int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3874c40[0m <[0;33mcol:41[0m, [0;33mcol:56[0m> [0;33mcol:56[0m[0;1;36m __first[0m [0;32m'_InputIterator'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3874cb0[0m <[0;33mline:1387:4[0m, [0;33mcol:19[0m> [0;33mcol:19[0m[0;1;36m __last[0m [0;32m'_InputIterator'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3874d10[0m <[0;33mcol:27[0m, [0;33mcol:32[0m> [0;33mcol:50[0m [0;32m'std::input_iterator_tag':'std::input_iterator_tag'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3875370[0m <[0;33mline:1390:7[0m, [0;33mline:1393:54[0m> [0;33mline:1392:9[0m[0;1;36m _M_range_insert[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3874fd0[0m <[0;33mline:1390:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _ForwardIterator[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x38752d8[0m <[0;33mline:1391:9[0m, [0;33mline:1393:54[0m> [0;33mline:1392:9[0m[0;1;36m _M_range_insert[0m [0;32m'void (std::vector<int, std::allocator<int> >::iterator, _ForwardIterator, _ForwardIterator, std::forward_iterator_tag)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3875060[0m <[0;33mcol:25[0m, [0;33mcol:34[0m> [0;33mcol:34[0m[0;1;36m __pos[0m [0;32m'std::vector<int, std::allocator<int> >::iterator':'__gnu_cxx::__normal_iterator<int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38750d0[0m <[0;33mcol:41[0m, [0;33mcol:58[0m> [0;33mcol:58[0m[0;1;36m __first[0m [0;32m'_ForwardIterator'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3875140[0m <[0;33mline:1393:4[0m, [0;33mcol:21[0m> [0;33mcol:21[0m[0;1;36m __last[0m [0;32m'_ForwardIterator'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38751a0[0m <[0;33mcol:29[0m, [0;33mcol:34[0m> [0;33mcol:54[0m [0;32m'std::forward_iterator_tag':'std::forward_iterator_tag'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3875658[0m <[0;33mline:1397:7[0m, [0;33mline:1398:74[0m> [0;33mcol:7[0m[0;1;36m _M_fill_insert[0m [0;32m'void (std::vector<int, std::allocator<int> >::iterator, std::vector::size_type, const std::vector<int, std::allocator<int> >::value_type &)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3875470[0m <[0;33mcol:22[0m, [0;33mcol:31[0m> [0;33mcol:31[0m[0;1;36m __pos[0m [0;32m'std::vector<int, std::allocator<int> >::iterator':'__gnu_cxx::__normal_iterator<int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38754d0[0m <[0;33mcol:38[0m, [0;33mcol:48[0m> [0;33mcol:48[0m[0;1;36m __n[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3875540[0m <[0;33mcol:53[0m, [0;33mcol:71[0m> [0;33mcol:71[0m[0;1;36m __x[0m [0;32m'const std::vector<int, std::allocator<int> >::value_type &'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x38757a0[0m <[0;33mline:1402:7[0m, [0;33mline:1403:38[0m> [0;33mcol:7[0m[0;1;36m _M_default_append[0m [0;32m'void (std::vector::size_type)'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3875718[0m <[0;33mcol:25[0m, [0;33mcol:35[0m> [0;33mcol:35[0m[0;1;36m __n[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3875850[0m <[0;33mline:1405:7[0m, [0;33mline:1406:24[0m> [0;33mcol:7[0m[0;1;36m _M_shrink_to_fit[0m [0;32m'bool ()'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3875c10[0m <[0;33mline:1414:7[0m, [0;33mline:1416:61[0m> [0;33mcol:9[0m[0;1;36m _M_insert_aux[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x38758f8[0m <[0;33mline:1414:16[0m, [0;33mcol:28[0m> [0;33mcol:28[0m typename depth 0 index 0 ...[0;1;36m _Args[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3875b78[0m <[0;33mline:1415:9[0m, [0;33mline:1416:61[0m> [0;33mcol:9[0m[0;1;36m _M_insert_aux[0m [0;32m'void (std::vector<int, std::allocator<int> >::iterator, _Args &&...)'[0m
+[0;34m|   |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3875990[0m <[0;33mcol:23[0m, [0;33mcol:32[0m> [0;33mcol:32[0m[0;1;36m __position[0m [0;32m'std::vector<int, std::allocator<int> >::iterator':'__gnu_cxx::__normal_iterator<int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3875a70[0m <[0;33mcol:44[0m, [0;33mcol:55[0m> [0;33mcol:55[0m[0;1;36m __args[0m [0;32m'_Args &&...'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3875f40[0m <[0;33mline:1418:7[0m, [0;33mline:1420:46[0m> [0;33mcol:9[0m[0;1;36m _M_emplace_back_aux[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3875cf0[0m <[0;33mline:1418:16[0m, [0;33mcol:28[0m> [0;33mcol:28[0m typename depth 0 index 0 ...[0;1;36m _Args[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3875ea8[0m <[0;33mline:1419:9[0m, [0;33mline:1420:46[0m> [0;33mcol:9[0m[0;1;36m _M_emplace_back_aux[0m [0;32m'void (_Args &&...)'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3875df0[0m <[0;33mcol:29[0m, [0;33mcol:40[0m> [0;33mcol:40[0m[0;1;36m __args[0m [0;32m'_Args &&...'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3876168[0m <[0;33mline:1424:7[0m, [0;33mline:1432:7[0m> [0;33mline:1425:7[0m[0;1;36m _M_check_len[0m [0;32m'std::vector<int, std::allocator<int> >::size_type (std::vector::size_type, const char *) const'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3876040[0m <[0;33mcol:20[0m, [0;33mcol:30[0m> [0;33mcol:30[0m[0;1;36m __n[0m [0;32m'std::vector::size_type':'unsigned long'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38760a0[0m <[0;33mcol:35[0m, [0;33mcol:47[0m> [0;33mcol:47[0m[0;1;36m __s[0m [0;32m'const char *'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3876320[0m <[0;33mline:1438:7[0m, [0;33mline:1443:7[0m> [0;33mline:1439:7[0m[0;1;36m _M_erase_at_end[0m [0;32m'void (std::vector<int, std::allocator<int> >::pointer) noexcept'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3876230[0m <[0;33mcol:23[0m, [0;33mcol:31[0m> [0;33mcol:31[0m[0;1;36m __pos[0m [0;32m'std::vector<int, std::allocator<int> >::pointer':'int *'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3878d68[0m <[0;33mline:1445:7[0m, [0;33mline:1446:35[0m> [0;33mcol:7[0m[0;1;36m _M_erase[0m [0;32m'std::vector<int, std::allocator<int> >::iterator (std::vector<int, std::allocator<int> >::iterator)'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3878c80[0m <[0;33mcol:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m[0;1;36m __position[0m [0;32m'std::vector<int, std::allocator<int> >::iterator':'__gnu_cxx::__normal_iterator<int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3878fa8[0m <[0;33mline:1448:7[0m, [0;33mline:1449:49[0m> [0;33mcol:7[0m[0;1;36m _M_erase[0m [0;32m'std::vector<int, std::allocator<int> >::iterator (std::vector<int, std::allocator<int> >::iterator, std::vector<int, std::allocator<int> >::iterator)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3878e28[0m <[0;33mcol:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m[0;1;36m __first[0m [0;32m'std::vector<int, std::allocator<int> >::iterator':'__gnu_cxx::__normal_iterator<int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3878e98[0m <[0;33mcol:34[0m, [0;33mcol:43[0m> [0;33mcol:43[0m[0;1;36m __last[0m [0;32m'std::vector<int, std::allocator<int> >::iterator':'__gnu_cxx::__normal_iterator<int *, std::vector<int, std::allocator<int> > >'[0m
+[0;34m|-[0m[0;1;32mAccessSpecDecl[0m[0;33m 0x3879060[0m <[0;33mline:1452:5[0m, [0;33mcol:12[0m> [0;33mcol:5[0m private
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3879210[0m <[0;33mline:1456:7[0m, [0;33mline:1463:7[0m> [0;33mline:1457:7[0m[0;1;36m _M_move_assign[0m [0;32m'void (std::vector<int, std::allocator<int> > &&, std::true_type) noexcept'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3879098[0m <[0;33mcol:22[0m, [0;33mcol:31[0m> [0;33mcol:31[0m[0;1;36m __x[0m [0;32m'std::vector<int, std::allocator<int> > &&'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38790f8[0m <[0;33mcol:36[0m, [0;33mcol:41[0m> [0;33mcol:50[0m [0;32m'std::true_type':'std::integral_constant<bool, true>'[0m
+[0;34m|-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3879448[0m <[0;33mline:1467:7[0m, [0;33mline:1480:7[0m> [0;33mline:1468:7[0m[0;1;36m _M_move_assign[0m [0;32m'void (std::vector<int, std::allocator<int> > &&, std::false_type)'[0m
+[0;34m| |-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38792d8[0m <[0;33mcol:22[0m, [0;33mcol:31[0m> [0;33mcol:31[0m[0;1;36m __x[0m [0;32m'std::vector<int, std::allocator<int> > &&'[0m
+[0;34m| `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3879338[0m <[0;33mcol:36[0m, [0;33mcol:41[0m> [0;33mcol:51[0m [0;32m'std::false_type':'std::integral_constant<bool, false>'[0m
+[0;34m|-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3879740[0m <[0;33mline:1484:7[0m, [0;33mline:1487:18[0m> [0;33mline:1486:2[0m[0;1;36m _M_data_ptr[0m
+[0;34m| |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3879500[0m <[0;33mline:1484:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _Up[0m
+[0;34m| `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x38796a8[0m <[0;33mline:1485:2[0m, [0;33mline:1487:18[0m> [0;33mline:1486:2[0m[0;1;36m _M_data_ptr[0m [0;32m'_Up *(_Up *) const'[0m
+[0;34m|   `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x38795b8[0m <[0;33mcol:14[0m, [0;33mcol:19[0m> [0;33mcol:19[0m[0;1;36m __ptr[0m [0;32m'_Up *'[0m
+[0;34m`-[0m[0;1;32mFunctionTemplateDecl[0m[0;33m 0x3879bb8[0m <[0;33mline:1489:7[0m, [0;33mline:1492:57[0m> [0;33mline:1491:2[0m[0;1;36m _M_data_ptr[0m
+[0;34m  |-[0m[0;1;32mTemplateTypeParmDecl[0m[0;33m 0x3879818[0m <[0;33mline:1489:16[0m, [0;33mcol:25[0m> [0;33mcol:25[0m typename depth 0 index 0[0;1;36m _Ptr[0m
+[0;34m  `-[0m[0;1;32mCXXMethodDecl[0m[0;33m 0x3879b20[0m <[0;33mline:1490:2[0m, [0;33mline:1492:57[0m> [0;33mline:1491:2[0m[0;1;36m _M_data_ptr[0m [0;32m'typename std::pointer_traits<_Ptr>::element_type *(_Ptr) const'[0m
+[0;34m    `-[0m[0;1;32mParmVarDecl[0m[0;33m 0x3879a18[0m <[0;33mcol:14[0m, [0;33mcol:19[0m> [0;33mcol:19[0m[0;1;36m __ptr[0m [0;32m'_Ptr'[0m
+
+Layout: <CGRecordLayout
+  LLVMType:%"class.std::vector" = type { %"struct.std::_Vector_base" }
+  NonVirtualBaseLLVMType:%"class.std::vector" = type { %"struct.std::_Vector_base" }
+  IsZeroInitializable:1
+  BitFields:[
+]>
