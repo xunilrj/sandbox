@@ -1,5 +1,8 @@
 #pragma once
 
+#define NOMINMAX
+#include <Windows.h>
+
 template <typename T>
 struct deltaTime
 {
@@ -12,6 +15,14 @@ struct deltaTime
 	deltaTime(T desired, bool s)
 		: desired{ desired },
 		delta{ 0 },
+		last{ 0 },
+		freq{ 0 }
+	{
+		if (s) start();
+	}
+
+	deltaTime(bool s)
+		: delta{ 0 },
 		last{ 0 },
 		freq{ 0 }
 	{
@@ -45,5 +56,13 @@ struct deltaTime
 			delta = 0;
 		}
 		return r;
+	}
+
+	T elapsed()
+	{
+		LARGE_INTEGER c;
+		QueryPerformanceCounter(&c);
+
+		return T(c.QuadPart - last) / freq;
 	}
 };

@@ -19,7 +19,7 @@
 #define NOMINMAX
 #include <Windows.h>
 
-#include "../TaskSystem/TaskSystem.h"
+#include <TaskSystem/TaskSystem.h>
 
 class Scene;
 

@@ -13,6 +13,8 @@ The idea is specially important in two fronts:
 
 # Links
 
+https://www.youtube.com/watch?v=aKLntZcp27M
+
 http://entity-systems.wikidot.com/
 ## T-Machine Series
 [Entity Systems are the future of MMOG development – Part 1](http://t-machine.org/index.php/2007/09/03/entity-systems-are-the-future-of-mmog-development-part-1)

@@ -1,5 +1,5 @@
-#include "../deltaTime/deltaTime.h"
-#include "../TaskSystem/TaskSystem.h"
+#include <deltaTime/deltaTime.h>
+#include <TaskSystem/TaskSystem.h>
 #include "../ecs/ecs.h"
 
 // EXAMPLE 1

@@ -1,3 +1,147 @@
+# ECS - System Design Choices
+
+In a ECS architecture, Systems can work on any arbitrary set of entities. And entities can have arbitrary set of components. And components are store in arbitrary data structures, although we prefer packed ones like std:vector.
+
+Here we will assess the performance impact of some possible design choices. First we will test the performance of transversing some data structures. We will call this "linear runs". Then we will access the items inside this structure following another structure.
+
+The last part we dive deep into the generated ASM code to assess if the solution will be as optimized as we need.
+
+# Understanding Iterator Performance
+
+Analyzing our performance in this example, we can see that a liner run is very fast for std::vector.
+
+First we will try multiple way to run a vector.
+
+```c++
+int accum = 0;
+
+std::vector<int> numbers (1000000);
+std::fill(numbers.begin(), numbers.end(), 1);
+
+std::cout << "------------------------Linear run - vector" << std::endl;
+accum = 0; time_for_each (numbers, [&](auto&& x){ accum += x; }); std::cout << " accum: " << accum << std::endl;
+accum = 0; time_begin_end(numbers, [&](auto&& x){ accum += x; }); std::cout << " accum: " << accum << std::endl;
+accum = 0; time_by_index (numbers, [&](auto&& x){ accum += x; }); std::cout << " accum: " << accum << std::endl;
+accum = 0; time_data_directly(numbers, [&](auto&& x){ accum += x; }); std::cout << " accum: " << accum << std::endl;
+```
+
+We can see from the results that, it does not matter much how we access.
+
+```
+------------------------Linear run - vector
+For Each: 0.0674161ms accum: 1000000000
+Begin/End: 0.0662968ms accum: 1000000000
+Indices: 0.0664087ms accum: 1000000000
+Data: 0.068697ms accum: 1000000000
+```
+
+But, of course, that is not what we intend to do. We want to update only a subset of this vector. So the first approach is to use a set to store the ids of the entities that we want to update and access them by index in the vector. 
+
+```c++
+std::cout << "------------------------From sorted Set" << std::endl;
+std::set<size_t> selected;
+uint64_t last = 0;
+for(int i = 0; i < 1000000; ++i)
+{
+selected.insert(last);
+++last;
+}
+
+accum = 0; time_foreach_index(selected, numbers, [&](auto&& x){ accum += x; }, 10); std::cout << " accum: " << accum << std::endl;
+accum = 0; time_iterators_iterators(numbers, selected, [&](auto&& x){ accum += x; }, 10); std::cout << " accum: " << accum << std::endl;
+```
+
+But the result is disastrous:
+
+```
+------------------------From sorted Set
+ForEach/Index: 20.7487ms accum: 10000000
+It/It: 21.237ms accum: 10000000
+```
+
+The problem here is that std::set is implemented as red-black tree. So just transversing the tree is much slower. To test this we will transverse just the std::set.
+
+```c++
+std::cout << "------------------------Linear run - set" << std::endl;
+
+accum = 0; time_for_each(selected, [&](auto&& x){ accum += x; }, 10); std::cout << " accum: " << accum << std::endl;
+```
+
+We can see that just transversing the std::set takes A LOT MORE than transversing the whole std::vector.
+
+```c++
+------------------------Linear run - set
+For Each: 19.9023ms accum: 653067456
+```
+
+This result surprise some, but the point here is that, this was not the use case envisioned when stD::set was built. We are using it here just because we want a "bag" of integers that do not repeat. But std::set is good to test existance inside this "bag". Any other use will probably be sub-optimal, as it is in our case.
+
+Why you shouldn't use set (and what you should use instead) - Matt Austern  
+http://lafstern.org/matt/col1.pdf  
+
+Truth is, the "std" does not have the collection that we want in this case. We want something that avoids duplication, keep its element sorted and it is fast to do a "linear run". We all know that there is no free-lunch. We will have to accept bad complexity/performance in some case:
+
+- We will be doind a "linear run" on every frame of the game, so this is the main case: std::vector is the campion here;
+- In the vast majority of cases we will be appending the sorted list. The "id" will be the greatest;
+- We accept "bad" complexity/performance for insertion of small ids;
+
+In this scenario we will build something custom, a "container adaptor" as they are known in c++. It is just a couple of modification on top of the std::vector.
+
+```c++
+template <typename T, class TCompare = std::less<T>>
+class sorted_vector
+{
+public:
+    using iterator = typename std::vector<T>::iterator;
+    using const_iterator = typename std::vector<T>::const_iterator;
+ 
+    iterator begin() { return data.begin(); }
+    iterator end() { return data.end(); }
+    const_iterator begin() const { return data.begin(); }
+    const_iterator end() const { return data.end(); }
+
+    const_iterator cbegin() { return data.cbegin(); }
+    const_iterator cend() { return data.cend(); }
+
+    iterator insert(const T& t) 
+    {
+        iterator i = std::lower_bound(begin(), end(), t, cmp);
+        if (i == end() || cmp(t, *i))
+            data.insert(i, t);
+        return i;
+    }
+private:
+    TCompare cmp;
+    std::vector<T> data;
+};
+```
+
+This will keep a sorted vector, sorted as we insert items. We avoid duplicated by the "cmp(t, *it)".
+
+```c++
+std::cout << "------------------------From sorted vector" << std::endl;
+sorted_vector<size_t> selected2;
+last = 0;
+for(int i = 0; i < 1000000; ++i)
+{
+        selected2.insert(last);
+        ++last;
+}
+
+accum = 0; time_foreach_index(selected2, numbers, [&](auto&& x){ accum += x; }); std::cout << accum << std::endl;
+```
+
+Now we take a LOT less than using the set. And this is the absolutely worst case where we have all entities.
+
+```
+------------------------From sorted vector
+ForEach/Index: 0.745353ms1000000000
+```
+
+With this we are ready to start working on joins.
+
+# Understanding Joins
+
 # Understanding Iterator Code
 
 Today we have multiple ways to iterate a simple std::vector. Here we will analyze the generated assembly and understand which would be the prefered way. 
@@ -6,7 +150,7 @@ Let us start simple. We have a std::vector initialized like this:
 
 ```c++
 std::vector<int> items (100000000);
-std::fill(items.begin(), items.end(), 0);
+std::fill(items.begin(), items.end(), 1);
 ```
 
 Everything between the code below will have its execution time measured.
