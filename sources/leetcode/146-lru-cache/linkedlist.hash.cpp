@@ -1,4 +1,4 @@
-#include <map>
+#include <unordered_map>
 #include <list>
 
 class LRUCache {
@@ -24,49 +24,50 @@ private:
     {
         int key;
         int value;
+        
+        kv(int k, int v) : key{k}, value{v}
+        {            
+        }
     };
-    using iterator = std::list<kv>::iterator;
-    using map_iterator = std::map<int, iterator>::iterator;
+    
+    int max;
+    std::list<kv> lru;
+    using iterator = decltype(lru)::iterator;
+    std::unordered_map<int, iterator> data;
+    using map_iterator = decltype(data)::iterator;
+
     
     
     void remove_if_full()
     {
         if(data.size() >= max) {
-            auto i = lru.front();
-            lru.pop_front();
-            data.erase(i.key);            
+            data.erase(lru.front().key);            
+            lru.pop_front();            
         }
     }
     
     void insert(int key, int value)
     {
+        auto it = lru.emplace(lru.end(), key, value);
+                    
         auto dit = data.find(key);
         if(dit != data.end()) {
-            //touch
             auto kvit = dit->second;
             lru.erase(kvit);
-            auto lruit = lru.emplace(lru.end(), kv{key, value});                 lruit->value = value;   
-            dit->second = lruit;            
+            dit->second = it;
         } else {        
             remove_if_full();        
-            data[key] = lru.emplace(lru.end(), kv{key, value});
+            data.emplace_hint(dit, key, it);
         }
     }
     
     int move_to_end(map_iterator it)
     {
-        auto kvit = it->second;
-        auto key = kvit->key;
-        auto value = kvit->value;
-        
-        lru.erase(kvit);
-        auto lruit = lru.emplace(lru.end(), kv{key, value});
-        it->second = lruit;
-        
-        return value;
+        auto newit = lru.emplace(lru.end(), it->second->key, it->second->value);
+        lru.erase(it->second);
+        it->second = newit;
+        return it->second->value;
     }    
     
-    int max;
-    std::map<int, iterator> data;
-    std::list<kv> lru;
+    
 };
