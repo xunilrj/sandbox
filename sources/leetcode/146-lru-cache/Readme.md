@@ -1,3 +1,8 @@
+# What is LRU
+
+The Magic of LRU Cache (100 Days of Google Dev)  
+https://www.youtube.com/watch?v=R5ON3iwx78M  
+
 # Result
 
 ```
