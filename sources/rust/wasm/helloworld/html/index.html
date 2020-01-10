@@ -18,34 +18,31 @@
                 window.addEventListener("keyup", e => {
                     game.set_key(e.keyCode, false);
                 });
+                let sendMouse = (e) => {
+                    var r = screen.getBoundingClientRect();
+                        let x =  e.clientX - r.left;
+                        let y =  e.clientY - r.top;
+                        let wheely = 0;
+                        if(e.deltaY)
+                            wheely = e.deltaY;
+
+                        let lb = (e.buttons & 1) == 1;
+                        let rb = (e.buttons & 2) == 2;
+                        let mb = (e.buttons & 4) == 4;
+
+                        game.set_mouse(x, y,
+                        wheely,
+                            lb, rb, mb);
+                        e.preventDefault();
+                }
                 let screen = document.getElementById("screen");
-                screen.addEventListener("mousemove", e => {
-                        var r = screen.getBoundingClientRect();
-                        let x =  e.clientX - r.left;
-                        let y =  e.clientY - r.top;
-
-                        let lb = (e.buttons & 1) == 1;
-                        let rb = (e.buttons & 2) == 2;
-                        let mb = (e.buttons & 4) == 4;
-
-                        game.set_mouse(x, y,
-                            0,
-                            lb, rb, mb);
-                    });
-                screen.addEventListener("wheel", e => {
-                        var r = screen.getBoundingClientRect();
-                        let x =  e.clientX - r.left;
-                        let y =  e.clientY - r.top;
-                        let wheely = e.deltaY;
-
-                        let lb = (e.buttons & 1) == 1;
-                        let rb = (e.buttons & 2) == 2;
-                        let mb = (e.buttons & 4) == 4;
-
-                        game.set_mouse(x, y,
-                            wheely,
-                            lb, rb, mb);
-                    });
+                screen.addEventListener('contextmenu', function(e) { 
+                    e.preventDefault();
+                }, false);
+                screen.addEventListener("mousemove", sendMouse);
+                screen.addEventListener("mousedown", sendMouse);
+                screen.addEventListener("mouseup", sendMouse);
+                screen.addEventListener("wheel", sendMouse);
 
                 const render = (timestamp) => {
                     game.update(timestamp);

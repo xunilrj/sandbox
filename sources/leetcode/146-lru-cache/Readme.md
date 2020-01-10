@@ -14,13 +14,16 @@ https://www.youtube.com/watch?v=8-FZRAjR7qU
 
 LRU cache design  
 ```
-A linked list + hashtable of pointers to the linked list nodes is the usual way to implement LRU caches. 
+A linked list + hashtable of pointers to the linked list nodes is 
+the usual way to implement LRU caches. 
 ```
 https://stackoverflow.com/questions/2504178/lru-cache-design  
   
 How to implement LRU cache using HashMap and Doubly Linked List  
 ```
-So our Implementation of LRU cache will have HashMap and Doubly LinkedList. In Which HashMap will hold the keys and address of the Nodes of Doubly LinkedList . And Doubly LinkedList will hold the values of keys.
+So our Implementation of LRU cache will have HashMap and Doubly LinkedList. 
+In Which HashMap will hold the keys and address of the Nodes of Doubly LinkedList. 
+And Doubly LinkedList will hold the values of keys.
 ```
 https://medium.com/@krishankantsinghal/my-first-blog-on-medium-583159139237  
 
@@ -71,8 +74,6 @@ https://www.youtube.com/watch?v=ncHmEUmJZf4
 
 CppCon 2019: Matt Kulukundis “Abseil's Open Source Hashtables: 2 Years In”
 https://www.youtube.com/watch?v=JZE3_0qvrMg
-
-
 
 # Papers
 

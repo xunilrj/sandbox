@@ -578,3 +578,30 @@ The CPP Core Guidelines C61 states:
 
 "Note Prefer value semantics unless you are building a “smart pointer”. Value semantics is the simplest to reason about and what the standard-library facilities expect."
 https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#c61-a-copy-operation-should-copy
+
+
+---
+
+References to items inside Data Structures
+
+--
+
+```c++
+#include <vector>
+#include <iostream>
+
+int main()
+{
+    auto v = std::vector<int> {};
+    v.push_back(0);
+    v.push_back(1);
+
+    auto& first = v[0];
+    std::cout << first << std::endl;
+
+    v.clear();
+
+    std::cout << first << std::endl;
+    return 0;
+}
+```
