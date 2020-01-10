@@ -37,6 +37,10 @@
 [Who is Afraid of Parsing](texts/dev/WhoIsAfraidOfParsing.md)  
 [C++ Performance: Packed array and Valgrind](sources/cpp/packedvsnode/readme.md)
 
+### leetcode
+
+[146 - LRU Cache](./sorces/leetcode/146-lru-cache/Readme.md)  
+
 ### Computer Graphics
 [Computer Graphics Guide](/texts/dev/ComputerScience/Computer%20Graphics)
 
