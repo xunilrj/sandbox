@@ -39,7 +39,7 @@
 
 ### leetcode
 
-[146 - LRU Cache](./sorces/leetcode/146-lru-cache/Readme.md)  
+[146 - LRU Cache](./sources/leetcode/146-lru-cache)  
 
 ### Computer Graphics
 [Computer Graphics Guide](/texts/dev/ComputerScience/Computer%20Graphics)
