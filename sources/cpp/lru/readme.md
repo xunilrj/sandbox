@@ -98,7 +98,7 @@ catch_discover_tests(${APP_NAME})
 
 The last step is inside the "Visual Studio". Catch2 tests will be visible inside the "Test Explorer" if you install the Catch2 plugin. 
 
-Test Adapter for Catch2
+Test Adapter for Catch2  
 https://marketplace.visualstudio.com/items?itemName=JohnnyHendriks.ext01
 
 And if you select the "ReferenceTests.runsettings" you downloaded before with "Tests -> Configure Run Settings -> Select Solution Wide runsetting file".
@@ -142,4 +142,37 @@ and "test.ps1"
 pushd .build
     ctest
 popd
+```
+
+# First test - return when does not exist
+
+Our first test is when we retrieve something that does not exist inside the LRUCache. The "leetcode" specification asks that we return -1. This not a very good interface for a Cache, but we will improve our LRUCache later.
+
+```c++
+class LRUCache
+{
+public:
+    LRUCache(size_t capacity = 1000) {}
+
+    void put(int key, int value) {}
+    int get(int key) { return -1; }
+};
+
+TEST_CASE("Cache.LRU.Must return -1 if not present", "[cache][lru][ok]")
+{
+   auto cache = LRUCache{};
+   REQUIRE(cache.get(1) == -1);
+}
+```
+If we run out tests, we will see that this test is already working.
+
+```
+>..\test.ps1   
+Test project D:/github/sandbox/sources/cpp/lru/.build
+    Start 1: Cache.LRU.Must return -1 if not present
+1/1 Test #1: Cache.LRU.Must return -1 if not present ...   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.04 sec
 ```
