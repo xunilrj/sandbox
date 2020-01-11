@@ -167,7 +167,7 @@ TEST_CASE("Cache.LRU.Must return -1 if not present", "[cache][lru][ok]")
 If we run out tests, we will see that this test is already working.
 
 ```
->..\test.ps1   
+> test.ps1   
 Test project D:/github/sandbox/sources/cpp/lru/.build
     Start 1: Cache.LRU.Must return -1 if not present
 1/1 Test #1: Cache.LRU.Must return -1 if not present ...   Passed    0.02 sec
