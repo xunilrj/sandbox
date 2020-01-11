@@ -110,13 +110,13 @@ Now we are ready to make our first test.
 We can go back to our "main.cpp" file and create our first, and useless, unit test.
 
 ````
-TEST_CASE("Cache.LRU.Must return -1 if not present", "[cache][lru][ok]")
+TEST_CASE("Cache.LRU.Must return -1 if not present", "[cache][lru][nok]")
 {   
 }
 ```` 
 The test name allows a conventions that goes like "<NAMESPACE>.<CLASS>.<TESTNAME>". This helps you to organize your tests. The second parameter are tags. You can run tests by tags.
 
-I am using the "ok" tag here because I want to separate the correctness tests from the performance tests.
+I am using the "nok" tag here because I want to separate the correctness/exceptions tests from the performance tests. I use "ok" for correctness and "nok" for exception cases.
 
 We can now run out tests both from inside the "Visual Studio" when we are developing because it is more productive, but we can also run them from the command line. 
 
@@ -158,7 +158,7 @@ public:
     int get(int key) { return -1; }
 };
 
-TEST_CASE("Cache.LRU.Must return -1 if not present", "[cache][lru][ok]")
+TEST_CASE("Cache.LRU.Must return -1 if not present", "[cache][lru][nok]")
 {
    auto cache = LRUCache{};
    REQUIRE(cache.get(1) == -1);
@@ -167,7 +167,7 @@ TEST_CASE("Cache.LRU.Must return -1 if not present", "[cache][lru][ok]")
 If we run out tests, we will see that this test is already working.
 
 ```
-> test.ps1   
+>..\test.ps1   
 Test project D:/github/sandbox/sources/cpp/lru/.build
     Start 1: Cache.LRU.Must return -1 if not present
 1/1 Test #1: Cache.LRU.Must return -1 if not present ...   Passed    0.02 sec
@@ -176,3 +176,33 @@ Test project D:/github/sandbox/sources/cpp/lru/.build
 
 Total Test time (real) =   0.04 sec
 ```
+# Second test put/get
+
+Our second test here to enable getting an item that was put in the cache.
+
+```c++
+TEST_CASE("Cache.LRU.Must get after put", "[cache][lru][ok]")
+{
+    auto cache = LRUCache{};
+    cache.put(1, 1);
+    REQUIRE(cache.get(1) == 1);
+}
+```
+This will be the last case that I will show the output of running the unit tests, just because now our test suite is failling.
+```
+>test.ps1
+Test project D:/github/sandbox/sources/cpp/lru/.build
+    Start 1: Cache.LRU.Must return -1 if not present
+1/2 Test #1: Cache.LRU.Must return -1 if not present ...   Passed    0.02 sec
+    Start 2: Cache.LRU.Must get after put
+2/2 Test #2: Cache.LRU.Must get after put ..............***Failed    0.02 sec
+
+50% tests passed, 1 tests failed out of 2
+
+Total Test time (real) =   0.09 sec
+
+The following tests FAILED:
+          2 - Cache.LRU.Must get after put (Failed)
+Errors while running CTest
+``` 
+It shows precisely which test failed, so this process alone allows us to develop, even outside "Visual Studio" if one prefers.
