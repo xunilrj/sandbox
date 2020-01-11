@@ -1,3 +1,7 @@
+# Tutorial
+
+to read my tutorial click [here](../../cpp/lru/readme.md)
+
 # What is LRU
 
 The Magic of LRU Cache (100 Days of Google Dev)  

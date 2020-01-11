@@ -43,7 +43,7 @@ https://cacm.acm.org/magazines/2010/7/95061-youre-doing-it-wrong/fulltext#F1
 
 ### Cache LRU
 
-[leetcode - LRU Cache](../leetcode/146-lru-cache)  
+[LRU Cache](./lru)  
 
 ## Performance
 
