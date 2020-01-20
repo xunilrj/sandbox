@@ -267,9 +267,9 @@ dependencies/
 
 sources/Powershell/Modules/Flyway/Flyway/
 jspm_packages/
-/sources/cousera-datascience/capstone/final/
-/sources/cousera-datascience/capstone/temp/
-/.build
+sources/cousera-datascience/capstone/final/
+sources/cousera-datascience/capstone/temp/
+.build
 
 .ionide/
 .cache/
