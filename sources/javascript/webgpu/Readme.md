@@ -1,6 +1,6 @@
 # WebGPU
 
-If you are old enought and stop to think you will realize that 3D APIs have more two decades now. And they have evolved.
+If you are old enough and stop to think you will realize that 3D APIs have more two decades now. And they have evolved.
 
 A new generation is emerging: Vulkan, Metal and WebGPU.
 
@@ -30,7 +30,7 @@ One of the first tasks in these APIs is to configure your swap chain. We will co
 
 ## 3D Data
 
-Since Decartes we define points in 3D with three numbers, its coordinates. Here we will do the same. We will render a triangle, three points, nine coordinates.
+Since Descartes we define points in 3D with three numbers, its coordinates. Here we will do the same. We will render a triangle, three points, nine coordinates.
 
 The hard part comes that we need, first, to send these coordinates to the GPU memory. This looks like a lot of work, but these APIs are made to much more heavy usage. Later we will devise a easier approach.
 
@@ -97,9 +97,9 @@ const swapchain = ctx.configureSwapChain({
 });
 ```
 
-https://gpuweb.github.io/gpuweb/#dom-gpucanvascontext-configureswapchain
-https://gpuweb.github.io/gpuweb/#enumdef-gputextureformat
-https://gpuweb.github.io/gpuweb/#typedefdef-gputextureusageflags
+https://gpuweb.github.io/gpuweb/#dom-gpucanvascontext-configureswapchain  
+https://gpuweb.github.io/gpuweb/#enumdef-gputextureformat  
+https://gpuweb.github.io/gpuweb/#typedefdef-gputextureusageflags  
 
 
 Now we crate out depth texture. In this case we are creating:
@@ -124,17 +124,17 @@ let depthTexture = device.createTexture({
 let depthTextureView = depthTexture.createView();
 ```
 
-https://gpuweb.github.io/gpuweb/#dom-gpudevice-createtexture
-https://gpuweb.github.io/gpuweb/#dictdef-gputexturedescriptor
+https://gpuweb.github.io/gpuweb/#dom-gpudevice-createtexture  
+https://gpuweb.github.io/gpuweb/#dictdef-gputexturedescriptor  
 
 
-Now we will send our data to the GPU memory. We already saw vertices. We are in the 3D world space here, but we have not configured the transformation from 3D to 2D, so we are actually ate the (-1,-1)x(1,1) space. That is why out first vertice is (1,-1,0) - bottom right; our second is (-1,-1) - bottom left; and our last is (0, 1, 0), top vertice.
+Now we will send our data to the GPU memory. We already saw vertices. We are in the 3D world space here, but we have not configured the transformation from 3D to 2D, so we are actually ate the (-1,-1)x(1,1) space. That is why out first vertex is (1,-1,0) - bottom right; our second is (-1,-1) - bottom left; and our last is (0, 1, 0), top vertice.
 
 But we also can specify the color of each vertex. Why, and how the color varies from one vertex to the other we will see later, in the rasterizer pass.
 
 Out last buffer is the index. We specify in the "array of vertices" which form the triangles.
 
-![Vertices](images\Vertices.png)
+![Vertices](images/Vertices.png)
 
 ```
 const positionBuffer = createBuffer(new Float32Array([
@@ -170,7 +170,7 @@ const pipeline = device.createRenderPipeline({
 });
 ```
 
-https://gpuweb.github.io/gpuweb/#dom-gpudevice-createrenderpipeline
+https://gpuweb.github.io/gpuweb/#dom-gpudevice-createrenderpipeline  
 
 
 ## 1 - Primitive Topology
@@ -181,7 +181,7 @@ We specify that we will pass "triangles list". In our case just one triangle;
 
 Here we are defining all the information needed for each vertex to render our triangle. First we define that how our positions is structured (1). "float3" means that we are passing three floats as the position. "arrayStride" is how much bytes we need to jump from the first to get the next position, 12 because we packed all positions, so just three floats of four bytes each.
 
-We have the same config for colour (2). The only pertinent difference here is the "shaderLocation". We will understand what this means later.
+We have the same config for color (2). The only pertinent difference here is the "shaderLocation". We will understand what this means later.
 
 In the end we we configure our "vertex state" binding everything together.
 
@@ -211,10 +211,9 @@ const vertexStage = {
     entryPoint: 'main' };
 ```
 
-https://gpuweb.github.io/gpuweb/#dom-gpudevice-createshadermodule
-https://gpuweb.github.io/gpuweb/#dictdef-gpushadermoduledescriptor
-https://gpuweb.github.io/gpuweb/#typedefdef-gpushadercode
-
+https://gpuweb.github.io/gpuweb/#dom-gpudevice-createshadermodule  
+https://gpuweb.github.io/gpuweb/#dictdef-gpushadermoduledescriptor  
+https://gpuweb.github.io/gpuweb/#typedefdef-gpushadercode  
 
 ```
 layout (location = 0) in vec3 inPos;
@@ -301,4 +300,4 @@ const colorState = {
 };
 ```
 
-![Output Merger - Blend](images/pipeline.om.blend.png.png)
+![Output Merger - Blend](images/pipeline.om.blend.png?raw=true)
