@@ -134,7 +134,7 @@ But we also can specify the color of each vertex. Why, and how the color varies 
 
 Out last buffer is the index. We specify in the "array of vertices" which form the triangles.
 
-![Vertices](images/Vertices.png)
+![Vertices](images/Vertices.png?raw=true)
 
 ```
 const positionBuffer = createBuffer(new Float32Array([
@@ -276,7 +276,7 @@ const depthStencilState = {
 };
 ```
 
-![Depth/Stencil Tests](images/pipeline.pipeline.dst.png)
+![Depth/Stencil Tests](images/pipeline.pipeline.dst.png?raw=true)
 
 ## 6 - Color State or Blending
 
