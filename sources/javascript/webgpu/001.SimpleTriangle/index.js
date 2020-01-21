@@ -100,11 +100,10 @@ async function setup()
         colorStates: [ colorState ],        
     });
 
-    function encodeCommands(colorTexture,
-        colorTextureView)
+    function triangleRenderPass(backBufferView)
     {
         let colorAttachment = {
-            attachment: colorTextureView,
+            attachment: backBufferView,
             loadValue: { r: 0, g: 0, b: 0, a: 1 },
             storeOp: 'store'
         };
@@ -112,31 +111,34 @@ async function setup()
         const renderPassDesc = {
             colorAttachments: [ colorAttachment ],
         };
-        
-        let commandEncoder = device.createCommandEncoder();
-        let passEncoder = commandEncoder.beginRenderPass(
-            renderPassDesc);
-        passEncoder.setPipeline(pipeline);
-        passEncoder.setViewport(0, 0, 
-            canvas.width, canvas.height, 0, 1);
-        passEncoder.setScissorRect(0, 0, 
-            canvas.width, canvas.height);
-        passEncoder.setVertexBuffer(0, positionBuffer);
-        passEncoder.setVertexBuffer(1, colorBuffer);
-        passEncoder.setIndexBuffer(indexBuffer);
-        passEncoder.drawIndexed(3, 1, 0, 0, 0);
-        passEncoder.endPass();
 
-        queue.submit([ commandEncoder.finish() ]);
+        let commandEncoder = device.createCommandEncoder()
+        let pass = commandEncoder.beginRenderPass(renderPassDesc);
+        pass.setPipeline(pipeline);
+        pass.setViewport(0, 0, canvas.width, canvas.height, 0, 1);
+        pass.setScissorRect(0, 0, canvas.width, canvas.height);
+        pass.setVertexBuffer(0, positionBuffer);
+        pass.setVertexBuffer(1, colorBuffer);
+        pass.setIndexBuffer(indexBuffer);
+        pass.drawIndexed(3, 1, 0, 0, 0);
+        pass.endPass();
+        return commandEncoder.finish()
+    }
+
+    function sendCommands(queue, backBufferView)
+    {
+        const commands = [
+            triangleRenderPass(backBufferView)
+        ];
+        queue.submit(commands);
     }
 
     const queue = device.defaultQueue;
     let render = () => {        
         const colorTexture = swapchain.getCurrentTexture();
-        const colorTextureView = colorTexture.createView();
+        const backBufferView = colorTexture.createView();
     
-        encodeCommands(colorTexture, colorTextureView);
-    
+        sendCommands(device.defaultQueue, backBufferView);
         requestAnimationFrame(render);
     };
     return render;

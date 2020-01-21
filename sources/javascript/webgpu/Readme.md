@@ -196,9 +196,67 @@ The GIF below show how each of these parameters change the rendered triangle. If
 
 ![Vertices](images/vertexatts.gif?raw=true)
 
+## Render the triangle
+
+We will jump a lot of configuration now, because it will be easier to understand them later. Now we need to the GPU a render command. The way to send commands to the GPU is grouping them and send everything together to a "rendering queue".
+
+```js
+function sendCommands(queue, backBufferView)
+{
+    const commands = [
+        ...
+    ];
+    queue.submit(commands);
+}
+```
+
+Now we generate a "Render Pass", that glues everything that the GPU needs to render whatever it needs to render.
+
+First, we need to know choose a target image (1). Here we will be rendering things to the backbuffer, but we can render to any image we like. This is very useful as we will se in future tutorials.
+
+"loadValue" means what the GPU must do with the value that is already on the target iamge and "load" means load the pixel value (2). This will be important later. Today you can just "load" ou pass a hardcoded color (3).
+
+"storeOp" means what the GPU must do with the generated fragment and "store" means write it (4). You can choose "store" or "clear" and you cannot pass a color.
+
+Some in summary we will "blend" what is stored in the target image with the pixel that we will generate. "blend" is a important word here and we will understand it better later.
+
+```js
+function triangleRenderPass(backBufferView)
+{
+    let colorAttachment = {
+            attachment: backBufferView, // 1
+            loadValue: "load",          // 2
+            //or
+            //loadValue: { r: 0, g: 0, b: 0, a: 1 }, // 3
+            storeOp: 'store',           // 4
+        };
+
+    let commandEncoder = device.createCommandEncoder()
+    let pass = commandEncoder.beginRenderPass({
+        colorAttachments: [ colorAttachment ],
+    });
+    pass.setPipeline(pipeline);
+    pass.setViewport(0, 0, canvas.width, canvas.height, 0, 1);
+    pass.setScissorRect(0, 0, canvas.width, canvas.height);
+    pass.setVertexBuffer(0, positionBuffer);
+    pass.setVertexBuffer(1, colorBuffer);
+    pass.setIndexBuffer(indexBuffer);
+    pass.drawIndexed(3, 1, 0, 0, 0);
+    pass.endPass();
+    return commandEncoder.finish()
+}
+```
+
+See more at:  
+https://gpuweb.github.io/gpuweb/#dom-gpucommandencoder-beginrenderpass  
+https://gpuweb.github.io/gpuweb/#dictdef-gpurenderpassdescriptor  
+https://gpuweb.github.io/gpuweb/#dictdef-gpurenderpasscolorattachmentdescriptor  
+
 ## Setup the Pipeline
 
 Now we can create the pipeline.
+
+![Vertices](images/pipeline.none.png?raw=true)
 
 1 - Primitive Topology  
 2 - Vertex State  
@@ -221,7 +279,9 @@ const pipeline = device.createRenderPipeline({
 https://gpuweb.github.io/gpuweb/#dom-gpudevice-createrenderpipeline  
 
 
-### 1 - Primitive Topology
+### 1 - Input Assembler
+
+![Vertices](images/pipeline.inputasm.png?raw=true)
 
 We specify that we will pass "triangles list". This means that each three uints inside the index buffer defines a triangle. In our case we have just one triangle, hence three uints: 0, 1, 2. This order is important as we will see below.
 
