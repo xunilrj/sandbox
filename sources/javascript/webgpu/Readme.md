@@ -402,7 +402,43 @@ Another good side from using Parcel is that it watches changes to its files. So 
 See more at:  
 https://gpuweb.github.io/gpuweb/#dom-gpudevice-createshadermodule    
 https://gpuweb.github.io/gpuweb/#dictdef-gpushadermoduledescriptor    
-https://gpuweb.github.io/gpuweb/#typedefdef-gpushadercode   
+https://gpuweb.github.io/gpuweb/#typedefdef-gpushadercode  
+
+### 4 and 5 - Tesselation and Geometry Shaders
+
+![Vertex Shader](images/pipeline.tesselation.geom.na.png?raw=true)
+
+Unfortunately these two stages are not yet available for webGPU, but they do exist in others APIs.
+
+Tesselation exist to allow you to generate vertices inside the GPU. The idea is that generating these vertices inside the GPU is faster than moving them throught the GPU memory and vertex shader. This sound strange but we will see that the complexity of the vertex shader increases fast.
+
+Another possible case is to have dynamic tesselation. Maybe you change the amount of vertices, and therefore the amount of detail bases on distance, for example.
+
+A more complete history os hardware tesselation: 
+http://rastergrid.com/blog/2010/09/history-of-hardware-tessellation.  
+
+The geometry shader exist to run a "script" for each primitive. In our case here we would run a "script" for each triangle. It can also generate more vertices, but this is not its reason to exist. Geometry shaders should be used to:
+
+- Layered rendering: rendering to multiple targets;  
+- Transform feedback: save vertex data back to GPU memory.  
+
+Just for the sake of completion this would be a Geometry Shader that does nothing. It just pass the vertices that it receives:
+
+```glsl
+layout(triangles) in;
+layout(triangle_list, max_vertices = 3) out;
+
+void main()
+{
+   for (int i = 0; i<gl_in.length(); i++)
+   {
+      gl_Position = gl_in[i].gl_Position;
+      EmitVertex();
+   }
+
+   EndPrimitive();
+}
+```
 
 ### 3 - Rasterizer State
 
