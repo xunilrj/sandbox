@@ -196,14 +196,15 @@ The GIF below show how each of these parameters change the rendered triangle. If
 
 ![Vertices](images/vertexatts.gif?raw=true)
 
+## Setup the Pipeline
+
 Now we can create the pipeline.
 
-1 - Primitive Topology
-2 - Vertex State
-3 - Rasterizer State
-4 - Fragment State
-5 - Depth-Stencil Test State
-6 - Color State
+1 - Primitive Topology  
+2 - Vertex State  
+3 - Rasterizer State  
+4 - Fragment State  
+5 - Color State  
 
 Each of these parts are sub-system of its own, so we gonna need a specific subpart for each.
 
@@ -213,19 +214,18 @@ const pipeline = device.createRenderPipeline({
     vertexStage, vertexState, layout,   // 2
     rasterizationState,                 // 3
     fragmentState,                      // 4
-    depthStencilState,                  // 5
-    colorStates: [ colorState ],        // 6
+    colorStates: [ colorState ],        // 5
 });
 ```
 
 https://gpuweb.github.io/gpuweb/#dom-gpudevice-createrenderpipeline  
 
 
-## 1 - Primitive Topology
+### 1 - Primitive Topology
 
-We specify that we will pass "triangles list". In our case just one triangle;
+We specify that we will pass "triangles list". This means that each three uints inside the index buffer defines a triangle. In our case we have just one triangle, hence three uints: 0, 1, 2. This order is important as we will see below.
 
-## 2 - Vertex State
+### 2 - Vertex State
 
 Here we are defining all the information needed for each vertex to render our triangle. First we define that how our positions is structured (1). "float3" means that we are passing three floats as the position. "arrayStride" is how much bytes we need to jump from the first to get the next position, 12 because we packed all positions, so just three floats of four bytes each.
 
@@ -250,7 +250,7 @@ const vertexState = {
 };
 ```
 
-## 2.1 - Vertex Shader
+### 2.1 - Vertex Shader
 
 ```
 const vertModule = device.createShaderModule({ code: await loadSPV(vertspv) });
@@ -279,7 +279,7 @@ void main()
 > glslangValidator.exe -V ./shaders/shader.vert -o ./shaders/vert.spv
 ```
 
-## 3 - Rasterizer State
+### 3 - Rasterizer State
 
 When rendering volumes, like a cube, we are normally looking directly into a face but we are not viewing the faces in the other direction. Think of a dice. If you are seing face 1, you cannot see face 6. But when rendering the dice we ask teh GPU to render all six faces. And we need to do everything with all the fragments of the face six that it is going to be overwritten by face one.
 
@@ -294,7 +294,7 @@ const rasterizationState = {
 };
 ```
 
-## 4 - Fragment State
+### 4 - Fragment State
 
 ```
 const fragModule = device.createShaderModule({ code: await loadSPV(fragspv) });
@@ -308,25 +308,7 @@ const fragmentStage = {
 > glslangValidator.exe -V ./shaders/shader.frag -o ./shaders/frag.spv
 ```
 
-## 5 - Depth-Stencil Test State
-
-In this state we already have the desired color of the fragment. But we also have its "depth". Here we will configure depth test and/or stencil test and decide if we want to merge this fragment to the final image.
-
-We enable depth test (1) and say that the fragment must be written only if its depth is "less" than the target depth buffer value (2).
-
-Stencil test is used to allow finer control when discarding pixels. Is useful in some rendering techniques. Suppose that you want that the middle pixels of our triangle are not rendered, for example, a circle around the center. You can achieve this using the Stencil Buffer, for example.
-
-```
-const depthStencilState = {
-    depthWriteEnabled: true, // 1
-    depthCompare: 'less', // 2
-    format: 'depth24plus-stencil8'
-};
-```
-
-![Depth/Stencil Tests](images/pipeline.pipeline.dst.png?raw=true)
-
-## 6 - Color State or Blending
+### 5 - Color State or Blending
 
 The color state configures how what we are rendering color going to be mixed with what already exist in the image. 
 
