@@ -62,9 +62,36 @@ Almost all the magic happens in what is called the pipeline. To do its magic it 
 3 - Rasterizer
 4 - Ouput Merger
 
+# Code Setup
+
+To start we need very little:
+
+1 - Chromium (download at: https://www.chromium.org/getting-involved/download-chromium);
+2 - Enable webGPU;
+3 - Install ParcelJS (see https://parceljs.org/getting_started.html);
+4 - Create a HTML with a canvas.
+
+```html
+<html>
+    <head>        
+    </head>
+    <body>
+        <canvas id="screen" width="800" height="600">
+        </canvas>
+        <script src="./index.js"></script>
+    </body>
+</html>
+```
+## Enable webGPU
+
+![Vertices](images/configchromium.png?raw=true)
+
 # Code
 
+The very first steps of the webGPU return Promises, for this reason our setup function will by async. If you are using ParcelJS as I suggested you need to import the "babel-polyfill" npm package to make it work.
+
 ```js
+import 'babel-polyfill';
 async function setup()
 {
 }
