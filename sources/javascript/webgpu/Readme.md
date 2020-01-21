@@ -101,65 +101,67 @@ import 'babel-polyfill';
 async function setup()
 {
 }
+setup();
 ```
 
+Our first step is to check if the browser supports webGPU. We are also printing everything to the console to inspect what is returned.
 
 ```js
 async function setup()
 {
+    // Check webGPU is supported
+    if(!navigator.gpu) {
+        console.error("webGPU not supported")
+        throw "webGPU not supported";
+    }
+
+    // Request device
     const gpu = navigator.gpu;
     const adapter = await gpu.requestAdapter();
     const device = await adapter.requestDevice();
+    console.log(navigator);
+    console.log(adapter);
+    console.log(device);
+    ...
 }
 ```
 
-The queue is one of the most important concepts. 
+See more at:  
+https://gpuweb.github.io/gpuweb/#requestadapter  
+https://gpuweb.github.io/gpuweb/#gpuadapter  
+https://gpuweb.github.io/gpuweb/#gpu-device    
+https://gpuweb.github.io/gpuweb/#requestdevice  
+
+## Setup Swap Chain
+
+Here we are going to create a double buffering swapchain with 32 bits. The "unorm" means that we can write four floats representing RGBA colors to it and it will rearrange and normalize the colors. For example, a red in float (1,0,0,1) will become (0,0,255,255).
+
+We will need the swapChainFormat below, so let just save it as a constant.
 
 ```js
-const queue = device.defaultQueue;
+async function setup()
+{
+    ...
+
+    const swapChainFormat = "rgba8unorm";
+    const canvas = document.getElementById("screen");
+    const ctx = canvas.getContext('gpupresent')
+    const swapchain = ctx.configureSwapChain({
+        device: device,
+        format: swapChainFormat
+    });
+    console.log(ctx);
+    console.log(swapchain);
+    ...
+}
 ```
 
-```
-const canvas = document.getElementById("screen");
-const ctx = canvas.getContext('gpupresent')
-const swapchain = ctx.configureSwapChain({
-    device: device,
-    format: 'bgra8unorm',
-    usage: GPUTextureUsage.OUTPUT_ATTACHMENT |
-        GPUTextureUsage.COPY_SRC
-});
-```
-
+See more at:  
 https://gpuweb.github.io/gpuweb/#dom-gpucanvascontext-configureswapchain  
 https://gpuweb.github.io/gpuweb/#enumdef-gputextureformat  
 https://gpuweb.github.io/gpuweb/#typedefdef-gputextureusageflags  
 
-
-Now we crate out depth texture. In this case we are creating:
-
-- Depth buffer: 24 bits;
-- Stencil buffer: 8 bits.
-
-```
-let depthTexture = device.createTexture({
-    size: {
-        width: canvas.width,
-        height: canvas.height,
-        depth: 1
-    },
-    arrayLayerCount: 1,
-    mipLevelCount: 1,
-    sampleCount: 1,
-    dimension: '2d',
-    format: 'depth24plus-stencil8',
-    usage: GPUTextureUsage.OUTPUT_ATTACHMENT | GPUTextureUsage.COPY_SRC
-});
-let depthTextureView = depthTexture.createView();
-```
-
-https://gpuweb.github.io/gpuweb/#dom-gpudevice-createtexture  
-https://gpuweb.github.io/gpuweb/#dictdef-gputexturedescriptor  
-
+## Send Vertex data to GPU
 
 Now we will send our data to the GPU memory. We already saw vertices. We are in the 3D world space here, but we have not configured the transformation from 3D to 2D, so we are actually ate the (-1,-1)x(1,1) space. That is why out first vertex is (1,-1,0) - bottom right; our second is (-1,-1) - bottom left; and our last is (0, 1, 0), top vertice.
 
@@ -169,17 +171,30 @@ Out last buffer is the index. We specify in the "array of vertices" which form t
 
 ![Vertices](images/Vertices.png?raw=true)
 
+```js
+async function setup()
+{
+    ...
+    const positionBuffer = createBuffer(new Float32Array([
+         1.0, -1.0, 0.0, // 0
+        -1.0, -1.0, 0.0, // 1 
+         0.0,  1.0, 0.0, // 2
+    ]), GPUBufferUsage.VERTEX);
+    const colorBuffer = createBuffer(new Float32Array([
+        1.0, 0.0, 0.0, // 0
+        0.0, 1.0, 0.0, // 1
+        0.0, 0.0, 1.0, // 2
+    ]), GPUBufferUsage.VERTEX);
+    const indexBuffer = createBuffer(new Uint16Array([ 
+        0, 1, 2
+    ]), GPUBufferUsage.INDEX);
+    ...
+}
 ```
-const positionBuffer = createBuffer(new Float32Array([
-    1.0, -1.0, 0.0,
-    -1.0, -1.0, 0.0,
-    0.0,  1.0, 0.0]), GPUBufferUsage.VERTEX);
-const colorBuffer = createBuffer(new Float32Array([
-    1.0, 0.0, 0.0,
-    0.0, 1.0, 0.0,
-    0.0, 0.0, 1.0]), GPUBufferUsage.VERTEX);
-const indexBuffer = createBuffer(new Uint16Array([ 0, 1, 2 ]), GPUBufferUsage.INDEX);
-```
+
+The GIF below show how each of these parameters change the rendered triangle.
+
+![Vertices](images/vertexatts.gif?raw=true)
 
 Now we can create the pipeline.
 

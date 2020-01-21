@@ -7,37 +7,31 @@ if(!navigator || !navigator.gpu)
 
 async function setup()
 {
+    // Check webGPU is supported
+    if(!navigator.gpu) {
+        console.error("webGPU not supported")
+        throw "webGPU not supported";
+    }
+
+    // Request device
     const gpu = navigator.gpu;
     const adapter = await gpu.requestAdapter();
     const device = await adapter.requestDevice();
-    const queue = device.defaultQueue;
+    console.log(navigator);
+    console.log(adapter);
+    console.log(device);
 
     //Swapchain
+    const swapChainFormat = "rgba8unorm";
     const canvas = document.getElementById("screen");
     const ctx = canvas.getContext('gpupresent')
     const swapchain = ctx.configureSwapChain({
         device: device,
-        format: 'bgra8unorm',
-        usage: GPUTextureUsage.OUTPUT_ATTACHMENT |
-            GPUTextureUsage.COPY_SRC
+        format: swapChainFormat
     });
+    console.log(ctx);
+    console.log(swapchain);
 
-    //Frame Buffer Attachments
-    let depthTexture = device.createTexture({
-        size: {
-            width: canvas.width,
-            height: canvas.height,
-            depth: 1
-        },
-        arrayLayerCount: 1,
-        mipLevelCount: 1,
-        sampleCount: 1,
-        dimension: '2d',
-        format: 'depth24plus-stencil8',
-        usage: GPUTextureUsage.OUTPUT_ATTACHMENT | GPUTextureUsage.COPY_SRC
-    });
-    let depthTextureView = depthTexture.createView();
-    
     //Initialize Resources
     let createBuffer = (arr, usage) => {
         let desc = { size: arr.byteLength, usage };
@@ -51,9 +45,19 @@ async function setup()
         return buffer;
     };
     
-    const positionBuffer = createBuffer(new Float32Array([1.0, -1.0, 0.0, -1.0, -1.0, 0.0, 0.0,  1.0, 0.0]), GPUBufferUsage.VERTEX);
-    const colorBuffer = createBuffer(new Float32Array([1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]), GPUBufferUsage.VERTEX);
-    const indexBuffer = createBuffer(new Uint16Array([ 0, 1, 2 ]), GPUBufferUsage.INDEX);
+    const positionBuffer = createBuffer(new Float32Array([
+         1.0, -1.0, 0.0, // 0
+        -1.0, -1.0, 0.0, // 1 
+         0.0,  1.0, 0.0, // 2
+    ]), GPUBufferUsage.VERTEX);
+    const colorBuffer = createBuffer(new Float32Array([
+        1.0, 0.0, 0.0, // 0
+        0.0, 1.0, 0.0, // 1
+        0.0, 0.0, 1.0, // 2
+    ]), GPUBufferUsage.VERTEX);
+    const indexBuffer = createBuffer(new Uint16Array([ 
+        0, 1, 2
+    ]), GPUBufferUsage.INDEX);
 
     // Shaders
     async function loadSPV(url)
@@ -73,9 +77,8 @@ async function setup()
     const vertexState = { indexFormat: 'uint16', vertexBuffers: [ positionBufferDesc, colorBufferDesc ] };
     const vertexStage = { module: vertModule, entryPoint: 'main' };
     const fragmentStage = { module: fragModule, entryPoint: 'main' };
-    const depthStencilState = { depthWriteEnabled: true, depthCompare: 'less', format: 'depth24plus-stencil8' };
     const colorState = {
-        format: 'bgra8unorm',
+        format: swapChainFormat,
         alphaBlend: { srcFactor: 'one', dstFactor: 'zero', operation: 'add' },
         colorBlend: { srcFactor: 'one', dstFactor: 'zero', operation: 'add' },
         writeMask: GPUColorWrite.ALL
@@ -94,10 +97,8 @@ async function setup()
         vertexStage, vertexState, layout,
         rasterizationState,
         fragmentStage,
-        depthStencilState,
         colorStates: [ colorState ],        
     });
-    
 
     function encodeCommands(colorTexture,
         colorTextureView)
@@ -108,17 +109,8 @@ async function setup()
             storeOp: 'store'
         };
 
-        const depthAttachment = {
-            attachment: depthTextureView,
-            depthLoadValue: 1,
-            depthStoreOp: 'store',
-            stencilLoadValue: 'load',
-            stencilStoreOp: 'store'
-        };
-
         const renderPassDesc = {
             colorAttachments: [ colorAttachment ],
-            depthStencilAttachment: depthAttachment
         };
         
         let commandEncoder = device.createCommandEncoder();
@@ -138,6 +130,7 @@ async function setup()
         queue.submit([ commandEncoder.finish() ]);
     }
 
+    const queue = device.defaultQueue;
     let render = () => {        
         const colorTexture = swapchain.getCurrentTexture();
         const colorTextureView = colorTexture.createView();
