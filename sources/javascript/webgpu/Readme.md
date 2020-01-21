@@ -397,7 +397,7 @@ const vertexStage = {
 
 Another good side from using Parcel is that it watches changes to its files. So if we change the spv file, by compiling the "shader.vert" file it will reload out little application. See below.
 
-![Vertices](images/vertexshader.gif?raw=true)
+![Vertex Shader](images/vertexshader.gif?raw=true)
 
 See more at:
 https://gpuweb.github.io/gpuweb/#dom-gpudevice-createshadermodule  
