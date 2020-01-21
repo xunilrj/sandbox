@@ -340,61 +340,69 @@ const colorBufferDesc = {
 See more at:
 https://gpuweb.github.io/gpuweb/#enumdef-gpuprimitivetopology
 
-### 2 - Vertex State
+### 2 - Vertex Shader
 
 ![Vertices](images/pipeline.vs.png?raw=true)
 
-Here we are defining all the information needed for each vertex to render our triangle. First we define that how our positions is structured (1). "float3" means that we are passing three floats as the position. "arrayStride" is how much bytes we need to jump from the first to get the next position, 12 because we packed all positions, so just three floats of four bytes each.
+Vertex Shaders are one the most important an buzzed topics. They are "little" scripts that allows you to apply transformations to the vertex data.
 
-We have the same config for color (2). The only pertinent difference here is the "shaderLocation". We will understand what this means later.
+In theory you could apply all changes that you need to the buffer and send them to the GPU again. In theory that works. The problem is that you will be suffer with the time to transfer all data necessary between the computer memory and the GPU memory.
 
-In the end we we configure our "vertex state" binding everything together.
+If you are more ingenious you can think that instead of sending a lot of data, we could send the "algorithm" that change the data to the GPU. Yes, you can do this using "GPU Compute". We will do this in the future. But the far more common, and easier approach, and probably faster, is to use shaders.
 
-```
-const posVB = {
-    attributes: [ { shaderLocation: 0, offset: 0, format: 'float3' } ],
-    arrayStride: 4 * 3,
-    stepMode: 'vertex'
-}; // 1
-const colorVB = {
-    attributes: [ { shaderLocation: 1, offset: 0, format: 'float3' } ],
-    arrayStride: 4 * 3,
-    stepMode: 'vertex'
-}; // 2
-const vertexState = {
-    indexFormat: 'uint16',
-    vertexBuffers: [ posVB, colorVB ]
-};
-```
+In this case Vertex Shaders. Shader that will run for every vertex in this render pass.
 
-### 2.1 - Vertex Shader
+Shaders remember any c-based language: c, c++, c#, java, javascript etc... The major difference here is that you specify your input and output as we do with "global variables".
 
-```
-const vertModule = device.createShaderModule({ code: await loadSPV(vertspv) });
-const vertexStage = {
-    module: vertModule,
-    entryPoint: 'main' };
-```
+Focus first at the variables with "layout (location = 0) in" (1) and "layout (location = 1) in" (2). These are the variables that will receive from the "Input Assembler" values at position 0 and 1, respectively. Go back to the shader configuration above and search for "shaderLocation: 0", for example. Nor you understand where the "vertex buffer" value will be used.
 
-https://gpuweb.github.io/gpuweb/#dom-gpudevice-createshadermodule  
-https://gpuweb.github.io/gpuweb/#dictdef-gpushadermoduledescriptor  
-https://gpuweb.github.io/gpuweb/#typedefdef-gpushadercode  
+The unique mandatory output from a vertex shader is the "gl_Position" (3) that is the vertice position in 4D (ignore this for now). Just understand that "vec4(inPos.xyz, 1.0)" is the same as "vec4(inPos.x, inPos.y, inPos.z, 1.0)". We are just passing the position throught.
 
-```
-layout (location = 0) in vec3 inPos;
-layout (location = 1) in vec3 inColor;
+As additional data we also generating "outColor" (4). And again we are doing nothing and just passing it throught. The position of the output is important because it needs to match the input of variables in the fragment shader.
+
+```glsl
+layout (location = 0) in vec3 inPos;        // 1
+layout (location = 1) in vec3 inColor;      // 2
 layout (location = 0) out vec3 outColor;
 
 void main()
 {
-    gl_Position = vec4(inPos.xyz, 1.0);
-    outColor = inColor;    
+    gl_Position = vec4(inPos.xyz, 1.0);     // 3
+    outColor = inColor;                     // 4
 }
 ```
+
+The problem is that, out-of-the-box, webGPU only supports shaders in a binary format called SPV-R. And we have our shader here in "glsl". So we need to compile this shader using the tool "glslangValidator".
 
 ```
 > glslangValidator.exe -V ./shaders/shader.vert -o ./shaders/vert.spv
 ```
+
+To load them, after compilation, is very easy, but we need to download them. If you are using Parcel as I suggested, you can use a trick that when you import a unknown file, Parcel give you the URL to download that file. So we can do.
+
+```js
+import vertspv from './shaders/vert.spv';
+async function loadSPV(url)
+{
+    const res = await fetch(url);
+    const buffer = await res.arrayBuffer();
+    return new Uint32Array(buffer);
+}
+const vertModule = device.createShaderModule({ code: await loadSPV(vertspv) });
+const vertexStage = {
+    module: vertModule,
+    entryPoint: 'main'
+};
+```
+
+Another good side from using Parcel is that it watches changes to its files. So if we change the spv file, by compiling the "shader.vert" file it will reload out little application. See below.
+
+![Vertices](images/vertexshader.gif?raw=true)
+
+See more at:
+https://gpuweb.github.io/gpuweb/#dom-gpudevice-createshadermodule  
+https://gpuweb.github.io/gpuweb/#dictdef-gpushadermoduledescriptor  
+https://gpuweb.github.io/gpuweb/#typedefdef-gpushadercode  
 
 ### 3 - Rasterizer State
 
