@@ -254,7 +254,7 @@ https://gpuweb.github.io/gpuweb/#dictdef-gpurenderpasscolorattachmentdescriptor
 
 ## Setup the Pipeline
 
-Now we can create the pipeline.
+Now we gonna dive deep in each state of the pipeline. Dashed states are scriptable, solid states are configurable.
 
 ![Vertices](images/pipeline.none.png?raw=true)
 
@@ -266,7 +266,7 @@ Now we can create the pipeline.
 
 Each of these parts are sub-system of its own, so we gonna need a specific subpart for each.
 
-```
+```js
 const pipeline = device.createRenderPipeline({
     primitiveTopology: 'triangle-list', // 1
     vertexStage, vertexState, layout,   // 2
@@ -283,9 +283,66 @@ https://gpuweb.github.io/gpuweb/#dom-gpudevice-createrenderpipeline
 
 ![Vertices](images/pipeline.inputasm.png?raw=true)
 
-We specify that we will pass "triangles list". This means that each three uints inside the index buffer defines a triangle. In our case we have just one triangle, hence three uints: 0, 1, 2. This order is important as we will see below.
+The main task of the "Input Assembler" stage is the understand the "input buffers", mainly the "index buffer", the "position vertex buffer" and other extra buffers.
+
+The "index buffer" as we saw above is just a raw list of "unsigned ints" that points to others arrays. You need to specify what they mean (1). For example, with the configuration below we are specifying that we will pass a "triangle list", or, every three indices specifies a triangle. Other possible options are:  "point-list", "line-list", "triangle-list" and others.
+
+```js
+const pipeline = device.createRenderPipeline({
+    primitiveTopology: 'triangle-list'/*1*/, vertexState
+    ...
+});
+```
+
+The second task of the "Input Assembler" is to..., well, assemble the input buffers. Here we will not specify what buffers are needed to render the triangle. This was done above. 
+
+Here we are specifying what buffers are needed. Imagine that here you are defining a function and above we were calling the function. If this picture in mind we are defining a pipeline that needs two buffers: a position buffer (1) and a color buffer (2).
+
+As a last step we say that the index buffer is of "uint16" (3). So he knows that if have to jump 4 bytes to get to the next index.
+
+```js
+const vertexState = {
+    indexFormat: 'uint16',  // 3
+    vertexBuffers: [
+        positionBufferDesc, // 1
+        colorBufferDesc     // 2
+    ]};
+```
+
+If we dive deeper on the buffers descriptions we will see that we define the "position buffer" as a "float3" (1) or a 3D Vector of floats, that starts at the beginning of the buffer (2) and we will use its value for the variable at position "0" of the vertex shader (3).
+
+If you are wondering why so many parameters that seems useless, just wait because in future tutorials we will pass all render information in just one buffer. Easier to download everything, easier to setup.
+
+Array stride (4) is the byte size need to find the next position. This array contain just positions and each position is 12 bytes.
+
+We repeat everything for the color attribute, but the shaderLocation that now points to variable position 1 (5).
+
+```js
+const positionBufferDesc = {
+    attributes: [
+        { 
+            format: 'float3',   // 1
+            offset: 0,          // 2
+            shaderLocation: 0,  // 3
+        }
+    ], arrayStride: 4 * 3,      // 4
+};
+const colorBufferDesc = {
+    attributes: [
+        { 
+            format: 'float3'
+            offset: 0,
+            shaderLocation: 1   // 5
+        }
+    ], arrayStride: 4 * 3 };
+```
+
+See more at:
+https://gpuweb.github.io/gpuweb/#enumdef-gpuprimitivetopology
 
 ### 2 - Vertex State
+
+![Vertices](images/pipeline.vs.png?raw=true)
 
 Here we are defining all the information needed for each vertex to render our triangle. First we define that how our positions is structured (1). "float3" means that we are passing three floats as the position. "arrayStride" is how much bytes we need to jump from the first to get the next position, 12 because we packed all positions, so just three floats of four bytes each.
 

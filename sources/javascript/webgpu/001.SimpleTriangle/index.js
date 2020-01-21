@@ -72,8 +72,8 @@ async function setup()
     // Pipeline
     const positionAttribDesc = { shaderLocation: 0, offset: 0, format: 'float3' };
     const colorAttribDesc = { shaderLocation: 1, offset: 0, format: 'float3' };
-    const positionBufferDesc = { attributes: [ positionAttribDesc ], arrayStride: 4 * 3, stepMode: 'vertex' };
-    const colorBufferDesc = { attributes: [ colorAttribDesc ], arrayStride: 4 * 3, stepMode: 'vertex' };
+    const positionBufferDesc = { attributes: [ positionAttribDesc ], arrayStride: 4 * 3 };
+    const colorBufferDesc = { attributes: [ colorAttribDesc ], arrayStride: 4 * 3 };
     const vertexState = { indexFormat: 'uint16', vertexBuffers: [ positionBufferDesc, colorBufferDesc ] };
     const vertexStage = { module: vertModule, entryPoint: 'main' };
     const fragmentStage = { module: fragModule, entryPoint: 'main' };
@@ -93,8 +93,8 @@ async function setup()
     });
 
     const pipeline = device.createRenderPipeline({
-        primitiveTopology: 'triangle-list',
-        vertexStage, vertexState, layout,
+        primitiveTopology: 'triangle-list', vertexState,
+        vertexStage, layout,
         rasterizationState,
         fragmentStage,
         colorStates: [ colorState ],        
