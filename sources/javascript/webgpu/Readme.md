@@ -399,10 +399,10 @@ Another good side from using Parcel is that it watches changes to its files. So 
 
 ![Vertex Shader](images/vertexshader.gif?raw=true)
 
-See more at:
-https://gpuweb.github.io/gpuweb/#dom-gpudevice-createshadermodule  
-https://gpuweb.github.io/gpuweb/#dictdef-gpushadermoduledescriptor  
-https://gpuweb.github.io/gpuweb/#typedefdef-gpushadercode  
+See more at:  
+https://gpuweb.github.io/gpuweb/#dom-gpudevice-createshadermodule    
+https://gpuweb.github.io/gpuweb/#dictdef-gpushadermoduledescriptor    
+https://gpuweb.github.io/gpuweb/#typedefdef-gpushadercode   
 
 ### 3 - Rasterizer State
 
