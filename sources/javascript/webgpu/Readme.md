@@ -192,7 +192,7 @@ async function setup()
 }
 ```
 
-The GIF below show how each of these parameters change the rendered triangle.
+The GIF below show how each of these parameters change the rendered triangle. If you really zoom the video you will see some glitches in form of points but they were caused by the GIF format, nothing to do with webGPU.
 
 ![Vertices](images/vertexatts.gif?raw=true)
 
