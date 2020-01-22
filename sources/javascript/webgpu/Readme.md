@@ -440,7 +440,7 @@ void main()
 
 ### 4 - Rasterization
 
-![Vertex Shader](images/pipeline.pipeline.rast.png?raw=true)
+![Rasterization](images/pipeline.rast.png?raw=true)
 
 When rendering volumes, like a cube, we are normally looking directly into a face but we are not viewing the faces in the other direction. Think of a dice. If you are seeing face 1, you cannot see face 6. But when rendering the dice we ask teh GPU to render all six faces. And we need to do everything with all the fragments of the face six that it is going to be overwritten by face one.
 
