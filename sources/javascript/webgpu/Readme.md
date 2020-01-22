@@ -53,14 +53,10 @@ Then we need to transform any two floats to our valid range: (0,0)x(800,600), fo
 
 Scissors will "cut" every pixel that after the transformation lies outside its range. Viewports will determine how 2D float between (-1,-1)x(1,1) will be transformed. We want (-1,-,1) to be pixel (0,0); and (1,1) to be pixel (800,600).
 
-## Pipeline
+## Rasterization
 
-Almost all the magic happens in what is called the pipeline. To do its magic it needs to know a lot of things, and you will see that there is a lot of configuration.
-
-1 - Input Layout: define how your vertices are configured;
-2 - Shaders
-3 - Rasterizer
-4 - Ouput Merger
+![Vertices](images/d3d10-rasterrulesline.png?raw=true)
+![Vertices](images/d3d10-rasterrulestriangle.png?raw=true)
 
 # Code
 
@@ -258,21 +254,23 @@ Now we gonna dive deep in each state of the pipeline. Dashed states are scriptab
 
 ![Vertices](images/pipeline.none.png?raw=true)
 
-1 - Primitive Topology  
-2 - Vertex State  
-3 - Rasterizer State  
-4 - Fragment State  
-5 - Color State  
+1 - Input Assembler  
+2 - Vertex Shader
+3 - Tesselation 
+4 - Geometry Shaders
+5 - Rasterization
+6 - Fragment Shader  
+7 - Color Blending  
 
 Each of these parts are sub-system of its own, so we gonna need a specific subpart for each.
 
 ```js
 const pipeline = device.createRenderPipeline({
-    primitiveTopology: 'triangle-list', // 1
-    vertexStage, vertexState, layout,   // 2
-    rasterizationState,                 // 3
-    fragmentState,                      // 4
-    colorStates: [ colorState ],        // 5
+    primitiveTopology: 'triangle-list', vertexState,    // 1
+    vertexStage, layout,                                // 2
+    rasterizationState,                                 // 5
+    fragmentState,                                      // 6
+    colorStates: [ colorState ],                        // 7
 });
 ```
 
@@ -404,7 +402,7 @@ https://gpuweb.github.io/gpuweb/#dom-gpudevice-createshadermodule
 https://gpuweb.github.io/gpuweb/#dictdef-gpushadermoduledescriptor    
 https://gpuweb.github.io/gpuweb/#typedefdef-gpushadercode  
 
-### 4 and 5 - Tesselation and Geometry Shaders
+### 3 and 4 - Tesselation and Geometry Shaders
 
 ![Vertex Shader](images/pipeline.tesselation.geom.na.png?raw=true)
 
@@ -440,24 +438,41 @@ void main()
 }
 ```
 
-### 3 - Rasterizer State
+### 4 - Rasterization
 
-When rendering volumes, like a cube, we are normally looking directly into a face but we are not viewing the faces in the other direction. Think of a dice. If you are seing face 1, you cannot see face 6. But when rendering the dice we ask teh GPU to render all six faces. And we need to do everything with all the fragments of the face six that it is going to be overwritten by face one.
+![Vertex Shader](images/pipeline.pipeline.rast.png?raw=true)
 
-All of this sounds like a huge waste. And it is. One solution is, from the assumption that we will normally render volumes, we can choose one convention of specifying faces as clockwise, as the clock pointer rotates. See why we chose the vertices index as we did. Not imagine looking at this face from the back. From vertex 0, to 1, to 2 would be in counter-clockwise direction. So with this strange, but simple convention we have a simple way of defining if we are seing a face from the front and from the behind.
+When rendering volumes, like a cube, we are normally looking directly into a face but we are not viewing the faces in the other direction. Think of a dice. If you are seeing face 1, you cannot see face 6. But when rendering the dice we ask teh GPU to render all six faces. And we need to do everything with all the fragments of the face six that it is going to be overwritten by face one.
+
+All of this sounds like a huge waste. And it is. One solution is, from the assumption that we will normally render volumes, we can choose one convention of specifying faces as clockwise, as the clock pointer rotates. See why we chose the vertices index as we did. Not imagine looking at this face from the back. From vertex 0, to 1, to 2 would be in counter-clockwise direction. So with this strange, but simple convention we have a simple way of defining if we are seeing a face from the front and from the behind.
 
 Here we are configuring that when clockwise we are from the front (1) and that that we should cull, or just ignore all the "back" faces (2).
 
-```
+```js
 const rasterizationState = {
     frontFace: 'cw', // 1
     cullMode: 'back' // 2
 };
 ```
 
-### 4 - Fragment State
+See more at:  
+https://gpuweb.github.io/gpuweb/#dictdef-gpurasterizationstatedescriptor  
+
+### 5 - Fragment Shader
+
+![Vertex Shader](images/pipeline.fs.png?raw=true)
+
+Fragment shaders, as Vertex Shaders are one the most important an buzzed topics. If in the "Vertex Shader" we wrote a little "script" for each vertex. Here we will write a small "script" for each fragment. Important no note, fragment are not pixels. At least not yet. But we will write pixels to the target image FROM fragments. Go back to the rasterization algorithm described above to remember the difference.
+
+As the "Vertex Shader" we need to compile out fragment shader.
 
 ```
+> glslangValidator.exe -V ./shaders/shader.frag -o ./shaders/frag.spv
+```
+
+And we load it exactly the same.
+
+```glsl
 const fragModule = device.createShaderModule({ code: await loadSPV(fragspv) });
 const fragmentStage = {
     module: fragModule, 
@@ -465,9 +480,30 @@ const fragmentStage = {
 };
 ```
 
+Even the shaders are similar (luckily).
+
+Not surprisingly we receive here what we outputted from the "Vertex Shader". The "outColor" there became the "inColor" here. Go look the "Vertex Shader" again to remember.
+
+Here we are just passing through the received color, but the important point is, this happens for every fragment-that-will-become-pixel of the target. If our triangle in the end of all span 100 pixels, this "script" will be run 100 times.
+
+```glsl
+#version 450
+
+layout (location = 0) in vec3 inColor;
+layout (location = 0) out vec4 outFragColor;
+
+void main()
+{
+  outFragColor = vec4(inColor, 1.0);
+}
 ```
-> glslangValidator.exe -V ./shaders/shader.frag -o ./shaders/frag.spv
-```
+
+If you are using ParcelJS as I suggested you can very easily play with the fragment shader just compiling the .frag file. Like below.
+
+![Vertex Shader](images/fragshader.gif?raw=true)
+
+See more at:  
+https://gpuweb.github.io/gpuweb/#dictdef-gpushadermoduledescriptor  
 
 ### 5 - Color State or Blending
 
