@@ -500,7 +500,7 @@ void main()
 
 If you are using ParcelJS as I suggested you can very easily play with the fragment shader just compiling the .frag file. Like below. 
 
-It is nor necessarily important to understand what is happening, but if you apply a weigth (the amount of energy) to each color channel, sum them and create a color with all channels equal this value, you create something like a "grayscale" filter.
+It is nor necessarily important to understand what is happening, but if you apply a weigth (the amount of energy) to each color channel, sum them and create a color with all channels equal this value, you create something like a "grayscale" filter. We will apply various "post-processing filters" like this one later.
 
 ![Vertex Shader](images/fragshader.gif?raw=true)
 
