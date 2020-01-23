@@ -55,6 +55,14 @@ If you glance at the image again, you will realize that R is zero, and the slide
 
 So in the end, images can be stored in a computer as simple arrays of 32 bits integers.
 
+```c++
+auto img = new uint32_t [800 * 600];
+```
+
+```js
+const img = new Uint32Array(800 * 600);
+```
+
 For this reason, is common to address colours as 32 bits hexadecimals numbers. Take even another glance at the image and search the "Hex" box. You will see "004CB2". Every two digits correspond as the hexadecimal value of that channel. In an RGB image, this means: 00 is the Red, 4C is the Green and B2 is the blue channel. 
 
 We need to store the Alpha, and you can put at the end, for example, creating a pixel as RGBA and its hexadecimal value as "004CB2FF".
