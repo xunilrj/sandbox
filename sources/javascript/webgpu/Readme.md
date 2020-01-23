@@ -103,13 +103,56 @@ On the other side, if the rendering code takes more than 16 ms, we would miss th
 
 ![Vertices](images/swaplost.png?raw=true)
 
-If your animation also contains input, maybe feedbacks of the animation like games, this "FPS drop" can mean a delay of dozens of ms and really kill the "real-time experience" given.
+If your animation also contains input, maybe feedbacks of the animation like games, this "FPS drop" can mean a delay of dozens of ms and really kill the "real-time experience" given, but this comes to be problems related to what is generally called "game loop", we will more of this later.
 
 ## 3D Data
 
-Since Descartes we define points in 3D with three numbers, its coordinates. Here we will do the same. We will render a triangle, three points, nine coordinates.
+I think the best way to describe how we store 3D data in computers today is to start thinking about flies. Yeah, that annoying little bug. Sound strange? It is precisely how it started, or at least how tales tell us.
 
-The hard part comes that we need, first, to send these coordinates to the GPU memory. This looks like a lot of work, but these APIs are made to much more heavy usage. Later we will devise a easier approach.
+Tales tell that in cold French night of the 17th century, Descartes was trying to sleep when he spotted a fly in the ceiling. Being as crazy as any other thinker, he asked himself what would be the best way to describe the fly position. 
+
+The corner of the ceiling would be an excellent reference point. So the fly position would be the number of centimeters (cm) to one of the walls, and the number of centimeters to the other wall (ok, the metric system would not be used in Decarte's time, let us forgive this anachronism).
+
+So Descartes could have said that the fly was 244 cm of the right wall and 249 cm of the front wall.
+
+One little trick in Mathematics is that if you do not know how to name something, name it with a letter. So the distance away from the right wall, we call it "x"; and the distance from the front wall we call it "y". 
+
+So the fly position is 244cm in the "x" direction, and 249 in the "y" direction, or abbreviated as (244, 249) and called the fly coordinates. The convention is "x" first, and "y" later. Now we have various other coordinates conventions.
+
+Some say that this tale is a myth, in the sense that is not true, but IT IS a myth, in the sense that is powerful. Especially for computer graphics.
+
+Descartes would never imagine how computers work today, but being able to specify a position in 2D space like this is very easy. We need just two "float"s.
+
+```c++
+struct vec2
+{
+    float x;
+    float y;
+};
+```
+
+And one of the beautiful aspects of this is that to store flies positions in 3D, we need another distance that we call "z", the distance from the ceiling.
+
+```c++
+struct vec3
+{
+    float x;
+    float y;
+    float z;
+};
+```
+
+And to store an array of points, we can create an array of this struct. That would be packed in memory and would enable us to access any position and any coordinate with a simple memory offset.
+
+```c++
+auto points = new vec3[10];
+```
+
+For example, we know that the first point coordinates is at the start of the array, at offset 0. The second point coordinate is at offset 12. The third at 24. Forming an arithmetic sequence: 0, 12, 24, 36, 48 etc...
+
+The difference between two succeeding offsets is always the same, 12 bytes, the size of the "vec3", we call this the "stride", a synonym for "step" for non-native English speakers, because is how much you need to "walk" to find the next 3d position.
+
+![Vertices](images/3darraymem.png?raw=true)
 
 ## Spaces
 
