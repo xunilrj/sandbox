@@ -16,7 +16,7 @@ Here we will, first, dive into webGPU. Running directly from the browser and hav
 
 In this introductory tutorial, we will render a simple coloured triangle as the image below.
 
-If you have experience in 3D, feel free to jump directly to the "Code" section. If you are totally new, you can continue reading and follow a very brief explanation of the convoluted process of generating 2D images from 3D worlds.
+If you have experience in 3D, feel free to jump directly to the [Code](#Code) section. If you are totally new, you can continue reading and follow a very brief explanation of the convoluted process of generating 2D images from 3D worlds.
 
 ![Vertices](images/Annotation&#32;2020-01-23&#32;083858.png?raw=true)
 
