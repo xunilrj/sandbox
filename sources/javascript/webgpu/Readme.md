@@ -507,11 +507,11 @@ It is nor necessarily important to understand what is happening, but if you appl
 See more at:  
 https://gpuweb.github.io/gpuweb/#dictdef-gpushadermoduledescriptor  
 
-### 5 - Color State or Blending
+### 6 - Color Blending
 
-The color state configures how what we are rendering color going to be mixed with what already exist in the image. 
+![Vertex Shader](images/pipeline.cb.png?raw=true)
 
-For example, we are rendering a colored triangle in a black background. 
+The color blending state allows us to configure how what we are rendering is going to be mixed with what already exist in the target image. For example, we are rendering a colored triangle in a black background. In this case we can control the final pixel color with the following formula.
 
 ```
 Color_Result = ColorSource * colorBlend.srcFactor + ColorDestination * colorBlend.dstFactor;
@@ -520,7 +520,7 @@ Alpha_Result = AlphaSource * alphaBlend.srcFactor + AlphaDestination * alphaBlen
 
 Source is what we are drawing and destination is what is already on the image. We don't care for transparency for now. So we will simply use:
 
-```
+```js
 const colorState = {
     format: 'bgra8unorm',
     alphaBlend: { srcFactor: 'one', dstFactor: 'zero', operation: 'add' },
@@ -529,4 +529,5 @@ const colorState = {
 };
 ```
 
-![Output Merger - Blend](images/pipeline.om.blend.png?raw=true)
+See more At:  
+https://gpuweb.github.io/gpuweb/#dictdef-gpucolorstatedescriptor  
