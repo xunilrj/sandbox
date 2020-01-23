@@ -1,30 +1,69 @@
 # WebGPU
 
-If you are old enough and stop to think you will realize that 3D APIs have more two decades now. And they have evolved.
+If you are old enough and stop to think, you will realize that 3D APIs have more two decades now. OpenGL, the most famous, has almost 30 years. The OpenGL Red Book is already on its 9th version. Boy, time does fly!
 
-A new generation is emerging: Vulkan, Metal and WebGPU.
+But we do not intend to get nostalgic here, our intention is to understand the new philosophy behind the new generation of 3D APIs. If you have any previous experience, they are all welcomed, but the APIs are very different from the earlier version. They have evolved a lot!
 
-They  all have tha same philosophy: less intermediary code in drivers and more direct control to hardware.
+This new generation is amidst its peak now: Vulkan, Metal and webGPU, they are all gaining market share as we speak. Well, actually, webGPU is still in alpha, but it is so similar to others, that is worth a try already. And that is precisely what we are going to do here.
 
-This allows your code to keep the GPU busy delivering more frames or better graphics; but demanding more of the developer.
+The first difference from earlier APIS that we must perceive is a different philosophy: thinner APIs, with less intermediary code in drivers and more direct control of the hardware.
 
-Here we will, first, dive into WebGPU. Running directly from the browser and having a javascript API it is the simpler to configure.
+This allows your code to keep the GPU busy delivering more frames or better graphics but demanding more of the developer. There a lot of configuration and even a small "hello triangle" code has hundreds of lines of code.
+
+Here we will, first, dive into webGPU. Running directly from the browser and having a javascript API, makes it the perfect choice as the first contact with this new generation.
 
 # Our objective in this tutorial
+
+In this introductory tutorial, we will render a simple coloured triangle as the image below.
+
+If you have experience in 3D, feel free to jump directly to the "Code" section. If you are totally new, you can continue reading and follow a very brief explanation of the convoluted process of generating 2D images from 3D worlds.
 
 ![Vertices](images/Annotation&#32;2020-01-23&#32;083858.png?raw=true)
 
 # How 3d graphics are rendered
 
-It almost impossible to not get lost in the setup of these 3 APIs if you do not have, at least a basic understanding of how 3D graphics become the images that we see. Or even animations.
+It is almost impossible not to get lost in the setup of these new APIs if you do not have, at least, a basic understanding of how 3D worlds become the images that we see.
+
+To have the necessary understanding of all the process, you somehow need to understand:
+
+1 - How 2D images are stored in a computer;  
+2 - How you can generate animation with a set of images;  
+3 - How 3D worlds and objects are stored in a computer;  
+4 - Bare minimum of linear algebra;  
+5 - Algorithms to draw lines and triangles.  
+
+We will see each of these topics very briefly, just to give you the necessary to understand the configuration of the "Code" section.
 
 ## 2D Images
 
-The first point is how 2D images are stored in computers. Images are composed of minors parts called pixels forming a grid. This is almost universally known nowadays. But when configuring these 3D APIs you have various parameters as to how these pixels are stored in the GPU memory.
+2D images in computers are composed of a grid of colours. If we zoom on our triangle image, we will see this grid. Each square in this grid is what we call a "pixel".
 
-You have to decide how many bits per pixel, for example. If you have a alpha channel or not, used for transparency. So it is not uncommon to have 32bits per pixel. We normally reserve  eight bits (one byte) for each color channel, so: R8G8B8A8. 
+![Vertices](images/pixelgrid.png?raw=true)
 
-What is a little bit more exotic is that you can have more than one color information per pixel. Without more context this sounds like a very stupid idea. But is very useful, actually. Remember that when rendering a 3D image or a game, you are drawing a lot of thing one on top of the other: first the very far away mountain, a house and then your character. Being able to have more than one color per pixel allows edges to be mixed and eliminate a pixelization effect. This is called multisampling. The name comes from you sample multiple colors for each pixel. In theory the mor subsamples you have per pixel the better, but they cost more.
+We can store each pixel pretty much the way we prefer: we can use just one bit and have "binary images" or "monochrome bitmaps"; up to 32 bits per pixel. This is the more common approach and what we will use.
+
+Monochrome Bitmaps  
+http://www.fastgraph.com/help/monochrome_bitmaps.html  
+
+If you dig a image composition software you will probably see a image like the one below. This image helps us to understand how the pixels are stored in a 32bit-per-pixel image.
+
+Take a look at the RGB values and the Alpha at the bottom. These are called channels, we store colours as a composition of these four values. 
+
+![Vertices](images/pixelstored.png?raw=true)
+
+If you glance at the image again, you will realize that R is zero, and the slider is at the beginning. Alpha is 255, and the slider is at the end. This is not a coincidence. Each of these values has a valid range of 0 to 255. One byte. Four values, four bytes. 32 bits.
+
+So in the end, images can be stored in a computer as simple arrays of 32 bits integers.
+
+For this reason, is common to address colours as 32 bits hexadecimals numbers. Take even another glance at the image and search the "Hex" box. You will see "004CB2". Every two digits correspond as the hexadecimal value of that channel. In an RGB image, this means: 00 is the Red, 4C is the Green and B2 is the blue channel. 
+
+We need to store the Alpha, and you can put at the end, for example, creating a pixel as RGBA and its hexadecimal value as "004CB2FF".
+
+There is no reason to have RGBA as the order instead of, let us say, BGRA. In the end, it makes no difference, and some software or APIs do make this change.
+
+These new APIs like to be very specific, so when you ask the GPU to create an image for you, you need to give even for details, that is why the image description sometimes is "R8G8B8A8". Where the number specifies the size in bits of that channel.
+
+
 
 ## Double Buffering
 
