@@ -71,13 +71,39 @@ There is no reason to have RGBA as the order instead of, let us say, BGRA. In th
 
 These new APIs like to be very specific, so when you ask the GPU to create an image for you, you need to give even for details, that is why the image description sometimes is "R8G8B8A8". Where the number specifies the size in bits of that channel.
 
+## Animation
 
+The first time that some wrote of writing a machine that would generate what we would today call animation is the paper "Account of an Optical Deception" of 1821. The author very artfully perceives that:
 
-## Double Buffering
+"an impression made by a pencil of rays on the retina, if sufficiently vivid, will remain for a certain time after the cause has ceased."
 
-Everyone also know tht we achieve animation by exchange very similar image. The same technique is achieved in 3D using just two images(off course, you can use more if you want). When you have two images this is called double buffering swap chain.
+This is the idea behind the concept of "Persistence of Vision", which has a lot of critics since 1912, when started the Phi/Beta interpretation.
 
-One of the first tasks in these APIs is to configure your swap chain. We will configure two images and each time that we render we will be displaying one image and be rendering to the another.
+Account of an Optical Deception
+https://archive.org/stream/quarterlyjournal10roya#page/282/mode/2up
+
+Phi is not beta, and why Wertheimer's discovery launched the Gestalt revolution
+https://www.sciencedirect.com/science/article/pii/S0042698900000869
+
+To us here matters only the conclusion that if we flip very similar images, around twelve per second, we achieve the perception of animation and not the perception of similar-images-flipped. Each new similar-image is called a "frame" of the animation.
+
+Thus, to animate, we need a set of frames, and we need to display these frames following a particular clock tick, for twelve frames-per-second (FPS) we need to update the displayed image every 83 milliseconds (ms), to generate the illusion of the animation.
+
+Nowadays it is expected 60 FPS, or display a new frame every 16 ms.
+
+In practice, what we do is the following: we have two frames. The first is being displayed on the monitor. The second is "hidden", and we will be rendering the next frame of the animation in this frame. In the correct time, we swap them. The second image goes to the monitor, and the first become hidden for 16 ms, the timeframe we have to render the next frame on it.
+
+This is called double buffering.
+
+The image below represents what would happen in double buffer scenario where the rendering code always takes less than 16 ms.
+
+![Vertices](images/swapok.png?raw=true)
+
+On the other side, if the rendering code takes more than 16 ms, we would miss the "swap tick" and give the impression of "only" 30 FPS, because the current image would be visible for 32 ms, instead of 16 ms.
+
+![Vertices](images/swaplost.png?raw=true)
+
+If your animation also contains input, maybe feedbacks of the animation like games, this "FPS drop" can mean a delay of dozens of ms and really kill the "real-time experience" given.
 
 ## 3D Data
 
