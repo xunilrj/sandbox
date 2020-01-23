@@ -10,6 +10,10 @@ This allows your code to keep the GPU busy delivering more frames or better grap
 
 Here we will, first, dive into WebGPU. Running directly from the browser and having a javascript API it is the simpler to configure.
 
+# Our objective in this tutorial
+
+![Vertices](images/Annotation&#32;2020-01-23&#32;083858.png?raw=true)
+
 # How 3d graphics are rendered
 
 It almost impossible to not get lost in the setup of these 3 APIs if you do not have, at least a basic understanding of how 3D graphics become the images that we see. Or even animations.
