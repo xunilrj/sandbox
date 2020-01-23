@@ -115,6 +115,8 @@ The corner of the ceiling would be an excellent reference point. So the fly posi
 
 So Descartes could have said that the fly was 244 cm of the right wall and 249 cm of the front wall.
 
+![Vertices](images/coordinates.gif?raw=true)
+
 One little trick in Mathematics is that if you do not know how to name something, name it with a letter. So the distance away from the right wall, we call it "x"; and the distance from the front wall we call it "y". 
 
 So the fly position is 244cm in the "x" direction, and 249 in the "y" direction, or abbreviated as (244, 249) and called the fly coordinates. The convention is "x" first, and "y" later. Now we have various other coordinates conventions.
