@@ -32,7 +32,7 @@ To have the necessary understanding of all the process, you somehow need to unde
 4 - Bare minimum of linear algebra;  
 5 - Algorithms to draw lines and triangles.  
 
-We will see each of these topics very briefly, just to give you the necessary to understand the configuration of the "Code" section.
+We will see each of these topics very briefly, just to give you the necessary to understand the configuration of the [Code](#Code) section.
 
 ## 2D Images
 
