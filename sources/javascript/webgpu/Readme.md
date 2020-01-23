@@ -79,11 +79,11 @@ The first time that some wrote of writing a machine that would generate what we 
 
 This is the idea behind the concept of "Persistence of Vision", which has a lot of critics since 1912, when started the Phi/Beta interpretation.
 
-Account of an Optical Deception
-https://archive.org/stream/quarterlyjournal10roya#page/282/mode/2up
+Account of an Optical Deception  
+https://archive.org/stream/quarterlyjournal10roya#page/282/mode/2up  
 
-Phi is not beta, and why Wertheimer's discovery launched the Gestalt revolution
-https://www.sciencedirect.com/science/article/pii/S0042698900000869
+Phi is not beta, and why Wertheimer's discovery launched the Gestalt revolution  
+https://www.sciencedirect.com/science/article/pii/S0042698900000869  
 
 To us here matters only the conclusion that if we flip very similar images, around twelve per second, we achieve the perception of animation and not the perception of similar-images-flipped. Each new similar-image is called a "frame" of the animation.
 
