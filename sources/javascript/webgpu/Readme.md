@@ -160,26 +160,27 @@ The difference between two succeeding offsets is always the same, 12 bytes, the 
 
 Spaces are by far one the most abstract concepts that we need to understand in 3D development. I am not saying that they are hard because it is not the truth, but we will need a little effort to understand them.
 
-We need just to know that they come from abstract linear algebra foundations, but we only need its very basics:
+Altough they come from abstract linear algebra foundations, here we only need its very basics:
 
 1 - reference points;  
 2 - new directions (new basis).
 
-Remember Descarte's fly? the ceiling corner was the "reference point", "x" was the direction away from one of the walls. 
+Remember Descarte's fly? The ceiling corner was the "reference point", "x" was the direction away from one of the walls. 
 
-If we change the "reference point" from the corner to the middle of the ceiling, where is spotted a lamp, for example, the "fly" coordinates will have to change, because we are measuring the distances from the lamp. But to what? How do we calculate this? In this simple case we can just "translate", move all points accordingly.
+
+Now image that tin the middle of the ceiling there is a lamp. Descartes could have chosen this point as the reference point. So, if we change the "reference point" from the corner to the lamp position, the "fly" coordinates will have to change, because we are measuring now distances from the lamp. But to what? How do we calculate this? In this simple case, we can "translate", move all points accordingly.
 
 ![Vertices](images/newcoord.gif?raw=true)
 
-So in this case the fly is at (-56,-51).
+So in this case the fly is at (-56,-51). We call this a "transformation" and in this particular case "translation".
 
-But suppose that we also change the direction we measure the distance. We want to measure now the distance along the lamp and the upper-right corner. This will be the "new x". And the direction along lamp to upper-left will be the "new y". But how de we calculate the fly coordinates now?
+But suppose that we also change the direction we measure the distance. Now, we want to measure the distance along the direction of the lamp to the upper-right corner. This will be the "new x". And the direction along the lamp to upper-left will be the "new y". But how do we calculate the fly coordinates now?
 
 ![Vertices](images/newcoord_newdir.gif?raw=true)
 
 First, let us reason again how we calculated the old coordinate. One can say that the fly walked 244 cm along the "x" direction, and then it "walked" 249 cm in the "y" direction. 
 
-It does makes sense. Let us try the same technique to calculate new coordinate and then reason if it makes sense. In the image below we "walk" a certain amount of centimeters along the "new x", and then along the "new y".
+It does make sense. Let us try the same technique to calculate new coordinate and then reason if it makes sense. In the image below, we "walk" a certain amount of centimeters along the "new x", and then along the "new y".
 
 ![Vertices](images/walkcoord.gif?raw=true)
 
@@ -187,21 +188,21 @@ The new "y" coordinate was very small because the fly is almost at the new "x" d
 
 ![Vertices](images/walkcoordzoom.gif?raw=true)
 
-You can see that we always walk 107/2 cm in opposite direction of the new "x" direction (from the lamp to the corner) and 5/2 cm in the new "y" direction. It does not matter which direction we start. We always arrive at the fly position.
+You can see that we always walk 107/2 cm in the opposite direction of the new "x" direction (from the lamp to the corner) and 5/2 cm in the new "y" direction. It does not matter which direction we start. We always arrive at the fly position.
 
-So there you have it! This is the new position of the fly in this new "coordinate system": (-107/2, -5/2).
+So there you have it! This is the new position of the fly in this new "coordinate system": (-107/2, -5/2). We call this transformation: "basis change". "Basis" here is the set of directions that we use to "walk".
 
 So let recap and understand the concept of "space" here.
 
-The fly, when we take the corner as the "reference point" is at (244, 249). When the change the reference point to the lamp and measure the distance in another direction the fly position is (-107/2, -5/2).
+The fly, when we take the corner as the "reference point" is at (244, 249). When the change the reference point to the lamp and measure the distance in another direction, the fly position is (-107/2, -5/2).
 
-The question is? Has the fly moved? No! This is NOT what we did here. The fly is immovable. We just change how we measure its position. In the fist case we can say that the fly is at (244,249) at the "corner space". And can also say that is at (-107/2, -5/2) at the "lamp space". 
+The question is... has the fly moved? No! This is NOT what we did here. The fly is immovable. We just changed how we measure its position. In the first case, we can say that the fly is at (244,249) at the "corner space". And we can also say that it is at (-107/2, -5/2) at the "lamp space". 
 
-You can almost ways replace here with "from the lamp point of view".
+You can almost ways replace "lamp space" here with "from the lamp point of view".
 
 How is this applied in 3D development? Everywhere!
 
-When you specify a cube, for example, all the pints are in "cube-center space". But if we want the render two cubes, one on top of the other, we need to put on cube centered at (0,0,0) and the other at (0,1,0) for example.
+When you specify a cube, for example, all the points are in "cube-center space". But if we want the render two cubes, one on top of the other, we need to put our first cube centred at (0,0,0) and the other at (0,1,0) for example.
 
 Something like:
 
@@ -210,7 +211,33 @@ drawCubeAt(0,0,0);
 drawCubeAt(0,1,0);
 ```
 
-The API will, with our help, transform all the cube points from the "cube-center space" that we call "object space" to "world space". In this simple case we will increase by one the "y" coordinate of each point.
+The API will, with our help, transform all the cube points from the "cube-center space", actually called as "object space" to "world space". In this simple case, we will increase by one the "y" coordinate of each point.
+
+Let us return to our fly example. Suppose that our fly is specified as just one point". The point is defined in "model space" as (0,0,0).
+
+```js
+auto flyPoints = {0, 0, 0};
+```
+
+Our "world" will have two flies. So we will do something like:
+
+```c++
+void drawFly(float worldX, worldY, worldZ)
+{
+    auto flyPoints = {0, 0, 0};
+    drawPointAt(
+        flyPoints.x + worldX,
+        flyPoints.y + worldY,
+        flyPoints.z + worldZ);
+}
+
+drawFly(0,0,0);
+drawFly(0,1,0);
+```
+
+You can imagine that instead of just one point, a "drawCube" would have eight points. But we would follow precisely the same strategy.
+
+The Mathematics magic is that we do these transformations using Matrices. We will see them in more detail later.
 
 ## Rasterization
 
