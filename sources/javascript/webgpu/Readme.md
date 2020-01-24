@@ -158,22 +158,59 @@ The difference between two succeeding offsets is always the same, 12 bytes, the 
 
 ## Spaces
 
-This is the most esoteric topic, by far. Specially if math, linear algebra, scares you. We have two mains problems here:
+Spaces are by far one the most abstract concepts that we need to understand in 3D development. I am not saying that they are hard because it is not the truth, but we will need a little effort to understand them.
 
-1 - We will define 3D points, but pixels are in 2D;
-2 - The 3D points can be any float but pixels to be visible need to be between (0,0), (800,600) for example.
+We need just to know that they come from abstract linear algebra foundations, but we only need its very basics:
 
-The first problem is solve with some complex matrices mathematics, I grant you. You do not need to understand everything now. You just need to understand that we will transform any three floats in any two floats. From 3D to 2D. From R^3 to R^2. 
+1 - reference points;  
+2 - new directions (new basis).
 
-<TODO>DEPTH BUFFER
-<TODO>STENCIL BUFFER
+Remember Descarte's fly? the ceiling corner was the "reference point", "x" was the direction away from one of the walls. 
 
-Then we need to transform any two floats to our valid range: (0,0)x(800,600), for example. Internally this is also done by mathematics, but for the API this will be configuration for us. Our valid range is controlled by two configurations:
+If we change the "reference point" from the corner to the middle of the ceiling, where is spotted a lamp, for example, the "fly" coordinates will have to change, because we are measuring the distances from the lamp. But to what? How do we calculate this? In this simple case we can just "translate", move all points accordingly.
 
-1 - Viewport
-2 - Scissors
+![Vertices](images/newcoord.gif?raw=true)
 
-Scissors will "cut" every pixel that after the transformation lies outside its range. Viewports will determine how 2D float between (-1,-1)x(1,1) will be transformed. We want (-1,-,1) to be pixel (0,0); and (1,1) to be pixel (800,600).
+So in this case the fly is at (-56,-51).
+
+But suppose that we also change the direction we measure the distance. We want to measure now the distance along the lamp and the upper-right corner. This will be the "new x". And the direction along lamp to upper-left will be the "new y". But how de we calculate the fly coordinates now?
+
+![Vertices](images/newcoord_newdir.gif?raw=true)
+
+First, let us reason again how we calculated the old coordinate. One can say that the fly walked 244 cm along the "x" direction, and then it "walked" 249 cm in the "y" direction. 
+
+It does makes sense. Let us try the same technique to calculate new coordinate and then reason if it makes sense. In the image below we "walk" a certain amount of centimeters along the "new x", and then along the "new y".
+
+![Vertices](images/walkcoord.gif?raw=true)
+
+The new "y" coordinate was very small because the fly is almost at the new "x" direction. Let us zoom to see what is happening. We are also going to start with the "y" direction now.
+
+![Vertices](images/walkcoordzoom.gif?raw=true)
+
+You can see that we always walk 107/2 cm in opposite direction of the new "x" direction (from the lamp to the corner) and 5/2 cm in the new "y" direction. It does not matter which direction we start. We always arrive at the fly position.
+
+So there you have it! This is the new position of the fly in this new "coordinate system": (-107/2, -5/2).
+
+So let recap and understand the concept of "space" here.
+
+The fly, when we take the corner as the "reference point" is at (244, 249). When the change the reference point to the lamp and measure the distance in another direction the fly position is (-107/2, -5/2).
+
+The question is? Has the fly moved? No! This is NOT what we did here. The fly is immovable. We just change how we measure its position. In the fist case we can say that the fly is at (244,249) at the "corner space". And can also say that is at (-107/2, -5/2) at the "lamp space". 
+
+You can almost ways replace here with "from the lamp point of view".
+
+How is this applied in 3D development? Everywhere!
+
+When you specify a cube, for example, all the pints are in "cube-center space". But if we want the render two cubes, one on top of the other, we need to put on cube centered at (0,0,0) and the other at (0,1,0) for example.
+
+Something like:
+
+```js
+drawCubeAt(0,0,0);
+drawCubeAt(0,1,0);
+```
+
+The API will, with our help, transform all the cube points from the "cube-center space" that we call "object space" to "world space". In this simple case we will increase by one the "y" coordinate of each point.
 
 ## Rasterization
 
