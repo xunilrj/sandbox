@@ -1,10 +1,16 @@
 # Generational Index
 
+Here we will explore a naive implementation of "generational indices". A strategy to improve the safeness when accessing items inside a "Vec".
+
 # Problem
 
-We want to have a list of "components", here simplified as u32, but for example a position of a player. We want to allow another NPC to follow the player. So our NPC struct needs to "point" (the-unpronounceable-word) to the player is going to follow.
+We are going to simulate a game using ECS architecture.
 
-The first and immediate solution is to have a pointer to the players position and do whatever you want with it.
+So here we have a list of "components", for example, players positions. We want to allow NPCs to follow players. So, our NPC struct needs to "point" (the-unpronounceable-word) to the player is going to follow.
+
+We can implement this in two ways.
+
+The first, and probably the most immediate solution, is to have a pointer to the player's position, and do whatever we need to follow him.
 
 ```rust
 type EntityId = usize;
@@ -38,7 +44,7 @@ fn main() {
 }
 ```
 
-The problem with this approach is that we will end up fighting the borrow checker and any attempt to keep this strategy will end up with the infamous "Vec<Rc<RefCell<PlayerPosition>>>". 
+The problem with this approach is that we will end up fighting the borrow checker, and after numerous tries, we will end up with the infamous "Vec<Rc<RefCell<PlayerPosition>>>".  We do not want to follow this path.
 
 ```
 error[E0502]: cannot borrow `vec` as mutable because it is also borrowed as immutable
@@ -53,9 +59,9 @@ error[E0502]: cannot borrow `vec` as mutable because it is also borrowed as immu
     |                                   ------- immutable borrow later used here
 ```
 
-Another strategy is to deceive the borrow checker and instead of "borrowing a pointer" you "borrow the index of the pointer". As we say in Computer Science, "every borrow checker can be deceive by one layer of indirection". Hum... or something like this...
+The second strategy is to deceive the borrow checker. So instead of "borrowing a pointer", we will "borrow the index of the pointer". As we say in Computer Science, "every borrow checker can be deceived by one layer of indirection". Hum... or something like this...
 
-This strategy allow me to convince the borrow checker that everything is fine.
+This strategy allows me to convince the borrow checker that everything is fine.
 
 ```rust
 fn main() {
@@ -87,7 +93,7 @@ fn main() {
 }
 ```
 
- It compiles... but it has a big bug... to understand let us first change the code a little bit:
+ It compiles... but it has a bug... a big bug! To see this bug let us first change the code a little bit to:
 
  ```rust
 fn main() {
@@ -128,21 +134,21 @@ value: 0, 0, 0
 value: 1, 0, 0
 ```
 
-Which means that the second "print" is actually printing the second item in the Vec. We exchanged a panic of a invalid pointer to a invisible bug. We are now following the wrong player. In some sense this is better, but it is also harder to diagnosis.
+Which means that the second "println" is actually printing the second item of the Vec. We exchanged a panic caused by the invalid pointer, to an invisible bug. In our little game, we are now following the wrong player. In some sense, this is better, a more mild problem, sure, but also a harder one to diagnosis.
 
-The problem here is somewhat similar to the famous ABA problem. Not the Swedish pop band, that is another problem but the concurrency problem.
+The problem here is somewhat similar to the famous ABA problem. Not the Swedish pop band, that is a whole other problem, but the famous concurrency problem.
 
 ABA problem  
 https://en.wikipedia.org/wiki/ABA_problem  
 
-In one of Bjarne Stroustrup paper about ABA, there is a section about ABA avoidance techniques (2.1 Known ABA Avoidance Techniques I) where he cites that a well known strategy is to use "t is to apply a version tag attached to each value. The usage of version tags is the most commonly cited solution for ABA avoidance. The approach is effective, when it is possible to apply". He continues with a problem in the specific case of concurrency, which does not affect us here.
+In one of Bjarne Stroustrup papers about ABA, there is a section about ABA avoidance techniques (2.1 Known ABA Avoidance Techniques I), where he cites that a well-known strategy. The idea "is to apply a version tag attached to each value. The usage of version tags is the most commonly cited solution for ABA avoidance. The approach is effective, when it is possible to apply". He continues with a problem in the specific case of concurrency, which does not affect us here.
 
 So we will try to tag each item in the Vec with a "version".
 
 Understanding and Effectively Preventing the ABA Problem in Descriptor-based Lock-free Designs  
 http://www.stroustrup.com/isorc2010.pdf  
 
-The first thing we will do, is to create our version of Vec, that will enrich every item with a "version", here called generation.
+The first thing we will do is to create our version of Vec, that will enrich every item with a "version", here called generation.
 
 ```rust
 #[derive(Clone)]
@@ -172,7 +178,13 @@ impl<T: Clone> GenerationVec<T>
 }
 ```
 
-Now we need to allow the insertion of items. But the idea of this strategy is to use the version to help me realize that the item I want was already deleted. So I will return both the index and the generation of the item.
+Now we need to allow the insertion of items. The first thing we need to do is find an empty space to put the item. After this, we insert the item and return a "token" that is used to retrieve that item. This token contains the chosen position and the item generation. 
+
+When retrieving the item using the token, we only return the item if the generation in the token matches the generation in the item.
+
+And if every time the item is inserted or deleted, we increase its generation, we effectively invalidate all tokens to that item. Making it very hard to suffer an ABA problem.
+
+Let us see the code.
 
 ```rust
 impl<T: Clone> GenerationVec<T>
@@ -198,7 +210,7 @@ impl<T: Clone> GenerationVec<T>
 }
 ```
 
-Now I want to store this index and used it to retrieve some data.
+Now we want to store the returned token and used it to retrieve our data.
 
 ```rust
 fn main() {
@@ -217,8 +229,9 @@ fn main() {
 }
 ```
 
-Now I want to remove this item, try to get again and receive None instead of some random value. But first, let us implement the remove. We will implement the "remove" first borrowing the index, and later moving it.
+If we remove this item now and try to get it again using the same token, we will receive None instead of some random value. Much better!
 
+As a side note, we will implement the "remove" first borrowing the index, and later moving it.
 
 ```rust
 impl<T: Clone> GenerationVec<T>
@@ -236,7 +249,7 @@ impl<T: Clone> GenerationVec<T>
 }
 ```
 
-And we can finally use like this.
+And we can finally use it in the code.
 
 ```rust
 fn main() {
@@ -265,16 +278,14 @@ fn main() {
 }
 ```
 
-Our result is as expected:
+Our result is, as expected:
 
 ```
 value: 0 0 0
 None
 ```
 
-Let us now move the index in the "remove". Making it a little bit harder to reuse the index later.
-
-We get a compilation error now. Good!
+If we move the index in the "remove", we make a little bit harder to reuse the index later, because it will generate a compilation error now.
 
 ```
 error[E0382]: borrow of moved value: `i1`
@@ -290,7 +301,9 @@ error[E0382]: borrow of moved value: `i1`
     |                            ^^^ value borrowed here after move
 ```
 
-We could derive Copy trait for the index here, but would allow a use that we want to avoid. On the other side, we need to share these indices. So we will derive Clone instead.
+We could derive Copy trait for the index, as the compiler suggest, but this would allow a use that we want to avoid.
+
+On the other side, we need to share these indices. So we will derive Clone instead.
 
 ```rust
 #[derive(Copy)]
@@ -312,7 +325,7 @@ struct GI
 }
 ```
 
-One last possible improvement, that we will not take, is to implement the traits Index and IndexMut for our GenerationVec and allow "items[i]" access. The problem with these traits is that they are very restrictive and will allow bad use cases. For example:
+One last possible improvement, that we will not make, is to implement the traits Index and IndexMut for our GenerationVec and allow "items[i]" access. The problem with these traits is that they are very restrictive. For example:
 
 ```rust
 use std::ops::{Index, IndexMut};
@@ -322,21 +335,24 @@ impl<T: Clone> Index<GI> for GenerationVec<T>
     type Output = Option<&T>;
     fn index<'a>(&'a self, i: GI) -> &'a Option<&T>
     {
-        
+        ...
     }
 }
 ```
 
-The first limitation is that the "index" method is defined to return &Output. It must always be a reference. In our case this is a problem in one of the three cases:
+The first limitation is that the "index" method is defined to return &Output. It must always be a reference. In our case, this is a problem in one of the three cases:
 
-1 - Data exists and generation are equal - ok;  
+1 - Data exists, and generation are equal - ok;  
 2 - Data does not exist - ok;
-3 - Data exists but generations are different - nok.
+3 - Data exists, but generations are different - nok.
 
-In this third case we were returning a "None", but now I need to return a reference. See that "get" returns a Option<> and not &Option<>. But worst part is the "write". I would need to return a &mut to a item, possibly empty, that would have to be activated when a value is set. That would be very hard to do in this API.
-So it is probably better not to use this API at all.
+In the third case, we were returning a "None", but now I need to return a reference. The "get" method returns a Option<> and not &Option<>. 
 
-To update the value we are going to need two functions. "set" is expected to be used when you have a valid index to an item. If your index became stale we return None. The other, "set_if_none" is expected to be used to populate the position for the first time. We pass a simple int and if it is none, we return a valid index.
+But the worst part is the "write" part. I would need to return a &mut to an item, possibly empty, that would have to be activated when its value is set. That would be very hard to do in this API.
+
+Thus, it is probably better not to use this API at all.
+
+To update the item's value, we are going to need two functions: "set", expected to be used when you have a valid token; and, "set_if_none", expected to be used to populate the position for the first time. In this case, a simple usize will suffice.
 
 ```rust
 impl<T: Clone> GenerationVec<T>
@@ -371,7 +387,7 @@ impl<T: Clone> GenerationVec<T>
 }
 ```
 
-This allow us a very safe use of the Vec.
+In the end, we have very safe use of the Vec.
 
 ```rust
     // We simulate the player is deleted.
