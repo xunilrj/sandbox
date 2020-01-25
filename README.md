@@ -63,6 +63,9 @@
 [Command line Debugging](sources/cpp/CommandLineDebug.md)  
 [Cache LRU](sources/cpp/lru)
 
+### Rust
+[Generational Index](sources/rust/generational_index)
+
 ### R
 [Realtime London Underground Position](https://rstudio-pubs-static.s3.amazonaws.com/269780_73750785d8c04f9e968287701e22af30.html)
 
