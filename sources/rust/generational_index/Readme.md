@@ -141,7 +141,9 @@ The problem here is somewhat similar to the famous ABA problem. Not the Swedish 
 **ABA problem**  
 https://en.wikipedia.org/wiki/ABA_problem  
 
-In one of Bjarne Stroustrup papers about ABA, there is a section about ABA avoidance techniques (2.1 Known ABA Avoidance Techniques I), where he cites that a well-known strategy. The idea "is to apply a version tag attached to each value. The usage of version tags is the most commonly cited solution for ABA avoidance. The approach is effective, when it is possible to apply". He continues with a problem in the specific case of concurrency, which does not affect us here.
+In one of Bjarne Stroustrup papers about ABA, there is a section about ABA avoidance techniques (2.1 Known ABA Avoidance Techniques I), where he cites that a well-known strategy. The idea 
+
+> "is to apply a version tag attached to each value. The usage of version tags is the most commonly cited solution for ABA avoidance. The approach is effective, when it is possible to apply". He continues with a problem in the specific case of concurrency, which does not affect us here.
 
 So we will try to tag each item in the Vec with a "version".
 
