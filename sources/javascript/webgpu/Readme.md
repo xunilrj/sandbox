@@ -241,8 +241,31 @@ The Mathematics magic is that we do these transformations using Matrices. We wil
 
 ## Rasterization
 
-![Vertices](images/d3d10-rasterrulesline.png?raw=true)
-![Vertices](images/d3d10-rasterrulestriangle.png?raw=true)
+Rasterization is the algorithm that given triangles (or any other geometrical figure) convert them to pixels. But to understand where the algorithms start, we need to understand one more space: "clip space". 
+
+As we saw above, we can go from one space to another using transformation. The rasterization algorithm starts when we transform everything we want to render from the "world space" (or "view space", we will see this one later) to a "clip space", where everything visible, must be "squished" inside a cube between (-1,-1,-1) and (1,1,1).
+
+![Vertices](images/cam.gif?raw=true)
+
+This means that we need to translate, scale and rotate all objects until they fit inside his imaginary cube. Once inside this imaginary cube, we can ignore its "z" position, flattening everything, and scaling and translating everything so that the coordinates nows match the positions of the pixels. This is "viewport space".
+
+![Vertices](images/rasterizer01.gif?raw=true)
+
+Now comes the easy part. All we need to do is "paint" the pixels inside the triangle. You can start with the naive (and useless) algorithm that checks every pixel if it is inside the triangle or not. And we will arrive at:
+
+![Vertices](images/rasterizer02.gif?raw=true)
+
+We will see later better algorithms.
+
+# Quick recap how to generate 2D images from 3D data
+
+Now we are ready to enter the last step to generate our lovely 2D images from 3D data. First a quick recap where we are:
+
+1 - We defined out model (fly or cube) in "object space";  
+2 - We transformed them somehow to "word space";  
+3 - We transformed them somehow to "clip space";  
+4 - The API transformed it to "viewport space";  
+5 - Rasterizer generated 2D image.  
 
 # Code
 

@@ -19,7 +19,8 @@ https://archive.org/details/computergraphics00fole
 
 Graphics Programming Black Book
 Michael Abrash
-http://www.jagregory.com/abrash-black-book
+http://www.jagregory.com/abrash-black-book  
+https://www.drdobbs.com/parallel/graphics-programming-black-book/184404919  
 
 1999
 
