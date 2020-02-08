@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# 8.3 - Perspective Projections
+# http://learnwebgl.brown37.net/08_projections/projections_perspective.html
 from sympy import *
 left,right,bottom,top,near,far,zmin,zmax = symbols('left right bottom top near far zmin zmax')
 

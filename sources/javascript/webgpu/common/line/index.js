@@ -1,3 +1,4 @@
+import { mat4 } from '../math/index.js';
 
 async function loadSPV(url)
 {
@@ -6,10 +7,10 @@ async function loadSPV(url)
     return new Uint32Array(buffer);
 }
 
-async function create(device, vs, fs, swapChainFormat, layout, options)
+async function createRenderObject(device, vs, fs, swapChainFormat, layout, options)
 {
-    if(!vs) vs = device.createShaderModule({ code: await loadSPV("http://localhost:5000/line.vert.spv") });
-    if(!fs) fs = device.createShaderModule({ code: await loadSPV("http://localhost:5000/line.frag.spv") });
+    if(!vs) vs = device.createShaderModule({ code: await loadSPV("http://localhost:5000/line/vert.spv") });
+    if(!fs) fs = device.createShaderModule({ code: await loadSPV("http://localhost:5000/line/frag.spv") });
 
     options = options || {};
     
@@ -114,4 +115,49 @@ async function create(device, vs, fs, swapChainFormat, layout, options)
     return { render };   
 }
 
-export default { create };
+
+class DebugLineRenderSystem
+{
+    constructor()
+    {
+        this.lines = [];
+        this.bindingGroupLayout = null;
+        this.renderObject = null;
+        this.cameraSystem = null;
+    } 
+
+    createBindingGroup(device, arr)
+    {
+        let buffer = device.createBuffer({ size: arr.byteLength, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+        let bindGroup = device.createBindGroup({ layout: this.bindingGroupLayout, bindings: [{ binding: 0, resource: { buffer } }] });
+        return [buffer, bindGroup, arr];
+    }
+    
+    pushLines(device, lines)
+    {
+        return lines.map(([a,b]) => {
+            const [buffer, bindGroup, matrix] = this.createBindingGroup(device, mat4.identity());
+            const line = { buffer, bindGroup, matrix, a, b };
+            this.lines.push(line);
+            return line;
+        });
+    }
+
+    render(canvas, device, backBufferView, depthTextureView)
+    {
+        let cam = this.cameraSystem.getActiveCamera();
+        let pv = cam.update();
+        return this.lines.flatMap((x,i) => {
+            let va = mat4.mulVec4(pv, x.a);
+            let vb = mat4.mulVec4(pv, x.b);
+
+            x.matrix[0] = va[0]; x.matrix[1] = va[1]; x.matrix[2] = va[2]; x.matrix[3] = va[3];
+            x.matrix[4] = vb[0]; x.matrix[5] = vb[1]; x.matrix[6] = vb[2]; x.matrix[7] = vb[3];
+
+            x.buffer.setSubData(0, x.matrix);
+            return [this.renderObject.render(canvas, device, backBufferView, depthTextureView, x.bindGroup)];
+        });
+    }
+}
+
+export default {createRenderObject, DebugLineRenderSystem};

@@ -5,70 +5,69 @@ import Boy01_Head_GeoMesh from '../common/models/Boy01_Head_GeoMesh.webgpu.js';
 import Boy01_Head_MAT from '../common/materials/Boy01_Head_MAT.webgpu.js';
 import cube from '../common/cube.js';
 import circle from '../common/circle.js';
-import line from '../common/line.js';
+import line from '../common/line/index.js';
 import {vec3, vec4, mat4, quat, distances} from '../common/math/index.js';
-import Camera from '../common/camera.js';
+import {Camera, CameraDebugRenderSystem} from '../common/camera/index.js';
 import handleMouse from '../common/mouse.js';
+import parse from 'minimist';
 
 if(!navigator || !navigator.gpu)
     console.error("No WebGPU. Sorry!");
 
-let cameras = [];
-let activeCameraIndex = 0;
-function setActiveCamera(i)
+let canvas;
+let cameraDebugRenderSystem = new CameraDebugRenderSystem();
+let lineDebugRenderSystem = new line.DebugLineRenderSystem();
+lineDebugRenderSystem.cameraSystem = cameraDebugRenderSystem;
+let systems = [
+    cameraDebugRenderSystem,
+    lineDebugRenderSystem
+];
+
+class GameConsole
 {
-    activeCameraIndex = i;
-}
-function getActiveCamera()
-{
-    return cameras[activeCameraIndex].camera;
-}
-let cameraBindingGroupLayout;
-function createCameraBindingGroup(device, arr)
-{
-    let buffer = device.createBuffer({
-        size: arr.byteLength,
-        usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
-    });
-    let group = device.createBindGroup({
-        layout: cameraBindingGroupLayout,
-        bindings: [{
-            binding: 0,
-            resource: { buffer }
-        }]
-    });
-    return [buffer, group, arr];
+    constructor()
+    {
+        this.commands = {};
+    }
+
+    addCommand(name, f)
+    {
+        this.commands[name] = f;
+    }
+
+    run(cmd)
+    {
+        let o = parse(cmd.split(" "));
+        Object.keys(o).forEach(x => { try { o[x] = eval(o[x]); } catch { } });
+        console.log(o);
+        let aggcmd = o._.join(".");
+        if(this.commands[aggcmd])
+        {
+            this.commands[aggcmd].call(this, o);
+        }
+    }
 }
 
-function pushCamera(device, camera)
+window.gameConsole = new GameConsole();
+window.gameConsole.addCommand("camera.add", function(obj)
 {
-    let cameraPositionMatrix = camera.getDebugMatrix();
-    let [buffer, bindGroup, matrix] = createCameraBindingGroup(device, cameraPositionMatrix);
-    cameras.push({
-        camera,
-        bindGroup,
-        buffer,
-        matrix
-    });
-    return camera;
-}
-let cameraRenderObject;
-function renderCameras(canvas, device, backBufferView, depthTextureView)
+    let params = Object.assign({
+        fovy: 45, 
+        aspect: this.services.canvas.width / this.services.canvas.height, 
+        near: 1, 
+        far: 10,
+        position: [2, 2, 2],
+        target: [0, 0, 0]
+    }, obj);
+    cameraDebugRenderSystem.pushCamera(this.services.device, Camera.fromTo(
+        params,
+        params,
+    ), lineDebugRenderSystem)
+});
+window.gameConsole.addCommand("camera.active", function(obj)
 {
-    const {camera, bindGroup, buffer, matrix} = cameras[activeCameraIndex];
-    const pv = camera.update();
-    return cameras.flatMap((x,i) => {
-        if(i == activeCameraIndex) return [];
-
-        const {camera, bindGroup, buffer, matrix} = x;
-        const m = x.camera.getDebugMatrix();
-        
-        mat4.mul(matrix, pv, m);
-        buffer.setSubData(0, matrix);
-
-        return [cameraRenderObject.render(canvas, device, backBufferView, depthTextureView, x.bindGroup)];
-    });
-}
+    cameraDebugRenderSystem.setActiveCamera(obj.index)
+});
 
 async function setupWebGPU(id)
 {
@@ -84,6 +83,11 @@ async function setupWebGPU(id)
 
     const canvas = document.getElementById(id);
     const ctx = canvas.getContext('gpupresent');
+
+    window.gameConsole.services = {
+        canvas: canvas,
+        device: device
+    };
 
     return {gpu, adapter, device, canvas, ctx};
 }
@@ -112,13 +116,6 @@ async function setupRenderTargets(device, canvas, ctx, swapChainFormat)
     return {swapchain, depthTexture, depthTextureView};
 }
 
-async function loadSPV(url)
-{
-    const res = await fetch(url);
-    const buffer = await res.arrayBuffer();
-    return new Uint32Array(buffer);
-}
-
 async function setup()
 {
     const canvasId = "screen";
@@ -129,10 +126,6 @@ async function setup()
     
     let {swapchain, depthTexture, depthTextureView} =
         await setupRenderTargets(device, canvas, ctx, swapChainFormat);
-
-
-    
-    
     
     let createBindGroupLayout = (device, bindings) => {
         let bs = bindings.map((x,i) => ({ binding: i, type: x.type, visibility: x.visibility}));
@@ -196,13 +189,12 @@ async function setup()
         mode:"wireframe",
         scale: instance.boundingBox.scale
     });
-     // config camera debug render
-     cameraBindingGroupLayout = cubeBindGroupLayout;
-     cameraRenderObject = cubeInstance;
 
-    let [pvmUniformBuffer, pvmUniformBindGroup, pvm] = createCameraBindingGroup(device, mat4.identity());
+    // config camera debug render
+    cameraDebugRenderSystem.cameraBindingGroupLayout = cubeBindGroupLayout;
+    cameraDebugRenderSystem.cameraRenderObject = cubeInstance;
 
-   
+    
 
     // let rotyInstance = await circle.create(device, null, null, swapChainFormat, pipelineLayout);
     // let rotyGrabber = await circle.create(device, null, null, swapChainFormat, pipelineLayout, {
@@ -210,40 +202,30 @@ async function setup()
     //     radius: 0.1
     // });
 
-    // let mouseRay = await line.create(device, null, null, swapChainFormat, pipelineLayout, {
-    //     center: [0, 0, 1],
-    //     radius: 0.1
-    // });
-    
-    
-    pushCamera(device, Camera.fromTo(
+    lineDebugRenderSystem.bindingGroupLayout = cubeBindGroupLayout;
+    lineDebugRenderSystem.renderObject = await line.createRenderObject(device, null, null, swapChainFormat, cubePipelineLayout);
+        
+    cameraDebugRenderSystem.pushCamera(device, Camera.fromTo(
         { fovy: 45, aspect: canvas.width / canvas.height, near: 1, far: 1000 },
-        { position: [-5, -5, -5], target: [0, 0, 0] }
+        { position: [15, 15, 15], target: [0, 0, 0] }
     ));
-
-    pushCamera(device, Camera.fromTo(
-        { fovy: 45, aspect: canvas.width / canvas.height, near: 1, far: 1000 },
-        { position: [2, 2, 0], target: [0, 0, 0] }
-    ))
-
-    pushCamera(device, Camera.fromTo(
-        { fovy: 45, aspect: canvas.width / canvas.height, near: 1, far: 1000 },
-        { position: [-2, 2, 0], target: [0, 0, 0] }
-    ))
-    setActiveCamera(0);
+    cameraDebugRenderSystem.setActiveCamera(0);
 
     // let [rayUniformBuffer, rayUniformBindGroup, rayPos] = createUniform(uniformGroupLayout, mat4.identity());
     
-    // TODO: render camera frustum
+    // CAMERAS
+
+    // TODO: fix matrix math
+
     // TODO: load camera from COLLADA
     // TODO: save camera changes TO the COLLADA
     // TODO: render a more beautiful camera
 
-    // TODO: Refactor to draw as many lines as we want
     // TODO: Selectables: rotate head
-    // TODO: Nothing selected we move camera
+    // TODO: Nothing selected we still move the camera
     // TODO: mouse click params: buttons and modifiers (control, alt etc...)        
     // TODO: convert math to webassembly
+    
     // TODO: shader file manager
     // TODO: shader file reload (dynamic config pipeline)
     // TODO: PASS DSL
@@ -252,10 +234,10 @@ async function setup()
         {center: [0,0,1], radius: 0.05}
     ]
     let raynear = vec4.zero(), rn = vec4.zero(), rayfar = vec4.zero(), rf = vec4.zero();
-    let theta = 1, phi = 1;
+    let theta = 3, phi = 2;
     let mouse = handleMouse(canvas, {
         move: ({current}) => {
-            const cam = getActiveCamera();
+            const cam = cameraDebugRenderSystem.getActiveCamera();
             const b = cam.update();
             const {near, far, dir } = vec3.unproject(b, canvas, current)
 
@@ -275,6 +257,7 @@ async function setup()
         }
     });
     
+    let [pvmUniformBuffer, pvmUniformBindGroup, pvm] = cameraDebugRenderSystem.createCameraBindingGroup(device, mat4.identity());
     function sendCommands(queue, backBufferView)
     {
         function send(obj, uniformBindGroup)
@@ -283,11 +266,12 @@ async function setup()
                 return obj.render(canvas, device, backBufferView, depthTextureView, uniformBindGroup)
         }
 
-        const cam = getActiveCamera();
-        cam.view.pos[0] = Math.sin(theta) * 5;
-        cam.view.pos[1] = Math.cos(phi) * 5;
-        cam.view.pos[2] = Math.cos(theta) * Math.sin(phi) * 5;
+        let cam = cameraDebugRenderSystem.cameras[0].camera;
+        // cam.view.pos[0] = Math.sin(theta) * 15;
+        // cam.view.pos[1] = Math.cos(phi) * 15;
+        // cam.view.pos[2] = Math.cos(theta) * Math.sin(phi) * 15;
 
+        cam = cameraDebugRenderSystem.getActiveCamera();
         mat4.fromQuat(g1ModelMatrix, g1Quat);
         mat4.identity(g1.args[0]);
         mat4.mul(g1.args[0], cam.update(), g1ModelMatrix);
@@ -300,8 +284,17 @@ async function setup()
             send(cubeInstance, pvmUniformBindGroup),
             // send(rotyInstance, pvmUniformBindGroup),
             // send(rotyGrabber, pvmUniformBindGroup),
-            ...renderCameras(canvas, device, backBufferView, depthTextureView)
         ];
+        queue.submit(commands);
+
+        systems.forEach(x => {
+            if(x.render)
+            {
+                let commands = x.render(canvas, device, backBufferView, depthTextureView);
+                if(commands && commands.length)
+                    queue.submit(commands);
+            }
+        })
         // if(raynear)
         // {
         //     var b = cam.update();
@@ -321,7 +314,6 @@ async function setup()
         //     rayUniformBuffer.setSubData(0, rayPos);
         //     commands.push(send(mouseRay, rayUniformBindGroup));
         // }
-        queue.submit(commands);
     }
 
     let render = (timestamp) => {        
