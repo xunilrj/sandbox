@@ -207,15 +207,13 @@ async function setup()
         
     cameraDebugRenderSystem.pushCamera(device, Camera.fromTo(
         { fovy: 45, aspect: canvas.width / canvas.height, near: 1, far: 1000 },
-        { position: [15, 15, 15], target: [0, 0, 0] }
+        { position: [4, 4, 4], target: [0, 0, 0] }
     ));
     cameraDebugRenderSystem.setActiveCamera(0);
 
     // let [rayUniformBuffer, rayUniformBindGroup, rayPos] = createUniform(uniformGroupLayout, mat4.identity());
     
     // CAMERAS
-
-    // TODO: fix matrix math
 
     // TODO: load camera from COLLADA
     // TODO: save camera changes TO the COLLADA
@@ -224,6 +222,7 @@ async function setup()
     // TODO: Selectables: rotate head
     // TODO: Nothing selected we still move the camera
     // TODO: mouse click params: buttons and modifiers (control, alt etc...)        
+    
     // TODO: convert math to webassembly
     
     // TODO: shader file manager

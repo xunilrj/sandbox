@@ -50,6 +50,7 @@ function scale(R, sx, sy, sz)
 
 function projectionFrustum(R, left, right, bottom, top, near, far)
 {
+    if(!R) R = new Float32Array(16);
     R[0] = -2*near/(left - right);
     R[1] = 0;
     R[2] = 0;
@@ -60,8 +61,8 @@ function projectionFrustum(R, left, right, bottom, top, near, far)
     R[7] = 0;
     R[8] = 0;
     R[9] = 0;
-    R[10] = -far/(far - near);
-    R[11] = -1;
+    R[10] = far/(far - near);
+    R[11] = 1;
     R[12] = near*(left + right)/(left - right);
     R[13] = near*(bottom + top)/(bottom - top);
     R[14] = -far*near/(far - near);
@@ -91,7 +92,7 @@ function lookAt(mat4, eye_x, eye_y, eye_z, center_x, center_y, center_z, up_dx, 
 
     var tx = -vec3.dot(x, eye);
     var ty = -vec3.dot(y, eye);
-    var tz = vec3.dot(z, eye);
+    var tz = -vec3.dot(z, eye);
 
     mat4[0] = x[0];  mat4[4] = x[1]; mat4[8]  = x[2]; mat4[12] = tx;
     mat4[1] = y[0];  mat4[5] = y[1]; mat4[9]  = y[2]; mat4[13] = ty;

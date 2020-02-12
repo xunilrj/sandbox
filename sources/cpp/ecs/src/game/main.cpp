@@ -46,6 +46,25 @@ int main()
 	scene.add(0, disable_input);
 	scene.add(1, enable_input);
 
+	//TODO SYSTEMS ORGANIZED BY PHASES
+	//TODO SYSTEM DAG ORDER BY DSL USING >>
+	//setup = scene.addPhase("setup");
+	//input = scene.addPhase("input");
+	//preTransform = scene.addPhase("pre-transform");
+	//transform = scene.addPhase("transform");
+	//posTransform = scene.addPhase("pos-transform");
+	//output = scene.addPhase("output");
+	//
+	//setup << input << preTransform << transform << posTransform << output;
+	//
+	//setup << sys_select << sys_lifespan;
+	//input << sys_control_player << sys_control_ai << sys_control_projectile;
+	//preTransform << sys_navigate << sys_aim << sys_shake << sys_animate << sys_move;
+	//transform << sys_transform;
+	//posTransform << sys_collide << sys_trigger << sys_shoot
+	//output << sys_cull << sys_audio << sys_camera << sys_render << sys_draw << sys_ui;
+	//
+
 	//TODO InputSystem
 	//TODO System Order (Serial, Parallel)
 	//TODO Rendering
@@ -64,6 +83,13 @@ int main()
 		.set(PositionComponent{ 0, 0, 0 })
 		.build();
 
+	//TODO remove the build_anim inside scene
+	//to use the sys_anim system
+	// auto anim1 = sys_animate.build_anim()
+	// 	.then(AnimManager::lerp(1, 0, 1))
+	// 	.then(AnimManager::lerp(2, 1, 0.5));
+	// auto anim2 = sys_animate.build_anim()
+	// 	.then(AnimManager::lerp(1, 0, 1));
 	auto anim1 = scene.build_anim()
 		.then(AnimManager::lerp(1, 0, 1))
 		.then(AnimManager::lerp(2, 1, 0.5));
@@ -86,6 +112,7 @@ int main()
 			
 			auto& int2 = scene.get<PositionComponent>(e2);
 
+			//TODO sys_input
 			if (input_enabled && (GetKeyState('A') & 0x8000))
 			{
 				scene.call(0);

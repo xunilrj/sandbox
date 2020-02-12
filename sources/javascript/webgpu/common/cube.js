@@ -79,15 +79,27 @@ async function create(device, vs, fs, swapChainFormat, layout, options)
     else if(options.mode == "wireframe") 
     {
         if(!options.color) options.color = [1,1,1];
-        let arr = new Float32Array(24);
-        for(var i = 0; i < 8; ++i)
-        {
-            arr[i*3 + 0] = options.color[0];
-            arr[i*3 + 1] = options.color[1];
-            arr[i*3 + 2] = options.color[2];
-        }
+        // let arr = new Float32Array(24);
+        // for(var i = 0; i < 8; ++i)
+        // {
+        //     arr[i*3 + 0] = options.color[0];
+        //     arr[i*3 + 1] = options.color[1];
+        //     arr[i*3 + 2] = options.color[2];
+        // }
 
-        colorBuffer = createBuffer(arr, GPUBufferUsage.VERTEX);
+        // colorBuffer = createBuffer(arr, GPUBufferUsage.VERTEX);
+        colorBuffer = createBuffer(new Float32Array([
+            // front colors
+            0.0, 0.0, 1.0,
+            1.0, 0.0, 1.0,
+            1.0, 1.0, 1.0,
+            0.0, 1.0, 1.0,
+            // back colors
+            0.0, 0.0, 0.0,
+            1.0, 0.0, 0.0,
+            1.0, 1.0, 0.0,
+            0.0, 1.0, 0.0
+        ]), GPUBufferUsage.VERTEX);
         indexBuffer = createBuffer(new Uint16Array([ 
             // front
             0, 1, 1, 2,
