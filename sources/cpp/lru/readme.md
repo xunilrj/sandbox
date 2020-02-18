@@ -6,7 +6,7 @@
 > code .
 ```
 
-First, we will create a file named "CMakeLists.txt". A little bit exotic name, but this file will be used by CMake to generate the compilation artefacts for all c++ toolchains. In our case here we will be using "Visual Studio".
+First, we will create a file named "CMakeLists.txt". A little bit exotic name, but this file will be used by CMake to generate the compilation artifacts for all c++ tool chains. In our case here we will be using "Visual Studio".
 
 So, our first step is to install CMake. If you are using windows and have Chocolatey installed it is as simple as 
 
@@ -188,7 +188,7 @@ TEST_CASE("Cache.LRU.Must get after put", "[cache][lru][ok]")
     REQUIRE(cache.get(1) == 1);
 }
 ```
-This will be the last case that I will show the output of running the unit tests, just because now our test suite is failling.
+This will be the last case that I will show the output of running the unit tests, just because now our test suite is failing.
 ```
 >test.ps1
 Test project D:/github/sandbox/sources/cpp/lru/.build
@@ -355,7 +355,7 @@ Linear: the number of calls to the destructor of T is the same as the number of 
 ```
 https://en.cppreference.com/w/cpp/container/vector/erase
 
-So we need to find another collection. We have two lists: std::foward_list and std::list. They are implemented as linked-lists and doubly-linked-lists, respectively.
+So we need to find another collection. We have two lists: std::forward_list and std::list. They are implemented as linked-lists and doubly-linked-lists, respectively.
 
 Both have "pop_front" to remove from the beginning as O(1) methods.
 
@@ -369,7 +369,7 @@ Complexity: Constant.
 ```
 https://en.cppreference.com/w/cpp/container/list/pop_front
 
-A good start, but std::foward_list does not have anything to "insert at the end". So we will ignore it here.
+A good start, but std::forward_list does not have anything to "insert at the end". So we will ignore it here.
 
 std::list have.
 
@@ -378,7 +378,7 @@ Complexity: Constant.
 ```
 https://en.cppreference.com/w/cpp/container/list/push_back
 
-And luckly, std::list also have "remove from the middle" and with constant complexity.
+And luckily, std::list also have "remove from the middle" and with constant complexity.
 
 ```
 Complexity: Constant.
@@ -713,20 +713,20 @@ private:
 };
 ```
 
-# Second Refactor - Moveable types
+# Second Refactor - Movable types
 
-Before releasing this code to production, I think that we must at least analyze how it works with moveable types.
+Before releasing this code to production, I think that we must at least analyze how it works with movable types.
 
-Move semantic is a complex topic on itself, so at least for now, let us just acknowledge that moveable types exist and that std::unique_ptr is one of them. We can see this at the documentation.
+Move semantic is a complex topic on itself, so at least for now, let us just acknowledge that movable types exist and that std::unique_ptr is one of them. We can see this at the documentation.
 
 ```
 The class satisfies the requirements of MoveConstructible and MoveAssignable, but not the requirements of either CopyConstructible or CopyAssignable.
 ```
 https://en.cppreference.com/w/cpp/memory/unique_ptr
 
-So std::unique_ptr is moveable but not copyable.
+So std::unique_ptr is movable but not copyable.
 
-So our first modification is on the "record" struct. That struct owns the data. We have been working with a trivially copyable type like "int". So no problem. Just copy the value to the "record", and that is it. With moveable type is different. We need to "move" the value to inside the "struct". We do this with:
+So our first modification is on the "record" struct. That struct owns the data. We have been working with a trivially copyable type like "int". So no problem. Just copy the value to the "record", and that is it. With movable type is different. We need to "move" the value to inside the "struct". We do this with:
 
 ```c++
  struct record
@@ -739,7 +739,7 @@ So our first modification is on the "record" struct. That struct owns the data. 
     };
 ```
 
-This means something like: if we try to create the "struct" with a copyable type, call the constructor that will just copy everything; if, on the other side, we try to create the "struct" with a moveable type, call the constructor that will move the value.
+This means something like: if we try to create the "struct" with a copyable type, call the constructor that will just copy everything; if, on the other side, we try to create the "struct" with a movable type, call the constructor that will move the value.
 
 It is important to note that the r-value is NOT const. Because when we move a value, the "source" is nulled.
 
@@ -758,7 +758,7 @@ Now we need the same options for the "put" method.
 }
 ```
 
-These methods are pretty much the same. The only difference is that we always need to move the "value" in the "moveable" version.
+These methods are pretty much the same. The only difference is that we always need to move the "value" in the "movable" version.
 
 ```c++
     TValue& put(const TKey& key, TValue&& value)
@@ -858,14 +858,14 @@ And the event better part is that now we can fix the "move" "put".
         return it->second.value;
     }
 ```
-We need the "std::foward" in this case because otherwise the compiler would try to call the "const TValue&" constructor. Why? We can see the explanation and an example in the documentation.
+We need the "std::forward" in this case because otherwise the compiler would try to call the "const TValue&" constructor. Why? We can see the explanation and an example in the documentation.
 
 ```
 rvalue reference variables are lvalues when used in expressions
 ```
 https://en.cppreference.com/w/cpp/language/reference
 
-So when you use the "TValue&&" in the "try_emplace" it is treated as a l-value, so the compiler calls the l-value constructor. That is why you need the std::foward because it preserves the "r-value-ness" of the parameter. This is called "perfect fowarding."
+So when you use the "TValue&&" in the "try_emplace" it is treated as a l-value, so the compiler calls the l-value constructor. That is why you need the std::forward because it preserves the "r-value-ness" of the parameter. This is called "perfect forwarding."
 
 Now all our tests are passing.
 
