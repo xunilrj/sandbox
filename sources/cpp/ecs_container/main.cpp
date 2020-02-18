@@ -6,104 +6,148 @@
 #include <unordered_map>
 #include <algorithm>
 #include <iostream>
+#include <numeric>
+#include <chrono>
+
+
 
 template <typename T>
 struct record
 {
 	uint64_t id;
+	bool has_value;
 	T value;
 };
 
-template <typename T>
+template <typename TValue>
+struct Bucket
+{
+	size_t bucket;
+	std::vector<record<TValue>>* ptr;
+};
+
+template <typename TValue>
 class col_iterator
 {
 public:
-	col_iterator(std::vector<record<T>>& v, bool begin) : items{ v }, it { v.begin() }
+	col_iterator(std::vector<Bucket<TValue>>& veclist)
 	{
-		if (begin) it = v.begin();
-		else it = v.end();
+		ll = veclist.data();
+		lllast = ll + veclist.size();
+
+		it = ll->ptr->data();
+		itlast = ll->ptr->data() + ll->ptr->size();
 	}
 
 	uint64_t id() const { return it->id; }
 
 	void to(uint64_t id)
 	{
-		while ((it != items.end()) && (it->id < id))
+		while (!atEnd() && (it->id < id))
 		{
 			++it;
 		}
 	}
 
-	bool operator == (const col_iterator<T>& it) const { return this->it == it.it; }
-	bool operator != (const col_iterator<T>& it) const { return this->it != it.it; }
+	bool atEnd() const { return ll > lllast; }
 
-	col_iterator<T>& operator ++ () { ++it;	return *this; }
-	T operator* () const { return it->value; }
+	//bool operator == (const col_iterator<TValue>& it) const
+	//{
+	//	return (this->end == it.end) && (this->it == it.it);
+	//}
+
+	//bool operator != (const col_iterator<TValue>& it) const
+	//{
+	//	return (this->end == it.end) && (this->it != it.it);
+	//}
+
+	TValue& operator* () const { return it->value; }
+	col_iterator<TValue>& operator ++ ()
+	{
+		++it;
+		if (it <= itlast) { return *this; }
+		else
+		{
+			++ll;
+			if (ll <= lllast)
+			{
+				it = ll->ptr->data();
+				_mm_prefetch((const char*)(const void*)(it), _MM_HINT_T0);
+				itlast = it + ll->ptr->size();
+			}
+		}
+		return *this;
+	}
 private:
-	std::vector<record<T>>& items;
-	typename std::vector<record<T>>::iterator it;
+	Bucket<TValue>* ll;
+	Bucket<TValue>* lllast;
+	record<TValue>* it;
+	record<TValue>* itlast;
 };
 
-template <typename TValue, size_t SIZE>
+template <typename TValue>
 class col
 {
 public:
-	void emplace(uint64_t id, TValue v)
+	col() : size{ 100 }
 	{
-		auto i = std::lower_bound(items.begin(), items.end(), id, [&](auto&& a, auto&&b) {
-			return a.id < id;
+	}
+
+	void emplace(uint64_t id, const TValue& v)
+	{
+		auto& vec = getOrAdd(id / size);
+
+		auto it = std::upper_bound(vec.begin(), vec.end(), id,
+		[](auto&& id, auto&& b) {
+			return id == b.id;
 		});
-		if (i == items.end() || (id != i->id))
-			items.emplace(i, record<TValue>{ id, v });
+		vec.insert(it, { id, true, v });
 	}
 
-	col_iterator<TValue> begin()
-	{
-		return { items, true };
-	}
+	col_iterator<TValue> begin() { return { ll }; }
+	col_iterator<TValue> end() { return { ll }; }
 
-	col_iterator<TValue> end()
+	TValue* at(uint64_t id)
 	{
-		return { items, false };
-	}
-
-	TValue* at(size_t id)
-	{
-		auto it = ids.find(id);
-		if (it == ids.end()) return nullptr;
-		else
-		{
-			auto i = *it;
-			if (i >= items.size()) return searchAndUpdate(it, id);
-
-			auto& item = items[i];
-			if (item.id == id) return &item.value;
-			else return searchAndUpdate(it, id);
-		}
+		auto& vec = getOrAdd(id / size);
+		auto it = std::binary_search(vec.begin(), vec.end(), [&](auto&& x) {
+			return x.id == id;
+		});
+		if (it == vec.end()) return nullptr;
+		if (!it->has_value) return nullptr;
+		else return &it->value;
 	}
 private:
-	TValue* searchAndUpdate(typename std::unordered_map<size_t, size_t>::iterator it, size_t id)
+	using vec_type = std::vector<record<TValue>>;
+
+	uint16_t size;
+	std::unordered_map<uint64_t, vec_type*> vectors;
+	std::vector<Bucket<TValue>> ll;
+
+	vec_type& getOrAdd(size_t bucket)
 	{
-		auto iit = std::find(items.begin(), items.end(), [=](auto&& item) { return item.id == id});
-		if (iit == items.end())
-		{
-			ids.erase(it);
-			return nullptr;
-		}
-		else
-		{
-			*it = std::distance(iit, items.begin());
-			return *iit.value;
+		auto it = vectors.find(bucket);
+		if (it != vectors.end()) { return *it->second; }
+		else {
+			vec_type* newvec = new vec_type();
+			newvec->reserve(size);
+			vectors.insert(std::make_pair(bucket, newvec));
+
+			auto it = std::upper_bound(ll.begin(), ll.end(), bucket,
+				[](auto&& bucket, auto&& b) {
+					return bucket == b.bucket;
+				});
+			ll.insert(it, { bucket, newvec });
+
+			return *newvec;
 		}
 	}
-	std::unordered_map<size_t, size_t> ids;
-	std::vector<record<TValue>> items;
 };
 
 template <typename... TArgs, std::size_t... Id>
-bool atEnd(std::tuple<TArgs...>& begins, std::tuple<TArgs...>& ends, std::index_sequence<Id...> id)
+bool atEnd(std::tuple<TArgs...>& begins, std::index_sequence<Id...> id)
 {
-	return (... || (std::get<Id>(begins) == std::get<Id>(ends)));
+	return (... || (std::get<Id>(begins).atEnd()));
 }
 
 template <typename F>
@@ -163,11 +207,10 @@ template <typename F, typename... TArgs>
 void join(F f, TArgs... args)
 {
 	auto its = std::make_tuple(args.begin()...);
-	auto ends = std::make_tuple(args.end()...);
 
 	while (true)
 	{
-		auto someAtEnd = atEnd(its, ends, std::index_sequence_for<TArgs...>{});
+		auto someAtEnd = atEnd(its, std::index_sequence_for<TArgs...>{});
 		if (someAtEnd) break;
 
 		auto advances = advance(its, std::index_sequence_for<TArgs...>{});
@@ -181,8 +224,8 @@ void join(F f, TArgs... args)
 
 TEST_CASE("Fake.Test.Will Pass", "[ok]")
 {
-	auto col1 = col<int, 10>{};
-	auto col2 = col<int, 10>{};
+	/*auto col1 = col<int>{};
+	auto col2 = col<int>{};
 
 	col1.emplace(1, 0);
 	col1.emplace(11, 1);
@@ -192,32 +235,86 @@ TEST_CASE("Fake.Test.Will Pass", "[ok]")
 	col2.emplace(21, 4);	
 	col2.emplace(31, 5);
 
+	auto it = col1.begin();
+	++it;
+	++it;
+	++it;
+	++it;
+
 
 	join([](auto&& a, auto&& b) {
 		std::cout << a << b;
 	}, col1, col2);
 
-	auto it1 = col1.begin();
-	auto it2 = col2.begin();
-
-	auto end1 = col1.end();
-	auto end2 = col2.end();
-
+	auto v1 = col1.at(1);
+	auto v2 = col1.at(31);
+	auto v3 = col1.at(11);
+	auto v4 = col1.at(21);*/
 	
+	// PERFORMANCE
+	////////////////////////////////////VECTOR
+	std::vector<int> v(1000);
+	std::iota(v.begin(), v.end(), 1);
 
-	// JOIN both cols
-	// no need to keep entities indices
-	// allow sparse components
-	while (true)
-	{
-		if (it1 == end1) break;
-		if (it2 == end2) break;
-		if (it1.id() < it2.id()) { it1.to(it2.id()); continue; }
-		if (it2.id() < it1.id()) { it2.to(it1.id()); continue; }
+	std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
 
-		auto v1 = *it1;
-		auto v2 = *it2;
-
-		++it2;
+	int times = 100000;
+	uint64_t agg = 0;
+	while (times > 0) {
+		for (auto x : v)
+			agg += x;
+		--times;
 	}
+	
+	std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+	auto time1 = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
+	std::cout << "vector " << agg << " " << time1 << std::endl;;
+
+	////////////////////////////////////////DEQUE
+	std::deque<int> d(1000);
+	std::iota(d.begin(), d.end(), 1);
+
+	begin = std::chrono::steady_clock::now();
+
+	times = 100000;
+	agg = 0;
+	while (times > 0) {
+		for (auto x : d)
+			agg += x;
+		--times;
+	}
+
+	end = std::chrono::steady_clock::now();
+	auto time2 = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
+	std::cout << "deque " << agg << " " << time2 << std::endl;;
+
+	////////////////////////////////////ECSCONTAINER
+
+	auto col3 = col<int>{};
+	times = 1000;
+	while (times > 0) {
+		col3.emplace(times, times);
+		--times;
+	}
+
+	begin = std::chrono::steady_clock::now();
+
+	times = 100000;
+	agg = 0;
+	while (times > 0) {
+		auto it = col3.begin();
+		while (!it.atEnd())
+		{
+			agg += *it;
+			++it;
+		}
+		--times;
+	}
+
+	end = std::chrono::steady_clock::now();
+	auto time3 = std::chrono::duration_cast<std::chrono::milliseconds>(end - begin).count();
+	std::cout << "ecs " << agg << " " << time3 << std::endl;
+
+	std::cout << "deque/vector " << (float)time2 / time1 << " " << time2 << " " << time1 << std::endl;
+	std::cout << "ecs/vector " << (float)time3 / time1 << " " << time3 << " " << time1 << std::endl;
 }

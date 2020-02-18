@@ -868,3 +868,9 @@ https://en.cppreference.com/w/cpp/language/reference
 So when you use the "TValue&&" in the "try_emplace" it is treated as a l-value, so the compiler calls the l-value constructor. That is why you need the std::foward because it preserves the "r-value-ness" of the parameter. This is called "perfect fowarding."
 
 Now all our tests are passing.
+
+# TODO
+
+1 - Multi-Thread support
+2 - Read-through
+3 - Write-over
