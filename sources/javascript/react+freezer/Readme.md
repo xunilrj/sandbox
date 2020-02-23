@@ -1,6 +1,6 @@
 # Building a React + Freezer integration
 
-We are aiming here a Flux architecture using Freezer as the store. Why? Because of its simplicity, and its guarantee of immutability of untouched nodes. See more at https://github.com/arqex/freezer#why-another-state-holder.  
+We are aiming here a Flux architecture using Freezer as the store. Why? Because of its simplicity, and its guarantee of the immutability of untouched nodes. See more at https://github.com/arqex/freezer#why-another-state-holder.  
 
 ## Quick Freezer tutorial
 
@@ -22,7 +22,9 @@ let newUser = state.user.reset({name: "Daniel 2"});
 console.log(newUser.name); // "Daniel 2"
 ```
 
-May you love this, maybe you hate it, but what is the advantage? Look below, we never touch "someOtherData" so the node does not change. The advantage is that after any change we now exactly which nodes changed, and that allows us to update the UI for these parts, and for these parts only.  
+Maybe you love it, maybe you hate it, but what is the advantage? 
+
+Look below, we never touch "someOtherData" so the node does not change. That gives us the knowledge of exactly which nodes changed; this allows us to update the UI for these parts, and for these parts only.  
 
 ```js
 let before =  store.get().user;
@@ -71,11 +73,11 @@ That is pretty much everything we need to know about Freezer.
 
 ## Integration version 01 - React Context
 
-The simples possible integration with React is using React Context (https://reactjs.org/docs/context.html). 
+The simplest possible integration with React is using React Context (https://reactjs.org/docs/context.html). 
 
-Context work in pairs: you have one component that provides the data, and other that consumes and update itself on data changes.
+Context work in pairs: you have one component that provides the data, and one that consumes and update itself on data changes.
 
-First you have to create the context, get the provider and render it;
+First you have to create the context, get the Provider and render it;
 
 ```js
 class FreezerProvider extends React.Component
@@ -91,7 +93,7 @@ class FreezerProvider extends React.Component
 }
 ```
 
-and secondly we need the consumer;
+and secondly, we need the Consumer;
 
 ```js
 class FreezerConsumer extends React.Component
@@ -124,7 +126,7 @@ render((
 ), document.getElementById('app'));
 ```
 
-More realistically we would have a component inside the consumer.
+More realistically, we would have a component inside the Consumer.
 
 ```js
 class UserStatus extends React.Component
@@ -185,7 +187,7 @@ Now "UserStatus" is completely ignorant from where its data comes from. As it sh
 
 ## Integration version 02 - Updates
 
-First let us see the problem. We expect that after changing the store, our UI would update itself. This does not happen and the reason is pretty obvious. React has no idea that the "store" was updated.
+First, let us see the problem. We expect that after changing the store, our UI would update itself. This does not happen, and the reason is pretty obvious. React has no idea that the "store" was updated.
 
 ```js
 render((
@@ -224,7 +226,7 @@ Now our UI update itself automatically.
 
 ## Integration version 03 - Commands
 
-No we need more interaction. Suppose that the control starts with a "login" button, we somehow log the user and then show its name.
+Now we need more interaction. Suppose that the control starts with a "login" button, we somehow log the user and then show its name.
 
 ```js
 class UserStatus extends React.Component
@@ -292,7 +294,7 @@ Done!
 
 ## Integration version 03 - Minimizing Re-Renderings
 
-First we need to verify what would happen if we had a second Component. This Component does nothing, just log when it is rendering. We never change "someOtherData" from the "store" so we want to see just one log.
+First, we need to verify what would happen if we had a second Component. This Component does nothing, just log when it is rendering. We never change "someOtherData" from the "store", so we are expecting only one log entry.
 
 ```js
 class SomeOtherData extends React.Component
@@ -326,7 +328,7 @@ SomeOtherData.render {}
 
 Fail! We render this Component three times. Why?
 
-Well... if you remember our setup, we subscribed to every "store" update and we always pass the new "store" state to React. If we want to stop rendering needlessly there are a couple of strategies we can try.
+Well... if you remember our setup, we subscribed to every "store" update, and we always pass the new "store" state to React. If we want to stop rendering needlessly, there are a couple of strategies we can try.
 
 First: use the fact that Freezer minimized mutation on the store and use "React" method "shouldComponentUpdate". (https://reactjs.org/docs/react-component.html#shouldcomponentupdate)
 
@@ -354,17 +356,17 @@ SomeOtherData.render {}
 
 Just one render. Beautiful!
 
-Off course is not practical to do this in every Component. And perceive that I had to receive an object, a node from the "store" to compare. I want to keep my Components ignorant of "stores", even subtlies like this one.
+Off course is not practical to do this in every Component. And perceive that I had to receive an object, a node from the "store" to compare. I want to keep my Components ignorant of "stores", even subtleties like this one.
 
-The second approach is do the exactly same thing, but in other place. We can start with the Consumer.
+The second approach does the exact same thing but in another place. We can start with the Consumer.
 
 The problem is that inside the Consumer is already too late. The Provider already asked us to re-render. We are analyzing the state inside the "renderChildren", we need to return anything, we cannot abort.
 
-So let us tru inside the Provider. Is the "forceUpdate()" inside the provider that started everything. And the problem is that we are stuck in a "One Provider" for multiple "Consumers" model.
+So let us try inside the Provider. Is the "forceUpdate()" inside the Provider that started everything. And the problem is that we are stuck in a "One Provider" for multiple "Consumers" model.
 
-The question is: do we need React Context? The answer is: No!
+The question is: do we need "React Context"? The answer is: No!
 
-We can very easily solve this problem with one simple Component.
+We can very quickly solve this problem with just one simple Component.
 
 ```js
 class FreezerConnect extends React.Component
@@ -413,7 +415,7 @@ I am calling "Connect" because it is the same name of the "Redux" (https://react
 
 But, what if I want to return something that is not a "store node". For example, I want to join data.
 
-That is why We made "FreezerConnect" accepting a array on map. We can make this in two steps here: map and reduce. First we run "map" and we subscribe to all listeners (just once) and after this we "reduce" this array and pass it to its children.
+That is why We made "FreezerConnect" accepting an array on map. We can make this in two steps here: "map" and "reduce". First, we run "map", and we subscribe to all listeners (just once) and after this, we "reduce" this array and pass it to its children.
 
 ```js
 class FreezerConnect extends React.Component
@@ -465,12 +467,12 @@ class JoinUserAndSomeOhterData extends React.Component
 }
 ```
 
-Now this new Component render three times as expected:
+Now, this new Component renders three times as expected:
 1 - First time;
 2 - When we change the user to isLoading=true;
 3 - When we change the user to name = "Daniel";
 
-And the "SomeOtherData" is rendered just once, because we nerver change it. Not bad.
+And the "SomeOtherData" is rendered just once because we never change it. Not bad.
 
 Result:
 ```
@@ -481,7 +483,7 @@ JoinUserAndSomeOhterData.render {user: {…}, someOtherData: {…}}
 
 ## Integration version 04 - Store Location
 
-We still have one problem. We are still getting the store using closure. The easiest approach is, off course, to pass it using props.
+We still have one problem. We are still getting the store using a closure. The most natural approach is, off course, to pass it using props.
 
 ```js
 class FreezerConnect extends React.Component
@@ -515,7 +517,7 @@ render((
 
 ## Integration version 05 - Better Emit
 
-To be honest our emit is easy to use, but I still think we can do better.
+To be honest, our emit is easy to use, but I still think we can do better.
 
 Let us remember how we are doing it.
 
@@ -536,7 +538,7 @@ class UserStatus extends React.Component
 }
 ```
 
-What we are doing here is creating a new function every time we render this component (https://reactjs.org/docs/faq-functions.html#arrow-function-in-render). Not ideal, but it is the easiest way to bind event handlers.
+What we are doing here is creating a new function every time we render this Component (https://reactjs.org/docs/faq-functions.html#arrow-function-in-render). Not ideal, but it is the easiest way to bind event handlers.
 
 But this code has two bad traits:
 1 - It points directly to the store;
@@ -544,7 +546,7 @@ But this code has two bad traits:
 
 Again, we want our components to be as ignorant as possible from "stores". So let us try to improve this.
 
-First we will just extract this to a new method:
+First, we will just extract this to a new method:
 
 ```js
 function emit(type, e)
@@ -572,7 +574,7 @@ Our use is already simpler. If we make the "emit" function magically find the "s
 
 Let us swap to the second one.
 
-We want our login event to be "props-acessible". One easy way is to make the emit search and call the callback on "this.props". All we need to do is:
+We want our login event to be "props-acessible". One easy way is to make the "emit" search and call the callback on "this.props". All we need to do is:
 
 ```js
 function emit(props, type, e)
@@ -680,17 +682,17 @@ render((
 ), document.getElementById('app'));
 ```
 
-Now, if we pass a function we call it. If we pass a store, we "emit" the event.
+Now, if we pass a function, we call it. If we pass a store, we "emit" the event.
 
 ## Integration version 06 - Store of Stores
 
-This is a polemic one. It is not hard to find guides saying never use multiple stores. It is even easier to find guides saying never touch the "window".
+This is a polemic one. It is not hard to find guides saying never to use multiple stores. It is even easier to find guides saying never to touch the "window".
 
-Here we are going to break both rules. This will allow a easier convention that will make the code easier. Use it judiciously.
+Here we are going to break both rules. This will allow an easier convention that will make the code easier. Use it judiciously.
 
-We have "store={store}" in a lot of places. And the vast majority of applications only have one store. So why not use the good-or-bad singleton pattern here. In my experience singletons tend to cause less problems in single-user applications.
+We have "store={store}" in a lot of places. And the vast majority of applications only have one store. So why not use the good-or-bad singleton pattern here. In my experience, singletons tend to cause fewer problems in single-user applications.
 
-We will store out store inside "window.stores".
+We will store our store inside "window.stores".
 
 ```js
 window.stores = {
@@ -698,7 +700,7 @@ window.stores = {
 };
 ```
 
-And in everyplace that we need a store, we use the one provided or we search there the named passed. This allows us the remove a lot of "store={store}". 
+And in every place that we need a store, we use the one provided, or we search there the named passed. This allows us the remove a lot of "store={store}". 
 
 ```js
 class FreezerConnect extends React.Component
@@ -747,7 +749,7 @@ This one is also a polemic one. People in the React world tend to avoid DOM even
 
 But here we will use the DOM Event bubbling and use the DOM root as a global listener. See more at "3.1. Event dispatch and DOM event flow" at https://www.w3.org/TR/DOM-Level-3-Events.
 
-To achieve this we will change a little bit our emit. Now we basically
+To achieve this, we will change a little bit our emit. Now we basically
 1 - search for an emit method. Call it, if found;
 2 - otherwise call it, if it is a function;
 3 - we dispatch the event with "bubbles" enabled.
@@ -807,9 +809,9 @@ class FreezerConnect extends React.Component
 }
 ```
 
-This allow us to "hear" all events. We can choose a better node, instead of the DOM root, but our "FreezerConnect" does not generate any DOM node. Something fixable in the future. For now it works.
+This allows us to "hear" all events. We can choose a better node, instead of the DOM root, but our "FreezerConnect" does not generate any DOM node. Something fixable in the future. For now, it works.
 
-This allow us to do:
+This allows us to do:
 
 ```js
 render((
@@ -890,3 +892,17 @@ class FreezerConnect extends React.Component
 }
 ```
 
+# Improvements
+
+1 - Unregister Freezer callbacks with "off";  
+2 - New Component just for events;  
+  - Create DOM Node when node=true;  
+  - Stop event propagation when stopPropagation=true;  
+  - Events could also be a array instead of comma separated string;
+  - Each event can have its stopPropagation config;
+  
+3 - Improve map/reduce. "map" should return an object instead of an array. This will make the Identity reduce more useful;  
+4 - Not totally related but standard methods to organize the store;
+  - addDataTable: normalize json array to data table like schema;
+  - addConfig: general Component config with tree inheretance;
+  - addTask: admin promises like redux-thunk and redux-saga.
