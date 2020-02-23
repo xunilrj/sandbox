@@ -829,4 +829,64 @@ render((
 ), document.getElementById('app'));
 ```
 
+## Final FreezerConnect
+
+```js
+class FreezerConnect extends React.Component
+{
+  getStore()
+  {
+    let store = this.props.store;
+    if ((!store) || (typeof store === 'string' || store instanceof String))
+        if(window && window.stores)
+          store = window.stores[store || "default"];
+    return store;
+  }
+
+  getMapped()
+  {
+    const store = this.getStore();
+    const state = store.get();
+    const map = this.props.map || ((x) => x);
+    return map(state);
+  }
+
+  getReduced()
+  {
+    const state = this.getMapped();
+    const reduce = this.props.reduce || ((x) => x);
+    return reduce(state);
+  }
+
+  componentDidMount()
+  {
+    const state = this.getMapped();
+    if(!Array.isArray(state)) state = [state];
+    state.forEach(x => {
+      if(x.getListener)
+        x.getListener().on("update", () => this.forceUpdate());
+    });
+
+    if(this.props.events)
+    {
+      const events = this.props.events.split(",");
+      events.forEach(x => {
+        window.document.addEventListener(x, e => {
+          const store = this.getStore();
+          if(store && store.emit)
+            store.emit(e.type, e.detail);
+        });
+      });
+    }
+  }
+
+  render()
+  {
+    const state = this.getReduced();    
+    let children = this.props.children;
+    if(children) children = React.cloneElement(children, state);
+    return children;
+  }
+}
+```
 
