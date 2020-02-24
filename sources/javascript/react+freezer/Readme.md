@@ -1070,7 +1070,3 @@ render((
   - addDataTable: normalize json array to data table like schema;
   - addConfig: general Component config with tree inheretance;
   - addTask: admin promises like redux-thunk and redux-saga.
-
-5 - Make this work with preact/InfernoJS and plain hyperscrit
-
-6-  
