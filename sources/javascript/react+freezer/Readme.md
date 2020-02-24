@@ -831,9 +831,23 @@ render((
 ), document.getElementById('app'));
 ```
 
-## Final FreezerConnect
+## Final Code
 
 ```js
+function emit(props, type, detail, options)
+{
+  const {emit = true, dispatch = true} = options || {};
+  const f = props[type];
+  const event = new CustomEvent(type, { bubbles: true, detail });
+  return e =>
+  {
+    if(emit && f && f.emit) f.emit(type, detail);
+    else if(typeof f === "function") f(detail);
+    if(dispatch && e && e.target && e.target.dispatchEvent)
+      e.target.dispatchEvent(event);
+  } 
+}
+
 class FreezerConnect extends React.Component
 {
   getStore()
@@ -892,6 +906,156 @@ class FreezerConnect extends React.Component
 }
 ```
 
+# Adapting it to Preact
+
+Preact is a lightweight version of React and has everything we need. The advantage can be better seen when you compare React+ReactDOM to Preact.
+
+https://bundlephobia.com/scan-results?packages=freezer-js@0.14.1,react@16.12.0,react-dom@16.12.0
+
+
+```
+freezer-js 3.6 kB MIN + GZIP
+react 2.6 kB MIN + GZIP
+react-dom  36.2 kB MIN + GZIP
+TOTAL 42.4 kB MIN + GZIP
+```
+
+versus
+
+```
+freezer-js 3.6 kB MIN + GZIP
+preact 3.7 kB MIN + GZIP
+TOTAL 7.3 kB MIN + GZIP
+```
+
+The adaptation is very simple. Just remove "React" in front of everything.
+
+
+```js
+/** @jsx h */
+
+import Freezer from 'freezer-js';
+import {render, h, Component, cloneElement} from 'preact';
+
+let store = new Freezer({user:{name:"Daniel"}, someOtherData:{}});
+window.stores = { default: store };
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+store.on("login", async ({name,password}) => {  
+  store.get().user.reset({isLoading: true});
+  await sleep(2000);
+  store.get().user.reset({isAuthenticated: true, name});
+});
+
+function emit(props, type, detail, options)
+{
+  const {emit = true, dispatch = true} = options || {};
+  const f = props[type];
+  const event = new CustomEvent(type, { bubbles: true, detail });
+  return e =>
+  {
+    if(emit && f && f.emit) f.emit(type, detail);
+    else if(typeof f === "function") f(detail);
+    if(dispatch && e && e.target && e.target.dispatchEvent)
+      e.target.dispatchEvent(event);
+  } 
+}
+
+class FreezerConnect extends Component
+{
+  getStore()
+  {
+    let store = this.props.store;
+    if ((!store) || (typeof store === 'string' || store instanceof String))
+        if(window && window.stores)
+          store = window.stores[store || "default"];
+    return store;
+  }
+
+  getMapped()
+  {
+    const store = this.getStore();
+    const state = store.get();
+    const map = this.props.map || ((x) => x);
+    return map(state);
+  }
+
+  getReduced()
+  {
+    const state = this.getMapped();
+    const reduce = this.props.reduce || ((x) => x);
+    return reduce(state);
+  }
+
+  componentDidMount()
+  {
+    const state = this.getMapped();
+    if(!Array.isArray(state)) state = [state];
+    state.forEach(x => {
+      if(x.getListener)
+        x.getListener().on("update", () => this.forceUpdate());
+    });
+
+    if(this.props.events)
+    {
+      const events = this.props.events.split(",");
+      events.forEach(x => {
+        window.document.addEventListener(x, e => {
+          const store = this.getStore();
+          if(store && store.emit)
+            store.emit(e.type, e.detail);
+        });
+      });
+    }
+  }
+
+  render()
+  {
+    const state = this.getReduced();    
+    let children = this.props.children;
+    if(children) children = cloneElement(children, state);
+    return children;
+  }
+}
+
+class UserStatus extends Component
+{
+  render()
+  {
+    const {isLoading, isAuthenticated, name} = this.props;
+    const loginEvent = {name:"daniel",password:"12345"};
+
+    if(isLoading) return <div>...</div>;
+    if(!isAuthenticated)
+      return <button onClick={x=> store.emit("login",loginEvent)}>Login</button>
+    else
+      return <div>{name}</div>
+  }
+}
+
+class SomeOtherData extends Component
+{
+  render()
+  {
+    console.log("SomeOtherData.render", this.props.someOtherData);
+    return <div>someOtherData</div>;
+  }
+}
+
+render((
+  <div>
+    <FreezerConnect map={x => x.user} events="login">
+      <UserStatus/>
+    </FreezerConnect>
+    <FreezerConnect map={x => x.someOtherData}>
+      <SomeOtherData/>
+    </FreezerConnect>
+  </div>
+), document.getElementById('app'));
+```
+
 # Improvements
 
 1 - Unregister Freezer callbacks with "off";  
@@ -907,4 +1071,6 @@ class FreezerConnect extends React.Component
   - addConfig: general Component config with tree inheretance;
   - addTask: admin promises like redux-thunk and redux-saga.
 
-5 - Make this work with preact/InfernoJS and plain hyperscript.
+5 - Make this work with preact/InfernoJS and plain hyperscrit
+
+6-  
