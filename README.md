@@ -96,6 +96,11 @@
 [WASM presentation](https://xunilrj.github.io/articles/dev/wasm001/WASM.htm)  
 [WASM presentation - PT/BR](https://www.youtube.com/watch?v=YYeqRMqn774)
 
+## Architectures
+
+### Frontend
+
+[React + Freezer](sources/javascript/react+freezer)  
 
 # Stackoverflow Answers
 ## C# and .NET
