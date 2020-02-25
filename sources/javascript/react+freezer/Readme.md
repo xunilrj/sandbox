@@ -1083,7 +1083,7 @@ becomes
 console.log(h('button'));
 ```
 
-With this in mind we can now extract the core of the FreezerConnect as
+With this in mind we can now extract the core of the "FreezerConnect" as:
 
 ```js
 function emit(type, detail, options)
@@ -1121,7 +1121,7 @@ function render(element, store, fnode, f)
 }
 ```
 
-We can wire these functions to our DOM with
+We can wire these functions to our DOM with:
 
 ```js
 const element = document.getElementById('app');
