@@ -57,20 +57,27 @@
 ### Linux
 [Linux Kernel Development](sources/unix/moddev/readme.md)    
 
-### C/C++
+### Languages
+
+#### C/C++
 [C++ Index](sources/cpp/readme.md)  
 [C++ Coroutines (even for WebAssembly)](sources/cpp/coroutines/)  
 [Command line Debugging](sources/cpp/CommandLineDebug.md)  
 [Cache LRU](sources/cpp/lru)
 
-### Rust
+#### Rust
 [Generational Index](sources/rust/generational_index)
 
-### R
+#### R
 [Realtime London Underground Position](https://rstudio-pubs-static.s3.amazonaws.com/269780_73750785d8c04f9e968287701e22af30.html)
 
-### WebAssembly
-#### WebAssembly Series
+#### Javascript
+
+[React + Freezer](sources/javascript/react+freezer)  
+
+#### WebAssembly
+
+##### WebAssembly Series
 [Index](/sources/webassembly)  
 
 01 - [WebAssembly with C/C++](/sources/webassembly/wasm.001.md) 
@@ -95,12 +102,6 @@
 
 [WASM presentation](https://xunilrj.github.io/articles/dev/wasm001/WASM.htm)  
 [WASM presentation - PT/BR](https://www.youtube.com/watch?v=YYeqRMqn774)
-
-## Architectures
-
-### Frontend
-
-[React + Freezer](sources/javascript/react+freezer)  
 
 # Stackoverflow Answers
 ## C# and .NET
