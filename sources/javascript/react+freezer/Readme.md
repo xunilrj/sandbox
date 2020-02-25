@@ -1056,6 +1056,101 @@ render((
 ), document.getElementById('app'));
 ```
 
+# Adapting it to hyperscript
+
+We can go even lower and use Freezer directly with hyperscript (https://github.com/hyperhype/hyperscript). "hyperscript" is much less known, it a simple method of creating DOM elements.
+
+```js
+const el1 = document.createElement('div');
+const el2 = h('div');
+```
+
+The magic is that we can control how a JS transpiler treats the JSX syntax with
+
+```js
+/** @jsx h */
+```
+
+So
+
+```js
+console.log(<button />);
+```
+
+becomes 
+
+```js
+console.log(h('button'));
+```
+
+With this in mind we can now extract the core of the FreezerConnect as
+
+```js
+function emit(type, detail, options)
+{
+  const {emit = true, dispatch = true} = options || {};
+  const event = new CustomEvent(type, { bubbles: true, detail });
+  return e =>
+  {
+    if(dispatch && e && e.target && e.target.dispatchEvent)
+      e.target.dispatchEvent(event);
+  } 
+}
+
+function addEventListener(element, store, events)
+{
+  if(!Array.isArray(events)) events = [events];
+  events.forEach(x => {
+    element.addEventListener(x, e => {
+      if(store && store.emit)
+        store.emit(e.type, e.detail);
+    });
+  });
+}
+
+function render(element, store, fnode, f)
+{
+  const update = () => {
+    const node = fnode(store.get());
+    element.innerHTML = "";
+    element.append(f(node));
+  }
+  const node = fnode(store.get());
+  node.getListener().on("update", update);
+  update();
+}
+```
+
+We can wire these functions to our DOM with
+
+```js
+const element = document.getElementById('app');
+addEventListener(element, store, ["login"]);
+render(element, store, x => x.user, UserStatus);
+```
+
+Our React/Preact component become:
+
+```js
+function UserStatus({isLoading, isAuthenticated, name})
+{
+  const loginEvent = {name:"daniel",password:"12345"};
+  if(isLoading) return <div>...</div>;
+  if(!isAuthenticated)
+    return <button onclick={emit("login", loginEvent)}>Login</button>
+  else
+    return <div>{name}</div>
+}
+```
+
+Hyperscript is even smaller then Preact. Is it worthy? That is up to you.
+
+```
+freezer-js 3.6 kB MIN + GZIP
+hyperscript 1.6 kB MIN + GZIP
+TOTAL 5.2 kB MIN + GZIP
+```
+
 # Improvements
 
 1 - Unregister Freezer callbacks with "off";  
