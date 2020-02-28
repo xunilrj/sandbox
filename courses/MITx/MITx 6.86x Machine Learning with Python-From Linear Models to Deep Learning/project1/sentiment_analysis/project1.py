@@ -59,7 +59,6 @@ def hinge_loss_full(feature_matrix, labels, theta, theta_0):
     given dataset and parameters. This number should be the average hinge
     loss across all of the points in the feature matrix.
     """
-    print(feature_matrix, labels, theta, theta_0)
     r = 1 - (labels * (np.matmul(feature_matrix, theta) + theta_0))
     r = np.maximum(0, r);
     return np.average(r)    
@@ -89,8 +88,11 @@ def perceptron_single_step_update(
     real valued number with the value of theta_0 after the current updated has
     completed.
     """
-    # Your code here
-    raise NotImplementedError
+    d = label * (np.dot(feature_vector, current_theta) + current_theta_0)
+    if(d > 0.001):
+        return (current_theta, current_theta_0)
+    else:
+        return (current_theta + label*feature_vector, current_theta_0 + label)
 #pragma: coderesponse end
 
 
@@ -120,12 +122,13 @@ def perceptron(feature_matrix, labels, T):
     theta_0, the offset classification parameter, after T iterations through
     the feature matrix.
     """
-    # Your code here
+    #print("np.array(", feature_matrix.tolist(), "); np.array(", labels.tolist(), ")", T)
+    theta = np.zeros(feature_matrix.shape[1])
+    t0 = 0
     for t in range(T):
         for i in get_order(feature_matrix.shape[0]):
-            # Your code here
-            pass
-    raise NotImplementedError
+            theta,t0 = perceptron_single_step_update(feature_matrix[i,:], labels[i], theta, t0)
+    return (theta,t0)
 #pragma: coderesponse end
 
 
@@ -159,8 +162,15 @@ def average_perceptron(feature_matrix, labels, T):
     Hint: It is difficult to keep a running average; however, it is simple to
     find a sum and divide.
     """
-    # Your code here
-    raise NotImplementedError
+    stheta, st0 = np.zeros(feature_matrix.shape[1]), 0
+    theta, t0 = np.zeros(feature_matrix.shape[1]), 0
+    n = feature_matrix.shape[0]
+    for t in range(T):
+        for i in get_order(n):
+            theta, t0 = perceptron_single_step_update(feature_matrix[i,:], labels[i], theta, t0)
+            stheta += theta
+            st0 += t0
+    return (stheta / (T*n), st0 / (T*n))
 #pragma: coderesponse end
 
 
@@ -191,8 +201,12 @@ def pegasos_single_step_update(
     real valued number with the value of theta_0 after the current updated has
     completed.
     """
-    # Your code here
-    raise NotImplementedError
+    d = label * (np.dot(feature_vector, current_theta) + current_theta_0)
+    current_theta = (1 - eta * L) * current_theta 
+    if(d <= 1.000001):
+        current_theta += eta * label * feature_vector
+        current_theta_0 += eta * label
+    return (current_theta, current_theta_0)
 #pragma: coderesponse end
 
 
@@ -226,8 +240,17 @@ def pegasos(feature_matrix, labels, T, L):
     number with the value of the theta_0, the offset classification
     parameter, found after T iterations through the feature matrix.
     """
-    # Your code here
-    raise NotImplementedError
+    theta, t0 = np.zeros(feature_matrix.shape[1]), 0
+    n = feature_matrix.shape[0]
+    tt = 1.0
+    for t in range(T):
+        for i in get_order(n):
+            theta, t0 = pegasos_single_step_update(
+                feature_matrix[i,:], labels[i],
+                L, 1.0/np.sqrt(tt),
+                theta, t0)
+            tt += 1
+    return (theta, t0)
 #pragma: coderesponse end
 
 # Part II
@@ -251,8 +274,8 @@ def classify(feature_matrix, theta, theta_0):
     given theta and theta_0. If a prediction is GREATER THAN zero, it should
     be considered a positive classification.
     """
-    # Your code here
-    raise NotImplementedError
+    d = np.dot(feature_matrix, theta) + theta_0
+    return np.vectorize(lambda v: -1 if v < 0.0001 else 1)(d)
 #pragma: coderesponse end
 
 
@@ -289,8 +312,10 @@ def classifier_accuracy(
     trained classifier on the training data and the second element is the
     accuracy of the trained classifier on the validation data.
     """
-    # Your code here
-    raise NotImplementedError
+    theta, t0 = classifier(train_feature_matrix, train_labels, **kwargs)
+    rt = classify(train_feature_matrix, theta, t0)
+    rv = classify(val_feature_matrix, theta, t0)
+    return (accuracy(rt, train_labels), accuracy(rv, val_labels))
 #pragma: coderesponse end
 
 
@@ -310,19 +335,22 @@ def extract_words(input_string):
 
 
 #pragma: coderesponse template
-def bag_of_words(texts):
+def bag_of_words(texts, stopwords = None):
     """
     Inputs a list of string reviews
     Returns a dictionary of unique unigrams occurring over the input
 
     Feel free to change this code as guided by Problem 9
     """
-    # Your code here
+    if(stopwords is None):
+        with open('stopwords.txt') as file:
+            stopwords = [line.rstrip('\n') for line in file]
+    stopwords = set(stopwords)
     dictionary = {} # maps word to unique index
     for text in texts:
         word_list = extract_words(text)
         for word in word_list:
-            if word not in dictionary:
+            if (word not in dictionary) and (word not in stopwords):
                 dictionary[word] = len(dictionary)
     return dictionary
 #pragma: coderesponse end
@@ -339,8 +367,6 @@ def extract_bow_feature_vectors(reviews, dictionary):
 
     Feel free to change this code as guided by Problem 9
     """
-    # Your code here
-
     num_reviews = len(reviews)
     feature_matrix = np.zeros([num_reviews, len(dictionary)])
 
@@ -348,7 +374,8 @@ def extract_bow_feature_vectors(reviews, dictionary):
         word_list = extract_words(text)
         for word in word_list:
             if word in dictionary:
-                feature_matrix[i, dictionary[word]] = 1
+                #feature_matrix[i, dictionary[word]] =  1 #give  better results
+                feature_matrix[i, dictionary[word]] = feature_matrix[i, dictionary[word]] + 1
     return feature_matrix
 #pragma: coderesponse end
 
