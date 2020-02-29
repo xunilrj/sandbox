@@ -13,16 +13,15 @@ Implementation of the book "3D Math Primer for Graphics and Game Development"
 ## Roadmap
 
 [x] 2.3 Specifying Vectors with Cartesian Coordinates 
-[] 2.4 Vectors versus Points 
-[] 2.5 Negating a Vector 
-[] 2.6 Vector Multiplication by a Scalar 
-[] 2.7 Vector Addition and Subtraction 
-[] 2.8 Vector Magnitude (Length) 
-[] 2.9 Unit Vectors 
-[] 2.10 The Distance Formula 
-[] 2.11 Vector Dot Product 
-[] 2.12 Vector Cross Product 
-[] 2.13 Linear Algebra Identities 
+[x] 2.5 Negating a Vector 
+[x] 2.6 Vector Multiplication by a Scalar 
+[x] 2.7 Vector Addition and Subtraction 
+[x] 2.8 Vector Magnitude (Length) 
+[x] 2.9 Unit Vectors 
+[x] 2.10 The Distance Formula 
+[x] 2.11 Vector Dot Product 
+[x] 2.12 Vector Cross Product 
+[x] 2.13 Linear Algebra Identities 
 
 [] 3 Multiple Coordinate Spaces
 [] 3.1 Why Bother with Multiple Coordinate Spaces? 

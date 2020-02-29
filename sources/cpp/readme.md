@@ -67,3 +67,9 @@ http://ithare.com/infographics-operation-costs-in-cpu-clock-cycles/
 https://gcc.gnu.org/onlinedocs/gcc/Other-Builtins.html#index-g_t_005f_005fbuiltin_005fexpect-4159  
 https://stackoverflow.com/questions/7346929/what-is-the-advantage-of-gccs-builtin-expect-in-if-else-statements#7347175  
 https://stackoverflow.com/questions/109710/how-do-the-likely-and-unlikely-macros-in-the-linux-kernel-work-and-what-is-t  
+
+
+# Good links
+
+https://kennykerr.ca/articles/  
+https://docs.microsoft.com/en-us%5Carchive%5Cmsdn-magazine%5Cauthors%5CKenny_Kerr
