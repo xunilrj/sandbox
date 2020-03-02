@@ -46,3 +46,6 @@ wget https://github.com/catchorg/Catch2/releases/download/v2.11.1/catch.hpp -Out
 wget https://raw.githubusercontent.com/catchorg/Catch2/ac94bd05209d6dffb6aa7cb9750cfc45cbc4ac72/contrib/Catch.cmake -OutFile Catch.cmake
 wget https://raw.githubusercontent.com/catchorg/Catch2/ac94bd05209d6dffb6aa7cb9750cfc45cbc4ac72/contrib/CatchAddTests.cmake -OutFile CatchAddTests.cmake
 wget https://raw.githubusercontent.com/xunilrj/sandbox/master/sources/cpp/catch/ReferenceTests.runsettings -OutFile ReferenceTests.runsettings
+
+#TODO: organize test folder and project
+wget "https://minhaskamal.github.io/DownGit/#/home?url=https:%2F%2Fgithub.com%2Fthejohnfreeman%2Fautocheck%2Ftree%2Fmaster%2Finclude%2Fautocheck" -OutFile autocheck.zip
