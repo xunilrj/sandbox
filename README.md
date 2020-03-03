@@ -63,7 +63,7 @@
 [C++ Index](sources/cpp/readme.md)  
 [C++ Coroutines (even for WebAssembly)](sources/cpp/coroutines/)  
 [Command line Debugging](sources/cpp/CommandLineDebug.md)  
-[Cache LRU](sources/cpp/lru)
+[Cache LRU](sources/cpp/lru)  
 [Functional (Curry,Partial Apply and Pipeline)](./sorces/cpp/func)
 
 #### Rust
