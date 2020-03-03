@@ -1,0 +1,5 @@
+@baseUrl = http://localhost:3005
+
+###
+GET {{baseUrl}} HTTP/1.1
+X-App-Config: {"IAppService.getHello":["log"]}
