@@ -3,7 +3,7 @@
 #include <algorithm>
 #include <cmath>
 #include <numeric>
-
+#include <array>
 #include <ostream>
 
 namespace math
@@ -37,10 +37,10 @@ namespace math
         f32() : value{ 0 } {}
         f32(const float v) : value{ v } {}
 
-        f32 operator - (const float v) const { return { value - v }; }
-        f32 operator + (const float v) const { return { value + v }; }
-        f32 operator * (const float v) const { return { value * v }; }
-        f32 operator / (const float v) const { return { value / v }; }
+        template <typename TNumber> f32 operator - (const TNumber v) const { return { value - v }; }
+        template <typename TNumber> f32 operator + (const TNumber v) const { return { value + v }; }
+        template <typename TNumber> f32 operator * (const TNumber v) const { return { value * v }; }
+        template <typename TNumber> f32 operator / (const TNumber v) const { return { value / v }; }
 
         bool operator == (const f32 b) const { return AbsoluteRelativeComparison::equals(value, b.value); }
 
@@ -74,78 +74,126 @@ namespace math
         return out << v.value;
     }
 
-    template <size_t D, typename T = f32> struct named_store { T data[D]; };
+
+    template <size_t D, typename T = float> struct named_store { T data[D]; };
     template <typename T> struct named_store<2, T> { union { T data[2]; struct { T x, y; }; }; };
     template <typename T> struct named_store<3, T> { union { T data[3]; struct { T x, y, z; }; }; };
     template <typename T> struct named_store<4, T> { union { T data[4]; struct { T x, y, z, w; }; }; };
 
-    template <size_t D, typename T = f32, typename... TMixings>
-    struct base_vector : public named_store<D, T>, public TMixings...
+    template<typename T>
+    using EnableIfArithmetic = std::enable_if_t<std::is_arithmetic_v<T>>;
+
+    template <typename TStore, typename Types, typename Indices>
+    struct base_vector {};
+
+    template <
+        typename T,
+        typename... Ts,
+        size_t... Is>
+    struct base_vector<T, std::tuple<Ts...>, std::index_sequence<Is...>>
+        : public named_store<sizeof...(Ts), T>
     {
-        template <typename TT>
-        using TME = base_vector<D, TT, TMixings...>;
+        using TVECTOR = base_vector<T, std::tuple<Ts...>, std::index_sequence<Is...>>;
 
-        static TME<T> zero()
+        static TVECTOR zero() { return { static_cast<Ts>(0)... }; }
+
+        auto operator == (const TVECTOR& r) const
         {
-            auto r = TME{};
-            r.data = { 0 };
-            return r;
+            return ((this->data[Is] == r.data[Is]) && ...);
         }
 
-        template <typename... TArgs>
-        base_vector(TArgs... args) : named_store<D, T>{ static_cast<T>(args)... }
+        base_vector(const Ts&&... args) : named_store<sizeof...(Ts), T>{ static_cast<T>(args)... }
         {
         }
 
-        constexpr T& operator [] (size_t i)
-        {
-            //static_assert (i < 2); // waiting http://open-std.org/JTC1/SC22/WG21/docs/papers/2019/p1045r1.html
-            return this->data[i];
-        }
-
-        constexpr const T& operator [] (size_t i) const
-        {
-            //static_assert (i < 2); // waiting http://open-std.org/JTC1/SC22/WG21/docs/papers/2019/p1045r1.html
-            return this->data[i];
-        }
+        T& operator [] (size_t i) { return this->data[i]; }
+        const T& operator [] (size_t i) const { return this->data[i]; }
 
         template <size_t DNORM = 2> T norm2() const { return 0; /*TODO*/ }
-        template <> T norm2<2>() const { T r = 0; for (auto i = 0; i < D; ++i) { r += this->data[i] * this->data[i]; } return r; }
+        template <> T norm2<2>() const
+        {
+            return ((this->data[Is] * this->data[Is]) + ...);
+        }
 
         template <size_t DNORM = 2> T norm() const { return 0; /*TODO*/ }
-        template <> T norm<2>() const { return std::sqrt(norm2<2>()); }
-
-        template <size_t DNORM = 2> TME<T>& normalize() { return (*this) /= norm<DNORM>(); }
-        template <size_t DNORM = 2> TME<T> normalized() const { auto v = *this; return v.template normalize<DNORM>(); }
-
-        template <typename TNumber> bool operator == (const TME<TNumber>& b) const
+        template <> T norm<2>() const
         {
-            auto r = true;
-            for (auto i = 0; i < D; ++i)
-                r &= this->data[i] == b.data[i];
-            return r;
+            return std::sqrt(norm2<2>());
         }
 
-        TME<T> operator -() const { auto r = TME<T>{}; for (auto i = 0; i < D; ++i) { r.data[i] = this->data[i] * -1.0f; } return r; }
-
-        template <typename TNumber> TME<T> operator *(const TNumber f) const { auto r = TME<T>{ 0 }; for (auto i = 0; i < D; ++i) { r.data[i] = f * this->data[i]; } return r; }
-        template <typename TNumber> TME<T> operator /(const TNumber f) const { auto r = TME<T>{ 0 }; for (auto i = 0; i < D; ++i) { r.data[i] = f / this->data[i]; } return r; }
-        template <typename TNumber> TME<T>& operator *=(const TNumber f) { for (auto i = 0; i < D; ++i) { this->data[i] *= f; } return *this; }
-        template <typename TNumber> TME<T>& operator /=(const TNumber f) { for (auto i = 0; i < D; ++i) { this->data[i] /= f; } return *this; }
-
-        template <typename TNumber> TME<T> operator + (const TME<TNumber>& b) const { auto r = TME<T>{ 0 }; for (auto i = 0; i < D; ++i) { r.data[i] = this->data[i] + b.data[i]; } return r; }
-        template <typename TNumber> TME<T> operator - (const TME<TNumber>& b) const { auto r = TME<T>{ 0 }; for (auto i = 0; i < D; ++i) { r.data[i] = this->data[i] - b.data[i]; } return r; }
-        template <typename TNumber> TME<T>& operator +=(const TME<TNumber>& b) { for (auto i = 0; i < D; ++i) { this->data[i] += b.data[i]; } return *this; }
-        template <typename TNumber> TME<T>& operator -=(const TME<TNumber>& b) { for (auto i = 0; i < D; ++i) { this->data[i] -= b.data[i]; } return *this; }
-
-        template <typename TNumber> T operator *(const TME<TNumber>& b) const { return dot(b); }
-        template <typename TNumber> T dot(const TME<TNumber>& b) const
+        template <size_t DNORM = 2> TVECTOR& normalize()
         {
-            T r = 0; for (auto i = 0; i < D; ++i) { r += this->data[i] * b.data[i]; } return r;
+            auto n = norm<DNORM>();
+            ((this->data[Is] /= n),... );
+            return *this;
+        }
+        template <size_t DNORM = 2> TVECTOR normalized() const
+        {
+            auto n = norm<DNORM>();
+            return {this->data[Is] / n...};
         }
 
-        template <typename = typename std::enable_if<D == 3>::type>
-        TME<T> operator % (const base_vector<3, T, TMixings...>& b) const
+        TVECTOR operator -() const
+        {
+            return { -this->data[Is]... };
+        }
+
+        template <typename TNumber, typename = EnableIfArithmetic<TNumber>>
+        TVECTOR operator *(const TNumber& f) const
+        {
+            return { this->data[Is] * f... };
+        }
+
+        template <typename TNumber, typename = EnableIfArithmetic<TNumber>>
+        TVECTOR operator /(const TNumber f) const
+        {
+            return { this->data[Is] / f... };
+        }
+
+        template <typename TNumber, typename = EnableIfArithmetic<TNumber>>
+        TVECTOR operator *=(const TNumber f)
+        {
+            ((this->data[Is] *= f), ...);
+            return *this;
+        }
+
+        template <typename TNumber, typename = EnableIfArithmetic<TNumber>>
+        TVECTOR operator /=(const TNumber f)
+        {
+            ((this->data[Is] /= f), ...);
+            return *this;
+        }
+
+        TVECTOR operator +(const TVECTOR& r) const
+        {
+            return { this->data[Is] + r.data[Is]... };
+        }
+
+        TVECTOR operator -(const TVECTOR& r) const
+        {
+            return { this->data[Is] - r.data[Is]... };
+        }
+
+        TVECTOR& operator +=(const TVECTOR& r)
+        {
+            ((this->data[Is] += r.data[Is]), ...);
+            return *this;
+        }
+
+        TVECTOR& operator -=(const TVECTOR& r)
+        {
+            ((this->data[Is] -= r.data[Is]), ...);
+            return *this;
+        }
+
+        T operator * (const TVECTOR& r) const { return dot(r); }
+        T dot(const TVECTOR& r) const
+        {
+            return ((this->data[Is] * r.data[Is]) + ...);
+        }
+
+        template<size_t D = sizeof...(Ts), typename = std::enable_if_t<D == 3>>
+        TVECTOR operator % (const TVECTOR& b) const
         {
             return {
                 this->y * b.z - this->z * b.y,
@@ -153,67 +201,59 @@ namespace math
                 this->x * b.y - this->y * b.x
             };
         }
+
+        template <typename TAny>
+        auto ltimes (const TAny& l) const { return (*this) * l; }
     };
 
-    struct no_mixin {};
+    template <
+        typename TNumber,
+        typename T,
+        typename... Ts,
+        size_t... Is>
+    auto operator * (const TNumber& l, const base_vector<T, std::tuple<Ts...>, std::index_sequence<Is...>>& r)
+    {
+        return r.ltimes(l);
+    }
 
-    #ifndef DEFAULT_TRAITS
-        #define DEFAULT_TRAITS no_mixin
+    template <typename T, size_t N>
+    class make_tuple
+    {
+        template<size_t> using T_ = T;
+        template<size_t... Is> static auto gen(std::index_sequence<Is...>) { return std::tuple<T_<Is>...>{}; }
+        static auto gen() { return gen(std::make_index_sequence<N>{}); }
+    public:
+        using type = decltype(gen());
+    };
+    template <typename T, size_t N>
+    using make_tuple_t = typename make_tuple<T, N>::type;
+
+    template <typename T, size_t D>
+    using vector = base_vector<T,
+        make_tuple_t<T,D>,
+        std::make_index_sequence<D>>;
+
+
+    #ifndef DEFAULT_TYPE
+        #define DEFAULT_TYPE f32
     #endif
 
-    template <size_t D, typename T>
-    using vector = base_vector<D, T, DEFAULT_TRAITS>;
+    using vec2 = vector<DEFAULT_TYPE, 2>;
+    using vec3 = vector<DEFAULT_TYPE, 3>;
+    using vec4 = vector<DEFAULT_TYPE, 4>;
 
-    template <size_t D, typename T> 
-    vector<D, T> operator *(int f, const vector<D, T>& v) { return v * f; }
-    template <size_t D, typename T> 
-    vector<D, T> operator *(float f, const vector<D, T>& v) { return v * f; }
+    template <size_t D, typename T = DEFAULT_TYPE>
+    constexpr auto zeros() { return vector<T, D>::zero(); }
 
-    using vec2 = vector<2, f32>;
-    using vec3 = vector<3, f32>;
-    using vec4 = vector<4, f32>;
 
-    using dvec2 = vector<2, double>;
-    using dvec3 = vector<3, double>;
-    using dvec4 = vector<4, double>;
-
-    template <size_t D, typename T = float>
-    constexpr auto zeros()
+    template <size_t DNORM = 2, 
+        typename T,
+        typename... Ts,
+        size_t... Is>
+    auto dist(
+        const base_vector<T, std::tuple<Ts...>, std::index_sequence<Is...>>& a, 
+        const base_vector<T, std::tuple<Ts...>, std::index_sequence<Is...>>& b)
     {
-        if constexpr (D == 2) return vec2{ 0,0 };
-        else if constexpr (D == 3) return vec3{ 0,0,0 };
-        else if constexpr (D == 4) return vec4{ 0,0,0,0 };
-        else return vector<D, T> { (T)0 };
+        return (a - b).template norm<DNORM>();
     }
-
-    template <size_t D, typename T, typename F>
-    constexpr auto all(vector<D, T> v, F f)
-    {
-        if constexpr (D == 2) return f(v.x) && f(v.y);
-        else if constexpr (D == 3) return f(v.x) && f(v.y) && f(v.z);
-        else if constexpr (D == 4) return f(v.x) && f(v.y) && f(v.w);
-        else return std::all_of(std::begin(v.data), std::end(v.data), f);
-    }
-
-    template <size_t D, typename T> constexpr auto neg(vector<D, T> v) { return -v; }
-
-    template <typename TNumber, size_t D, typename T> constexpr auto mul(vector<D, T> v, TNumber n) { return v * n; }
-    template <typename TNumber, size_t D, typename T> constexpr auto mul(TNumber n, vector<D, T> v) { return n * v; }
-
-    template <size_t D, typename T1, typename T2> constexpr auto sum(vector<D, T1> a, vector<D, T2> b) { return a + b; }
-    template <size_t D, typename T1, typename T2> constexpr auto diff(vector<D, T1> a, vector<D, T2> b) { return a - b; }
-
-
-    namespace distance
-    {
-        template <typename TA, typename TB> struct dist {};
-        template <size_t D, typename T1, typename T2> struct dist<vector<D, T1>, vector<D, T2>>
-        {
-            template <size_t DNORM> T1 run(const vector<D, T1>& a, const vector<D, T2>& b)
-            {
-                return (a - b).template norm<DNORM>();
-            }
-        };
-    }
-    template <size_t DNORM = 2, typename TA, typename TB> auto dist(const TA& a, const TB& b) { auto d = distance::dist<TA, TB>{}; return d.run<DNORM>(a, b); }
 }
