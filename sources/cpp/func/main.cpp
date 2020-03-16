@@ -86,6 +86,7 @@ TEST_CASE("Func.Pipeline.STL Integration", "[ok]")
 
 TEST_CASE("Func.Performance.Should not be slower than manual code", "[ok]")
 {
+    #ifdef NDEBUG
     using namespace std;
 
     random_device rnd_device;
@@ -128,7 +129,28 @@ TEST_CASE("Func.Performance.Should not be slower than manual code", "[ok]")
         << ", func: " << funcTime 
         << " (func/manual = " << (float)funcTime / (float)manualTime << ")" << std::endl;
     REQUIRE(r == rr);
-    #ifdef NDEBUG
-        REQUIRE(funcTime < (manualTime * 1.05)); // Func cannot be 5% slower than manual code
+    
+    REQUIRE(funcTime < (manualTime * 1.05)); // Func cannot be 5% slower than manual code
     #endif
+}
+
+class NotificationSender
+{
+    virtual void Sender() = 0;
+};
+
+class SomeController
+{
+    NotificationSender* sender;
+    SomeController() {}
+public:
+    SomeController build()
+    {
+        return {};
+    }
+};
+
+TEST_CASE("Func.DependencyInjection", "[ok]")
+{
+    auto f = $(&SomeController::build);
 }

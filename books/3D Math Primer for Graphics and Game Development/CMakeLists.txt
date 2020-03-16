@@ -11,6 +11,7 @@ list(APPEND LIB_FILES src/math.h)
 list(APPEND LIB_FILES src/math.cpp)
 set (LIB_NAME "math")
 add_library(${LIB_NAME} ${LIB_FILES})
+target_include_directories(${LIB_NAME} PRIVATE include)
 set_property(TARGET ${LIB_NAME} PROPERTY CXX_STANDARD 20)
 set_property(TARGET ${LIB_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
 

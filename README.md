@@ -64,7 +64,7 @@
 [C++ Coroutines (even for WebAssembly)](sources/cpp/coroutines/)  
 [Command line Debugging](sources/cpp/CommandLineDebug.md)  
 [Cache LRU](sources/cpp/lru)  
-[Functional (Curry,Partial Apply and Pipeline)](./sources/cpp/func/)
+[Functional (Curry, Partial Binding and Pipeline)](./sources/cpp/func/)
 
 #### Rust
 [Generational Index](sources/rust/generational_index)

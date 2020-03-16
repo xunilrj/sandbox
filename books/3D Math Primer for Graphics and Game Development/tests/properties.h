@@ -23,10 +23,10 @@ struct TimesOperator { template <typename TA, typename TB> auto operator() (cons
 
 
 template <typename T>
-autocheck::generator<T> gen() { return {}; }
+autocheck::generator<T> genenator() { return {}; }
 
 template <typename T, typename... TArgs>
-auto gen(const TArgs...args) { return autocheck::cons<T>(args...); }
+auto genenator(const TArgs...args) { return autocheck::cons<T>(args...); }
 
 class catch_reporter : public autocheck::catch_reporter {
 	std::string name;
@@ -75,14 +75,73 @@ void check(const std::string& name, const TGen1& gen1, const TGen2& gen2, const 
 	>(prop, size, arb, rep);
 }
 
-auto any_float() { return gen<float>(); }
-auto any_f32() { return gen<math::f32>(gen<float>()); }
+template <typename TProp, typename TGen1, typename TGen2, typename TGen3, typename TGen4>
+void check(const std::string& name, const TGen1& gen1, const TGen2& gen2, const TGen3& gen3, const TGen4& gen4, const TProp& prop, size_t size = 100)
+{
+	catch_reporter rep{ name };
+	auto arb = autocheck::make_arbitrary(gen1, gen2, gen3, gen4);
+	autocheck::check<
+		typename TGen1::result_type,
+		typename TGen2::result_type,
+		typename TGen3::result_type,
+		typename TGen4::result_type
+	>(prop, size, arb, rep);
+}
+
+auto any_int() { return genenator<int>(); }
+auto any_float() { return genenator<float>(); }
+auto any_f32() { return genenator<math::f32>(genenator<float>()); }
+
 template <size_t D>
 constexpr auto any_vec()
 {
-	if constexpr (D == 2) return gen<math::vec2>(any_f32(), any_f32());
-	else if constexpr (D == 3) return gen<math::vec3>(any_f32(), any_f32(), any_f32());
-	else return gen<math::vector<D, math::f32>>();
+	if constexpr (D == 2) return genenator<math::vec2>(any_f32(), any_f32());
+	else if constexpr (D == 3) return genenator<math::vec3>(any_f32(), any_f32(), any_f32());
+	else if constexpr (D == 4) return genenator<math::vec4>(any_f32(), any_f32(), any_f32(), any_f32());
+	else return genenator<math::vector<D, math::f32>>();
+}
+
+auto any_mat4()
+{
+	return genenator<math::mat4>(
+		any_f32(), any_f32(), any_f32(), any_f32(),
+		any_f32(), any_f32(), any_f32(), any_f32(),
+		any_f32(), any_f32(), any_f32(), any_f32(),
+		any_f32(), any_f32(), any_f32(), any_f32()
+	);
+}
+
+auto any_quat()
+{
+	auto f = any_f32();
+	return genenator<math::quat>(f, f, f, f);
+}
+
+auto any_unitquat()
+{
+	using namespace math;
+	auto f = any_f32();
+	return autocheck::map([](auto& gens, size_t size)
+		{
+			auto [a, b, c, d] = gens;
+			auto q = quat(a, b, c, d);
+			if (q.norm() == 0) return quat(1, 0, 0, 0);
+			return q.normalized();
+		}, genenator<std::tuple<f32,f32,f32,f32>>(f, f, f, f));
+}
+
+auto diagonal_mat4()
+{
+	using namespace math;
+	return autocheck::map([](auto& a, size_t size)
+		{
+			return mat4::diagonal(
+				std::get<0>(a),
+				std::get<1>(a),
+				std::get<2>(a),
+				std::get<3>(a)
+			);
+		}, genenator<std::tuple<f32,f32,f32,f32>>(any_f32(), any_f32(), any_f32(), any_f32()));
 }
 
 /*

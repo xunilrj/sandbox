@@ -23,33 +23,33 @@ Implementation of the book "3D Math Primer for Graphics and Game Development"
 [x] 2.12 Vector Cross Product 
 [x] 2.13 Linear Algebra Identities 
 
-[] 3 Multiple Coordinate Spaces
-[] 3.1 Why Bother with Multiple Coordinate Spaces? 
-[] 3.2 Some Useful Coordinate Spaces 
-[] 3.3 Basis Vectors and Coordinate Space Transformations 
-[] 3.4 Nested Coordinate Spaces 
-[] 3.5 In Defense of Upright Space 
+[] Vector Functional API using our "func.h"
+[] Vector WASM
 
-[] 4 Introduction to Matrices
-[] 4.1 Mathematical Definition of Matrix 
-[] 4.2 Geometric Interpretation of Matrix 
-[] 4.3 The Bigger Picture of Linear Algebra 
+[x] 4 Introduction to Matrices
+[x] 4.1.2 describes square matrices.
+[x] 4.1.4 describes matrix transposition.
+[x] 4.1.5 explains how to multiply a matrix by a scalar.
+[x] 4.1.6 explains how to multiply a matrix by another matrix.
+[x] 4.1.7 explains how to multiply a vector by a matrix.
 
 [] 5 Matrices and Linear Transformations
-[] 5.1 Rotation 
-[] 5.2 Scale 
+[x] 5.1 Rotation 
+[x] 5.1.2 3D Rotation about Cardinal Axes
+[x] 5.1.3 3D Rotation about an Arbitrary Axis
+[x] 5.2 Scale 
+[x] 5.2.1 Scaling along the Cardinal Axes
+[ ] 5.2.2 Scaling in an Arbitrary Direction
 [] 5.3 Orthographic Projection 
 [] 5.4 Reflection 
 [] 5.5 Shearing 
-[] 5.6 Combining Transformations 
-[] 5.7 Classes of Transformations 
 
 [] 6 More on Matrices
-[] 6.1 Determinant of a Matrix 
-[] 6.2 Inverse of a Matrix 
-[] 6.3 Orthogonal Matrices 
-[] 6.4 4 × 4 Homogeneous Matrices 
-[] 6.5 4 × 4 Matrices and Perspective Projection 
+[x] 6.1 Determinant of a Matrix 
+[x] 6.2 Inverse of a Matrix 
+[x] 6.3 Orthogonal Matrices 
+[x] 6.4 4 × 4 Homogeneous Matrices 
+[x] 6.5 4 × 4 Matrices and Perspective Projection 
 
 [] 7 Polar Coordinate Systems
 [] 7.1 2D Polar Space 
@@ -61,17 +61,40 @@ Implementation of the book "3D Math Primer for Graphics and Game Development"
 [] 8.1 What Exactly is “Orientation”? 
 [] 8.2 Matrix Form 
 [] 8.3 Euler Angles 
+[] Another reason to choose Euler angles when you need to save space is that the numbers you are storing are more easily compressed.
 [] 8.4 Axis-Angle and Exponential Map Representations 
-[] 8.5 Quaternions 
+[x] 8.5 Quaternions 
+[x] 8.5.1 Quaternion Notation
+[x] 8.5.3 Quaternion Negation
+[x] 8.5.4 Identity Quaternion(s)
+[x] 8.5.5 Quaternion Magnitude
+[x] 8.5.6 Quaternion Conjugate and Inverse
+[x] 8.5.7 Quaternion Multiplication
+[] 8.5.8 Quaternion “Difference”
+[] 8.5.9 Quaternion Dot Product
+[] 8.5.10 Quaternion log, exp, and Multiplication by a Scalar
+[] 8.5.11 Quaternion Exponentiation
+[x] 8.5.12 Quaternion Interpolation, a.k.a. Slerp
 [] 8.6 Comparison of Methods 
 [] 8.7 Converting between Representations 
+[] 8.7.1 shows how to convert Euler angles to a matrix.
+[] 8.7.2 shows how to convert a matrix to Euler angles.
+[x] 8.7.3 shows how to convert a quaternion to a matrix.
+[x] 8.7.4 shows how to convert a matrix to a quaternion.
+[x] 8.7.5 shows how to convert Euler angles to a quaternion.
+[x] 8.7.6 shows how to convert a quaternion to Euler angles.
 
 [] 9 Geometric Primitives
 [] 9.1 Representation Techniques 
 [] 9.2 Lines and Rays 
 [] 9.3 Spheres and Circles 
 [] 9.4 Bounding Boxes 
+[x] 9.4.1 Representing AABBs
+[x] 9.4.2 Computing AABBs
+[x] 9.4.4 Transforming AABBs
 [] 9.5 Planes 
+[x] 9.5.2 Defining a Plane by Using Three Points
+[x] 9.5.4 Distance from Point to Plane
 [] 9.6 Triangles 
 [] 9.7 Polygons 
 
@@ -138,3 +161,7 @@ Implementation of the book "3D Math Primer for Graphics and Game Development"
 [] A.16 Intersection of a Ray and a Triangle 
 [] A.17 Intersection of Two AABBs 
 [] A.18 Intersection of a Ray and an AABB 
+
+TODO
+Improve robust float
+Improve Unit of Measures

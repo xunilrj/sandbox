@@ -118,23 +118,31 @@ https://www.npmjs.com/package/jsverify
 All api endpoints have a type, that defines the contract. 
 
 List Entities
-    GET /api/<ENTITY>
+  GET /api/<ENTITY>
 	Pagination	?page=1&page_size=1000
 	Filter	?filter=Name%20eq%’NAME’
 	Order	?orderby=Name%20desc
 	Expand	(_privileges)
 	Returns	200 […] ← array
+  Property Testing
+    for all properties Order must return sorted list
+    for all properties filter must return property matching filter
+    for all items can appear only one page
+  GET /api/<ENTITY>/$metadata
+    properties info
 
 Get ID		
-    GET /api/<ENTITY>/<KEY>
+  GET /api/<ENTITY>/<KEY>
 	invalid id	400 {“code”:”invalidId”,message:”...”}
 	not found	404 {“code”:”notFound”,message:”...”}
 	deleted	404 {“code”:”notFound”,message:”...”}
 	Expand	(_privileges, _allowedItems/<PROPERTY>)
 	Returns	200 {…} <- bag or properties
+  Property Testing
+    for all items, listed on "List Entity" must be returned by id
 
 Create Entity	
-    POST /api/<ENTITY>
+  POST /api/<ENTITY>
 	Missing Required Property	400 {“code”:”InvalidInput”,message:”...”, "errorDetails": [ "propertyName": "AuditFunctionId", "message": "(MUST BE GLOBALIZED!!"}]} }
 	Invalid Property Value	400 {“code”:”InvalidInput”,message:”...”, "errorDetails": [ "propertyName": "AuditFunctionId", "message": "(MUST BE GLOBALIZED!!"}]} }
 	Relationship: 
@@ -142,6 +150,10 @@ Create Entity
         {…, Responsible: { Property: “...” } } <- only with return just one item OR
         {..., Responsible: "KEY", ...} <- must be key value
 	Returns	201 {…} ← same as GET (!IMPORTANT)
+  Property Testing
+    after creation list qtd must increase by 1
+    after creation must be possible to get by id (exactly equal obj)
+    after creation must be possible to see item in list    
 
 Update Entity
     when PUT <- completely update entity
@@ -150,16 +162,23 @@ Update Entity
 	    returns 200 ← same as GET (!IMPORTANT)
         PUT /api/<ENTITY>/<KEY>?force=true
             CAN BE USED WITH FORCE TO BYPASS RULES (needs permission)
+  Property Testing
+    get after put must return exactly equal put (on editable properties)
 	when PATCH <- just the properties passed
         PATCH /api/<ENTITY>/<KEY>
         return 200 <- same as GET (!IMPORTANT)
         used with state machines: {state: "newState", transitionField: ""}
+  Property Testing
+    get after patch must return exactly equal patch (for sent properties)
 
 Delete Entity	
-    DELETE /api/<ENTITY>/<KEY>
+  DELETE /api/<ENTITY>/<KEY>
 	invalid id	400 {“code”:”invalidId”,message:”...”}
 	not found	404 {“code”:”notFound”,message:”...”}
 	already deleted	404 {“code”:”notFound”,message:”...”}
+  Property Testing
+    after delete should return 404 on get
+    after delete should not appear on list
 
 “Methods” (eg: Approve)	POST api/<ENTITY>/<KEY>/$approve {“Description:”...”}
 	200 {…} ← OkInfo
@@ -172,13 +191,17 @@ Datasources	<- different from list entities, more "grid" like
 	Order	?orderby=Name%20desc
 	Expand	???
 	Returns	200 { columns: [], rows:[], aggregations: {<KV>} }
+  Property Testing
+    for all properties Order must return sorted list
+    for all properties filter must return property matching filter
+    for all items can appear only one page
 
 Datasets <- multiple datasources
     GET /api/datasets/<NAME>
     GET /api/datasets?datasources=<NAME>,<NAME>
 	Pagination	?page=1&page_size=1000
-	Filter	?filter=Name%20eq%’NAME’
-	Order	?orderby=Name%20desc
+	Filter	?filter=Name%20eq%’NAME’ <- cross filter and/or per datasource
+	Order	?orderby=Name%20desc <- cross order and/or per datasource
 	Expand	???
 	Returns	200 { <NAME1>: {datasource}, <NAME2>: {datasource} }
 
@@ -221,7 +244,6 @@ Asking Progress
 API Batch
     https://github.com/Huachao/vscode-restclient    
     /api/batch
-    
 
 # Task Scheduler
 # Task Job (Run Background)
@@ -279,6 +301,8 @@ This is a "debug", "dev" tool, so we allow you to control when this is available
 ### Server Events Logger
 ### What-if
 ### Trace Instropector
+
+# Access Control using RBAC on Sql Server graph
 
 
 
