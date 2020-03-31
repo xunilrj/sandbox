@@ -40,6 +40,20 @@ bool input_enabled = true;
 void enable_input(Scene& s) { input_enabled = true; }
 void disable_input(Scene& s) { input_enabled = false; }
 
+void animA(Scene& scene, EntityRef ref)
+{
+	scene.call(0);
+	auto anim1 = scene.build_anim()
+		.then(AnimManager::lerp(1, 0, 1))
+		.then(AnimManager::lerp(2, 1, 0.5));
+	auto anim2 = scene.build_anim()
+		.then(AnimManager::lerp(1, 0, 1));
+
+	auto& anim_i1 = scene.start(anim1, ref, &PositionComponent::x);
+	auto& anim_i2 = scene.start_after(anim2, ref, &PositionComponent::y, &anim_i1);
+	scene.call(1, &anim_i2);
+}
+
 int main()
 {
     auto scene = Scene{};
@@ -90,11 +104,7 @@ int main()
 	// 	.then(AnimManager::lerp(2, 1, 0.5));
 	// auto anim2 = sys_animate.build_anim()
 	// 	.then(AnimManager::lerp(1, 0, 1));
-	auto anim1 = scene.build_anim()
-		.then(AnimManager::lerp(1, 0, 1))
-		.then(AnimManager::lerp(2, 1, 0.5));
-	auto anim2 = scene.build_anim()
-		.then(AnimManager::lerp(1, 0, 1));
+	
 	
 	
 	/*scene.components.build_copier(
@@ -115,10 +125,7 @@ int main()
 			//TODO sys_input
 			if (input_enabled && (GetKeyState('A') & 0x8000))
 			{
-				scene.call(0);
-				auto& anim_i1 = scene.start(anim1, e2, &PositionComponent::x);
-				auto& anim_i2 = scene.start_after(anim2, e2, &PositionComponent::y, &anim_i1);
-				scene.call(1, &anim_i2);
+				animA(scene, e2);
 			}
 
 			scene.set<DeltaTimeComponent>({ (float)(elapsed / 1000.0) });

@@ -8,6 +8,8 @@ include(Catch.cmake)
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
 list(APPEND APP_FILES main.cpp)
+list(APPEND APP_FILES func.h)
+list(APPEND APP_FILES events.h)
 
 set (APP_NAME "func_tests")
 add_executable(${APP_NAME} ${APP_FILES})

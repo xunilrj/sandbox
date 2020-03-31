@@ -67,18 +67,30 @@ struct Func<TF, std::tuple<TArgs...>, std::tuple<TF*, TBounds...>>
 
     template <
         typename... TBinds,
-        size_t QTD = sizeof...(TBinds),
-        typename = std::enable_if_t<QTD <= (sizeofArgs - sizeofBounds)>,
-        typename = std::enable_if_t<
-            types_match<
-            sizeofBounds,
-                tuple_args,
-                std::tuple<TBinds...>,                
-                std::make_index_sequence<sizeof...(TBinds)>
-            >::type::value
-        >
+        size_t QTD = sizeof...(TBinds)
     >
-    auto operator() (TBinds... binds)
+    using can_invoke_with = std::enable_if_t
+    <
+        (QTD == (sizeofArgs - sizeofBounds)) &&
+        (types_match< sizeofBounds, tuple_args, std::tuple<TBinds...>, std::make_index_sequence<sizeof...(TBinds)>>::type::value)
+    >;
+
+    template <
+        typename... TBinds,
+        size_t QTD = sizeof...(TBinds)
+    >
+    using can_bind_with = std::enable_if_t
+    <
+        (QTD <= (sizeofArgs - sizeofBounds)) &&
+        (types_match< sizeofBounds, tuple_args, std::tuple<TBinds...>, std::make_index_sequence<sizeof...(TBinds)>>::type::value)
+    >;
+
+    template <
+        typename... TBinds,
+        size_t QTD = sizeof...(TBinds),
+        typename = can_bind_with<TBinds...>
+    >
+    auto operator() (TBinds... binds) const
     {
         auto newf = Func<TF, tuple_args,
             std::tuple<TF*, TBounds..., TBinds...>
@@ -210,3 +222,4 @@ struct pipeline
     auto $$(Fs1 fs1, Fs... fs);
 
 #endif
+

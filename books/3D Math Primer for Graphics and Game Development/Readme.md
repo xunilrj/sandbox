@@ -154,7 +154,7 @@ Implementation of the book "3D Math Primer for Graphics and Game Development"
 [] A.9 Intersection of a Ray and Plane 
 [] A.10 Intersection of an AABB and Plane 
 [] A.11 Intersection of Three Planes 
-[] A.12 Intersection of Ray and a Circle or Sphere 
+[x] A.12 Intersection of Ray and a Circle or Sphere 
 [] A.13 Intersection of Two Circles or Spheres 
 [] A.14 Intersection of a Sphere and AABB 
 [] A.15 Intersection of a Sphere and a Plane 
@@ -165,3 +165,9 @@ Implementation of the book "3D Math Primer for Graphics and Game Development"
 TODO
 Improve robust float
 Improve Unit of Measures
+
+
+
+Real Time Collision
+
+[x] 5.3.2 Intersecting Ray or Segment Against Sphere

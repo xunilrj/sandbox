@@ -353,3 +353,345 @@ Which is an 100% equal a simple call to sum. The compiler kills everything. Wond
 
 Regard of this we have a test that mandates the bind and call to never be 5% slower than just calling a function. 5% here is mainly for noise when running the test, because we expect the generated assembly to be similar.
 
+# Stackoverflow Code Review
+
+https://codereview.stackexchange.com/questions/238306/functional-utility-in-c-curry-partial-binding-and-pipeline
+
+TLDR
+
+I created a curry/partial binding "lib. My request for "code review" is, what possible improvements I need to achieve "release quality", if I wanted to release this as a lib?
+
+You can see the end result here. https://godbolt.org/z/SnFnFt
+
+Complete story and analyzing the code
+
+This weekend I caught myself testing some new C++2x functionalities and come up with a "lib" that allow me to do this:
+
+```
+int sum(int a, int b, int c)
+{
+    return a+b+c;
+}
+...
+auto f = $(sum);
+std::cout << "1: " << f(1)(2)(3) << std::endl;
+std::cout << "2: " << f(1,2)(3) << std::endl;
+std::cout << "3: " << f(1)(2,3) << std::endl;
+std::cout << "4: " << f(1,2,3) << std::endl;
+std::cout << "5: " << (f << 1 << 2 << 3)() << std::endl;
+std::cout << "6: " << (f << 1 << 2)(3) << std::endl;
+std::cout << "7: " << (f << 1)(2, 3) << std::endl;
+...
+auto v = std::vector<int>{1,2,3};
+std::transform(std::begin(v), std::end(v),
+    std::begin(v),
+    $$(
+        $(sum) << 1 << 2,
+        $(times) << 2)
+    );
+std::cout << "11: " << v << std::endl;
+```
+
+Complete code is at the end of this post. I will try to explain my rationale and the code as much as possible here.
+
+The code relies heavily on "parameter pack" and "fold expressions" and very complex enable_if. Truly the only complex and hard-to-read part of the code, in my opinion. But let me try to explain it as much as possible.
+
+It all start at the function $. TF here is meant to be callable. TF* is, of course, a pointer to this callable. In the example above, a pointer to sum. All I do here is create my wrapper class and return it. All the "magic" will happen in side this wrapper.
+
+```
+template <typename TF>
+auto $(TF* f)
+{
+    return typename make_f<TF>::type
+    {
+        std::make_tuple(f)
+    };
+}
+```
+
+Here I have my first problem. To create my wrapper I need to know all TF arguments types, because I will use them to guarantee the binding is correct.
+
+There is a "very easy way" to do this.
+
+```
+template<typename... TArgs> struct types { using type = std::tuple<TArgs...>; };
+
+template<class T> struct args;
+template<class TReturn, class... TArgs> struct args<TReturn     (TArgs...)> : types<TArgs...> {};
+template<class TReturn, class... TArgs> struct args<TReturn  (*)(TArgs...)> : types<TArgs...> {};
+template<class T> using args_t = typename args<T>::type;
+```
+
+So args_t<(int (*) (int,int)> returns std::tuple<int,int>.
+See more here: https://godbolt.org/z/h4sbtW
+
+With this I can build my wrapper type with:
+
+using type = Func<TF, args_t<TF>, std::tuple<TF*>>;
+This is the type of the wrapper completely unbound. Its template parameters are: 1 - function type;
+2 - std:tuple of TF arguments, as we saw above'
+3 - std:tuple of all bound parameters so far. Up until now just the function pointer.
+
+The idea now is that everytime you give one more argument, I store in a "bigger" tuple with std::tuple_cat(old, new_argument), until this "catted" tuple matches the function definition.
+
+Then I just call the target function.
+
+The "heart" of the code that does that is:
+
+```
+template <typename TF,
+    typename... TArgs,
+    typename... TBounds>
+struct Func<TF, std::tuple<TArgs...>, std::tuple<TF*, TBounds...>>
+{
+...
+// all args to the target function
+using tuple_args = std::tuple<TArgs...>;        
+// bound args so far
+using tuple_bound = std::tuple<TF*, TBounds...>;
+...
+// bound args store in a tuple
+tuple_bound bound;                              
+...
+// magic happen here: bind, partial apply on operator()
+template <
+        typename... TBinds,
+        size_t QTD = sizeof...(TBinds),
+
+        // avoid binding more arguments than possible
+        typename = std::enable_if_t<QTD <= (sizeofArgs - sizeofBounds)>,
+
+        // test if arguments types match, otherwise generate compiler error
+        // more on this below
+        typename = std::enable_if_t<
+            types_match<
+            sizeofBounds,
+                tuple_args,
+                std::tuple<TBinds...>,                
+                std::make_index_sequence<sizeof...(TBinds)>
+            >::type::value                  
+        >
+    >
+    auto operator() (TBinds... binds)                       
+    {                                       
+        auto newf = Func<TF, tuple_args,    
+            std::tuple<TF*, TBounds..., TBinds...>
+        >
+        {
+            std::tuple_cat(bound, std::make_tuple(binds...))
+        };
+        // if we bound exactly the number of args, call target function
+        // else returns a partial applied function
+        if constexpr (QTD == (sizeofArgs - sizeofBounds))           
+            return newf();
+        else 
+            return newf;                            
+    }
+}
+```
+
+I have a "Func" template specialization for when the bind is complete:
+
+```
+template <typename TF, typename... TArgs>
+struct Func<TF, std::tuple<TArgs...>, std::tuple<TF*, TArgs...>>
+{
+    std::tuple<TF*, TArgs...> bound;
+
+    auto operator() ()
+    {
+        return std::apply(fwd, bound);
+    }
+
+    static auto fwd(TF* f, TArgs... args)
+    {
+        return f(args...);
+    }
+};
+```
+
+It guarantees that only the exact types are bound and it only allows you to call the function. In theory it represents a "auto (*) ()" function. If that was possible.
+
+One nice feature of all of this, is that I can generate an (horrible) compile error when you try to bind arguments with the wrong type. This is done by the enable_if below that exists on the "operator ()" of the Func class.
+
+```
+template <
+        // all new arguments that you are trying to bind
+        typename... TBinds,
+        // enabled only if the new binds match possible arguments
+        typename = std::enable_if_t<
+            types_match<
+                sizeofBounds,
+                tuple_args,
+                std::tuple<TBinds...>,                
+                std::make_index_sequence<sizeof...(TBinds)>
+            >::type::value  
+```
+
+The "magic" here is:
+
+1 - tuple_args would be, for example, std:tuple<int,int>;
+2 - We have not bound anything yet, so sizeofBounds is zero, and we are passing TBinds... new arguments. So, I need to check if these new types match what is expected. I do this with the types_match type trait. It receives two std::tuple and an offset, and check if their types match.
+
+Something like this.
+
+```
+std::is_same<
+    decltype(std::get<0>(tuple1),
+    decltype(std::get<0 + OFFSET>(tuple2)
+> && std::is_same<
+    decltype(std::get<1>(tuple1),
+    decltype(std::get<1 + OFFSET>(tuple2)
+> && ...
+```
+See more here: https://godbolt.org/z/wG8JYr
+
+This allows you to bind any number of arguments at any time. The only constraints are that the types must match, and you cannot bind more than needed.
+
+All of this seems like a huge burden to a simple function call, but "Godbolting" this with:
+
+```
+($(sum) << rand() << rand() << rand())();
+```
+
+generates:
+
+```
+call    rand
+mov     ebx, eax # ebx = rand()
+
+call    rand
+mov     ebp, eax # ebp = rand()
+
+call    rand     # eax = rand()
+
+add     ebp, ebx
+add     ebp, eax # ebp = ebp + ebx + eax
+```
+
+Which I consider a wonderful result. The compiler optimization killed everything. Wonderful beasts they are!
+
+I even did a small performance test to assert this. The performance is pretty much identical to normally calling the function.
+
+https://github.com/xunilrj/sandbox/blob/master/sources/cpp/func/main.cpp#L87
+
+```
+TEST_CASE("Func.Performance.Should not be slower than manual code", "[ok]")
+{
+    using namespace std;
+
+    // I will generate some random numbers below
+
+    random_device rnd_device;
+    mt19937 mersenne_engine{ rnd_device() };
+    uniform_int_distribution<int> dist{ 1, 52 };
+    auto gen = [&dist, &mersenne_engine]() { return dist(mersenne_engine); };
+    vector<int> vec(3);
+
+    std::clock_t    start;
+    start = std::clock();
+
+    // Benchmark. Manual calling sum with tree random numbers
+    /* MANUAL CODE */
+    auto r = true;
+    for (int i = 0; i < 10000000; ++i)
+    {
+        generate(begin(vec), end(vec), gen);
+        auto expected = sum(vec[0], vec[1], vec[2]);
+
+        //using this just to guarantee that the compiler will not drop my code.
+        r &= (sum(vec[0], vec[1], vec[2]) == expected);
+    }
+    /* MANUAL CODE */
+    auto manualTime = (std::clock() - start) / (double)(CLOCKS_PER_SEC / 1000);
+
+
+    start = std::clock();
+    // Now we are using the "lib" code
+    /* FUNC CODE */
+    auto rr = true;
+    for (int i = 0; i < 10000000; ++i)
+    {
+        generate(begin(vec), end(vec), gen);
+        auto expected = sum(vec[0], vec[1], vec[2]);
+
+        auto f = $(sum) << vec[0] << vec[1] << vec[2];
+
+        // again just to guarantee nothing is dropped.
+        rr &= (f() == expected);
+    }
+    /* FUNC CODE */
+    auto funcTime = (std::clock() - start) / (double)(CLOCKS_PER_SEC / 1000);
+
+
+    std::cout << "manual: " << manualTime 
+        << ", func: " << funcTime 
+        << " (func/manual = " << (float)funcTime / (float)manualTime << ")" << std::endl;
+    REQUIRE(r == rr);
+
+    // Assert that we are inside a "noise threshold" in RELEASE
+    #ifdef NDEBUG
+        REQUIRE(funcTime < (manualTime * 1.05)); // Func cannot be 5% slower than manual code
+    #endif
+}
+```
+
+Complete code using the "lib":
+https://github.com/xunilrj/sandbox/blob/master/sources/cpp/func/main.cpp
+
+Possible steps would be:
+
+1 - Test with member function;
+2 - Test functions with (references, pointers, moves etc...);
+3 - Test with Polymorphism;
+4 - Test with unmaterialized templates;
+5 - The pipeline function creates a tuple of "constructed" objects. Is this avoidable?
+6 - Test bounding High-Order-Functions with other function and "partial applied" function.
+7 - Test with more callback, events, observers etc... systems.
+
+Complete "lib" code:
+https://github.com/xunilrj/sandbox/blob/master/sources/cpp/func/func.h
+
+Me going through what/why and how:
+https://github.com/xunilrj/sandbox/tree/master/sources/cpp/func
+
+Complete code
+
+```
+#include <tuple>
+#include <iostream>
+#include <type_traits>
+#include <algorithm>
+#include <vector>
+
+template <typename TF,
+    typename TArgs,
+    typename TBound>
+struct Func{};
+
+template <typename TF, typename... TArgs>
+struct Func<TF, std::tuple<TArgs...>, std::tuple<TF*, TArgs...>>
+{
+    std::tuple<TF*, TArgs...> bound;
+
+    auto operator() ()
+    {
+        return std::apply(fwd, bound);
+    }
+
+    static auto fwd(TF* f, TArgs... args)
+    {
+        return f(args...);
+    }
+};
+
+template <typename TF,
+    typename... TArgs,
+    typename... TBounds>
+struct Func<TF, std::tuple<TArgs...>, std::tuple<TF*, TBounds...>>
+{
+    using result_of = std::invoke_result_t<TF, TArgs...>;
+
+    using tuple_args = std::tuple<TArgs...>;
+    using tuple_bound = std::tuple<TF*, TBounds...>;
+```

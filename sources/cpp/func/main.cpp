@@ -1,5 +1,6 @@
 #define FUNC_BODY
 #include "func.h"
+#include "events.h"
 
 #include <vector>
 #include <random>
@@ -134,23 +135,50 @@ TEST_CASE("Func.Performance.Should not be slower than manual code", "[ok]")
     #endif
 }
 
-class NotificationSender
-{
-    virtual void Sender() = 0;
-};
 
-class SomeController
+void doSomething(int a, int b, int c)
 {
-    NotificationSender* sender;
-    SomeController() {}
-public:
-    SomeController build()
-    {
-        return {};
-    }
-};
 
-TEST_CASE("Func.DependencyInjection", "[ok]")
+}
+
+
+template <typename F, typename... TArgs, size_t... Is>
+void magic_invoke_impl(const F& f, const std::tuple<TArgs...>& args, std::index_sequence<Is...>)
 {
-    auto f = $(&SomeController::build);
+    f(std::get<Is>(args)...);
+}
+
+template <typename F, typename... TArgs>
+void magic_invoke(const F& f, const std::tuple<TArgs...>& args)
+{
+    magic_invoke_impl(f, args, std::index_sequence_for<TArgs...>{});
+}
+
+
+
+
+TEST_CASE("Func.Event System", "[ok]")
+{
+    //auto c = CallAny{};
+    ////c.set(&doSomething, 1, 2, 3);
+    //c.set2(ds);
+    //c.invoke(someEvent{7});
+
+    auto s = EventSystem{};
+    auto tdel = s.make<int,int>();
+
+    tdel.subscribe($(doSomething) << 1);
+    tdel.subscribe($(doSomething) << 7);
+
+    tdel(2, 3);
+
+    const size_t EVENT1 = 0;
+    s.raise(EVENT1, 2, 3);
+
+    s.subscribe<int,int>(EVENT1, $(doSomething) << 1);
+    s.raise(EVENT1, 4, 5);
+
+    //TODO simulate a player walking
+    //and opening doors
+    //https://www.youtube.com/watch?v=gx0Lt4tCDE0
 }

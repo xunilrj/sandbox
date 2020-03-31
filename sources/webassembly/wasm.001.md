@@ -172,12 +172,12 @@ This label helps to calculate the size of the main function in bytes.
 Now that we understand what is behind the curtain. Let us generate a real WebAssembly.
 
     > clang --target=wasm32-unknown-unknown-wasm ./main.001.c -c -o .\.bin\main.001.o -O3
-    > lld -flavor wasm -export .\.bin\main.001.o -o .\.bin\main.001.wasm --no-entry
+    > lld -flavor wasm .\.bin\main.001.o -o .\.bin\main.001.wasm --no-entry --export-dynamic
 
     or 
 
     > clang --target=wasm32-unknown-unknown-wasm ./main.001.c -c -o .\.bin\main.001.o -O3
-    > wasm-ld -export .\.bin\main.001.o -o .\.bin\main.001.wasm --no-entry
+    > wasm-ld .\.bin\main.001.o -o .\.bin\main.001.wasm --no-entry --export-dynamic
 
 This will generate a binary version of the wasm. We can see the textual representation of the wasm file doing.
 

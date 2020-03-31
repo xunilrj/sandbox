@@ -5,12 +5,18 @@
 #include <numeric>
 #include <array>
 #include <ostream>
+#include <vector>
+#include <unordered_map>
 
 namespace math
 {
 #ifndef DEFAULT_FLOAT
 #define DEFAULT_FLOAT f32
 #endif
+
+    template<typename T>
+    using EnableIfArithmetic = std::enable_if_t<std::is_arithmetic_v<T>>;
+
 
     #define ENABLE_FOR_NUMBERS typename = std::enable_if_t<std::is_floating_point_v<TNumber> || std::is_integral_v<TNumber>>
 
@@ -66,7 +72,7 @@ namespace math
 
         template <typename TNumber> f32 operator - (const TNumber v) const { return { value - v }; }
         template <typename TNumber> f32 operator + (const TNumber v) const { return { value + v }; }
-        template <typename TNumber> f32 operator * (const TNumber v) const { return { value * v }; }
+        template <typename TNumber, typename = EnableIfArithmetic<TNumber>> f32 operator * (const TNumber v) const { return { value * v }; }
         template <typename TNumber> f32 operator / (const TNumber v) const { return { value / v }; }
         template <typename TNumber> f32& operator *= (const TNumber v) { value *= v; return *this; }
         template <typename TNumber> f32& operator /= (const TNumber v) { value /= v; return *this; }
@@ -130,9 +136,7 @@ namespace math
     template <typename T> struct named_store<3, T> { union { T data[3]; struct { T x, y, z; }; }; };
     template <typename T> struct named_store<4, T> { union { T data[4]; struct { T x, y, z, w; }; }; };
 
-    template<typename T>
-    using EnableIfArithmetic = std::enable_if_t<std::is_arithmetic_v<T>>;
-
+   
     // DECLARATIONS
 
     template <typename T> struct base_quat;
@@ -208,26 +212,26 @@ namespace math
             return { -this->data[Is]... };
         }
 
-        template <typename TNumber, typename = EnableIfArithmetic<TNumber>>
+        template <typename TNumber/*, typename = EnableIfArithmetic<TNumber>*/>
         TVECTOR operator *(const TNumber& f) const
         {
             return { this->data[Is] * f... };
         }
 
-        template <typename TNumber, typename = EnableIfArithmetic<TNumber>>
+        template <typename TNumber/*, typename = EnableIfArithmetic<TNumber>*/>
         TVECTOR operator /(const TNumber f) const
         {
             return { this->data[Is] / f... };
         }
 
-        template <typename TNumber, typename = EnableIfArithmetic<TNumber>>
+        template <typename TNumber/*, typename = EnableIfArithmetic<TNumber>*/>
         TVECTOR operator *=(const TNumber f)
         {
             ((this->data[Is] *= f), ...);
             return *this;
         }
 
-        template <typename TNumber, typename = EnableIfArithmetic<TNumber>>
+        template <typename TNumber/*, typename = EnableIfArithmetic<TNumber>*/>
         TVECTOR operator /=(const TNumber f)
         {
             ((this->data[Is] /= f), ...);
@@ -1134,6 +1138,218 @@ namespace math
             w1*k0 + w2*k1,
         };
     }
+
+    // Intersection
+
+    template <typename T, size_t D>
+    struct ray
+    {
+        vector<T, D> start;
+        vector<T, D> dir;
+    };
+
+    using ray3 = ray<DEFAULT_FLOAT, 3>;
+
+    template <typename T, size_t D>
+    struct line_segment
+    {
+        vector<T, D> start;
+        vector<T, D> end;
+
+        std::tuple<ray<T, D>,T> get_ray() const
+        {
+            auto d = end - start;
+            auto l = d.norm();
+            return { {start, d / l }, l };
+        }
+    };
+
+    using seg3 = line_segment<DEFAULT_FLOAT, 3>;
+
+    template <typename T, size_t D>
+    struct sphere
+    {
+        vector<T, D> center;
+        T radius;
+    };
+
+    using sphere3 = sphere<DEFAULT_FLOAT, 3>;
+
+    template <typename T>
+    struct quadratic_solution
+    {
+        size_t sols;
+        T smaller;
+        T bigger;
+    };
+
+    // a*x**2 + b*x + c = 0 
+    template <typename T>
+    quadratic_solution<T> solve_polynomial(T a, T b, T c)
+    {
+        float delta = b * b - 4 * a * c;
+
+        if (delta < 0)
+            return { 0, 0, 0 };
+
+        auto sqrtDelta = std::sqrt(delta);
+
+        auto twoa = 2 * a;
+
+        auto t1 = (-b - sqrtDelta) / twoa;
+        if (delta == 0)
+            return { 1, t1, t1 };
+
+        auto t2 = (-b + sqrtDelta) / twoa;
+        return { 2, t1, t2 };
+    }
+
+    // An Introduction to Ray Tracing - IRT p.39,91;
+    // The Graphics Gems series. - p.388; <- does not handle behind ray
+    // http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.49.9172&rep=rep1&type=pdf
+    // Geometric Tools
+    // 3D Games: Real-time Rendering and Software Technology, 3DG p.16;
+    // Geometric Tools for Computer Graphics p.501;
+    // http://web.archive.org/web/20190911160248/http://www.andrewaye.com:80/Teikitu%20Gaming%20System/source_collision.shtml
+    // Real-Time Collision Detection 5.3.2 page 177
+    // http://graphicscodex.com/
+    // Real-Time Rendering, Fourth Edition p.955;
+    // Game Physics Cookbook;
+    // http://www.iquilezles.org/www/articles/intersectors/intersectors.htm
+    std::vector<vec3> intersection(const ray3& r, const sphere3& s, float tmin = 0, float tmax = 9999999999)
+    {
+        auto ps = std::vector<vec3>{};
+
+        auto m = r.start - s.center;
+        auto m2 = m.dot(m);
+        auto r2 = s.radius * s.radius;
+
+        float b = 2*m.dot(r.dir);
+        float c = m2 - r2;
+
+        // rays’s origin outside sphere (c > 0)
+        // and ray is pointing away from sphere (b > 0)
+        if (c > 0.0f && b > 0.0f) 
+            return ps;
+
+        auto sol = solve_polynomial<f32>(1, b, c);
+
+        if ((sol.sols >= 1) && (sol.smaller >= tmin) && (sol.smaller <= tmax))
+            ps.push_back(r.start + sol.smaller * r.dir);
+        if ((sol.sols >= 2) && (sol.bigger >= tmin) && (sol.bigger <= tmax))
+            ps.push_back(r.start + sol.bigger * r.dir);
+
+        return ps;
+    }
+
+    std::vector<vec3> intersection(const sphere3& s, const ray3& r)
+    {
+        return intersection(r, s);
+    }
+
+    std::vector<vec3> intersection(const seg3& seg, const sphere3& s, float tmin = 0, float tmax = 9999999999)
+    {
+        auto [ray,l] = seg.get_ray();
+        return intersection(ray, s, 0, l);
+    }
+
+    enum class object_type
+    {
+        sphere = 1
+    };
+
+    // Uniform Grid
+    struct spatial_partitioning_record
+    {
+        object_type type;
+        void* obj;
+    };
+
+    template <typename T, size_t D>
+    struct spatial_partitioning_presence
+    {
+        vector<T, D> pos;
+        std::unordered_map<void*, int> inside;
+    };
+
+    enum class entering_exiting
+    {
+        exiting = 0,
+        entering = 1,
+    };
+
+    template <typename T, size_t D>
+    struct spatial_partitioning_step_to_result
+    {
+        vector<T, D> pos;
+        void* obj;
+        entering_exiting status;
+    };
+
+    template <typename T, size_t D>
+    struct spatial_partitioning
+    {
+        std::vector<spatial_partitioning_record> objs;
+
+    public:
+        void insert(const sphere<T, D>* s)
+        {
+            objs.push_back({
+                object_type::sphere,
+                (void*)s
+            });
+        }
+
+        spatial_partitioning_presence<T,D> 
+            new_presence(vector<T, D> pos)
+        {
+            return { pos };
+        }
+
+        std::vector<spatial_partitioning_step_to_result<T,D>>
+            step_to(
+                spatial_partitioning_presence<T, D>& p,
+                vector<T, D> target)
+        {
+            auto intersections = std::vector<spatial_partitioning_step_to_result<T,D>>{};
+
+            auto segment = line_segment<T,D>{ p.pos, target };
+
+            for (auto&& o : objs)
+            {
+                if (o.type == object_type::sphere)
+                {
+                    auto& s = *(sphere<T,D>*)o.obj;
+                    auto ints = intersection(segment, s);
+
+                    int* inside_int = nullptr;
+
+                    if (ints.size() > 0)
+                    {
+                        inside_int = &p.inside[o.obj];
+                    }
+
+                    for (auto&& i : ints)
+                    {
+                        (*inside_int)++;
+                        *inside_int = (*inside_int) % 2;
+
+                        intersections.push_back({
+                            i,
+                            o.obj,
+                            (entering_exiting )*inside_int
+                        });
+                    }
+                }
+            }
+
+            p.pos = target;
+
+            return intersections;
+        }
+    };
+
+    using ugrid3 = spatial_partitioning<DEFAULT_FLOAT, 3>;
 }
 
 namespace std

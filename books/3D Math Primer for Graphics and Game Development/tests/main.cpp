@@ -906,3 +906,152 @@ TEST_CASE("math.distance.point-plane", "[ok]")
 	REQUIRE(dist(vec3{ 0,1,0 }, p) == 1);
 	REQUIRE(dist(vec3{ 0,-1,0 }, p) == 1);
 }
+
+TEST_CASE("math.intersection.ray-sphere", "[ok]")
+{
+	using namespace math;
+
+	auto s = math::sphere3{ {0,0,0}, 1 };
+
+	//
+	//  +----------+
+	//	|          |
+	//	|          |
+	//	|    x     | < ---------- +
+	//	|  (0,0)   |            (10,0)
+	//	|          |
+	//	+----------+
+	//
+	auto r = math::ray3{ {10, 0, 0}, {-1, 0, 0} };
+	auto points = math::intersection(r, s);
+
+	REQUIRE(points.size() == 2);
+	REQUIRE(points[0] == vec3{ 1,0,0 });
+	REQUIRE(points[1] == vec3{-1,0,0 });
+
+	//
+	//                         +----------+
+	//	                       |          |
+	//	                       |          |
+	//	< ---------- +         |    x     | 
+	//	           (10,0)      |  (0,0)   | 
+	//	                       |          |
+	//	                       +----------+
+	//
+
+	r = math::ray3{ {-10, 0, 0}, {-1, 0, 0} };
+	points = math::intersection(r, s);
+	REQUIRE(points.size() == 0);
+
+	//
+	//        +----------+
+	//	      |          |
+	//	      |          |
+	//	  <-----x  x     | 
+	//	      |  (0,0)   | 
+	//	      |          |
+	//	      +----------+
+	//
+
+	r = math::ray3{ {-0.5, 0, 0}, {-1, 0, 0} };
+	points = math::intersection(r, s);
+	REQUIRE(points.size() == 1);
+	REQUIRE(points[0] == vec3{-1,0,0 });
+
+	//
+	//   Only tangentially touch the sphere
+	//
+	//   +----------+   <--------x
+	//	 |          |
+	//	 |          |
+	//	 |    x     | 
+	//	 |  (0,0)   | 
+	//	 |          |
+	//	 +----------+
+	//
+
+	r = math::ray3{ {10, 1, 0}, {-1, 0, 0} };
+	points = math::intersection(r, s);
+	REQUIRE(points.size() == 1);
+	REQUIRE(points[0] == vec3{ 0,1,0 });
+}
+
+TEST_CASE("math.intersection.line_segment-sphere", "[ok]")
+{
+	using namespace math;
+
+	auto s = math::sphere3{ {0,0,0}, 1 };
+
+	//
+	//          +----------+
+	//	        |          |
+	//	        |          |
+	//	  <----------------------------- +
+	//	        |  (0,0)   |            (10,0)
+	//	        |          |
+	//	        +----------+
+	//	        
+	auto r = math::seg3{ {10, 0, 0}, {-10, 0, 0} };
+	auto points = math::intersection(r, s);
+	REQUIRE(points.size() == 2);
+	REQUIRE(points[0] == vec3{ 1,0,0 });
+	REQUIRE(points[1] == vec3{ -1,0,0 });
+
+	//
+	//          +----------+
+	//	        |          |
+	//	        |          |
+	//	        |    <------------------- +
+	//	        |  (0,0)   |            (10,0)
+	//	        |          |
+	//	        +----------+
+	//	        
+	r = math::seg3{ {10, 0, 0}, {0, 0, 0} };
+	points = math::intersection(r, s);
+	REQUIRE(points.size() == 1);
+	REQUIRE(points[0] == vec3{ 1,0,0 });
+
+
+	//
+	//          +----------+
+	//	        |          |
+	//	        |          |
+	//	        |          |    <-------- +
+	//	        |  (0,0)   |   (5,0)    (10,0)
+	//	        |          |
+	//	        +----------+
+	//	        
+	r = math::seg3{ {10, 0, 0}, {5, 0, 0} };
+	points = math::intersection(r, s);
+	REQUIRE(points.size() == 0);
+}
+
+
+TEST_CASE("math.spatial-partitioning", "[ok]")
+{
+	using namespace math;
+
+	math::ugrid3 g;
+
+	auto s = math::sphere3{ {0,0,0}, 1 };
+	g.insert(&s);
+
+	auto p = g.new_presence({ 10,0,0 });
+
+	auto events = g.step_to(p, { 0,0,0 });
+	REQUIRE(events.size() == 1);
+	REQUIRE(events[0].pos == vec3{ 1,0,0 });
+	REQUIRE(events[0].status == entering_exiting::entering);
+
+	events = g.step_to(p, {-10,0,0 });
+	REQUIRE(events.size() == 1);
+	REQUIRE(events[0].pos == vec3{-1,0,0 });
+	REQUIRE(events[0].status == entering_exiting::exiting);
+
+	events = g.step_to(p, { 10,0,0 });
+	REQUIRE(events.size() == 2);
+	REQUIRE(events[0].pos == vec3{ -1,0,0 });
+	REQUIRE(events[0].status == entering_exiting::entering);
+	REQUIRE(events[1].pos == vec3{ 1,0,0 });
+	REQUIRE(events[1].status == entering_exiting::exiting);
+}
