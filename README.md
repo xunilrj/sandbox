@@ -40,6 +40,7 @@
 ### leetcode
 
 [146 - LRU Cache](./sources/leetcode/146-lru-cache)  
+[Other Leetcode Submissions](/sources/leetcode/Readme.md)
 
 ### Computer Graphics/Gamedev
 [Computer Graphics Guide](/texts/dev/ComputerScience/Computer%20Graphics)  
