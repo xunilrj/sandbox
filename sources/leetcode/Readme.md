@@ -40,3 +40,14 @@ public:
 ```
 
 # Data Structures
+
+## LRU Cache
+
+Runtime: 104 ms  
+Memory Usage: 40.1 MB  
+https://leetcode.com/submissions/detail/292957724/  
+
+![alt text](./LRUCache.cpu.png "LRU Cache - CPU")
+![alt text](./LRUCache.mem.png "LRU Cache - Memory")
+
+[Code and Tutorial](./146-lru-cache/Readme.md)
