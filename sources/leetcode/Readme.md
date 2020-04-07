@@ -47,7 +47,8 @@ Runtime: 104 ms
 Memory Usage: 40.1 MB  
 https://leetcode.com/submissions/detail/292957724/  
 
-![alt text](./LRUCache.cpu.png "LRU Cache - CPU")
-![alt text](./LRUCache.mem.png "LRU Cache - Memory")
+![alt text](./LRUCache.cpu.png "LRU Cache - CPU")  
+![alt text](./LRUCache.mem.png "LRU Cache - Memory")  
 
-[Code and Tutorial](./146-lru-cache/Readme.md)
+[More LRU Cache Details](./146-lru-cache/Readme.md)  
+[LRU Cache Tutorial](https://github.com/xunilrj/sandbox/blob/master/sources/cpp/lru/readme.md)  
