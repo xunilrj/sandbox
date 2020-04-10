@@ -70,10 +70,14 @@ https://katyscode.wordpress.com/2012/09/22/tutorial-a-modern-approach-to-impleme
 
 ## Red-Black Tree
 
-Red-black trees in 4 minutes — The basics https://youtu.be/qvZGUFHWChY  
-Red-black trees in 3 minutes — Rotations https://youtu.be/95s3ndZRGbk
-Red-black trees in 5 minutes — Insertions (strategy) https://youtu.be/5IBxA-bZZH8
-Red-black trees in 5 minutes — Insertions (examples) https://www.youtube.com/watch?v=A3JZinzkMpk  
+Red-black trees in 4 minutes — The basics  
+https://youtu.be/qvZGUFHWChY  
+Red-black trees in 3 minutes — Rotations  
+https://youtu.be/95s3ndZRGbk  
+Red-black trees in 5 minutes — Insertions (strategy)  
+https://youtu.be/5IBxA-bZZH8  
+Red-black trees in 5 minutes — Insertions (examples)  
+https://www.youtube.com/watch?v=A3JZinzkMpk    
 
 Introduction to Algorithms (SMA 5503)  
 Lecture 10: Red-black Trees, Rotations, Insertions, Deletions  
