@@ -1,4 +1,4 @@
-# Tutorial
+# LRU Cache
 
 to read my tutorial click [here](../../cpp/lru/readme.md)
 
