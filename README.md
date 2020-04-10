@@ -38,7 +38,6 @@
 [C++ Performance: Packed array and Valgrind](sources/cpp/packedvsnode/readme.md)
 
 ### leetcode/hackerrank
-
 [leetcode - 146 - LRU Cache](./sources/leetcode/146-lru-cache)  
 [leetcode - 480 - Sliding Window Median](./sources/leetcode/480-sliding-window-median)  
 [Other Leetcode Submissions](/sources/leetcode/Readme.md) (some have tutorial/references etc...)  
