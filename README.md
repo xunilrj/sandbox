@@ -117,6 +117,21 @@
 [WASM presentation](https://xunilrj.github.io/articles/dev/wasm001/WASM.htm)  
 [WASM presentation - PT/BR](https://www.youtube.com/watch?v=YYeqRMqn774)
 
+# Courses
+
+[columbia-cg-animation](./courses/columbia-cg-animation)
+[columbia-ia](./courses/columbia-ia)
+[columbia-robotic](./courses/columbia-robotic)
+[coursera-princeton-algorithms-1](./courses/coursera-princeton-algorithms-1)
+[coursera-sandiego-algorithms](./courses/coursera-sandiego-algorithms)
+[ImperialCollege-LinearAlgebra](./courses/ImperialCollege-LinearAlgebra)
+[IMTx-Queue-Theory](./courses/IMTx-Queue-Theory)
+[johnhopkins-datascience](./courses/johnhopkins-datascience)
+[kth-distributed-algorithms-1](./courses/kth-distributed-algorithms-1)
+[NewYorkBuffalo-ComputerVision](./courses/NewYorkBuffalo-ComputerVision)
+[university-of-texas-linear-algebra](./courses/university-of-texas-linear-algebra)
+[UTAustinX UT.PHP.16.01x](./courses/UTAustinX UT.PHP.16.01x)
+
 # Stackoverflow Answers
 ## C# and .NET
 ### UnitOfWork, Repository Database Connection Issue  
