@@ -52,3 +52,14 @@ https://leetcode.com/submissions/detail/292957724/
 
 [More LRU Cache Details](./146-lru-cache/Readme.md)  
 [LRU Cache Tutorial](https://github.com/xunilrj/sandbox/blob/master/sources/cpp/lru/readme.md)  
+
+# Stream processing
+
+## Sliding Window Median
+
+Runtime: 88 ms  
+Memory Usage: 15.2 MB  
+https://leetcode.com/submissions/detail/322571550/  
+
+![alt text](./SlidingWindowMedian.cpu.png "Sliding Window Median - CPU")  
+![alt text](./SlidingWindowMedian.mem.png "Sliding Window Median - Memory")  
