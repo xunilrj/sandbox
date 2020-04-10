@@ -43,6 +43,7 @@
 [Other Leetcode Submissions](/sources/leetcode/Readme.md) (some have tutorial/references etc...)  
 [hackerrank - Array Manipulation](/sources/hackerrank/array-manipulation/Readme.md)  
 [hackerrank - Fraudulent Activity Notifications](/sources/hackerrank/fraudulent-activity-notifications/Readme.md)  
+[hackerrank - Heaps: Find the Running Median](/sources/hackerrank/heaps-find-the-running-median/Readme.md)  
 
 ### Computer Graphics/Gamedev
 [Computer Graphics Guide](/texts/dev/ComputerScience/Computer%20Graphics)  
