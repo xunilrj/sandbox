@@ -56,4 +56,44 @@ https://www.geeksforgeeks.org/median-of-sliding-window-in-an-array
 
 ## About std::multiset
 
+std::multiset  
+https://en.cppreference.com/w/cpp/container/multiset  
+
+How is std::multiset implemented?
+```
+It's most often implemented as a threaded red-black tree, but almost any other form of balanced tree (e.g., AVL tree, B-tree) could be used instead (and implementations using both of these have been written). Regardless of the form the balancing takes, the tree does have to be threaded (i.e., incrementing or decrementing an iterator is required to have constant complexity, so you need some way to get from one node to its predecessor/successor without traversing an arbitrary number of nodes in between.
+```
+https://www.quora.com/How-is-std-multiset-implemented  
+
+Tutorial: A Modern Approach To Implementing High Score Tables in C++ using STL and Boost  
+https://katyscode.wordpress.com/2012/09/22/tutorial-a-modern-approach-to-implementing-high-score-tables-in-c-using-stl-and-boost/
+
+## Red-Black Tree
+
+Red-black trees in 4 minutes — The basics https://youtu.be/qvZGUFHWChY  
+Red-black trees in 3 minutes — Rotations https://youtu.be/95s3ndZRGbk
+Red-black trees in 5 minutes — Insertions (strategy) https://youtu.be/5IBxA-bZZH8
+Red-black trees in 5 minutes — Insertions (examples) https://www.youtube.com/watch?v=A3JZinzkMpk  
+
+Introduction to Algorithms (SMA 5503)  
+Lecture 10: Red-black Trees, Rotations, Insertions, Deletions  
+https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-10-red-black-trees-rotations-insertions-deletions/
+
+Introduction to Algorithms 6.046J/18.401J  
+https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-046j-introduction-to-algorithms-sma-5503-fall-2005/video-lectures/lecture-10-red-black-trees-rotations-insertions-deletions/lec10.pdf
+
+## AVL-Trees
+
+MIT 6.006 Introduction to Algorithms, Fall 2011  
+6. AVL Trees, AVL Sort  
+https://www.youtube.com/watch?v=FNeL18KsWPc
+
+Introduction to Algorithms  
+https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-006-introduction-to-algorithms-fall-2011/recitation-videos/recitation-6-avl-trees/
+
 ## About Circular Queue
+
+In the LRU Cache we are using a Linked-List and here we are using a Circular Queue. Why?
+Because here we now that the history always have "k" items.
+
+In the LRU case we can have multiple items if we measure the cache by size.
