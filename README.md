@@ -39,8 +39,8 @@
 
 ### leetcode/hackerrank
 [leetcode - 26 - Remove Duplicates from Sorted Array](./sources/leetcode/26-remove-duplicates-from-sorted-array)  
-[leetcode - 146 - LRU Cache](./sources/leetcode/146-lru-cache) 
-[leetcode - 295 - Find Median from Data Stream](./sources/leetcode/295-find-median-from-data-stream)
+[leetcode - 146 - LRU Cache](./sources/leetcode/146-lru-cache)  
+[leetcode - 295 - Find Median from Data Stream](./sources/leetcode/295-find-median-from-data-stream)  
 [leetcode - 480 - Sliding Window Median](./sources/leetcode/480-sliding-window-median)  
 [Other Leetcode Submissions](/sources/leetcode) (some have tutorial/references etc...)  
 [hackerrank - Array Manipulation](/sources/hackerrank/array-manipulation)  
