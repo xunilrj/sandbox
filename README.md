@@ -45,6 +45,7 @@
 [hackerrank - Array Manipulation](/sources/hackerrank/array-manipulation)  
 [hackerrank - Fraudulent Activity Notifications](/sources/hackerrank/fraudulent-activity-notifications)  
 [hackerrank - Heaps: Find the Running Median](/sources/hackerrank/heaps-find-the-running-median)  
+[hackerrank - Find the Running Median](/sources/hackerrank/find-the-running-median)  
 
 ### Computer Graphics/Gamedev
 [Computer Graphics Guide](/texts/dev/ComputerScience/Computer%20Graphics)  
