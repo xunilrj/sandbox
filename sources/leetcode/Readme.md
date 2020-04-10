@@ -63,3 +63,5 @@ https://leetcode.com/submissions/detail/322571550/
 
 ![alt text](./SlidingWindowMedian.cpu.png "Sliding Window Median - CPU")  
 ![alt text](./SlidingWindowMedian.mem.png "Sliding Window Median - Memory")  
+
+[More LRU Cache Details](./146-lru-cache/Readme.md)  

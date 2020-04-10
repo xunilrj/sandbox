@@ -10,11 +10,10 @@ https://www.youtube.com/watch?v=R5ON3iwx78M
 # Result
 
 ```
-Success
-Details 
-Runtime: 104 ms, faster than 90.34% of C++ online submissions for LRU Cache.
-Memory Usage: 40.1 MB, less than 32.93% of C++ online submissions for LRU Cache.
+Runtime: 104 ms, (Your runtime beats 90.34%% of cpp submissions)
+Memory Usage: 40.1 MB, (Your runtime beats 32.93% of cpp submissions)
 ```
+https://leetcode.com/submissions/detail/292957724/  
 
 # Possible Implementations
 
