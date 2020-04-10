@@ -130,7 +130,7 @@
 [kth-distributed-algorithms-1](./courses/kth-distributed-algorithms-1)  
 [NewYorkBuffalo-ComputerVision](./courses/NewYorkBuffalo-ComputerVision)  
 [university-of-texas-linear-algebra](./courses/university-of-texas-linear-algebra)  
-[UTAustinX UT.PHP.16.01x](./courses/UTAustinX UT.PHP.16.01x)  
+[UTAustinX UT.PHP.16.01x](./courses/UTAustinX%20UT.PHP.16.01x)  
 
 # Stackoverflow Answers
 ## C# and .NET
