@@ -10,10 +10,10 @@ https://leetcode.com/submissions/detail/321115997
 
 # Solution
 
-Iterate the array with two indices:
-1 - The current item;
-2 - The next free slot;
-
-For every item, copy it to the "next free slot".
-Fast skip all duplicate items, advance the "current item".
-Advance "next free slot".
+Iterate the array with two indices:  
+1 - The current item;  
+2 - The next free slot;  
+  
+For every item, copy it to the "next free slot".  
+Fast skip all duplicate items, advance the "current item".  
+Advance "next free slot".  
