@@ -38,7 +38,7 @@
 [C++ Performance: Packed array and Valgrind](sources/cpp/packedvsnode/readme.md)
 
 ### leetcode/hackerrank
-[leetcode - 26 - Remove Duplicates from Sorted Array](./sources/leetcode/26-remove-duplicates-from-sorted-array)  
+[leetcode - 26 - Remove Duplicates from Sorted Array](./sources/leetcode/26-remove-duplicates-from-sorted-array) [c++](./sources/leetcode/26-remove-duplicates-from-sorted-array/main.cpp), [rust](./sources/leetcode/26-remove-duplicates-from-sorted-array/main.rs)  
 [leetcode - 146 - LRU Cache](./sources/leetcode/146-lru-cache)  
 [leetcode - 295 - Find Median from Data Stream](./sources/leetcode/295-find-median-from-data-stream)  
 [leetcode - 480 - Sliding Window Median](./sources/leetcode/480-sliding-window-median)  

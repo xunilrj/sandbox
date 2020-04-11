@@ -17,3 +17,12 @@ Iterate the array with two indices:
 For every item, copy it to the "next free slot".  
 Fast skip all duplicate items, advance the "current item".  
 Advance "next free slot".  
+
+
+# Other languages
+
+## Rust
+```
+Runtime: 0 ms, faster than 100.00% of Rust online submissions for Remove Duplicates from Sorted Array.
+Memory Usage: 2.3 MB, less than 100.00% of Rust online submissions for Remove Duplicates from Sorted Array.
+```
