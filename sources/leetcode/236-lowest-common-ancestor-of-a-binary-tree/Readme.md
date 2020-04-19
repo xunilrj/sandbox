@@ -1,5 +1,4 @@
-# Sliding Window Median
-
+# Lowest Common Ancestor of a Binary Tree
 
 # Result
 
