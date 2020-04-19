@@ -312,11 +312,11 @@ void dotNode(int p, const std::string& color)
 {
     auto& cp = centroids[p];
     std::cout << p << "[label=\"" << p 
-        << "," << cp.val_v.first 
-        << "," << cp.val_v.second
-        << "," << cp.val_v_av.first
-        << "," << cp.val_v_av.second
-        << "," << cp.VALUE
+        << ",value=" << cp.val_v.first 
+        << ",minus=" << cp.val_v.second
+        << ",value=" << cp.val_v_av.first
+        << ",minus=" << cp.val_v_av.second
+        << ",NODEVALUE=" << cp.VALUE
         << "\", color = \"" << color << "\"]" << std::endl;
 }
 
@@ -378,21 +378,34 @@ struct centroid_decomposition
             auto& cp = centroids[p];
 
             dotNode(p, "red");
+            std::cout << "label = \"broadcast_value " 
+                << x 
+                << " x: " << x
+                << ", depth: " << cp.depth
+                << ", dist: " << distance_to_node[cp.depth][x]
+                << "\"" 
+                << std::endl;
 
             cp.val_v += {x, 0};
             cp.val_v_av += {x * distance_to_node[cp.depth][x], 0};
 
             cp.VALUE += x;
+            dotNode(p, "green");
 
             if (cp.parent != -1)
             {
-                dotNode(p, "green");
                 int par = cp.parent;
                 auto& cpar = centroids[par];
 
+                std::cout << "label = \"broadcast_value "
+                    << x
+                    << " (parent) x: " << x
+                    << ", depth: " << cpar.depth
+                    << ", dist: " << distance_to_node[cpar.depth][x]
+                    << "\""
+                    << std::endl;
                 cp.val_v -= {0, x};
                 cp.val_v_av -= {0, x * distance_to_node[cpar.depth][x]};
-                dotNode(p, "green");
             }
 
             //Pure(cp.val_v);
@@ -459,27 +472,14 @@ struct centroid_decomposition
         {
             auto& cp = centroids[p];
 
-            dotQuery(x, p, ret, v, v_av,"");
-            dotNode(p, "red");
-
-            dotQuery(x, p, ret, v, v_av, "v += cp.val_v.first");
             v += cp.val_v.first;
-            dotQuery(x, p, ret, v, v_av, "v_av += cp.val_v_av.first;");
             v_av += cp.val_v_av.first;
-            dotQuery(x, p, ret, v, v_av, "ret += x * v_av;");
             ret += x * v_av;
-            dotQuery(x, p, ret, v, v_av, "ret %= mod;");
-            ret %= mod;
-            dotQuery(x, p, ret, v, v_av, "ret += x * distance_to_node[cp.depth][x] * v;");
+            //ret %= mod;
             ret += x * distance_to_node[cp.depth][x] * v;
-            dotQuery(x, p, ret, v, v_av, "ret %= mod;");
-            ret %= mod;
-            dotQuery(x, p, ret, v, v_av, "v = cp.val_v.second;");
+            //ret %= mod;
             v = cp.val_v.second;
-            dotQuery(x, p, ret, v, v_av, "v_av = cp.val_v_av.second;");
             v_av = cp.val_v_av.second;
-            dotQuery(x, p, ret, v, v_av,"");
-            dotNode(p, "black");
 
             p = cp.parent;
         }

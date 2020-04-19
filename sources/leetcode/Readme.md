@@ -2,7 +2,7 @@
 
 https://leetcode.com/xunilrj/
 
-# Simple Algorithms
+# Algorithms
 
 ## Remove Duplicates from Sorted Array
 
@@ -38,6 +38,19 @@ public:
     }
 };
 ```
+
+## Lowest Common Ancestor of a Binary Tree
+
+```
+Runtime: 16 ms (Your runtime beats 95.94 % of cpp submissions.)
+Memory Usage: 14.7 MB (Your runtime beats 100 % of cpp submissions.)
+```
+https://leetcode.com/submissions/detail/327338526/
+
+![alt text](./lowest-common-ancestor-of-a-binary-tree.cpu.png "Lowest Common Ancestor of a Binary Tree - CPU")
+![alt text](./lowest-common-ancestor-of-a-binary-tree.mem.png "Lowest Common Ancestor of a Binary Tree - Memory")
+
+[See More](./146-lru-cache/Readme.md) 
 
 # Data Structures
 
