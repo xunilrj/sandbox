@@ -8,7 +8,7 @@ Solution: https://www.hackerrank.com/challenges/binary-search-tree-lowest-common
 Although this problem does not need I chose to solve it using Euler Tour.  
 A more advanced implementation would build the segment tree whilst DFsing the tree (like the cp-algotihm one does).
 
-For this particular problem is faster to calculate the LCA inside the Euler Tour like here.
+For this particular problem is faster to calculate the LCA inside the Euler Tour like [here](../../leetcode/236-lowest-common-ancestor-of-a-binary-tree).
 
 https://en.wikipedia.org/wiki/Euler_tour_technique
 https://www.geeksforgeeks.org/euler-tour-tree  
