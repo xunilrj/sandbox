@@ -51,6 +51,7 @@ Most important method:
    - Save persisted events to the DB  
    - Commit Transaction  
    - Send messages to the queue
+     - Preferably using "Claim Check Patern" (https://www.enterpriseintegrationpatterns.com/patterns/messaging/StoreInLibrary.html)
      - "Async Handlers" do the actual work. That email is sent here.
 
 I understand that the most polemic part here is: "why saving the messages in the DB if we have a queue?"
@@ -78,6 +79,67 @@ The answer is: First because it is better. In the 99.99% of the cases, we never 
 More:
 "Life beyond Distributed Transactions: an Apostate’s Opinion"  
 http://www-db.cs.wisc.edu/cidr/cidr2007/papers/cidr07p15.pdf
+
+## Considerations when processing messages
+
+All of this is, of course, possible using queue servers in general, but...
+
+Another advantage of having the messages in the DB is to uniformally process messages using different messages servers. If you plan to send e-mail using a specific gateway that supports batches, you can easily get all email-messages, batch them, and send them (using transactions). Not something easily done in some queue servers.
+
+Another advantage is that is very easy to implement poisonous-message handling (https://docs.microsoft.com/en-us/dotnet/framework/wcf/feature-details/poison-message-handling) when handling the message inside a transaction. It is very easy to append a metadata and or "remove" the message from a queue (https://www.enterpriseintegrationpatterns.com/patterns/messaging/InvalidMessageChannel.html).
+
+Another point is, if you plan to use a SAGA (http://udidahan.com/2009/04/20/saga-persistence-and-event-driven-architectures) you are going to need a store anyway.
+
+# REST and Testing
+
+I like to test the REST API in two ways.
+
+ - Integration tests actually calling the API using stubs where appropriate.
+   - Avoid as MUCH as possible mocks.
+   - Allow the application to be configured in a "test mode".
+   - Use "Property Based Testing" (https://www.codit.eu/blog/property-based-testing-with-c)
+     - Some endpoints behave like "collections", so I test them like collections.
+       - If an item is not in the list and I insert it; it must be in the list.
+       - etc...
+     - Some endpoints behave like "state machines", so I test them like state machines.
+       - If an item is in state X, and I can transition to state Y, and I do it; it must now be in state Y.
+       - etc...
+ - Normal Unit tests
+   - I dislike the approach of testing if the controller calls the correct method of the façade using mocks, for example. In my experience, this generates a lot of useless tests that just cement the implementation.
+   - Pure functional methods (no global/db/outside reads and no side effects) must be tested using Unit Test, of course.
+
+# Extensions Methods and Monads
+
+Monads are very useful, but generally is too thick to C# developers. I like to mix their gain with a still-looks-like-c# code using extension methods. Mainly on top of the Task class.
+
+So instead of 
+
+```
+Task<Either<int,InvalidArgumentException>> doSomethingAsync(int value)
+{
+  ...
+}
+
+var result = (await doSomethingAsync(0)).map(x => x, err => 0);
+```
+
+Which does not looks natural C#. I prefer (even for non IO methods) to treat Task<T>/ValueTask<T> as the Either monad. It has a .Result and a .Exception. We lose the guarantees of the Either monad, but that is ok.
+
+```
+// non async example
+ValueTask<int> doSomething(int value)
+{
+  ...
+  if(...)
+    return new InvalidArgumentException().AsValueTask(); // <- we never throw
+  ...
+  return value.AsValueTask();
+}
+
+var result = await doSomething(0)
+  .whenOk(x => x) // <- unecessary, off course
+  .WhenErr(err => 0);
+```
 
 # Stackoverflow Answers
 
