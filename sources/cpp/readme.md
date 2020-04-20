@@ -197,4 +197,9 @@ From <https://herbsutter.com/category/concurrency/page/10/>
   
   
 https://stackoverflow.com/questions/13632344/understanding-c11-memory-fences  
+
+
+# Interesting libs
+
+https://github.com/dpilger26/NumCpp
   

@@ -140,6 +140,16 @@ var result = await doSomething(0)
   .whenOk(x => x) // <- unecessary, off course
   .WhenErr(err => 0);
 ```
+# to ORM or to not ORM: that is th question
+
+It is undeniable that ORMs help. But sometimes you struggle with their limitations (not optimal pagination, geospatial query, hierarchical column, graph queries, fulltext search etc...). In these cases I prefer to use a SQL builder directly.
+
+QueryBuilder
+https://github.com/sqlkata/querybuilder
+
+I like to discriminate commands and queries, so inside the queries part of the application, I definitely prefer to use a querybuilder. 
+
+We can avoid problems with magic-string with "nameof" (https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/nameof).
 
 # Stackoverflow Answers
 
