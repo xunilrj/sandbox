@@ -40,6 +40,7 @@
 ### leetcode/hackerrank
 [leetcode - 26 - Remove Duplicates from Sorted Array](./sources/leetcode/26-remove-duplicates-from-sorted-array) [c++](./sources/leetcode/26-remove-duplicates-from-sorted-array/main.cpp), [rust](./sources/leetcode/26-remove-duplicates-from-sorted-array/main.rs)  
 [leetcode - 146 - LRU Cache](./sources/leetcode/146-lru-cache)  
+[leetcode - 235 - Lowest Common Ancestor of a Binary Search Tree](./sources/leetcode/235-lowest-common-ancestor-of-a-235-lowest-common-ancestor-of-a-binary-search-tree)   
 [leetcode - 236 - Lowest Common Ancestor of a Binary Tree](./sources/leetcode/236-lowest-common-ancestor-of-a-binary-tree)  
 [leetcode - 295 - Find Median from Data Stream](./sources/leetcode/295-find-median-from-data-stream)  
 [leetcode - 480 - Sliding Window Median](./sources/leetcode/480-sliding-window-median)  
