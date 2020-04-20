@@ -39,6 +39,19 @@ public:
 };
 ```
 
+# 235. Lowest Common Ancestor of a Binary Search Tree
+
+```
+Runtime: 32 ms Your runtime beats 96.18 % of cpp submissions.
+Memory Usage: 23.4 MB Your runtime beats 100 % of cpp submissions.
+```
+https://leetcode.com/submissions/detail/327569400/   
+
+![alt text](./235-235-lowest-common-ancestor-of-a-binary-search-tree/cpu.png "Lowest Common Ancestor of a Binary Search Tree - CPU")  
+![alt text](./235-235-lowest-common-ancestor-of-a-binary-search-tree/mem.png "Lowest Common Ancestor of a Binary Search Tree - Memory")  
+
+[See More](./235-lowest-common-ancestor-of-a-binary-search-tree/) 
+
 ## Lowest Common Ancestor of a Binary Tree
 
 ```
