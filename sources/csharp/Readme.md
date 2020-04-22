@@ -151,6 +151,15 @@ I like to discriminate commands and queries, so inside the queries part of the a
 
 We can avoid problems with magic-string with "nameof" (https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/operators/nameof).
 
+# Logging
+
+In 80% of the scenarios, Seq+Serilog is more than enough.
+
+Seq
+https://datalust.co/seq
+
+In more complex settings I would go with https://opentracing.io,https://opentelemetry.io.
+
 # Stackoverflow Answers
 
 ## C# and .NET
