@@ -3,13 +3,10 @@ from typing import Tuple
 import numpy as np
 from common import GaussianMixture
 import math
+
 from scipy.stats import multivariate_normal
 
 def Gaussian(X, mu, var):
-    #print(mu.shape[0], var)
-    #expoent = -1/(2*var)*(X-mu)**2
-    #normalizer = 1/np.sqrt(2*math.pi*var)
-    #return normalizer*np.exp(expoent)
     return multivariate_normal.pdf(X, mean=mu, cov=np.eye(mu.shape[0])*var)
 
 def estep(X: np.ndarray, mixture: GaussianMixture) -> Tuple[np.ndarray, float]:
@@ -53,11 +50,9 @@ def mstep(X: np.ndarray, post: np.ndarray) -> GaussianMixture:
     new_vars = np.empty((post.shape[1], ))
     new_ps = np.empty((post.shape[1], ))
     
-    clusters = post.argmax(axis=1)
     denominator = np.sum(post, axis=0)
 
     for k in range(post.shape[1]):
-        new_ps[k] = np.count_nonzero(clusters == k)
         new_ps[k] = denominator[k] / X.shape[0]
         probs = np.repeat(post[:,k], X.shape[1]).reshape(post.shape[0], X.shape[1])
         new_mus[k,:] = np.sum(X*probs, axis=0) / denominator[k]

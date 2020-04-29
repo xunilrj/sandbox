@@ -80,7 +80,7 @@ def plot(X: np.ndarray, mixture: GaussianMixture, post: np.ndarray,
         ax.text(mu[0], mu[1], legend)
     plt.axis('equal')    
     global ploti
-    plt.savefig('%d.png' % ploti)
+    plt.savefig('%s.png' % title)
     ploti += 1
 
 
@@ -100,4 +100,8 @@ def bic(X: np.ndarray, mixture: GaussianMixture,
     Returns:
         float: the BIC for this mixture
     """
-    raise NotImplementedError
+    p = 0
+    p += mixture.mu.shape[0] * mixture.mu.shape[1]
+    p += mixture.var.shape[0]
+    p += mixture.p.shape[0] - 1
+    return log_likelihood - 1/2*p*np.log(X.shape[0])
