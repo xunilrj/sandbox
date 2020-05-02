@@ -1,0 +1,8 @@
+#! /bin/bash
+clang++-10 main.cpp -o main -O3 -g # -O3 -g allow kcachegrind to show profile per sourceline
+
+echo "Test 02"
+time ./main < input02.txt
+
+echo "Test 13"
+time ./main < input13.txt
