@@ -1,0 +1,4 @@
+settings set target.input-path input00.txt
+b solve
+gui
+r
