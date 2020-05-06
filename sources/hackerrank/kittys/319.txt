@@ -1,0 +1,325 @@
+digraph graphname {
+rank1 [style=invisible];
+rank2 [style=invisible];
+rank1 -> rank2 [color=white];
+rank2 -> 1 [ style=invis ];7->3;
+6->3;
+5->3;
+4->1;
+3->1;
+3->5;
+3->6;
+3->7;
+2->1;
+1->2;
+1->3;
+1->4;
+7->3[color="brown"];
+6->3[color="brown"];
+5->3[color="brown"];
+4->1[color="brown"];
+3[label="3,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "brown"]
+2->1[color="brown"];
+1->3[color="brown"];
+0->0[color="brown"];
+2[label="2,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "green"]
+4[label="4,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "green"]
+label = "broadcast_value 2"
+2[label="2,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "red"]
+label = "broadcast_value 2 x: 2, depth: 2, dist: 0"
+2[label="2,value=2,minus=0,value=0,minus=0,NODEVALUE=2", color = "green"]
+label = "broadcast_value 2 (parent) x: 2, depth: 1, dist: 1"
+2[label="2,value=2,minus=-2,value=0,minus=-2,NODEVALUE=2", color = "black"]
+1[label="1,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "red"]
+label = "broadcast_value 2 x: 2, depth: 1, dist: 1"
+1[label="1,value=2,minus=0,value=2,minus=0,NODEVALUE=2", color = "green"]
+label = "broadcast_value 2 (parent) x: 2, depth: 0, dist: 2"
+1[label="1,value=2,minus=-2,value=2,minus=-4,NODEVALUE=2", color = "black"]
+3[label="3,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "red"]
+label = "broadcast_value 2 x: 2, depth: 0, dist: 2"
+3[label="3,value=2,minus=0,value=4,minus=0,NODEVALUE=2", color = "green"]
+3[label="3,value=2,minus=0,value=4,minus=0,NODEVALUE=2", color = "black"]
+label = "broadcast_value 4"
+4[label="4,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "red"]
+label = "broadcast_value 4 x: 4, depth: 2, dist: 0"
+4[label="4,value=4,minus=0,value=0,minus=0,NODEVALUE=4", color = "green"]
+label = "broadcast_value 4 (parent) x: 4, depth: 1, dist: 1"
+4[label="4,value=4,minus=-4,value=0,minus=-4,NODEVALUE=4", color = "black"]
+1[label="1,value=2,minus=-2,value=2,minus=-4,NODEVALUE=2", color = "red"]
+label = "broadcast_value 4 x: 4, depth: 1, dist: 1"
+1[label="1,value=6,minus=-2,value=6,minus=-4,NODEVALUE=6", color = "green"]
+label = "broadcast_value 4 (parent) x: 4, depth: 0, dist: 2"
+1[label="1,value=6,minus=-6,value=6,minus=-12,NODEVALUE=6", color = "black"]
+3[label="3,value=2,minus=0,value=4,minus=0,NODEVALUE=2", color = "red"]
+label = "broadcast_value 4 x: 4, depth: 0, dist: 2"
+3[label="3,value=6,minus=0,value=12,minus=0,NODEVALUE=6", color = "green"]
+3[label="3,value=6,minus=0,value=12,minus=0,NODEVALUE=6", color = "black"]
+label = "query 2"
+label = "query 2 ret=0 v=0 v_av=0distance to 2=0"
+2[label="2,value=2,minus=-2,value=0,minus=-2,NODEVALUE=2", color = "red"]
+label = "query 2 ret=0 v=0 v_av=0distance to 2=0v += cp.val_v.first"
+label = "query 2 ret=0 v=2 v_av=0distance to 2=0v_av += cp.val_v_av.first;"
+label = "query 2 ret=0 v=2 v_av=0distance to 2=0ret += x * v_av;"
+label = "query 2 ret=0 v=2 v_av=0distance to 2=0ret %= mod;"
+label = "query 2 ret=0 v=2 v_av=0distance to 2=0ret += x * distance_to_node[cp.depth][x] * v;"
+label = "query 2 ret=0 v=2 v_av=0distance to 2=0ret %= mod;"
+label = "query 2 ret=0 v=2 v_av=0distance to 2=0v = cp.val_v.second;"
+label = "query 2 ret=0 v=-2 v_av=0distance to 2=0v_av = cp.val_v_av.second;"
+label = "query 2 ret=0 v=-2 v_av=-2distance to 2=0"
+2[label="2,value=2,minus=-2,value=0,minus=-2,NODEVALUE=2", color = "black"]
+label = "query 2 ret=0 v=-2 v_av=-2distance to 2=1"
+1[label="1,value=6,minus=-6,value=6,minus=-12,NODEVALUE=6", color = "red"]
+label = "query 2 ret=0 v=-2 v_av=-2distance to 2=1v += cp.val_v.first"
+label = "query 2 ret=0 v=4 v_av=-2distance to 2=1v_av += cp.val_v_av.first;"
+label = "query 2 ret=0 v=4 v_av=4distance to 2=1ret += x * v_av;"
+label = "query 2 ret=8 v=4 v_av=4distance to 2=1ret %= mod;"
+label = "query 2 ret=8 v=4 v_av=4distance to 2=1ret += x * distance_to_node[cp.depth][x] * v;"
+label = "query 2 ret=16 v=4 v_av=4distance to 2=1ret %= mod;"
+label = "query 2 ret=16 v=4 v_av=4distance to 2=1v = cp.val_v.second;"
+label = "query 2 ret=16 v=-6 v_av=4distance to 2=1v_av = cp.val_v_av.second;"
+label = "query 2 ret=16 v=-6 v_av=-12distance to 2=1"
+1[label="1,value=6,minus=-6,value=6,minus=-12,NODEVALUE=6", color = "black"]
+label = "query 2 ret=16 v=-6 v_av=-12distance to 2=2"
+3[label="3,value=6,minus=0,value=12,minus=0,NODEVALUE=6", color = "red"]
+label = "query 2 ret=16 v=-6 v_av=-12distance to 2=2v += cp.val_v.first"
+label = "query 2 ret=16 v=0 v_av=-12distance to 2=2v_av += cp.val_v_av.first;"
+label = "query 2 ret=16 v=0 v_av=0distance to 2=2ret += x * v_av;"
+label = "query 2 ret=16 v=0 v_av=0distance to 2=2ret %= mod;"
+label = "query 2 ret=16 v=0 v_av=0distance to 2=2ret += x * distance_to_node[cp.depth][x] * v;"
+label = "query 2 ret=16 v=0 v_av=0distance to 2=2ret %= mod;"
+label = "query 2 ret=16 v=0 v_av=0distance to 2=2v = cp.val_v.second;"
+label = "query 2 ret=16 v=0 v_av=0distance to 2=2v_av = cp.val_v_av.second;"
+label = "query 2 ret=16 v=0 v_av=0distance to 2=2"
+3[label="3,value=6,minus=0,value=12,minus=0,NODEVALUE=6", color = "black"]
+label = "query 4"
+label = "query 4 ret=0 v=0 v_av=0distance to 4=0"
+4[label="4,value=4,minus=-4,value=0,minus=-4,NODEVALUE=4", color = "red"]
+label = "query 4 ret=0 v=0 v_av=0distance to 4=0v += cp.val_v.first"
+label = "query 4 ret=0 v=4 v_av=0distance to 4=0v_av += cp.val_v_av.first;"
+label = "query 4 ret=0 v=4 v_av=0distance to 4=0ret += x * v_av;"
+label = "query 4 ret=0 v=4 v_av=0distance to 4=0ret %= mod;"
+label = "query 4 ret=0 v=4 v_av=0distance to 4=0ret += x * distance_to_node[cp.depth][x] * v;"
+label = "query 4 ret=0 v=4 v_av=0distance to 4=0ret %= mod;"
+label = "query 4 ret=0 v=4 v_av=0distance to 4=0v = cp.val_v.second;"
+label = "query 4 ret=0 v=-4 v_av=0distance to 4=0v_av = cp.val_v_av.second;"
+label = "query 4 ret=0 v=-4 v_av=-4distance to 4=0"
+4[label="4,value=4,minus=-4,value=0,minus=-4,NODEVALUE=4", color = "black"]
+label = "query 4 ret=0 v=-4 v_av=-4distance to 4=1"
+1[label="1,value=6,minus=-6,value=6,minus=-12,NODEVALUE=6", color = "red"]
+label = "query 4 ret=0 v=-4 v_av=-4distance to 4=1v += cp.val_v.first"
+label = "query 4 ret=0 v=2 v_av=-4distance to 4=1v_av += cp.val_v_av.first;"
+label = "query 4 ret=0 v=2 v_av=2distance to 4=1ret += x * v_av;"
+label = "query 4 ret=8 v=2 v_av=2distance to 4=1ret %= mod;"
+label = "query 4 ret=8 v=2 v_av=2distance to 4=1ret += x * distance_to_node[cp.depth][x] * v;"
+label = "query 4 ret=16 v=2 v_av=2distance to 4=1ret %= mod;"
+label = "query 4 ret=16 v=2 v_av=2distance to 4=1v = cp.val_v.second;"
+label = "query 4 ret=16 v=-6 v_av=2distance to 4=1v_av = cp.val_v_av.second;"
+label = "query 4 ret=16 v=-6 v_av=-12distance to 4=1"
+1[label="1,value=6,minus=-6,value=6,minus=-12,NODEVALUE=6", color = "black"]
+label = "query 4 ret=16 v=-6 v_av=-12distance to 4=2"
+3[label="3,value=6,minus=0,value=12,minus=0,NODEVALUE=6", color = "red"]
+label = "query 4 ret=16 v=-6 v_av=-12distance to 4=2v += cp.val_v.first"
+label = "query 4 ret=16 v=0 v_av=-12distance to 4=2v_av += cp.val_v_av.first;"
+label = "query 4 ret=16 v=0 v_av=0distance to 4=2ret += x * v_av;"
+label = "query 4 ret=16 v=0 v_av=0distance to 4=2ret %= mod;"
+label = "query 4 ret=16 v=0 v_av=0distance to 4=2ret += x * distance_to_node[cp.depth][x] * v;"
+label = "query 4 ret=16 v=0 v_av=0distance to 4=2ret %= mod;"
+label = "query 4 ret=16 v=0 v_av=0distance to 4=2v = cp.val_v.second;"
+label = "query 4 ret=16 v=0 v_av=0distance to 4=2v_av = cp.val_v_av.second;"
+label = "query 4 ret=16 v=0 v_av=0distance to 4=2"
+3[label="3,value=6,minus=0,value=12,minus=0,NODEVALUE=6", color = "black"]
+label = "remove_value 2"
+2[label="2,value=2,minus=-2,value=0,minus=-2,NODEVALUE=2", color = "red"]
+1[label="1,value=6,minus=-6,value=6,minus=-12,NODEVALUE=6", color = "black"]
+1[label="1,value=6,minus=-6,value=6,minus=-12,NODEVALUE=6", color = "red"]
+3[label="3,value=6,minus=0,value=12,minus=0,NODEVALUE=6", color = "black"]
+3[label="3,value=6,minus=0,value=12,minus=0,NODEVALUE=6", color = "red"]
+-1[label="-1,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "black"]
+label = "remove_value 4"
+4[label="4,value=4,minus=-4,value=0,minus=-4,NODEVALUE=4", color = "red"]
+1[label="1,value=4,minus=-4,value=4,minus=-8,NODEVALUE=4", color = "black"]
+1[label="1,value=4,minus=-4,value=4,minus=-8,NODEVALUE=4", color = "red"]
+3[label="3,value=4,minus=0,value=8,minus=0,NODEVALUE=4", color = "black"]
+3[label="3,value=4,minus=0,value=8,minus=0,NODEVALUE=4", color = "red"]
+-1[label="-1,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "black"]
+5[label="5,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "green"]
+label = "broadcast_value 5"
+5[label="5,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "red"]
+label = "broadcast_value 5 x: 5, depth: 1, dist: 0"
+5[label="5,value=5,minus=0,value=0,minus=0,NODEVALUE=5", color = "green"]
+label = "broadcast_value 5 (parent) x: 5, depth: 0, dist: 1"
+5[label="5,value=5,minus=-5,value=0,minus=-5,NODEVALUE=5", color = "black"]
+3[label="3,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "red"]
+label = "broadcast_value 5 x: 5, depth: 0, dist: 1"
+3[label="3,value=5,minus=0,value=5,minus=0,NODEVALUE=5", color = "green"]
+3[label="3,value=5,minus=0,value=5,minus=0,NODEVALUE=5", color = "black"]
+label = "query 5"
+label = "query 5 ret=0 v=0 v_av=0distance to 5=0"
+5[label="5,value=5,minus=-5,value=0,minus=-5,NODEVALUE=5", color = "red"]
+label = "query 5 ret=0 v=0 v_av=0distance to 5=0v += cp.val_v.first"
+label = "query 5 ret=0 v=5 v_av=0distance to 5=0v_av += cp.val_v_av.first;"
+label = "query 5 ret=0 v=5 v_av=0distance to 5=0ret += x * v_av;"
+label = "query 5 ret=0 v=5 v_av=0distance to 5=0ret %= mod;"
+label = "query 5 ret=0 v=5 v_av=0distance to 5=0ret += x * distance_to_node[cp.depth][x] * v;"
+label = "query 5 ret=0 v=5 v_av=0distance to 5=0ret %= mod;"
+label = "query 5 ret=0 v=5 v_av=0distance to 5=0v = cp.val_v.second;"
+label = "query 5 ret=0 v=-5 v_av=0distance to 5=0v_av = cp.val_v_av.second;"
+label = "query 5 ret=0 v=-5 v_av=-5distance to 5=0"
+5[label="5,value=5,minus=-5,value=0,minus=-5,NODEVALUE=5", color = "black"]
+label = "query 5 ret=0 v=-5 v_av=-5distance to 5=1"
+3[label="3,value=5,minus=0,value=5,minus=0,NODEVALUE=5", color = "red"]
+label = "query 5 ret=0 v=-5 v_av=-5distance to 5=1v += cp.val_v.first"
+label = "query 5 ret=0 v=0 v_av=-5distance to 5=1v_av += cp.val_v_av.first;"
+label = "query 5 ret=0 v=0 v_av=0distance to 5=1ret += x * v_av;"
+label = "query 5 ret=0 v=0 v_av=0distance to 5=1ret %= mod;"
+label = "query 5 ret=0 v=0 v_av=0distance to 5=1ret += x * distance_to_node[cp.depth][x] * v;"
+label = "query 5 ret=0 v=0 v_av=0distance to 5=1ret %= mod;"
+label = "query 5 ret=0 v=0 v_av=0distance to 5=1v = cp.val_v.second;"
+label = "query 5 ret=0 v=0 v_av=0distance to 5=1v_av = cp.val_v_av.second;"
+label = "query 5 ret=0 v=0 v_av=0distance to 5=1"
+3[label="3,value=5,minus=0,value=5,minus=0,NODEVALUE=5", color = "black"]
+label = "remove_value 5"
+5[label="5,value=5,minus=-5,value=0,minus=-5,NODEVALUE=5", color = "red"]
+3[label="3,value=5,minus=0,value=5,minus=0,NODEVALUE=5", color = "black"]
+3[label="3,value=5,minus=0,value=5,minus=0,NODEVALUE=5", color = "red"]
+-1[label="-1,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "black"]
+2[label="2,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "green"]
+4[label="4,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "green"]
+5[label="5,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "green"]
+label = "broadcast_value 2"
+2[label="2,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "red"]
+label = "broadcast_value 2 x: 2, depth: 2, dist: 0"
+2[label="2,value=2,minus=0,value=0,minus=0,NODEVALUE=2", color = "green"]
+label = "broadcast_value 2 (parent) x: 2, depth: 1, dist: 1"
+2[label="2,value=2,minus=-2,value=0,minus=-2,NODEVALUE=2", color = "black"]
+1[label="1,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "red"]
+label = "broadcast_value 2 x: 2, depth: 1, dist: 1"
+1[label="1,value=2,minus=0,value=2,minus=0,NODEVALUE=2", color = "green"]
+label = "broadcast_value 2 (parent) x: 2, depth: 0, dist: 2"
+1[label="1,value=2,minus=-2,value=2,minus=-4,NODEVALUE=2", color = "black"]
+3[label="3,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "red"]
+label = "broadcast_value 2 x: 2, depth: 0, dist: 2"
+3[label="3,value=2,minus=0,value=4,minus=0,NODEVALUE=2", color = "green"]
+3[label="3,value=2,minus=0,value=4,minus=0,NODEVALUE=2", color = "black"]
+label = "broadcast_value 4"
+4[label="4,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "red"]
+label = "broadcast_value 4 x: 4, depth: 2, dist: 0"
+4[label="4,value=4,minus=0,value=0,minus=0,NODEVALUE=4", color = "green"]
+label = "broadcast_value 4 (parent) x: 4, depth: 1, dist: 1"
+4[label="4,value=4,minus=-4,value=0,minus=-4,NODEVALUE=4", color = "black"]
+1[label="1,value=2,minus=-2,value=2,minus=-4,NODEVALUE=2", color = "red"]
+label = "broadcast_value 4 x: 4, depth: 1, dist: 1"
+1[label="1,value=6,minus=-2,value=6,minus=-4,NODEVALUE=6", color = "green"]
+label = "broadcast_value 4 (parent) x: 4, depth: 0, dist: 2"
+1[label="1,value=6,minus=-6,value=6,minus=-12,NODEVALUE=6", color = "black"]
+3[label="3,value=2,minus=0,value=4,minus=0,NODEVALUE=2", color = "red"]
+label = "broadcast_value 4 x: 4, depth: 0, dist: 2"
+3[label="3,value=6,minus=0,value=12,minus=0,NODEVALUE=6", color = "green"]
+3[label="3,value=6,minus=0,value=12,minus=0,NODEVALUE=6", color = "black"]
+label = "broadcast_value 5"
+5[label="5,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "red"]
+label = "broadcast_value 5 x: 5, depth: 1, dist: 0"
+5[label="5,value=5,minus=0,value=0,minus=0,NODEVALUE=5", color = "green"]
+label = "broadcast_value 5 (parent) x: 5, depth: 0, dist: 1"
+5[label="5,value=5,minus=-5,value=0,minus=-5,NODEVALUE=5", color = "black"]
+3[label="3,value=6,minus=0,value=12,minus=0,NODEVALUE=6", color = "red"]
+label = "broadcast_value 5 x: 5, depth: 0, dist: 1"
+3[label="3,value=11,minus=0,value=17,minus=0,NODEVALUE=11", color = "green"]
+3[label="3,value=11,minus=0,value=17,minus=0,NODEVALUE=11", color = "black"]
+label = "query 2"
+label = "query 2 ret=0 v=0 v_av=0distance to 2=0"
+2[label="2,value=2,minus=-2,value=0,minus=-2,NODEVALUE=2", color = "red"]
+label = "query 2 ret=0 v=0 v_av=0distance to 2=0v += cp.val_v.first"
+label = "query 2 ret=0 v=2 v_av=0distance to 2=0v_av += cp.val_v_av.first;"
+label = "query 2 ret=0 v=2 v_av=0distance to 2=0ret += x * v_av;"
+label = "query 2 ret=0 v=2 v_av=0distance to 2=0ret %= mod;"
+label = "query 2 ret=0 v=2 v_av=0distance to 2=0ret += x * distance_to_node[cp.depth][x] * v;"
+label = "query 2 ret=0 v=2 v_av=0distance to 2=0ret %= mod;"
+label = "query 2 ret=0 v=2 v_av=0distance to 2=0v = cp.val_v.second;"
+label = "query 2 ret=0 v=-2 v_av=0distance to 2=0v_av = cp.val_v_av.second;"
+label = "query 2 ret=0 v=-2 v_av=-2distance to 2=0"
+2[label="2,value=2,minus=-2,value=0,minus=-2,NODEVALUE=2", color = "black"]
+label = "query 2 ret=0 v=-2 v_av=-2distance to 2=1"
+1[label="1,value=6,minus=-6,value=6,minus=-12,NODEVALUE=6", color = "red"]
+label = "query 2 ret=0 v=-2 v_av=-2distance to 2=1v += cp.val_v.first"
+label = "query 2 ret=0 v=4 v_av=-2distance to 2=1v_av += cp.val_v_av.first;"
+label = "query 2 ret=0 v=4 v_av=4distance to 2=1ret += x * v_av;"
+label = "query 2 ret=8 v=4 v_av=4distance to 2=1ret %= mod;"
+label = "query 2 ret=8 v=4 v_av=4distance to 2=1ret += x * distance_to_node[cp.depth][x] * v;"
+label = "query 2 ret=16 v=4 v_av=4distance to 2=1ret %= mod;"
+label = "query 2 ret=16 v=4 v_av=4distance to 2=1v = cp.val_v.second;"
+label = "query 2 ret=16 v=-6 v_av=4distance to 2=1v_av = cp.val_v_av.second;"
+label = "query 2 ret=16 v=-6 v_av=-12distance to 2=1"
+1[label="1,value=6,minus=-6,value=6,minus=-12,NODEVALUE=6", color = "black"]
+label = "query 2 ret=16 v=-6 v_av=-12distance to 2=2"
+3[label="3,value=11,minus=0,value=17,minus=0,NODEVALUE=11", color = "red"]
+label = "query 2 ret=16 v=-6 v_av=-12distance to 2=2v += cp.val_v.first"
+label = "query 2 ret=16 v=5 v_av=-12distance to 2=2v_av += cp.val_v_av.first;"
+label = "query 2 ret=16 v=5 v_av=5distance to 2=2ret += x * v_av;"
+label = "query 2 ret=26 v=5 v_av=5distance to 2=2ret %= mod;"
+label = "query 2 ret=26 v=5 v_av=5distance to 2=2ret += x * distance_to_node[cp.depth][x] * v;"
+label = "query 2 ret=46 v=5 v_av=5distance to 2=2ret %= mod;"
+label = "query 2 ret=46 v=5 v_av=5distance to 2=2v = cp.val_v.second;"
+label = "query 2 ret=46 v=0 v_av=5distance to 2=2v_av = cp.val_v_av.second;"
+label = "query 2 ret=46 v=0 v_av=0distance to 2=2"
+3[label="3,value=11,minus=0,value=17,minus=0,NODEVALUE=11", color = "black"]
+label = "query 4"
+label = "query 4 ret=0 v=0 v_av=0distance to 4=0"
+4[label="4,value=4,minus=-4,value=0,minus=-4,NODEVALUE=4", color = "red"]
+label = "query 4 ret=0 v=0 v_av=0distance to 4=0v += cp.val_v.first"
+label = "query 4 ret=0 v=4 v_av=0distance to 4=0v_av += cp.val_v_av.first;"
+label = "query 4 ret=0 v=4 v_av=0distance to 4=0ret += x * v_av;"
+label = "query 4 ret=0 v=4 v_av=0distance to 4=0ret %= mod;"
+label = "query 4 ret=0 v=4 v_av=0distance to 4=0ret += x * distance_to_node[cp.depth][x] * v;"
+label = "query 4 ret=0 v=4 v_av=0distance to 4=0ret %= mod;"
+label = "query 4 ret=0 v=4 v_av=0distance to 4=0v = cp.val_v.second;"
+label = "query 4 ret=0 v=-4 v_av=0distance to 4=0v_av = cp.val_v_av.second;"
+label = "query 4 ret=0 v=-4 v_av=-4distance to 4=0"
+4[label="4,value=4,minus=-4,value=0,minus=-4,NODEVALUE=4", color = "black"]
+label = "query 4 ret=0 v=-4 v_av=-4distance to 4=1"
+1[label="1,value=6,minus=-6,value=6,minus=-12,NODEVALUE=6", color = "red"]
+label = "query 4 ret=0 v=-4 v_av=-4distance to 4=1v += cp.val_v.first"
+label = "query 4 ret=0 v=2 v_av=-4distance to 4=1v_av += cp.val_v_av.first;"
+label = "query 4 ret=0 v=2 v_av=2distance to 4=1ret += x * v_av;"
+label = "query 4 ret=8 v=2 v_av=2distance to 4=1ret %= mod;"
+label = "query 4 ret=8 v=2 v_av=2distance to 4=1ret += x * distance_to_node[cp.depth][x] * v;"
+label = "query 4 ret=16 v=2 v_av=2distance to 4=1ret %= mod;"
+label = "query 4 ret=16 v=2 v_av=2distance to 4=1v = cp.val_v.second;"
+label = "query 4 ret=16 v=-6 v_av=2distance to 4=1v_av = cp.val_v_av.second;"
+label = "query 4 ret=16 v=-6 v_av=-12distance to 4=1"
+1[label="1,value=6,minus=-6,value=6,minus=-12,NODEVALUE=6", color = "black"]
+label = "query 4 ret=16 v=-6 v_av=-12distance to 4=2"
+3[label="3,value=11,minus=0,value=17,minus=0,NODEVALUE=11", color = "red"]
+label = "query 4 ret=16 v=-6 v_av=-12distance to 4=2v += cp.val_v.first"
+label = "query 4 ret=16 v=5 v_av=-12distance to 4=2v_av += cp.val_v_av.first;"
+label = "query 4 ret=16 v=5 v_av=5distance to 4=2ret += x * v_av;"
+label = "query 4 ret=36 v=5 v_av=5distance to 4=2ret %= mod;"
+label = "query 4 ret=36 v=5 v_av=5distance to 4=2ret += x * distance_to_node[cp.depth][x] * v;"
+label = "query 4 ret=76 v=5 v_av=5distance to 4=2ret %= mod;"
+label = "query 4 ret=76 v=5 v_av=5distance to 4=2v = cp.val_v.second;"
+label = "query 4 ret=76 v=0 v_av=5distance to 4=2v_av = cp.val_v_av.second;"
+label = "query 4 ret=76 v=0 v_av=0distance to 4=2"
+3[label="3,value=11,minus=0,value=17,minus=0,NODEVALUE=11", color = "black"]
+label = "query 5"
+label = "query 5 ret=0 v=0 v_av=0distance to 5=0"
+5[label="5,value=5,minus=-5,value=0,minus=-5,NODEVALUE=5", color = "red"]
+label = "query 5 ret=0 v=0 v_av=0distance to 5=0v += cp.val_v.first"
+label = "query 5 ret=0 v=5 v_av=0distance to 5=0v_av += cp.val_v_av.first;"
+label = "query 5 ret=0 v=5 v_av=0distance to 5=0ret += x * v_av;"
+label = "query 5 ret=0 v=5 v_av=0distance to 5=0ret %= mod;"
+label = "query 5 ret=0 v=5 v_av=0distance to 5=0ret += x * distance_to_node[cp.depth][x] * v;"
+label = "query 5 ret=0 v=5 v_av=0distance to 5=0ret %= mod;"
+label = "query 5 ret=0 v=5 v_av=0distance to 5=0v = cp.val_v.second;"
+label = "query 5 ret=0 v=-5 v_av=0distance to 5=0v_av = cp.val_v_av.second;"
+label = "query 5 ret=0 v=-5 v_av=-5distance to 5=0"
+5[label="5,value=5,minus=-5,value=0,minus=-5,NODEVALUE=5", color = "black"]
+label = "query 5 ret=0 v=-5 v_av=-5distance to 5=1"
+3[label="3,value=11,minus=0,value=17,minus=0,NODEVALUE=11", color = "red"]
+label = "query 5 ret=0 v=-5 v_av=-5distance to 5=1v += cp.val_v.first"
+label = "query 5 ret=0 v=6 v_av=-5distance to 5=1v_av += cp.val_v_av.first;"
+label = "query 5 ret=0 v=6 v_av=12distance to 5=1ret += x * v_av;"
+label = "query 5 ret=60 v=6 v_av=12distance to 5=1ret %= mod;"
+label = "query 5 ret=60 v=6 v_av=12distance to 5=1ret += x * distance_to_node[cp.depth][x] * v;"
+label = "query 5 ret=90 v=6 v_av=12distance to 5=1ret %= mod;"
+label = "query 5 ret=90 v=6 v_av=12distance to 5=1v = cp.val_v.second;"
+}

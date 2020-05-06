@@ -1,0 +1,23 @@
+POST https://localhost:5001
+
+client_metrics,clientid=1 expenditure=2  
+client_metrics,clientid=1 expenditure=3 
+client_metrics,clientid=1 expenditure=4 
+client_metrics,clientid=1 expenditure=2 
+client_metrics,clientid=1 expenditure=3 
+client_metrics,clientid=1 expenditure=6 
+client_metrics,clientid=1 expenditure=8 
+client_metrics,clientid=1 expenditure=4 
+client_metrics,clientid=1 expenditure=5 
+
+# 2 3 4 2 3 6 8 4 5
+###
+@influxdbUrl = http://localhost:8086/query
+@kapacitorUrl = http://localhost:9092/write
+###
+POST {{influxdbUrl}}?db=fraud&q=SELECT count(*) FROM client_metrics_agg
+
+###
+POST {{kapacitorUrl}}?db=fraud&rp=autogen
+
+client_metrics,clientid=1 expenditure=5 

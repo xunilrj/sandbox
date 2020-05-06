@@ -1,0 +1,12 @@
+{
+  "name": "wasmint",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "buildScript": "./c2wasm.ps1 script.c"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}

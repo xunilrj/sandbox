@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "@emotion/core": "^10.0.28",
+    "@emotion/styled": "^10.0.27",
+    "@projectstorm/react-canvas-core": "^6.0.2",
+    "@projectstorm/react-diagrams": "^6.0.2",
+    "closest": "0.0.1",
+    "dagre": "^0.8.5",
+    "lodash": "^4.17.15",
+    "mathjs": "^6.6.4",
+    "pathfinding": "^0.4.18",
+    "paths-js": "^0.4.10",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "resize-observer-polyfill": "^1.5.1"
+  }
+}

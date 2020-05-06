@@ -1,0 +1,44 @@
+sudo apt-get update
+sudo apt-get upgrade
+sudo apt-get dist-upgrade
+
+sudo do-release-upgrade -d
+
+sudo apt-get install build-essential
+
+# rust
+curl https://sh.rustup.rs -sSf | sh -s -- --default-toolchain nightly
+
+# llvm
+echo "deb http://apt.llvm.org/unstable/ llvm-toolchain-10 main" >> /etc/apt/sources.list
+echo "deb-src http://apt.llvm.org/unstable/ llvm-toolchain-10 main" >> /etc/apt/sources.list
+wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
+sudo apt-get update && sudo apt-get install libllvm-10-ocaml-dev libllvm10 llvm-10 llvm-10-dev llvm-10-doc llvm-10-examples llvm-10-runtime clang-10 clang-tools-10 clang-10-doc libclang-common-10-dev libclang-10-dev libclang1-10 clang-format-10 python3-clang-10 clangd-10 libfuzzer-10-dev lldb-10 lld-10 libc++-10-dev libc++abi-10-dev libomp-10-dev
+
+#docker
+
+sudo groupadd docker
+sudo usermod -aG docker $USER
+
+
+sudo useradd dockeruser
+sudo usermod -aG docker dockeruser
+sudo usermod –aG sudo dockeruser
+sudo passwd testuser
+
+
+#kubernetes
+
+sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg2
+curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+sudo apt-get update
+sudo apt-get install -y kubectl
+
+
+curl -Lo minikube https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64 \
+chmod +x minikube
+sudo mkdir -p /usr/local/bin/
+sudo install minikube /usr/local/bin/
+
+

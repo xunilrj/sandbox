@@ -1,0 +1,12 @@
+(module
+    (func $lerp (import "env" "lerp"))
+    (func $helloWorld1 (result i32)
+        (call $lerp)
+        (i32.const 42)
+    )
+    (func $helloWorld2 (result i32)
+        (i32.const 21)
+    )
+    (export "helloWorld1" (func 1))
+    (export "helloWorld2" (func 2))
+)

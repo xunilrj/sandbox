@@ -1,0 +1,14 @@
+{
+  "FileVersion": 2,
+  "Id": "131a9a21-7b0a-4d34-adf1-8f8c0c5b26b4",
+  "Items": [
+    {
+      "Id": "218b0272-d09c-459d-af67-7b9f2e7a88d0",
+      "Command": "< D:\\github\\sandbox\\sources\\hackerrank\\input.txt > D:\\github\\sandbox\\sources\\hackerrank\\proj-kittys-calculations-on-a-tree\\dot.txt"
+    },
+    {
+      "Id": "392aa94f-be72-46c3-a7d7-34b5a2b86658",
+      "Command": "< D:\\github\\sandbox\\sources\\hackerrank\\kittys-calculations-on-a-tree.7.in.txt"
+    }
+  ]
+}

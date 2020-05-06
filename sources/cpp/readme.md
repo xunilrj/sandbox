@@ -79,7 +79,7 @@ https://docs.microsoft.com/en-us%5Carchive%5Cmsdn-magazine%5Cauthors%5CKenny_Ker
 ## Concurrency
 
 Concurrency Guide
-
+https://www.kernel.org/doc/htmldocs/kernel-locking/index.html  
 http://www.gotw.ca/resources/Software%20and%20Concurrency%20-%20OGDC.pdf  
 
 	http://www.drdobbs.com/parallel/the-pillars-of-concurrency/200001985  

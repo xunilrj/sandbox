@@ -1,0 +1,8 @@
+digraph graphname {
+rank1 [style=invisible];
+rank2 [style=invisible];
+rank1 -> rank2 [color=white];
+rank2 -> 1 [ style=invis ];7->3;
+6->3;
+5->3;
+}

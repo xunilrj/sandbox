@@ -1,0 +1,25 @@
+digraph graphname {
+rank1 [style=invisible];
+rank2 [style=invisible];
+rank1 -> rank2 [color=white];
+rank2 -> 1 [ style=invis ];7->3;
+6->3;
+5->3;
+4->1;
+3->1;
+3->5;
+3->6;
+3->7;
+2->1;
+1->2;
+1->3;
+1->4;
+7->3[color="brown"];
+6->3[color="brown"];
+5->3[color="brown"];
+4->1[color="brown"];
+3[label="3,value=0,minus=0,value=0,minus=0,NODEVALUE=0", color = "brown"]
+2->1[color="brown"];
+1->3[color="brown"];
+0->0[color="brown"];
+}
