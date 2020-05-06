@@ -1,0 +1,21 @@
+[package]
+authors = ["Daniel Frederico Lins Leite <xunilrj@hotmail.com>"]
+edition = "2018"
+name = "myactix"
+version = "0.1.0"
+
+[dependencies]
+actix = "0.9.0"
+actix-rt = "1.1.1"
+actix-web = "2.0.0"
+actix_derive = "0.5.0"
+futures = "0.3.4"
+listenfd = "0.3"
+refinery = "0.2.1"
+url = "2.1.1"
+log = "0.4"
+pretty_env_logger = "0.4.0"
+
+[dependencies.diesel]
+features = ["postgres"]
+version = "1.4.4"
