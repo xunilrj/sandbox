@@ -1,0 +1,12 @@
+[package]
+authors = ["root"]
+edition = "2018"
+name = "actix2"
+version = "0.1.0"
+
+[dependencies]
+actix-web = "2.0.0"
+actix-rt = "1.1.1"
+env_logger = "0.7.1"
+serde = "*"
+serde_derive = "*"

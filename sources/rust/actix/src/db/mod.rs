@@ -1,17 +1,16 @@
-use diesel::result::Error::DatabaseError;
-use diesel::ConnectionError::BadConnection;
 use actix::prelude::*;
 use actix::{Actor, Message, Handler};
-use actix_derive::{MessageResponse};
 use diesel::prelude::*;
 use diesel::pg::PgConnection;
-use url::{Url, ParseError};
-use log::{info, trace, warn, error};
+use diesel::result::Error::DatabaseError;
+use url::{Url};
+use log::{trace};
 
-mod embedded
+pub mod embedded
 {
-    use refinery::embed_migrations;
-    embed_migrations!("src/db/migrations");
+    //use refinery::embed_migrations;
+    //embed_migrations!("src/db/migrations");
+    refinery::embed_migrations!("src/db/migrations");
 }
 
 #[derive(Message)]
@@ -69,20 +68,25 @@ impl Actor for DbActor
 }
 
 impl Handler<StartMigration> for DbActor
-{
-    type Result = Result<usize, bool>;
+{        
+    type Result = Result<usize, bool>;    
 
     fn handle(&mut self, msg: StartMigration, _: &mut Self::Context) -> Self::Result
     {
         println!("Start migration");
+
+        let r = 1;
+        let a = embedded::migrations::runner();
+        a.run(&mut self.conn);
+        //let b = a.run(& mut self.conn);
+
+        
         // embedded::migrations::runner()
         //     .run(&mut self.conn)
         //     .unwrap();
-        let r = 1;
         Ok(r)
     }
 }
-
 
 impl Handler<CreateUser> for DbActor
 {
