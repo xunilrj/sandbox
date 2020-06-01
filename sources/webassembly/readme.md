@@ -9,6 +9,7 @@
     01.5 - Linking the WASM file  
     01.6 - The Whole Process  
     01.7 - Using wasmer  
+
 02 - [Running Webassembly inside browsers](./wasm.002.md)  
 
     02.1 - Creating host application  
@@ -16,3 +17,10 @@
     02.3 - Loading WASM manually  
     02.4 - Enabling Console.Log  
     02.5 - Peeking inside the WASM file  
+
+03 - [Javascript/Webassembly Interaction and Memory Layout](./wasm.003.md)  
+
+    03.1 - More complex interactions
+    03.2 - Returning a Struct and Memory Operations
+    03.3 - Calling the generated Wasm and reading Memory
+    03.4 - Wasm Memory Layout

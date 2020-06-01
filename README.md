@@ -117,6 +117,13 @@
         02.4 - Enabling Console.Log  
         02.5 - Peeking inside the WASM file  
 
+03 - [Javascript/Webassembly Interaction and Memory Layout](/sources/webassembly/wasm.003.md)  
+
+    03.1 - More complex interactions
+    03.2 - Returning a Struct and Memory Operations
+    03.3 - Calling the generated Wasm and reading Memory
+    03.4 - Wasm Memory Layout
+
 [C++ Coroutines (even for WebAssembly)](sources/cpp/coroutines/)  
 
 [WASM presentation](https://xunilrj.github.io/articles/dev/wasm001/WASM.htm)  

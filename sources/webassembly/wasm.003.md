@@ -10,7 +10,7 @@ We are now ready to continue advancing:
 2 - We will return a C++ struct by value;
 3 - We will dive more in-depth on the interaction between Javascript/Webassembly;
 
-# Vector Math lib
+# Returning a Struct and Memory Operations
 
 Ou code today is straightforward.
 
@@ -174,7 +174,7 @@ Also see: https://releases.llvm.org/8.0.0/docs/ReleaseNotes.html#changes-to-the-
     for returning small structs as multiple return values,
     once the underlying WebAssembly platform itself supports it. 
 
-# Calling the generated Wasm
+# Calling the generated Wasm and reading Memory
 
 Ok, we need to pass a pointer as the first parameter. But how do we chose this value?
 
@@ -225,7 +225,7 @@ So "0" as the memory address worked, but is it safe? How do I know that I am not
 
 To answer this, we need to go deeper in the rabbit hole.
 
-# Wasm Memory
+# Wasm Memory Layout
 
 If we peek the Wasm file again, we will find a mysterious line:
 
@@ -333,8 +333,6 @@ Ok. Let us see what we got.
 Our stack is still 1024. Our base global is still 512. So 1568 - 1024 - 512 = 32. Bullseye! 
 
 We are using 20 bytes, but "wasm-ld" is reserving 32 bytes for globals. Now we know the stack is 16 bytes aligned.
-
-## Memory Layout
 
 So now we know that our memory layout is:
 
