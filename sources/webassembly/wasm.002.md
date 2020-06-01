@@ -147,14 +147,12 @@ To easy this burden and to start understanding how the integration between WASM 
 The first thing here is to update the C/C++ application to call our log function.
 
     main.002.cpp
-    #define EXPORT __attribute__((visibility("default")))
     namespace browser::console
     {
         extern void log(int i) asm("consoleLog");
     }
 
-    EXPORT int add(int l, int r) asm("add");
-    int add(int l, int r)
+    __attribute__((export_name("sum"))) int add(int l, int r)
     {
         browser::console::log(1);
         return l + r;
@@ -166,15 +164,15 @@ For this to work we must define a function as "extern". We will see what this ge
 
 Now we can easily compile and link our new wasm. Given that we are using [nested namespaces](https://en.cppreference.com/w/cpp/language/namespace) we also need the flag to enable C++17.
 
-    > clang --target=wasm32-unknown-unknown-wasm ./main.002.cpp -c -o .\.bin\main.002.o -O3 -std=c++17
-    > wasm-ld -export .\.bin\main.002.o -o .\.bin\main.002.wasm --no-entry --allow-undefined
+    > clang++ --target=wasm32 main.002.cpp -c -o main.002.o -O3 -std=c++17
+    > wasm-ld main.002.o -o main.002.wasm --no-entry --allow-undefined
 
 Pay special attention, also to the new flag "allow-undefined" of the wams-ld linker. Without it wasm-ld will fail because it does not have access to the body of browser::console::log. For example:
 
-    > wasm-ld -export .\.bin\main.002.o -o .\.bin\main.002.wasm --no-entry
-    wasm-ld.exe: error: .\.bin\main.002.o: undefined symbol: consoleLog
+    > wasm-ld main.002.o -o main.002.wasm --no-entry
+    wasm-ld.exe: error: main.002.o: undefined symbol: consoleLog
 
-The final step is to wire the import together. For this, we do not need to do anything different when compiling and instantiating the WASM. We just need to pass our import object and everything will works. The "env" is needed because line 03 below.
+The final step is to wire the import together. For this, we do not need to do anything different when compiling and instantiating the WASM. We just need to pass our import object and everything will works.
 
     main.js
     ...
@@ -192,7 +190,7 @@ The final step is to wire the import together. For this, we do not need to do an
 
 We can also peek how the WASM works under the hood with the tool [wasm2wat](https://github.com/WebAssembly/wabt).
 
-    > wasm2wat.exe .\.bin\main.002.wasm
+    > wasm2wat main.002.wasm
     00 (module
     01     (type (;0;) (func (param i32 i32) (result i32)))
     02     (type (;1;) (func (param i32)))
@@ -211,9 +209,9 @@ We can also peek how the WASM works under the hood with the tool [wasm2wat](http
 
 To understand how the wiring between WASM and browser works, the important line is line 03. In this line we define a new function that needs to be imported and is typed as "type 1", which is defined in line 02 as a func that has one parameter of type i32, a normal integer of 32 bits.
 
-If we jump to and analyze the body of function $add on line 04 we will very easy understand how WebAssembly works. On this line, 04, we see that we define a function (func), named $add, it is of type 0 (defined on line 1), receives two parameters of type i32 and return another i32.
+If we jump to and analyze the body of function $add on line will be very easy to understand how WebAssembly works. On this line, 04, we see that we define a function (func), named $add, it is of type 0 (defined on line 1), that receives two parameters of type i32 and return another i32.
 
-Its first instruction (line 05) pushes onto the global stack the value 1 and calls the function $consoleLog (line 06). That is how you call functions on WASM. You put them on the stack and pop the result.
+Its first instruction (line 05) we push onto the global stack the value 1 and we call the function $consoleLog (line 06). That is how you call functions on WASM. You put their parameters on the stack and pop their results. In this case, no result is returned.
 
 After this we read our parameters (line 07, 08) and call the instruction i32.add (line 09), that will sum the first two values of the global stack and put the result back on the stack. Given that our return value is the sum we do not need to do anything to return it.
 
