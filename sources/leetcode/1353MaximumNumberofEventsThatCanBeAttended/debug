@@ -1,0 +1,3 @@
+settings set target.input-path testcase
+b main.cpp:190 
+run
