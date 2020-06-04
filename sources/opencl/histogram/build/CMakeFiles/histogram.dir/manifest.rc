@@ -1,0 +1,2 @@
+#pragma code_page(65001)
+1 /* CREATEPROCESS_MANIFEST_RESOURCE_ID */ 24 /* RT_MANIFEST */ "D:/github/sandbox/sources/opencl/histogram/build/CMakeFiles/histogram.dir/embed.manifest"

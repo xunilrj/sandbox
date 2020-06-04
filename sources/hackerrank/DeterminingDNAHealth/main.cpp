@@ -1,6 +1,6 @@
 #include <algorithm>
-#include <bits/c++config.h>
-#include <bits/stdc++.h>
+//#include <bits/c++config.h>
+//#include <bits/stdc++.h>
 #include <cstddef>
 #include <cstdint>
 #include <functional>

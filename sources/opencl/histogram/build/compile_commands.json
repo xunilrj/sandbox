@@ -1,0 +1,7 @@
+[
+{
+  "directory": "D:/github/sandbox/sources/opencl/histogram/build",
+  "command": "C:\\PROGRA~2\\MICROS~1\\2019\\COMMUN~1\\VC\\Tools\\MSVC\\1425~1.286\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP  -ID:\\github\\vcpkg\\installed\\x64-windows\\include  /DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1   /FoCMakeFiles\\histogram.dir\\main.cpp.obj /FdTARGET_COMPILE_PDB /FS -c D:\\github\\sandbox\\sources\\opencl\\histogram\\main.cpp",
+  "file": "D:/github/sandbox/sources/opencl/histogram/main.cpp"
+}
+]
