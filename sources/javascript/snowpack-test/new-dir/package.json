@@ -1,0 +1,18 @@
+{
+  "scripts": {
+    "start": "snowpack dev",
+    "build": "snowpack build",
+    "test": "echo \"This template does not include a test runner by default.\" && exit 1",
+    "format": "prettier --write 'src/**/*.js'",
+    "lint": "prettier --check 'src/**/*.js'"
+  },
+  "webDependencies": {
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1"
+  },
+  "devDependencies": {
+    "prettier": "^2.0.0",
+    "snowpack": "^2.0.0-0"
+  },
+  "dependencies": {}
+}

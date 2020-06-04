@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "build": "parcel build index.html",
+    "start": "parcel serve index.html"
+  },
+  "dependencies": {
+    "perlin.js": "^1.0.0",
+    "three": "^0.116.1",
+    "three-orbit-controls": "^82.1.0"
+  },  
+  "devDependencies": {
+    "parcel": "^2.0.0-alpha.3.2"
+  }
+}

@@ -1,0 +1,23 @@
+#! /bin/bash
+clang++-10 src/roots.cpp  \
+    -I/opt/wasi-sdk/share/wasi-sysroot/include/c++/v1 \
+    -I/opt/wasi-sdk/share/wasi-sysroot/include \
+    -L/opt/wasi-sdk/share/wasi-sysroot/lib/wasm32-wasi \
+    -c -o roots.o \
+    --target=wasm32 \
+    -nostdlib \
+    --std=c++2a \
+    -flto \
+    -ffunction-sections \
+    -fdata-sections \
+    -O3
+
+wasm-ld-10 roots.o /opt/wasi-sdk/share/wasi-sysroot/lib/wasm32-wasi/crt1.o \
+		-o roots.wasm \
+		--no-entry \
+		-O3 \
+		-lto-O3 \
+		--export-dynamic \
+		--gc-sections \
+		--import-memory
+    

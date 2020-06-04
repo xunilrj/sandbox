@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "react": "https://cdn.pika.dev/pin/react@v16.13.1-ByypZEPVPs6cpkpGdpQK/react.js",
+    "react-dom": "https://cdn.pika.dev/pin/react-dom@v16.13.1-qv1YB4ZAVXJG84jEgino/react-dom.js"
+  }
+}

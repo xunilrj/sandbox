@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "start": "parcel serve index.html"
+  },
+  "devDependencies": {
+    "parcel": "^2.0.0-alpha.3.2"
+  },
+  "dependencies": {
+    "three": "^0.116.1"
+  }
+}

@@ -1,0 +1,3 @@
+#! /bin/bash
+mkdir .build -p
+clang++-10 tests/tests.cpp -std=c++2a -g -o .build/tests -Iinclude && .build/tests

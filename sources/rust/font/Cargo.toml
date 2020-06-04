@@ -1,0 +1,18 @@
+[package]
+name = "font"
+version = "0.1.0"
+authors = ["root"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+font-kit = {version="0.7.0", features=["loader-freetype"]}
+pathfinder_geometry = "0.5.1"
+image = "0.21"
+signed-distance-field = { version = "0.6.3", features = [ "piston_image" ] }
+lerp = "0.2.0"
+quickcheck = {path="../../../../forks/quickcheck" }
+quickcheck_macros = "*"
+approx = "0.3.2"
+num = {version="0.2.1", features=["std"]}
