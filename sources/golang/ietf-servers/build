@@ -1,0 +1,4 @@
+#! /bin/sh
+
+go build daytime/main.go -o ./daytime
+go build echo/main.go
