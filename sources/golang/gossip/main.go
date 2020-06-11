@@ -151,6 +151,7 @@ func main() {
 	udp, err := openUDP(*listenPort)
 	checkError(err)
 	if len(*seedAddr) != 0 {
+		*seedAddr = ":" + *seedAddr
 		broadcastUDP(udp, *seedAddr, []byte{})
 	}
 
