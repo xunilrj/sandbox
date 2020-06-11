@@ -133,7 +133,7 @@
 
 IETF Servers:
 
-[daytime](https://github.com/xunilrj/sandbox/tree/master/sources/golang/ietf-servers/daytime) 
+[daytime](https://github.com/xunilrj/sandbox/tree/master/sources/golang/ietf-servers/daytime)   
 [echo](https://github.com/xunilrj/sandbox/tree/master/sources/golang/ietf-servers/echo) 
 
 Gossip:
