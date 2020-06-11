@@ -3,21 +3,83 @@ package main
 import (
 	"bufio"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net"
 	"os"
+	"os/signal"
 	"strconv"
 	"strings"
+	"syscall"
 	"time"
 )
 
+type dicData struct {
+	Value     string
+	Timestamp time.Time
+}
 type setData struct {
 	Keys   []string
-	Values []string
+	Values []dicData
 }
 type getData struct {
-	keys     []string
-	response chan setData
+	Keys     []string
+	Response chan setData
+}
+type watchData struct {
+	getData
+}
+
+func setAppend(requests chan<- interface{}, key string, value string) {
+	q := getData{Keys: []string{key}}
+	q.Response = make(chan setData)
+
+	requests <- q
+	r := <-q.Response
+
+	dic := map[string]bool{value: true}
+
+	values := strings.Split(r.Values[0].Value, ",")
+	for _, v := range values {
+		if len(v) == 0 {
+			continue
+		}
+		dic[v] = true
+	}
+
+	r.Values[0].Value = ""
+	for v := range dic {
+		r.Values[0].Value += v + ","
+	}
+
+	r.Values[0].Timestamp = time.Now()
+
+	requests <- setData{Keys: []string{key}, Values: []dicData{r.Values[0]}}
+}
+
+func parseLine(line string) (interface{}, error) {
+	if strings.HasPrefix(line, ".query") {
+		query := strings.Trim(line, ".query")
+		query = strings.Trim(line, " ")
+		return getData{[]string{query}, make(chan setData)}, nil
+	}
+	if strings.HasPrefix(line, ".watch") {
+		query := strings.Trim(line, ".watch")
+		query = strings.Trim(line, " ")
+		return watchData{getData{[]string{query}, make(chan setData)}}, nil
+	}
+
+	parts := strings.Split(line, "=")
+
+	if len(parts) != 2 {
+		return nil, errors.New("Syntax error")
+	}
+
+	key := strings.Trim(parts[0], " ")
+	value := strings.Trim(parts[1], " ")
+	d := dicData{value, time.Now()}
+
+	return setData{Keys: []string{key}, Values: []dicData{d}}, nil
 }
 
 func main() {
@@ -34,34 +96,38 @@ func main() {
 	fmt.Print("> ")
 	for scanner.Scan() {
 		line := scanner.Text()
-
-		if line[0] == '?' {
-			query := strings.Trim(line, "?")
-
-			q := getData{keys: []string{query}}
-			q.response = make(chan setData)
-
-			dictionaryChannel <- q
-			r := <-q.response
-
-			fmt.Println(r.Keys[0], "=", r.Values[0])
-			fmt.Print("> ")
+		result, err := parseLine(line)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Fatal error ", err.Error())
 			continue
 		}
 
-		parts := strings.Split(line, "=")
+		switch cmd := result.(type) {
+		case watchData:
+			fmt.Println("start watch")
+			ticker := time.NewTicker(1 * time.Second)
+			sigs := make(chan os.Signal, 1)
+			signal.Notify(sigs, syscall.SIGINT)
+			running := true
+			for running {
+				select {
+				case <-ticker.C:
+					dictionaryChannel <- cmd
+					r := <-cmd.Response
+					fmt.Println(r.Keys[0], "=", r.Values[0].Value)
+				case <-sigs:
+					running = false
+				}
+			}
+			fmt.Println("end watch")
+		case getData:
+			dictionaryChannel <- cmd
+			r := <-cmd.Response
 
-		if len(parts) != 2 {
-			fmt.Println("Syntax Error: KEY=VALUE")
-			fmt.Print("> ")
-			continue
+			fmt.Println(r.Keys[0], "=", r.Values[0].Value)
+		case setData:
+			dictionaryChannel <- cmd
 		}
-
-		key := strings.Trim(parts[0], " ")
-		value := strings.Trim(parts[1], " ")
-
-		r := setData{Keys: []string{key}, Values: []string{value}}
-		dictionaryChannel <- r
 
 		fmt.Print("> ")
 	}
@@ -71,7 +137,7 @@ func main() {
 }
 
 func dictionaryActor(requests <-chan interface{}) {
-	dic := map[string]string{}
+	dic := map[string]dicData{}
 
 	for {
 		req := <-requests
@@ -79,26 +145,28 @@ func dictionaryActor(requests <-chan interface{}) {
 		switch v := req.(type) {
 		case getData:
 			{
-				if len(v.keys) == 0 {
-					for key := range dic {
-						v.keys = append(v.keys, key)
-					}
+				if len(v.Keys) == 0 {
+					v.Keys = getKeys(dic)
 				}
 
 				resp := setData{}
-				resp.Keys = make([]string, len(v.keys))
-				resp.Values = make([]string, len(v.keys))
-				for i, k := range v.keys {
+				resp.Keys = make([]string, len(v.Keys))
+				resp.Values = make([]dicData, len(v.Keys))
+				for i, k := range v.Keys {
 					resp.Keys[i] = k
 					resp.Values[i] = dic[k]
 				}
 
-				v.response <- resp
+				v.Response <- resp
 			}
 		case setData:
 			{
 				for i, k := range v.Keys {
-					dic[k] = v.Values[i]
+					value := v.Values[i]
+					current, found := dic[k]
+					if !found || value.Timestamp.After(current.Timestamp) {
+						dic[k] = v.Values[i]
+					}
 				}
 			}
 		}
@@ -111,13 +179,16 @@ func listenGossip(listenAt string, dic chan<- interface{}, done chan<- bool) {
 
 	conn, err := net.ListenUDP("udp", udpAddr)
 	checkError(err)
+	defer conn.Close()
 
 	var buf [512]byte
 	for {
-		size, _, err2 := conn.ReadFromUDP(buf[0:])
+		size, addr, err2 := conn.ReadFromUDP(buf[0:])
 		if err2 != nil {
 			break
 		}
+
+		setAppend(dic, "peers", addr.String())
 
 		r := setData{}
 		err = json.Unmarshal(buf[0:size], &r)
@@ -134,35 +205,56 @@ func sendGossip(listenAt string, dic chan<- interface{}, done chan<- bool) {
 	for {
 		<-ticker.C
 
-		data := getData{}
-		data.response = make(chan setData)
-		dic <- data
-		r := <-data.response
-		close(data.response)
+		allData := getAllData(dic)
+		jsonBytes, err := json.Marshal(allData)
+		if err != nil {
+			continue //TODO somehow log
+		}
 
-		jsonBytes, err := json.Marshal(r)
-		checkError(err)
-
-		seq := sequence(1200, 1210)
-
-		for _, port := range seq {
+		//TODO keep peers ips in dic
+		for _, port := range sequence(1200, 1210) {
 			portStr := ":" + strconv.Itoa(port)
 
 			if portStr == listenAt {
 				continue
 			}
 
-			udpAddr, err := net.ResolveUDPAddr("udp", "255.255.255.255"+portStr)
-			checkError(err)
-
-			conn, err := net.DialUDP("udp", nil, udpAddr)
-			checkError(err)
-
-			_, err = conn.Write(jsonBytes)
-			checkError(err)
+			broadcastUDP(portStr, jsonBytes)
 		}
 	}
-	done <- true
+
+	done <- true //TODO integrate signal mgt
+}
+
+func getAllData(dic chan<- interface{}) setData {
+	data := getData{}
+	data.Response = make(chan setData)
+	defer close(data.Response)
+
+	dic <- data
+	r := <-data.Response
+
+	return r
+}
+
+func broadcastUDP(portStr string, bytes []byte) error {
+	udpAddr, err := net.ResolveUDPAddr("udp", "255.255.255.255"+portStr)
+	if err != nil {
+		return err
+	}
+
+	conn, err := net.DialUDP("udp", nil, udpAddr)
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	_, err = conn.Write(bytes)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func checkError(err error) {
@@ -178,4 +270,14 @@ func sequence(min, max int) []int {
 		a[i] = min + i
 	}
 	return a
+}
+
+func getKeys(m map[string]dicData) []string {
+	i := 0
+	keys := make([]string, len(m))
+	for k := range m {
+		keys[i] = k
+		i++
+	}
+	return keys
 }
