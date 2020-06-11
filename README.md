@@ -138,7 +138,9 @@ IETF Servers:
 
 Gossip:
 
-[UDP Gossip](https://github.com/xunilrj/sandbox/tree/master/sources/golang/gossip) 
+[UDP Gossip](https://github.com/xunilrj/sandbox/tree/master/sources/golang/gossip)   
+![Gossip](./gossip.gif "Gossip")  
+
 
 # Courses
 
