@@ -4,11 +4,11 @@ import (
 	"bufio"
 	"encoding/json"
 	"errors"
+	"flag"
 	"fmt"
 	"net"
 	"os"
 	"os/signal"
-	"strconv"
 	"strings"
 	"syscall"
 	"time"
@@ -27,7 +27,27 @@ type getData struct {
 	Response chan setData
 }
 type watchData struct {
-	getData
+	get getData
+}
+
+func setGet(requests chan<- interface{}, key string) map[string]bool {
+	q := getData{Keys: []string{key}}
+	q.Response = make(chan setData)
+
+	requests <- q
+	r := <-q.Response
+
+	dic := map[string]bool{}
+
+	values := strings.Split(r.Values[0].Value, ",")
+	for _, v := range values {
+		if len(v) == 0 {
+			continue
+		}
+		dic[v] = true
+	}
+
+	return dic
 }
 
 func setAppend(requests chan<- interface{}, key string, value string) {
@@ -59,13 +79,13 @@ func setAppend(requests chan<- interface{}, key string, value string) {
 
 func parseLine(line string) (interface{}, error) {
 	if strings.HasPrefix(line, ".query") {
-		query := strings.Trim(line, ".query")
-		query = strings.Trim(line, " ")
+		query := strings.Replace(line, ".watch", "", 1)
+		query = strings.Trim(query, " ")
 		return getData{[]string{query}, make(chan setData)}, nil
 	}
 	if strings.HasPrefix(line, ".watch") {
-		query := strings.Trim(line, ".watch")
-		query = strings.Trim(line, " ")
+		query := strings.Replace(line, ".watch", "", 1)
+		query = strings.Trim(query, " ")
 		return watchData{getData{[]string{query}, make(chan setData)}}, nil
 	}
 
@@ -82,15 +102,60 @@ func parseLine(line string) (interface{}, error) {
 	return setData{Keys: []string{key}, Values: []dicData{d}}, nil
 }
 
+func runWatchData(dictionaryChannel chan<- interface{}, cmd watchData) {
+	fmt.Println("start watch")
+	ticker := time.NewTicker(1 * time.Second)
+	sigs := make(chan os.Signal, 1)
+	signal.Notify(sigs, syscall.SIGINT)
+	defer signal.Reset(syscall.SIGINT)
+
+	running := true
+	for running {
+		select {
+		case <-ticker.C:
+			dictionaryChannel <- cmd.get
+			r := <-cmd.get.Response
+			fmt.Println(r.Keys[0], "=", r.Values[0].Value)
+		case <-sigs:
+			running = false
+		}
+	}
+	fmt.Println("end watch")
+}
+
+func runGetData(dictionaryChannel chan<- interface{}, cmd getData) {
+	dictionaryChannel <- cmd
+	r := <-cmd.Response
+
+	fmt.Println(r.Keys[0], "=", r.Values[0].Value)
+}
+
 func main() {
-	listenAt := os.Args[1]
+	listenPort := flag.String("listen", "1200", "udp port this instance will listen")
+	seedAddr := flag.String("seed", "", "ip:port of a known cluster node")
+
+	flag.Parse()
+
+	if len(*listenPort) == 0 {
+		fmt.Println("ERROR: --listen flag is mandatory")
+		os.Exit(1)
+	}
+
+	*listenPort = ":" + *listenPort
 
 	done := make(chan bool, 2)
 	dictionaryChannel := make(chan interface{}, 10)
 
 	go dictionaryActor(dictionaryChannel)
-	go listenGossip(listenAt, dictionaryChannel, done)
-	go sendGossip(listenAt, dictionaryChannel, done)
+
+	udp, err := openUDP(*listenPort)
+	checkError(err)
+	if len(*seedAddr) != 0 {
+		broadcastUDP(udp, *seedAddr, []byte{})
+	}
+
+	go listenGossip(udp, dictionaryChannel, done)
+	go sendGossip(udp, *listenPort, dictionaryChannel, done)
 
 	scanner := bufio.NewScanner(os.Stdin)
 	fmt.Print("> ")
@@ -104,27 +169,9 @@ func main() {
 
 		switch cmd := result.(type) {
 		case watchData:
-			fmt.Println("start watch")
-			ticker := time.NewTicker(1 * time.Second)
-			sigs := make(chan os.Signal, 1)
-			signal.Notify(sigs, syscall.SIGINT)
-			running := true
-			for running {
-				select {
-				case <-ticker.C:
-					dictionaryChannel <- cmd
-					r := <-cmd.Response
-					fmt.Println(r.Keys[0], "=", r.Values[0].Value)
-				case <-sigs:
-					running = false
-				}
-			}
-			fmt.Println("end watch")
+			runWatchData(dictionaryChannel, cmd)
 		case getData:
-			dictionaryChannel <- cmd
-			r := <-cmd.Response
-
-			fmt.Println(r.Keys[0], "=", r.Values[0].Value)
+			runGetData(dictionaryChannel, cmd)
 		case setData:
 			dictionaryChannel <- cmd
 		}
@@ -146,7 +193,9 @@ func dictionaryActor(requests <-chan interface{}) {
 		case getData:
 			{
 				if len(v.Keys) == 0 {
-					v.Keys = getKeys(dic)
+					v.Keys = getKeys(dic, func(k string) bool {
+						return !strings.HasPrefix(k, "_")
+					})
 				}
 
 				resp := setData{}
@@ -173,26 +222,35 @@ func dictionaryActor(requests <-chan interface{}) {
 	}
 }
 
-func listenGossip(listenAt string, dic chan<- interface{}, done chan<- bool) {
+func openUDP(listenAt string) (*net.UDPConn, error) {
 	udpAddr, err := net.ResolveUDPAddr("udp", listenAt)
-	checkError(err)
+	if err != nil {
+		return nil, err
+	}
 
 	conn, err := net.ListenUDP("udp", udpAddr)
-	checkError(err)
-	defer conn.Close()
+	if err != nil {
+		return nil, err
+	}
 
+	return conn, nil
+}
+
+func listenGossip(udp *net.UDPConn, dic chan<- interface{}, done chan<- bool) {
 	var buf [512]byte
 	for {
-		size, addr, err2 := conn.ReadFromUDP(buf[0:])
-		if err2 != nil {
+		size, addr, err := udp.ReadFromUDP(buf[0:])
+		if err != nil {
 			break
 		}
 
-		setAppend(dic, "peers", addr.String())
+		setAppend(dic, "_peers", addr.String())
 
 		r := setData{}
 		err = json.Unmarshal(buf[0:size], &r)
-		checkError(err)
+		if err != nil {
+			continue //TODO log
+		}
 
 		dic <- r
 	}
@@ -200,8 +258,9 @@ func listenGossip(listenAt string, dic chan<- interface{}, done chan<- bool) {
 	done <- true
 }
 
-func sendGossip(listenAt string, dic chan<- interface{}, done chan<- bool) {
+func sendGossip(udp *net.UDPConn, listenAt string, dic chan<- interface{}, done chan<- bool) {
 	ticker := time.NewTicker(5 * time.Second)
+
 	for {
 		<-ticker.C
 
@@ -211,15 +270,8 @@ func sendGossip(listenAt string, dic chan<- interface{}, done chan<- bool) {
 			continue //TODO somehow log
 		}
 
-		//TODO keep peers ips in dic
-		for _, port := range sequence(1200, 1210) {
-			portStr := ":" + strconv.Itoa(port)
-
-			if portStr == listenAt {
-				continue
-			}
-
-			broadcastUDP(portStr, jsonBytes)
+		for to := range setGet(dic, "_peers") {
+			broadcastUDP(udp, to, jsonBytes)
 		}
 	}
 
@@ -237,20 +289,14 @@ func getAllData(dic chan<- interface{}) setData {
 	return r
 }
 
-func broadcastUDP(portStr string, bytes []byte) error {
-	udpAddr, err := net.ResolveUDPAddr("udp", "255.255.255.255"+portStr)
+func broadcastUDP(udp *net.UDPConn, toAddr string, bytes []byte) error {
+	addr, err := net.ResolveUDPAddr("udp", toAddr)
 	if err != nil {
 		return err
 	}
 
-	conn, err := net.DialUDP("udp", nil, udpAddr)
-	if err != nil {
-		return err
-	}
-	defer conn.Close()
-
-	_, err = conn.Write(bytes)
-	if err != nil {
+	_, err2 := udp.WriteToUDP(bytes, addr)
+	if err2 != nil {
 		return err
 	}
 
@@ -272,11 +318,13 @@ func sequence(min, max int) []int {
 	return a
 }
 
-func getKeys(m map[string]dicData) []string {
+func getKeys(m map[string]dicData, filter func(k string) bool) []string {
 	i := 0
 	keys := make([]string, len(m))
 	for k := range m {
-		keys[i] = k
+		if filter(k) {
+			keys[i] = k
+		}
 		i++
 	}
 	return keys
