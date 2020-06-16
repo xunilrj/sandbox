@@ -84,9 +84,6 @@
 [Cache LRU](sources/cpp/lru)  
 [Functional (Curry, Partial Binding and Pipeline)](./sources/cpp/func/)
 
-#### Rust
-[Generational Index](sources/rust/generational_index)
-
 #### R
 [Realtime London Underground Position](https://rstudio-pubs-static.s3.amazonaws.com/269780_73750785d8c04f9e968287701e22af30.html)
 
@@ -130,6 +127,8 @@
 [WASM presentation - PT/BR](https://www.youtube.com/watch?v=YYeqRMqn774)
 
 #### Rust
+
+[Generational Index](sources/rust/generational_index)
 
 Chat  
 [low level HTTP using MIO](https://github.com/xunilrj/sandbox/tree/master/sources/rust/chat)  
