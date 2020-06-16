@@ -133,6 +133,10 @@
 
 Chat  
 [low level HTTP using MIO](https://github.com/xunilrj/sandbox/tree/master/sources/rust/chat)  
+[scalability using Cassandra/ScyllaDB](https://github.com/xunilrj/sandbox/tree/master/sources/rust/chat-ws)  
+
+SSTable  
+[Simple Trait based SSTable](https://github.com/xunilrj/sandbox/tree/master/sources/rust/sstable)  
 
 #### Go
 
