@@ -129,6 +129,11 @@
 [WASM presentation](https://xunilrj.github.io/articles/dev/wasm001/WASM.htm)  
 [WASM presentation - PT/BR](https://www.youtube.com/watch?v=YYeqRMqn774)
 
+#### Rust
+
+Chat  
+[low level HTTP using MIO](https://github.com/xunilrj/sandbox/tree/master/sources/rust/chat)  
+
 #### Go
 
 IETF Servers:
