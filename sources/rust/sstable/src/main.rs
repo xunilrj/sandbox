@@ -1,29 +1,27 @@
 use byteorder::{LittleEndian, WriteBytesExt};
 use std::fs::File;
-use std::io::prelude::*;
+use std::io::prelude::Write;
 use std::io::Seek;
 use std::io::SeekFrom;
-use std::result::Result;
 use thiserror::Error;
 
-#[derive(Error, Debug)]
-enum KeyWriterError {
-    #[error("Error")]
-    Error,
+trait SSTableDataWriter {
+    fn write_to(&self, w: &mut impl std::io::Write) -> std::io::Result<usize>;
 }
 
-trait KeyWriter {
-    fn write_next(w: impl std::io::Write) -> Result<(), KeyWriterError>;
+trait SSTableKeyWriter<'a> {
+    type T;
+    fn start(&'a self) -> Self::T;
+    fn write(&'a self, t: &mut Self::T, w: &mut impl std::io::Write) -> std::io::Result<usize>;
 }
 
-trait SSTable<'a, K, V> {
-    type Iter: Iterator<Item = (&'a K, &'a V)>;
-
-    fn items(&self) -> Self::Iter;
-    fn values(&self) -> Self::Iter;
+trait SSTableValueWriter<'a> {
+    type T;
+    fn start(&'a self) -> Self::T;
+    fn write(&'a self, t: &mut Self::T, w: &mut impl std::io::Write) -> std::io::Result<usize>;
 }
 
-struct SSTableWriter {}
+struct SSTable {}
 
 #[derive(Error, Debug)]
 enum FlushError {
@@ -31,60 +29,115 @@ enum FlushError {
     Error,
 }
 
-impl SSTableWriter {
-    pub fn write<'a>(filename: &str, t: &'a impl SSTable<'a>) -> Result<(), FlushError> {
+impl SSTable {
+    pub fn write<'a, T: SSTableKeyWriter<'a> + SSTableValueWriter<'a>>(
+        filename: &str,
+        t: &'a T,
+    ) -> Result<(), FlushError> {
         let mut file = File::create(filename).or(Err(FlushError::Error))?;
-        SSTableWriter::write_to_file(&mut file, t)?;
+        SSTable::write_to_file(&mut file, t).or(Err(FlushError::Error))?;
         file.flush().or(Err(FlushError::Error))?;
         Ok(())
     }
-    fn write_to_file<'a>(f: &mut File, t: &'a impl SSTable<'a>) -> Result<(), FlushError> {
-        let mut jumps_offsets = Vec::new();
-        let mut keyvec = Vec::new();
 
-        let keys = t.keys();
-        for k in keys {
-            keyvec.push(k);
-            let k = keyvec.last().ok_or(FlushError::Error)?;
-            f.write(k.as_slice()).or(Err(FlushError::Error))?;
+    fn write_to_file<'a, T: SSTableKeyWriter<'a> + SSTableValueWriter<'a>>(
+        f: &mut File,
+        t: &'a T,
+    ) -> std::io::Result<usize> {
+        let start_offset = f.seek(SeekFrom::Current(0))?;
 
-            let current_offset = f.seek(SeekFrom::Current(0)).or(Err(FlushError::Error))?;
-            jumps_offsets.push(current_offset);
+        // index table offset
+        // will be fixed later
+        f.write_u64::<LittleEndian>(0 as u64)?;
 
-            f.write_u64::<LittleEndian>(0 as u64)
-                .or(Err(FlushError::Error))?;
+        // Write keys and values
+        // store offset for the index
+        let mut offsets = Vec::new();
+
+        let mut keys = SSTableKeyWriter::start(t);
+        let mut values = SSTableValueWriter::start(t);
+        loop {
+            let current_offset = f.seek(SeekFrom::Current(0))?;
+            offsets.push(current_offset);
+
+            let size = SSTableKeyWriter::write(t, &mut keys, f)?;
+            if size == 0 {
+                break;
+            }
+
+            let size = SSTableValueWriter::write(t, &mut values, f)?;
+            if size == 0 {
+                break;
+            }
         }
 
-        let mut values_offsets = Vec::new();
-        let values = t.values();
+        let index_offset = f.seek(SeekFrom::Current(0))?;
 
-        let keys = keyvec.iter();
-        for (k, v) in keys.zip(values) {
-            let current_offset = f.seek(SeekFrom::Current(0)).or(Err(FlushError::Error))?;
-            values_offsets.push(current_offset);
+        // Write keys and offsets
+        let mut keys = SSTableKeyWriter::start(t);
+        let mut keyoffseti = 0;
+        loop {
+            let size = SSTableKeyWriter::write(t, &mut keys, f)?;
+            if size == 0 {
+                break;
+            }
 
-            f.write(k.as_slice()).or(Err(FlushError::Error))?;
-            f.write(v.as_slice()).or(Err(FlushError::Error))?;
+            f.write_u64::<LittleEndian>(offsets[keyoffseti] as u64)?;
+            keyoffseti += 1;
         }
 
-        let indices_to_fix = jumps_offsets.iter().zip(values_offsets.iter());
-        for (at, value) in indices_to_fix {
-            f.seek(SeekFrom::Start(*at)).or(Err(FlushError::Error))?;
-            f.write_u64::<LittleEndian>(*value)
-                .or(Err(FlushError::Error))?;
-        }
+        f.seek(SeekFrom::Current(start_offset as i64))?;
+        f.write_u64::<LittleEndian>(index_offset)?;
 
-        Ok(())
+        let end_offset = f.seek(SeekFrom::Current(0))?;
+        Ok((end_offset - start_offset) as usize)
     }
 }
 
 use std::collections::HashMap;
 
-impl<'a, K: 'a, V: 'a> SSTable<'a> for HashMap<K, V> {
-    type Iter = std::iter::Map<std::collections::hash_map::Iter<'a, K, V>, fn((&K, &V)) -> Vec<u8>>;
-
-    fn items(&'a self) -> Self::Iter {
+impl<'a, K: 'a, V: 'a> SSTableKeyWriter<'a> for HashMap<K, V>
+where
+    K: SSTableDataWriter,
+{
+    type T = std::collections::hash_map::Iter<'a, K, V>;
+    fn start(&'a self) -> Self::T {
         self.iter()
+    }
+    fn write(&'a self, iter: &mut Self::T, w: &mut impl std::io::Write) -> std::io::Result<usize> {
+        match iter.next() {
+            None => Ok(0),
+            Some((k, _)) => k.write_to(w),
+        }
+    }
+}
+
+impl<'a, K: 'a, V: 'a> SSTableValueWriter<'a> for HashMap<K, V>
+where
+    V: SSTableDataWriter,
+{
+    type T = std::collections::hash_map::Iter<'a, K, V>;
+    fn start(&'a self) -> Self::T {
+        self.iter()
+    }
+    fn write(&'a self, iter: &mut Self::T, w: &mut impl std::io::Write) -> std::io::Result<usize> {
+        match iter.next() {
+            None => Ok(0),
+            Some((_, v)) => v.write_to(w),
+        }
+    }
+}
+
+impl SSTableDataWriter for &str {
+    fn write_to(&self, w: &mut impl std::io::Write) -> std::io::Result<usize> {
+        w.write(self.as_bytes())
+    }
+}
+
+impl SSTableDataWriter for i32 {
+    fn write_to(&self, w: &mut impl std::io::Write) -> std::io::Result<usize> {
+        w.write_i32::<LittleEndian>(*self)?;
+        Ok(4)
     }
 }
 
@@ -93,5 +146,5 @@ fn main() {
     hm.insert("Daniel", 1);
     hm.insert("Niara", 2);
 
-    SSTableWriter::write("sstable.db", &hm).unwrap();
+    SSTable::write("sstable.db", &hm).unwrap();
 }
