@@ -1,24 +1,29 @@
 use byteorder::{LittleEndian, WriteBytesExt};
+use std::boxed::Box;
 use std::fs::File;
 use std::io::prelude::Write;
 use std::io::Seek;
 use std::io::SeekFrom;
 use thiserror::Error;
 
+trait Pusher<T> {
+    fn push(&mut self, v: T);
+}
+
+impl<T> Pusher<T> for Vec<T> {
+    fn push(&mut self, v: T) {
+        Vec::push(self, v);
+    }
+}
+
 trait SSTableDataWriter {
     fn write_to(&self, w: &mut impl std::io::Write) -> std::io::Result<usize>;
 }
 
-trait SSTableKeyWriter<'a> {
-    type T;
-    fn start(&'a self) -> Self::T;
-    fn write(&'a self, t: &mut Self::T, w: &mut impl std::io::Write) -> std::io::Result<usize>;
-}
-
-trait SSTableValueWriter<'a> {
-    type T;
-    fn start(&'a self) -> Self::T;
-    fn write(&'a self, t: &mut Self::T, w: &mut impl std::io::Write) -> std::io::Result<usize>;
+trait SSTableIterator<'a, K: 'a + SSTableDataWriter, V: 'a + SSTableDataWriter> {
+    fn iter(&'a self) -> Box<dyn Iterator<Item = (&'a K, &'a V)> + 'a>;
+    fn sorted_keys(&'a self) -> Vec<&'a K>;
+    fn get(&'a self, k: &'a K) -> Option<&'a V>;
 }
 
 struct SSTable {}
@@ -30,101 +35,93 @@ enum FlushError {
 }
 
 impl SSTable {
-    pub fn write<'a, T: SSTableKeyWriter<'a> + SSTableValueWriter<'a>>(
+    pub fn write<
+        'a,
+        K: 'a + SSTableDataWriter,
+        V: 'a + SSTableDataWriter,
+        T: SSTableIterator<'a, K, V>,
+    >(
         filename: &str,
         t: &'a T,
-    ) -> Result<(), FlushError> {
+    ) -> Result<usize, FlushError> {
         let mut file = File::create(filename).or(Err(FlushError::Error))?;
-        SSTable::write_to_file(&mut file, t).or(Err(FlushError::Error))?;
+        let size = SSTable::write_to_file(&mut file, t).or(Err(FlushError::Error))?;
         file.flush().or(Err(FlushError::Error))?;
-        Ok(())
+        Ok(size)
     }
 
-    fn write_to_file<'a, T: SSTableKeyWriter<'a> + SSTableValueWriter<'a>>(
+    fn write_to_file<
+        'a,
+        K: 'a + SSTableDataWriter,
+        V: 'a + SSTableDataWriter,
+        T: SSTableIterator<'a, K, V>,
+    >(
         f: &mut File,
         t: &'a T,
-    ) -> std::io::Result<usize> {
-        let start_offset = f.seek(SeekFrom::Current(0))?;
+    ) -> Result<usize, FlushError> {
+        let start_offset = f.seek(SeekFrom::Current(0)).or(Err(FlushError::Error))?;
 
         // index table offset
         // will be fixed later
-        f.write_u64::<LittleEndian>(0 as u64)?;
+        f.write_u64::<LittleEndian>(0 as u64)
+            .or(Err(FlushError::Error))?;
 
         // Write keys and values
         // store offset for the index
-        let mut offsets = Vec::new();
+        let mut offsets: HashMap<usize, u64> = HashMap::new();
 
-        let mut keys = SSTableKeyWriter::start(t);
-        let mut values = SSTableValueWriter::start(t);
-        loop {
-            let current_offset = f.seek(SeekFrom::Current(0))?;
-            offsets.push(current_offset);
+        for (k, v) in t.iter() {
+            let current_offset = f.seek(SeekFrom::Current(0)).or(Err(FlushError::Error))?;
+            let addr = (k as *const K) as usize;
+            offsets.insert(addr, current_offset);
 
-            let size = SSTableKeyWriter::write(t, &mut keys, f)?;
-            if size == 0 {
-                break;
-            }
-
-            let size = SSTableValueWriter::write(t, &mut values, f)?;
-            if size == 0 {
-                break;
-            }
+            k.write_to(f).or(Err(FlushError::Error))?;
+            v.write_to(f).or(Err(FlushError::Error))?;
         }
 
-        let index_offset = f.seek(SeekFrom::Current(0))?;
+        let index_offset = f.seek(SeekFrom::Current(0)).or(Err(FlushError::Error))?;
 
         // Write keys and offsets
-        let mut keys = SSTableKeyWriter::start(t);
-        let mut keyoffseti = 0;
-        loop {
-            let size = SSTableKeyWriter::write(t, &mut keys, f)?;
-            if size == 0 {
-                break;
-            }
-
-            f.write_u64::<LittleEndian>(offsets[keyoffseti] as u64)?;
-            keyoffseti += 1;
+        let keys = t.sorted_keys();
+        for k in keys.iter() {
+            k.write_to(f).or(Err(FlushError::Error))?;
+            let addr = (*k as *const K) as usize;
+            offsets
+                .get(&addr)
+                .unwrap()
+                .write_to(f)
+                .or(Err(FlushError::Error))?;
         }
 
-        f.seek(SeekFrom::Current(start_offset as i64))?;
-        f.write_u64::<LittleEndian>(index_offset)?;
+        f.seek(SeekFrom::Current(start_offset as i64))
+            .or(Err(FlushError::Error))?;
+        f.write_u64::<LittleEndian>(index_offset)
+            .or(Err(FlushError::Error))?;
 
-        let end_offset = f.seek(SeekFrom::Current(0))?;
+        let end_offset = f.seek(SeekFrom::Current(0)).or(Err(FlushError::Error))?;
         Ok((end_offset - start_offset) as usize)
     }
 }
 
 use std::collections::HashMap;
 
-impl<'a, K: 'a, V: 'a> SSTableKeyWriter<'a> for HashMap<K, V>
+impl<'a, K: 'a + Ord, V: 'a> SSTableIterator<'a, K, V> for HashMap<K, V>
 where
-    K: SSTableDataWriter,
-{
-    type T = std::collections::hash_map::Iter<'a, K, V>;
-    fn start(&'a self) -> Self::T {
-        self.iter()
-    }
-    fn write(&'a self, iter: &mut Self::T, w: &mut impl std::io::Write) -> std::io::Result<usize> {
-        match iter.next() {
-            None => Ok(0),
-            Some((k, _)) => k.write_to(w),
-        }
-    }
-}
-
-impl<'a, K: 'a, V: 'a> SSTableValueWriter<'a> for HashMap<K, V>
-where
+    K: SSTableDataWriter + std::hash::Hash,
     V: SSTableDataWriter,
 {
-    type T = std::collections::hash_map::Iter<'a, K, V>;
-    fn start(&'a self) -> Self::T {
-        self.iter()
+    fn iter(&'a self) -> Box<dyn Iterator<Item = (&'a K, &'a V)> + 'a> {
+        Box::new(self.iter())
     }
-    fn write(&'a self, iter: &mut Self::T, w: &mut impl std::io::Write) -> std::io::Result<usize> {
-        match iter.next() {
-            None => Ok(0),
-            Some((_, v)) => v.write_to(w),
-        }
+
+    fn sorted_keys(&'a self) -> Vec<&'a K> {
+        let mut keys: Vec<&'a K> = self.keys().collect();
+        keys.sort_by(|a, b| (*a).cmp(*b));
+        keys
+    }
+
+    fn get(&'a self, k: &'a K) -> Option<&'a V> {
+        self.get(k)
     }
 }
 
@@ -138,6 +135,20 @@ impl SSTableDataWriter for i32 {
     fn write_to(&self, w: &mut impl std::io::Write) -> std::io::Result<usize> {
         w.write_i32::<LittleEndian>(*self)?;
         Ok(4)
+    }
+}
+
+impl SSTableDataWriter for u64 {
+    fn write_to(&self, w: &mut impl std::io::Write) -> std::io::Result<usize> {
+        w.write_u64::<LittleEndian>(*self as u64)?;
+        Ok(8)
+    }
+}
+
+impl SSTableDataWriter for usize {
+    fn write_to(&self, w: &mut impl std::io::Write) -> std::io::Result<usize> {
+        w.write_u64::<LittleEndian>(*self as u64)?;
+        Ok(8)
     }
 }
 
