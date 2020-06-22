@@ -1,0 +1,4 @@
+#! /bin/bash
+pushd boids-wasm
+    wasm-pack build -d ../frontend/wasm/ -t web
+popd

@@ -1,0 +1,2 @@
+#! /bin/bash
+clang++-10 -std=c++2a main.cpp -I/root/github/seastar/include

@@ -1,0 +1,8 @@
+[package]
+name = "concurrency"
+version = "0.1.0"
+authors = ["Daniel Leite <1985.daniel@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+tokio = { version = "0.2.21", features = ["full"] }

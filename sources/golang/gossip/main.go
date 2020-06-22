@@ -145,7 +145,6 @@ func main() {
 
 	done := make(chan bool, 2)
 	dictionaryChannel := make(chan interface{}, 10)
-
 	go dictionaryActor(dictionaryChannel)
 
 	udp, err := openUDP(*listenPort)
