@@ -1,0 +1,2 @@
+#!/bin/bash
+RUST_LOG=trace LOOM_LOCATION=1 LOOM_CHECKPOINT_INTERVAL=1 LOOM_LOG=1 RUSTFLAGS="--cfg loom --cfg loom_nightly --cfg loom_show_code" cargo test -- --nocapture 
