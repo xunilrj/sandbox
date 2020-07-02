@@ -27,6 +27,7 @@ Example test_next_weekday:
 
 Proof. simpl. reflexivity. Qed.
 
+(*
 (* BOOLEAN *)
 Inductive bool : Type :=
   | true
@@ -42,6 +43,9 @@ Definition andb (b1:bool) (b2:bool) : bool :=
   | true => b2
   | false => false
   end.
+
+
+*)
 
 Definition nandb (b1:bool) (b2:bool) : bool :=
   negb (andb b1 b2).
@@ -86,8 +90,8 @@ Inductive color : Type :=
   | primary (p : rgb).
 
 
-
-(* NATURALS *)
+(*
+NATURALS
 Module NatPlayground.
 (* Inductive nat : Type :=
 | O
@@ -167,7 +171,7 @@ Example test_ltb3: (ltb 4 2) = false.
 Proof. simpl. reflexivity. Qed.
 
 End NatPlayground.
-
+*)
 
 Theorem plus_O_n : forall n : nat, 0 + n = n.
 Proof.
@@ -180,3 +184,133 @@ Proof.
 Theorem mult_0_l : forall n:nat, 0 * n = 0.
 Proof.
   intros n. reflexivity. Qed.
+
+
+
+
+Theorem plus_id_example : forall n m:nat,
+  n = m ->
+  n + n = m + m.
+Proof.
+  intros n m.
+  intros H.
+  rewrite <- H.
+  reflexivity. Qed.
+
+
+Theorem plus_id_exercise : forall n m o : nat,
+  n = m -> m = o -> n + m = m + o.
+Proof.
+  intros n m o.
+  intros H0.
+  intros H1.
+  rewrite -> H0.
+  rewrite -> H1.
+  reflexivity. Qed.
+
+
+Theorem mult_0_plus : forall n m : nat,
+  (0 + n) * m = n * m.
+Proof.
+  intros n m.
+  rewrite -> plus_O_n.
+  reflexivity. Qed.
+
+Theorem mult_S_1 : forall n m : nat,
+  m = S n ->
+  m * (1 + n) = m * m.
+Proof.
+  intros n m H.
+  simpl.
+  rewrite <- H.
+  reflexivity.
+  Qed.
+
+
+Theorem negb_involutive : forall b : bool,
+  negb (negb b) = b.
+Proof.
+  intros b. destruct b eqn:E1.
+  - reflexivity.
+  - reflexivity.
+  Qed.
+
+Theorem andb_commutative : forall b c,
+  andb b c = andb c b.
+Proof.
+  intros b c. destruct b eqn:Eb.
+  - destruct c eqn:Ec.
+    + reflexivity.
+    + reflexivity.
+  - destruct c eqn:Ec.
+    + reflexivity.
+    + reflexivity.
+Qed.
+
+
+Theorem andb_true_elim2 : forall b c : bool,
+  andb b c = true -> c = true.
+Proof.
+  intros [] [].
+  - reflexivity.
+  - simpl. intros H. rewrite -> H. reflexivity.
+  - reflexivity.
+  - simpl. intros H. rewrite -> H. reflexivity.
+  Qed.
+
+(******************************************** EXERCIES *)
+
+Theorem identity_fn_applied_twice :
+  forall (f : bool -> bool),
+  (forall (x : bool), f x = x) -> forall (b : bool), f (f b) = b.
+Proof.
+  intros f x b.
+  rewrite -> x.
+  rewrite -> x.
+  reflexivity.
+  Qed.
+
+Theorem negation_fn_applied_twice :
+  forall (f : bool -> bool),
+  (forall (x : bool), f x = negb x) -> forall (b : bool), f (f b) = b.
+Proof.
+  intros f b c.
+  rewrite -> b.
+  rewrite -> b.
+  rewrite -> negb_involutive.
+  reflexivity.
+  Qed.
+  
+Theorem andb_eq_orb : forall b c : bool,
+  (andb b c = orb b c) -> b = c.
+Proof.
+  intros [] [].
+  - reflexivity.
+  - simpl. intros H. rewrite -> H. reflexivity.
+  - simpl. intros H. rewrite -> H. reflexivity.
+  - reflexivity.
+Qed.
+
+Inductive bin : Type :=
+  | Z
+  | A (n : bin)
+  | B (n : bin).
+  
+Fixpoint incr (n : bin) : bin :=
+  match n with
+  | Z => B Z
+  | A n' => B n'
+  | B n' => A (incr n')
+  end.
+
+Fixpoint bin_to_nat (b : bin) : nat :=
+  match b with
+  | Z => 0
+  | A b' => 2 * (bin_to_nat b')
+  | B b' => 1 + 2 * (bin_to_nat b')
+  end.
+  
+Example test_bin_incr1 :=
+  bin_to_nat(incr (B (B (B (B Z))))).
+  
+Compute bin_to_nat(incr (B (B (B (B Z))))).
