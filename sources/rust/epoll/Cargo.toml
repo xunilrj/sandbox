@@ -1,0 +1,11 @@
+[package]
+name = "epoll"
+version = "0.1.0"
+authors = ["Daniel Leite <1985.daniel@gmail.com>"]
+edition = "2018"
+
+[profile.release]
+debug = true
+
+[dependencies]
+derive_builder = "0.9.0"
