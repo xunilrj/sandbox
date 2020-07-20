@@ -1,5 +1,8 @@
 # Index
 
+[![Anurag's github stats](https://github-readme-stats.vercel.app/api?username=xunilrj)](https://github.com/xunilrj/sandbox)
+
+
 ## Math
 ### Theory
 [Geometric Interpretation of Covariance](texts/math/Statistics/GeometricInterpretationOfCovarianceMatrix.pdf)   
