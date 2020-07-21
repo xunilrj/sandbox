@@ -1,52 +1,62 @@
-use super::{
-    epoll_create1, EpollCreateFlag, EpollSocket, Errno, Protocol, SinFamily, SockType, Socket,
-};
+use super::{epoll_create1, EpollCreateFlag, EpollEventData, EpollSocket, Errno};
 use crate::platform::api::Epoll;
 use crate::platform::linux_x86_64::epoll_wait;
-use crate::platform::linux_x86_64::EpollEvent;
 use crate::platform::linux_x86_64::EpollEventBuilder;
-use crate::platform::linux_x86_64::SocketAddressInetBuilder;
+use log::trace;
 use std::sync::mpsc::Receiver;
-use std::task::Waker;
+use std::{task::Waker, thread::JoinHandle};
 
-pub fn open(port: u16) -> Result<Socket, Errno> {
-    let fd = Socket::new(SinFamily::Inet, SockType::StreamNonBlock, Protocol::TCP)?;
-    let addr = SocketAddressInetBuilder::default()
-        .port(port)
-        .build()
-        .unwrap();
-    fd.bind(&addr)?;
-    fd.listen(1000)?;
-    Ok(fd)
-}
-
-pub async fn accept<F: Fn(EpollSocket)>(fd: EpollSocket, f: F) {
-    let mut fd = fd;
+pub async fn acceptor<'a, F: Fn(EpollSocket<'a>)>(mut fd: EpollSocket<'a>, f: F) {
     loop {
+        trace!(target: "Acceptor", "Waiting...");
         let (newfd, _) = fd.accept_async().await.unwrap();
+        trace!(target: "Acceptor", "Accepted {:?}", newfd);
         f(newfd);
     }
 }
 
-pub struct EpollReactor(pub Epoll);
+pub fn dummy_receiver<T: 'static + Send>(r: Receiver<T>) -> JoinHandle<!> {
+    std::thread::spawn(move || loop {
+        let _ = r.recv().unwrap();
+    })
+}
+
+pub struct EpollReactor {
+    pub epoll: Epoll,
+}
 impl EpollReactor {
-    pub fn new() -> Self {
-        let epoll = epoll_create1(EpollCreateFlag::None).unwrap();
-        Self(Epoll(epoll as i32))
+    pub fn new() -> Result<Self, Errno> {
+        let epoll = Epoll(epoll_create1(EpollCreateFlag::None)?);
+        Ok(Self { epoll })
     }
     pub fn spawn(&self) -> Receiver<u64> {
         let (w, r) = std::sync::mpsc::channel();
-        let epfd = (self.0).0;
-        std::thread::spawn(move || loop {
-            let mut waitevents = vec![EpollEventBuilder::uninitialized(); 100];
-            let qtd = epoll_wait(epfd as u16, &mut waitevents, 10000).unwrap() as usize;
-            for i in 0..qtd {
-                let e = waitevents[i].data_as::<EpollEvent>();
-                let waker = e.data_as::<Waker>();
-                waker.wake_by_ref();
-                w.send(e.data as u64).unwrap();
-            }
-        });
+        let epfd = self.epoll.0;
+        std::thread::Builder::new()
+            .name("EpollReactor".to_owned())
+            .spawn(move || -> Result<(), Errno> {
+                trace!(target: "EpollReactor", "Start");
+                loop {
+                    let mut events = vec![EpollEventBuilder::uninitialized(); 100];
+                    let qtd = epoll_wait(epfd, &mut events, -1).unwrap() as usize;
+                    trace!(target: "EpollReactor", "epoll_wait returned [{}] events", qtd);
+                    for i in 0..qtd {
+                        match events[i]
+                            .data_as_mut::<EpollEventData>()
+                            .map(|x| x.take_ref::<Waker>())
+                            .flatten()
+                        {
+                            Some(waker) => {
+                                trace!(target: "EpollReactor", "Waking event {} @ {:X}", i, waker as *const Waker as usize);
+                                waker.wake_by_ref();
+                                w.send(0).unwrap();
+                            }
+                            None => {}
+                        }
+                    }
+                }
+            })
+            .unwrap();
         r
     }
 }

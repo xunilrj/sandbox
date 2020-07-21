@@ -1,8 +1,8 @@
+use log::trace;
 use std::{
-    cell::RefCell,
     future::Future,
     pin::Pin,
-    sync::Arc,
+    sync::{Arc, Mutex},
     task::{Context, Poll, RawWaker, RawWakerVTable, Waker},
 };
 
@@ -26,6 +26,9 @@ fn new_waker(data: *const ()) -> Waker {
 
 struct Spawner {}
 
+unsafe impl Send for Spawner {}
+unsafe impl Sync for Spawner {}
+
 impl Spawner {
     pub fn spawn<'a, T: 'a + Future<Output = ()>>(&'a mut self, f: T)
     where
@@ -44,8 +47,8 @@ impl Spawner {
         match p.poll(&mut context) {
             Poll::Pending => {}
             Poll::Ready(_) => {
-                let b = unsafe { Box::from_raw(data as *mut Task) };
-                let _ = unsafe { Box::from_raw(b.f) };
+                // let b = unsafe { Box::from_raw(data as *mut Task) };
+                // let _ = unsafe { Box::from_raw(b.f) };
             }
         };
     }
@@ -58,15 +61,32 @@ impl Spawner {
         match p.poll(&mut context) {
             Poll::Pending => {}
             Poll::Ready(_) => {
-                let b = unsafe { Box::from_raw(data as *mut Task) };
-                let _ = unsafe { Box::from_raw(b.f) };
+                // let b = unsafe { Box::from_raw(data as *mut Task) };
+                // let _ = unsafe { Box::from_raw(b.f) };
             }
         };
     }
 }
 
+trait Runnable {
+    fn run(self, spawner: &mut Spawner);
+}
+
+struct SpawnerData(Box<dyn FnOnce(&mut Spawner)>);
+
+impl<'a> Runnable for SpawnerData {
+    fn run(self, spawner: &mut Spawner) {
+        self.0(spawner)
+    }
+}
+
+unsafe impl<'a> Send for SpawnerData {}
+
 pub struct Runtime {
-    spawner: Arc<RefCell<Spawner>>,
+    spawner: Arc<Mutex<Spawner>>,
+    threads: Vec<std::thread::JoinHandle<()>>,
+    sender: crossbeam::channel::Sender<SpawnerData>,
+    receiver: crossbeam::channel::Receiver<SpawnerData>,
 }
 
 struct Task<'a> {
@@ -77,25 +97,65 @@ struct Task<'a> {
 
 impl Runtime {
     pub fn new() -> Self {
+        let (s, r) = crossbeam::channel::unbounded();
+
         Runtime {
-            spawner: Arc::new(RefCell::new(Spawner {})),
+            spawner: Arc::new(Mutex::new(Spawner {})),
+            threads: Vec::new(),
+            sender: s,
+            receiver: r,
         }
+    }
+
+    pub fn increase_threads(&mut self, delta: u8) -> std::io::Result<()> {
+        for tid in 0..delta {
+            let r = self.receiver.clone();
+            let spawner = self.spawner.clone();
+            let f = move || {
+                trace!(target:"Runtime", "Thread {} Started", tid);
+                loop {
+                    match r.recv() {
+                        Ok(msg) => {
+                            trace!(target:"Runtime", "Thread {}", tid);
+                            let mut guard = spawner.lock().unwrap();
+                            msg.run(&mut guard);
+                        }
+                        Err(_) => break,
+                    }
+                }
+                trace!(target:"Runtime", "Thread {} stopped", tid);
+            };
+            let j = std::thread::Builder::new()
+                .name(format!("Runtime #{}", 1))
+                .spawn(f)?;
+            self.threads.push(j);
+        }
+
+        Ok(())
     }
 
     pub fn spawn<'a, T: 'a + Future<Output = ()>>(&'a self, f: T)
     where
         T::Output: std::fmt::Debug,
     {
-        self.spawner.borrow_mut().spawn(f)
+        self.spawner.lock().unwrap().spawn(f)
     }
 
-    pub fn spawner<'a, T1, TR: 'a + Future<Output = ()>, F: 'a + Fn(T1) -> TR>(
-        &'a self,
-        f: &'a F,
-    ) -> Box<dyn Fn(T1) + 'a> {
-        let spawner = self.spawner.clone();
+    pub fn spawner<
+        T1: 'static,
+        TR: 'static + Future<Output = ()> + Send + Sync,
+        F: Fn(T1) -> TR,
+    >(
+        &self,
+        f: &'static F,
+    ) -> Box<dyn Fn(T1) + 'static> {
+        let s = self.sender.clone();
         Box::new(move |x| {
-            spawner.borrow_mut().spawn(f(x));
+            let msg = SpawnerData(Box::new(move |s| {
+                let future = f(x);
+                s.spawn(future);
+            }));
+            s.send(msg).unwrap();
         })
     }
 }

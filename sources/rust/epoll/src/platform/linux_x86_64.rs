@@ -20,6 +20,7 @@ enum Syscall {
 #[derive(Clone, Copy)]
 #[allow(dead_code)]
 pub enum Errno {
+    NoFile = 2,
     BadFileDescriptor = 9,
     WouldBlock = 11,
     Fault = 14,
@@ -27,9 +28,10 @@ pub enum Errno {
     MaxErrno = 4095,
 }
 
-impl Debug for Errno {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let data = match self {
+impl From<&Errno> for String {
+    fn from(errno: &Errno) -> Self {
+        match errno {
+            Errno::NoFile => "No such file or directory (POSIX.1-2001)".to_string(),
             Errno::WouldBlock => {
                 "Operation would block (may be same value as EAGAIN)(POSIX.1-2001)".to_owned()
             }
@@ -37,7 +39,19 @@ impl Debug for Errno {
             Errno::BadFileDescriptor => "Bad file descriptor (POSIX.1-2001)".to_owned(),
             Errno::InvalidArgument => "Invalid argument (POSIX.1-2001)".to_owned(),
             x @ _ => format!("Unknown errno: [{}]", *x as i32),
-        };
+        }
+    }
+}
+
+impl From<Errno> for String {
+    fn from(errno: Errno) -> Self {
+        (&errno).into()
+    }
+}
+
+impl Debug for Errno {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let data: String = self.into();
         f.write_str(&data)
     }
 }
@@ -323,7 +337,8 @@ pub fn epoll_create1(flags: EpollCreateFlag) -> Result<u16, Errno> {
 pub enum EpollEvents {
     In = 0x0000_0001,
     EdgeTriggered = 1 << 31,
-    InEdgeTriggered = 0x0000_0001 | 1 << 31,
+    OneShot = 1 << 30,
+    InOneShot = 0x0000_0001 | 1 << 30,
 }
 
 #[repr(C, packed)]
@@ -334,16 +349,20 @@ pub struct EpollEvent {
 }
 
 impl EpollEvent {
-    // pub fn data<T>(&mut self, pin: &Pin<Box<T>>) {
-    //     self.data = pin.as_ref().get_ref() as *const T as *const () as usize;
+    // pub fn data_as_ref<T>(&self) -> Option<&T> {
+    //     if self.data == 0 {
+    //         None
+    //     } else {
+    //         Some(unsafe { &*(self.data as *const () as *const T) })
+    //     }
     // }
 
-    pub fn data_as<T>(&self) -> &T {
-        unsafe { &*(self.data as *const () as *const T) }
-    }
-
-    pub fn data_to_self(self: &mut Pin<Box<Self>>) {
-        self.data = self.as_ref().get_ref() as *const Self as *const () as usize;
+    pub fn data_as_mut<T>(&self) -> Option<&mut T> {
+        if self.data == 0 {
+            None
+        } else {
+            Some(unsafe { &mut *(self.data as *mut () as *mut T) })
+        }
     }
 }
 
@@ -351,19 +370,19 @@ pub struct EpollEventBuilder(EpollEvents, Option<*const ()>);
 impl EpollEventBuilder {
     pub fn uninitialized() -> EpollEvent {
         EpollEvent {
-            events: EpollEvents::InEdgeTriggered,
+            events: EpollEvents::InOneShot,
             data: 0,
         }
     }
 
-    pub fn in_edge_triggered() -> Self {
-        Self(EpollEvents::InEdgeTriggered, None)
+    pub fn in_edge_triggered_one_shot() -> Self {
+        Self(EpollEvents::InOneShot, None)
     }
 
-    // pub fn data<T>(&mut self, pin: &Pin<Box<T>>) -> &mut Self {
-    //     self.1 = Some(pin.as_ref().get_ref() as *const T as *const ());
-    //     self
-    // }
+    pub fn data<T>(&mut self, pin: &Pin<Box<T>>) -> &mut Self {
+        self.1 = Some(pin.as_ref().get_ref() as *const T as *const ());
+        self
+    }
 
     pub fn pin_box(&self) -> Pin<Box<EpollEvent>> {
         Box::pin(EpollEvent {
@@ -379,6 +398,7 @@ impl EpollEventBuilder {
 pub enum EpollOperation {
     Add = 1,
     Delete = 2,
+    Modify = 3,
 }
 
 pub fn epoll_ctl(
