@@ -1,0 +1,43 @@
+<html>
+
+<head>
+    <script src="opencvjs/opencv.js"></script>
+</head>
+
+<body>
+
+    <div>
+        <button id="record-start">start</button>
+        <button id="record-end">stop</button>
+    </div>
+    <div>
+        <video width="300px" height="200px" id="cam"></video>
+        <canvas width="300px" height="200px" id="camcanvas"></canvas>
+    </div>
+    <div>
+        <div>steps</div>
+        <div>
+            <canvas width="300px" height="200px" id="step1"></canvas>
+            <canvas width="300px" height="200px" id="step2"></canvas>
+            <canvas width="300px" height="200px" id="step3"></canvas>
+            <canvas width="300px" height="200px" id="step4"></canvas>
+            <canvas width="300px" height="200px" id="step5"></canvas>
+            <canvas width="300px" height="200px" id="step6"></canvas>
+            <canvas width="300px" height="200px" id="step7"></canvas>
+            <canvas width="300px" height="200px" id="step8"></canvas>
+        </div>
+        <pre id="sudoko-textarea">
+
+        </pre>
+    </div>
+    <div>
+        <button id="record-play">play</button>
+    </div>
+    <div>
+        <video width="300px" height="200px" id="vid"></video>
+        <script type='module' src="index.js"></script>
+    </div>
+
+</body>
+
+</html>

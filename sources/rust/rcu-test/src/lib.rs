@@ -109,9 +109,9 @@ impl<'a, T: Debug> Fifo<T> {
 }
 
 #[cfg(test)]
-#[cfg(loom)]
 mod tests {
     #[test]
+    #[cfg(loom)]
     fn t1push_t2pop() {
         pretty_env_logger::init();
         loom::model(|| {
@@ -132,5 +132,12 @@ mod tests {
             j1.join().unwrap();
             assert_eq!(1, j2.join().unwrap());
         });
+    }
+
+    #[test]
+    fn a() {
+        let a = 1;
+        let b = 2;
+        assert_eq!(a + b, 3);
     }
 }

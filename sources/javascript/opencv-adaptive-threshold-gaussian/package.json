@@ -1,0 +1,17 @@
+{
+  "name": "opencv-adaptive-threshold-gaussian",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tensorflow/tfjs": "^2.0.1",
+    "http-server": "^0.12.3",
+    "snowpack": "^2.5.4"
+  }
+}

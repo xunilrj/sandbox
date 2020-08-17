@@ -1,4 +1,4 @@
-use std::{convert::TryFrom, fmt::Debug, pin::Pin};
+use std::{convert::TryFrom, fmt::Debug, pin::Pin, sync::Arc};
 
 // https://filippo.io/linux-syscall-table/
 #[repr(C)]
@@ -349,49 +349,11 @@ pub struct EpollEvent {
 }
 
 impl EpollEvent {
-    // pub fn data_as_ref<T>(&self) -> Option<&T> {
-    //     if self.data == 0 {
-    //         None
-    //     } else {
-    //         Some(unsafe { &*(self.data as *const () as *const T) })
-    //     }
-    // }
-
-    pub fn data_as_mut<T>(&self) -> Option<&mut T> {
-        if self.data == 0 {
-            None
-        } else {
-            Some(unsafe { &mut *(self.data as *mut () as *mut T) })
-        }
-    }
-}
-
-pub struct EpollEventBuilder(EpollEvents, Option<*const ()>);
-impl EpollEventBuilder {
-    pub fn uninitialized() -> EpollEvent {
-        EpollEvent {
+    pub fn new(data: usize) -> Self {
+        Self {
             events: EpollEvents::InOneShot,
             data: 0,
         }
-    }
-
-    pub fn in_edge_triggered_one_shot() -> Self {
-        Self(EpollEvents::InOneShot, None)
-    }
-
-    pub fn data<T>(&mut self, pin: &Pin<Box<T>>) -> &mut Self {
-        self.1 = Some(pin.as_ref().get_ref() as *const T as *const ());
-        self
-    }
-
-    pub fn pin_box(&self) -> Pin<Box<EpollEvent>> {
-        Box::pin(EpollEvent {
-            events: self.0,
-            data: match self.1 {
-                None => 0,
-                Some(v) => v as usize,
-            },
-        })
     }
 }
 

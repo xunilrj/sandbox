@@ -16,6 +16,7 @@ use platform::{
 use runtime::Runtime;
 
 async fn handle<'a>(mut fd: EpollSocket<'a>) {
+    let fd = Box::leak(Box::new(fd));
     trace!(target: "Handler", "Reading {:?}", fd);
     match fd.read(1024).await {
         Ok((buff, size)) => {

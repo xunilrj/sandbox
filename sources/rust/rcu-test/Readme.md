@@ -2,9 +2,11 @@
 
 ## Memory Models
 
-https://preshing.com/20120710/memory-barriers-are-like-source-control-operations
-https://preshing.com/20120625/memory-ordering-at-compile-time
-https://preshing.com/20120913/acquire-and-release-semantics
+https://preshing.com/20120710/memory-barriers-are-like-source-control-operations  
+https://preshing.com/20120625/memory-ordering-at-compile-time  
+https://preshing.com/20120913/acquire-and-release-semantics  
+
+https://www.nickwilcox.com/blog/arm_vs_x86_memory_model  
 
 ## Fifo
 

@@ -1,3 +1,4 @@
+use super::EpollEvent;
 use crate::platform::linux_x86_64::{
     accept4, bind, close, epoll_ctl, listen, read, socket, write, Accept4Flags::NonBlock,
     EpollEventBuilder, EpollOperation, Errno, Protocol, SinFamily, SockType, SocketAddress,
@@ -7,8 +8,11 @@ use log::trace;
 use std::{
     fmt::Debug,
     pin::Pin,
-    sync::atomic::{AtomicUsize, Ordering},
-    task::Poll,
+    sync::{
+        atomic::{AtomicPtr, AtomicUsize, Ordering},
+        Arc, Mutex, RwLock,
+    },
+    task::{Poll, RawWaker, Waker},
 };
 
 pub struct Socket(pub u16);
@@ -23,35 +27,6 @@ impl Drop for Socket {
     fn drop(&mut self) {
         if self.0 > 0 {
             let _ = close(self.0);
-        }
-    }
-}
-
-pub struct EpollEventData(AtomicUsize);
-impl EpollEventData {
-    pub fn pinned() -> Pin<Box<EpollEventData>> {
-        Box::pin(EpollEventData(AtomicUsize::new(0)))
-    }
-
-    // pub fn store_usize(&mut self, value: usize) {
-    //     self.0.store(value, Ordering::SeqCst);
-    // }
-
-    // pub fn store_mut<T>(&mut self, value: &mut T) {
-    //     self.0.store(value as *const T as usize, Ordering::SeqCst);
-    // }
-
-    pub fn store_ref<T>(&mut self, value: &T) -> Option<&T> {
-        match self.0.swap(value as *const T as usize, Ordering::SeqCst) {
-            0 => None,
-            r => unsafe { Some(&*(r as *const T)) },
-        }
-    }
-
-    pub fn take_ref<T>(&mut self) -> Option<&T> {
-        match self.0.swap(0, Ordering::SeqCst) {
-            0 => None,
-            r => unsafe { Some(&*(r as *const T)) },
         }
     }
 }
@@ -81,40 +56,100 @@ impl Socket {
     }
 
     pub fn attach<'a>(mut self, epoll: &'a Epoll) -> EpollSocket<'a> {
-        let fd = self.0;
-        self.0 = 0;
+        let mut fd = 0;
+        std::mem::swap(&mut fd, &mut self.0);
 
-        let data = EpollEventData::pinned();
-        let mut event = EpollEventBuilder::in_edge_triggered_one_shot()
-            .data(&data)
-            .pin_box();
-        epoll_ctl(epoll.0, EpollOperation::Add, fd, &mut event).unwrap();
+        let idx = epoll.reserve();
+        let mut event = EpollEvent::new(idx);
+        epoll_ctl(epoll.fd, EpollOperation::Add, fd, &mut event).unwrap();
 
-        EpollSocket { fd, epoll, data }
+        EpollSocket { fd, epoll, idx }
     }
 }
 
-pub struct Epoll(pub u16);
+#[derive(Copy, Clone)]
+struct EpollData {
+    free: bool,
+    data: usize,
+}
+
+pub struct Epoll {
+    pub fd: u16,
+    ptrs: Mutex<Vec<EpollData>>,
+    nextptr: usize,
+}
 
 impl Drop for Epoll {
     fn drop(&mut self) {
-        let _ = close(self.0);
+        let _ = close(self.fd);
     }
 }
 
-impl Epoll {}
+impl Epoll {
+    pub fn new(fd: u16) -> Self {
+        Self {
+            fd,
+            ptrs: Mutex::new(vec![
+                EpollData {
+                    free: true,
+                    data: 0
+                };
+                100
+            ]),
+            nextptr: 0,
+        }
+    }
+
+    pub fn reserve(&mut self) -> usize {
+        let mut g = self.ptrs.lock().unwrap();
+        let mut idx = self.nextptr;
+        while !g[idx].free {
+            idx += 1;
+            if idx >= g.len() {
+                idx = 0;
+            }
+        }
+
+        g[idx] = EpollData {
+            free: false,
+            data: 0,
+        };
+
+        self.nextptr += 1;
+        if self.nextptr >= g.len() {
+            self.nextptr = 0;
+        }
+
+        idx
+    }
+
+    pub fn take(&mut self, idx: usize) -> Option<&Waker> {
+        let mut g = self.ptrs.lock().unwrap();
+        if g[idx].free {
+            None
+        } else {
+            g[idx].free = true;
+            Some(unsafe { &*(g[idx].data as *const Waker) })
+        }
+    }
+
+    pub fn store(&mut self, idx: usize, waker: &Waker) {
+        let mut g = self.ptrs.lock().unwrap();
+        g[idx].data = waker as *const Waker as usize;
+    }
+}
 
 pub struct EpollSocket<'a> {
     fd: u16,
     epoll: &'a Epoll,
-    data: Pin<Box<EpollEventData>>,
+    idx: usize,
 }
 
 impl<'a> Debug for EpollSocket<'a> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.write_str(&format!(
             "EpollSocket(fd: {},epollfd: {})",
-            self.fd, self.epoll.0
+            self.fd, self.epoll.fd
         ))
     }
 }
@@ -122,10 +157,10 @@ impl<'a> Debug for EpollSocket<'a> {
 impl<'a> Drop for EpollSocket<'a> {
     fn drop(&mut self) {
         if self.fd > 0 {
-            trace!(target:"SocketApi", "Socket closing {} {:X}", self.fd, self.data.as_ref().get_ref() as *const EpollEventData as usize);
+            trace!(target:"SocketApi", "Socket closing {}", self.fd);
 
             epoll_ctl(
-                self.epoll.0,
+                self.epoll.fd,
                 EpollOperation::Delete,
                 self.fd,
                 &mut EpollEventBuilder::uninitialized(),
@@ -140,48 +175,45 @@ impl<'a> EpollSocket<'a> {
     pub async fn accept_async<'b>(
         &'b mut self,
     ) -> Result<(EpollSocket<'a>, SocketAddressInet), Errno> {
-        let (fd, addr) = Accept4Awaitable(&self.fd, &mut self.data).await;
+        let (fd, addr) = Accept4Awaitable(&self.fd, &self.epoll, &self.idx).await;
 
-        let mut event = EpollEventBuilder::in_edge_triggered_one_shot()
-            .data(&self.data)
-            .pin_box();
-        epoll_ctl(self.epoll.0, EpollOperation::Modify, self.fd, &mut event)?;
+        let mut event = EpollEvent::new(self.idx);
+        epoll_ctl(self.epoll.fd, EpollOperation::Modify, self.fd, &mut event)?;
 
-        let data = EpollEventData::pinned();
-        let mut event = EpollEventBuilder::in_edge_triggered_one_shot()
-            .data(&data)
-            .pin_box();
-        epoll_ctl(self.epoll.0, EpollOperation::Add, fd, &mut event)?;
+        let idx = self.epoll.reserve();
+        let mut event = EpollEvent::new(idx);
+        epoll_ctl(self.epoll.fd, EpollOperation::Add, fd, &mut event)?;
 
         Ok((
             EpollSocket {
                 fd,
                 epoll: self.epoll,
-                data,
+                idx,
             },
             addr,
         ))
     }
 
     pub async fn read<'b>(&'b mut self, size: usize) -> Result<(Vec<u8>, usize), Errno> {
-        ReadAwaitable(size, &self.fd, &mut self.data).await
+        ReadAwaitable(size, &self.fd, &self.epoll, &self.idx).await
     }
 
     pub async fn write<'b>(&'b mut self, buffer: &'a [u8]) -> Result<usize, Errno> {
-        WriteAwaitable(buffer, &self.fd, &mut self.data).await
+        WriteAwaitable(buffer, &self.fd, &self.epoll, &self.idx).await
     }
 }
 
-struct Accept4Awaitable<'a>(&'a u16, &'a mut EpollEventData);
+struct Accept4Awaitable<'a>(&'a u16, &'a Epoll, &'a usize);
 impl<'a> std::future::Future for Accept4Awaitable<'a> {
     type Output = (u16, SocketAddressInet);
     fn poll(
         self: std::pin::Pin<&mut Self>,
         ctx: &mut std::task::Context<'_>,
     ) -> std::task::Poll<Self::Output> {
-        let Accept4Awaitable(fd, data) = self.get_mut();
+        let Accept4Awaitable(fd, epoll, idx) = self.get_mut();
+
         trace!(target:"SocketApi", "Accept4Awaitable {}", **fd);
-        data.store_ref(ctx.waker());
+        epoll.store(**idx, ctx.waker());
 
         let mut addr: SocketAddressInet = SocketAddressInetBuilder::build_default();
         match accept4(**fd, &mut addr, NonBlock) {
@@ -192,16 +224,17 @@ impl<'a> std::future::Future for Accept4Awaitable<'a> {
     }
 }
 
-struct ReadAwaitable<'a>(usize, &'a u16, &'a mut EpollEventData);
+struct ReadAwaitable<'a>(usize, &'a u16, &'a Epoll, &'a usize);
 impl<'a> std::future::Future for ReadAwaitable<'a> {
     type Output = Result<(Vec<u8>, usize), Errno>;
     fn poll(
         self: std::pin::Pin<&mut Self>,
         ctx: &mut std::task::Context<'_>,
     ) -> std::task::Poll<Self::Output> {
-        let ReadAwaitable(size, fd, data) = self.get_mut();
+        let ReadAwaitable(size, fd, epoll, idx) = self.get_mut();
+
         trace!(target:"SocketApi", "ReadAwaitable {}", **fd);
-        data.store_ref(ctx.waker());
+        epoll.store(**idx, ctx.waker());
 
         let mut buf = vec![0; *size];
         match read(**fd, &mut buf) {
@@ -218,16 +251,17 @@ impl<'a> std::future::Future for ReadAwaitable<'a> {
     }
 }
 
-struct WriteAwaitable<'a>(&'a [u8], &'a u16, &'a mut EpollEventData);
+struct WriteAwaitable<'a>(&'a [u8], &'a u16, &'a Epoll, &'a usize);
 impl<'a> std::future::Future for WriteAwaitable<'a> {
     type Output = Result<usize, Errno>;
     fn poll(
         self: std::pin::Pin<&mut Self>,
         ctx: &mut std::task::Context<'_>,
     ) -> std::task::Poll<Self::Output> {
-        let WriteAwaitable(buffer, fd, data) = self.get_mut();
+        let WriteAwaitable(buffer, fd, epoll, idx) = self.get_mut();
+
         trace!(target:"SocketApi", "WriteAwaitable {}", **fd);
-        data.store_ref(ctx.waker());
+        epoll.store(**idx, ctx.waker());
 
         match write(**fd, buffer) {
             Ok(size) => Poll::Ready(Ok(size as usize)),
