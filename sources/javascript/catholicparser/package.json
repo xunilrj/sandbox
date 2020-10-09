@@ -10,6 +10,6 @@
   "license": "ISC",
   "dependencies": {
     "mssql": "^5.1.0",
-    "puppeteer": "^1.5.0"
+    "puppeteer": "^1.13.0"
   }
 }
