@@ -1,0 +1,15 @@
+:func main
+    [ptr, size] :move string("Hello World!\0")
+    write(1, ptr, size)
+    exit(0)
+:func exit
+    code@rdi
+    mov rax, 231
+    mov rdi, 0
+    syscall
+:func write 
+    stream@rdi 
+    string@rsi
+    size@rdx
+    syscall
+    ret
