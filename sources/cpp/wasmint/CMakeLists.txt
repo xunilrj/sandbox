@@ -13,7 +13,9 @@ set (APP_NAME "wasmint_tests")
 add_executable(${APP_NAME} ${APP_FILES})
 set_property(TARGET ${APP_NAME} PROPERTY CXX_STANDARD 20)
 set_property(TARGET ${APP_NAME} PROPERTY CXX_STANDARD_REQUIRED ON)
-set_target_properties(${APP_NAME} PROPERTIES LINK_FLAGS /SUBSYSTEM:CONSOLE)
+
+#MSVC only
+#set_target_properties(${APP_NAME} PROPERTIES LINK_FLAGS /SUBSYSTEM:CONSOLE)
 
 ## VULKAN
 if (NOT "$ENV{VK_SDK_PATH}" STREQUAL "")
