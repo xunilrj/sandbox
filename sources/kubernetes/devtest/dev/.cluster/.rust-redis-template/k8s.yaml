@@ -1,0 +1,53 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redistest-pod
+  labels:
+    api: redistest
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+    fsGroup: 1000
+  volumes:
+    - name: source-code-storage
+      persistentVolumeClaim:
+        claimName: source-code-storage-claim
+  containers:
+  - name: redistest
+    image: redistest
+    volumeMounts:
+    - mountPath: /usr/src
+      name: source-code-storage
+    ports:
+      - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redistest-service
+spec:
+  selector:
+    api: redistest
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: redistest-ingress
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: k8s.local
+    http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: redistest-service
+                port:
+                  number: 8080
