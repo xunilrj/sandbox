@@ -1,4 +1,4 @@
-#define CATCH_CONFIG_MAIN 
+#define CATCH_CONFIG_MAIN
 #include "../catch/catch.hpp"
 
 #include <Windows.h>
@@ -7,23 +7,23 @@
 #include <stack>
 #include <unordered_map>
 
-
 template <typename T>
-T& read(uint8_t*& p)
+T &read(uint8_t *&p)
 {
-    auto* ptr = (T*)p;
+    auto *ptr = (T *)p;
     p += sizeof(T);
 
     return *ptr;
 }
 
-uint32_t readULEB128(uint8_t*& p)
+uint32_t readULEB128(uint8_t *&p)
 {
     uint32_t result = 0;
     uint32_t shift = 0;
     while (true)
     {
-        uint8_t byte = (*p); ++p;
+        uint8_t byte = (*p);
+        ++p;
         result |= (byte & 0b01111111) << shift;
         if ((byte & 0b10000000) == 0)
             break;
@@ -33,7 +33,7 @@ uint32_t readULEB128(uint8_t*& p)
     return result;
 }
 
-int32_t readLEB128(uint8_t*& p)
+int32_t readLEB128(uint8_t *&p)
 {
     size_t size = 32;
 
@@ -41,8 +41,10 @@ int32_t readLEB128(uint8_t*& p)
     int32_t shift = 0;
 
     uint8_t byte;
-    do {
-        byte = (*p); ++p;
+    do
+    {
+        byte = (*p);
+        ++p;
         result |= (byte & 0b01111111) << shift;
         shift += 7;
     } while ((byte & 0b10000000) != 0);
@@ -53,26 +55,26 @@ int32_t readLEB128(uint8_t*& p)
     return result;
 }
 
-std::string readString(uint8_t*& p)
+std::string readString(uint8_t *&p)
 {
     auto nameSize = readULEB128(p);
 
-    auto str = std::string((char*)p, nameSize);
+    auto str = std::string((char *)p, nameSize);
 
     p += nameSize;
 
     return str;
 }
 
-float readFloat(uint8_t*& p)
+float readFloat(uint8_t *&p)
 {
-    auto v = *(float*)p;
+    auto v = *(float *)p;
     p += 4;
     return v;
 }
 
 template <typename T>
-std::vector<T> readVector(uint8_t*& p)
+std::vector<T> readVector(uint8_t *&p)
 {
     auto v = std::vector<T>{};
 
@@ -88,7 +90,7 @@ std::vector<T> readVector(uint8_t*& p)
     return v;
 }
 
-uint8_t readOPCode(uint8_t*& p)
+uint8_t readOPCode(uint8_t *&p)
 {
     auto opcode = *p;
     ++p;
@@ -98,7 +100,6 @@ uint8_t readOPCode(uint8_t*& p)
 
 namespace wasm
 {
-    
 
     struct TypeSection
     {
@@ -108,13 +109,13 @@ namespace wasm
 
     struct Export
     {
-        static Export read(uint8_t*& p)
+        static Export read(uint8_t *&p)
         {
             auto name = ::readString(p);
             auto type = ::read<uint8_t>(p);
             auto idx = ::read<uint8_t>(p);
 
-            return { name, type, idx };
+            return {name, type, idx};
         }
 
         std::string name;
@@ -124,12 +125,12 @@ namespace wasm
 
     struct ExportSection
     {
-        static ExportSection read(uint8_t*& p)
+        static ExportSection read(uint8_t *&p)
         {
             auto size = readULEB128(p);
             auto exports = readVector<wasm::Export>(p);
 
-            auto temp = ExportSection{ size, exports };
+            auto temp = ExportSection{size, exports};
             temp.buildIndex();
 
             return temp;
@@ -142,22 +143,25 @@ namespace wasm
         {
         }
 
-        ExportSection(uint32_t size, const std::vector<Export>& exports) : size{ size }, exports{ exports }
+        ExportSection(uint32_t size, const std::vector<Export> &exports) : size{size}, exports{exports}
         {
         }
 
-        const Export* operator [] (const std::string& name) const
+        const Export *operator[](const std::string &name) const
         {
             auto it = byName.find(name);
-            if (it != byName.end()) return it->second;
-            else return nullptr;
+            if (it != byName.end())
+                return it->second;
+            else
+                return nullptr;
         }
+
     private:
-        std::unordered_map<std::string, Export*> byName;
+        std::unordered_map<std::string, Export *> byName;
         void buildIndex()
         {
             byName.clear();
-            for (auto&& exp : exports)
+            for (auto &&exp : exports)
             {
                 byName.emplace(exp.name, &exp);
             }
@@ -166,11 +170,11 @@ namespace wasm
 
     struct CodeLocal
     {
-        static CodeLocal read(uint8_t*& p)
+        static CodeLocal read(uint8_t *&p)
         {
             auto n = readULEB128(p);
             auto type = readLEB128(p);
-            return { n, type };
+            return {n, type};
         }
 
         uint32_t n;
@@ -179,12 +183,12 @@ namespace wasm
 
     struct Code
     {
-        static Code read(uint8_t*& p)
+        static Code read(uint8_t *&p)
         {
             auto size = readULEB128(p);
             auto end = p + size;
             auto locals = readVector<wasm::CodeLocal>(p);
-            auto temp = Code{ size, locals, p };
+            auto temp = Code{size, locals, p};
 
             p = end;
 
@@ -193,33 +197,33 @@ namespace wasm
 
         uint32_t size;
         std::vector<CodeLocal> locals;
-        uint8_t* start;
+        uint8_t *start;
     };
 
     struct CodeSection
     {
-        static CodeSection read(uint8_t*& p)
+        static CodeSection read(uint8_t *&p)
         {
             auto size = ::readULEB128(p);
             auto codes = ::readVector<wasm::Code>(p);
 
-            return { size, codes };
+            return {size, codes};
         }
-       
+
         uint32_t size;
         std::vector<Code> codes;
     };
 
     struct Import
     {
-        static Import read(uint8_t*& p)
+        static Import read(uint8_t *&p)
         {
             auto mod = ::readString(p);
             auto name = ::readString(p);
             auto type = ::read<uint8_t>(p);
             auto param1 = ::readULEB128(p);
 
-            return { mod , name, type, param1 };
+            return {mod, name, type, param1};
         }
 
         std::string mod;
@@ -230,12 +234,12 @@ namespace wasm
 
     struct ImportSection
     {
-        static ImportSection read(uint8_t*& p)
+        static ImportSection read(uint8_t *&p)
         {
             auto size = ::readULEB128(p);
             auto imports = ::readVector<wasm::Import>(p);
 
-            return { size, imports };
+            return {size, imports};
         }
 
         uint32_t size;
@@ -244,11 +248,11 @@ namespace wasm
 
     struct Func
     {
-        static Func read(uint8_t*& p)
+        static Func read(uint8_t *&p)
         {
             auto typeidx = ::readULEB128(p);
 
-            return { typeidx };
+            return {typeidx};
         }
 
         uint32_t typeidx;
@@ -256,12 +260,12 @@ namespace wasm
 
     struct FuncSection
     {
-        static FuncSection read(uint8_t*& p)
+        static FuncSection read(uint8_t *&p)
         {
             auto size = ::readULEB128(p);
             auto funcs = ::readVector<wasm::Func>(p);
 
-            return { size, funcs };
+            return {size, funcs};
         }
 
         uint32_t size;
@@ -270,18 +274,18 @@ namespace wasm
 
     struct FuncRecord
     {
-        static FuncRecord import(Import* imp)
+        static FuncRecord import(Import *imp)
         {
-            return { true, imp, 0 };
+            return {true, imp, 0};
         }
 
         static FuncRecord code(uint32_t idx, Code code)
         {
-            return { false, nullptr, idx };
+            return {false, nullptr, idx};
         }
 
         bool imported;
-        Import* imp;
+        Import *imp;
         uint32_t codeidx;
     };
 
@@ -306,14 +310,14 @@ namespace wasm
                 double f64;
             };
 
-            value(int32_t v) : i32{ v } {}
-            value(float v) : f32{ v } {}
+            value(int32_t v) : i32{v} {}
+            value(float v) : f32{v} {}
         };
 
         struct callframe
         {
-            FunctionRegister* funcs;
-            uint8_t* IP;
+            FunctionRegister *funcs;
+            uint8_t *IP;
         };
 
         enum class step_result_type
@@ -325,7 +329,7 @@ namespace wasm
 
         struct step_result_call_imported
         {
-            FuncRecord* f;
+            FuncRecord *f;
         };
 
         struct step_result
@@ -338,14 +342,13 @@ namespace wasm
 
             step_result() {}
 
-            step_result(step_result_type type) : type { type }
+            step_result(step_result_type type) : type{type}
             {
             }
 
             step_result(step_result_call_imported imp)
-                : type{ step_result_type::call_imported }, call_imported{ imp }
+                : type{step_result_type::call_imported}, call_imported{imp}
             {
-
             }
         };
 
@@ -354,39 +357,38 @@ namespace wasm
             std::stack<callframe> callstack;
             std::stack<value> valuestack;
 
-            thread(FunctionRegister* mod, uint8_t* ip)
+            thread(FunctionRegister *mod, uint8_t *ip)
             {
-                if(ip != nullptr)
-                    callstack.push({ mod,ip });
+                if (ip != nullptr)
+                    callstack.push({mod, ip});
             }
 
             step_result step()
             {
                 if (callstack.size() == 0)
-                    return { step_result_type::end };
+                    return {step_result_type::end};
 
-                auto& callframe = callstack.top();
-                uint8_t*& IP = callframe.IP;
+                auto &callframe = callstack.top();
+                uint8_t *&IP = callframe.IP;
 
                 //https://developercommunity.visualstudio.com/idea/965226/supoport-the-labels-as-values-in-cc-compiler-to-he.html
                 //https://gcc.gnu.org/onlinedocs/gcc/Labels-as-Values.html
                 //https://eli.thegreenplace.net/2012/07/12/computed-goto-for-efficient-dispatch-tables
-                static void* dispatch_table[] = {
+                static void *dispatch_table[] = {
                     0, 0, 0, 0, 0, 0, 0, 0,
-                    0, 0, 0, 0, 0, 0, 0, 0, 
-                    &&call                    
-                };
-                auto opcode = readOPCode (IP);
+                    0, 0, 0, 0, 0, 0, 0, 0,
+                    &&call};
+                auto opcode = readOPCode(IP);
 
                 // 0x10 x:funcidx => call x
                 if (opcode == 0x10)
                 {
-                    call:
+                call:
                     auto operand = readULEB128(IP);
-                    auto& f = callframe.funcs->funcs[operand];
+                    auto &f = callframe.funcs->funcs[operand];
                     if (f.imported)
                     {
-                        return { step_result_call_imported{&f} };
+                        return {step_result_call_imported{&f}};
                     }
                     //TODO find this function
                 }
@@ -405,10 +407,10 @@ namespace wasm
                     callstack.pop();
                     //end
 
-                    return { step_result_type::end };
+                    return {step_result_type::end};
                 }
 
-                return { step_result_type::normal };
+                return {step_result_type::normal};
             }
 
             step_result stepUntilImport()
@@ -422,7 +424,7 @@ namespace wasm
                 return r;
             }
         };
-    }
+    } // namespace execution
 
     struct ModuleHeader
     {
@@ -440,145 +442,143 @@ namespace wasm
 
         FunctionRegister funcRegister;
 
-        Module from(uint8_t*& p)
+        static Module from(uint8_t *&p)
         {
             auto mod = wasm::Module{};
             mod.header = read<wasm::ModuleHeader>(p);
 
             return mod;
         }
-        
 
-        void readAllSections(uint8_t*& p, uint32_t size)
+        void readAllSections(uint8_t *&p, uint32_t size)
         {
             auto lastSection = 0;
             while (size > 0)
             {
-                auto [section,read] = readSection(p);
+                auto [section, read] = readSection(p);
                 size -= read;
 
-                if (read == 0) break;
+                if (read == 0)
+                    break;
 
                 lastSection = section;
                 auto nextSection = *p;
 
-                if ((nextSection < 0) && (nextSection >= 11)) break;
+                if ((nextSection < 0) && (nextSection >= 11))
+                    break;
             }
             //assert(size == 0); //file bigger than necessary. Why?
 
             setupFuncRegister();
         }
 
-        std::tuple<int8_t,uint32_t> readSection(uint8_t*& p)
+        std::tuple<int8_t, uint32_t> readSection(uint8_t *&p)
         {
             auto sectionType = read<uint8_t>(p);
             switch (sectionType)
             {
-                case 2:
-                {
-                    importSection = wasm::ImportSection::read(p);
-                    return { sectionType, importSection.size };
-                }
-                case 3:
-                {
-                    funcSection = wasm::FuncSection::read(p);
-                    return  { sectionType,funcSection.size };
-                }
-                case 7:
-                {
-                    exportSection = wasm::ExportSection::read(p);
-                    return  { sectionType,exportSection.size };
-                }
-                case 10:
-                {
-                    codeSection = wasm::CodeSection::read(p);
-                    return  { sectionType,codeSection.size };
-                }
-                default:
-                {
-                    
-                    auto size = readULEB128(p);
-                    p += size;
-                    return  { sectionType,size };
-                }
+            case 2:
+            {
+                importSection = wasm::ImportSection::read(p);
+                return {sectionType, importSection.size};
+            }
+            case 3:
+            {
+                funcSection = wasm::FuncSection::read(p);
+                return {sectionType, funcSection.size};
+            }
+            case 7:
+            {
+                exportSection = wasm::ExportSection::read(p);
+                return {sectionType, exportSection.size};
+            }
+            case 10:
+            {
+                codeSection = wasm::CodeSection::read(p);
+                return {sectionType, codeSection.size};
+            }
+            default:
+            {
+
+                auto size = readULEB128(p);
+                p += size;
+                return {sectionType, size};
+            }
             }
 
-            return { -1, 0 };
+            return {-1, 0};
         }
 
         void setupFuncRegister()
         {
-            for (auto&& x : importSection.imports)
+            for (auto &&x : importSection.imports)
             {
                 funcRegister.funcs.emplace_back(FuncRecord::import(&x));
             }
 
             for (auto i = 0; i < codeSection.codes.size(); ++i)
             {
-                auto& x = codeSection.codes[i];
+                auto &x = codeSection.codes[i];
                 funcRegister.funcs.emplace_back(FuncRecord::code(i, x));
             }
         }
 
-        execution::thread spawn(const std::string& name)
+        execution::thread spawn(const std::string &name)
         {
-            auto* exp = exportSection[name];
-            if (exp == nullptr) return { &funcRegister, nullptr };
+            auto *exp = exportSection[name];
+            if (exp == nullptr)
+                return {&funcRegister, nullptr};
 
             auto codeidx = funcRegister.funcs[exp->idx].codeidx;
             auto code = codeSection.codes[codeidx];
-            return execution::thread{ &funcRegister, code.start };
+            return execution::thread{&funcRegister, code.start};
         }
     };
-}
-
+} // namespace wasm
 
 TEST_CASE("Fake.Test.Will Pass", "[ok]")
 {
-    //auto fileName = TEXT("D:/github/sandbox/sources/cpp/wasmint/example1.wasm");
-    auto fileName = TEXT("D:/github/sandbox/sources/cpp/wasmint/script.c.wasm");
+    // //auto fileName = TEXT("D:/github/sandbox/sources/cpp/wasmint/example1.wasm");
+    // auto fileName = TEXT("D:/github/sandbox/sources/cpp/wasmint/script.c.wasm");
 
-    SYSTEM_INFO SysInfo;
-    GetSystemInfo(&SysInfo);
-    DWORD dwSysGran = SysInfo.dwAllocationGranularity;
+    // SYSTEM_INFO SysInfo;
+    // GetSystemInfo(&SysInfo);
+    // DWORD dwSysGran = SysInfo.dwAllocationGranularity;
 
-    DWORD FILE_MAP_START = 0;
-    DWORD BUFFSIZE = 1024;
-    DWORD dwFileMapStart = (FILE_MAP_START / dwSysGran) * dwSysGran;
-    DWORD dwFileMapSize = FILE_MAP_START + BUFFSIZE;
-    DWORD dwMapViewSize = (FILE_MAP_START % dwSysGran) + BUFFSIZE;
+    // DWORD FILE_MAP_START = 0;
+    // DWORD BUFFSIZE = 1024;
+    // DWORD dwFileMapStart = (FILE_MAP_START / dwSysGran) * dwSysGran;
+    // DWORD dwFileMapSize = FILE_MAP_START + BUFFSIZE;
+    // DWORD dwMapViewSize = (FILE_MAP_START % dwSysGran) + BUFFSIZE;
 
-    HANDLE hFile = CreateFile(fileName,
-            GENERIC_READ | GENERIC_WRITE,
-            0,
-            NULL,
-            OPEN_EXISTING,
-            FILE_ATTRIBUTE_NORMAL,
-            NULL);
-    REQUIRE(hFile != INVALID_HANDLE_VALUE);
-    
-    DWORD dwFileSize = GetFileSize(hFile, nullptr);
+    // HANDLE hFile = CreateFile(fileName,
+    //                           GENERIC_READ | GENERIC_WRITE,
+    //                           0,
+    //                           NULL,
+    //                           OPEN_EXISTING,
+    //                           FILE_ATTRIBUTE_NORMAL,
+    //                           NULL);
+    // REQUIRE(hFile != INVALID_HANDLE_VALUE);
 
-    HANDLE hMapFile = CreateFileMapping(hFile,
-            NULL,
-            PAGE_READWRITE,
-            0,
-            dwFileMapSize,
-            NULL);
-    REQUIRE(hMapFile != NULL);
+    // DWORD dwFileSize = GetFileSize(hFile, nullptr);
 
-    auto* lpMapAddress = (uint8_t *)MapViewOfFile(hMapFile,
-            FILE_MAP_ALL_ACCESS,
-            0,
-            dwFileMapStart,
-            dwMapViewSize);
-    REQUIRE(lpMapAddress != NULL);
+    // HANDLE hMapFile = CreateFileMapping(hFile,
+    //                                     NULL,
+    //                                     PAGE_READWRITE,
+    //                                     0,
+    //                                     dwFileMapSize,
+    //                                     NULL);
+    // REQUIRE(hMapFile != NULL);
 
-    auto mod = wasm::Module{};
-    
-    mod.header = wasm::ModuleHeader::from(lpMapAddress);
-    mod.readAllSections(lpMapAddress, dwFileSize);
+    // auto *lpMapAddress = (uint8_t *)MapViewOfFile(hMapFile,
+    //                                               FILE_MAP_ALL_ACCESS,
+    //                                               0,
+    //                                               dwFileMapStart,
+    //                                               dwMapViewSize);
+    // REQUIRE(lpMapAddress != NULL);
 
-    auto t = mod.spawn("helloWorld1");
-    auto r = t.stepUntilImport();
+    // auto mod = wasm::Module::from(lpMapAddress);
+
+    // auto t = mod.spawn("helloWorld1");
+    // auto r = t.stepUntilImport();
 }
