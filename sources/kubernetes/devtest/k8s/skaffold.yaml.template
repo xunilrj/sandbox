@@ -1,0 +1,11 @@
+apiVersion: skaffold/v2beta9
+kind: Config
+metadata:
+  name: dev
+build:
+  artifacts:
+  - image: k8sdevimage
+deploy:
+  kubectl:
+    manifests:
+    - k8sdevimage.yaml

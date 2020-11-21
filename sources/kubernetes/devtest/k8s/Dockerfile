@@ -1,2 +1,4 @@
 FROM scratch
-ADD root.tar.xz /
+ADD root.tar /
+VOLUME /realroot
+ENTRYPOINT ["tail","-f","/dev/null"]

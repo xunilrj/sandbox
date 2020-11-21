@@ -1,47 +1,39 @@
 #! /bin/bash
 
-rm root.tar 2> /dev/null
-rm root.tar.xz 2> /dev/null
-tar -cf root.tar -T /dev/null
+mkdir root -p
+pushd root
 
-tar_dependencies () {
-    if [ ! -z "$2" ]; then
-        mkdir $(dirname $2)
-        pushd $(dirname $2)
-        cp "$1" "$2"
-        popd
-        tar -rf root.tar "$2" 2> /dev/null
-        rm -rf $(dirname $2)
-    fi
-    if [ -z "$2" ]; then
-        tar -rf root.tar "$1" 2> /dev/null
-    fi
-    
-    deps=$(ldd "$1")
-    for line in $deps; do
-        if [ -f "$line" ]; then
-            tar -rf root.tar "$line" 2> /dev/null
-            
-            fullpath=$(realpath "$line")
-            if [ -f "$fullpath" ]; then
-                tar -rf root.tar "$fullpath" 2> /dev/null
-            fi
-        fi
-    done
-}
+ln -s /realroot/bin bin -f
+ln -s /realroot/boot boot -f
+ln -s /realroot/home home -f
+ln -s /realroot/init init -f
+ln -s /realroot/lib lib -f
+ln -s /realroot/lib32 lib32 -f
+ln -s /realroot/lib64 lib64 -f
+ln -s /realroot/libx32 libx32 -f
+ln -s /realroot/media media -f
+ln -s /realroot/mnt mnt -f
+ln -s /realroot/opt opt -f
+ln -s /realroot/root root -f
+ln -s /realroot/run run -f
+ln -s /realroot/sbin sbin -f
+ln -s /realroot/snap snap -f
+ln -s /realroot/srv srv -f
+ln -s /realroot/tmp tmp -f
+ln -s /realroot/usr usr -f
+ln -s /realroot/var var -f
 
-tar_dependencies "/bin/bash"
-tar_dependencies "/bin/ls"
-tar_dependencies "/bin/mkdir"
-tar_dependencies "/usr/bin/wget"
-tar_dependencies "/root/.cargo/bin/bat" "/bin/bat"
+rm etc -rf
+mkdir etc -p
+cat /etc/environment > etc/environment
+echo "root:x:0:0:root:/root:/bin/bash" > etc/passwd
+echo "Defaults    env_reset" > etc/sudoers
+echo "Defaults    mail_badpass" >> etc/sudoers
+echo "Defaults    secure_path='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin'" >> etc/sudoers
+echo "root    ALL=(ALL) ALL" >> etc/sudoers
+echo "%sudo ALL=(ALL) ALL" >> etc/sudoers
+cat /etc/bash.bashrc > /etc/bash.bashrc
 
-mkdir bin && pushd bin && ln -s /bin/bash sh && popd
-tar -rf root.tar bin/sh
-rm -rf bin
-echo "Files that will be copied:"
+tar -cf ../root.tar .
 
-tar -tvf root.tar
-xz root.tar
-
-docker build . -t k8s.server
+popd

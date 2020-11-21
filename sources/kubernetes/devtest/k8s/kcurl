@@ -1,0 +1,3 @@
+#!/bin/bash
+NODEPORT=$(kubectl get svc nginx-nginx-ingress -o=jsonpath="{.spec.ports[?(@.name=='http')].nodePort}")
+curl "http://k8s.local:$NODEPORT$1"
