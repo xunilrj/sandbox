@@ -1,0 +1,96 @@
+STUN client version 0.97
+Opened port 25185 with fd 3
+Opened port 25186 with fd 4
+Encoding stun message: 
+Encoding ChangeRequest: 0
+
+About to send msg of len 28 to 217.10.68.145:3478
+Encoding stun message: 
+Encoding ChangeRequest: 4
+
+About to send msg of len 28 to 217.10.68.145:3478
+Encoding stun message: 
+Encoding ChangeRequest: 2
+
+About to send msg of len 28 to 217.10.68.145:3478
+Received stun message: 88 bytes
+MappedAddress = 141.0.158.5:60915
+SourceAddress = 217.10.68.145:3478
+ChangedAddress = 217.116.122.141:3479
+Unknown attribute: 32800
+ServerName = Vovida.org 0.96
+Received message of type 257  id=1
+Encoding stun message: 
+Encoding ChangeRequest: 0
+
+About to send msg of len 28 to 217.116.122.141:3478
+Encoding stun message: 
+Encoding ChangeRequest: 4
+
+About to send msg of len 28 to 217.10.68.145:3478
+Encoding stun message: 
+Encoding ChangeRequest: 2
+
+About to send msg of len 28 to 217.10.68.145:3478
+Encoding stun message: 
+Encoding ChangeRequest: 0
+
+About to send msg of len 28 to 141.0.158.5:60915
+Received stun message: 88 bytes
+MappedAddress = 141.0.158.5:60915
+SourceAddress = 217.116.122.141:3479
+ChangedAddress = 217.10.68.145:3478
+Unknown attribute: 32800
+ServerName = Vovida.org 0.96
+Received message of type 257  id=10
+Received stun message: 88 bytes
+MappedAddress = 141.0.158.5:60818
+SourceAddress = 217.10.68.145:3479
+ChangedAddress = 217.116.122.141:3479
+Unknown attribute: 32800
+ServerName = Vovida.org 0.96
+Received message of type 257  id=3
+Received stun message: 28 bytes
+ChangeRequest = 0
+Received message of type 1  id=11
+Received stun message: 88 bytes
+MappedAddress = 141.0.158.5:60818
+SourceAddress = 217.10.68.145:3479
+ChangedAddress = 217.116.122.141:3479
+Unknown attribute: 32800
+ServerName = Vovida.org 0.96
+Received message of type 257  id=3
+Encoding stun message: 
+Encoding ChangeRequest: 4
+
+About to send msg of len 28 to 217.10.68.145:3478
+Encoding stun message: 
+Encoding ChangeRequest: 4
+
+About to send msg of len 28 to 217.10.68.145:3478
+Encoding stun message: 
+Encoding ChangeRequest: 4
+
+About to send msg of len 28 to 217.10.68.145:3478
+Encoding stun message: 
+Encoding ChangeRequest: 4
+
+About to send msg of len 28 to 217.10.68.145:3478
+Encoding stun message: 
+Encoding ChangeRequest: 4
+
+About to send msg of len 28 to 217.10.68.145:3478
+Encoding stun message: 
+Encoding ChangeRequest: 4
+
+About to send msg of len 28 to 217.10.68.145:3478
+test I = 1
+test II = 0
+test III = 1
+test I(2) = 1
+is nat  = 1
+mapped IP same = 1
+hairpin = 1
+preserver port = 0
+Primary: Independent Mapping, Address Dependent Filter, random port, will hairpin	
+Return value is 0x000004
