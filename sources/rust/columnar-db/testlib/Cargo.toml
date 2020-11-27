@@ -1,0 +1,12 @@
+[package]
+name = "testlib"
+version = "0.1.0"
+authors = ["root"]
+edition = "2018"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = "1.0.51"
+quote = "1.0.7"
