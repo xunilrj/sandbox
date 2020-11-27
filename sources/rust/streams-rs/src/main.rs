@@ -7,45 +7,43 @@ fn main() -> Result<(), std::io::Error> {
     let args: Vec<String> = std::env::args().collect();
     println!("{:?}", args);
 
-    let mut x = Streams::new(".");
+    let (mgr, s) = filemgr::FileMgr::new();
+    let mut mgr = mgr.start_new_thread();
+
+    let mut x = Streams::new("./data/");
+    x.xadd_sync = WhenSync::FileManager(s.clone(), None);
 
     if let Some(arg1) = args.get(1) {
-        if arg1 == "consumer"
-        {
+        if arg1 == "consumer" {
             let stream = args.get(2).unwrap();
             let group = args.get(3).unwrap();
             let consumer = args.get(4).unwrap();
-            
-            loop
-            {
+
+            loop {
                 match x.group_read(&group, &consumer, &stream, true) {
                     Ok(msgs) => {
                         for msg in msgs {
-                            let ack = x.ack(stream, group, &StreamId::Specific(msg.timestamp, msg.order));
+                            let ack =
+                                x.ack(stream, group, &StreamId::Specific(msg.timestamp, msg.order));
                             println!("{:?} {:?}", msg, ack);
                         }
-                    },
-                    Err(e) => return Err(e)
+                    }
+                    Err(e) => return Err(e),
                 }
             }
-        }
-        else if arg1 == "producer"
-        {
+        } else if arg1 == "producer" {
             let stream = args.get(2).unwrap();
 
-            use std::time::{SystemTime, UNIX_EPOCH};
-            let start = SystemTime::now();                
+            use std::time::{SystemTime};
+            let start = SystemTime::now();
 
-            for i in 0..10
-            {
-                let id = x.add(&stream, StreamId::Asterisk).unwrap();
+            for _ in 0..10 {
+                let _ = x.add(&stream, StreamId::Asterisk).unwrap();
             }
 
-            let end = SystemTime::now();          
+            let end = SystemTime::now();
             println!("Took: {:?}", end.duration_since(start));
-        }
-        else if arg1 == "pending" 
-        {
+        } else if arg1 == "pending" {
             let stream = args.get(2).unwrap();
             let group = args.get(3).unwrap();
 
@@ -54,9 +52,13 @@ fn main() -> Result<(), std::io::Error> {
             println!("{:?}", r.1);
             println!("{:?}", r.2);
             println!("{:?}", r.3);
-        }    
+        }
     }
-
+    
+    let start = std::time::SystemTime::now();
+    mgr.kill().wait(std::time::Duration::from_secs(1));
+    let end = std::time::SystemTime::now();
+    println!("Kill Took: {:?}", end.duration_since(start));
 
     // let stream = "room-1";
 
@@ -70,8 +72,8 @@ fn main() -> Result<(), std::io::Error> {
     // let msg = range.iter().nth(0).unwrap();
     // println!("{:?}", msg);
 
-    // let range = x.range(stream, 
-    //     StreamId::Specific(msg.timestamp, msg.order), 
+    // let range = x.range(stream,
+    //     StreamId::Specific(msg.timestamp, msg.order),
     //     StreamId::Specific(msg.timestamp, msg.order), Some(1))?;
     // println!("{:?}", range);
 

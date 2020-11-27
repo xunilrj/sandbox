@@ -6,7 +6,6 @@ pub struct FileLock
 pub struct FileLockGuard
 {
     f: std::fs::File,
-    path: String
 }
 
 impl Drop for FileLockGuard
@@ -27,11 +26,10 @@ impl FileLock
 
     pub fn lock(&mut self, name: &str) -> Result<FileLockGuard, std::io::Error>
     {
-        use std::io::*;
         use fs2::FileExt;
 
         let path = format!("{}/{}.lock", self.path, name);
-        let mut f = std::fs::File::with_options()
+        let f = std::fs::File::with_options()
             .read(true)
             .write(true)
             .truncate(true)
@@ -41,6 +39,6 @@ impl FileLock
         
         f.lock_exclusive().unwrap();
 
-        Ok(FileLockGuard { f, path })
+        Ok(FileLockGuard { f })
     }
 }
