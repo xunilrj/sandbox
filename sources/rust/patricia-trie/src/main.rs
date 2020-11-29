@@ -1,6 +1,3 @@
-#![feature(box_syntax)]
-#![feature(const_in_array_repeat_expressions)]
-
 #[derive(Debug, Clone)]
 enum Value {
     None,
@@ -27,8 +24,8 @@ struct Node {
 impl Node {
     pub fn new() -> Self {
         Self {
-            children: [None; 26],
-            labels: [None; 26],
+            children: arr_macro::arr![None; 26],
+            labels: arr_macro::arr![None; 26],
             value: ObservableValue {
                 inode: 0,
                 value: Value::None,
@@ -38,15 +35,13 @@ impl Node {
 
     pub fn with_value(value: Value) -> Self {
         Self {
-            children: [None; 26],
-            labels: [None; 26],
+            children: arr_macro::arr![None; 26],
+            labels: arr_macro::arr![None; 26],
             value: ObservableValue { inode: 0, value },
         }
     }
 
     pub fn split_at(&mut self, idx: usize, at: usize) -> &mut Node {
-        println!("Before: {:?}", self);
-
         let (a, b) = match &self.labels[idx] {
             Some(l) => l.split_at(at),
             None => panic!(),
@@ -62,8 +57,8 @@ impl Node {
         let bidx = first_letter as usize - 'a' as usize;
 
         let mut bnode = Self {
-            children: [None; 26],
-            labels: [None; 26],
+            children: arr_macro::arr![None; 26],
+            labels: arr_macro::arr![None; 26],
             value: ObservableValue {
                 inode: 0,
                 value: oldleaf.value.value.clone(),
@@ -72,9 +67,8 @@ impl Node {
         oldleaf.value.value = Value::None;
 
         oldleaf.labels[bidx] = Some(b);
-        oldleaf.children[bidx] = Some(box bnode);
+        oldleaf.children[bidx] = Some(Box::new(bnode));
 
-        println!("After: {:?}", &self);
         self.children[idx].as_mut().unwrap()
     }
 }
@@ -148,13 +142,13 @@ impl PatriciaTrie {
                     let first_letter = first_letter.nth(0).unwrap();
                     let bidx = first_letter as usize - 'a' as usize;
                     oldleaf.labels[bidx] = Some(b.to_string());
-                    oldleaf.children[bidx] = Some(box Node::with_value(value));
+                    oldleaf.children[bidx] = Some(Box::new(Node::with_value(value)));
                 }
                 None => {}
             },
             _ => {
                 let node = Node::with_value(value);
-                self.root.children[idx] = Some(box node);
+                self.root.children[idx] = Some(Box::new(node));
                 self.root.labels[idx] = Some(key.to_string());
             }
         };
@@ -206,6 +200,27 @@ impl PatriciaTrie {
             _ => Value::None,
         }
     }
+
+    fn dump_node(node: &Node, depth: usize) {
+        println!("Value: {:?}", node.value.value);
+        for (l, c) in node.labels.iter().zip(&node.children) {
+            match (l, c) {
+                (Some(l), Some(c)) => {
+                    print!(
+                        "{}",
+                        String::from_utf8(vec![' ' as u8; (depth + 1) * 4]).unwrap()
+                    );
+                    print!("{} -> ", l);
+                    Self::dump_node(c.as_ref(), depth + 1);
+                }
+                _ => {}
+            }
+        }
+    }
+
+    pub fn dump_to_console(&self) {
+        Self::dump_node(&self.root, 0)
+    }
 }
 
 fn main() {
@@ -219,11 +234,15 @@ fn name() {
     tree.insert("Daniel", Value::I32(1));
     tree.insert("Dante", Value::I32(2));
 
-    println!("Tree: {:?}", tree);
+    assert!(matches!(tree.get("Daniel"), Value::I32(1)));
+    assert!(matches!(tree.get("Dante"), Value::I32(2)));
+    assert!(matches!(tree.get("Danty"), Value::None));
 
-    println!("{:?}", tree.get("Daniel"));
-    println!("{:?}", tree.get("Dante"));
-    println!("{:?}", tree.get("Danty"));
+    tree.insert("Tree", Value::I32(3));
+    tree.insert("Trie", Value::I32(4));
 
+    tree.insert("Daniela", Value::I32(5)); //TODO panic here
+
+    tree.dump_to_console();
     //tree.update("Daniel", Value::I32(3));
 }
