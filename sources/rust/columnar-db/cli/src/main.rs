@@ -1,22 +1,7 @@
-mod threadpool;
-// use threadpool::*;
-
-// struct DataCatalog
-// {
-// }
-
-// impl DataCatalog
-// {
-//     pub fn new() -> Self
-//     {
-
-//     }
-
-//     pub fn add(&mut self, column: &str, path: &str)
-//     {
-
-//     }
-// }
+use columnar_db::computegraphdefinition::*;
+use columnar_db::datacatalog::*;
+use columnar_db::filemanager::*;
+use columnar_db::threadpool::*;
 
 // struct ExecutionContext
 // {
@@ -54,81 +39,6 @@ mod threadpool;
 //     Maximum { input: ReadChannel<Array>, output: WriteChannel<Array> },
 // }
 
-// struct ComputeTask
-// {
-//     data: ComputeTaskData,
-// }
-
-// impl ComputeTask
-// {
-// }
-
-// struct ComputeGraph
-// {
-//     tasks: Vec<ComputeTask>,
-//     root: usize,
-// }
-
-// impl ComputeGraph
-// {
-//     pub fn start(&mut self)
-//     {
-//     }
-
-//     pub fn wait(&self, timeout: std::time::Duration)
-//     {
-
-//     }
-
-//     pub fn result(&self) -> Result<(),()>
-//     {
-
-//     }
-// }
-
-// enum ComputeTaskDefinitionSources
-// {
-//     ReadColumn { column: String }
-// }
-
-// enum ComputeTaskDefinitionFolders
-// {
-//     Maximum
-// }
-
-// struct ComputeTaskDefinition
-// {
-// }
-
-// impl ComputeTaskDefinition
-// {
-//     pub fn fold(&mut self, next: ComputeTaskDefinitionFolders) -> &mut ComputeTaskDefinition
-//     {
-//     }
-// }
-
-// struct ComputeGraphDefinition
-// {
-// }
-
-// impl ComputeGraphDefinition
-// {
-//     pub fn new() -> Self
-//     {
-
-//     }
-
-//     pub fn source(&mut self, source: ComputeTaskDefinitionSources) -> &mut ComputeTaskDefinition
-//     {
-
-//     }
-
-//     pub fn build(&self, ctx: &ExecutionContext) -> ComputeGraph
-//     {
-
-//     }
-// }
-
 // struct ServicesCatalog
 // {
 // }
@@ -144,41 +54,32 @@ mod threadpool;
 //     }
 // }
 
-// struct FileManager
-// {
-// }
-
-// impl FileManager
-// {
-//     pub fn new() -> Self
-//     {
-//     }
-// }
-
 fn main() {
-    // let pool = Threadpool::new();
-    // pool.create_one_per_cpu();
+    let file = TempFile::random("Table1.Column1.dat").expect("Cannot create temo file");
 
-    // let filemgr = FileManager::new();
+    let mut pool = Threadpool::new();
+    pool.create_one_per_cpu().expect("Cannot create Threadpool");
 
-    // let catalog = DataCatalog::new();
-    // catalog.add("Table1.Column1", "/data/Table1.Column1.dat");
+    let filemgr = FileManager::new(&mut pool);
+
+    let mut catalog = DataCatalog::new();
+    catalog.add("Table1.Column1", "Table1.Column1.dat");
 
     // let svcs = ServicesCatalog::new();
     // svcs.add(pool);
     // svcs.add(filemgr);
     // svcs.add(catalog);
 
-    // let definition = ComputeGraphDefinition::new();
-    // let a = definition.source(ComputeTaskDefinitionSources::ReadColumn {
-    //     column: "Table1.Column1".to_string(),
-    // });
-    // let b = a.fold(ComputeTaskDefinitionFolders::Maximum);
+    let mut def = ComputeGraphDefinition::new();
+    let t1c1 = def.from_columns("Table1.Column1");
+    let _maxt1c1 = def.fold_source(&t1c1, ComputeTaskDefinitionFolds::Maximum);
 
     // let ctx = ExecutionContext::new(&svcs);
-    // let mut computation = definition.build(&ctx);
-    // computation.start();
+    let mut computation = def.build(&catalog);
+    computation.start();
     // computation.wait(std::time::Duration::from_secs(1));
 
     // println!("Result: {:?}", computation.result());
+
+    drop(file)
 }

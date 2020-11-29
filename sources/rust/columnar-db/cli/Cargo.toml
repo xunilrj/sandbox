@@ -1,9 +1,8 @@
 [package]
 name = "cli"
 version = "0.1.0"
-authors = ["root"]
+authors = ["Daniel Frederico Lins Leite"]
 edition = "2018"
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
+columnar-db = { path = "../db" } 
