@@ -16,6 +16,7 @@ pub enum FileManagerRequestsResponses {
 }
 
 pub struct FileManager<'a> {
+    epoll: libc::c_int,
     dispatcher: TypedThreadDispatcher<'a, FileManagerRequests, FileManagerRequestsResponses>,
 }
 
@@ -34,6 +35,11 @@ impl Buffer {
 
     pub fn as_u8(&self) -> &[u8] {
         unsafe { std::slice::from_raw_parts(self.data.as_ptr(), self.size) }
+    }
+
+    pub fn push_u8(&mut self, value: u8) {
+        self.data.push(value);
+        self.size += 1;
     }
 }
 
@@ -100,13 +106,28 @@ impl Drop for TempFile {
 pub fn handle_read_all(file: &str, sender: &Sender<Buffer>) -> ReadAllResult {
     let mut path = file.to_string();
     path.push('\0');
-    let r = unsafe { libc::open(path.as_ptr() as *const i8, libc::O_RDONLY) };
-    if r < 0 {
-        let err = errno::errno();
-        eprintln!("{}", err);
-    }
-    let f = r;
 
+    let fd = {
+        let r = unsafe {
+            libc::open(
+                path.as_ptr() as *const i8,
+                libc::O_RDONLY | libc::O_NONBLOCK,
+            )
+        };
+        if r < 0 {
+            let err = errno::errno();
+            eprintln!("{}", err);
+        }
+        let flags = unsafe { libc::fcntl(r, libc::F_GETFL, 0) };
+        let _rcontrol = unsafe { libc::fcntl(r, libc::F_SETFL, flags | libc::O_NONBLOCK) };
+        r
+    };
+
+    let _r = unsafe {
+        libc::posix_fadvise(fd, 0, 0, libc::POSIX_FADV_NORMAL | libc::POSIX_FADV_NOREUSE)
+    };
+
+    let mut offset = 0;
     loop {
         let mut buffer = Buffer {
             data: vec![0; 4 * 1024],
@@ -114,23 +135,27 @@ pub fn handle_read_all(file: &str, sender: &Sender<Buffer>) -> ReadAllResult {
         };
 
         buffer.size = unsafe {
-            let r = libc::read(
-                f,
+            let r = libc::pread(
+                fd,
                 buffer.data.as_mut_ptr() as *mut libc::c_void,
                 buffer.size,
+                offset,
             );
             if r == 0 {
                 break;
             }
             if r < 0 {
                 let err = errno::errno();
-                eprintln!("{}", err);
+                eprintln!("{}", err); // TODO
                 break;
             }
             r as usize
         };
+        offset += buffer.size as i64;
         let _ = sender.send(buffer);
     }
+
+    unsafe { libc::close(fd) };
 
     ReadAllResult {}
 }
@@ -142,7 +167,15 @@ impl<'a> FileManager<'a> {
                 FileManagerRequestsResponses::ReadAllResult(handle_read_all(file, sender))
             }
         });
-        Self { dispatcher }
+        let epoll = {
+            let r = unsafe { libc::epoll_create1(0) };
+            if r < 0 {
+                let err = errno::errno();
+                eprintln!("{}", err); //TODO
+            }
+            r
+        };
+        Self { dispatcher, epoll }
     }
 
     fn send(&mut self, req: FileManagerRequests) -> RunResult<FileManagerRequestsResponses> {
@@ -170,6 +203,14 @@ impl<'a> FileManager<'a> {
                 }
             });
         Ok(future)
+    }
+}
+
+impl<'a> Drop for FileManager<'a> {
+    fn drop(&mut self) {
+        if self.epoll > 0 {
+            unsafe { libc::close(self.epoll) };
+        }
     }
 }
 

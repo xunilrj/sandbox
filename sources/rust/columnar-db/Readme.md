@@ -51,3 +51,16 @@ All real computation is sent to the Theadpool. Also by channels.
 ## References
 ### Internet
 https://www.infoq.com/articles/columnar-databases-and-vectorization  
+https://www.linuxtoday.com/blog/blocking-and-non-blocking-i-0.html  
+https://unix.stackexchange.com/questions/34751/how-to-find-out-the-file-offset-of-an-opened-file  
+
+### The Linux programming interface a Linux and UNIX system programming handbook by Michael Kerrisk
+https://nostarch.com/tlpi  
+
+- Linux IO  
+Section 2.5 File I/O Model  
+Chapter 4: File I/O: The UniversalL I/O Model  
+Chapter 5: File I/O: Further Details  
+Chapter 13: File I/O Buffering  
+Chapter 63: Alternative I/O Models
+
