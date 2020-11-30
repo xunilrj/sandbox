@@ -60,7 +60,7 @@ fn main() {
     let mut pool = Threadpool::new();
     pool.create_one_per_cpu().expect("Cannot create Threadpool");
 
-    let filemgr = FileManager::new(&mut pool);
+    let _filemgr = FileManager::new(&mut pool);
 
     let mut catalog = DataCatalog::new();
     catalog.add("Table1.Column1", "Table1.Column1.dat");
@@ -77,7 +77,7 @@ fn main() {
 
     // let ctx = ExecutionContext::new(&svcs);
     let mut computation = def.build(&catalog);
-    computation.start();
+    computation.start(&mut pool);
     computation.wait(std::time::Duration::from_secs(1));
 
     println!(

@@ -1,22 +1,23 @@
 use crate::computegraphdefinition::*;
 use crate::datacatalog::*;
 use crate::filemanager::*;
+use crate::threadpool::*;
 use crossbeam_channel::*;
 use std::collections::*;
 use std::sync::*;
 use std::vec::*;
 
-struct ComputeTask {
-    f: Box<dyn Fn(&Vec<Option<Receiver<Buffer>>>, &Vec<Option<Sender<Buffer>>>)>,
+struct ComputeTaskData {
+    f: Box<dyn Fn(&Vec<Option<Receiver<Buffer>>>, &Vec<Option<Sender<Buffer>>>) + Send>,
     // data: ComputeTaskData,
     inputs: Vec<Option<Receiver<Buffer>>>,
     outputs: Vec<Option<Sender<Buffer>>>,
 }
 
-impl ComputeTask {
+impl ComputeTaskData {
     pub fn new<F>(f: F) -> Self
     where
-        F: Fn(&Vec<Option<Receiver<Buffer>>>, &Vec<Option<Sender<Buffer>>>) + 'static,
+        F: Fn(&Vec<Option<Receiver<Buffer>>>, &Vec<Option<Sender<Buffer>>>) + Send + 'static,
     {
         Self {
             f: Box::new(f),
@@ -24,10 +25,40 @@ impl ComputeTask {
             outputs: Vec::new(),
         }
     }
+}
 
-    pub fn start(&self) {
-        let f = self.f.as_ref();
-        f(&self.inputs, &self.outputs);
+struct ComputeTask {
+    data: Option<ComputeTaskData>,
+}
+
+impl ComputeTask {
+    pub fn new<F>(f: F) -> Self
+    where
+        F: Fn(&Vec<Option<Receiver<Buffer>>>, &Vec<Option<Sender<Buffer>>>) + Send + 'static,
+    {
+        Self {
+            data: Some(ComputeTaskData::new(f)),
+        }
+    }
+
+    fn reserve_channels(&mut self, qty_in: usize, qty_out: usize) {
+        if let Some(data) = &mut self.data {
+            for _ in 0..qty_in {
+                data.inputs.push(None);
+            }
+
+            for _ in 0..qty_out {
+                data.outputs.push(None);
+            }
+        }
+    }
+
+    pub fn start(&mut self, pool: &mut Threadpool) {
+        let data = self.data.take().unwrap();
+        let _ = pool.run(move || {
+            let f = data.f.as_ref();
+            f(&data.inputs, &data.outputs);
+        });
     }
 }
 
@@ -58,12 +89,12 @@ impl<'a> ComputeGraph<'a> {
                 let column = column.to_string();
                 let file = self.catalog.get_file(&column).to_string();
 
-                let mut task = ComputeTask::new(move |i, o| {
+                let mut task = ComputeTask::new(move |_, o| {
                     let stdout = o.get(0).unwrap();
                     let stdout = stdout.as_ref().unwrap();
                     handle_read_all(&file, stdout);
                 });
-                task.outputs.push(None);
+                task.reserve_channels(0, 1);
                 self.tasks.push(task);
             }
             Fold(Maximum) => {
@@ -84,8 +115,7 @@ impl<'a> ComputeGraph<'a> {
                     buffer.push_u8(max_value);
                     let _ = stdout.send(buffer);
                 });
-                task.inputs.push(None);
-                task.outputs.push(None);
+                task.reserve_channels(1, 1);
                 self.tasks.push(task);
             }
             Result(name) => {
@@ -94,7 +124,7 @@ impl<'a> ComputeGraph<'a> {
 
                 let name = name.clone();
                 let result_map = self.results.clone();
-                let mut task = ComputeTask::new(move |i, o| {
+                let mut task = ComputeTask::new(move |i, _| {
                     let stdin = i.get(0).unwrap();
                     let stdin = stdin.as_ref().unwrap();
 
@@ -107,7 +137,7 @@ impl<'a> ComputeGraph<'a> {
 
                     let _ = s.send(());
                 });
-                task.inputs.push(None);
+                task.reserve_channels(1, 0);
                 self.tasks.push(task);
             }
         }
@@ -115,28 +145,20 @@ impl<'a> ComputeGraph<'a> {
 
     pub fn link(&mut self, sid: usize, spid: usize, did: usize, dpid: usize) {
         let (s, r) = unbounded::<Buffer>();
-        let output = self
-            .tasks
-            .get_mut(sid)
-            .unwrap()
-            .outputs
-            .get_mut(spid)
-            .unwrap();
+        let output = self.tasks.get_mut(sid).unwrap();
+        let output = output.data.as_mut().unwrap();
+        let output = output.outputs.get_mut(spid).unwrap();
         *output = Some(s);
 
-        let input = self
-            .tasks
-            .get_mut(did)
-            .unwrap()
-            .inputs
-            .get_mut(dpid)
-            .unwrap();
+        let input = self.tasks.get_mut(did).unwrap();
+        let input = input.data.as_mut().unwrap();
+        let input = input.inputs.get_mut(dpid).unwrap();
         *input = Some(r);
     }
 
-    pub fn start(&mut self) {
-        for t in &self.tasks {
-            t.start();
+    pub fn start(&mut self, pool: &mut Threadpool) {
+        for t in &mut self.tasks {
+            t.start(pool);
         }
     }
 

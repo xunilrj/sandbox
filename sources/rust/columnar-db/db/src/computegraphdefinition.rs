@@ -22,6 +22,7 @@ pub enum ComputeTaskDefinitionTypes {
     Result(String),
 }
 
+#[allow(dead_code)]
 pub struct ComputeTaskDefinition {
     id: usize,
     definition: ComputeTaskDefinitionTypes,
