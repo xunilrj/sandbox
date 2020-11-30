@@ -72,14 +72,18 @@ fn main() {
 
     let mut def = ComputeGraphDefinition::new();
     let t1c1 = def.from_columns("Table1.Column1");
-    let _maxt1c1 = def.fold_source(&t1c1, ComputeTaskDefinitionFolds::Maximum);
+    let maxt1c1 = def.fold_source(&t1c1, ComputeTaskDefinitionFolds::Maximum);
+    def.result_from_fold(&maxt1c1, "max from table1.column1");
 
     // let ctx = ExecutionContext::new(&svcs);
     let mut computation = def.build(&catalog);
     computation.start();
-    // computation.wait(std::time::Duration::from_secs(1));
+    computation.wait(std::time::Duration::from_secs(1));
 
-    // println!("Result: {:?}", computation.result());
+    println!(
+        "Result: {:?}",
+        computation.get_result("max from table1.column1")
+    );
 
     drop(file)
 }

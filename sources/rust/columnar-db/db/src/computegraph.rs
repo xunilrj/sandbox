@@ -2,6 +2,7 @@ use crate::computegraphdefinition::*;
 use crate::datacatalog::*;
 use crate::filemanager::*;
 use crossbeam_channel::*;
+use std::collections::*;
 use std::sync::*;
 use std::vec::*;
 
@@ -32,6 +33,8 @@ impl ComputeTask {
 
 pub struct ComputeGraph<'a> {
     tasks: Vec<ComputeTask>,
+    results: Arc<RwLock<HashMap<String, u8>>>,
+    results_receivers: Vec<Receiver<()>>,
 
     catalog: &'a DataCatalog,
 }
@@ -40,6 +43,8 @@ impl<'a> ComputeGraph<'a> {
     pub fn new(catalog: &'a DataCatalog) -> Self {
         Self {
             tasks: Vec::new(),
+            results: Arc::new(RwLock::new(HashMap::new())),
+            results_receivers: Vec::new(),
             catalog: catalog,
         }
     }
@@ -66,13 +71,41 @@ impl<'a> ComputeGraph<'a> {
                     let stdin = i.get(0).unwrap();
                     let stdin = stdin.as_ref().unwrap();
 
-                    let mut r = std::u8::MIN;
+                    let mut max_value = std::u8::MIN;
                     let buffer = stdin.recv().unwrap();
                     for v in buffer.as_u8() {
-                        r = r.max(*v);
+                        max_value = max_value.max(*v);
                     }
 
-                    println!("max {}", r);
+                    let stdout = o.get(0).unwrap();
+                    let stdout = stdout.as_ref().unwrap();
+
+                    let mut buffer = Buffer::new();
+                    buffer.push_u8(max_value);
+                    let _ = stdout.send(buffer);
+                });
+                task.inputs.push(None);
+                task.outputs.push(None);
+                self.tasks.push(task);
+            }
+            Result(name) => {
+                let (s, r) = bounded(1);
+                self.results_receivers.push(r);
+
+                let name = name.clone();
+                let result_map = self.results.clone();
+                let mut task = ComputeTask::new(move |i, o| {
+                    let stdin = i.get(0).unwrap();
+                    let stdin = stdin.as_ref().unwrap();
+
+                    let buffer = stdin.recv().unwrap();
+                    let &v = buffer.as_u8().get(0).unwrap();
+
+                    let mut result_map = result_map.write().unwrap();
+                    result_map.insert(name.clone(), v);
+                    drop(result_map);
+
+                    let _ = s.send(());
                 });
                 task.inputs.push(None);
                 self.tasks.push(task);
@@ -107,7 +140,19 @@ impl<'a> ComputeGraph<'a> {
         }
     }
 
-    // pub fn wait(&self, timeout: std::time::Duration) {}
+    pub fn wait(&self, timeout: std::time::Duration) {
+        let deadline = std::time::Instant::now() + timeout;
 
-    // pub fn result(&self) -> Result<(), ()> {}
+        for x in &self.results_receivers {
+            let _ = x.recv_deadline(deadline).unwrap();
+        }
+    }
+
+    pub fn get_result(&self, name: &str) -> Option<u8> {
+        let r = self.results.read().unwrap();
+        match r.get(name) {
+            Some(&v) => Some(v),
+            None => None,
+        }
+    }
 }

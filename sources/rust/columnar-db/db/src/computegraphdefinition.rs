@@ -14,9 +14,12 @@ pub enum ComputeTaskDefinitionFolds {
 
 pub struct ComputeTaskDefinitionFold(usize);
 
+pub struct ComputeTaskDefinitionResult(usize);
+
 pub enum ComputeTaskDefinitionTypes {
     Source(ComputeTaskDefinitionSources),
     Fold(ComputeTaskDefinitionFolds),
+    Result(String),
 }
 
 pub struct ComputeTaskDefinition {
@@ -66,6 +69,20 @@ impl ComputeGraphDefinition {
         });
         self.links.push((source.0, id));
         ComputeTaskDefinitionFold(id)
+    }
+
+    pub fn result_from_fold(
+        &mut self,
+        fold: &ComputeTaskDefinitionFold,
+        name: &str,
+    ) -> ComputeTaskDefinitionResult {
+        let id = self.tasks.len();
+        self.tasks.push(ComputeTaskDefinition {
+            id: id,
+            definition: ComputeTaskDefinitionTypes::Result(name.to_string()),
+        });
+        self.links.push((fold.0, id));
+        ComputeTaskDefinitionResult(id)
     }
 
     pub fn build<'a>(&self, catalog: &'a DataCatalog) -> ComputeGraph<'a> {
