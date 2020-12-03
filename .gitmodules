@@ -1,3 +1,0 @@
-[submodule "sources/rust/sstable"]
-	path = sources/rust/sstable
-	url = http://www.machinaaurum.com/gitea/Daniel/SSTable.git
