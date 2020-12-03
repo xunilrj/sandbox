@@ -1,10 +1,12 @@
+use crate::channel::*;
 use crate::threadpool::*;
 use crossbeam_channel::*;
 
 pub enum FileManagerRequests {
     ReadAll {
         file: String,
-        sender: Sender<Buffer>,
+        next: usize,
+        sender: Sender<Message>,
     },
 }
 
@@ -18,29 +20,6 @@ pub enum FileManagerRequestsResponses {
 pub struct FileManager<'a> {
     epoll: libc::c_int,
     dispatcher: TypedThreadDispatcher<'a, FileManagerRequests, FileManagerRequestsResponses>,
-}
-
-pub struct Buffer {
-    data: Vec<u8>,
-    size: usize,
-}
-
-impl Buffer {
-    pub fn new() -> Self {
-        Self {
-            data: Vec::new(),
-            size: 0,
-        }
-    }
-
-    pub fn as_u8(&self) -> &[u8] {
-        unsafe { std::slice::from_raw_parts(self.data.as_ptr(), self.size) }
-    }
-
-    pub fn push_u8(&mut self, value: u8) {
-        self.data.push(value);
-        self.size += 1;
-    }
 }
 
 pub struct TempFile {
@@ -80,14 +59,17 @@ impl TempFile {
         Ok(Self { path: path.into() })
     }
 
-    pub fn random(path: &str) -> std::io::Result<Self> {
+    pub fn random(path: &str, mut size: usize) -> std::io::Result<Self> {
         use std::io::*;
         let _ = std::fs::remove_file(&path);
         let mut file = std::fs::File::create(&path)?;
 
-        let mut data = vec![0u8; 16 * 1024];
-        for v in data.iter_mut() {
-            *v = rand::random::<u8>()
+        let mut data = vec![0u8; 4 * 1024];
+        while size > 0 {
+            for v in data.iter_mut() {
+                *v = rand::random::<u8>()
+            }
+            size -= data.len();
         }
 
         file.write_all(&data)?;
@@ -103,7 +85,7 @@ impl Drop for TempFile {
     }
 }
 
-pub fn handle_read_all(file: &str, sender: &Sender<Buffer>) -> ReadAllResult {
+pub fn handle_read_all(file: &str, next: usize, sender: &Sender<Message>) -> ReadAllResult {
     let mut path = file.to_string();
     path.push('\0');
 
@@ -129,11 +111,7 @@ pub fn handle_read_all(file: &str, sender: &Sender<Buffer>) -> ReadAllResult {
 
     let mut offset = 0;
     loop {
-        let mut buffer = Buffer {
-            data: vec![0; 4 * 1024],
-            size: 4 * 1024,
-        };
-
+        let mut buffer = Buffer::all_zero(4 * 1024);
         buffer.size = unsafe {
             let r = libc::pread(
                 fd,
@@ -152,9 +130,10 @@ pub fn handle_read_all(file: &str, sender: &Sender<Buffer>) -> ReadAllResult {
             r as usize
         };
         offset += buffer.size as i64;
-        let _ = sender.send(buffer);
+        let _ = sender.send(Message::Buffer(buffer, next));
     }
 
+    let _ = sender.send(Message::Eof);
     unsafe { libc::close(fd) };
 
     ReadAllResult {}
@@ -163,10 +142,11 @@ pub fn handle_read_all(file: &str, sender: &Sender<Buffer>) -> ReadAllResult {
 impl<'a> FileManager<'a> {
     pub fn new(pool: &mut Threadpool<'a>) -> Self {
         let dispatcher = pool.new_dispatcher(move |request| match request {
-            FileManagerRequests::ReadAll { file, sender } => {
-                FileManagerRequestsResponses::ReadAllResult(handle_read_all(file, sender))
+            FileManagerRequests::ReadAll { file, next, sender } => {
+                FileManagerRequestsResponses::ReadAllResult(handle_read_all(file, *next, sender))
             }
         });
+
         let epoll = {
             let r = unsafe { libc::epoll_create1(0) };
             if r < 0 {
@@ -175,6 +155,7 @@ impl<'a> FileManager<'a> {
             }
             r
         };
+
         Self { dispatcher, epoll }
     }
 
@@ -185,7 +166,8 @@ impl<'a> FileManager<'a> {
     pub fn read_all(
         &mut self,
         file: &str,
-        sender: Sender<Buffer>,
+        next: usize,
+        sender: Sender<Message>,
     ) -> std::result::Result<
         ReceiverFutureMap<FileManagerRequestsResponses, ReadAllResult>,
         ThreadpoolRunError,
@@ -193,6 +175,7 @@ impl<'a> FileManager<'a> {
         let future = self
             .send(FileManagerRequests::ReadAll {
                 file: file.to_string(),
+                next,
                 sender,
             })?
             .map(|x| {
@@ -230,15 +213,17 @@ mod tests {
         let (sender, receiver) = bounded(4);
 
         let readl_all_result = mgr
-            .read_all(file.path.to_str().unwrap(), sender)
+            .read_all(file.path.to_str().unwrap(), 1, sender)
             .expect("Cannot read file");
 
         for _ in 0..4 {
-            let buffer = receiver
-                .recv_timeout(std::time::Duration::from_secs(1))
-                .expect("Read all timeout");
-            testlib::assert!(buffer.data.len() == 4096);
-            testlib::assert!(buffer.data.iter().all(|x| *x == 1u8));
+            if let Ok(crate::channel::Message::Buffer(buffer, next)) =
+                receiver.recv_timeout(std::time::Duration::from_secs(1))
+            {
+                testlib::assert!(next == 1);
+                testlib::assert!(buffer.data.len() == 4096);
+                testlib::assert!(buffer.data.iter().all(|x| *x == 1u8));
+            }
         }
 
         readl_all_result

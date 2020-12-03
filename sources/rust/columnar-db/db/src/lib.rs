@@ -1,3 +1,4 @@
+pub mod channel;
 pub mod computegraph;
 pub mod computegraphdefinition;
 pub mod datacatalog;

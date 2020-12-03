@@ -1,0 +1,14 @@
+[package]
+name = "html"
+version = "0.1.0"
+authors = ["root"]
+edition = "2018"
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = { version = "1.0.51", features = ["full", "parsing", "extra-traits"] }
+syn-rsx = "0.7.3"
+proc-macro2 = { version = "1.0.20", default-features = false }
+quote = "1.0.7"

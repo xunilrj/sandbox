@@ -1,0 +1,136 @@
+<html>
+
+<body>
+    <div id="root"></div>
+    <script>
+
+        function cleanNode(node) { }
+
+        function setAttributes(targetNode, wantedStateNode) {
+            const wantedStateNodeAttrs = wantedStateNode.attributes;
+            for (let i = wantedStateNodeAttrs.length - 1; i >= 0; i--) {
+                let attr = wantedStateNodeAttrs[i];
+                let attrName = attr.name;
+                let attrNamespaceURI = attr.namespaceURI;
+                let attrValue = attr.value;
+
+                if (attrNamespaceURI) {
+                    attrName = attr.localName || attrName;
+                    fromValue = targetNode.getAttributeNS(attrNamespaceURI, attrName);
+
+                    if (fromValue !== attrValue) {
+                        if (attr.prefix === "xmlns") {
+                            attrName = attr.name; // It's not allowed to set an attribute with the XMLNS namespace without specifying the `xmlns` prefix
+                        }
+                        targetNode.setAttributeNS(attrNamespaceURI, attrName, attrValue);
+                    }
+                } else {
+                    fromValue = targetNode.getAttribute(attrName);
+
+                    if (fromValue !== attrValue) {
+                        targetNode.setAttribute(attrName, attrValue);
+                    }
+                }
+            }
+
+            var targetNodeAttrs = targetNode.attributes;
+            for (var d = targetNodeAttrs.length - 1; d >= 0; d--) {
+                let attr = targetNodeAttrs[d];
+                let attrName = attr.name;
+                let attrNamespaceURI = attr.namespaceURI;
+
+                if (attrNamespaceURI) {
+                    attrName = attr.localName || attrName;
+
+                    if (!wantedStateNode.hasAttributeNS(attrNamespaceURI, attrName)) {
+                        targetNode.removeAttributeNS(attrNamespaceURI, attrName);
+                    }
+                } else {
+                    if (!wantedStateNode.hasAttribute(attrName)) {
+                        targetNode.removeAttribute(attrName);
+                    }
+                }
+            }
+        }
+
+        function setDOM(targetNode, wantedStateNode, options) {
+            if (!options) {
+                options = {};
+            }
+
+            if (typeof wantedStateNode === "string") {
+                targetNode.replaceWith(wantedStateNode);
+            } else {
+                let targetNodeName = targetNode.nodeName;
+                let wantedStateNodeName = wantedStateNode.nodeName;
+                if (targetNodeName != wantedStateNodeName) {
+                    let el = document.createElement(wantedStateNodeName);
+                    el.append(...targetNode.childNodes);
+                    setAttributes(el, wantedStateNodeName);
+                    targetNode.replaceWith(el);
+                    targetNode = el;
+                } else {
+                    setAttributes(targetNode, wantedStateNode);
+                }
+
+                if (
+                    targetNode.children.length == 0 &&
+                    wantedStateNode.children.length == 0
+                ) {
+                    targetNode.innerHTML = wantedStateNode.innerHTML;
+                } else {
+                    let i = 0;
+                    let max = Math.min(
+                        targetNode.children.length,
+                        wantedStateNode.children.length
+                    );
+                    for (; i < max; ++i) {
+                        let t = targetNode.children[i];
+                        let w = wantedStateNode.children[i];
+                        setDOM(t, w);
+                    }
+                    max = Math.max(
+                        targetNode.children.length,
+                        wantedStateNode.children.length
+                    );
+                    const toAdd = [];
+                    for (; i < max; ++i) {
+                        toAdd.push(wantedStateNode.children[i]);
+                    }
+                    targetNode.append(...toAdd);
+                }
+            }
+        }
+    </script>
+    <script>
+        let wasm;
+        function apply_to(size, ptr) {
+            const { memory } = wasm.instance.exports;
+
+            const array = new Uint8Array(memory.buffer, Number(ptr), Number(size))
+            const decoder = new TextDecoder();
+
+            const html = decoder.decode(array);
+
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(html, 'text/html');
+
+            setDOM(
+                document.getElementById("root"),
+                doc.body.firstChild
+            )
+        }
+        WebAssembly.instantiateStreaming(fetch('content/relm.wasm'), { env: { apply_to } })
+            .then(obj => {
+                wasm = obj;
+
+                window.send = function (msgid) {
+                    obj.instance.exports.send(BigInt(0), BigInt(msgid));
+                }
+
+                const appid = obj.instance.exports.mount();
+            });
+    </script>
+</body>
+
+</html>

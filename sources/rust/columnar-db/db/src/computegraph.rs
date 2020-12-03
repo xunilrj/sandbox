@@ -1,3 +1,4 @@
+use crate::channel::*;
 use crate::computegraphdefinition::*;
 use crate::datacatalog::*;
 use crate::filemanager::*;
@@ -8,16 +9,16 @@ use std::sync::*;
 use std::vec::*;
 
 struct ComputeTaskData {
-    f: Box<dyn Fn(&Vec<Option<Receiver<Buffer>>>, &Vec<Option<Sender<Buffer>>>) + Send>,
+    f: Box<dyn Fn(&Vec<Option<Receiver<Message>>>, &Vec<Option<Sender<Message>>>) + Send>,
     // data: ComputeTaskData,
-    inputs: Vec<Option<Receiver<Buffer>>>,
-    outputs: Vec<Option<Sender<Buffer>>>,
+    inputs: Vec<Option<Receiver<Message>>>,
+    outputs: Vec<Option<Sender<Message>>>,
 }
 
 impl ComputeTaskData {
     pub fn new<F>(f: F) -> Self
     where
-        F: Fn(&Vec<Option<Receiver<Buffer>>>, &Vec<Option<Sender<Buffer>>>) + Send + 'static,
+        F: Fn(&Vec<Option<Receiver<Message>>>, &Vec<Option<Sender<Message>>>) + Send + 'static,
     {
         Self {
             f: Box::new(f),
@@ -34,7 +35,7 @@ struct ComputeTask {
 impl ComputeTask {
     pub fn new<F>(f: F) -> Self
     where
-        F: Fn(&Vec<Option<Receiver<Buffer>>>, &Vec<Option<Sender<Buffer>>>) + Send + 'static,
+        F: Fn(&Vec<Option<Receiver<Message>>>, &Vec<Option<Sender<Message>>>) + Send + 'static,
     {
         Self {
             data: Some(ComputeTaskData::new(f)),
@@ -103,17 +104,21 @@ impl<'a> ComputeGraph<'a> {
                     let stdin = stdin.as_ref().unwrap();
 
                     let mut max_value = std::u8::MIN;
-                    let buffer = stdin.recv().unwrap();
-                    for v in buffer.as_u8() {
-                        max_value = max_value.max(*v);
+                    match stdin.recv().unwrap() {
+                        Message::Buffer(buffer) => {
+                            for v in buffer.as_u8() {
+                                max_value = max_value.max(*v);
+                            }
+                        }
+                        Message::Eof => {
+                            let stdout = o.get(0).unwrap();
+                            let stdout = stdout.as_ref().unwrap();
+
+                            let mut buffer = Buffer::new();
+                            buffer.push_u8(max_value);
+                            let _ = stdout.send(Message::Buffer(buffer));
+                        }
                     }
-
-                    let stdout = o.get(0).unwrap();
-                    let stdout = stdout.as_ref().unwrap();
-
-                    let mut buffer = Buffer::new();
-                    buffer.push_u8(max_value);
-                    let _ = stdout.send(buffer);
                 });
                 task.reserve_channels(1, 1);
                 self.tasks.push(task);
@@ -127,15 +132,17 @@ impl<'a> ComputeGraph<'a> {
                 let mut task = ComputeTask::new(move |i, _| {
                     let stdin = i.get(0).unwrap();
                     let stdin = stdin.as_ref().unwrap();
+                    match stdin.recv().unwrap() {
+                        Message::Buffer(buffer) => {
+                            let &v = buffer.as_u8().get(0).unwrap();
+                            let mut result_map = result_map.write().unwrap();
+                            result_map.insert(name.clone(), v);
+                            drop(result_map);
 
-                    let buffer = stdin.recv().unwrap();
-                    let &v = buffer.as_u8().get(0).unwrap();
-
-                    let mut result_map = result_map.write().unwrap();
-                    result_map.insert(name.clone(), v);
-                    drop(result_map);
-
-                    let _ = s.send(());
+                            let _ = s.send(());
+                        }
+                        _ => {}
+                    }
                 });
                 task.reserve_channels(1, 0);
                 self.tasks.push(task);
@@ -144,7 +151,7 @@ impl<'a> ComputeGraph<'a> {
     }
 
     pub fn link(&mut self, sid: usize, spid: usize, did: usize, dpid: usize) {
-        let (s, r) = unbounded::<Buffer>();
+        let (s, r) = unbounded::<Message>();
         let output = self.tasks.get_mut(sid).unwrap();
         let output = output.data.as_mut().unwrap();
         let output = output.outputs.get_mut(spid).unwrap();
