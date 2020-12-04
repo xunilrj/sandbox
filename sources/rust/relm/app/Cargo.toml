@@ -1,7 +1,7 @@
 [package]
-name = "runtime"
+name = "app"
 version = "0.1.0"
-authors = ["root"]
+authors = ["Daniel Leite <xunilrj@hotmail.com>"]
 edition = "2018"
 
 [lib]
@@ -13,4 +13,5 @@ crate-type = ["cdylib", "rlib"]
 debug = true
 
 [dependencies]
-html = {path = "../html"}
+runtime = { path = "../runtime" }
+html = { path = "../html" }

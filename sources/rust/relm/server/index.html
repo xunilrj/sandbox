@@ -104,13 +104,17 @@
     </script>
     <script>
         let wasm;
+        const decoder = new TextDecoder();
+        function console_error(size, ptr) {
+            const { memory } = wasm.instance.exports;
+            const array = new Uint8Array(memory.buffer, Number(ptr), Number(size))
+            console.error(decoder.decode(array));
+        }
         function apply_to(size, ptr) {
             const { memory } = wasm.instance.exports;
-
             const array = new Uint8Array(memory.buffer, Number(ptr), Number(size))
-            const decoder = new TextDecoder();
-
             const html = decoder.decode(array);
+            console.log(html);
 
             var parser = new DOMParser();
             var doc = parser.parseFromString(html, 'text/html');
@@ -120,12 +124,29 @@
                 doc.body.firstChild
             )
         }
-        WebAssembly.instantiateStreaming(fetch('content/relm.wasm'), { env: { apply_to } })
+        WebAssembly.instantiateStreaming(fetch('content/app.wasm'), { env: { apply_to, console_error } })
             .then(obj => {
                 wasm = obj;
 
-                window.send = function (msgid) {
-                    obj.instance.exports.send(BigInt(0), BigInt(msgid));
+                window.send = function (msgid, e) {
+
+                    const enc = new TextEncoder();
+
+                    e = e || [];
+
+                    let ps = [];
+                    for (let v of e) {
+                        if (typeof (v) == 'string') {
+                            let ptr = Number(obj.instance.exports.alloc(BigInt(v.length)));
+                            ps.push(ptr);
+
+                            const array = new Uint8Array(obj.instance.exports.memory.buffer, ptr, v.length);
+                            enc.encodeInto(v, array);
+                        }
+                    }
+                    let r = obj.instance.exports.send(BigInt(0), BigInt(msgid),
+                        BigInt(ps[0] || 0), BigInt(ps[1] || 0), BigInt(ps[2] || 0), BigInt(ps[3] || 0), BigInt(ps[4] || 0));
+                    console.log(r);
                 }
 
                 const appid = obj.instance.exports.mount();

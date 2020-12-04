@@ -32,6 +32,27 @@ struct HtmlElement {
 }
 
 impl HtmlElement {
+    fn quote_by_event_name(k: &str, expr: &Expr) -> (proc_macro2::TokenStream, String) {
+        if let Expr::Closure(c) = expr {
+            match k {
+                "onclick" => (
+                    quote! {let message = MessageFactory::OnClick(Box::new(#c))},
+                    "=\"send({});\"".to_string(),
+                ),
+                "oninput" => (
+                    quote! {let message = MessageFactory::OnInput(Box::new(#c))},
+                    "=\"var e = arguments[0];send({}, [e.data]);\"".to_string(),
+                ),
+                _ => panic!("unkown event"),
+            }
+        } else {
+            (
+                quote! {let message = MessageFactory::Message(#expr)},
+                "=\"send({});\"".to_string(),
+            )
+        }
+    }
+
     fn quote_attrs(&self, q: &mut proc_macro2::TokenStream) {
         // println!("Quoting Attributes for {}", self.name);
         for (k, v) in &self.attributes {
@@ -40,14 +61,27 @@ impl HtmlElement {
             match v {
                 HtmlAttributeContent::None => {}
                 HtmlAttributeContent::Expression(expr) => {
-                    q.extend(quote! {
-                        {
-                            let message = #expr;
-                            let id = messages.len();
-                            messages.push(message);
-                            html.push_str(&format!("=\"send({})\" ", id));
-                        }
-                    });
+                    // dbg!(&expr);
+                    let is_eventcallback = k.starts_with("on");
+                    if is_eventcallback {
+                        let (message_init, event_html) =
+                            Self::quote_by_event_name(k.as_str(), expr);
+                        q.extend(quote! {
+                            {
+                                #message_init;
+                                let id = messages.len();
+                                messages.push(message);
+                                html.push_str(&format!(#event_html, id));
+                            }
+                        });
+                    } else {
+                        q.extend(quote! {
+                            {
+                                let v = &(#expr);
+                                html.push_str(&format!("=\"{}\" ", &v));
+                            }
+                        });
+                    }
                 }
                 HtmlAttributeContent::String(s) => {
                     q.extend(quote! {
@@ -137,7 +171,9 @@ fn open_element(stream: &mut ParseStream) -> Option<HtmlElement> {
             attributes: HashMap::new(),
         };
 
-        // End the open tag
+        // we now can have
+        // end the open tag
+        // end of the tag (todo)
         // or attributes
 
         if stream.peek(Gt) {
@@ -145,6 +181,7 @@ fn open_element(stream: &mut ParseStream) -> Option<HtmlElement> {
         } else {
             while let Ok(attr_name) = parsers::parse_seq1::<Ident>(stream) {
                 let attr_name = format!("{}", attr_name);
+
                 // println!("Found Attribute {}", attr_name);
                 element
                     .attributes
@@ -172,7 +209,18 @@ fn open_element(stream: &mut ParseStream) -> Option<HtmlElement> {
                 }
             }
 
-            stream.parse::<token::Gt>().unwrap();
+            // We can now have
+            // end the open tag
+            // end of the tag (todo)
+            if stream.peek(Gt) {
+                stream.parse::<token::Gt>().unwrap();
+            }
+            if stream.peek(Div) {
+                stream.parse::<token::Div>().unwrap();
+                stream.parse::<token::Gt>().unwrap();
+
+                return Some(element);
+            }
         }
 
         // element content

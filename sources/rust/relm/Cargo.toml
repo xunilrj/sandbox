@@ -1,2 +1,2 @@
 [workspace]
-members = ["html", "runtime"]
+members = ["html", "runtime", "app"]
