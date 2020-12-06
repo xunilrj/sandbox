@@ -1,5 +1,4 @@
 use runtime::*;
-pub type App = Application<CounterState, Messages>;
 
 pub struct CounterState {
     pub count: u64,
@@ -13,55 +12,70 @@ pub enum Messages {
     Input { data: String },
 }
 
-pub fn init() -> CounterState {
-    CounterState {
-        count: 0,
-        amount: "1".into(),
+impl std::default::Default for CounterState {
+    fn default() -> Self {
+        CounterState {
+            count: 0,
+            amount: "1".into(),
+        }
     }
 }
 
-pub fn update(message: &Messages, state: &mut CounterState) {
-    if let Ok(v) = state.amount.parse::<u64>() {
+impl runtime::ApplicationTrait for CounterState {
+    type State = Self;
+    type Message = Messages;
+
+    fn update(&mut self, message: &Self::Message) {
         match message {
-            Messages::Increment => state.count = state.count.saturating_add(v),
-            Messages::Decrement => state.count = state.count.saturating_sub(v),
+            Messages::Increment => {
+                self.count = {
+                    let v = self.amount.parse::<u64>().unwrap_or(0);
+                    self.count.saturating_add(v)
+                }
+            }
+            Messages::Decrement => {
+                self.count = {
+                    let v = self.amount.parse::<u64>().unwrap_or(0);
+                    self.count.saturating_sub(v)
+                }
+            }
             Messages::Input { data } => {
-                state.amount.value.push_str(data);
+                self.amount.value.push_str(data);
             }
         }
-    } else {
-        //todo show error
+    }
+
+    fn to_html(&self) -> runtime::ViewResult<Messages> {
+        html::html! {
+            <div id="root">
+                <div>
+                    <button class="red" onclick={Messages::Increment}>"Increment"</button>
+                    <button onclick={Messages::Decrement}>"Decrement"</button>
+                </div>
+                <div>
+                    <input value={self.amount.value} oninput={|e| Messages::Input { data: e.data.to_string()}} />
+                </div>
+                <div>
+                    <div>{self.count}</div>
+                </div>
+            </div>
+        }
     }
 }
 
-pub fn view(state: &CounterState) -> ViewResult<Messages> {
-    html::html! {
-        <div id="root">
-            <div>
-                <button class="red" onclick={Messages::Increment}>"Increment"</button>
-                <button onclick={Messages::Decrement}>"Decrement"</button>
-            </div>
-            <div>
-                <input value={state.amount.value} oninput={|e| Messages::Input { data: e.data.to_string()}} />
-            </div>
-            <div>
-                <div>{state.count}</div>
-            </div>
-        </div>
-    }
-}
+// #[cfg(test)]
+// mod tests {
+//     use super::*;
+//     use runtime::*;
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+//     #[test]
+//     fn it_works() {
+//         let mut t = runtime::Tester::<CounterState>::new();
 
-    #[test]
-    fn it_works() {
-        let mut app = Application::new(init, update, view);
-        app.render();
-        app.send_by_id(0, Vec::new()).unwrap();
-        app.render();
-        app.send_by_id(1, Vec::new()).unwrap();
-        app.render();
-    }
-}
+//         t.click("#root button:nth-of-type(1)");
+//         t.assert_inner_text("#root div div", |x| x == "1");
+
+//         t.click("#root button:nth-of-type(2)");
+//         t.assert_inner_text("#root div div", |x| x == "0");
+//     }
+// }

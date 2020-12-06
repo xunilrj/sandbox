@@ -1,4 +1,4 @@
-use std::{alloc::Layout, str::FromStr, sync::RwLock};
+use std::{alloc::Layout, collections::VecDeque};
 
 #[derive(Debug)]
 pub struct OnInput {
@@ -19,16 +19,104 @@ impl<TMessage: std::fmt::Debug> std::fmt::Debug for MessageFactory<TMessage> {
             MessageFactory::Message(msg) => {
                 write!(f, "{:?}", msg);
             }
+            MessageFactory::OnClick(_) => {
+                write!(f, "OnClick");
+            }
+            MessageFactory::OnInput(_) => {
+                write!(f, "OnInput");
+            }
             _ => {}
         };
         Ok(())
     }
 }
 
-pub type InitFunction<T> = fn() -> T;
-pub type UpdateFunction<TMessage, TState> = fn(message: &TMessage, state: &mut TState);
+// pub type UpdateFunction<TMessage, TState> = fn(message: &TMessage, state: &mut TState);
 pub type ViewResult<TMessage> = (Html, Vec<MessageFactory<TMessage>>);
-pub type ViewFunction<TState, TMessage: std::fmt::Debug> = fn(&TState) -> ViewResult<TMessage>;
+// pub type ViewFunction<TState, TMessage: std::fmt::Debug> = fn(&TState) -> ViewResult<TMessage>;
+
+pub trait ApplicationFacade {
+    fn send_by_id(
+        &mut self,
+        id: usize,
+        p: Vec<u64>,
+        messages: *mut (),
+    ) -> std::result::Result<String, u64>;
+    fn render(&mut self, messages: *mut ()) -> Html;
+}
+
+pub struct ApplicationWrapper {
+    pub facade: Box<dyn ApplicationFacade>,
+    pub messages: *mut (),
+}
+
+pub trait ApplicationTrait {
+    type State;
+    type Message: Clone + std::fmt::Debug;
+
+    fn update(&mut self, message: &Self::Message);
+    fn to_html(&self) -> ViewResult<Self::Message>;
+
+    fn send(&mut self, message: &Self::Message) {
+        self.update(message);
+    }
+
+    fn render2(&mut self, messages: *mut ()) -> Html {
+        let v = unsafe { &mut *(messages as *mut Vec<MessageFactory<Self::Message>>) };
+        v.clear();
+
+        let (html, messages) = self.to_html();
+
+        println!("HTML: {:?}", html);
+        println!("Messages: {:?}", messages);
+
+        v.extend(messages);
+
+        unsafe {
+            apply_to(html.len() as u32, html.as_ptr() as u32);
+        }
+
+        html
+    }
+
+    fn send_by_id2(
+        &mut self,
+        id: usize,
+        p: Vec<u64>,
+        messages: *mut (),
+    ) -> std::result::Result<String, u64> {
+        let messages = unsafe { &mut *(messages as *mut Vec<MessageFactory<Self::Message>>) };
+        let message_factory = messages.get_mut(id).ok_or(0u64)?;
+
+        let msg = match message_factory {
+            MessageFactory::Message(msg) => Some(msg.clone()),
+            MessageFactory::OnClick(e) => {
+                let onclick = OnClick {};
+                let f = e.as_ref();
+                Some(f(onclick))
+            }
+            MessageFactory::OnInput(e) => {
+                let p0 = p.get(0).ok_or(0u64)?;
+                let buffer = AllocBuffer::from_data_ptr(*p0 as usize);
+                let data = buffer.as_str().map_err(|_| 0u64)?.to_owned();
+
+                let onclick = OnInput {
+                    data: data.to_string(),
+                };
+                let f = e.as_ref();
+                Some(f(onclick))
+            }
+        };
+
+        if let Some(msg) = msg {
+            self.update(&msg);
+            let html = self.render2(messages as *mut Vec<MessageFactory<Self::Message>> as *mut ());
+            Ok(html)
+        } else {
+            Err(0)
+        }
+    }
+}
 
 pub type Html = String;
 
@@ -56,80 +144,76 @@ impl From<&str> for InputState {
     }
 }
 
-pub struct Application<TState, TMessage: std::fmt::Debug + Clone> {
-    state: TState,
-    update: UpdateFunction<TMessage, TState>,
-    view: ViewFunction<TState, TMessage>,
-    messages: Vec<MessageFactory<TMessage>>,
+impl std::default::Default for InputState {
+    fn default() -> Self {
+        Self {
+            value: "".to_string(),
+        }
+    }
 }
 
-impl<TState, TMessage: std::fmt::Debug + Clone> Application<TState, TMessage> {
-    pub fn new(
-        init: InitFunction<TState>,
-        update: UpdateFunction<TMessage, TState>,
-        view: ViewFunction<TState, TMessage>,
-    ) -> Self {
-        Self {
-            state: init(),
-            update,
-            view,
-            messages: Vec::new(),
-        }
-    }
+pub static mut APPS: Vec<ApplicationWrapper> = Vec::new();
 
-    pub fn send(&mut self, message: &TMessage) {
-        let f = self.update;
-        f(message, &mut self.state);
-    }
+#[macro_export]
+macro_rules! mount {
+    ( $($id:expr => $type:ty),*) => {
 
-    pub fn send_by_id(&mut self, id: usize, p: Vec<u64>) -> std::result::Result<(), u64> {
-        let message_factory = self.messages.get_mut(id).ok_or(0u64)?;
+        $(impl runtime::ApplicationFacade for $type {
+            fn send_by_id(&mut self, id: usize, p: Vec<u64>, messages: *mut ()) -> Result<String, u64> { self.send_by_id2(id, p, messages) }
+            fn render(&mut self, messages: *mut ()) -> Html { self.render2(messages) }
+        })*
 
-        let msg = match message_factory {
-            MessageFactory::Message(msg) => Some(msg.clone()),
-            MessageFactory::OnClick(e) => {
-                let onclick = OnClick {};
-                let f = e.as_ref();
-                Some(f(onclick))
+        #[no_mangle]
+        pub fn mount(id: u64) -> i64 {
+            std::panic::set_hook(Box::new(|panic_info| {
+                let msg = format!("{}", panic_info);
+                unsafe { console_error(msg.len() as u32, msg.as_ptr() as u32) };
+            }));
+
+            let app = match id {
+                $(
+                    $id => Some((
+                        Box::new(<$type as std::default::Default>::default()) as Box<dyn ApplicationFacade>,
+                        Box::leak(
+                            Box::new(Vec::<MessageFactory<<$type as ApplicationTrait>::Message>>::new())
+                        ) as *mut Vec::<MessageFactory<<$type as ApplicationTrait>::Message>> as *mut ()
+                    )),
+                )*
+                _ => None,
+            };
+
+            match app {
+                Some((facade, messages)) => unsafe {
+                    APPS.push(ApplicationWrapper { facade, messages });
+                    let id = APPS.len() as u64 - 1;
+
+                    match APPS.get_mut(id as usize) {
+                        Some(app) => {
+                            app.facade.render(messages);
+                        }
+                        None => {}
+                    }
+
+                    id as i64
+                },
+                None => -1,
             }
-            MessageFactory::OnInput(e) => {
-                let p0 = p.get(0).ok_or(0u64)?;
-                let buffer = AllocBuffer::from_data_ptr(*p0 as usize);
-                let data = buffer.as_str().map_err(|_| 0u64)?.to_owned();
+        }
+    };
+}
 
-                let onclick = OnInput {
-                    data: data.to_string(),
-                };
-                let f = e.as_ref();
-                Some(f(onclick))
+#[no_mangle]
+pub fn send(app_idx: u64, msg_idx: u64, p0: u64, p1: u64, p2: u64, p3: u64, p4: u64) -> bool {
+    let p = vec![p0, p1, p2, p3, p4];
+    unsafe {
+        if let Some(app) = APPS.get_mut(app_idx as usize) {
+            match app.facade.send_by_id(msg_idx as usize, p, app.messages) {
+                Ok(_) => true,
+                Err(_) => false,
             }
-        };
-
-        if let Some(msg) = msg {
-            let f = self.update;
-            f(&msg, &mut self.state);
-            self.render();
+        } else {
+            false
         }
-
-        Ok(())
-    }
-
-    pub fn render(&mut self) -> Html {
-        self.messages.clear();
-
-        let f = self.view;
-        let (html, messages) = f(&self.state);
-
-        println!("HTML: {:?}", html);
-        println!("Messages: {:?}", messages);
-
-        self.messages.extend(messages);
-
-        unsafe {
-            apply_to(html.len() as u32, html.as_ptr() as u32);
-        }
-
-        html
     }
 }
 
@@ -146,7 +230,7 @@ pub fn apply_to(size: u32, ptr: u32) {}
 pub fn console_error(size: u32, ptr: u32) {}
 
 #[track_caller]
-fn console_error_str(s: &str) {
+pub fn console_error_str(s: &str) {
     let location = core::panic::Location::caller();
     let s = format!("{} at {}", s, location);
     unsafe { console_error(s.len() as u32, s.as_ptr() as u32) };
@@ -208,6 +292,16 @@ impl AllocBuffer {
         let slice = self.as_slice();
         std::str::from_utf8(slice)
     }
+
+    pub fn copy_str(&mut self, s: &str) -> Result<(), u64> {
+        if s.len() > self.data_size() {
+            Err(0)
+        } else {
+            let data = self.as_slice_mut();
+            data.copy_from_slice(s.as_bytes());
+            Ok(())
+        }
+    }
 }
 
 impl Drop for AllocBuffer {
@@ -225,26 +319,112 @@ pub fn alloc(size: u64) -> u64 {
     ptr
 }
 
-// #[no_mangle]
-// pub fn mount() -> u64 {
-//     std::panic::set_hook(Box::new(|panic_info| {
-//         let msg = format!("{}", panic_info);
-//         unsafe { console_error(msg.len() as u32, msg.as_ptr() as u32) };
-//     }));
+fn alloc_str(s: &str) -> AllocBuffer {
+    let mut buffer = AllocBuffer::new(s.len());
+    buffer.copy_str(s).unwrap();
+    buffer
+}
 
-//     let app = login::App::new(login::init, login::update, login::view);
+// #[cfg(test)]
+pub struct Tester<T: Default + ApplicationTrait> {
+    state: T,
+    messages: Vec<MessageFactory<<T as ApplicationTrait>::Message>>,
+    document: scraper::Html,
+}
 
-//     unsafe {
-//         APPS.push(Applications::Login(app));
-//         let id = APPS.len() as u64 - 1;
+// #[cfg(test)]
+impl<T: Default + ApplicationTrait> Tester<T> {
+    pub fn new() -> Self {
+        let state: T = Default::default();
+        let (html, messages) = state.to_html();
 
-//         match APPS.get_mut(id as usize) {
-//             Some(app) => {
-//                 app.render();
-//             }
-//             None => {}
-//         }
+        println!("{}", html);
 
-//         id
-//     }
-// }
+        let document = scraper::Html::parse_document(html.as_str());
+
+        Self {
+            state,
+            messages,
+            document,
+        }
+    }
+
+    fn get_message_id(&self, selector: &str, idx: usize, event_name: &str) -> Option<usize> {
+        let selector = scraper::Selector::parse(selector).unwrap();
+        let mut s = self.document.select(&selector);
+        let el = s.nth(idx).unwrap();
+        let el = el.value();
+
+        if let Some(s) = el.attr(event_name) {
+            let i = s.find("send(").unwrap();
+            let (_, s) = s.split_at(i);
+            if s.starts_with("send(") {
+                let mut parameters = s
+                    .trim_start_matches("send(")
+                    .trim_end_matches(");")
+                    .split(",");
+                Some(parameters.nth(0).unwrap().parse::<u64>().unwrap() as usize)
+            } else {
+                None
+            }
+        } else {
+            None
+        }
+    }
+
+    pub fn click(&mut self, query: &str, idx: usize) {
+        if let Some(msg_id) = self.get_message_id(query, idx, "onclick") {
+            println!("Clinking {:?}", query);
+            if let Ok(html) = self.state.send_by_id2(
+                msg_id,
+                Vec::new(),
+                &mut self.messages as *mut Vec<MessageFactory<<T as ApplicationTrait>::Message>>
+                    as *mut (),
+            ) {
+                self.document = scraper::Html::parse_document(html.as_str());
+            } else {
+                panic!("element not found");
+            }
+        } else {
+            panic!("element not found");
+        }
+    }
+
+    pub fn input(&mut self, query: &str, idx: usize, text: &str) {
+        if let Some(msg_id) = self.get_message_id(query, idx, "oninput") {
+            let messages = &mut self.messages
+                as *mut Vec<MessageFactory<<T as ApplicationTrait>::Message>>
+                as *mut ();
+            let addr = alloc_str(text);
+            let ps = vec![addr.data_ptr() as u64];
+            std::mem::forget(addr);
+            println!("Sending input {:?} to {:?}", text, query);
+            if let Ok(html) = self.state.send_by_id2(msg_id, ps, messages) {
+                self.document = scraper::Html::parse_document(html.as_str());
+            } else {
+                panic!("element not found");
+            }
+        } else {
+            panic!("element not found");
+        }
+    }
+
+    pub fn assert_inner_text<F>(&mut self, query: &str, f: F)
+    where
+        F: Fn(&str) -> bool,
+    {
+        let selector = scraper::Selector::parse(query).unwrap();
+        let mut s = self.document.select(&selector);
+        if let Some(node) = s.nth(0) {
+            let inner_text: Vec<_> = node.text().collect();
+            let inner_text = format!("{}", inner_text.iter().nth(0).unwrap());
+            let r = f(inner_text.as_str());
+            if !r {
+                println!("Failed: {}", inner_text);
+            }
+            assert!(r);
+        } else {
+            assert!(false);
+        }
+    }
+}

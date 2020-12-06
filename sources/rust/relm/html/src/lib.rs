@@ -9,12 +9,71 @@ use syn::{
 mod parsers;
 use crate::parsers::*;
 
+enum HtmlElementClose {
+    AutoClose,
+    CloseElement,
+}
+
 #[derive(Debug)]
 enum HtmlElementContent {
     None,
     Expression(Expr),
     String(LitStr),
     Children(Vec<HtmlElement>),
+    If(Expr, Box<HtmlElementContent>, Box<HtmlElementContent>),
+}
+
+impl HtmlElementContent {
+    pub fn quote(&self) -> (HtmlElementClose, proc_macro2::TokenStream) {
+        let mut q = quote! {};
+        match &self {
+            HtmlElementContent::None => (HtmlElementClose::AutoClose, q.into()),
+            HtmlElementContent::Children(children) => {
+                if children.len() > 0 {
+                    q.extend(quote! {html.push_str(">");});
+
+                    for child in children {
+                        q.extend(child.quote());
+                    }
+
+                    (HtmlElementClose::CloseElement, q.into())
+                } else {
+                    (HtmlElementClose::AutoClose, q.into())
+                }
+            }
+            HtmlElementContent::Expression(expr) => {
+                q.extend(quote! {html.push_str(">");});
+                q.extend(quote! {
+                    {
+                        let v = #expr;
+                        html.push_str(&format!("{}", v));
+                    }
+                });
+                (HtmlElementClose::CloseElement, q.into())
+            }
+            HtmlElementContent::String(s) => {
+                q.extend(quote! {html.push_str(">");});
+                q.extend(quote! {html.push_str(#s);});
+                (HtmlElementClose::CloseElement, q.into())
+            }
+            HtmlElementContent::If(cond, t, f) => {
+                let (_, tquote) = t.quote();
+                let (_, fquote) = f.quote();
+
+                q.extend(quote! {
+                    {
+                        if (#cond) {
+                            #tquote
+                        } else {
+                            #fquote
+                        }
+                    }
+                });
+
+                (HtmlElementClose::CloseElement, q.into())
+            }
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -57,7 +116,8 @@ impl HtmlElement {
         // println!("Quoting Attributes for {}", self.name);
         for (k, v) in &self.attributes {
             // println!("Attribute {}", k);
-            q.extend(quote! {html.push_str(#k);});
+            let name = format!(" {}", k);
+            q.extend(quote! {html.push_str(#name);});
             match v {
                 HtmlAttributeContent::None => {}
                 HtmlAttributeContent::Expression(expr) => {
@@ -78,14 +138,15 @@ impl HtmlElement {
                         q.extend(quote! {
                             {
                                 let v = &(#expr);
-                                html.push_str(&format!("=\"{}\" ", &v));
+                                html.push_str(&format!("=\"{}\"", &v));
                             }
                         });
                     }
                 }
                 HtmlAttributeContent::String(s) => {
+                    let all = format!("=\"{}\"", &s.value());
                     q.extend(quote! {
-                        html.push_str(&format!("=\"{}\" ", #s));
+                        html.push_str(#all);
                     });
                 }
             }
@@ -93,65 +154,27 @@ impl HtmlElement {
     }
 
     pub fn quote(&self) -> proc_macro2::TokenStream {
-        let open_html = format!("<{} ", self.name);
-        let close_html = format!("</{}>", self.name);
+        let open_html = format!("<{}", self.name);
 
         let mut q = quote! {};
 
-        match &self.content {
-            HtmlElementContent::None => {
-                q.extend(quote! {html.push_str(#open_html);});
-                self.quote_attrs(&mut q);
-                q.extend(quote! {html.push_str("/>");});
+        q.extend(quote! {html.push_str(#open_html);});
+        self.quote_attrs(&mut q);
 
-                q.into()
-            }
-            HtmlElementContent::Children(children) => {
-                if children.len() > 0 {
-                    let close_html = format!("</{}>", self.name);
+        let (close, content_quote) = self.content.quote();
+        q.extend(content_quote);
 
-                    q.extend(quote! {html.push_str(#open_html);});
-                    self.quote_attrs(&mut q);
-                    q.extend(quote! {html.push_str("/>");});
-
-                    for child in children {
-                        q.extend(child.quote());
-                    }
-
-                    q.extend(quote! {html.push_str(#close_html);});
-                    q.into()
-                } else {
-                    let html = format!("<{} />", self.name);
-                    q.extend(quote! {#html});
-                    q.into()
-                }
-            }
-            HtmlElementContent::Expression(expr) => {
-                q.extend(quote! {html.push_str(#open_html);});
-                self.quote_attrs(&mut q);
-                q.extend(quote! {html.push_str("/>");});
-
-                q.extend(quote! {
-                    {
-                        let v = #expr;
-                        html.push_str(&format!("{}", v));
-                    }
-                });
-
+        match close {
+            HtmlElementClose::AutoClose => {
+                let close_html = "/>";
                 q.extend(quote! {html.push_str(#close_html);});
-
-                q.into()
             }
-            HtmlElementContent::String(s) => {
-                q.extend(quote! {html.push_str(#open_html);});
-                self.quote_attrs(&mut q);
-                q.extend(quote! {html.push_str("/>");});
-                q.extend(quote! {html.push_str(#s);});
+            HtmlElementClose::CloseElement => {
+                let close_html = format!("</{}>", self.name);
                 q.extend(quote! {html.push_str(#close_html);});
-
-                q.into()
             }
         }
+        q.into()
     }
 }
 
@@ -179,6 +202,7 @@ fn open_element(stream: &mut ParseStream) -> Option<HtmlElement> {
         if stream.peek(Gt) {
             stream.parse::<Gt>().unwrap();
         } else {
+            // all attributes
             while let Ok(attr_name) = parsers::parse_seq1::<Ident>(stream) {
                 let attr_name = format!("{}", attr_name);
 
@@ -211,7 +235,7 @@ fn open_element(stream: &mut ParseStream) -> Option<HtmlElement> {
 
             // We can now have
             // end the open tag
-            // end of the tag (todo)
+            // end of the tag
             if stream.peek(Gt) {
                 stream.parse::<token::Gt>().unwrap();
             }
@@ -223,20 +247,42 @@ fn open_element(stream: &mut ParseStream) -> Option<HtmlElement> {
             }
         }
 
-        // element content
-
-        if stream.peek(token::Brace) {
-            if let Ok(block) = parsers::parse_seq1::<Block>(stream) {
-                if let Stmt::Expr(expr) = block.stmts.get(0).unwrap() {
-                    element.content = HtmlElementContent::Expression(expr.clone());
+        fn parse_content(stream: &mut ParseStream) -> HtmlElementContent {
+            if let Ok(expr) = parsers::parse_seq1::<Expr>(stream) {
+                HtmlElementContent::Expression(expr.clone())
+            } else if let Ok((_, cond)) = parsers::parse_seq2::<syn::token::If, syn::Expr>(stream) {
+                let dom = parsers::braced::<HtmlDom>(stream).unwrap();
+                let t = Box::new(HtmlElementContent::Children(dom.children));
+                if stream.peek(syn::token::Else) {
+                    let _ = stream.parse::<syn::token::Else>();
+                    let else_dom = parsers::braced::<HtmlDom>(stream).unwrap();
+                    // println!("ELSE {:?}", else_dom);
+                    HtmlElementContent::If(
+                        cond.clone(),
+                        t,
+                        Box::new(HtmlElementContent::Children(else_dom.children)),
+                    )
+                } else {
+                    HtmlElementContent::If(cond.clone(), t, Box::new(HtmlElementContent::None))
                 }
+            } else if let Ok(dom) = parsers::parse_seq1::<HtmlDom>(stream) {
+                HtmlElementContent::Children(dom.children)
+            } else {
+                print!("INVALID BLOCK {:?}", stream);
+                HtmlElementContent::None
             }
+        }
+
+        // element content
+        if let Ok(content) = parsers::braced_map(stream, parse_content) {
+            element.content = content;
+        } else if stream.peek(token::Lt) && stream.peek2(token::Div) {
         } else if stream.peek(token::Lt) {
             let mut children = Vec::new();
             while let Some(child) = open_element(stream) {
                 children.push(child);
             }
-            element.content = HtmlElementContent::Children(children)
+            element.content = HtmlElementContent::Children(children);
         } else {
             if let Ok(s) = parsers::parse_seq1::<LitStr>(stream) {
                 element.content = HtmlElementContent::String(s);
@@ -291,7 +337,7 @@ impl Parse for HtmlDom {
     fn parse(mut stream: ParseStream) -> Result<Self> {
         let mut dom = HtmlDom::new();
 
-        if let Some(element) = open_element(&mut stream) {
+        while let Some(element) = open_element(&mut stream) {
             dom.append(element);
         }
 

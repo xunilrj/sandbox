@@ -14,3 +14,8 @@ debug = true
 
 [dependencies]
 html = {path = "../html"}
+crabquery = "0.1.7"
+html5ever = "0.25.1"
+markup5ever_arcdom = "0.1.1"
+tendril = "0.4.1"
+scraper = "0.12.0"
