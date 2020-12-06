@@ -385,6 +385,7 @@ name = "runtime"
 version = "0.1.0"
 dependencies = [
  "crabquery",
+ "ego-tree",
  "html",
  "html5ever",
  "markup5ever_arcdom",

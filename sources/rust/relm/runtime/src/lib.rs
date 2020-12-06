@@ -67,8 +67,8 @@ pub trait ApplicationTrait {
 
         let (html, messages) = self.to_html();
 
-        println!("HTML: {:?}", html);
-        println!("Messages: {:?}", messages);
+        // println!("HTML: {:?}", html);
+        // println!("Messages: {:?}", messages);
 
         v.extend(messages);
 
@@ -325,6 +325,49 @@ fn alloc_str(s: &str) -> AllocBuffer {
     buffer
 }
 
+fn pretty_print_node<'a>(depth: usize, r: &'a ego_tree::NodeRef<'a, scraper::Node>) {
+    let node = r.value();
+    let spaces = " ".repeat(depth * 2);
+    if let Some(element) = node.as_element() {
+        print!("{}<{}", spaces, element.name.local);
+
+        for (k, v) in element.attrs() {
+            print!(" {}=\"{}\"", k, v);
+        }
+
+        println!(">");
+    }
+    if let Some(txt) = node.as_text() {
+        println!("{}{}", spaces, txt.to_string());
+    }
+
+    for child in r.children() {
+        pretty_print_node(depth + 1, &child);
+    }
+
+    if let Some(element) = node.as_element() {
+        println!("{}</{}>", spaces, element.name.local);
+    }
+}
+
+fn pretty_print_html(doc: &scraper::Html) {
+    let root = doc.tree.root();
+    for child in root.children() {
+        for child in child.children() {
+            pretty_print_node(0, &child);
+        }
+    }
+}
+
+fn parse_and_print(html: &str) -> scraper::Html {
+    let document = scraper::Html::parse_fragment(html);
+    println!("View");
+    println!("-----------------------------");
+    pretty_print_html(&document);
+    println!("-----------------------------");
+    document
+}
+
 // #[cfg(test)]
 pub struct Tester<T: Default + ApplicationTrait> {
     state: T,
@@ -338,9 +381,7 @@ impl<T: Default + ApplicationTrait> Tester<T> {
         let state: T = Default::default();
         let (html, messages) = state.to_html();
 
-        println!("{}", html);
-
-        let document = scraper::Html::parse_document(html.as_str());
+        let document = parse_and_print(html.as_str());
 
         Self {
             state,
@@ -381,7 +422,7 @@ impl<T: Default + ApplicationTrait> Tester<T> {
                 &mut self.messages as *mut Vec<MessageFactory<<T as ApplicationTrait>::Message>>
                     as *mut (),
             ) {
-                self.document = scraper::Html::parse_document(html.as_str());
+                self.document = parse_and_print(html.as_str());
             } else {
                 panic!("element not found");
             }
@@ -400,7 +441,7 @@ impl<T: Default + ApplicationTrait> Tester<T> {
             std::mem::forget(addr);
             println!("Sending input {:?} to {:?}", text, query);
             if let Ok(html) = self.state.send_by_id2(msg_id, ps, messages) {
-                self.document = scraper::Html::parse_document(html.as_str());
+                self.document = parse_and_print(html.as_str());
             } else {
                 panic!("element not found");
             }
