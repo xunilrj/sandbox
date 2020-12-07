@@ -24,12 +24,21 @@ int times(int a, int b)
 
 TEST_CASE("Func.Currying.Call Syntax", "[ok]")
 {
-    auto f = $(sum);
+    auto f1 = $(sum);
 
-    REQUIRE(f(1)(2)(3) == 6);
-    REQUIRE(f(1, 2)(3) == 6);
-    REQUIRE(f(1)(2, 3) == 6);
-    REQUIRE(f(1, 2, 3) == 6);
+    REQUIRE(f1(1)(2)(3) == 6);
+    REQUIRE(f1(1, 2)(3) == 6);
+    REQUIRE(f1(1)(2, 3) == 6);
+    REQUIRE(f1(1, 2, 3) == 6);
+
+    auto f2 = $([](int a, int b, int c) {
+        return a+b+c;
+    });
+
+    REQUIRE(f2(1)(2)(3) == 6);
+    REQUIRE(f2(1, 2)(3) == 6);
+    REQUIRE(f2(1)(2, 3) == 6);
+    REQUIRE(f2(1, 2, 3) == 6);
 }
 
 TEST_CASE("Func.Currying.Call Syntax and STL integration", "[ok]")

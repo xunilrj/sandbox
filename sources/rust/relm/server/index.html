@@ -144,12 +144,14 @@
                             enc.encodeInto(v, array);
                         }
                     }
-                    let r = obj.instance.exports.send(BigInt(0), BigInt(msgid),
+                    let r = obj.instance.exports.application_send(0, 0, msgid,
                         BigInt(ps[0] || 0), BigInt(ps[1] || 0), BigInt(ps[2] || 0), BigInt(ps[3] || 0), BigInt(ps[4] || 0));
                     console.log(r);
                 }
 
-                const appid = obj.instance.exports.mount(BigInt(0));
+                obj.instance.exports.init();
+                const appid = obj.instance.exports.application_new();
+                const wrapperid = obj.instance.exports.application_mount(appid, 0);
             });
     </script>
 </body>

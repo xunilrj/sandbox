@@ -17,16 +17,25 @@ pub enum Messages {
 impl runtime::ApplicationTrait for State {
     type State = Self;
     type Message = Messages;
+    type Actions = crate::actions::Actions;
 
-    fn update(&mut self, message: &Self::Message) {
-        match message {
-            Messages::InputLogin { data } => {
-                self.username.value.push_str(data);
+    fn update(&mut self, message: &Self::Message, actions: &mut Vec<Self::Actions>) {
+        if !self.loading {
+            match message {
+                Messages::InputLogin { data } => {
+                    self.username.value.push_str(data);
+                }
+                Messages::InputPassword { data } => {
+                    self.password.value.push_str(data);
+                }
+                Messages::Login => {
+                    self.loading = true;
+                    actions.push(crate::actions::Actions::Login {
+                        username: self.username.value.clone(),
+                        password: self.password.value.clone(),
+                    })
+                }
             }
-            Messages::InputPassword { data } => {
-                self.password.value.push_str(data);
-            }
-            Messages::Login => self.loading = true,
         }
     }
 

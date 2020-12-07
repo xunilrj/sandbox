@@ -53,12 +53,14 @@ pub struct ApplicationWrapper {
 pub trait ApplicationTrait {
     type State;
     type Message: Clone + std::fmt::Debug;
+    type Actions: Clone + std::fmt::Debug;
 
-    fn update(&mut self, message: &Self::Message);
+    fn update(&mut self, message: &Self::Message, commands: &mut Vec<Self::Actions>);
     fn to_html(&self) -> ViewResult<Self::Message>;
 
     fn send(&mut self, message: &Self::Message) {
-        self.update(message);
+        let mut commands = Vec::new();
+        self.update(message, &mut commands);
     }
 
     fn render2(&mut self, messages: *mut ()) -> Html {
@@ -109,7 +111,7 @@ pub trait ApplicationTrait {
         };
 
         if let Some(msg) = msg {
-            self.update(&msg);
+            self.send(&msg);
             let html = self.render2(messages as *mut Vec<MessageFactory<Self::Message>> as *mut ());
             Ok(html)
         } else {
@@ -152,7 +154,62 @@ impl std::default::Default for InputState {
     }
 }
 
-pub static mut APPS: Vec<ApplicationWrapper> = Vec::new();
+// pub static mut APPS: Vec<ApplicationWrapper> = Vec::new();
+
+pub static mut APPS2: Vec<Application> = Vec::new();
+
+pub struct Application {
+    apps: Vec<ApplicationWrapper>,
+}
+
+impl Application {
+    pub fn new() -> Self {
+        Self { apps: Vec::new() }
+    }
+
+    pub fn mount(&mut self, wrapper: ApplicationWrapper) -> usize {
+        self.apps.push(wrapper);
+        self.apps.len() - 1
+    }
+
+    pub fn send(&mut self, app_id: usize, msg_id: usize, p: Vec<u64>) -> bool {
+        match self.apps.get_mut(app_id) {
+            Some(ApplicationWrapper { facade, messages }) => {
+                match facade.send_by_id(msg_id, p, *messages) {
+                    Ok(_) => true,
+                    Err(_) => false,
+                }
+            }
+            None => false,
+        }
+    }
+
+    pub fn render(&mut self, id: usize) {
+        match self.apps.get_mut(id) {
+            Some(ApplicationWrapper { facade, messages }) => {
+                facade.render(*messages);
+            }
+            None => {}
+        }
+    }
+}
+
+#[no_mangle]
+pub fn init() {
+    std::panic::set_hook(Box::new(|panic_info| {
+        let msg = format!("{}", panic_info);
+        unsafe { console_error(msg.len() as u32, msg.as_ptr() as u32) };
+    }));
+}
+
+#[no_mangle]
+pub fn application_new() -> usize {
+    let app = Application::new();
+    unsafe {
+        APPS2.push(app);
+        APPS2.len() - 1
+    }
+}
 
 #[macro_export]
 macro_rules! mount {
@@ -164,55 +221,54 @@ macro_rules! mount {
         })*
 
         #[no_mangle]
-        pub fn mount(id: u64) -> i64 {
-            std::panic::set_hook(Box::new(|panic_info| {
-                let msg = format!("{}", panic_info);
-                unsafe { console_error(msg.len() as u32, msg.as_ptr() as u32) };
-            }));
+        pub fn application_mount(app_id: usize, type_id: usize) -> isize {
+            unsafe {
+                match APPS2.get_mut(app_id as usize) {
+                    Some(app) => {
+                        let r = match type_id {
+                            $(
+                                $id => Some((
+                                    Box::new(<$type as std::default::Default>::default()) as Box<dyn ApplicationFacade>,
+                                    Box::leak(
+                                        Box::new(Vec::<MessageFactory<<$type as ApplicationTrait>::Message>>::new())
+                                    ) as *mut Vec::<MessageFactory<<$type as ApplicationTrait>::Message>> as *mut ()
+                                )),
+                            )*
+                            _ => None,
+                        };
 
-            let app = match id {
-                $(
-                    $id => Some((
-                        Box::new(<$type as std::default::Default>::default()) as Box<dyn ApplicationFacade>,
-                        Box::leak(
-                            Box::new(Vec::<MessageFactory<<$type as ApplicationTrait>::Message>>::new())
-                        ) as *mut Vec::<MessageFactory<<$type as ApplicationTrait>::Message>> as *mut ()
-                    )),
-                )*
-                _ => None,
-            };
-
-            match app {
-                Some((facade, messages)) => unsafe {
-                    APPS.push(ApplicationWrapper { facade, messages });
-                    let id = APPS.len() as u64 - 1;
-
-                    match APPS.get_mut(id as usize) {
-                        Some(app) => {
-                            app.facade.render(messages);
+                        match r {
+                            Some((facade, messages)) => unsafe {
+                                let id = app.mount(ApplicationWrapper { facade, messages });
+                                app.render(id);
+                                id as isize
+                            },
+                            None => -1,
                         }
-                        None => {}
-                    }
-
-                    id as i64
-                },
-                None => -1,
+                    },
+                    None => -1
+                }
             }
         }
     };
 }
 
 #[no_mangle]
-pub fn send(app_idx: u64, msg_idx: u64, p0: u64, p1: u64, p2: u64, p3: u64, p4: u64) -> bool {
+pub fn application_send(
+    app_id: usize,
+    wrapper_id: usize,
+    msg_idx: usize,
+    p0: u64,
+    p1: u64,
+    p2: u64,
+    p3: u64,
+    p4: u64,
+) -> bool {
     let p = vec![p0, p1, p2, p3, p4];
     unsafe {
-        if let Some(app) = APPS.get_mut(app_idx as usize) {
-            match app.facade.send_by_id(msg_idx as usize, p, app.messages) {
-                Ok(_) => true,
-                Err(_) => false,
-            }
-        } else {
-            false
+        match APPS2.get_mut(app_id as usize) {
+            Some(app) => app.send(wrapper_id as usize, msg_idx as usize, p),
+            None => false,
         }
     }
 }
@@ -223,10 +279,10 @@ extern "C" {
     pub fn console_error(size: u32, ptr: u32);
 }
 
-#[cfg(unix)]
+#[cfg(target_arch = "x86_64")]
 pub fn apply_to(size: u32, ptr: u32) {}
 
-#[cfg(unix)]
+#[cfg(target_arch = "x86_64")]
 pub fn console_error(size: u32, ptr: u32) {}
 
 #[track_caller]
@@ -325,68 +381,81 @@ fn alloc_str(s: &str) -> AllocBuffer {
     buffer
 }
 
-fn pretty_print_node<'a>(depth: usize, r: &'a ego_tree::NodeRef<'a, scraper::Node>) {
+#[cfg(target_arch = "x86_64")]
+fn pretty_print_node<'a>(
+    depth: usize,
+    r: &'a ego_tree::NodeRef<'a, scraper::Node>,
+    newhtml: &mut String,
+) {
+    use std::fmt::Write;
+
     let node = r.value();
     let spaces = " ".repeat(depth * 2);
     if let Some(element) = node.as_element() {
-        print!("{}<{}", spaces, element.name.local);
+        write!(newhtml, "{}<{}", spaces, element.name.local);
 
-        for (k, v) in element.attrs() {
-            print!(" {}=\"{}\"", k, v);
+        let mut attrs: Vec<_> = element.attrs().collect();
+        attrs.sort_by(|(lk, _), (rk, _)| lk.cmp(rk));
+        for (k, v) in attrs.iter() {
+            write!(newhtml, " {}=\"{}\"", k, v);
         }
 
-        println!(">");
+        writeln!(newhtml, ">");
     }
     if let Some(txt) = node.as_text() {
-        println!("{}{}", spaces, txt.to_string());
+        writeln!(newhtml, "{}{}", spaces, txt.to_string());
     }
 
     for child in r.children() {
-        pretty_print_node(depth + 1, &child);
+        pretty_print_node(depth + 1, &child, newhtml);
     }
 
     if let Some(element) = node.as_element() {
-        println!("{}</{}>", spaces, element.name.local);
+        writeln!(newhtml, "{}</{}>", spaces, element.name.local);
     }
 }
 
-fn pretty_print_html(doc: &scraper::Html) {
+#[cfg(target_arch = "x86_64")]
+fn pretty_print_html(doc: &scraper::Html, newhtml: &mut String) {
     let root = doc.tree.root();
     for child in root.children() {
         for child in child.children() {
-            pretty_print_node(0, &child);
+            pretty_print_node(0, &child, newhtml);
         }
     }
 }
 
-fn parse_and_print(html: &str) -> scraper::Html {
+#[cfg(target_arch = "x86_64")]
+fn parse_and_print(html: &str) -> (scraper::Html, String) {
     let document = scraper::Html::parse_fragment(html);
-    println!("View");
-    println!("-----------------------------");
-    pretty_print_html(&document);
-    println!("-----------------------------");
-    document
+
+    let mut newhtml = String::new();
+    pretty_print_html(&document, &mut newhtml);
+
+    (document, newhtml)
 }
 
-// #[cfg(test)]
+#[cfg(target_arch = "x86_64")]
 pub struct Tester<T: Default + ApplicationTrait> {
     state: T,
     messages: Vec<MessageFactory<<T as ApplicationTrait>::Message>>,
     document: scraper::Html,
+    pretty_html: String,
 }
 
-// #[cfg(test)]
+#[cfg(target_arch = "x86_64")]
 impl<T: Default + ApplicationTrait> Tester<T> {
     pub fn new() -> Self {
         let state: T = Default::default();
         let (html, messages) = state.to_html();
 
-        let document = parse_and_print(html.as_str());
+        let (document, pretty_html) = parse_and_print(html.as_str());
 
         Self {
             state,
             messages,
             document,
+            pretty_html,
         }
     }
 
@@ -415,14 +484,24 @@ impl<T: Default + ApplicationTrait> Tester<T> {
 
     pub fn click(&mut self, query: &str, idx: usize) {
         if let Some(msg_id) = self.get_message_id(query, idx, "onclick") {
-            println!("Clinking {:?}", query);
+            println!("Clicking {:?}", query);
             if let Ok(html) = self.state.send_by_id2(
                 msg_id,
                 Vec::new(),
                 &mut self.messages as *mut Vec<MessageFactory<<T as ApplicationTrait>::Message>>
                     as *mut (),
             ) {
-                self.document = parse_and_print(html.as_str());
+                let (document, new_pretty_html) = parse_and_print(html.as_str());
+
+                let diff =
+                    prettydiff::diff_lines(self.pretty_html.as_str(), new_pretty_html.as_str());
+
+                println!("----------------------------------");
+                println!("{}", diff);
+                println!("----------------------------------");
+
+                self.document = document;
+                self.pretty_html = new_pretty_html;
             } else {
                 panic!("element not found");
             }
@@ -441,7 +520,16 @@ impl<T: Default + ApplicationTrait> Tester<T> {
             std::mem::forget(addr);
             println!("Sending input {:?} to {:?}", text, query);
             if let Ok(html) = self.state.send_by_id2(msg_id, ps, messages) {
-                self.document = parse_and_print(html.as_str());
+                let (document, new_pretty_html) = parse_and_print(html.as_str());
+
+                let diff =
+                    prettydiff::diff_lines(self.pretty_html.as_str(), new_pretty_html.as_str());
+                println!("----------------------------------");
+                println!("{}", diff);
+                println!("----------------------------------");
+
+                self.document = document;
+                self.pretty_html = new_pretty_html;
             } else {
                 panic!("element not found");
             }
