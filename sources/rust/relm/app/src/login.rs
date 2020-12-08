@@ -38,8 +38,11 @@ impl runtime::ApplicationTrait for State {
             }
         }
     }
+}
 
-    fn to_html(&self) -> runtime::ViewResult<Messages> {
+impl runtime::DisplayHtml for State {
+    type Message = Messages;
+    fn fmt(&self, f: &mut runtime::FormatterHtml<Self::Message>) {
         html::html! {
             <div id="root">
                 {if self.loading {

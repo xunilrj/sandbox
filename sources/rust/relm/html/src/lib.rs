@@ -326,7 +326,8 @@ impl HtmlDom {
         }
 
         tokens.extend(quote! {
-            (html, messages)
+            f.html = html;
+            f.messages = messages;
         });
 
         tokens.into()

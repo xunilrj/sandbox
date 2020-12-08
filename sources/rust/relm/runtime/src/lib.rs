@@ -41,7 +41,7 @@ pub trait ApplicationFacade {
         id: usize,
         p: Vec<u64>,
         messages: *mut (),
-    ) -> std::result::Result<String, u64>;
+    ) -> std::result::Result<(), u64>;
     fn render(&mut self, messages: *mut ()) -> Html;
 }
 
@@ -56,29 +56,10 @@ pub trait ApplicationTrait {
     type Actions: Clone + std::fmt::Debug;
 
     fn update(&mut self, message: &Self::Message, commands: &mut Vec<Self::Actions>);
-    fn to_html(&self) -> ViewResult<Self::Message>;
 
     fn send(&mut self, message: &Self::Message) {
         let mut commands = Vec::new();
         self.update(message, &mut commands);
-    }
-
-    fn render2(&mut self, messages: *mut ()) -> Html {
-        let v = unsafe { &mut *(messages as *mut Vec<MessageFactory<Self::Message>>) };
-        v.clear();
-
-        let (html, messages) = self.to_html();
-
-        // println!("HTML: {:?}", html);
-        // println!("Messages: {:?}", messages);
-
-        v.extend(messages);
-
-        unsafe {
-            apply_to(html.len() as u32, html.as_ptr() as u32);
-        }
-
-        html
     }
 
     fn send_by_id2(
@@ -86,7 +67,7 @@ pub trait ApplicationTrait {
         id: usize,
         p: Vec<u64>,
         messages: *mut (),
-    ) -> std::result::Result<String, u64> {
+    ) -> std::result::Result<(), u64> {
         let messages = unsafe { &mut *(messages as *mut Vec<MessageFactory<Self::Message>>) };
         let message_factory = messages.get_mut(id).ok_or(0u64)?;
 
@@ -112,8 +93,7 @@ pub trait ApplicationTrait {
 
         if let Some(msg) = msg {
             self.send(&msg);
-            let html = self.render2(messages as *mut Vec<MessageFactory<Self::Message>> as *mut ());
-            Ok(html)
+            Ok(())
         } else {
             Err(0)
         }
@@ -216,8 +196,10 @@ macro_rules! mount {
     ( $($id:expr => $type:ty),*) => {
 
         $(impl runtime::ApplicationFacade for $type {
-            fn send_by_id(&mut self, id: usize, p: Vec<u64>, messages: *mut ()) -> Result<String, u64> { self.send_by_id2(id, p, messages) }
-            fn render(&mut self, messages: *mut ()) -> Html { self.render2(messages) }
+            fn send_by_id(&mut self, id: usize, p: Vec<u64>, messages: *mut ()) -> Result<(), u64> { self.send_by_id2(id, p, messages) }
+            fn render(&mut self, messages: *mut ()) -> Html {
+                <$type as DisplayHtml>::render2(self, messages)
+            }
         })*
 
         #[no_mangle]
@@ -267,9 +249,46 @@ pub fn application_send(
     let p = vec![p0, p1, p2, p3, p4];
     unsafe {
         match APPS2.get_mut(app_id as usize) {
-            Some(app) => app.send(wrapper_id as usize, msg_idx as usize, p),
+            Some(app) => {
+                app.send(wrapper_id as usize, msg_idx as usize, p);
+                app.render(wrapper_id);
+                true
+            }
             None => false,
         }
+    }
+}
+
+pub struct FormatterHtml<TMessage: Clone + std::fmt::Debug> {
+    pub html: String,
+    pub messages: Vec<MessageFactory<TMessage>>,
+}
+
+pub trait DisplayHtml {
+    type Message: Clone + std::fmt::Debug;
+
+    fn fmt(&self, f: &mut FormatterHtml<Self::Message>);
+
+    fn render2(&mut self, messages: *mut ()) -> Html {
+        let v = unsafe { &mut *(messages as *mut Vec<MessageFactory<Self::Message>>) };
+        v.clear();
+
+        let mut f = FormatterHtml {
+            html: "".to_string(),
+            messages: Vec::new(),
+        };
+        self.fmt(&mut f);
+
+        // println!("HTML: {:?}", html);
+        // println!("Messages: {:?}", messages);
+
+        v.extend(f.messages);
+
+        unsafe {
+            apply_to(f.html.len() as u32, f.html.as_ptr() as u32);
+        }
+
+        f.html
     }
 }
 
@@ -444,16 +463,25 @@ pub struct Tester<T: Default + ApplicationTrait> {
 }
 
 #[cfg(target_arch = "x86_64")]
-impl<T: Default + ApplicationTrait> Tester<T> {
+impl<
+        TMessage: Clone + std::fmt::Debug,
+        T: Default + ApplicationTrait<Message = TMessage> + DisplayHtml<Message = TMessage>,
+    > Tester<T>
+{
     pub fn new() -> Self {
         let state: T = Default::default();
-        let (html, messages) = state.to_html();
 
-        let (document, pretty_html) = parse_and_print(html.as_str());
+        let mut formatter = FormatterHtml {
+            html: "".to_string(),
+            messages: Vec::new(),
+        };
+        <T as DisplayHtml>::fmt(&state, &mut formatter);
+
+        let (document, pretty_html) = parse_and_print(formatter.html.as_str());
 
         Self {
             state,
-            messages,
+            messages: formatter.messages,
             document,
             pretty_html,
         }
@@ -485,12 +513,11 @@ impl<T: Default + ApplicationTrait> Tester<T> {
     pub fn click(&mut self, query: &str, idx: usize) {
         if let Some(msg_id) = self.get_message_id(query, idx, "onclick") {
             println!("Clicking {:?}", query);
-            if let Ok(html) = self.state.send_by_id2(
-                msg_id,
-                Vec::new(),
-                &mut self.messages as *mut Vec<MessageFactory<<T as ApplicationTrait>::Message>>
-                    as *mut (),
-            ) {
+            let messages = &mut self.messages
+                as *mut Vec<MessageFactory<<T as ApplicationTrait>::Message>>
+                as *mut ();
+            if let Ok(_) = self.state.send_by_id2(msg_id, Vec::new(), messages) {
+                let html = self.state.render2(messages);
                 let (document, new_pretty_html) = parse_and_print(html.as_str());
 
                 let diff =
@@ -519,7 +546,8 @@ impl<T: Default + ApplicationTrait> Tester<T> {
             let ps = vec![addr.data_ptr() as u64];
             std::mem::forget(addr);
             println!("Sending input {:?} to {:?}", text, query);
-            if let Ok(html) = self.state.send_by_id2(msg_id, ps, messages) {
+            if let Ok(_) = self.state.send_by_id2(msg_id, ps, messages) {
+                let html = self.state.render2(messages);
                 let (document, new_pretty_html) = parse_and_print(html.as_str());
 
                 let diff =
