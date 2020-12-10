@@ -1,4 +1,5 @@
 #[derive(Clone, Debug)]
 pub enum Actions {
-    Login { username: String, password: String },
+    Timeout { duration: std::time::Duration },
+    TryLogin { username: String, password: String },
 }

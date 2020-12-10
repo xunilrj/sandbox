@@ -303,6 +303,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "html-test"
+version = "0.1.0"
+dependencies = [
+ "html",
+ "runtime",
+]
+
+[[package]]
 name = "html5ever"
 version = "0.25.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"

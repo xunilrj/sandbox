@@ -1,39 +1,44 @@
 use proc_macro::TokenStream;
 use quote::*;
 use std::collections::HashMap;
-use syn::{
-    parse::Parse, parse::ParseStream, token::Brace, token::Div, token::Gt, token::Lt, token::Token,
-    Ident, *,
-};
+use syn::{parse::Parse, parse::ParseStream, token::Div, token::Gt, token::Lt, Ident, *};
 
 mod parsers;
-use crate::parsers::*;
 
 enum HtmlElementClose {
     AutoClose,
     CloseElement,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 enum HtmlElementContent {
     None,
     Expression(Expr),
     String(LitStr),
-    Children(Vec<HtmlElement>),
+    Element(Box<HtmlElement>),
+    Children(Vec<HtmlElementContent>),
     If(Expr, Box<HtmlElementContent>, Box<HtmlElementContent>),
+    Map(
+        Vec<Ident>,
+        syn::punctuated::Punctuated<syn::Pat, syn::token::Comma>,
+        Box<HtmlElement>,
+    ),
 }
 
 impl HtmlElementContent {
-    pub fn quote(&self) -> (HtmlElementClose, proc_macro2::TokenStream) {
+    pub fn quote(&self, first_close: bool) -> (HtmlElementClose, proc_macro2::TokenStream) {
         let mut q = quote! {};
         match &self {
             HtmlElementContent::None => (HtmlElementClose::AutoClose, q.into()),
             HtmlElementContent::Children(children) => {
                 if children.len() > 0 {
-                    q.extend(quote! {html.push_str(">");});
+                    if first_close {
+                        q.extend(quote! {html.push_str(">");});
+                    }
 
                     for child in children {
-                        q.extend(child.quote());
+                        let (_, tokens) = child.quote(false);
+                        q.extend(tokens);
                     }
 
                     (HtmlElementClose::CloseElement, q.into())
@@ -42,7 +47,6 @@ impl HtmlElementContent {
                 }
             }
             HtmlElementContent::Expression(expr) => {
-                q.extend(quote! {html.push_str(">");});
                 q.extend(quote! {
                     {
                         let v = #expr;
@@ -52,17 +56,16 @@ impl HtmlElementContent {
                 (HtmlElementClose::CloseElement, q.into())
             }
             HtmlElementContent::String(s) => {
-                q.extend(quote! {html.push_str(">");});
                 q.extend(quote! {html.push_str(#s);});
                 (HtmlElementClose::CloseElement, q.into())
             }
             HtmlElementContent::If(cond, t, f) => {
-                let (_, tquote) = t.quote();
-                let (_, fquote) = f.quote();
+                let (_, tquote) = t.quote(false);
+                let (_, fquote) = f.quote(false);
 
                 q.extend(quote! {
                     {
-                        if (#cond) {
+                        if #cond {
                             #tquote
                         } else {
                             #fquote
@@ -72,21 +75,47 @@ impl HtmlElementContent {
 
                 (HtmlElementClose::CloseElement, q.into())
             }
+            HtmlElementContent::Element(e) => {
+                if first_close {
+                    q.extend(quote! {html.push_str(">");});
+                }
+                q.extend(e.quote());
+                (HtmlElementClose::CloseElement, q.into())
+            }
+
+            HtmlElementContent::Map(idents, args, body) => {
+                q.extend(quote! { for #args in &});
+                for (i, ident) in idents.iter().enumerate() {
+                    if i > 0 {
+                        q.extend(quote! {.});
+                    }
+                    q.extend(quote! {#ident});
+                }
+
+                let t = body.quote();
+
+                q.extend(quote! {{
+                    #t
+                }});
+
+                // println!("{}", q);
+                (HtmlElementClose::CloseElement, q.into())
+            }
         }
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 enum HtmlAttributeContent {
     None,
     Expression(Expr),
     String(LitStr),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 struct HtmlElement {
     attributes: HashMap<String, HtmlAttributeContent>,
-    name: Ident,
+    name: Option<Ident>,
     content: HtmlElementContent,
 }
 
@@ -113,9 +142,9 @@ impl HtmlElement {
     }
 
     fn quote_attrs(&self, q: &mut proc_macro2::TokenStream) {
-        // println!("Quoting Attributes for {}", self.name);
+        // //println!("Quoting Attributes for {}", self.name);
         for (k, v) in &self.attributes {
-            // println!("Attribute {}", k);
+            // //println!("Attribute {}", k);
             let name = format!(" {}", k);
             q.extend(quote! {html.push_str(#name);});
             match v {
@@ -154,14 +183,16 @@ impl HtmlElement {
     }
 
     pub fn quote(&self) -> proc_macro2::TokenStream {
-        let open_html = format!("<{}", self.name);
-
         let mut q = quote! {};
 
-        q.extend(quote! {html.push_str(#open_html);});
+        if let Some(name) = &self.name {
+            let open_html = format!("<{}", name);
+            q.extend(quote! {html.push_str(#open_html);});
+        }
+
         self.quote_attrs(&mut q);
 
-        let (close, content_quote) = self.content.quote();
+        let (close, content_quote) = self.content.quote(true);
         q.extend(content_quote);
 
         match close {
@@ -170,8 +201,10 @@ impl HtmlElement {
                 q.extend(quote! {html.push_str(#close_html);});
             }
             HtmlElementClose::CloseElement => {
-                let close_html = format!("</{}>", self.name);
-                q.extend(quote! {html.push_str(#close_html);});
+                if let Some(name) = &self.name {
+                    let close_html = format!("</{}>", name);
+                    q.extend(quote! {html.push_str(#close_html);});
+                }
             }
         }
         q.into()
@@ -179,17 +212,25 @@ impl HtmlElement {
 }
 
 fn open_element(stream: &mut ParseStream) -> Option<HtmlElement> {
+    //println!("");
+    //println!("open_element: {}", &stream);
+    //println!("");
+
+    // <Ident />
     if let Ok((_, name, _, _)) = parsers::parse_seq4::<Lt, Ident, Div, Gt>(stream) {
+        //println!("<Ident />: {}", &stream);
         return Some(HtmlElement {
-            name,
+            name: Some(name),
             content: HtmlElementContent::None,
             attributes: HashMap::new(),
         });
     }
 
+    // <Ident
     if let Ok((_, name)) = parsers::parse_seq2::<Lt, Ident>(stream) {
+        //println!("Found Element {}", name);
         let mut element = HtmlElement {
-            name,
+            name: Some(name),
             content: HtmlElementContent::None,
             attributes: HashMap::new(),
         };
@@ -200,13 +241,14 @@ fn open_element(stream: &mut ParseStream) -> Option<HtmlElement> {
         // or attributes
 
         if stream.peek(Gt) {
+            //println!("Found Element Closing");
             stream.parse::<Gt>().unwrap();
         } else {
             // all attributes
             while let Ok(attr_name) = parsers::parse_seq1::<Ident>(stream) {
                 let attr_name = format!("{}", attr_name);
 
-                // println!("Found Attribute {}", attr_name);
+                // //println!("Found Attribute {}", attr_name);
                 element
                     .attributes
                     .entry(attr_name.clone())
@@ -243,59 +285,149 @@ fn open_element(stream: &mut ParseStream) -> Option<HtmlElement> {
                 stream.parse::<token::Div>().unwrap();
                 stream.parse::<token::Gt>().unwrap();
 
+                //println!("Auto Close : {}", &stream);
                 return Some(element);
             }
         }
 
-        fn parse_content(stream: &mut ParseStream) -> HtmlElementContent {
-            if let Ok(expr) = parsers::parse_seq1::<Expr>(stream) {
-                HtmlElementContent::Expression(expr.clone())
-            } else if let Ok((_, cond)) = parsers::parse_seq2::<syn::token::If, syn::Expr>(stream) {
-                let dom = parsers::braced::<HtmlDom>(stream).unwrap();
-                let t = Box::new(HtmlElementContent::Children(dom.children));
-                if stream.peek(syn::token::Else) {
-                    let _ = stream.parse::<syn::token::Else>();
-                    let else_dom = parsers::braced::<HtmlDom>(stream).unwrap();
-                    // println!("ELSE {:?}", else_dom);
-                    HtmlElementContent::If(
-                        cond.clone(),
-                        t,
-                        Box::new(HtmlElementContent::Children(else_dom.children)),
-                    )
-                } else {
-                    HtmlElementContent::If(cond.clone(), t, Box::new(HtmlElementContent::None))
-                }
-            } else if let Ok(dom) = parsers::parse_seq1::<HtmlDom>(stream) {
-                HtmlElementContent::Children(dom.children)
-            } else {
-                print!("INVALID BLOCK {:?}", stream);
-                HtmlElementContent::None
-            }
-        }
-
         // element content
-        if let Ok(content) = parsers::braced_map(stream, parse_content) {
-            element.content = content;
-        } else if stream.peek(token::Lt) && stream.peek2(token::Div) {
-        } else if stream.peek(token::Lt) {
-            let mut children = Vec::new();
-            while let Some(child) = open_element(stream) {
-                children.push(child);
-            }
-            element.content = HtmlElementContent::Children(children);
+        //println!("Try reading content: {}", stream);
+        if let Ok(mut dom) = parsers::parse_seq1::<HtmlDom>(stream) {
+            //println!("Recursing DOM: {:?}", &dom);
+            element.content = HtmlElementContent::Children(dom.children_as_element_content());
         } else {
-            if let Ok(s) = parsers::parse_seq1::<LitStr>(stream) {
-                element.content = HtmlElementContent::String(s);
-            }
+            //println!("No Content found!");
         }
 
         // close element
+        parsers::parse_seq4::<Lt, Div, Ident, Gt>(stream).unwrap();
 
-        let _ = parsers::parse_seq4::<Lt, Div, Ident, Gt>(stream);
+        //println!("<Ident : {}", &stream);
 
         return Some(element);
     }
 
+    fn braced_options(stream: &mut ParseStream) -> Result<HtmlElementContent> {
+        // println!("braced_options {}", stream);
+        if let Ok(expr) = parsers::parse_seq1::<syn::Expr>(stream) {
+            Ok(HtmlElementContent::Expression(expr.clone()))
+        } else if let Ok((_, cond)) = parsers::parse_seq2::<syn::token::If, syn::Expr>(stream) {
+            //println!("Found if <Expr>:  {}", stream);
+            let mut dom = parsers::braced::<HtmlDom>(stream).unwrap();
+            let t = Box::new(HtmlElementContent::Children(
+                dom.children_as_element_content(),
+            ));
+            let content = if stream.peek(syn::token::Else) {
+                let _ = stream.parse::<syn::token::Else>();
+                //println!("Found else:  {}", stream);
+                let mut else_dom = parsers::braced::<HtmlDom>(stream).unwrap();
+                HtmlElementContent::If(
+                    cond.clone(),
+                    t,
+                    Box::new(HtmlElementContent::Children(
+                        else_dom.children_as_element_content(),
+                    )),
+                )
+            } else {
+                HtmlElementContent::If(cond.clone(), t, Box::new(HtmlElementContent::None))
+            };
+
+            //println!("IF: {}", &stream);
+            Ok(content)
+
+        // <ident>.<ident>.map(|x| <HtmlElement>)
+        } else if (stream.peek(syn::Ident) || stream.peek(syn::token::SelfValue))
+            && stream.peek2(syn::token::Dot)
+        {
+            let mut idents = Vec::new();
+
+            if let Ok((ident, _)) =
+                parsers::parse_seq2::<syn::token::SelfValue, syn::token::Dot>(stream)
+            {
+                idents.push(syn::Ident::new("self", ident.span));
+            }
+
+            while let Ok((ident, _)) = parsers::parse_seq2::<syn::Ident, syn::token::Dot>(stream) {
+                idents.push(ident);
+            }
+
+            if stream.peek(syn::Ident) && stream.peek2(syn::token::Paren) {
+                // println!("Ident Paren");
+                if let Ok(ident) = parsers::parse_seq1::<syn::Ident>(stream) {
+                    let name = format!("{}", ident);
+                    // println!("Ident {}", name);
+                    if name == "map" {
+                        let closure_tokens;
+                        syn::parenthesized!(closure_tokens in stream);
+
+                        // Closure Inputs
+                        let mut inputs = syn::punctuated::Punctuated::new();
+                        parsers::parse_seq1::<Token![|]>(&mut &closure_tokens).unwrap();
+                        loop {
+                            let value =
+                                parsers::parse_seq1::<syn::Pat>(&mut &closure_tokens).unwrap();
+                            inputs.push_value(value);
+                            if let Ok(_) = parsers::parse_seq1::<Token![|]>(&mut &closure_tokens) {
+                                break;
+                            }
+                            let punct: Token![,] = closure_tokens.parse()?;
+                            inputs.push_punct(punct);
+                        }
+
+                        // println!("Inputs: {:?}", inputs);
+                        // println!("Stream: {}", closure_tokens);
+
+                        let body_tokens;
+                        syn::braced!(body_tokens in closure_tokens);
+                        let body = open_element(&mut &body_tokens);
+
+                        // println!("Body recognized: {:?}", closure_tokens);
+                        Ok(HtmlElementContent::Map(
+                            idents,
+                            inputs,
+                            Box::new(body.unwrap()),
+                        ))
+                    } else {
+                        Err(stream.error("Unkown inside braces"))
+                    }
+                } else {
+                    Err(stream.error("Unkown inside braces"))
+                }
+            } else {
+                Err(stream.error("Unkown inside braces"))
+            }
+        } else {
+            Err(stream.error("Unkown inside braces"))
+        }
+    }
+
+    // { <Expr> }
+    // { if <Expr> { <HtmlElement>* } else { <HtmlElement>* } }
+    //println!("Trying braced: {}", &stream);
+    if let Ok(content) = parsers::braced_map(stream, braced_options) {
+        //println!("Found braced {:?}; Stream: {}", content, &stream);
+
+        let element = HtmlElement {
+            name: None,
+            content,
+            attributes: HashMap::new(),
+        };
+        return Some(element);
+    }
+
+    // "..."
+    if let Ok(s) = parsers::parse_seq1::<LitStr>(stream) {
+        //println!("Found LitStr: {}", &stream);
+
+        let element = HtmlElement {
+            name: None,
+            content: HtmlElementContent::String(s),
+            attributes: HashMap::new(),
+        };
+        return Some(element);
+    }
+
+    //println!("Don't know what to do: {}", &stream);
     None
 }
 
@@ -332,23 +464,41 @@ impl HtmlDom {
 
         tokens.into()
     }
+
+    pub fn children_as_element_content(&mut self) -> Vec<HtmlElementContent> {
+        let mut v = vec![HtmlElementContent::None; self.children.len()];
+        while let Some(e) = self.children.pop() {
+            let idx = self.children.len();
+            v[idx] = HtmlElementContent::Element(Box::new(e));
+        }
+        v
+    }
 }
 
 impl Parse for HtmlDom {
     fn parse(mut stream: ParseStream) -> Result<Self> {
+        //println!("Parsing HtmlDOM");
         let mut dom = HtmlDom::new();
 
         while let Some(element) = open_element(&mut stream) {
+            //println!("HtmlDom: Element found");
             dom.append(element);
         }
 
-        Ok(dom)
+        if dom.children.len() == 0 {
+            //println!("No DOM found!");
+            Err(stream.error("No DOM found!"))
+        } else {
+            Ok(dom)
+        }
     }
 }
 
 #[proc_macro]
 pub fn html(input: TokenStream) -> TokenStream {
     let parsed = parse_macro_input!(input as HtmlDom);
+
+    //println!("PARSED");
     // dbg!(&parsed);
     parsed.quote().into()
 }

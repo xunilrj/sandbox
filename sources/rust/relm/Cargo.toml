@@ -1,2 +1,7 @@
+[profile.release]
+lto = true
+opt-level = 'z'
+#debug = true
+
 [workspace]
-members = ["html", "runtime", "app"]
+members = ["html", "html-test", "runtime", "app"]

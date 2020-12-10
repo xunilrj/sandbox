@@ -1,4 +1,37 @@
-use syn::parse::{Parse, ParseBuffer, ParseStream};
+use syn::{
+    parse::{Lookahead1, Parse, ParseStream, Peek},
+    token::{CustomToken, Token},
+};
+
+pub enum Or<A, B> {
+    None,
+    A(A),
+    B(B),
+}
+
+impl<TA: Token, TB: Token> CustomToken for Or<TA, TB> {
+    fn peek(cursor: syn::buffer::Cursor) -> bool {
+        TA::peek(cursor) || TB::peek(cursor)
+    }
+
+    fn display() -> &'static str {
+        "OR"
+    }
+}
+
+impl<TA: Parse + Peek + std::default::Default, TB: Parse + Peek + std::default::Default> Parse
+    for Or<TA, TB>
+{
+    fn parse(input: ParseStream) -> syn::Result<Self> {
+        if input.peek::<TA>(Default::default()) {
+            Ok(Or::A(TA::parse(input).unwrap()))
+        } else if input.peek::<TB>(Default::default()) {
+            Ok(Or::B(TB::parse(input).unwrap()))
+        } else {
+            Err(input.error("Nor A nor B"))
+        }
+    }
+}
 
 pub fn parse_seq1<T1: Parse>(stream: &mut ParseStream) -> syn::Result<T1> {
     let fork = stream.fork();
@@ -24,6 +57,7 @@ pub fn parse_seq2<T1: Parse, T2: Parse>(stream: &mut ParseStream) -> syn::Result
     }
 }
 
+#[allow(dead_code)]
 pub fn parse_seq3<T1: Parse, T2: Parse, T3: Parse>(
     stream: &mut ParseStream,
 ) -> syn::Result<(T1, T2, T3)> {
@@ -65,6 +99,7 @@ pub fn parse_seq4<T1: Parse, T2: Parse, T3: Parse, T4: Parse>(
     }
 }
 
+#[allow(dead_code)]
 pub fn parse_seq5<T1: Parse, T2: Parse, T3: Parse, T4: Parse, T5: Parse>(
     stream: &mut ParseStream,
 ) -> syn::Result<(T1, T2, T3, T4, T5)> {
@@ -92,6 +127,7 @@ pub fn parse_seq5<T1: Parse, T2: Parse, T3: Parse, T4: Parse, T5: Parse>(
     }
 }
 
+#[allow(dead_code)]
 pub fn parse_seq6<T1: Parse, T2: Parse, T3: Parse, T4: Parse, T5: Parse, T6: Parse>(
     stream: &mut ParseStream,
 ) -> syn::Result<(T1, T2, T3, T4, T5, T6)> {
@@ -148,12 +184,12 @@ impl syn::parse::Parse for CloseBrace {
 
 pub fn braced_map<'a, T, F>(stream: &mut ParseStream, f: F) -> syn::Result<T>
 where
-    F: Fn(&mut ParseStream) -> T + 'a,
+    F: Fn(&mut ParseStream) -> syn::Result<T> + 'a,
 {
     let content;
     syn::braced!(content in stream);
     let mut stream: ParseStream = &content;
-    Ok(f(&mut stream))
+    f(&mut stream)
 }
 
 pub fn braced<T: Parse>(stream: &mut ParseStream) -> syn::Result<T> {

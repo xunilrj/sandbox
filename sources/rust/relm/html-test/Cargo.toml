@@ -1,0 +1,9 @@
+[package]
+name = "html-test"
+version = "0.1.0"
+authors = ["Daniel Leite <xunilrj@hotmail.com>"]
+edition = "2018"
+
+[dependencies]
+html = { path = "../html" }
+runtime = { path = "../runtime" }

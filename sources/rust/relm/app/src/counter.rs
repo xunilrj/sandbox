@@ -21,12 +21,12 @@ impl std::default::Default for CounterState {
     }
 }
 
-impl runtime::ApplicationTrait for CounterState {
+impl runtime::UpdatableState for CounterState {
     type State = Self;
     type Message = Messages;
     type Actions = crate::actions::Actions;
 
-    fn update(&mut self, message: &Self::Message, commands: &mut Vec<Self::Actions>) {
+    fn update(&mut self, message: &Self::Message, _commands: &mut Vec<Self::Actions>) {
         match message {
             Messages::Increment => {
                 self.count = {
