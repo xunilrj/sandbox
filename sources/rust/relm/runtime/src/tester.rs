@@ -34,11 +34,34 @@ fn pretty_print_node<'a>(
 
 #[cfg(target_arch = "x86_64")]
 fn pretty_print_html(doc: &scraper::Html, newhtml: &mut String) {
+    let mut tempstr = String::new();
+
     let root = doc.tree.root();
     for child in root.children() {
         for child in child.children() {
-            pretty_print_node(0, &child, newhtml);
+            pretty_print_node(0, &child, &mut tempstr);
         }
+    }
+
+    let mut size = 30usize;
+    if let Some((terminal_size::Width(w), terminal_size::Height(_))) =
+        terminal_size::terminal_size()
+    {
+        size = ((w - 20) / 2) as usize;
+    }
+
+    for line in tempstr.lines() {
+        if line.len() > size {
+            let (a, b) = line.split_at(size);
+            newhtml.push_str(a);
+            if b.len() > 0 {
+                newhtml.push_str("\n");
+                newhtml.push_str(b);
+            }
+        } else {
+            newhtml.push_str(line);
+        }
+        newhtml.push_str("\n");
     }
 }
 
@@ -53,6 +76,53 @@ fn parse_and_print(html: &str) -> (scraper::Html, String) {
 }
 
 #[cfg(target_arch = "x86_64")]
+pub struct TesterMutElement<
+    'a,
+    TMessage: Clone + crate::MyDebug,
+    T: Default + crate::UpdatableState<Message = TMessage> + crate::DisplayHtml<Message = TMessage>,
+> {
+    t: &'a mut Tester<T>,
+    query: String,
+}
+
+#[cfg(target_arch = "x86_64")]
+impl<
+        'a,
+        TMessage: Clone + crate::MyDebug,
+        T: Default
+            + crate::UpdatableState<Message = TMessage>
+            + crate::DisplayHtml<Message = TMessage>,
+    > TesterMutElement<'a, TMessage, T>
+{
+    pub fn raise<TEvent>(self, e: TEvent)
+    where
+        crate::HtmlEvents: From<TEvent>,
+    {
+        let e: crate::HtmlEvents = e.into();
+        match e {
+            crate::HtmlEvents::OnInput(crate::OnInput { data }) => {
+                self.t.input(self.query.as_str(), 0, data.as_str());
+            }
+            crate::HtmlEvents::OnClick(_) => {
+                self.t.click(self.query.as_str(), 0);
+            }
+        }
+    }
+}
+
+#[allow(dead_code)] //TODO
+#[cfg(target_arch = "x86_64")]
+pub struct TesterElement<
+    'a,
+    TMessage: Clone + crate::MyDebug,
+    T: Default + crate::UpdatableState<Message = TMessage> + crate::DisplayHtml<Message = TMessage>,
+> {
+    t: &'a Tester<T>,
+    query: String,
+    idx: usize,
+}
+
+#[cfg(target_arch = "x86_64")]
 pub struct Tester<T: Default + crate::UpdatableState> {
     pub state: T,
     messages: Vec<crate::MessageFactory<<T as crate::UpdatableState>::Message>>,
@@ -63,7 +133,7 @@ pub struct Tester<T: Default + crate::UpdatableState> {
 
 #[cfg(target_arch = "x86_64")]
 impl<
-        TMessage: Clone + std::fmt::Debug,
+        TMessage: Clone + crate::MyDebug,
         T: Default
             + crate::UpdatableState<Message = TMessage>
             + crate::DisplayHtml<Message = TMessage>,
@@ -73,12 +143,17 @@ impl<
         let state: T = Default::default();
 
         let mut formatter = crate::FormatterHtml {
+            app: 0,
+            actor: 0,
             html: "".to_string(),
             messages: Vec::new(),
         };
         <T as crate::DisplayHtml>::fmt(&state, &mut formatter);
 
         let (document, pretty_html) = parse_and_print(formatter.html.as_str());
+        // println!("----------------------------------");
+        // println!("{}", pretty_html);
+        // println!("----------------------------------");
 
         Self {
             state,
@@ -103,7 +178,7 @@ impl<
                     .trim_start_matches("send(")
                     .trim_end_matches(");")
                     .split(",");
-                Some(parameters.nth(0).unwrap().parse::<u64>().unwrap() as usize)
+                Some(parameters.nth(2).unwrap().parse::<u64>().unwrap() as usize)
             } else {
                 None
             }
@@ -130,22 +205,26 @@ impl<
 
         if let Ok(message) = self.state.build_message(msg, ps, messages) {
             self.actions = self.state.send(&message);
-            let html = self.state.render2(messages);
+            let html = self.state.render2(0, 0, messages);
             let (document, new_pretty_html) = parse_and_print(html.as_str());
 
             let diff = prettydiff::diff_lines(self.pretty_html.as_str(), new_pretty_html.as_str());
-            println!("----------------------------------");
-            diff.prettytable();
-            if self.actions.len() > 0 {
-                println!("Actions");
-                dbg!(&self.actions);
+
+            let print_html = std::env::var("PRINT_HTML").unwrap_or("".to_string());
+            if print_html == "true" {
+                println!("----------------------------------");
+                diff.prettytable();
+                if self.actions.len() > 0 {
+                    println!("Actions");
+                    // dbg!(&self.actions); //TODO
+                }
+                println!("----------------------------------");
             }
-            println!("----------------------------------");
 
             self.document = document;
             self.pretty_html = new_pretty_html;
         } else {
-            panic!("element not found");
+            panic!(format!("Message not found [{}]", msg));
         }
     }
 
@@ -182,6 +261,12 @@ impl<
         }
     }
 
+    pub fn query_selector_all(&self, query: &str) -> Vec<&scraper::node::Element> {
+        let selector = scraper::Selector::parse(query).unwrap();
+        let s = self.document.select(&selector);
+        s.map(|x| x.value()).collect()
+    }
+
     pub fn get_action(&self, id: usize) -> Option<&T::Actions> {
         self.actions.iter().nth(id)
     }
@@ -190,43 +275,112 @@ impl<
         F: Fn(&T::Actions) -> Result<<T as crate::UpdatableState>::Message, ()>,
     >(
         &mut self,
-        id: usize,
         f: F,
     ) -> Result<(), u64> {
         let messages = &mut self.messages
             as *mut Vec<crate::MessageFactory<<T as crate::UpdatableState>::Message>>
             as *mut ();
-        match self.actions.iter().nth(id) {
-            Some(a) => {
-                println!("Handling {:?}", a);
-                match f(&a) {
-                    Ok(message) => {
-                        println!("Sending {:?}", message);
-                        self.actions = self.state.send(&message);
-                        let html = self.state.render2(messages);
-                        let (document, new_pretty_html) = parse_and_print(html.as_str());
 
-                        let diff = prettydiff::diff_lines(
-                            self.pretty_html.as_str(),
-                            new_pretty_html.as_str(),
-                        );
+        for a in &self.actions {
+            #[cfg(feature = "derive-debug")]
+            {
+                println!("Handling {:?}", a);
+            }
+            match f(&a) {
+                Ok(message) => {
+                    #[cfg(feature = "derive-debug")]
+                    {
+                        println!("Sending {:?}", message);
+                    }
+                    self.actions = self.state.send(&message);
+                    let html = self.state.render2(0, 0, messages);
+                    let (document, new_pretty_html) = parse_and_print(html.as_str());
+
+                    let diff =
+                        prettydiff::diff_lines(self.pretty_html.as_str(), new_pretty_html.as_str());
+
+                    let print_html = std::env::var("PRINT_HTML").unwrap_or("".to_string());
+                    if print_html == "true" {
                         println!("----------------------------------");
                         diff.prettytable();
                         if self.actions.len() > 0 {
                             println!("Actions");
-                            dbg!(&self.actions);
+                            // dbg!(&self.actions); //TODO
                         }
                         println!("----------------------------------");
-
-                        self.document = document;
-                        self.pretty_html = new_pretty_html;
-
-                        Ok(())
                     }
-                    _ => Err(0),
+
+                    self.document = document;
+                    self.pretty_html = new_pretty_html;
+
+                    return Ok(());
                 }
+                _ => continue,
             }
-            None => Err(0),
         }
+
+        Err(0)
+    }
+
+    pub fn get_mut<'a>(&'a mut self, selector: &str) -> Option<TesterMutElement<'a, TMessage, T>> {
+        let selection = self.query_selector_all(selector);
+        if selection.len() == 1 {
+            Some(TesterMutElement {
+                t: self,
+                query: selector.to_string(),
+            })
+        } else if selection.len() == 0 {
+            None
+        } else {
+            panic!("unexpected more than one element selected");
+        }
+    }
+
+    pub fn get_all_mut<'a>(&'a self, selector: &str) -> Vec<TesterElement<'a, TMessage, T>> {
+        let selection = self.query_selector_all(selector);
+
+        let mut v = Vec::new();
+        for (i, _) in selection.iter().enumerate() {
+            v.push(TesterElement {
+                t: self,
+                query: selector.to_string(),
+                idx: i,
+            });
+        }
+        v
+    }
+}
+
+pub fn any<T2: Any<T2>>() -> T2 {
+    <T2 as Any<T2>>::any()
+}
+
+pub trait Any<T> {
+    fn any() -> T;
+}
+impl Any<&str> for &str {
+    fn any() -> &'static str {
+        "ANY"
+    }
+}
+impl Any<String> for String {
+    fn any() -> String {
+        "ANY".to_string()
+    }
+}
+impl Any<u32> for u32 {
+    fn any() -> u32 {
+        0
+    }
+}
+
+#[cfg(target_arch = "x86_64")]
+#[extend::ext(pub)]
+impl<T> Vec<T> {
+    fn assert_single(&self) -> &T {
+        if self.len() > 1 {
+            panic!("Vec has more than one item");
+        }
+        self.get(0).unwrap()
     }
 }

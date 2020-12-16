@@ -1,35 +1,86 @@
-use crate::actions;
-use actions::*;
 use runtime::*;
+
+#[derive(Clone)]
+#[cfg_attr(feature = "derive_debug", derive(Debug))]
+#[allow(dead_code)]
+pub enum StateErrors {
+    UsernameEmpty,
+    PasswordEmpty,
+    Timeout,
+    InvalidUsernameAndPassword,
+}
+
+impl std::fmt::Display for StateErrors {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match &self {
+            StateErrors::UsernameEmpty => write!(f, "Username Empty"),
+            StateErrors::PasswordEmpty => write!(f, "Password Empty"),
+            StateErrors::Timeout => write!(f, "Timeout"),
+            StateErrors::InvalidUsernameAndPassword => write!(f, "Invalid Username and Password"),
+        }
+    }
+}
 
 #[derive(Default)]
 pub struct State {
-    pub errors: Vec<String>,
+    pub errors: Vec<StateErrors>,
     pub username: InputState,
     pub password: InputState,
     pub loading: bool,
 }
 
-#[derive(Debug, Clone)]
+impl State {
+    fn validate(&mut self) {
+        if self.username.is_empty() {
+            self.errors.push(StateErrors::UsernameEmpty);
+        }
+        if self.password.is_empty() {
+            self.errors.push(StateErrors::PasswordEmpty);
+        }
+    }
+}
+
+#[derive(Clone)]
+#[cfg_attr(feature = "derive_debug", derive(Debug))]
+#[allow(dead_code)]
 pub enum Messages {
     InputLogin { data: String },
     InputPassword { data: String },
     Login,
-    LoginFailed { error: String },
-    Timeout,
+    LoginFailed(StateErrors),
+    LastActionTimedout,
+}
+
+#[derive(Clone)]
+#[cfg_attr(feature = "derive_debug", derive(Debug))]
+pub enum Actions {
+    SetTimeout { duration: std::time::Duration },
+    TryLogin { username: String, password: String },
+}
+
+impl Actions {
+    pub async fn handle(self, mut env: runtime::env::Env<Messages>) {
+        match self {
+            Actions::SetTimeout { duration } => {
+                env.set_timeout(duration).await;
+                env.send(crate::login::Messages::LastActionTimedout);
+            }
+            Actions::TryLogin { .. } => {}
+        }
+    }
 }
 
 impl runtime::UpdatableState for State {
     type State = Self;
     type Message = Messages;
-    type Actions = crate::actions::Actions;
+    type Actions = Actions;
 
     fn update(&mut self, message: &Self::Message, actions: &mut Vec<Self::Actions>) {
         self.errors.clear();
 
         if !self.loading {
             match message {
-                Messages::Timeout | Messages::LoginFailed { .. } => {}
+                Messages::LastActionTimedout | Messages::LoginFailed { .. } => {}
                 Messages::InputLogin { data } => {
                     self.username.value.push_str(data);
                 }
@@ -37,20 +88,15 @@ impl runtime::UpdatableState for State {
                     self.password.value.push_str(data);
                 }
                 Messages::Login => {
-                    if self.username.is_empty() {
-                        self.errors.push("Username empty".to_string());
-                    }
-                    if self.username.is_empty() {
-                        self.errors.push("Password empty".to_string());
-                    }
+                    self.validate();
 
-                    if self.errors.len() == 0 {
+                    if self.errors.is_empty() {
                         self.loading = true;
                         actions.push(Actions::TryLogin {
                             username: self.username.value.clone(),
                             password: self.password.value.clone(),
                         });
-                        actions.push(Actions::Timeout {
+                        actions.push(Actions::SetTimeout {
                             duration: std::time::Duration::from_secs(5),
                         });
                     }
@@ -58,15 +104,13 @@ impl runtime::UpdatableState for State {
             }
         } else {
             match message {
-                //TODO maybe update must return Result
                 Messages::InputLogin { .. } | Messages::InputPassword { .. } | Messages::Login => {}
-                Messages::Timeout => {
-                    self.errors
-                        .push("Ops, timeout! Please try again!".to_string());
+                Messages::LastActionTimedout => {
+                    self.errors.push(StateErrors::Timeout);
                     self.password.clear();
                     self.loading = false;
                 }
-                Messages::LoginFailed { error } => {
+                Messages::LoginFailed(error) => {
                     self.errors.push(error.clone());
                     self.password.clear();
                     self.loading = false;
@@ -76,68 +120,104 @@ impl runtime::UpdatableState for State {
     }
 }
 
-impl runtime::DisplayHtml for State {
-    type Message = Messages;
-    fn fmt(&self, f: &mut runtime::FormatterHtml<Self::Message>) {
-        html::html! {
-            <div id="root">
-                {self.errors.map(|x| {<div>{x}</div>})}
-                {if self.loading {
-                    <div>"Loading"</div>
-                } else {
-                    <div>
-                        <input value={self.username.value} oninput={|e| Messages::InputLogin { data: e.data.to_string()}} />
-                    </div>
-                    <div>
-                        <input value={self.password.value} oninput={|e| Messages::InputPassword { data: e.data.to_string()}} />
-                    </div>
-                    <button onclick={Messages::Login}>"Login"</button>
-                }}
+html::html! {State
+    <div id="root">
+        {self.errors.map(|x| {<div class="error">{x}</div>})}
+        {if self.loading {
+            <div>"Loading"</div>
+        } else {
+            <div>
+                <input ref="username" value={self.username.value} oninput={|e| Messages::InputLogin { data: e.data.to_string()}} />
             </div>
-        }
-    }
+            <div>
+                <input ref="password" value={self.password.value} oninput={|e| Messages::InputPassword { data: e.data.to_string()}} />
+            </div>
+            <button ref="login" onclick={Messages::Login}>"Login"</button>
+        }}
+    </div>
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use runtime::tester::*;
 
     #[test]
-    fn it_works() {
+    fn must_show_username_empty_error() {
+        let mut t = Tester::<State>::new();
+
+        t.get_password().unwrap().raise(OnInput { data: any() });
+        t.get_login().unwrap().raise(OnClick {});
+
+        assert!(matches!(
+            t.state.errors.assert_single(),
+            StateErrors::UsernameEmpty
+        ));
+        t.query_class_error().assert_single();
+    }
+
+    #[test]
+    fn must_show_password_empty_error() {
+        let mut t = Tester::<State>::new();
+
+        t.get_username().unwrap().raise(OnInput { data: any() });
+        t.get_login().unwrap().raise(OnClick {});
+
+        assert!(matches!(
+            t.state.errors.assert_single(),
+            StateErrors::PasswordEmpty
+        ));
+        t.query_class_error().assert_single();
+    }
+
+    #[test]
+    fn must_show_timeout_error() {
         let mut t = runtime::tester::Tester::<State>::new();
 
-        // t.input("#root > div > input", 0, "user1");
-        // t.input("#root > div > input", 1, "password1");
-        t.click("#root button", 0);
+        t.get_username().unwrap().raise(OnInput { data: any() });
+        t.get_password().unwrap().raise(OnInput { data: any() });
+        t.get_login().unwrap().raise(OnClick {});
 
-        // assert!(t.state.loading);
-        // assert_eq!(t.actions.len(), 2);
+        assert!(t.state.loading);
+        assert_eq!(t.actions.len(), 2);
 
-        // assert!(matches!(t.get_action(0),
-        //     Some(Actions::TryLogin { username, password }) if
-        //         username == "user1" &&
-        //         password == "password1"
-        // ));
+        t.handle_action(|a| match a {
+            Actions::SetTimeout { .. } => Ok(Messages::LastActionTimedout),
+            _ => Err(()),
+        })
+        .expect("To work");
 
-        // assert!(matches!(t.get_action(1),
-        //     Some(Actions::Timeout { duration }) if
-        //         duration.as_secs() == 5
-        // ));
+        assert!(matches!(
+            t.state.errors.assert_single(),
+            StateErrors::Timeout
+        ));
+        t.query_class_error().assert_single();
+    }
 
-        // // t.handle_action(1, |a| match a {
-        // //     Actions::Timeout { .. } => Ok(Messages::Timeout),
-        // //     _ => Err(()),
-        // // })
-        // // .expect("To work");
+    #[test]
+    fn must_show_failed_login_error() {
+        let mut t = runtime::tester::Tester::<State>::new();
 
-        // t.handle_action(0, |a| match a {
-        //     Actions::TryLogin { username, password } => Ok(Messages::LoginFailed {
-        //         error: "User does not exist".to_string(),
-        //     }),
-        //     _ => Err(()),
-        // })
-        // .expect("To work");
+        t.get_username().unwrap().raise(OnInput { data: any() });
+        t.get_password().unwrap().raise(OnInput { data: any() });
+        t.get_login().unwrap().raise(OnClick {});
 
-        // assert!(t.state.password.is_empty());
+        assert!(t.state.loading);
+        assert_eq!(t.actions.len(), 2);
+
+        t.handle_action(|a| match a {
+            Actions::TryLogin { .. } => Ok(Messages::LoginFailed(
+                StateErrors::InvalidUsernameAndPassword,
+            )),
+            _ => Err(()),
+        })
+        .expect("To work");
+
+        assert!(matches!(
+            t.state.errors.assert_single(),
+            StateErrors::InvalidUsernameAndPassword
+        ));
+        assert!(t.state.password.is_empty());
+        t.query_class_error().assert_single();
     }
 }

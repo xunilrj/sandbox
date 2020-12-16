@@ -1,0 +1,11 @@
+[package]
+name = "async-test"
+version = "0.1.0"
+authors = ["Daniel Leite <xunilrj@hotmail.com>"]
+edition = "2018"
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+async-trait = "0.1.42"

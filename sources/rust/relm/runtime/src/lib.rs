@@ -1,22 +1,53 @@
+pub mod env;
+pub mod executor;
 pub mod tester;
 pub mod wasm;
-use std::alloc::Layout;
+use executor::Executor;
 pub use wasm::*;
 
-#[derive(Debug)]
+#[cfg(not(feature = "derive_debug"))]
+pub trait MyDebug {}
+#[cfg(not(feature = "derive_debug"))]
+impl<T> MyDebug for T {}
+
+#[cfg(feature = "derive_debug")]
+pub trait MyDebug: std::fmt::Debug {}
+
+#[cfg(feature = "derive_debug")]
+impl<T: std::fmt::Debug> MyDebug for T {}
+
+#[cfg_attr(feature = "derive_debug", derive(Debug))]
 pub struct OnInput {
     pub data: String,
 }
-#[derive(Debug)]
+#[cfg_attr(feature = "derive_debug", derive(Debug))]
 pub struct OnClick {}
 
-pub enum MessageFactory<TMessage: std::fmt::Debug> {
+pub enum HtmlEvents {
+    OnInput(OnInput),
+    OnClick(OnClick),
+}
+
+impl From<OnInput> for HtmlEvents {
+    fn from(v: OnInput) -> Self {
+        HtmlEvents::OnInput(v)
+    }
+}
+
+impl From<OnClick> for HtmlEvents {
+    fn from(v: OnClick) -> Self {
+        HtmlEvents::OnClick(v)
+    }
+}
+
+pub enum MessageFactory<TMessage: MyDebug> {
     Message(TMessage),
     OnInput(Box<dyn Fn(OnInput) -> TMessage>),
     OnClick(Box<dyn Fn(OnClick) -> TMessage>),
 }
 
-impl<TMessage: std::fmt::Debug> std::fmt::Debug for MessageFactory<TMessage> {
+#[cfg(feature = "derive-debug")]
+impl<TMessage: MyDebug> std::fmt::Debug for MessageFactory<TMessage> {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self {
             MessageFactory::Message(msg) => {
@@ -36,11 +67,14 @@ impl<TMessage: std::fmt::Debug> std::fmt::Debug for MessageFactory<TMessage> {
 pub trait ApplicationFacade {
     fn send_by_id(
         &mut self,
-        id: usize,
+        app: usize,
+        actor: usize,
+        msg: usize,
         p: Vec<u64>,
         messages: *mut (),
+        executor: &mut Executor,
     ) -> std::result::Result<(), u64>;
-    fn render(&mut self, messages: *mut ()) -> Html;
+    fn render(&mut self, app: usize, actor: usize, messages: *mut ()) -> Html;
 }
 
 pub struct Actor {
@@ -50,8 +84,8 @@ pub struct Actor {
 
 pub trait UpdatableState {
     type State;
-    type Message: Clone + std::fmt::Debug;
-    type Actions: Clone + std::fmt::Debug;
+    type Message: Clone + MyDebug;
+    type Actions: Clone + MyDebug;
 
     fn update(&mut self, message: &Self::Message, commands: &mut Vec<Self::Actions>);
 
@@ -135,12 +169,18 @@ impl std::default::Default for InputState {
 }
 
 pub struct Application {
+    id: usize,
     actors: Vec<Actor>,
+    executor: Executor,
 }
 
 impl Application {
-    pub fn new() -> Self {
-        Self { actors: Vec::new() }
+    pub fn new(id: usize) -> Self {
+        Self {
+            id,
+            actors: Vec::new(),
+            executor: Executor::new(),
+        }
     }
 
     pub fn mount(&mut self, actor: Actor) -> usize {
@@ -151,7 +191,14 @@ impl Application {
     pub fn send(&mut self, actor: usize, msg: usize, message_parameters: Vec<u64>) -> bool {
         match self.actors.get_mut(actor) {
             Some(Actor { facade, messages }) => {
-                match facade.send_by_id(msg, message_parameters, *messages) {
+                match facade.send_by_id(
+                    self.id,
+                    actor,
+                    msg,
+                    message_parameters,
+                    *messages,
+                    &mut self.executor,
+                ) {
                     Ok(_) => true,
                     Err(_) => false,
                 }
@@ -163,21 +210,25 @@ impl Application {
     pub fn render(&mut self, id: usize) {
         match self.actors.get_mut(id) {
             Some(Actor { facade, messages }) => {
-                facade.render(*messages);
+                facade.render(self.id, id, *messages);
             }
             None => {}
         }
     }
 }
 
-pub struct FormatterHtml<TMessage: Clone + std::fmt::Debug> {
+pub struct FormatterHtml<TMessage: Clone + MyDebug> {
+    pub app: usize,
+    pub actor: usize,
     pub html: String,
     pub messages: Vec<MessageFactory<TMessage>>,
 }
 
-impl<TMessage: Clone + std::fmt::Debug> FormatterHtml<TMessage> {
-    pub fn new() -> Self {
+impl<TMessage: Clone + MyDebug> FormatterHtml<TMessage> {
+    pub fn new(app: usize, actor: usize) -> Self {
         Self {
+            app,
+            actor,
             html: "".to_string(),
             messages: Vec::new(),
         }
@@ -185,15 +236,17 @@ impl<TMessage: Clone + std::fmt::Debug> FormatterHtml<TMessage> {
 }
 
 pub trait DisplayHtml {
-    type Message: Clone + std::fmt::Debug;
+    type Message: Clone + MyDebug;
 
     fn fmt(&self, f: &mut FormatterHtml<Self::Message>);
 
-    fn render2(&mut self, messages: *mut ()) -> Html {
+    fn render2(&mut self, app: usize, actor: usize, messages: *mut ()) -> Html {
         let v = unsafe { &mut *(messages as *mut Vec<MessageFactory<Self::Message>>) };
         v.clear();
 
         let mut f = FormatterHtml {
+            app,
+            actor,
             html: "".to_string(),
             messages: Vec::new(),
         };

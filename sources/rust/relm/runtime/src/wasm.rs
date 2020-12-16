@@ -1,31 +1,70 @@
 use crate::*;
+use std::alloc::Layout;
 
 pub static mut APPS2: Vec<Application> = Vec::new();
+static LOGGER: WebConsoleLogger = WebConsoleLogger {};
+
+struct WebConsoleLogger {}
+
+impl log::Log for WebConsoleLogger {
+    fn enabled(&self, metadata: &log::Metadata) -> bool {
+        metadata.level() <= log::max_level()
+    }
+
+    fn log(&self, record: &log::Record) {
+        if !self.enabled(record.metadata()) {
+            return;
+        }
+
+        let txt = &format!(
+            "{} [{}] @ {}:{}",
+            record.target(),
+            record.args(),
+            record.file().unwrap(),
+            record.line().unwrap()
+        );
+
+        unsafe {
+            match record.level() {
+                log::Level::Error => console(0, txt.len() as u32, txt.as_ptr() as u32),
+                log::Level::Warn => console(1, txt.len() as u32, txt.as_ptr() as u32),
+                log::Level::Info => console(2, txt.len() as u32, txt.as_ptr() as u32),
+                log::Level::Debug => console(3, txt.len() as u32, txt.as_ptr() as u32),
+                log::Level::Trace => console(4, txt.len() as u32, txt.as_ptr() as u32),
+            }
+        }
+    }
+
+    fn flush(&self) {}
+}
 
 #[cfg(target_arch = "wasm32")]
 extern "C" {
     pub fn apply_to(size: u32, ptr: u32);
-    pub fn console_error(size: u32, ptr: u32);
+    pub fn console(category: u32, size: u32, ptr: u32);
 }
 
 #[cfg(target_arch = "x86_64")]
 pub unsafe fn apply_to(_size: u32, _ptr: u32) {}
 
 #[cfg(target_arch = "x86_64")]
-pub unsafe fn console_error(_size: u32, _ptr: u32) {}
+pub unsafe fn console(_category: u32, _size: u32, _ptr: u32) {}
 
 #[no_mangle]
 pub fn init() {
     std::panic::set_hook(Box::new(|panic_info| {
         let msg = format!("{}", panic_info);
-        unsafe { console_error(msg.len() as u32, msg.as_ptr() as u32) };
+        unsafe { console(0, msg.len() as u32, msg.as_ptr() as u32) };
     }));
+
+    let _ = log::set_logger(&LOGGER);
+    log::set_max_level(log::LevelFilter::Trace);
 }
 
 #[no_mangle]
 pub fn application_new() -> usize {
-    let app = Application::new();
     unsafe {
+        let app = Application::new(APPS2.len());
         APPS2.push(app);
         APPS2.len() - 1
     }
@@ -34,24 +73,45 @@ pub fn application_new() -> usize {
 #[macro_export]
 macro_rules! mount {
     ( $($id:expr => $type:ty),*) => {
-
         $(impl runtime::ApplicationFacade for $type {
-            fn send_by_id(&mut self, id: usize, p: Vec<u64>, messages: *mut ()) -> Result<(), u64>
+            fn send_by_id(&mut self,
+                app: usize,
+                actor: usize,
+                id: usize,
+                p: Vec<u64>,
+                messages: *mut (),
+                executor: &mut runtime::executor::Executor) -> Result<(), u64>
             {
                 match self.build_message(id, p, messages) {
                     Ok(message) => {
-                        let _actions = self.send(&message);
-                        //TODO do something with actions
+                        #[cfg(feature = "derive_debug")]
+                        {
+                            log::trace!(target: "actor", "{}:{} Update: [{:?}]", app, actor, message);
+                        }
+                        let mut actions = self.send(&message);
+
+                        while let Some(action) = actions.pop() {
+                            #[cfg(feature = "derive_debug")]
+                            {
+                                log::trace!(target: "actor", "{}:{} Action: [{:?}]", app, actor, action);
+                            }
+                            let env = env::Env::new(app, actor);
+                            let handle = action.handle(env);
+                            executor.spawn(handle);
+                        }
+
                         Ok(())
                     }
                     _ => Err(0)
                 }
             }
 
-            fn render(&mut self, messages: *mut ()) -> Html {
-                <$type as DisplayHtml>::render2(self, messages)
+            fn render(&mut self, app: usize, actor: usize, messages: *mut ()) -> Html {
+                <$type as DisplayHtml>::render2(self, app, actor, messages)
             }
-        })*
+        }
+
+        )*
 
         #[no_mangle]
         pub fn application_mount(app_id: usize, type_id: usize) -> isize {
@@ -88,9 +148,9 @@ macro_rules! mount {
 
 #[no_mangle]
 pub fn application_send(
-    app_id: usize,
-    wrapper_id: usize,
-    msg_idx: usize,
+    app: usize,
+    actor: usize,
+    msg: usize,
     p0: u64,
     p1: u64,
     p2: u64,
@@ -99,13 +159,25 @@ pub fn application_send(
 ) -> bool {
     let p = vec![p0, p1, p2, p3, p4];
     unsafe {
-        match APPS2.get_mut(app_id as usize) {
+        match APPS2.get_mut(app as usize) {
             Some(app) => {
-                app.send(wrapper_id as usize, msg_idx as usize, p);
-                app.render(wrapper_id);
+                app.send(actor as usize, msg as usize, p);
+                app.render(actor);
                 true
             }
             None => false,
+        }
+    }
+}
+
+pub fn application_get_messages(app_id: usize, wrapper_id: usize) -> Option<*mut ()> {
+    unsafe {
+        match APPS2
+            .get_mut(app_id as usize)
+            .and_then(|x| x.actors.get(wrapper_id))
+        {
+            Some(actor) => Some(actor.messages),
+            None => None,
         }
     }
 }
@@ -114,7 +186,7 @@ pub fn application_send(
 pub fn console_error_str(s: &str) {
     let location = core::panic::Location::caller();
     let s = format!("{} at {}", s, location);
-    unsafe { console_error(s.len() as u32, s.as_ptr() as u32) };
+    unsafe { console(0, s.len() as u32, s.as_ptr() as u32) };
 }
 
 pub struct AllocBuffer {

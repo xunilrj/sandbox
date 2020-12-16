@@ -5,11 +5,20 @@ pub struct CounterState {
     pub amount: InputState,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
+#[cfg_attr(feature = "derive_debug", derive(Debug))]
 pub enum Messages {
     Increment,
     Decrement,
     Input { data: String },
+}
+
+#[derive(Clone)]
+#[cfg_attr(feature = "derive_debug", derive(Debug))]
+pub enum Actions {}
+
+impl Actions {
+    pub async fn handle(self, _env: runtime::env::Env<Messages>) {}
 }
 
 impl std::default::Default for CounterState {
@@ -24,7 +33,7 @@ impl std::default::Default for CounterState {
 impl runtime::UpdatableState for CounterState {
     type State = Self;
     type Message = Messages;
-    type Actions = crate::actions::Actions;
+    type Actions = Actions;
 
     fn update(&mut self, message: &Self::Message, _commands: &mut Vec<Self::Actions>) {
         match message {
@@ -47,24 +56,19 @@ impl runtime::UpdatableState for CounterState {
     }
 }
 
-impl runtime::DisplayHtml for CounterState {
-    type Message = Messages;
-    fn fmt(&self, f: &mut runtime::FormatterHtml<Self::Message>) {
-        html::html! {
-            <div id="root">
-                <div>
-                    <button class="red" onclick={Messages::Increment}>"Increment"</button>
-                    <button onclick={Messages::Decrement}>"Decrement"</button>
-                </div>
-                <div>
-                    <input value={self.amount.value} oninput={|e| Messages::Input { data: e.data.to_string()}} />
-                </div>
-                <div>
-                    <div>{self.count}</div>
-                </div>
-            </div>
-        }
-    }
+html::html! {CounterState
+    <div id="root">
+        <div>
+            <button class="red" onclick={Messages::Increment}>"Increment"</button>
+            <button onclick={Messages::Decrement}>"Decrement"</button>
+        </div>
+        <div>
+            <input value={self.amount.value} oninput={|e| Messages::Input { data: e.data.to_string()}} />
+        </div>
+        <div>
+            <div>{self.count}</div>
+        </div>
+    </div>
 }
 
 // #[cfg(test)]

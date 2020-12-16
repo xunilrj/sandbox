@@ -82,7 +82,6 @@ impl HtmlElementContent {
                 q.extend(e.quote());
                 (HtmlElementClose::CloseElement, q.into())
             }
-
             HtmlElementContent::Map(idents, args, body) => {
                 q.extend(quote! { for #args in &});
                 for (i, ident) in idents.iter().enumerate() {
@@ -102,6 +101,46 @@ impl HtmlElementContent {
                 (HtmlElementClose::CloseElement, q.into())
             }
         }
+    }
+
+    pub fn get_ids(
+        &self,
+        typ: &syn::Ident,
+    ) -> (proc_macro2::TokenStream, proc_macro2::TokenStream) {
+        let mut qsig = quote! {};
+        let mut qcode = quote! {};
+
+        match self {
+            HtmlElementContent::Element(e) => {
+                let (sig, code) = e.get_ids(typ);
+                qsig.extend(sig);
+                qcode.extend(code);
+            }
+            HtmlElementContent::If(_, t, f) => {
+                let (sig, code) = t.get_ids(typ);
+                qsig.extend(sig);
+                qcode.extend(code);
+
+                let (sig, code) = f.get_ids(typ);
+                qsig.extend(sig);
+                qcode.extend(code);
+            }
+            HtmlElementContent::Children(children) => {
+                for child in children {
+                    let (sig, code) = child.get_ids(typ);
+                    qsig.extend(sig);
+                    qcode.extend(code);
+                }
+            }
+            HtmlElementContent::Map(_, _, e) => {
+                let (sig, code) = e.get_ids(typ);
+                qsig.extend(sig);
+                qcode.extend(code);
+            }
+            _ => {}
+        }
+
+        (qsig.into(), qcode.into())
     }
 }
 
@@ -125,18 +164,18 @@ impl HtmlElement {
             match k {
                 "onclick" => (
                     quote! {let message = MessageFactory::OnClick(Box::new(#c))},
-                    "=\"send({});\"".to_string(),
+                    "=\"send({},{},{})\"".to_string(),
                 ),
                 "oninput" => (
                     quote! {let message = MessageFactory::OnInput(Box::new(#c))},
-                    "=\"var e = arguments[0];send({}, [e.data]);\"".to_string(),
+                    "=\"var e=arguments[0];send({},{},{},[e.data])\"".to_string(),
                 ),
                 _ => panic!("unkown event"),
             }
         } else {
             (
                 quote! {let message = MessageFactory::Message(#expr)},
-                "=\"send({});\"".to_string(),
+                "=\"send({},{},{});\"".to_string(),
             )
         }
     }
@@ -145,12 +184,19 @@ impl HtmlElement {
         // //println!("Quoting Attributes for {}", self.name);
         for (k, v) in &self.attributes {
             // //println!("Attribute {}", k);
+
+            let mut cfgq = quote! {};
+            if k == "ref" {
+                cfgq = quote! {#[cfg(test)]};
+            }
+
             let name = format!(" {}", k);
-            q.extend(quote! {html.push_str(#name);});
-            match v {
-                HtmlAttributeContent::None => {}
+
+            let valueq = match v {
+                HtmlAttributeContent::None => quote! {},
                 HtmlAttributeContent::Expression(expr) => {
-                    // dbg!(&expr);
+                    let mut q = quote! {};
+
                     let is_eventcallback = k.starts_with("on");
                     if is_eventcallback {
                         let (message_init, event_html) =
@@ -160,7 +206,7 @@ impl HtmlElement {
                                 #message_init;
                                 let id = messages.len();
                                 messages.push(message);
-                                html.push_str(&format!(#event_html, id));
+                                html.push_str(&format!(#event_html, f.app, f.actor, id));
                             }
                         });
                     } else {
@@ -171,14 +217,28 @@ impl HtmlElement {
                             }
                         });
                     }
+
+                    q
                 }
                 HtmlAttributeContent::String(s) => {
+                    let mut q = quote! {};
+
                     let all = format!("=\"{}\"", &s.value());
                     q.extend(quote! {
                         html.push_str(#all);
                     });
+
+                    q
                 }
-            }
+            };
+
+            q.extend(quote! {
+                #cfgq
+                {
+                    html.push_str(#name);
+                    #valueq
+                }
+            });
         }
     }
 
@@ -208,6 +268,96 @@ impl HtmlElement {
             }
         }
         q.into()
+    }
+
+    pub fn get_ids(
+        &self,
+        typ: &syn::Ident,
+    ) -> (proc_macro2::TokenStream, proc_macro2::TokenStream) {
+        let mut qsig = quote! {};
+        let mut qcode = quote! {};
+
+        for (k, v) in &self.attributes {
+            if let HtmlAttributeContent::String(v) = v {
+                // ID OR REF
+                if k == "id" || k == "ref" {
+                    let selector = if k == "id" {
+                        format!("#{}", v.value())
+                    } else {
+                        format!("[ref=\"{}\"]", v.value())
+                    };
+
+                    let fnname = syn::Ident::new(
+                        &format!("get_{}", v.value()),
+                        proc_macro2::Span::call_site(),
+                    );
+
+                    qsig.extend(quote! {
+                        #[cfg(test)]
+                        fn #fnname <'a> (&'a mut self) -> Option<
+                            runtime::tester::TesterMutElement<
+                                'a,
+                                <#typ as runtime::UpdatableState>::Message,
+                                #typ>
+                            >;
+                    });
+
+                    qcode.extend(quote! {
+                        #[cfg(test)]
+                        fn #fnname <'a> (&'a mut self) -> Option<
+                            runtime::tester::TesterMutElement<
+                                'a,
+                                <#typ as runtime::UpdatableState>::Message,
+                                #typ>
+                            >
+                        {
+                            self.get_mut(#selector)
+                        }
+                    });
+                }
+                // CLASS
+                else if k == "class" {
+                    let classes = v.value();
+                    let classes = classes.split(" ");
+                    for class in classes {
+                        let selector = format!(".{}", class);
+
+                        let fnname = syn::Ident::new(
+                            &format!("query_class_{}", class),
+                            proc_macro2::Span::call_site(),
+                        );
+                        qsig.extend(quote! {
+                            #[cfg(test)]
+                            fn #fnname <'a> (&'a mut self) -> Vec<
+                                runtime::tester::TesterElement<
+                                    'a,
+                                    <#typ as runtime::UpdatableState>::Message,
+                                    #typ>
+                                >;
+                        });
+
+                        qcode.extend(quote! {
+                            #[cfg(test)]
+                            fn #fnname <'a> (&'a mut self) -> Vec<
+                                runtime::tester::TesterElement<
+                                    'a,
+                                    <#typ as runtime::UpdatableState>::Message,
+                                    #typ>
+                                >
+                            {
+                                self.get_all_mut(#selector)
+                            }
+                        });
+                    }
+                }
+            }
+        }
+
+        let (sig, code) = self.content.get_ids(typ);
+        qsig.extend(sig);
+        qcode.extend(code);
+
+        (qsig.into(), qcode.into())
     }
 }
 
@@ -245,8 +395,12 @@ fn open_element(stream: &mut ParseStream) -> Option<HtmlElement> {
             stream.parse::<Gt>().unwrap();
         } else {
             // all attributes
-            while let Ok(attr_name) = parsers::parse_seq1::<Ident>(stream) {
-                let attr_name = format!("{}", attr_name);
+            type OrIdentOrRef = parsers::Or<syn::Ident, syn::token::Ref>;
+            while let Ok(attr_name) = parsers::parse_seq1::<OrIdentOrRef>(stream) {
+                let attr_name = match attr_name {
+                    parsers::Or::A(v) => format!("{}", v),
+                    parsers::Or::B(_) => format!("ref"),
+                };
 
                 // //println!("Found Attribute {}", attr_name);
                 element
@@ -473,6 +627,23 @@ impl HtmlDom {
         }
         v
     }
+
+    pub fn get_ids(
+        &self,
+        typ: &syn::Ident,
+    ) -> (proc_macro2::TokenStream, proc_macro2::TokenStream) {
+        let mut qsig = quote! {};
+        let mut qcode = quote! {};
+
+        for children in &self.children {
+            let (sig, code) = children.get_ids(typ);
+
+            qsig.extend(sig);
+            qcode.extend(code);
+        }
+
+        (qsig.into(), qcode.into())
+    }
 }
 
 impl Parse for HtmlDom {
@@ -494,11 +665,53 @@ impl Parse for HtmlDom {
     }
 }
 
-#[proc_macro]
-pub fn html(input: TokenStream) -> TokenStream {
-    let parsed = parse_macro_input!(input as HtmlDom);
+#[derive(Debug)]
+struct HtmlDomFunction {
+    children: Vec<HtmlElement>,
+}
 
-    //println!("PARSED");
-    // dbg!(&parsed);
-    parsed.quote().into()
+struct Main {
+    typ: syn::Ident,
+    dom: HtmlDom,
+}
+
+impl Parse for Main {
+    fn parse(stream: ParseStream) -> Result<Self> {
+        let typ: syn::Ident = stream.parse()?;
+        let dom: HtmlDom = stream.parse()?;
+
+        Ok(Self { typ, dom })
+    }
+}
+
+#[proc_macro]
+pub fn html(item: TokenStream) -> TokenStream {
+    let parsed = parse_macro_input!(item as Main);
+
+    let typ = &parsed.typ;
+    let typename = syn::Ident::new(&format!("{}Html", typ), proc_macro2::Span::call_site());
+
+    let code = parsed.dom.quote();
+    let (idssigs, idscodes) = parsed.dom.get_ids(typ);
+
+    let mut q = quote! {};
+    q.extend(quote! {
+        trait #typename {
+            #idssigs
+        }
+
+        #[cfg(test)]
+        impl #typename for runtime::tester::Tester<#typ> {
+            #idscodes
+        }
+
+        impl runtime::DisplayHtml for #typ {
+            type Message = Messages;
+            fn fmt(&self, f: &mut runtime::FormatterHtml<Self::Message>)
+            {
+                #code
+            }
+        }
+    });
+    q.into()
 }

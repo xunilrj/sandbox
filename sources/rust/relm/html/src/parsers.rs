@@ -1,10 +1,9 @@
 use syn::{
-    parse::{Lookahead1, Parse, ParseStream, Peek},
+    parse::{Parse, ParseStream},
     token::{CustomToken, Token},
 };
 
 pub enum Or<A, B> {
-    None,
     A(A),
     B(B),
 }
@@ -19,14 +18,12 @@ impl<TA: Token, TB: Token> CustomToken for Or<TA, TB> {
     }
 }
 
-impl<TA: Parse + Peek + std::default::Default, TB: Parse + Peek + std::default::Default> Parse
-    for Or<TA, TB>
-{
+impl<TA: Parse, TB: Parse> Parse for Or<TA, TB> {
     fn parse(input: ParseStream) -> syn::Result<Self> {
-        if input.peek::<TA>(Default::default()) {
-            Ok(Or::A(TA::parse(input).unwrap()))
-        } else if input.peek::<TB>(Default::default()) {
-            Ok(Or::B(TB::parse(input).unwrap()))
+        if let Ok(ta) = TA::parse(input) {
+            Ok(Or::A(ta))
+        } else if let Ok(tb) = TB::parse(input) {
+            Ok(Or::B(tb))
         } else {
             Err(input.error("Nor A nor B"))
         }

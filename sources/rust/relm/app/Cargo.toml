@@ -5,8 +5,14 @@ authors = ["Daniel Leite <xunilrj@hotmail.com>"]
 edition = "2018"
 
 [lib]
-crate-type = ["cdylib", "rlib"]
+crate-type = ["cdylib"]
 
 [dependencies]
 runtime = { path = "../runtime" }
 html = { path = "../html" }
+log = "0.4.11"
+
+[features]
+default=[]
+default_test=["derive_debug"]
+derive_debug = ["runtime/derive_debug"]

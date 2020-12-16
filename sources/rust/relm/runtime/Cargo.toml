@@ -9,9 +9,16 @@ crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 html = {path = "../html"}
+log = "0.4.11"
 
 [target.'cfg(target_arch = "x86_64")'.dependencies]
 scraper = "0.12.0"
 ego-tree = "0.6.2"
 prettydiff = "0.3.1"
+extend = "0.3.0"
+terminal_size = "0.1.15"
+
+[features]
+default=["derive_debug"]
+derive_debug = []
 
