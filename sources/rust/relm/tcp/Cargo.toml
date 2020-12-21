@@ -1,0 +1,22 @@
+[package]
+name = "tcp"
+version = "0.1.0"
+authors = ["Daniel Leite <xunilrj@hotmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+nix = "0.19"
+goose = "0.10"
+http = { path = "../http" }
+crossbeam = "0.8.0"
+rand = "0.8.0"
+
+[[bin]]
+name = "main"
+path = "src/main.rs"
+
+[[bin]]
+name = "load-test"
+path = "src/bench.rs"

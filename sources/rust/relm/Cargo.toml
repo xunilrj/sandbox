@@ -4,4 +4,4 @@ opt-level = 'z'
 #debug = true
 
 [workspace]
-members = ["html", "html-test", "runtime", "app", "async-test"]
+members = ["html", "tcp", "http", "html-test", "runtime", "app", "async-test"]
