@@ -65,6 +65,18 @@ https://leetcode.com/submissions/detail/327338526/
 
 [See More](./146-lru-cache/Readme.md) 
 
+## Median of Two Sorted Arrays
+
+Rust [see code](./4-MedianOfTwoSortedArrays/main.rs) 
+```
+Runtime: 4 ms, faster than 70.71% of Rust online submissions for Median of Two Sorted Arrays.
+Memory Usage: 2.2 MB, less than 28.57% of Rust online submissions for Median of Two Sorted Arrays.
+```
+https://leetcode.com/submissions/detail/433660231
+
+![alt text](./4-MedianOfTwoSortedArrays/median-of-two-sorted-arrays.cpu.jpg "Median of Two Sorted Arrays - CPU")
+![alt text](./4-MedianOfTwoSortedArrays/median-of-two-sorted-arrays.mem.jpg "Median of Two Sorted Arrays - Memory")
+
 # Data Structures
 
 ## LRU Cache
