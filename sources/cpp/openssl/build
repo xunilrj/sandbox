@@ -1,0 +1,10 @@
+#!/bin/bash
+
+# Client Certificate
+#openssl req -newkey rsa:2048 -nodes -keyout clientkey.pem -x509 -days 365 -out clientcertificate.pem
+clang++ client.cpp -lssl -lcrypto -o client
+
+# Server Certificate
+#openssl req -newkey rsa:2048 -nodes -keyout key.pem -x509 -days 365 -out certificate.pem
+#openssl x509 -in certificate.pem -text -noout
+clang++ server.cpp -lssl -lcrypto -o server
