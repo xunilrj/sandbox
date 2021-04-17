@@ -1,0 +1,4 @@
+#! /bin/bash
+pushd "./Week01/anyint"
+cargo run --bin SendAnInteger
+popd

@@ -61,3 +61,11 @@ Inside of it run
 :CocInstall coc-rust-analyzer
 :UpdateRemotePlugins
 ```
+
+# Building good Rust APIs
+
+## AsRef, Into, Cow
+https://www.philipdaniels.com/blog/2019/rust-api-design/
+
+## Collections and Iteration
+https://www.philipdaniels.com/blog/2019/rust-api-design2/
