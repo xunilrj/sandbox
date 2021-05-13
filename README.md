@@ -57,9 +57,9 @@
 ### Computer Graphics/Gamedev
 [Computer Graphics Guide](/texts/dev/ComputerScience/Computer%20Graphics)  
 [webGPU](/sources/javascript/webgpu/Readme.md)  
-[Unreal Engine - Localization](/sources/unreal/localization/Readme.md)
-[Unreal Engine - Basic locomotion using Mixamo](/sources/unreal/locomotion/Readme.md)
-[Unreal Engine - Writing Complex Unreal functions in C++](/sources/unreal/complexlatentfunction/Readme.md)
+[Unreal Engine - Localization](/sources/unreal/localization/Readme.md)  
+[Unreal Engine - Basic locomotion using Mixamo](/sources/unreal/locomotion/Readme.md)  
+[Unreal Engine - Writing Complex Unreal functions in C++](/sources/unreal/complexlatentfunction/Readme.md)  
 
 ### Concurrency
 [Concurrency](/texts/dev/ComputerScience/Concurrency)
