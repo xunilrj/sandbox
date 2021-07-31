@@ -1,0 +1,11 @@
+[package]
+name = "scan"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+proc-macro2 = { version = "1.0.28", features = ["span-locations"] }
+syn = "1.0.74"
+auto_from = "0.3.0"

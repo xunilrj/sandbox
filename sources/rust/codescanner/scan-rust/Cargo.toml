@@ -1,0 +1,11 @@
+[package]
+name = "scan-rust"
+version = "0.1.0"
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+scan = { path = "../scan" }
+walkdir = "2.3.2"
+syn = { version = "1.0.74", features = ["extra-traits", "full"] }

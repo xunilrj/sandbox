@@ -1,0 +1,8 @@
+[package]
+name = "scanner"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+scan = { path = "../scan" }
+scan-rust = { path = "../scan-rust" }

@@ -1,0 +1,11 @@
+[package]
+name = "scanner-cli"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+proc-macro2 = "1.0.28"
+structopt = "0.3.22"
+scan = { path = "../scan" }
+scanner = { path = "../scanner" }
+ansi_rgb = "0.2.0"

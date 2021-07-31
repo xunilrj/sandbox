@@ -1,0 +1,2 @@
+[workspace]
+members = ["scan-rust", "scanner", "scanner-cli", "tests/test-rust"]
