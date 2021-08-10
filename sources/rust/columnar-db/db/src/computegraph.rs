@@ -202,7 +202,7 @@ impl<'a> ComputeGraph<'a> {
         let deadline = std::time::Instant::now() + timeout;
 
         for x in &self.results_receivers {
-            let r = x.recv_deadline(deadline);
+            let _ = x.recv_deadline(deadline);
         }
     }
 

@@ -47,7 +47,7 @@ extern "C" fn thread_f(arg: *mut libc::c_void) -> *mut libc::c_void {
                 let _ = callback.send(());
                 break;
             }
-            Ok(ThreadMessage::Run(debug, f, callback)) => {
+            Ok(ThreadMessage::Run(_, f, callback)) => {
                 f();
                 let _ = callback.send(());
             }
@@ -291,7 +291,7 @@ impl<'a> Threadpool<'a> {
 impl<'a> Drop for Threadpool<'a> {
     fn drop(&mut self) {
         for t in &mut self.threads {
-            let r = t.kill(std::time::Duration::from_secs(1));
+            let _ = t.kill(std::time::Duration::from_secs(1));
         }
     }
 }
