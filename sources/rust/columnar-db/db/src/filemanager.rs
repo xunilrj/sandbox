@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use crate::channel::*;
 use crate::threadpool::*;
 use crossbeam_channel::*;
@@ -5,7 +7,6 @@ use crossbeam_channel::*;
 pub enum FileManagerRequests {
     ReadAll {
         file: String,
-        next: usize,
         sender: Sender<Message>,
     },
 }
@@ -70,9 +71,9 @@ impl TempFile {
                 *v = rand::random::<u8>()
             }
             size -= data.len();
+            file.write_all(&data)?;
         }
 
-        file.write_all(&data)?;
         file.sync_all()?;
 
         Ok(Self { path: path.into() })
@@ -85,29 +86,29 @@ impl Drop for TempFile {
     }
 }
 
-pub fn handle_read_all(file: &str, next: usize, sender: &Sender<Message>) -> ReadAllResult {
-    let mut path = file.to_string();
+pub fn handle_read_all<P: AsRef<Path>>(file: P, sender: &Sender<Message>) -> ReadAllResult {
+    let mut path = file.as_ref().to_str().unwrap().to_string();
     path.push('\0');
 
     let fd = {
         let r = unsafe {
             libc::open(
                 path.as_ptr() as *const i8,
-                libc::O_RDONLY | libc::O_NONBLOCK,
+                libc::O_RDONLY, /*| libc::O_NONBLOCK*/
             )
         };
         if r < 0 {
             let err = errno::errno();
             eprintln!("{}", err);
         }
-        let flags = unsafe { libc::fcntl(r, libc::F_GETFL, 0) };
-        let _rcontrol = unsafe { libc::fcntl(r, libc::F_SETFL, flags | libc::O_NONBLOCK) };
+        // let flags = unsafe { libc::fcntl(r, libc::F_GETFL, 0) };
+        // let _rcontrol = unsafe { libc::fcntl(r, libc::F_SETFL, flags | libc::O_NONBLOCK) };
         r
     };
 
-    let _r = unsafe {
-        libc::posix_fadvise(fd, 0, 0, libc::POSIX_FADV_NORMAL | libc::POSIX_FADV_NOREUSE)
-    };
+    // let _r = unsafe {
+    //     libc::posix_fadvise(fd, 0, 0, libc::POSIX_FADV_NORMAL | libc::POSIX_FADV_NOREUSE)
+    // };
 
     let mut offset = 0;
     loop {
@@ -130,7 +131,7 @@ pub fn handle_read_all(file: &str, next: usize, sender: &Sender<Message>) -> Rea
             r as usize
         };
         offset += buffer.size as i64;
-        let _ = sender.send(Message::Buffer(buffer, next));
+        let _ = sender.send(Message::Buffer(buffer));
     }
 
     let _ = sender.send(Message::Eof);
@@ -142,8 +143,8 @@ pub fn handle_read_all(file: &str, next: usize, sender: &Sender<Message>) -> Rea
 impl<'a> FileManager<'a> {
     pub fn new(pool: &mut Threadpool<'a>) -> Self {
         let dispatcher = pool.new_dispatcher(move |request| match request {
-            FileManagerRequests::ReadAll { file, next, sender } => {
-                FileManagerRequestsResponses::ReadAllResult(handle_read_all(file, *next, sender))
+            FileManagerRequests::ReadAll { file, sender } => {
+                FileManagerRequestsResponses::ReadAllResult(handle_read_all(file, sender))
             }
         });
 
@@ -166,7 +167,6 @@ impl<'a> FileManager<'a> {
     pub fn read_all(
         &mut self,
         file: &str,
-        next: usize,
         sender: Sender<Message>,
     ) -> std::result::Result<
         ReceiverFutureMap<FileManagerRequestsResponses, ReadAllResult>,
@@ -175,7 +175,6 @@ impl<'a> FileManager<'a> {
         let future = self
             .send(FileManagerRequests::ReadAll {
                 file: file.to_string(),
-                next,
                 sender,
             })?
             .map(|x| {

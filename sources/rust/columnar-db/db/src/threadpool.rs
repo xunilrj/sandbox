@@ -43,13 +43,13 @@ extern "C" fn thread_f(arg: *mut libc::c_void) -> *mut libc::c_void {
 
     loop {
         match receiver.recv() {
-            Ok(ThreadMessage::Kill(s)) => {
-                let _ = s.send(());
+            Ok(ThreadMessage::Kill(callback)) => {
+                let _ = callback.send(());
                 break;
             }
-            Ok(ThreadMessage::Run(f, s)) => {
+            Ok(ThreadMessage::Run(debug, f, callback)) => {
                 f();
-                let _ = s.send(());
+                let _ = callback.send(());
             }
             Err(_) => break,
         }
@@ -121,7 +121,7 @@ impl<'a> Thread<'a> {
 }
 pub enum ThreadMessage<'a> {
     Kill(Sender<()>),
-    Run(Box<dyn Fn() + Send + 'a>, Sender<()>),
+    Run(String, Box<dyn Fn() + Send + 'a>, Sender<()>),
 }
 
 pub struct Threadpool<'a> {
@@ -246,7 +246,7 @@ impl<'a> Threadpool<'a> {
         Ok(())
     }
 
-    pub fn run<F, TR>(&mut self, f: F) -> RunResult<TR>
+    pub fn run<F, TR>(&mut self, debug: &str, f: F) -> RunResult<TR>
     where
         F: 'a + Send + Fn() -> TR,
         TR: 'a + Send + Sync,
@@ -258,6 +258,7 @@ impl<'a> Threadpool<'a> {
         let (sender, receiver) = bounded(1);
         self.sender
             .send(ThreadMessage::Run(
+                debug.to_string(),
                 Box::new(move || {
                     let r = f();
                     if let Ok(mut l) = storage_clone.lock() {
@@ -290,7 +291,7 @@ impl<'a> Threadpool<'a> {
 impl<'a> Drop for Threadpool<'a> {
     fn drop(&mut self) {
         for t in &mut self.threads {
-            let _ = t.kill(std::time::Duration::from_secs(1));
+            let r = t.kill(std::time::Duration::from_secs(1));
         }
     }
 }
@@ -311,6 +312,7 @@ impl<'a, TReq: 'a + Send + Sync, TRes: 'a + Send + Sync> TypedThreadDispatcher<'
         let (sender, receiver) = bounded(1);
         self.sender
             .send(ThreadMessage::Run(
+                "TypedThreadDispatcher".to_string(),
                 Box::new(move || {
                     let r = f(&message);
                     if let Ok(mut l) = storage_clone.lock() {

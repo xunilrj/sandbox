@@ -22,23 +22,12 @@ let mut computation = def.build(&catalog); // 5
 computation.start(); // 6
 ```
 
-1 -   
-First step we need the Threadpool. We deciced for one thread per CPU.
-
-2 -  
-FileManager is the struct that do every IO. You specify the Sender<> that needs the result.
-
-3 -  
-DataCatalog translates columns full names to files.
-
-4 -  
-ComputeGraphDefinition specify all the desired computation as DAG. This class is serializable.
-
-5 -  
-We use this class to build the actual DAG that will compute our query.
-
-6 -  
-We actually run our DAG using our Threadpool.
+1 - First step we need the Threadpool. We deciced for one thread per CPU.
+2 - FileManager is the struct that do every IO. You specify the Sender<> that needs the result.
+3 - DataCatalog translates columns full names to files.
+4 - ComputeGraphDefinition specify all the desired computation as DAG. This class is serializable.
+5 - We use this class to build the actual DAG that will compute our query.
+6 - We actually run our DAG using our Threadpool.
 
 ## Diagram
 

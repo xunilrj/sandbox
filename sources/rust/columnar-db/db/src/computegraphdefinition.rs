@@ -2,12 +2,14 @@ use crate::computegraph::*;
 use crate::datacatalog::*;
 use std::vec::Vec;
 
+#[derive(Debug)]
 pub enum ComputeTaskDefinitionSources {
     ReadColumn { column: String },
 }
 
 pub struct ComputeTaskDefinitionSource(usize);
 
+#[derive(Debug)]
 pub enum ComputeTaskDefinitionFolds {
     Maximum,
 }
@@ -16,13 +18,15 @@ pub struct ComputeTaskDefinitionFold(usize);
 
 pub struct ComputeTaskDefinitionResult(usize);
 
+#[derive(Debug)]
+
 pub enum ComputeTaskDefinitionTypes {
     Source(ComputeTaskDefinitionSources),
     Fold(ComputeTaskDefinitionFolds),
     Result(String),
 }
 
-#[allow(dead_code)]
+#[derive(Debug)]
 pub struct ComputeTaskDefinition {
     id: usize,
     definition: ComputeTaskDefinitionTypes,
@@ -30,6 +34,7 @@ pub struct ComputeTaskDefinition {
 
 impl ComputeTaskDefinition {}
 
+#[derive(Debug)]
 pub struct ComputeGraphDefinition {
     tasks: Vec<ComputeTaskDefinition>,
     links: Vec<(usize, usize)>,

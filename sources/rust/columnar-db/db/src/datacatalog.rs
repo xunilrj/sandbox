@@ -1,7 +1,11 @@
-use std::collections::*;
+use std::{
+    collections::*,
+    path::{Path, PathBuf},
+};
 
+#[derive(Debug)]
 pub struct DataCatalog {
-    catalog: HashMap<String, String>,
+    catalog: HashMap<String, PathBuf>,
 }
 
 impl DataCatalog {
@@ -11,11 +15,11 @@ impl DataCatalog {
         }
     }
 
-    pub fn add(&mut self, name: &str, file: &str) {
-        self.catalog.insert(name.to_string(), file.to_string());
+    pub fn add<S: Into<String>, P: AsRef<Path>>(&mut self, name: S, file: P) {
+        self.catalog.insert(name.into(), file.as_ref().to_owned());
     }
 
-    pub fn get_file(&self, name: &str) -> &str {
-        self.catalog.get(name).unwrap()
+    pub fn get_file<'a>(&'a self, name: &str) -> &'a Path {
+        self.catalog.get(name).unwrap().as_path()
     }
 }

@@ -1,5 +1,5 @@
 pub enum Message {
-    Buffer(Buffer, usize),
+    Buffer(Buffer),
     Eof,
 }
 
