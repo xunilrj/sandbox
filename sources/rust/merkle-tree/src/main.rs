@@ -1,7 +1,6 @@
 use merkle::MerkleTreeBuilder;
 
 mod merkle;
-mod utils;
 
 #[tokio::main]
 async fn main() {
