@@ -1,0 +1,32 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slide 47</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000080" vlink="#0000CC" alink="#000080">
+<center>
+<a href="text0.html">First page</a> <a href="text45.html">Back</a> <a href="text47.html">Continue</a> <a href="text68.html">Last page</a> <a href="WASM.htm">Overview</a> <a href="img46.html">Image</a></center><br>
+<h1></h1>
+<p>WASM - How it is generated</p>
+<p>6.</p>
+<p>a.wasm</p>
+<p><font color="#EEEEEE">a.wat</font></p>
+<p><font color="#EEEEEE">./wat2wasm</font></p>
+<p><a href="https://github.com/xunilrj/sandbox/blob/master/sources/webassembly/wasm.001.md"><u><font color="#0000FF">https://github.com/xunilrj/sandbox/blob/master/sources/webassembly/wasm.001.md</u></font></a></p>
+<p><font color="#EEEEEE">int main()</font></p>
+<p><font color="#EEEEEE">{</font></p>
+<p><font color="#EEEEEE">	return 0;</font></p>
+<p><font color="#EEEEEE">}</font></p>
+<p>a.cpp</p>
+<p>clang</p>
+<p><font color="#EEEEEE">&gt; clang --target=wasm32-unknown-unknown-wasm a.c -c -o a.o -O3</font></p>
+<p><font color="#EEEEEE">&gt; lld -flavor wasm -export a.o -o a.wasm --no-entry</font></p>
+<p><font color="#EEEEEE"></font></p>
+<p>a.o</p>
+<p>lld</p>
+<p>backend</p>
+<p>frontend</p>
+</body>
+</html>

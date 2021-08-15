@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slide 26</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000080" vlink="#0000CC" alink="#000080">
+<center>
+<a href="text0.html">First page</a> <a href="text24.html">Back</a> <a href="text26.html">Continue</a> <a href="text68.html">Last page</a> <a href="WASM.htm">Overview</a> <a href="img25.html">Image</a></center><br>
+<h1></h1>
+<p>WASM – Exports</p>
+<p><font color="#EEEEEE">(module</font></p>
+<p><font color="#EEEEEE">  (type $0 (func (result i32)))</font></p>
+<p><font color="#EEEEEE">  (func $main (type $0)</font></p>
+<p><font color="#EEEEEE">    (i32.const 0)</font></p>
+<p><font color="#EEEEEE">  )</font></p>
+<p>  <font color="#ACB20C">(</font><font color="#FF4000">export</font> <font color="#00A933">&quot;main&quot;</font> <font color="#ED4C05">(</font><font color="#2A6099">func</font> <font color="#FF8000">$main</font><font color="#650953">)</font><font color="#1E6A39">)</font></p>
+<p><font color="#EEEEEE">)</font></p>
+<p><font color="#EEEEEE">...</font></p>
+<p><font color="#EEEEEE">; section &quot;Function&quot; (3)</font></p>
+<p><font color="#EEEEEE">000000f: 03                                        ; section code</font></p>
+<p><font color="#EEEEEE">0000010: 00                                        ; section size (guess)</font></p>
+<p><font color="#EEEEEE">0000011: 01                                        ; num functions</font></p>
+<p><font color="#EEEEEE">0000012: 00                                        ; function 0 signature index</font></p>
+<p><font color="#EEEEEE">0000010: 02                                        ; FIXUP section size</font></p>
+<p>; section &quot;Export&quot; (7)</p>
+<p>0000013: 07                                        ; section code</p>
+<p>0000014: 00                                        ; section size (guess)</p>
+<p>0000015: 01                                        ; num exports</p>
+<p><font color="#00A933">0000016: 04                                        ; string length</font></p>
+<p><font color="#00A933">0000017: 6d61 696e                                main  ; export name</font></p>
+<p><font color="#2A6099">000001b: 00                                        ; export kind</font></p>
+<p><font color="#FF8000">000001c: 00                                        ; export func index</font></p>
+<p><font color="#EEEEEE">0000014: 08                                        ; FIXUP section size</font></p>
+<p><font color="#EEEEEE">; section &quot;Code&quot; (10)</font></p>
+<p><font color="#EEEEEE">000001d: 0a                                        ; section code</font></p>
+<p><font color="#EEEEEE">000001e: 00                                        ; section size (guess)</font></p>
+<p><font color="#EEEEEE">000001f: 01                                        ; num functions</font></p>
+<p><font color="#EEEEEE">; function body 0</font></p>
+<p><font color="#EEEEEE">0000020: 00                                        ; func body size (guess)</font></p>
+<p><font color="#EEEEEE">0000021: 00                                        ; local decl count</font></p>
+<p><font color="#EEEEEE">0000022: 41                                        ; i32.const</font></p>
+<p><font color="#EEEEEE">0000023: 00                                        ; i32 literal</font></p>
+<p><font color="#EEEEEE">0000024: 0b                                        ; end</font></p>
+<p><font color="#EEEEEE">0000020: 04                                        ; FIXUP func body size</font></p>
+<p><font color="#EEEEEE">000001e: 06                                        ; FIXUP section size</font></p>
+<p><font color="#EEEEEE">...</font></p>
+<p>It decodes into a vector of exports that represent the exports component of a module.</p>
+<p>Export = <font color="#ACB20C">‘(’ </font><font color="#FF0000">‘export’  </font><font color="#00A933">name  exported </font><font color="#1E6A39">‘)’</font></p>
+<p><font color="#1E6A39">Exported = </font><font color="#BE480A">‘(’ </font><font color="#2A6099">‘func’  </font><font color="#FF8000">funcid </font><font color="#650953">‘)’</font></p>
+<p><font color="#650953"></font></p>
+<p><font color="#650953">https://webassembly.github.io/spec/core/text/modules.html#exports</font></p>
+<p>4.</p>
+</body>
+</html>

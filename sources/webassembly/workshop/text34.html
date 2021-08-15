@@ -1,0 +1,57 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slide 35</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000080" vlink="#0000CC" alink="#000080">
+<center>
+<a href="text0.html">First page</a> <a href="text33.html">Back</a> <a href="text35.html">Continue</a> <a href="text68.html">Last page</a> <a href="WASM.htm">Overview</a> <a href="img34.html">Image</a></center><br>
+<h1></h1>
+<p>WASM – Stack Machine</p>
+<p><font color="#EEEEEE">(module</font></p>
+<p><font color="#EEEEEE">  (type $0 (func (result i32)))</font></p>
+<p>  (func $main (type $0)</p>
+<p>    (i32.const 0)</p>
+<p>  )</p>
+<p>  <font color="#EEEEEE">(export &quot;main&quot; (func $main))</font></p>
+<p><font color="#EEEEEE">)</font></p>
+<p><font color="#EEEEEE">...</font></p>
+<p><font color="#EEEEEE">; section &quot;Function&quot; (3)</font></p>
+<p><font color="#EEEEEE">000000f: 03                                        ; section code</font></p>
+<p><font color="#EEEEEE">0000010: 00                                        ; section size (guess)</font></p>
+<p><font color="#EEEEEE">0000011: 01                                        ; num functions</font></p>
+<p><font color="#EEEEEE">0000012: 00                                        ; function 0 signature index</font></p>
+<p><font color="#EEEEEE">0000010: 02                                        ; FIXUP section size</font></p>
+<p><font color="#EEEEEE">; section &quot;Export&quot; (7)</font></p>
+<p><font color="#EEEEEE">0000013: 07                                        ; section code</font></p>
+<p><font color="#EEEEEE">0000014: 00                                        ; section size (guess)</font></p>
+<p><font color="#EEEEEE">0000015: 01                                        ; num exports</font></p>
+<p><font color="#EEEEEE">0000016: 04                                        ; string length</font></p>
+<p><font color="#EEEEEE">0000017: 6d61 696e                                main  ; export name</font></p>
+<p><font color="#EEEEEE">000001b: 00                                        ; export kind</font></p>
+<p><font color="#EEEEEE">000001c: 00                                        ; export func index</font></p>
+<p><font color="#EEEEEE">0000014: 08                                        ; FIXUP section size</font></p>
+<p><font color="#EEEEEE">; section &quot;Code&quot; (10)</font></p>
+<p><font color="#EEEEEE">000001d: 0a                                        ; section code</font></p>
+<p><font color="#EEEEEE">000001e: 00                                        ; section size (guess)</font></p>
+<p><font color="#EEEEEE">000001f: 01                                        ; num functions</font></p>
+<p><font color="#EEEEEE">; function body 0</font></p>
+<p>0000020: 00                                        ; func body size (guess)</p>
+<p>0000021: 00                                        ; local decl count</p>
+<p>0000022: 41                                        ; i32.const</p>
+<p>0000023: 00                                        ; i32 literal</p>
+<p>0000024: 0b                                        ; end</p>
+<p><font color="#EEEEEE">0000020: 04                                        ; FIXUP func body size</font></p>
+<p><font color="#EEEEEE">000001e: 06                                        ; FIXUP section size</font></p>
+<p><font color="#EEEEEE">...</font></p>
+<p>Instruction Pointer</p>
+<p>0000000</p>
+<p>Stack</p>
+<p>Stack Pointer</p>
+<p>0000000</p>
+<p>Machine not running</p>
+<p>5.</p>
+</body>
+</html>

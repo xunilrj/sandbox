@@ -1,0 +1,48 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slide 63</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000080" vlink="#0000CC" alink="#000080">
+<center>
+<a href="text0.html">First page</a> <a href="text61.html">Back</a> <a href="text63.html">Continue</a> <a href="text68.html">Last page</a> <a href="WASM.htm">Overview</a> <a href="img62.html">Image</a></center><br>
+<h1></h1>
+<p>WASM – emscripten</p>
+<p>6.</p>
+<p>The interesting part is the .js file.</p>
+<p>function <b>___syscall146</b>(which, varargs) {</p>
+<p>    SYSCALLS.varargs = varargs;</p>
+<p>    try {</p>
+<p>        <b>var stream = SYSCALLS.get(),</b></p>
+<p><b>            iov = SYSCALLS.get(),</b></p>
+<p><b>            iovcnt = SYSCALLS.get();</b></p>
+<p>        var ret = 0;</p>
+<p>        for (var i = 0; i &lt; iovcnt; i++) {</p>
+<p>           <b> var ptr = HEAP32[iov + i * 8 &gt;&gt; 2];</b></p>
+<p><b>            var len = HEAP32[iov + (i * 8 + 4) &gt;&gt; 2];</b></p>
+<p>            for (var j = 0; j &lt; <b>len</b>; j++) {</p>
+<p>                SYSCALLS.printChar(<b>stream</b>, HEAPU8[<b>ptr</b> + j])</p>
+<p>            }</p>
+<p>            ret += len</p>
+<p>        }</p>
+<p>        return ret</p>
+<p>    } catch (e) {</p>
+<p>        if (typeof FS === &quot;undefined&quot; || !(e instanceof FS.ErrnoError)) abort(e);</p>
+<p>        return -e.errno</p>
+<p>    }</p>
+<p>}</p>
+<p>var env = {</p>
+<p>    &quot;a&quot;: abort,</p>
+<p>    &quot;f&quot;: ___syscall140,</p>
+<p>    &quot;b&quot;: ___syscall146,</p>
+<p>    &quot;e&quot;: ___syscall54,</p>
+<p>    &quot;d&quot;: ___syscall6,</p>
+<p>    &quot;c&quot;: _emscripten_memcpy_big</p>
+<p>};</p>
+<p>...   </p>
+<p>            return WebAssembly.instantiate(wasmFile, {env});</p>
+<p>...</p>
+</body>
+</html>

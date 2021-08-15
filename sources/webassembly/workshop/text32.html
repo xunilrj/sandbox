@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slide 33</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000080" vlink="#0000CC" alink="#000080">
+<center>
+<a href="text0.html">First page</a> <a href="text31.html">Back</a> <a href="text33.html">Continue</a> <a href="text68.html">Last page</a> <a href="WASM.htm">Overview</a> <a href="img32.html">Image</a></center><br>
+<h1></h1>
+<p>WASM – Stack Machine</p>
+<p>(module</p>
+<p>  (type $0 (func (result i32)))</p>
+<p>  (func $main (type $0)</p>
+<p>    (i32.const 0)</p>
+<p>  )</p>
+<p>  (export &quot;main&quot; (func $main))</p>
+<p>)</p>
+<p>...</p>
+<p>; section &quot;Function&quot; (3)</p>
+<p>000000f: 03                                        ; section code</p>
+<p>0000010: 00                                        ; section size (guess)</p>
+<p>0000011: 01                                        ; num functions</p>
+<p>0000012: 00                                        ; function 0 signature index</p>
+<p>0000010: 02                                        ; FIXUP section size</p>
+<p>; section &quot;Export&quot; (7)</p>
+<p>0000013: 07                                        ; section code</p>
+<p>0000014: 00                                        ; section size (guess)</p>
+<p>0000015: 01                                        ; num exports</p>
+<p>0000016: 04                                        ; string length</p>
+<p>0000017: 6d61 696e                                main  ; export name</p>
+<p>000001b: 00                                        ; export kind</p>
+<p>000001c: 00                                        ; export func index</p>
+<p>0000014: 08                                        ; FIXUP section size</p>
+<p>; section &quot;Code&quot; (10)</p>
+<p>000001d: 0a                                        ; section code</p>
+<p>000001e: 00                                        ; section size (guess)</p>
+<p>000001f: 01                                        ; num functions</p>
+<p>; function body 0</p>
+<p>0000020: 00                                        ; func body size (guess)</p>
+<p>0000021: 00                                        ; local decl count</p>
+<p>0000022: 41                                        ; i32.const</p>
+<p>0000023: 00                                        ; i32 literal</p>
+<p>0000024: 0b                                        ; end</p>
+<p>0000020: 04                                        ; FIXUP func body size</p>
+<p>000001e: 06                                        ; FIXUP section size</p>
+<p>...</p>
+<p>5.</p>
+</body>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slide 68</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000080" vlink="#0000CC" alink="#000080">
+<center>
+<a href="text0.html">First page</a> <a href="text66.html">Back</a> <a href="text68.html">Continue</a> <a href="text68.html">Last page</a> <a href="WASM.htm">Overview</a> <a href="img67.html">Image</a></center><br>
+<h1></h1>
+<p>WASM - emscripten</p>
+<ul>
+<li>“I don’t believe it!”</li>
+</ul>
+<p>&gt; git clone <a href="https://github.com/dondido/zombie-breakout"><u><font color="#0000FF">https://github.com/dondido/zombie-breakout</u></font></a></p>
+<p><font color="#0000FF">&gt; cd zombie-breakout</font></p>
+<p><font color="#0000FF">&gt; make</font></p>
+<p><font color="#0000FF">gcc -c main.c -g -Wall -O3 -D_GNU_SOURCE=1 -D_REENTRANT -pedantic -lm -I/usr/include/SDL2  -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf</font></p>
+<p><font color="#0000FF"></font></p>
+<p><font color="#0000FF">gcc -o zombie-breakout main.o -g -Wall -O3 -D_GNU_SOURCE=1 -D_REENTRANT -pedantic -lm -I/usr/include/SDL2  -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf</font></p>
+<p><font color="#0000FF"></font></p>
+<p><font color="#0000FF">&gt; make emcc</font></p>
+<p><font color="#0000FF">emcc main.c -s USE_SDL=2 -s USE_SDL_TTF=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='[&quot;png&quot;]' -s USE_SDL_MIXER=2 -s WASM=1 --shell-file html_template/resize-with-aspect-ratio.html -s USE_OGG=1 -s USE_VORBIS=1 -o docs/index.html -O2 --preload-file assets</font></p>
+<p><font color="#0000FF"></font></p>
+<p>* with minor adjustments</p>
+<p>6.</p>
+</body>
+</html>

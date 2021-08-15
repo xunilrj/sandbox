@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slide 17</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000080" vlink="#0000CC" alink="#000080">
+<center>
+<a href="text0.html">First page</a> <a href="text15.html">Back</a> <a href="text17.html">Continue</a> <a href="text68.html">Last page</a> <a href="WASM.htm">Overview</a> <a href="img16.html">Image</a></center><br>
+<h1></h1>
+<p>WASM – Types</p>
+<p><font color="#EEEEEE">(module</font></p>
+<p><font color="#EEEEEE">   (type $0 (</font><font color="#2A6099">func </font><font color="#CE181E">(param i32) </font><font color="#00A933">(result i32)</font><font color="#EEEEEE">))</font></p>
+<p><font color="#EEEEEE">)</font></p>
+<p><font color="#EEEEEE">0000000: 0061 736d                                 ; WASM_BINARY_MAGIC</font></p>
+<p><font color="#EEEEEE">0000004: 0100 0000                                 ; WASM_BINARY_VERSION</font></p>
+<p><font color="#EEEEEE">; section &quot;Type&quot; (1)</font></p>
+<p><font color="#EEEEEE">0000008: 01                                        ; section code</font></p>
+<p><font color="#EEEEEE">0000009: 00                                        ; section size (guess)</font></p>
+<p><font color="#EEEEEE">000000a: 01                                        ; num types</font></p>
+<p><font color="#EEEEEE">; type 0</font></p>
+<p><font color="#2A6099">000000b: 60                                        ; func</font></p>
+<p><font color="#CE181E">000000c: 01                                        ; num params</font></p>
+<p><font color="#CE181E">000000d: 7f                                        ; i32</font></p>
+<p><font color="#00A933">000000e: 01                                        ; num results</font></p>
+<p><font color="#00A933">000000f: 7f                                        ; i32</font></p>
+<p><font color="#EEEEEE">0000009: 06                                        ; FIXUP section size</font></p>
+<p><font color="#EEEEEE">; section &quot;name&quot;</font></p>
+<p><font color="#EEEEEE">0000010: 00                                        ; section code</font></p>
+<p><font color="#EEEEEE">0000011: 00                                        ; section size (guess)</font></p>
+<p><font color="#EEEEEE">0000012: 04                                        ; string length</font></p>
+<p><font color="#EEEEEE">0000013: 6e61 6d65                                name  ; custom section name</font></p>
+<p><font color="#EEEEEE">0000017: 02                                        ; local name type</font></p>
+<p><font color="#EEEEEE">0000018: 00                                        ; subsection size (guess)</font></p>
+<p><font color="#EEEEEE">0000019: 00                                        ; num functions</font></p>
+<p><font color="#EEEEEE">0000018: 01                                        ; FIXUP subsection size</font></p>
+<p><font color="#EEEEEE">0000011: 08                                        ; FIXUP section size</font></p>
+<p><b><font color="#2A6099">Function types </b>classify the signature of functions, mapping </font><font color="#FF0000">a vector of parameters to a </font><font color="#00A933">vector of results.</font></p>
+<p><font color="#00A933">https://webassembly.github.io/spec/core/syntax/types.html#syntax-type</font></p>
+<p>4.</p>
+</body>
+</html>

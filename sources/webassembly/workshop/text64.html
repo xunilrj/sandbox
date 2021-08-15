@@ -1,0 +1,47 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slide 65</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000080" vlink="#0000CC" alink="#000080">
+<center>
+<a href="text0.html">First page</a> <a href="text63.html">Back</a> <a href="text65.html">Continue</a> <a href="text68.html">Last page</a> <a href="WASM.htm">Overview</a> <a href="img64.html">Image</a></center><br>
+<h1></h1>
+<p>WASM - emscripten</p>
+<ul>
+<li>and the WASM file.</li>
+</ul>
+<p><font color="#EEEEEE">(module</font></p>
+<p><font color="#EEEEEE">  (type (;0;) (func (param i32 i32 i32) (result i32)))</font></p>
+<p><font color="#EEEEEE">  (type (;1;) (func (param i32) (result i32)))</font></p>
+<p><font color="#EEEEEE">  (type (;2;) (func (param i32 i64 i32) (result i64)))</font></p>
+<p><font color="#EEEEEE">  (type (;3;) (func (param i32)))</font></p>
+<p><font color="#EEEEEE">  (type (;4;) (func (param i32 i32) (result i32)))</font></p>
+<p><font color="#EEEEEE">  (type (;5;) (func (result i32)))</font></p>
+<p><font color="#EEEEEE">  (type (;6;) (func))</font></p>
+<p><font color="#EEEEEE">  (import &quot;env&quot; &quot;a&quot; (func (;0;) (type 3)))</font></p>
+<p><b>  (import <font color="#CE181E">&quot;env&quot;</font> <font color="#00A933">&quot;b&quot;</font> (func (;1;) (type 4)))</b></p>
+<p><font color="#EEEEEE">  (import &quot;env&quot; &quot;c&quot; (func (;2;) (type 0)))</font></p>
+<p><font color="#EEEEEE">  (import &quot;env&quot; &quot;d&quot; (func (;3;) (type 4)))</font></p>
+<p><font color="#EEEEEE">  (import &quot;env&quot; &quot;e&quot; (func (;4;) (type 4)))</font></p>
+<p><font color="#EEEEEE">  (import &quot;env&quot; &quot;f&quot; (func (;5;) (type 4)))</font></p>
+<p><font color="#EEEEEE">...</font></p>
+<p><b>var <font color="#CE181E">env</font> = {</b></p>
+<p><font color="#EEEEEE">    &quot;a&quot;: abort,</font></p>
+<p><font color="#EEEEEE">    &quot;f&quot;: ___syscall140,</font></p>
+<p><b>    <font color="#00A933">&quot;b&quot;</font>: ___syscall146,</b></p>
+<p><font color="#EEEEEE">    &quot;e&quot;: ___syscall54,</font></p>
+<p><font color="#EEEEEE">    &quot;d&quot;: ___syscall6,</font></p>
+<p><font color="#EEEEEE">    &quot;c&quot;: _emscripten_memcpy_big</font></p>
+<p><b>};</b></p>
+<p><font color="#EEEEEE"></font></p>
+<p><font color="#EEEEEE"></font></p>
+<p><font color="#EEEEEE"></font></p>
+<p><font color="#EEEEEE">...   </font></p>
+<p><font color="#EEEEEE">            <b></font>return WebAssembly.instantiate(wasmFile, <font color="#CE181E">{env}</font>);</b></p>
+<p><font color="#EEEEEE">...</font></p>
+<p>6.</p>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slide 57</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000080" vlink="#0000CC" alink="#000080">
+<center>
+<a href="text0.html">First page</a> <a href="text55.html">Back</a> <a href="text57.html">Continue</a> <a href="text68.html">Last page</a> <a href="WASM.htm">Overview</a> <a href="img56.html">Image</a></center><br>
+<h1></h1>
+<ul>
+<li>Syscall</li>
+</ul>
+<p>global _start</p>
+<p>_start:</p>
+<p>    ; Write.</p>
+<p>    mov rax, 1                  		; use the write syscall</p>
+<p>    mov rdi, 1                  		; write to stdout</p>
+<p>    mov rsi, hello_world        	; use string at hello_world</p>
+<p>    mov rdx, hello_world_len    	; size = hello_world_len</p>
+<p>    syscall</p>
+<p>    ; Exit.</p>
+<p>    mov rax, 60                 		; use the _exit syscall</p>
+<p>    mov rdi, 0                  		; error code 0</p>
+<p>    syscall</p>
+<p>hello_world db &quot;hello world&quot;, 10</p>
+<p>hello_world_len equ $ - hello_world</p>
+<p>&gt; nasm -felf64 write.asm &amp;&amp;  ld write.o &amp;&amp; ./a.out</p>
+<p>hello world</p>
+<p>or</p>
+<p>https://rextester.com/l/nasm_online_compiler</p>
+<p>6.</p>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slide 58</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000080" vlink="#0000CC" alink="#000080">
+<center>
+<a href="text0.html">First page</a> <a href="text56.html">Back</a> <a href="text58.html">Continue</a> <a href="text68.html">Last page</a> <a href="WASM.htm">Overview</a> <a href="img57.html">Image</a></center><br>
+<h1></h1>
+<ul>
+<li>Syscall</li>
+</ul>
+<p><font color="#EEEEEE">global _start</font></p>
+<p><font color="#EEEEEE">_start:</font></p>
+<p><font color="#EEEEEE">    ; Write.</font></p>
+<p><font color="#EEEEEE">    </font>mov rax, 1                  		; use the write syscall</p>
+<p>    mov rdi, 1                  		; write to stdout</p>
+<p>    mov rsi, hello_world        	; pointer to hello_world</p>
+<p>    mov rdx, hello_world_len    	; size = hello_world_len</p>
+<p>    syscall</p>
+<p><font color="#EEEEEE"></font></p>
+<p><font color="#EEEEEE">    ; Exit.</font></p>
+<p><font color="#EEEEEE">    mov rax, 60                 		; use the _exit syscall</font></p>
+<p><font color="#EEEEEE">    mov rdi, 0                  		; error code 0</font></p>
+<p><font color="#EEEEEE">    syscall</font></p>
+<p><font color="#EEEEEE"></font></p>
+<p><font color="#EEEEEE">hello_world db &quot;hello world&quot;, 10</font></p>
+<p><font color="#EEEEEE">hello_world_len equ $ - hello_world</font></p>
+<p><font color="#EEEEEE">&gt; nasm -felf64 write.asm &amp;&amp;  ld write.o &amp;&amp; ./a.out</font></p>
+<p><font color="#EEEEEE">hello world</font></p>
+<p><font color="#EEEEEE">or</font></p>
+<p><font color="#EEEEEE">https://rextester.com/l/nasm_online_compiler</font></p>
+<p>6.</p>
+</body>
+</html>

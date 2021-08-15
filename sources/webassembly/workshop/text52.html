@@ -1,0 +1,27 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slide 53</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000080" vlink="#0000CC" alink="#000080">
+<center>
+<a href="text0.html">First page</a> <a href="text51.html">Back</a> <a href="text53.html">Continue</a> <a href="text68.html">Last page</a> <a href="WASM.htm">Overview</a> <a href="img52.html">Image</a></center><br>
+<h1></h1>
+<p>WASM – emscripten</p>
+<ul>
+<li><font color="#EEEEEE">Emscripten is an <b>LLVM compiler</b>. It takes LLVM bitcode - which can be generated from C/C++, using llvm-gcc (DragonEgg) or clang, or any other language that can be converted into LLVM - and compiles that into JavaScript, which can be run on the web (or anywhere else JavaScript can run).</font></li>
+<li><font color="#EEEEEE">https://github.com/emscripten-core/emscripten</font></li>
+</ul>
+<p>6.</p>
+<p><font color="#EEEEEE">#include &lt;stdio.h&gt;</font></p>
+<p><font color="#EEEEEE"></font></p>
+<p><font color="#EEEEEE">int main()</font></p>
+<p><font color="#EEEEEE">{</font></p>
+<p><font color="#EEEEEE">    printf(&quot;hello world!\n&quot;);</font></p>
+<p><font color="#EEEEEE">    return 0;</font></p>
+<p><font color="#EEEEEE">}</font></p>
+<p><font color="#EEEEEE">&gt; emcc em.main.cpp -o em.main.html</font></p>
+</body>
+</html>

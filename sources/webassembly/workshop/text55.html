@@ -1,0 +1,61 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slide 56</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000080" vlink="#0000CC" alink="#000080">
+<center>
+<a href="text0.html">First page</a> <a href="text54.html">Back</a> <a href="text56.html">Continue</a> <a href="text68.html">Last page</a> <a href="WASM.htm">Overview</a> <a href="img55.html">Image</a></center><br>
+<h1></h1>
+<p><font color="#EEEEEE">WASM – emscripten</font></p>
+<ul>
+<li><font color="#EEEEEE">OK… but what smscripten brings to the table?</font></li>
+<ul>
+<li><font color="#EEEEEE">Runtime!</font></li>
+</ul>
+<li><font color="#EEEEEE">How printf actually works?</font></li>
+</ul>
+<p><a href="http://osteras.info/personal/2013/10/11/hello-world-analysis.html"><u><font color="#0000FF">http://osteras.info/personal/2013/10/11/hello-world-analysis.html</u></font></a></p>
+<p><font color="#0000FF"></font></p>
+<p><font color="#0000FF">C runtime (ucrt.dll (windows) or libc.so (linux) )</font></p>
+<p><font color="#0000FF"></font></p>
+<p><font color="#0000FF"></font></p>
+<p><a href="https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/stdio-common/vprintf.c#L30"><u><font color="#0000FF">https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/stdio-common/vprintf.c#L30</u></font></a></p>
+<p><a href="https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/stdio-common/vfprintf.c#L81"><u><font color="#0000FF">https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/stdio-common/vfprintf.c#L81</u></font></a></p>
+<p><a href="https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/stdio-common/vfprintf.c#L81"><u><font color="#0000FF">https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/stdio-common/vfprintf.c#L81</u></font></a></p>
+<p><a href="https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/stdio-common/vfprintf.c#L95"><u><font color="#0000FF">https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/stdio-common/vfprintf.c#L95</u></font></a></p>
+<p><a href="https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/libio/iopadn.c#L36"><u><font color="#0000FF">https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/libio/iopadn.c#L36</u></font></a></p>
+<p><a href="https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/libio/libioP.h#L374"><u><font color="#0000FF">https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/libio/libioP.h#L374</u></font></a></p>
+<p><a href="https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/libio/libioP.h#L171"><u><font color="#0000FF">https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/libio/libioP.h#L171</u></font></a></p>
+<p><a href="https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/libio/fileops.c#L1262"><u><font color="#0000FF">https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/libio/fileops.c#L1262</u></font></a></p>
+<p><a href="https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/stdio-common/printf.c#L33"><u><font color="#0000FF">https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/stdio-common/printf.c#L33</u></font></a></p>
+<p><a href="https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/libio/fileops.c#L456"><u><font color="#0000FF">https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/libio/fileops.c#L456</u></font></a></p>
+<p><a href="https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/libio/libioP.h#L244"><u><font color="#0000FF">https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/libio/libioP.h#L244</u></font></a></p>
+<p><a href="https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/libio/fileops.c#L1185"><u><font color="#0000FF">https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/libio/fileops.c#L1185</u></font></a></p>
+<p><font color="#0000FF"></font></p>
+<p><font color="#0000FF">Call syscall</font></p>
+<p><font color="#0000FF"></font></p>
+<p><a href="https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/sysdeps/unix/sysv/linux/write.c#L26"><u><font color="#0000FF">https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/sysdeps/unix/sysv/linux/write.c#L26</u></font></a></p>
+<p><a href="https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/sysdeps/unix/syscalls.list#L99"><u><font color="#0000FF">https://github.com/lattera/glibc/blob/895ef79e04a953cac1493863bcae29ad85657ee1/sysdeps/unix/syscalls.list#L99</u></font></a></p>
+<p><font color="#0000FF"></font></p>
+<p><font color="#0000FF">Kernel code</font></p>
+<p><font color="#0000FF"></font></p>
+<p><a href="https://github.com/torvalds/linux/blob/2f4c53349961c8ca480193e47da4d44fdb8335a8/fs/read_write.c#L620"><u><font color="#0000FF">https://github.com/torvalds/linux/blob/2f4c53349961c8ca480193e47da4d44fdb8335a8/fs/read_write.c#L620</u></font></a></p>
+<p><a href="https://github.com/torvalds/linux/blob/2f4c53349961c8ca480193e47da4d44fdb8335a8/fs/read_write.c#L600"><u><font color="#0000FF">https://github.com/torvalds/linux/blob/2f4c53349961c8ca480193e47da4d44fdb8335a8/fs/read_write.c#L600</u></font></a></p>
+<p><font color="#0000FF">https://github.com/torvalds/linux/blob/2f4c53349961c8ca480193e47da4d44fdb8335a8/fs/read_write.c#L494</font></p>
+<p><font color="#0000FF"></font></p>
+<p><font color="#0000FF"></font></p>
+<p><font color="#0000FF"></font></p>
+<p><font color="#0000FF"></font></p>
+<p><font color="#0000FF"></font></p>
+<p><font color="#0000FF"></font></p>
+<p><font color="#0000FF"></font></p>
+<p><font color="#0000FF"></font></p>
+<p><font color="#0000FF"></font></p>
+<p><font color="#0000FF"></font></p>
+<p><font color="#0000FF"></font></p>
+<p>6.</p>
+</body>
+</html>

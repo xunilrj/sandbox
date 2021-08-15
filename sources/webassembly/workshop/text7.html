@@ -1,0 +1,22 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slide 8</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000080" vlink="#0000CC" alink="#000080">
+<center>
+<a href="text0.html">First page</a> <a href="text6.html">Back</a> <a href="text8.html">Continue</a> <a href="text68.html">Last page</a> <a href="WASM.htm">Overview</a> <a href="img7.html">Image</a></center><br>
+<h1></h1>
+<p>WASM - Streamable/Parallelizable</p>
+<ul>
+<li>Streaming compilation: start compiling earlier</li>
+<li>If you give WebAssembly.instantiateStreaming a response object, <b>the chunks will go right into the WebAssembly engine as soon as they arrive</b>. Then <b>the compiler can start working on the first chunk while the next one is still being downloaded</b>.</li>
+<li>Parallelize: make it all even faster</li>
+<li>The unit of parallelization is the function. <b>Each function can be compiled independently, on a different core.</b> This is so fine-grained, in fact, that we actually need to batch these functions up into larger groups of functions. These batches get sent to different cores.</li>
+<li>https://hacks.mozilla.org/2018/01/making-webassembly-even-faster-firefoxs-new-streaming-and-tiering-compiler/</li>
+</ul>
+<p>3.</p>
+</body>
+</html>

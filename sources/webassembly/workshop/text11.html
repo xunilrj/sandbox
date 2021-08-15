@@ -1,0 +1,35 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slide 12</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000080" vlink="#0000CC" alink="#000080">
+<center>
+<a href="text0.html">First page</a> <a href="text10.html">Back</a> <a href="text12.html">Continue</a> <a href="text68.html">Last page</a> <a href="WASM.htm">Overview</a> <a href="img11.html">Image</a></center><br>
+<h1></h1>
+<p>WASM – Module</p>
+<p><font color="#CE181E">(</font><font color="#2A6099">module</font><font color="#00A933">)</font></p>
+<p><font color="#00A933"></font></p>
+<p><font color="#EEEEEE">0000000: 0061 736d                                 ; WASM_BINARY_MAGIC</font></p>
+<p><font color="#EEEEEE">0000004: 0100 0000                                 ; WASM_BINARY_VERSION</font></p>
+<p><font color="#EEEEEE">; section &quot;name&quot;</font></p>
+<p><font color="#EEEEEE">0000008: 00                                        ; section code</font></p>
+<p><font color="#EEEEEE">0000009: 00                                        ; section size (guess)</font></p>
+<p><font color="#EEEEEE">000000a: 04                                        ; string length</font></p>
+<p><font color="#EEEEEE">000000b: 6e61 6d65                                name  ; custom section name</font></p>
+<p><font color="#EEEEEE">000000f: 02                                        ; local name type</font></p>
+<p><font color="#EEEEEE">0000010: 00                                        ; subsection size (guess)</font></p>
+<p><font color="#EEEEEE">0000011: 00                                        ; num functions</font></p>
+<p><font color="#EEEEEE">0000010: 01                                        ; FIXUP subsection size</font></p>
+<p><font color="#EEEEEE">0000009: 08                                        ; FIXUP section size</font></p>
+<p><b>Modules</b></p>
+<p>WebAssembly programs are organized into modules, which are the unit of deployment, loading, and compilation.  A module collects definitions for <font color="#81D41A">types, </font><font color="#ACB20C">functions, </font><font color="#8D281E">tables, </font><font color="#3465A4">memories, and </font><font color="#BF819E">globals. </font></p>
+<p><font color="#BF819E">https://webassembly.github.io/spec/core/syntax/modules.html</font></p>
+<p>Module =<font color="#FF0000">‘(’ </font><font color="#2A6099">‘module’ </font><font color="#CCCCCC"> id?  (m:fields)∗ </font><font color="#00A933">‘)’ </font></p>
+<p><font color="#00A933"></font></p>
+<p><font color="#00A933">https://webassembly.github.io/spec/core/text/modules.html</font></p>
+<p>4.</p>
+</body>
+</html>

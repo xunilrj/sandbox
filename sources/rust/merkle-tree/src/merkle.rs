@@ -1,4 +1,4 @@
-use sha2::{digest::generic_array::typenum::private::PrivateDivIntOut, Digest};
+use sha2::Digest;
 
 pub struct MerkleTreeBuilder {
     nodes: Vec<MerkleNode>,

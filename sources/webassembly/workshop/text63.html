@@ -1,0 +1,54 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slide 64</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000080" vlink="#0000CC" alink="#000080">
+<center>
+<a href="text0.html">First page</a> <a href="text62.html">Back</a> <a href="text64.html">Continue</a> <a href="text68.html">Last page</a> <a href="WASM.htm">Overview</a> <a href="img63.html">Image</a></center><br>
+<h1></h1>
+<p>WASM – emscripten</p>
+<p>6.</p>
+<p><font color="#EEEEEE">The interesting part is the .js file.</font></p>
+<p><font color="#EEEEEE">function <b>___syscall146</b>(which, varargs) {</font></p>
+<p><font color="#EEEEEE">    SYSCALLS.varargs = varargs;</font></p>
+<p><font color="#EEEEEE">    try {</font></p>
+<p><font color="#EEEEEE">        <b>var stream = SYSCALLS.get(),</b></font></p>
+<p><b><font color="#EEEEEE">            iov = SYSCALLS.get(),</b></font></p>
+<p><b><font color="#EEEEEE">            iovcnt = SYSCALLS.get();</b></font></p>
+<p><font color="#EEEEEE">        var ret = 0;</font></p>
+<p><font color="#EEEEEE">        for (var i = 0; i &lt; iovcnt; i++) {</font></p>
+<p><font color="#EEEEEE">           <b> var ptr = HEAP32[iov + i * 8 &gt;&gt; 2];</b></font></p>
+<p><b><font color="#EEEEEE">            var len = HEAP32[iov + (i * 8 + 4) &gt;&gt; 2];</b></font></p>
+<p><font color="#EEEEEE">            for (var j = 0; j &lt; <b>len</b>; j++) {</font></p>
+<p><font color="#EEEEEE">                SYSCALLS.printChar(<b>stream</b>, HEAPU8[<b>ptr</b> + j])</font></p>
+<p><font color="#EEEEEE">            }</font></p>
+<p><font color="#EEEEEE">            ret += len</font></p>
+<p><font color="#EEEEEE">        }</font></p>
+<p><font color="#EEEEEE">        return ret</font></p>
+<p><font color="#EEEEEE">    } catch (e) {</font></p>
+<p><font color="#EEEEEE">        if (typeof FS === &quot;undefined&quot; || !(e instanceof FS.ErrnoError)) abort(e);</font></p>
+<p><font color="#EEEEEE">        return -e.errno</font></p>
+<p><font color="#EEEEEE">    }</font></p>
+<p><font color="#EEEEEE">}</font></p>
+<p><b>var env = {</b></p>
+<p><font color="#EEEEEE">    &quot;a&quot;: abort,</font></p>
+<p><font color="#EEEEEE">    &quot;f&quot;: ___syscall140,</font></p>
+<p><b>    &quot;b&quot;: ___syscall146,</b></p>
+<p><font color="#EEEEEE">    &quot;e&quot;: ___syscall54,</font></p>
+<p><font color="#EEEEEE">    &quot;d&quot;: ___syscall6,</font></p>
+<p><font color="#EEEEEE">    &quot;c&quot;: _emscripten_memcpy_big</font></p>
+<p><b>};</b></p>
+<p><font color="#EEEEEE"></font></p>
+<p><font color="#EEEEEE"></font></p>
+<p><font color="#EEEEEE"></font></p>
+<p><font color="#EEEEEE">...   </font></p>
+<p><font color="#EEEEEE">            <b></font>return WebAssembly.instantiate(wasmFile, <font color="#CE181E">{env}</font>);</b></p>
+<p><font color="#EEEEEE">...</font></p>
+<p>WASM Imports!</p>
+<p>Allow wasm code to call external </p>
+<p>functions</p>
+</body>
+</html>

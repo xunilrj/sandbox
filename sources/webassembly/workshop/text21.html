@@ -1,0 +1,53 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+     "http://www.w3.org/TR/html4/transitional.dtd">
+<html>
+<head>
+  <meta HTTP-EQUIV=CONTENT-TYPE CONTENT="text/html; charset=utf-8">
+  <title>Slide 22</title>
+</head>
+<body text="#000000" bgcolor="#FFFFFF" link="#000080" vlink="#0000CC" alink="#000080">
+<center>
+<a href="text0.html">First page</a> <a href="text20.html">Back</a> <a href="text22.html">Continue</a> <a href="text68.html">Last page</a> <a href="WASM.htm">Overview</a> <a href="img21.html">Image</a></center><br>
+<h1></h1>
+<p>WASM – Funcs</p>
+<p><font color="#EEEEEE">(module</font></p>
+<p><font color="#EEEEEE">  (type $0 (func (result i32)))</font></p>
+<p><font color="#EEEEEE">  </font><font color="#ACB20C">(</font><font color="#800080">func </font><font color="#CE181E">$main</font> <font color="#00A933">(type $0)</font></p>
+<p>    <font color="#2A6099">(i32.const 0)</font></p>
+<p>  <font color="#FF972F">)</font></p>
+<p><font color="#EEEEEE">)</font></p>
+<p><font color="#EEEEEE">...</font></p>
+<p><font color="#EEEEEE">; type 0</font></p>
+<p><font color="#EEEEEE">000000b: 60                                        ; func</font></p>
+<p><font color="#EEEEEE">000000c: 00                                        ; num params</font></p>
+<p><font color="#EEEEEE">000000d: 01                                        ; num results</font></p>
+<p><font color="#EEEEEE">000000e: 7f                                        ; i32</font></p>
+<p><font color="#EEEEEE">0000009: 05                                        ; FIXUP section size</font></p>
+<p>; section &quot;Function&quot; (3)</p>
+<p>000000f: 03                                        ; section code</p>
+<p>0000010: 00                                        ; section size (guess)</p>
+<p>0000011: 01                                        ; num functions</p>
+<p><font color="#00A933">0000012: 00                                        ; function 0 signature index</font></p>
+<p>0000010: 02                                        ; FIXUP section size</p>
+<p>; section &quot;Code&quot; (10)</p>
+<p>0000013: 0a                                        ; section code</p>
+<p>0000014: 00                                        ; section size (guess)</p>
+<p>0000015: 01                                        ; num functions</p>
+<p>; function body 0</p>
+<p>0000016: 00                                        ; func body size (guess)</p>
+<p><font color="#B2B2B2">0000017: 00                                        ; local decl count</font></p>
+<p><font color="#2A6099">0000018: 41                                        ; i32.const</font></p>
+<p><font color="#2A6099">0000019: 00                                        ; i32 literal</font></p>
+<p><font color="#2A6099">000001a: 0b                                        ; end</font></p>
+<p>0000016: 04                                        ; FIXUP func body size</p>
+<p>0000014: 06                                        ; FIXUP section size</p>
+<p><font color="#EEEEEE">...</font></p>
+<p><font color="#EEEEEE"></font></p>
+<p>Function definitions can bind a symbolic <font color="#CE181E">function identifier, and local identifiers for its parameters and locals.</font></p>
+<p><font color="#CE181E"></font></p>
+<p><font color="#CE181E">Func = </font><font color="#ACB20C">‘(’ </font><font color="#800080">‘func’  </font><font color="#FF0000">id?  </font><font color="#00A933">type </font><font color="#CCCCCC">(t:local)∗  </font><font color="#2A6099">(instruction)∗ </font><font color="#FF972F">‘)’</font></p>
+<p><font color="#FF972F"></font></p>
+<p><font color="#FF972F">https://webassembly.github.io/spec/core/text/modules.html#functions</font></p>
+<p>4.</p>
+</body>
+</html>
