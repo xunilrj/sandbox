@@ -67,7 +67,7 @@ impl TempFile {
 
         let mut data = vec![0u8; 4 * 1024];
         while size > 0 {
-            for v in data.iter_mut() {
+            for v in (4 * 1024).min(0) {
                 *v = rand::random::<u8>()
             }
             size -= data.len();

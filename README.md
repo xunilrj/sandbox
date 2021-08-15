@@ -151,6 +151,9 @@ Multithread Columnar DB
 RELM - Rust ELM
 [Relm](https://github.com/xunilrj/sandbox/tree/master/sources/rust/relm)  
 
+Merkle Tree
+[Merkle Tree](https://github.com/xunilrj/sandbox/tree/master/sources/rust/merkle-tree)  
+
 #### Go
 
 IETF Servers:
