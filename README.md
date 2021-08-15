@@ -128,7 +128,7 @@
 
 [C++ Coroutines (even for WebAssembly)](sources/cpp/coroutines/)  
 
-[WASM presentation](https://xunilrj.github.io/articles/dev/wasm001/WASM.htm)  
+[WASM presentation](https://github.com/xunilrj/sandbox/blob/master/sources/webassembly/workshop/Readme.md)  
 [WASM presentation - PT/BR](https://www.youtube.com/watch?v=YYeqRMqn774)
 
 #### Rust
