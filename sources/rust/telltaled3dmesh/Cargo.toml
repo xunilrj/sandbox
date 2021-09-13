@@ -1,0 +1,14 @@
+[package]
+name = "telltaled3dmesh"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+structopt = "0.3.23"
+nom = "7.0.0"
+obj-exporter = "0.2.0"
+flate2 = "1.0.21"
+compress = "0.2.1"
+lz4-compression = "0.7.0"
+json = "*"
+base64 = "0.13.0"
