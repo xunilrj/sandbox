@@ -1,10 +1,6 @@
 use crate::indexbuffer;
 use json::JsonValue;
-use std::{
-    io::{Read, Write},
-    path::PathBuf,
-    str::FromStr,
-};
+use std::io::Read;
 
 #[inline(always)]
 fn parse_n_bytes(input: &[u8], n: usize) -> nom::IResult<&[u8], &[u8]> {
@@ -44,6 +40,7 @@ fn parse_length_string(input: &[u8]) -> nom::IResult<&[u8], &str> {
 }
 
 #[inline(always)]
+#[allow(dead_code)]
 fn parse_string(input: &[u8], size: usize) -> nom::IResult<&[u8], &str> {
     let (input, data) = nom::bytes::complete::take(size)(input)?;
     let s = std::str::from_utf8(data).unwrap();
@@ -51,11 +48,13 @@ fn parse_string(input: &[u8], size: usize) -> nom::IResult<&[u8], &str> {
 }
 
 #[inline(always)]
+#[allow(dead_code)]
 fn parse_u8_slice(input: &[u8], size: usize) -> nom::IResult<&[u8], &[u8]> {
     let (input, data) = nom::bytes::complete::take(size)(input)?;
     Ok((input, data))
 }
 
+#[allow(dead_code)]
 fn whats_next(input: &[u8]) {
     println!("Options:");
     println!(
@@ -84,6 +83,7 @@ fn whats_next(input: &[u8]) {
     );
 }
 
+#[allow(dead_code)]
 fn find_str(input: &[u8], size: usize) {
     println!("Trying to find a str:");
     for i in 0..128 {
@@ -96,6 +96,7 @@ fn find_str(input: &[u8], size: usize) {
     }
 }
 
+#[allow(dead_code)]
 fn find_u16(input: &[u8]) {
     println!("Trying to find a u16:");
     for i in 0..128 {
@@ -108,6 +109,7 @@ fn find_u16(input: &[u8]) {
     }
 }
 
+#[allow(dead_code)]
 fn find_u32(input: &[u8]) {
     println!("Trying to find a u32:");
     for i in 0..128 {
@@ -120,6 +122,7 @@ fn find_u32(input: &[u8]) {
     }
 }
 
+#[allow(dead_code)]
 fn find_f32(input: &[u8]) {
     println!("Trying to find a f32:");
     for i in 0..128 {
@@ -132,6 +135,7 @@ fn find_f32(input: &[u8]) {
     }
 }
 
+#[allow(dead_code)]
 fn find_f32_min_max(input: &[u8], min: f32, max: f32) {
     println!("Trying to find a f32:");
     for i in 0..128 {
@@ -157,10 +161,12 @@ fn find_f32_min_max(input: &[u8], min: f32, max: f32) {
 }
 
 #[derive(Debug)]
+#[allow(dead_code)]
 pub enum ParseD3dMeshError {
     Unkown,
 }
 
+#[allow(dead_code)]
 fn parse_map(i: &[u8]) -> nom::IResult<&[u8], &str> {
     let (i, header_length) = parse_le_u32(i)?;
     let (i, _) = parse_n_bytes(i, header_length as usize).unwrap();
@@ -176,6 +182,7 @@ fn parse_map(i: &[u8]) -> nom::IResult<&[u8], &str> {
     Ok((i, name))
 }
 
+#[allow(dead_code)]
 fn println_f32(value: f32) {
     println!("{:?}: {:X?}", value, value.to_le_bytes());
 }
@@ -264,6 +271,7 @@ impl<'a> NomSlice<'a> {
     }
 
     #[inline(always)]
+    #[allow(dead_code)]
     pub fn parse_u16_slice(&mut self, n: usize) -> &[u16] {
         let bytes_size = std::mem::size_of::<u16>() * n;
         let (i, data) = parse_n_bytes(self.slice, bytes_size).unwrap();
@@ -288,10 +296,10 @@ pub enum D3DBufferData {
 }
 
 pub struct D3DBuffer {
-    r#type: String,
-    qty: u32,
-    stride: u32,
-    data: D3DBufferData,
+    pub r#type: String,
+    pub qty: u32,
+    pub stride: u32,
+    pub data: D3DBufferData,
 }
 
 impl D3DBuffer {
@@ -308,22 +316,88 @@ impl D3DBuffer {
             _ => panic!(),
         }
     }
+
+    pub fn as_bytes(&self) -> &[u8] {
+        match &self.data {
+            D3DBufferData::U16(v) => unsafe {
+                std::slice::from_raw_parts(v.as_ptr() as *const u8, v.len() / 2)
+            },
+            D3DBufferData::F32(v) => unsafe {
+                std::slice::from_raw_parts(v.as_ptr() as *const u8, v.len() / 4)
+            },
+        }
+    }
+
+    pub fn to_json_number(&self) -> Vec<JsonValue> {
+        match &self.data {
+            D3DBufferData::U16(v) => {
+                let mut n = vec![];
+                for v in v {
+                    let number = json::number::Number::from(*v);
+                    n.push(JsonValue::Number(number));
+                }
+                n
+            }
+            D3DBufferData::F32(v) => {
+                let mut n = vec![];
+                for v in v {
+                    let number = json::number::Number::from(*v);
+                    n.push(JsonValue::Number(number));
+                }
+                n
+            }
+        }
+    }
+}
+
+#[derive(Default)]
+pub struct D3DBoundingBox {
+    pub minx: f32,
+    pub miny: f32,
+    pub minz: f32,
+    pub maxx: f32,
+    pub maxy: f32,
+    pub maxz: f32,
+}
+
+pub struct D3DMap {
+    pub r#type: String,
+    pub name: String,
 }
 
 pub struct D3DMesh {
-    buffers: Vec<D3DBuffer>,
+    pub bbox: D3DBoundingBox,
+    pub maps: Vec<D3DMap>,
 }
 
 impl D3DMesh {
     pub fn new() -> Self {
-        Self { buffers: vec![] }
+        Self {
+            bbox: D3DBoundingBox::default(),
+            maps: Vec::with_capacity(16),
+        }
     }
 }
 
-fn parse_d3dmesh_buffer(
-    input: &mut NomSlice,
-    buffer_as_base64: bool,
-) -> (D3DBuffer, json::JsonValue) {
+pub struct D3DFile {
+    pub name: String,
+    pub bbox: D3DBoundingBox,
+    pub meshes: Vec<D3DMesh>,
+    pub buffers: Vec<D3DBuffer>,
+}
+
+impl D3DFile {
+    pub fn new() -> Self {
+        Self {
+            name: "".to_string(),
+            meshes: Vec::with_capacity(10),
+            buffers: Vec::with_capacity(10),
+            bbox: D3DBoundingBox::default(),
+        }
+    }
+}
+
+fn parse_d3dmesh_buffer(input: &mut NomSlice) -> D3DBuffer {
     input.qty = 0;
 
     let qty = input.parse_le_u32();
@@ -337,39 +411,24 @@ fn parse_d3dmesh_buffer(
         2 => "normal".to_string(),
         _ => format!("{}", t),
     };
-    (
-        D3DBuffer {
-            r#type: t.clone(),
-            qty,
-            stride,
-            data: D3DBufferData::F32(data.to_vec()),
-        },
-        json::object! {
-            type: t,
-            qty: qty,
-            stride: stride,
-            data: if buffer_as_base64 {
-                let data =
-                    unsafe { std::slice::from_raw_parts(data.as_ptr() as *const u8, data.len() * 4) };
-                JsonValue::String(base64::encode(data))
-            } else {
-                let data: Vec<_> = data
-                    .iter()
-                    .map(|x| JsonValue::Number(json::number::Number::from(*x)))
-                    .collect();
-                JsonValue::Array(data)
-            }
-        },
-    )
+    D3DBuffer {
+        r#type: t.clone(),
+        qty,
+        stride,
+        data: D3DBufferData::F32(data.to_vec()),
+    }
 }
 
-pub fn parse_d3dmesh<S: AsRef<str>>(
+pub fn parse_d3dfile<S: AsRef<str>>(
     path: S,
     output: Option<String>,
     pretty_print: bool,
     buffer_as_base64: bool,
 ) -> std::result::Result<(), ParseD3dMeshError> {
-    let mut json = json::object! {};
+    let mut bar = progress::Bar::new();
+    bar.set_job_title("Parsing...");
+
+    let mut d3dfile = D3DFile::new();
 
     let mut f = std::fs::File::open(path.as_ref()).unwrap();
     let bytes = {
@@ -396,7 +455,7 @@ pub fn parse_d3dmesh<S: AsRef<str>>(
     let _header_len = input.parse_le_u32();
     let d3d_name = input.parse_length_string();
 
-    json["name"] = JsonValue::String(d3d_name.to_string());
+    d3dfile.name = d3d_name.to_string();
 
     let _ = input.parse_length_string();
 
@@ -406,7 +465,7 @@ pub fn parse_d3dmesh<S: AsRef<str>>(
     let maxx = input.parse_le_f32();
     let maxy = input.parse_le_f32();
     let maxz = input.parse_le_f32();
-    json["bbox"] = json::object! {
+    d3dfile.bbox = D3DBoundingBox {
         minx: minx,
         miny: miny,
         minz: minz,
@@ -415,13 +474,12 @@ pub fn parse_d3dmesh<S: AsRef<str>>(
         maxz: maxz,
     };
 
-    json["meshes"] = JsonValue::Array(vec![]);
-
     let _header_size = input.parse_le_u32();
     let qty_meshes = input.parse_le_u32();
 
     for _ in 0..qty_meshes {
-        let mut mesh = json::object! {};
+        bar.reach_percent(25);
+        let mut mesh = D3DMesh::new();
 
         input.qty = 0;
 
@@ -446,13 +504,13 @@ pub fn parse_d3dmesh<S: AsRef<str>>(
         let maxx = input.parse_le_f32();
         let maxy = input.parse_le_f32();
         let maxz = input.parse_le_f32();
-        mesh["bbox"] = json::object! {
-            minx: minx,
-            miny: miny,
-            minz: minz,
-            maxx: maxx,
-            maxy: maxy,
-            maxz: maxz,
+        mesh.bbox = D3DBoundingBox {
+            minx,
+            miny,
+            minz,
+            maxx,
+            maxy,
+            maxz,
         };
 
         let _ = input.parse_le_u32();
@@ -461,13 +519,11 @@ pub fn parse_d3dmesh<S: AsRef<str>>(
         let _ = input.parse_le_u32();
         let _ = input.parse_le_u32();
 
-        mesh["maps"] = JsonValue::Array(vec![]);
-
         let _ = input.parse_le_u32();
         let name = input.parse_length_string();
-        let _ = mesh["maps"].push(json::object! {
-            type: "diffuse",
-            name: name
+        mesh.maps.push(D3DMap {
+            r#type: "diffuse".to_string(),
+            name: name.to_string(),
         });
 
         let _ = input.parse_le_u32();
@@ -542,7 +598,7 @@ pub fn parse_d3dmesh<S: AsRef<str>>(
         let _ = input.parse_length_string();
         let _ = input.parse_length_string();
 
-        let _ = json["meshes"].push(mesh);
+        d3dfile.meshes.push(mesh);
     }
 
     let _ = input.parse_le_u32();
@@ -593,12 +649,14 @@ pub fn parse_d3dmesh<S: AsRef<str>>(
 
     let _ = input.parse_n_bytes(1);
 
+    // Buffers
+
+    bar.reach_percent(50);
+
     let _ = input.parse_le_u32();
     let qty_indices = input.parse_le_u32();
     let a = input.parse_le_u32(); //              ESP+18
     let first_index = input.parse_le_u16(); // first index? ESP+14
-
-    json["buffers"] = JsonValue::Array(vec![]);
 
     let buffer_size = input.parse_le_u32();
     let index_buffer: Vec<_> = input
@@ -626,26 +684,7 @@ pub fn parse_d3dmesh<S: AsRef<str>>(
         std::slice::from_raw_parts(index_buffer.as_ptr() as *const u16, qty_indices as usize)
     };
 
-    let index_buffer_json = if buffer_as_base64 {
-        let bytes = unsafe {
-            std::slice::from_raw_parts(index_buffer.as_ptr() as *const u8, index_buffer.len() * 2)
-        };
-        JsonValue::String(base64::encode(bytes))
-    } else {
-        let index_buffer: Vec<_> = index_buffer
-            .iter()
-            .map(|x| JsonValue::Number(json::number::Number::from(*x)))
-            .collect();
-        JsonValue::Array(index_buffer)
-    };
-    let _ = json["buffers"].push(json::object! {
-        type: "index",
-        qty: qty_indices,
-        data: index_buffer_json
-    });
-
-    let mut mesh = D3DMesh::new();
-    mesh.buffers.push(D3DBuffer {
+    d3dfile.buffers.push(D3DBuffer {
         r#type: "index".to_string(),
         qty: qty_indices,
         stride: 2,
@@ -653,73 +692,27 @@ pub fn parse_d3dmesh<S: AsRef<str>>(
     });
 
     while input.slice.len() != 0 {
-        let (buffer, buffer_json) = parse_d3dmesh_buffer(&mut input, buffer_as_base64);
-        mesh.buffers.push(buffer);
-        let _ = json["buffers"].push(buffer_json);
+        bar.reach_percent(75);
+        let buffer = parse_d3dmesh_buffer(&mut input);
+        d3dfile.buffers.push(buffer);
     }
 
+    bar.reach_percent(100);
+    println!("");
+    let mut bar = progress::Bar::new();
+    bar.set_job_title("Saving...");
     match output {
-        Some(output) => save_to(mesh, json, output, pretty_print),
+        Some(output) => crate::outputs::save_to(&d3dfile, output, buffer_as_base64, pretty_print),
         None => {
-            if !pretty_print {
-                println!("{}", json);
-            } else {
-                println!("{}", json.pretty(4));
-            }
+            todo!("print to stdout")
+            // if !pretty_print {
+            //     println!("{}", json);
+            // } else {
+            //     println!("{}", json.pretty(4));
+            // }
         }
     }
+    bar.reach_percent(100);
 
     Ok(())
-}
-
-fn save_to(mesh: D3DMesh, json: JsonValue, output: String, pretty_print: bool) {
-    let path = PathBuf::from_str(output.as_str()).unwrap();
-    let ext = path.extension().unwrap();
-    if ext == "json" {
-        let json = if !pretty_print {
-            format!("{}", json)
-        } else {
-            format!("{}", json.pretty(4))
-        };
-        let _ = std::fs::write(path, json);
-    } else if ext == "obj" {
-        save_to_obj(mesh, path);
-    } else {
-        todo!();
-    }
-}
-
-#[inline(always)]
-fn obj_v(f: &mut std::fs::File, x: f32, y: f32, z: f32) {
-    let _ = write!(f, "v {} {} {}\n", x, y, z);
-}
-
-#[inline(always)]
-fn obj_f(f: &mut std::fs::File, a: u16, b: u16, c: u16) {
-    let _ = write!(f, "f {} {} {}\n", a, b, c);
-}
-
-fn save_to_obj(mesh: D3DMesh, path: PathBuf) {
-    let mut f = std::fs::File::with_options()
-        .write(true)
-        .create(true)
-        .truncate(true)
-        .open(path)
-        .unwrap();
-
-    let vertices = mesh
-        .buffers
-        .iter()
-        .find(|x| x.r#type == "position")
-        .unwrap();
-    let vertices = vertices.as_f32();
-    for v in vertices.chunks(3) {
-        obj_v(&mut f, v[0], v[1], v[2]);
-    }
-
-    let indices = mesh.buffers.iter().find(|x| x.r#type == "index").unwrap();
-    let indices = indices.as_u16();
-    for i in indices.chunks(3) {
-        obj_f(&mut f, i[0] + 1, i[1] + 1, i[2] + 1);
-    }
 }

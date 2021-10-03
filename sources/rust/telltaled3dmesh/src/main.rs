@@ -1,12 +1,11 @@
-#![allow(dead_code)]
 #![feature(with_options)]
-#![feature(asm)]
 
+mod d3dfile;
 mod indexbuffer;
+pub mod outputs;
 pub mod run;
-mod d3dmesh;
 
-use d3dmesh::parse_d3dmesh;
+use d3dfile::parse_d3dfile;
 use structopt::StructOpt;
 
 #[derive(StructOpt, Debug)]
@@ -15,6 +14,7 @@ enum Args {
     Convert {
         #[structopt(short, long)]
         path: String,
+        /// Relative or absolute path of the file that will be generated. Supported formats: .json, .obj.
         #[structopt(short, long)]
         output: Option<String>,
         #[structopt(long)]
@@ -35,7 +35,7 @@ fn main() {
             pretty_print,
             buffer_as_base64,
         } => {
-            parse_d3dmesh(path, output, pretty_print, buffer_as_base64).unwrap();
+            parse_d3dfile(path, output, pretty_print, buffer_as_base64).unwrap();
         }
     }
 }
