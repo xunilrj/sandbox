@@ -1,0 +1,5 @@
+dword(esp+C) == 0x27B9
+
+ReadFile(..., Buffer: {dword(esp+8)}, Size: {dword(esp+C)}, ..)
+
+0x{p:cip} {i:cip} : {eax} {ebc} {ecx} {edx} {esi} {edi}
