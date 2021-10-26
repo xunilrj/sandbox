@@ -5,8 +5,8 @@ use std::str::FromStr;
 mod json;
 mod obj;
 
-pub fn save_to(d3dfile: &D3DFile, output: String, buffer_as_base64: bool, pretty_print: bool) {
-    let path = PathBuf::from_str(output.as_str()).unwrap();
+pub fn save_to(d3dfile: &D3DFile, output: &str, buffer_as_base64: bool, pretty_print: bool) {
+    let path = PathBuf::from_str(output).unwrap();
     let ext = path.extension().unwrap();
     if ext == "json" {
         let json = json::d3dfile_to_json(d3dfile, buffer_as_base64);

@@ -21,10 +21,14 @@ enum Args {
         pretty_print: bool,
         #[structopt(long)]
         buffer_as_base64: bool,
+        #[structopt(long)]
+        detach_index_buffer: bool,
     },
 }
 
 fn main() {
+    pretty_env_logger::init();
+
     let args = Args::from_args();
     //println!("{:?}", args);
 
@@ -34,8 +38,16 @@ fn main() {
             output,
             pretty_print,
             buffer_as_base64,
+            detach_index_buffer,
         } => {
-            parse_d3dfile(path, output, pretty_print, buffer_as_base64).unwrap();
+            parse_d3dfile(
+                path,
+                output,
+                pretty_print,
+                buffer_as_base64,
+                detach_index_buffer,
+            )
+            .unwrap();
         }
     }
 }

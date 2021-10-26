@@ -38,6 +38,14 @@ pub fn d3dfile_to_json(d3dfile: &D3DFile, buffer_as_base64: bool) -> json::JsonV
             maxy: d3dmesh.bbox.maxy,
             maxz: d3dmesh.bbox.maxz,
         };
+        mesh["vertices"] = JsonValue::Array(vec![
+            JsonValue::Number(d3dmesh.vertices[0].into()),
+            JsonValue::Number(d3dmesh.vertices[1].into()),
+        ]);
+        mesh["indices"] = JsonValue::Array(vec![
+            JsonValue::Number(d3dmesh.indices[0].into()),
+            JsonValue::Number(d3dmesh.indices[1].into()),
+        ]);
         mesh["maps"] = JsonValue::Array(vec![]);
         for d3dmap in d3dmesh.maps.iter() {
             let _ = mesh["maps"].push(json::object! {

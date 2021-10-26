@@ -1,6 +1,7 @@
 use std::iter::FromIterator;
 
 use iced_x86::Register;
+use log::debug;
 
 use crate::run::{Context, Value};
 
@@ -10,16 +11,25 @@ pub fn get_index_buffer(
     esp18: &mut u32,
     esp20: &mut u32,
     esp40: &mut u32,
-    esi1c: &mut u32,
+    esi1c: &mut u32, //qty indices
     esi20: &mut u32,
 ) -> Vec<u8> {
+    debug!("esp14={}", esp14);
+    debug!("esp18={}", esp18);
+    debug!("esp20={}", esp20);
+    debug!("esp40={}", esp40);
+    debug!("esi1c={}", esi1c);
+    debug!("esi20={}", esi20);
+    let output_buffer_size = *esi1c as usize * 2;
     let mut ctx = Context::new();
-    ctx.debug = false;
+    ctx.debug = std::env::var("EMULATOR_DEBUG")
+        .unwrap_or("false".to_string())
+        .parse()
+        .unwrap();
     ctx.mount_mem(0x19E000, vec![0u8; 4 * 1024]);
     ctx.mount_mem(0x0070FC81, crate::run::read_code());
     ctx.mount_mem(0xEF14F28, vec![0u8; 100]);
-    ctx.mount_mem(0xF8200A0, vec![0u8; 1024 * 1024]);
-    // ctx.mount_mem_file(0x3BD3020, "island_gelato_indexbuffer.txt");
+    ctx.mount_mem(0xF8200A0, vec![0u8; output_buffer_size]);
     ctx.mount_mem(0x3BD3020, ib);
     ctx.set_register(Register::EIP, 0x0070FC81);
     ctx.set_register(Register::ESP, 0x19E074);
@@ -40,5 +50,5 @@ pub fn get_index_buffer(
     crate::run::run(&mut ctx, usize::MAX - 1);
 
     let output = ctx.borrow_mem(0xF8200A0);
-    return Vec::from_iter(output.iter().map(|x| *x).take(*esi1c as usize * 2));
+    output.iter().map(|x| *x).take(output_buffer_size).collect()
 }

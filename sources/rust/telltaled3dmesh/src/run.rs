@@ -188,6 +188,9 @@ impl Context {
         let mem: Vec<_> = self.mem.find(addr as usize, addr as usize + 1).collect();
 
         if mem.len() == 0 {
+            if self.debug {
+                println!("Memory not found: {} 0x{:X?}", addr, addr);
+            }
             panic!("Memory not found: {} 0x{:X?}", addr, addr);
         }
 
@@ -545,7 +548,7 @@ pub fn test_emulator() {
     let t1 = std::time::Instant::now();
 
     let mut ctx = Context::new();
-    ctx.debug = false;
+    ctx.debug = true;
     ctx.mount_mem(0x19E000, vec![0u8; 4 * 1024]);
     ctx.mount_mem(0x0070FC81, read_code());
     ctx.mount_mem(0xEF14F28, vec![0u8; 100]);

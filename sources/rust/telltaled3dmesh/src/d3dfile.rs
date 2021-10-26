@@ -1,6 +1,7 @@
 use crate::indexbuffer;
 use json::JsonValue;
-use std::io::Read;
+use log::debug;
+use std::{io::Read, str::FromStr};
 
 #[inline(always)]
 fn parse_n_bytes(input: &[u8], n: usize) -> nom::IResult<&[u8], &[u8]> {
@@ -215,49 +216,65 @@ impl<'a> NomSlice<'a> {
 
     #[inline(always)]
     pub fn parse_n_bytes(&mut self, n: usize) -> &[u8] {
-        let (i, data) = parse_n_bytes(self.slice, n).unwrap();
-        self.slice = i;
-        self.qty += n;
-        data
+        if let Ok((i, data)) = parse_n_bytes(self.slice, n) {
+            self.slice = i;
+            self.qty += n;
+
+            let d: Vec<_> = data.iter().take(10).collect();
+            debug!("read {} bytes: {:?}", n, d);
+            data
+        } else {
+            panic!("parse_n_bytes");
+        }
     }
 
     #[inline(always)]
-    pub fn parse_le_u16(&mut self) -> u16 {
+    pub fn parse_le_u16(&mut self, name: &str) -> u16 {
         let (i, data) = parse_le_u16(self.slice).unwrap();
         self.slice = i;
         self.qty += 2;
+
+        debug!("[{}] u16: {}", name, data);
         data
     }
 
     #[inline(always)]
-    pub fn parse_le_u32(&mut self) -> u32 {
+    pub fn parse_le_u32(&mut self, name: &str) -> u32 {
         let (i, data) = parse_le_u32(self.slice).unwrap();
         self.slice = i;
         self.qty += 4;
+
+        debug!("[{}] as u32: {}", name, data);
         data
     }
 
     #[inline(always)]
-    pub fn parse_le_u64(&mut self) -> u64 {
+    pub fn parse_le_u64(&mut self, name: &str) -> u64 {
         let (i, data) = parse_le_u64(self.slice).unwrap();
         self.slice = i;
         self.qty += 8;
+
+        debug!("[{}] as u64: {} 0x{:X?}", name, data, data);
         data
     }
 
     #[inline(always)]
-    pub fn parse_le_f32(&mut self) -> f32 {
+    pub fn parse_le_f32(&mut self, name: &str) -> f32 {
         let (i, data) = parse_le_f32(self.slice).unwrap();
         self.slice = i;
         self.qty += 4;
+
+        debug!("[{}] as f32: {}", name, data);
         data
     }
 
     #[inline(always)]
-    pub fn parse_length_string(&mut self) -> &str {
+    pub fn parse_length_string(&mut self, name: &str) -> &str {
         let (i, data) = parse_length_string(self.slice).unwrap();
         self.slice = i;
         self.qty += 4 + data.len();
+
+        debug!("[{}] as string: {} {}", name, data.len(), data);
         data
     }
 
@@ -267,6 +284,8 @@ impl<'a> NomSlice<'a> {
         let data = std::str::from_utf8(data).unwrap();
         self.slice = i;
         self.qty += size;
+
+        debug!("read string: {} {}", size, data);
         data
     }
 
@@ -277,6 +296,10 @@ impl<'a> NomSlice<'a> {
         let (i, data) = parse_n_bytes(self.slice, bytes_size).unwrap();
         self.slice = i;
         self.qty += bytes_size;
+
+        let d: Vec<_> = data.iter().take(10).collect();
+        debug!("read {} u16: {:?}", n, bytes_size);
+
         unsafe { std::slice::from_raw_parts(data.as_ptr() as *const u16, n) }
     }
 
@@ -286,6 +309,10 @@ impl<'a> NomSlice<'a> {
         let (i, data) = parse_n_bytes(self.slice, bytes_size).unwrap();
         self.slice = i;
         self.qty += bytes_size;
+
+        let d: Vec<_> = data.iter().take(10).collect();
+        debug!("read {} f32: {:?}", n, bytes_size);
+
         unsafe { std::slice::from_raw_parts(data.as_ptr() as *const f32, n) }
     }
 }
@@ -368,6 +395,8 @@ pub struct D3DMap {
 pub struct D3DMesh {
     pub bbox: D3DBoundingBox,
     pub maps: Vec<D3DMap>,
+    pub vertices: [usize; 2],
+    pub indices: [usize; 2],
 }
 
 impl D3DMesh {
@@ -375,6 +404,8 @@ impl D3DMesh {
         Self {
             bbox: D3DBoundingBox::default(),
             maps: Vec::with_capacity(16),
+            vertices: [0; 2],
+            indices: [0; 2],
         }
     }
 }
@@ -400,10 +431,10 @@ impl D3DFile {
 fn parse_d3dmesh_buffer(input: &mut NomSlice) -> D3DBuffer {
     input.qty = 0;
 
-    let qty = input.parse_le_u32();
-    let stride = input.parse_le_u32();
-    let t = input.parse_le_u32();
-    let _ = input.parse_le_u32();
+    let qty = input.parse_le_u32("Buffer Qty");
+    let stride = input.parse_le_u32("Buffer Stride");
+    let t = input.parse_le_u32("Buffer Type");
+    let _ = input.parse_le_u32("?");
     let data = input.parse_f32_slice(((stride * qty) / 4) as usize);
 
     let t = match t {
@@ -411,8 +442,9 @@ fn parse_d3dmesh_buffer(input: &mut NomSlice) -> D3DBuffer {
         2 => "normal".to_string(),
         _ => format!("{}", t),
     };
+
     D3DBuffer {
-        r#type: t.clone(),
+        r#type: t,
         qty,
         stride,
         data: D3DBufferData::F32(data.to_vec()),
@@ -424,6 +456,7 @@ pub fn parse_d3dfile<S: AsRef<str>>(
     output: Option<String>,
     pretty_print: bool,
     buffer_as_base64: bool,
+    detach_index_buffer: bool,
 ) -> std::result::Result<(), ParseD3dMeshError> {
     let mut bar = progress::Bar::new();
     bar.set_job_title("Parsing...");
@@ -443,28 +476,28 @@ pub fn parse_d3dfile<S: AsRef<str>>(
         panic!()
     }
 
-    let param_count = input.parse_le_u32();
+    let param_count = input.parse_le_u32("?");
     let _param_hash = input.parse_n_bytes(8);
 
     for _ in 0..(param_count - 1) {
-        let _ = input.parse_le_u32();
+        let _ = input.parse_le_u32("?");
         let _ = input.parse_n_bytes(8);
     }
 
-    let _ = input.parse_le_u32();
-    let _header_len = input.parse_le_u32();
-    let d3d_name = input.parse_length_string();
+    let _ = input.parse_le_u32("?");
+    let _header_len = input.parse_le_u32("?");
+    let d3d_name = input.parse_length_string("?");
 
     d3dfile.name = d3d_name.to_string();
 
-    let _ = input.parse_length_string();
+    let _ = input.parse_length_string("?");
 
-    let minx = input.parse_le_f32();
-    let miny = input.parse_le_f32();
-    let minz = input.parse_le_f32();
-    let maxx = input.parse_le_f32();
-    let maxy = input.parse_le_f32();
-    let maxz = input.parse_le_f32();
+    let minx = input.parse_le_f32("bbox.minx");
+    let miny = input.parse_le_f32("bbox.miny");
+    let minz = input.parse_le_f32("bbox.minz");
+    let maxx = input.parse_le_f32("bbox.maxx");
+    let maxy = input.parse_le_f32("bbox.maxy");
+    let maxz = input.parse_le_f32("bbox.maxz");
     d3dfile.bbox = D3DBoundingBox {
         minx: minx,
         miny: miny,
@@ -474,160 +507,396 @@ pub fn parse_d3dfile<S: AsRef<str>>(
         maxz: maxz,
     };
 
-    let _header_size = input.parse_le_u32();
-    let qty_meshes = input.parse_le_u32();
+    let _header_size = input.parse_le_u32("?");
+    let qty_meshes = input.parse_le_u32("?");
 
-    for _ in 0..qty_meshes {
+    for i in 0..qty_meshes {
+        debug!("Mesh: {}", i);
         bar.reach_percent(25);
         let mut mesh = D3DMesh::new();
 
         input.qty = 0;
 
-        let _header_hash = input.parse_le_u64();
+        let _header_hash = input.parse_le_u64("Mesh header hash");
 
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u64();
+        let _ = input.parse_le_u32("?");
+        let _ = input.parse_le_u64("?");
 
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u64();
-        let _ = input.parse_le_u32();
+        let _ = input.parse_le_u32("?");
+        let _ = input.parse_le_u32("?");
+        let _ = input.parse_le_u32("?");
 
-        let minx = input.parse_le_f32();
-        let miny = input.parse_le_f32();
-        let minz = input.parse_le_f32();
-        let maxx = input.parse_le_f32();
-        let maxy = input.parse_le_f32();
-        let maxz = input.parse_le_f32();
-        mesh.bbox = D3DBoundingBox {
-            minx,
-            miny,
-            minz,
-            maxx,
-            maxy,
-            maxz,
-        };
+        mesh.vertices[0] = input.parse_le_u32("Vertex Start") as usize;
+        mesh.vertices[1] = input.parse_le_u32("Vertex End") as usize;
 
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
+        mesh.indices[0] = input.parse_le_u32("Index Start") as usize;
+        mesh.indices[1] = 0;
 
-        let _ = input.parse_le_u32();
-        let name = input.parse_length_string();
-        mesh.maps.push(D3DMap {
-            r#type: "diffuse".to_string(),
-            name: name.to_string(),
-        });
+        let _ = input.parse_le_u32("?");
+        let _ = input.parse_le_u64("section header");
 
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
+        const ATT_BOUNDING_BOX: u32 = 0;
+        const ATT_DIFFUSE_MAP: u32 = 25;
+        for _ in 0..9 {
+            let att = input.parse_le_u32("attribute");
 
-        let _ = input.parse_le_u32();
-        let _ = input.parse_length_string();
-        let _ = input.parse_le_u32();
-        let _ = input.parse_length_string();
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
+            match att {
+                ATT_BOUNDING_BOX => {
+                    let minx = input.parse_le_f32("bbox.minx");
+                    let miny = input.parse_le_f32("bbox.miny");
+                    let minz = input.parse_le_f32("bbox.minz");
+                    let maxx = input.parse_le_f32("bbox.maxx");
+                    let maxy = input.parse_le_f32("bbox.maxy");
+                    let maxz = input.parse_le_f32("bbox.maxz");
+                    mesh.bbox = D3DBoundingBox {
+                        minx,
+                        miny,
+                        minz,
+                        maxx,
+                        maxy,
+                        maxz,
+                    };
+                }
+                8 => {
+                    let _ = input.parse_le_u32("?");
+                }
+                18 => {
+                    let name = input.parse_length_string("some texture");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                20 => {
+                    let _ = input.parse_le_f32("?");
+                    let _ = input.parse_le_f32("?");
+                    let _ = input.parse_le_f32("?");
+                    let _ = input.parse_le_f32("?");
+                }
+                23 => {
+                    let name = input.parse_length_string("some texture");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                24 => {
+                    let name = input.parse_length_string("some texture");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                ATT_DIFFUSE_MAP => {
+                    let name = input.parse_length_string("some texture");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                26 => {
+                    let name = input.parse_length_string("some texture");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                27 => {
+                    let name = input.parse_length_string("some texture");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                28 => {
+                    let name = input.parse_length_string("some texture");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                29 => {
+                    let name = input.parse_length_string("some texture");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                30 => {
+                    let name = input.parse_length_string("some texture");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                31 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                32 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                33 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                34 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                35 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                36 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                37 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                38 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                39 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                40 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                41 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                42 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                43 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                44 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                45 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                46 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                47 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                49 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                50 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                51 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                52 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                54 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                57 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+                58 => {
+                    let name = input.parse_length_string("?? map");
+                    mesh.maps.push(D3DMap {
+                        r#type: "??".to_string(),
+                        name: name.to_string(),
+                    });
+                }
+
+                x @ _ => todo!("{:?}", x),
+            }
+        }
+
+        let att1 = input.parse_n_bytes(1);
+        if att1[0] == 49 {
+            let size = input.parse_le_u32("size");
+            let _ = input.parse_n_bytes(size as usize);
+        }
+        let att2 = input.parse_n_bytes(1);
+        let att3 = input.parse_n_bytes(1);
+        let att4 = input.parse_le_u32("?");
+        let att5 = input.parse_n_bytes(1);
+
+        let _ = input.parse_le_u32("?");
+        let _ = input.parse_le_u32("?");
+
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
 
         let _ = input.parse_n_bytes(1);
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
-
-        let _ = input.parse_le_u32();
-        let _ = input.parse_n_bytes(1);
-        let _ = input.parse_n_bytes(1);
-
-        let _ = input.parse_le_u32();
-        let _ = input.parse_n_bytes(1);
-
-        let _ = input.parse_le_u32();
-
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
 
         let _ = input.parse_n_bytes(1);
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
         let _ = input.parse_n_bytes(1);
         let _ = input.parse_n_bytes(1);
         let _ = input.parse_n_bytes(1);
         let _ = input.parse_n_bytes(1);
+
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+
         let _ = input.parse_n_bytes(1);
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_n_bytes(1);
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_f32();
-        let _ = input.parse_le_u32();
-        let _ = input.parse_n_bytes(1);
-        let _ = input.parse_n_bytes(1);
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_f32();
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_f32("?");
+        let _ = input.parse_le_u32("?");
+
         let _ = input.parse_n_bytes(1);
         let _ = input.parse_n_bytes(1);
-        let _ = input.parse_length_string();
-        let _ = input.parse_length_string();
+        let _ = input.parse_le_u32("?");
+        let _ = input.parse_le_f32("?");
+
+        let _ = input.parse_n_bytes(1);
+        let _ = input.parse_n_bytes(1);
+
+        let _ = input.parse_le_u32("?");
+        let _ = input.parse_n_bytes(6);
+        let _ = input.parse_le_u32("?");
+        let _ = input.parse_n_bytes(6);
 
         d3dfile.meshes.push(mesh);
     }
 
-    let _ = input.parse_le_u32();
-    let _ = input.parse_le_u32();
+    let _ = input.parse_le_u32("?");
+    let _ = input.parse_le_u32("?");
 
-    let t = input.parse_le_u32();
+    let t = input.parse_le_u32("?");
     if t == 60 {
-        let _ = input.parse_le_u32();
+        let _ = input.parse_le_u32("?");
 
-        let mut qty = input.parse_le_u32();
+        let mut qty = input.parse_le_u32("?");
         if qty > 0 {
             loop {
                 if qty > 0 {
-                    let _ = input.parse_le_u64();
-                    let _ = input.parse_le_u32();
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
                 } else {
                     break;
                 }
                 qty -= 1;
             }
 
-            let _ = input.parse_le_u32();
-            let _ = input.parse_le_u32();
+            let _ = input.parse_le_u32("?");
+            let _ = input.parse_le_u32("?");
         }
     } else {
-        let _ = input.parse_le_u32();
+        let _ = input.parse_le_u32("?");
 
-        let _ = input.parse_le_u32();
-        let _ = input.parse_le_u32();
+        let _ = input.parse_le_u32("?");
+        let _ = input.parse_le_u32("?");
     }
 
     let _ = input.parse_n_bytes(1);
@@ -635,17 +904,17 @@ pub fn parse_d3dfile<S: AsRef<str>>(
     let _ = input.parse_n_bytes(1);
     let _ = input.parse_n_bytes(1);
 
-    let _ = input.parse_le_u32();
+    let _ = input.parse_le_u32("?");
 
     let _ = input.parse_n_bytes(1);
-    let _ = input.parse_le_u32();
-    let _ = input.parse_le_u32();
+    let _ = input.parse_le_u32("?");
+    let _ = input.parse_le_u32("?");
 
-    let _ = input.parse_le_u32();
-    let _ = input.parse_le_u32();
+    let _ = input.parse_le_u32("?");
+    let _ = input.parse_le_u32("?");
 
-    let _ = input.parse_le_u32();
-    let _ = input.parse_le_u32();
+    let _ = input.parse_le_u32("?");
+    let _ = input.parse_le_u32("?");
 
     let _ = input.parse_n_bytes(1);
 
@@ -653,12 +922,12 @@ pub fn parse_d3dfile<S: AsRef<str>>(
 
     bar.reach_percent(50);
 
-    let _ = input.parse_le_u32();
-    let qty_indices = input.parse_le_u32();
-    let a = input.parse_le_u32(); //              ESP+18
-    let first_index = input.parse_le_u16(); // first index? ESP+14
+    let _ = input.parse_le_u32("?");
+    let qty_indices = input.parse_le_u32("IB Qty Indices");
+    let a = input.parse_le_u32("?"); //              ESP+18
+    let first_index = input.parse_le_u16("IB First Index"); // first index? ESP+14
 
-    let buffer_size = input.parse_le_u32();
+    let buffer_size = input.parse_le_u32("IB Buffer Size");
     let index_buffer: Vec<_> = input
         .parse_n_bytes(buffer_size as usize)
         .iter()
@@ -671,7 +940,7 @@ pub fn parse_d3dfile<S: AsRef<str>>(
     let mut esp40 = 0;
     let mut esi1c = qty_indices;
     let mut esi20 = 2;
-    let index_buffer = indexbuffer::get_index_buffer(
+    let index_buffer_bytes = indexbuffer::get_index_buffer(
         index_buffer,
         &mut esp14,
         &mut esp18,
@@ -681,7 +950,10 @@ pub fn parse_d3dfile<S: AsRef<str>>(
         &mut esi20,
     );
     let index_buffer = unsafe {
-        std::slice::from_raw_parts(index_buffer.as_ptr() as *const u16, qty_indices as usize)
+        std::slice::from_raw_parts(
+            index_buffer_bytes.as_ptr() as *const u16,
+            qty_indices as usize,
+        )
     };
 
     d3dfile.buffers.push(D3DBuffer {
@@ -691,6 +963,18 @@ pub fn parse_d3dfile<S: AsRef<str>>(
         data: D3DBufferData::U16(index_buffer.to_vec()),
     });
 
+    // Fix indices
+    for i in 0..d3dfile.meshes.len() {
+        let next = d3dfile
+            .meshes
+            .get(i + 1)
+            .map(|x| x.indices[0] - 1)
+            .unwrap_or(qty_indices as usize);
+        d3dfile.meshes[i].indices[1] = next;
+    }
+
+    // Read buffers
+
     while input.slice.len() != 0 {
         bar.reach_percent(75);
         let buffer = parse_d3dmesh_buffer(&mut input);
@@ -698,11 +982,20 @@ pub fn parse_d3dfile<S: AsRef<str>>(
     }
 
     bar.reach_percent(100);
-    println!("");
     let mut bar = progress::Bar::new();
     bar.set_job_title("Saving...");
     match output {
-        Some(output) => crate::outputs::save_to(&d3dfile, output, buffer_as_base64, pretty_print),
+        Some(output) => {
+            crate::outputs::save_to(&d3dfile, output.as_str(), buffer_as_base64, pretty_print);
+
+            let output = std::path::PathBuf::from_str(output.as_str()).unwrap();
+            let output = output.with_extension("ib");
+
+            if detach_index_buffer {
+                use std::str::FromStr;
+                std::fs::write(output, index_buffer_bytes);
+            }
+        }
         None => {
             todo!("print to stdout")
             // if !pretty_print {
@@ -712,6 +1005,8 @@ pub fn parse_d3dfile<S: AsRef<str>>(
             // }
         }
     }
+
+    bar.set_job_title("Done");
     bar.reach_percent(100);
 
     Ok(())

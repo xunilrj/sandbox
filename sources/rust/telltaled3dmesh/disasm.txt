@@ -1,0 +1,1845 @@
+int32_t* sub_48aed0(int32_t* arg1)
+
+0048aed5  *(arg1 + 0x28) = 0x899c98
+0048aedc  *arg1 = 0x7e8c68  {"wbox"}
+0048aee9  *data_8c1cec = 0x14
+0048aef3  *data_8c1cf0 = 0x5e1a70
+0048aefd  sub_434ec0(arg1, data_8c1cec)
+0048af09  *data_8c1ce0 = 0x16
+0048af13  *data_8c1ce4 = 0x5deb90
+0048af1d  sub_434ec0(arg1, data_8c1ce0)
+0048af22  *data_8c1cd0 = arg1
+0048af28  *data_8c1cdc = 0x6c2d80
+0048af32  *data_8c1cc4 = 0x7e3ce0  {"mName"}
+0048af3c  *data_8c1cc8 = 0
+0048af46  *(arg1 + 0x1c) = 0x8c1cc4
+0048af4d  *data_8c1cb4 = arg1
+0048af53  *data_8c1c98 = arg1
+0048af59  *data_8c1c7c = arg1
+0048af5f  *data_8c1c60 = arg1
+0048af67  *data_8c1cc0 = 0x48a5e0
+0048af71  *data_8c1ca8 = 0x7e8c60  {"mTris"}
+0048af7b  *data_8c1cac = 0x1c
+0048af85  *data_8c1cd4 = 0x8c1ca8
+0048af8f  *data_8c1ca4 = 0x484a30
+0048af99  *data_8c1c8c = 0x7e8858  {"mVerts"}
+0048afa3  *data_8c1c90 = 0x2c
+0048afad  *data_8c1cb8 = 0x8c1c8c
+0048afb7  *data_8c1c88 = 0x482650
+0048afc1  *data_8c1c70 = 0x7e8c54  {"mNormals"}
+0048afcb  *data_8c1c74 = 0x3c
+0048afd5  *data_8c1c9c = 0x8c1c70
+0048afdf  *data_8c1c6c = 0x487630
+0048afe9  *data_8c1c54 = 0x7e8c4c  {"mQuads"}
+0048aff3  *data_8c1c58 = 0x4c
+0048affd  *data_8c1c80 = 0x8c1c54
+0048b008  return arg1
+
+
+int32_t sub_48f2a0(int32_t arg1)
+
+0048f2a8  *(arg1 + 0x28) = 0x899a34
+0048f2b6  *data_8c2b8c = 0x14
+0048f2c0  *data_8c2b90 = 0x5c36b0
+0048f2ca  sub_434ec0(arg1, data_8c2b8c)
+0048f2de  *data_8c2b88 = 0x549f30
+0048f2e3  *data_8c2b70 = 0x7e9600  {"mVertexShaderName"}
+0048f2ed  *data_8c2b74 = 0x18
+0048f2f7  *data_8c2b7c = arg1
+0048f2fd  *(arg1 + 0x1c) = 0x8c2b70
+0048f309  *data_8c2b6c = 0x549f30
+0048f30e  *data_8c2b54 = 0x7e95ec  {"mPixelShaderName"}
+0048f318  *data_8c2b58 = 0x20
+0048f322  *data_8c2b60 = arg1
+0048f328  *data_8c2b80 = 0x8c2b54
+0048f332  *data_8c2b50 = 0x635b80
+0048f33c  *data_8c2b38 = 0x7e95dc  {"mpVertexShader"}
+0048f346  *data_8c2b3c = 0x28
+0048f350  *data_8c2b44 = arg1
+0048f356  *data_8c2b64 = 0x8c2b38
+0048f360  *data_8c2b34 = 0x4f33e0
+0048f366  *data_8c2b1c = 0x7e95c8  {"mBonePaletteIndex"}
+0048f370  *data_8c2b20 = 0x2c
+0048f37a  *data_8c2b28 = arg1
+0048f380  *data_8c2b48 = 0x8c2b1c
+0048f38a  *data_8c2b18 = 0x4f33e0
+0048f390  *data_8c2b00 = 0x7e95b8  {"mGeometryFormat"}
+0048f39a  *data_8c2b04 = 0x30
+0048f3a4  *data_8c2b0c = arg1
+0048f3aa  *data_8c2b2c = 0x8c2b00
+0048f3b4  *data_8c2afc = 0x4f33e0
+0048f3ba  *data_8c2ae4 = 0x7e95a8  {"mMinVertIndex"}
+0048f3c4  *data_8c2ae8 = 0x34
+0048f3ce  *data_8c2af0 = arg1
+0048f3d4  *data_8c2b10 = 0x8c2ae4
+0048f3de  *data_8c2ae0 = 0x4f33e0
+0048f3e4  *data_8c2ac8 = 0x7e9598  {"mMaxVertIndex"}
+0048f3ee  *data_8c2acc = 0x38
+0048f3f8  *data_8c2ad4 = arg1
+0048f3fe  *data_8c2af4 = 0x8c2ac8
+0048f408  *data_8c2ac4 = 0x4f33e0
+0048f40e  *data_8c2aac = 0x7e8cb8  {"mStartIndex"}
+0048f418  *data_8c2ab0 = 0x3c
+0048f422  *data_8c2ab8 = arg1
+0048f428  *data_8c2ad8 = 0x8c2aac
+0048f432  *data_8c2aa8 = 0x4f33e0
+0048f438  *data_8c2a90 = 0x7e9588  {"mNumPrimitives"}
+0048f442  *data_8c2a94 = 0x40
+0048f448  *data_8c2a9c = arg1
+0048f44e  *data_8c2abc = 0x8c2a90
+0048f458  *data_8c2a8c = 0x549f30
+0048f45d  *data_8c2a74 = 0x7e9578  {"mLightingGroup"}
+0048f467  *data_8c2a78 = 0x48
+0048f471  *data_8c2a80 = arg1
+0048f477  *data_8c2aa0 = 0x8c2a74
+0048f481  *data_8c2a70 = 0x480dc0
+0048f48b  *data_8c2a58 = 0x7e9568  {"mBoundingBox"}
+0048f495  *data_8c2a5c = 0x50
+0048f49f  *data_8c2a64 = arg1
+0048f4a5  *data_8c2a84 = 0x8c2a58
+0048f4af  *data_8c2a54 = 0x480e00
+0048f4b9  *data_8c2a3c = 0x7e9558  {"mBoundingSphere"}
+0048f4c3  *data_8c2a40 = 0x68
+0048f4cd  *data_8c2a48 = arg1
+0048f4d3  *data_8c2a68 = 0x8c2a3c
+0048f4dd  *data_8c2a38 = 0x48f260
+0048f4e3  *data_8c2a20 = 0x7e9548  {"mhDiffuseMap"}
+0048f4ed  *data_8c2a24 = 0x80
+0048f4f7  *data_8c2a2c = arg1
+0048f4fd  *data_8c2a4c = 0x8c2a20
+0048f507  *data_8c2a1c = 0x48f260
+0048f517  *data_8c2a04 = 0x7e9534  {"mhSpecularColorMap"}
+0048f521  *data_8c2a08 = 0x94
+0048f52b  *data_8c2a10 = arg1
+0048f531  *data_8c2a30 = 0x8c2a04
+0048f53b  *data_8c2a00 = 0x48f260
+0048f541  *data_8c29e8 = 0x7e9528  {"mhDetailMap"}
+0048f54b  *data_8c29ec = 0x84
+0048f555  *data_8c29f4 = arg1
+0048f55b  *data_8c2a14 = 0x8c29e8
+0048f565  *data_8c29e4 = 0x48f260
+0048f56b  *data_8c29cc = 0x7e951c  {"mhLightMap"}
+0048f575  *data_8c29d0 = 0x88
+0048f57f  *data_8c29d8 = arg1
+0048f585  *data_8c29f8 = 0x8c29cc
+0048f58f  *data_8c29c8 = 0x48f260
+0048f595  *data_8c29b0 = 0x7e9510  {"mhBumpMap"}
+0048f59f  *data_8c29b4 = 0x8c
+0048f5a9  *data_8c29bc = arg1
+0048f5af  *data_8c29dc = 0x8c29b0
+0048f5b9  *data_8c29ac = 0x48f260
+0048f5bf  *data_8c2994 = 0x7e9500  {"mhAmbientMap"}
+0048f5c9  *data_8c2998 = 0x98
+0048f5d3  *data_8c29a0 = arg1
+0048f5d9  *data_8c29c0 = 0x8c2994
+0048f5e3  *data_8c2990 = 0x48f260
+0048f5e9  *data_8c2978 = 0x7e94e8  {"mhToonLightQuantized"}
+0048f5f3  *data_8c297c = 0xa0
+0048f5fd  *data_8c2984 = arg1
+0048f603  *data_8c29a4 = 0x8c2978
+0048f60d  *data_8c2974 = 0x635b80
+0048f617  *data_8c295c = 0x7e94d8  {"mpPixelShader"}
+0048f621  *data_8c2960 = 0xe4
+0048f62b  *data_8c2968 = arg1
+0048f631  *data_8c2988 = 0x8c295c
+0048f63b  *data_8c2958 = 0x7397b0
+0048f640  *data_8c2940 = 0x7e94bc  {"mbHasPixelShader_RemoveMe"}
+0048f64a  *data_8c2944 = 0xe8
+0048f654  *data_8c294c = arg1
+0048f65a  *data_8c296c = 0x8c2940
+0048f664  *data_8c293c = 0x482610
+0048f66e  *data_8c2924 = 0x7e94b0  {"mTriStrips"}
+0048f678  *data_8c2928 = 0xec
+0048f682  *data_8c2930 = arg1
+0048f688  *data_8c2950 = 0x8c2924
+0048f692  *data_8c2920 = 0x4f33e0
+0048f698  *data_8c2908 = 0x7e949c  {"mNumTotalIndices"}
+0048f6a2  *data_8c290c = 0xfc
+0048f6ac  *data_8c2914 = arg1
+0048f6b2  *data_8c2934 = 0x8c2908
+0048f6bc  *data_8c2904 = 0x7397b0
+0048f6c1  *data_8c28ec = 0x7e948c  {"mbDoubleSided"}
+0048f6cb  *data_8c28f0 = 0x100
+0048f6d5  *data_8c28f8 = arg1
+0048f6db  *data_8c2918 = 0x8c28ec
+0048f6e5  *data_8c28e8 = 0x7397b0
+0048f6ea  *data_8c28d0 = 0x7e9474  {"mbBumpEffectsSpecular"}
+0048f6f4  *data_8c28d4 = 0x101
+0048f6fe  *data_8c28dc = arg1
+0048f704  *data_8c28fc = 0x8c28d0
+0048f70e  *data_8c28cc = 0x5d5f20
+0048f714  *data_8c28b4 = 0x7e9464  {"mfBumpHeight"}
+0048f71e  *data_8c28b8 = 0x104
+0048f728  *data_8c28c0 = arg1
+0048f72e  *data_8c28e0 = 0x8c28b4
+0048f738  *data_8c28b0 = 0x7397b0
+0048f73d  *data_8c2898 = 0x7e9450  {"mbBumpAsNormalMap"}
+0048f747  *data_8c289c = 0x108
+0048f751  *data_8c28a4 = arg1
+0048f757  *data_8c28c4 = 0x8c2898
+0048f761  *data_8c2894 = 0x48f260
+0048f767  *data_8c287c = 0x7e9444  {"mhEnvMap"}
+0048f771  *data_8c2880 = 0x90
+0048f77b  *data_8c2888 = arg1
+0048f781  *data_8c28a8 = 0x8c287c
+0048f78b  *data_8c2878 = 0x5d5f20
+0048f791  *data_8c2860 = 0x7e9434  {"mfEccentricity"}
+0048f79b  *data_8c2864 = 0x10c
+0048f7a5  *data_8c286c = arg1
+0048f7ab  *data_8c288c = 0x8c2860
+0048f7ba  *data_8c285c = 0x47fba0
+0048f7c0  *data_8c2844 = 0x7e9424  {"mSpecularColor"}
+0048f7ca  *data_8c2848 = 0x11c
+0048f7d4  *data_8c2850 = arg1
+0048f7da  *data_8c2870 = 0x8c2844
+0048f7e4  *data_8c2840 = 0x47fba0
+0048f7ea  *data_8c2828 = 0x7e9414  {"mAmbientColor"}
+0048f7f4  *data_8c282c = 0x12c
+0048f7fe  *data_8c2834 = arg1
+0048f804  *data_8c2854 = 0x8c2828
+0048f80e  *data_8c2824 = 0x7397b0
+0048f813  *data_8c280c = 0x7e9400  {"mbSelfIlluminated"}
+0048f81d  *data_8c2810 = 0x13c
+0048f827  *data_8c2818 = arg1
+0048f82d  *data_8c2838 = 0x8c280c
+0048f837  *data_8c2808 = 0x47fba0
+0048f83d  *data_8c27f0 = 0x7e93ec  {"mToonMaterialColor"}
+0048f847  *data_8c27f4 = 0xa4
+0048f851  *data_8c27fc = arg1
+0048f857  *data_8c281c = 0x8c27f0
+0048f861  *data_8c27ec = 0x47fba0
+0048f867  *data_8c27d4 = 0x7e93d8  {"mToonOutlineColor"}
+0048f871  *data_8c27d8 = 0xb4
+0048f87b  *data_8c27e0 = arg1
+0048f881  *data_8c2800 = 0x8c27d4
+0048f88b  *data_8c27d0 = 0x5d5f20
+0048f891  *data_8c27b8 = 0x7e93c4  {"mToonOutlineSize"}
+0048f89b  *data_8c27bc = 0xc4
+0048f8a5  *data_8c27c4 = arg1
+0048f8ab  *data_8c27e4 = 0x8c27b8
+0048f8b5  *data_8c27b4 = 0x513c30
+0048f8bf  *data_8c279c = 0x7e93b8  {"mToonOffset"}
+0048f8c9  *data_8c27a0 = 0xcc
+0048f8d3  *data_8c27a8 = arg1
+0048f8d9  *data_8c27c8 = 0x8c279c
+0048f8e3  *data_8c2798 = 0x7397b0
+0048f8e8  *data_8c2780 = 0x7e93a4  {"mToonEnvLighting"}
+0048f8f2  *data_8c2784 = 0xd4
+0048f8fc  *data_8c278c = arg1
+0048f902  *data_8c27ac = 0x8c2780
+0048f90c  *data_8c277c = 0x7397b0
+0048f911  *data_8c2764 = 0x7e9390  {"mToonNoNormalDeform"}
+0048f91b  *data_8c2768 = 0xd5
+0048f925  *data_8c2770 = arg1
+0048f92b  *data_8c2790 = 0x8c2764
+0048f935  *data_8c2760 = 0x7397b0
+0048f93a  *data_8c2748 = 0x7e9380  {"mNeedSWSkinning"}
+0048f944  *data_8c274c = 0xe0
+0048f94e  *data_8c2754 = arg1
+0048f954  *data_8c2774 = 0x8c2748
+0048f95e  *data_8c2744 = 0x7397b0
+0048f963  *data_8c272c = 0x7e936c  {"mNeedComputeOutline"}
+0048f96d  *data_8c2730 = 0xe1
+0048f977  *data_8c2738 = arg1
+0048f97d  *data_8c2758 = 0x8c272c
+0048f987  *data_8c2728 = 0x7397b0
+0048f98c  *data_8c2710 = 0x7e9358  {"mNeedRenderOutline"}
+0048f996  *data_8c2714 = 0xe2
+0048f9a0  *data_8c271c = arg1
+0048f9a6  *data_8c273c = 0x8c2710
+0048f9b0  *data_8c270c = 0x5d5f20
+0048f9b6  *data_8c26f4 = 0x7e933c  {"mToonMaxZConstOutlineSize"}
+0048f9c0  *data_8c26f8 = 0xd8
+0048f9ca  *data_8c2700 = arg1
+0048f9d0  *data_8c2720 = 0x8c26f4
+0048f9da  *data_8c26f0 = 0x5d5f20
+0048f9e0  *data_8c26d8 = 0x7e9320  {"mToonMinZConstOutlineSize"}
+0048f9ea  *data_8c26dc = 0xdc
+0048f9f4  *data_8c26e4 = arg1
+0048f9fa  *data_8c2704 = 0x8c26d8
+0048fa04  *data_8c26d4 = 0x5d5f20
+0048fa0a  *data_8c26bc = 0x7e9310  {"mGlowIntensity"}
+0048fa14  *data_8c26c0 = 0x118
+0048fa1e  *data_8c26c8 = arg1
+0048fa24  *data_8c26e8 = 0x8c26bc
+0048fa2e  *data_8c26b8 = 0x5d5f20
+0048fa34  *data_8c26a0 = 0x7e92f8  {"mReceiveShadowIntensity"}
+0048fa3e  *data_8c26a4 = 0x110
+0048fa48  *data_8c26ac = arg1
+0048fa4e  *data_8c26cc = 0x8c26a0
+0048fa58  int32_t edi = *data_8c2698
+0048fa60  *data_8c267c = 0
+0048fa66  *data_8c2680 = edi
+0048fa71  *data_8c266c = 0
+0048fa77  int32_t ebp = *data_8c265c
+0048fa7d  *data_8c2644 = 0x7397b0
+0048fa82  *data_8c262c = 0x7e92e8  {"mReceiveShadows"}
+0048fa8c  *data_8c2630 = 0x114
+0048fa96  *data_8c2638 = arg1
+0048fa9c  *data_8c26b0 = 0x8c262c
+0048faa6  *data_8c269c = 0x4f33e0
+0048faac  *data_8c2684 = 0x7e60f8  {"mAlphaMode"}
+0048fab6  *data_8c2688 = 0x140
+0048fac0  *data_8c268c = 0x40
+0048fac6  *data_8c2690 = arg1
+0048facc  *data_8c263c = 0x8c2684
+0048fad6  *data_8c2674 = 0x7e92cc  {"RenderDevice::kBlendNormal"}
+0048fae0  *data_8c261c = 0x7e92b0  {"RenderDevice::kBlendAlpha"}
+0048faea  *data_8c2624 = 1
+0048faf0  *data_8c2628 = 0x8c2674
+0048fafa  *data_8c260c = 0x7e928c  {"RenderDevice::kBlendAlphaAlphaTe…"}
+0048fb04  *data_8c2614 = 2
+0048fb0e  *data_8c2618 = 0x8c261c
+0048fb18  *data_8c25fc = 0x7e926c  {"RenderDevice::kBlendAlphaTest"}
+0048fb22  *data_8c2604 = 3
+0048fb2c  *data_8c2608 = 0x8c260c
+0048fb36  *data_8c25ec = 0x7e9248  {"RenderDevice::kBlendInvAlphaTest"}
+0048fb40  *data_8c25f4 = 4
+0048fb4a  *data_8c25f8 = 0x8c25fc
+0048fb54  *data_8c25dc = 0x7e9230  {"RenderDevice::kBlendAdd"}
+0048fb5e  *data_8c25e4 = 5
+0048fb68  *data_8c25e8 = 0x8c25ec
+0048fb72  *data_8c25cc = 0x7e9210  {"RenderDevice::kBlendMultiply"}
+0048fb7c  *data_8c25d4 = 6
+0048fb86  *data_8c25d8 = 0x8c25dc
+0048fb90  *data_8c25bc = 0x7e91f0  {"RenderDevice::kBlendInvMultiply"}
+0048fb9a  *data_8c25c4 = 7
+0048fba4  *data_8c25c8 = 0x8c25cc
+0048fbae  *data_8c25ac = 0x7e91d0  {"RenderDevice::kBlendAlphaAdd"}
+0048fbb8  *data_8c25b4 = 8
+0048fbc2  *data_8c25b8 = 0x8c25bc
+0048fbcc  *data_8c259c = 0x7e91ac  {"RenderDevice::kBlendAlphaSubtrac…"}
+0048fbd6  *data_8c25a4 = 9
+0048fbe0  *data_8c25a8 = 0x8c25ac
+0048fbea  *data_8c2698 = 0x8c259c
+0048fbf4  *data_8c2598 = 0x5d5f20
+0048fbfa  *data_8c2580 = 0x7e919c  {"mfReflectivity"}
+0048fc04  *data_8c2584 = 0x144
+0048fc0e  *data_8c258c = arg1
+0048fc14  *data_8c2694 = 0x8c2580
+0048fc1e  *data_8c2660 = 0x4f33e0
+0048fc24  *data_8c2648 = 0x7e918c  {"mToonNumShades"}
+0048fc2e  *data_8c264c = 0xc8
+0048fc38  *data_8c2650 = 0x40
+0048fc3e  *data_8c2654 = arg1
+0048fc44  *data_8c2590 = 0x8c2648
+0048fc4e  *data_8c2664 = 0x7e916c  {"TriangleSet::kNumToonShades7"}
+0048fc58  *data_8c2670 = ebp
+0048fc5e  *data_8c2570 = 0x7e914c  {"TriangleSet::kNumToonShades6"}
+0048fc68  *data_8c2578 = 1
+0048fc6e  *data_8c257c = 0x8c2664
+0048fc78  *data_8c2560 = 0x7e912c  {"TriangleSet::kNumToonShades5"}
+0048fc82  *data_8c2568 = 2
+0048fc8c  *data_8c256c = 0x8c2570
+0048fc96  *data_8c2550 = 0x7e910c  {"TriangleSet::kNumToonShades4"}
+0048fca0  *data_8c2558 = 3
+0048fcaa  *data_8c255c = 0x8c2560
+0048fcb4  *data_8c2540 = 0x7e90ec  {"TriangleSet::kNumToonShades3"}
+0048fcbe  *data_8c2548 = 4
+0048fcc8  *data_8c254c = 0x8c2550
+0048fcd2  *data_8c2530 = 0x7e90cc  {"TriangleSet::kNumToonShades2"}
+0048fcdc  *data_8c2538 = 5
+0048fce6  *data_8c253c = 0x8c2540
+0048fcf0  *data_8c2520 = 0x7e90a4  {"TriangleSet::kNumToonShadesUseTe…"}
+0048fcfa  *data_8c2528 = 6
+0048fd04  *data_8c252c = 0x8c2530
+0048fd0e  *data_8c265c = 0x8c2520
+0048fd18  *data_8c251c = 0x7397b0
+0048fd1d  *data_8c2504 = 0x7e9094  {"mbToonRendering"}
+0048fd27  *data_8c24fc = 1
+0048fd2e  *data_8c24f0 = 0x7397b0
+0048fd33  *data_8c24d4 = 0x7397b0
+0048fd38  *data_8c24b8 = 0x7397b0
+0048fd3d  *data_8c2510 = arg1
+0048fd43  *data_8c24e4 = arg1
+0048fd49  *data_8c2490 = arg1
+0048fd4f  *data_8c2474 = arg1
+0048fd55  *data_8c24c8 = arg1
+0048fd5b  *data_8c24ac = arg1
+0048fd64  *data_8c249c = 0x4f33e0
+0048fd6a  int32_t ecx_1 = *data_8c2498
+0048fd71  *data_8c248c = 0x40
+0048fd77  *data_8c2508 = 0x9c
+0048fd81  *data_8c2658 = 0x8c2504
+0048fd8b  *data_8c24d8 = 0x7e9080  {"mbVertexAnimation"}
+0048fd95  *data_8c24dc = 0xe3
+0048fd9f  *data_8c2514 = 0x8c24d8
+0048fda9  *data_8c2484 = 0x7e9074  {"mUVGenMode"}
+0048fdb3  *data_8c2488 = 0x14c
+0048fdbd  *data_8c24e8 = 0x8c2484
+0048fdc7  *data_8c2458 = 0x7e9058  {"TriangleSet::eUVGENDefault"}
+0048fdd1  *data_8c2460 = 0
+0048fddb  *data_8c2464 = ecx_1
+0048fde1  *data_8c24f4 = 0x7e9030  {"TriangleSet::eUVGENPositionCamer…"}
+0048fdeb  *data_8c2500 = 0x8c2458
+0048fdf5  *data_8c2498 = 0x8c24f4
+0048fdff  *data_8c2480 = 0x5d5f20
+0048fe05  *data_8c2468 = 0x7e9018  {"mUVScreenSpaceScaling"}
+0048fe0f  *data_8c246c = 0x148
+0048fe19  *data_8c2494 = 0x8c2468
+0048fe23  *data_8c24bc = 0x7e9004  {"mUVScreenSpaceZoom"}
+0048fe2d  *data_8c24c0 = 0x150
+0048fe37  *data_8c2478 = 0x8c24bc
+0048fe41  *data_8c24a0 = 0x7e8ff8  {"mbHasOctree"}
+0048fe4b  *data_8c24a4 = 0x7c
+0048fe55  *data_8c24cc = 0x8c24a0
+0048fe60  return arg1
+
+int32_t* sub_493d80(int32_t* arg1)
+
+00493d85  *(arg1 + 0x10) = *(arg1 + 0x10) | 0x200000
+00493d8c  *(arg1 + 0x28) = 0x89b2b4
+00493d93  *arg1 = 0x7e987c  {"d3dmesh"}
+00493da0  *data_8c3528 = 0x1b
+00493daa  *data_8c352c = 0x5c11c0
+00493db4  sub_434ec0(arg1, data_8c3528)
+00493dc0  *data_8c351c = 0x1a
+00493dca  *data_8c3520 = 0x5c11d0
+00493dd4  sub_434ec0(arg1, data_8c351c)
+00493de0  *data_8c3510 = 0
+00493dea  *data_8c3514 = 0x5c1cf0
+00493df4  sub_434ec0(arg1, data_8c3510)
+00493e00  *data_8c3504 = 0x14
+00493e0a  *data_8c3508 = 0x5c4b10
+00493e14  sub_434ec0(arg1, data_8c3504)
+00493e1e  *data_8c3500 = 0x6c2d80
+00493e28  *data_8c34e8 = 0x7e3ce0  {"mName"}
+00493e32  *data_8c34ec = 0x44
+00493e3c  *data_8c34f4 = arg1
+00493e42  *(arg1 + 0x1c) = 0x8c34e8
+00493e4e  *data_8c34e4 = 0x4f33e0
+00493e54  *data_8c34cc = 0x7e3e68  {"mVersion"}
+00493e5e  *data_8c34d0 = 0x60
+00493e68  *data_8c34d8 = arg1
+00493e6e  *data_8c34f8 = 0x8c34cc
+00493e78  *data_8c34c8 = 0x7397b0
+00493e7d  *data_8c34b0 = 0x7e986c  {"mbDeformable"}
+00493e87  *data_8c34b4 = 0x164
+00493e91  *data_8c34bc = arg1
+00493e97  *data_8c34dc = 0x8c34b0
+00493ea1  *data_8c34ac = 0x480dc0
+00493eab  *data_8c3494 = 0x7e9568  {"mBoundingBox"}
+00493eb5  *data_8c3498 = 0x78
+00493ebf  *data_8c34a0 = arg1
+00493ec5  *data_8c34c0 = 0x8c3494
+00493ecf  *data_8c3490 = 0x4916a0
+00493ed9  *data_8c3478 = 0x7e985c  {"mTriangleSets"}
+00493ee3  *data_8c347c = 0xc4
+00493eed  *data_8c3484 = arg1
+00493ef3  *data_8c34a4 = 0x8c3478
+00493efd  *data_8c3474 = 0x48e750
+00493f07  *data_8c345c = 0x7e9848  {"mVertexAnimations"}
+00493f11  *data_8c3460 = 0xd4
+00493f1b  *data_8c3468 = arg1
+00493f21  *data_8c3488 = 0x8c345c
+00493f2b  *data_8c3458 = 0x489ca0
+00493f35  *data_8c3440 = 0x7e9838  {"mBonePalettes"}
+00493f3f  *data_8c3444 = 0xe4
+00493f49  *data_8c344c = arg1
+00493f4f  *data_8c346c = 0x8c3440
+00493f59  *data_8c343c = 0x4875f0
+00493f63  *data_8c3424 = 0x7e9828  {"mSkinningData"}
+00493f6d  *data_8c3428 = 0xf4
+00493f77  *data_8c3430 = arg1
+00493f7d  *data_8c3450 = 0x8c3424
+00493f87  *data_8c3420 = 0x7397b0
+00493f8c  *data_8c3408 = 0x7e981c  {"mbLightmaps"}
+00493f96  *data_8c340c = 0x165
+00493fa0  *data_8c3414 = arg1
+00493fa6  *data_8c3434 = 0x8c3408
+00493fb0  *data_8c3404 = 0x7397b0
+00493fb5  *data_8c33ec = 0x7e9808  {"mbLowQualityRender"}
+00493fbf  *data_8c33f0 = 0x167
+00493fc9  *data_8c33f8 = arg1
+00493fcf  *data_8c3418 = 0x8c33ec
+00493fd9  *data_8c33e8 = 0x7397b0
+00493fde  *data_8c33d0 = 0x7e97f0  {"mbVertexAlphaSupport"}
+00493fe8  *data_8c33d4 = 0x168
+00493ff2  *data_8c33dc = arg1
+00493ff8  *data_8c33cc = 0x7397b0
+00493ffd  *data_8c33b0 = 0x7397b0
+00494002  *data_8c33c0 = arg1
+00494008  *data_8c3388 = arg1
+0049400e  *data_8c33a4 = arg1
+00494014  *data_8c336c = arg1
+0049401a  *data_8c3350 = arg1
+00494020  *data_8c3334 = arg1
+00494026  *data_8c3318 = arg1
+0049402e  *data_8c33fc = 0x8c33d0
+00494038  *data_8c33b4 = 0x7e97d8  {"mbMeshHasVertexAlpha"}
+00494042  *data_8c33b8 = 0x169
+0049404c  *data_8c33e0 = 0x8c33b4
+00494056  *data_8c3394 = 0x4f33e0
+0049405c  *data_8c337c = 0x7e97c4  {"mTriangleStripState"}
+00494066  *data_8c3380 = 0x70
+00494070  *data_8c33c4 = 0x8c337c
+0049407a  *data_8c3398 = 0x7e97a4  {"mbMeshHasSmoothNormalsSupport"}
+00494084  *data_8c339c = 0x16a
+0049408e  *data_8c338c = 0x8c3398
+00494098  *data_8c3378 = 0x4f33e0
+0049409e  *data_8c3360 = 0x7e978c  {"mAnimatedVertexCount"}
+004940a8  *data_8c3364 = 0x74
+004940b2  *data_8c33a8 = 0x8c3360
+004940bc  *data_8c335c = 0x40d890
+004940c6  *data_8c3344 = 0x7e3c80  {"mFlags"}
+004940d0  *data_8c3348 = 0x64
+004940da  *data_8c3370 = 0x8c3344
+004940e4  *data_8c3340 = 0x48e790
+004940ee  *data_8c3328 = 0x7e9770  {"mToolAnimatedVertexEntries"}
+004940f8  *data_8c332c = 0x16c
+00494102  *data_8c3354 = 0x8c3328
+0049410c  *data_8c3324 = 0x493c60
+00494116  *data_8c330c = 0x7e9750  {"mToolAnimatedVertexGroupEntries"}
+00494120  *data_8c3310 = 0x17c
+0049412a  *data_8c3338 = 0x8c330c
+00494135  return arg1
+
+
+------------------------------------------------------------------------------------
+
+
+uint32_t __fastcall sub_5cdd50(void* arg1)
+
+005cdd57  int32_t* fsbase
+005cdd57  uint32_t eax = *fsbase
+005cdd5d  uint32_t var_c = eax
+005cdd5e  *fsbase = &var_c
+005cdd6b  void* ebp = arg1
+005cdd6d  void* esi = *(ebp + 0xfc)
+005cdd74  void* edi = ebp + 0xfc
+005cdd7e  void* var_18 = ebp
+005cdd7c  if (esi != 0)
+005cdd8e      void* var_40
+005cdd8e      if (((*(esi + 0x38) u>> 0xf).b & 1) == 0)
+005cdd92          eax = *(esi + 0x30)
+005cdd9d          *(esi + 0x3c) = *data_8ba770
+005cdd95          uint32_t esi_1
+005cdd95          if (eax != 0)
+005cdda2              esi_1 = eax
+005cdda6          else if (*(esi + 0x28) == 0)
+005cddab              esi_1 = 0
+005cddaf          else
+005cddaf              if ((*(esi + 0x38) & 0x9000) != 0)
+005cddb8                  var_40 = data_8951a0
+005cddbf                  sub_41a5e0(esi, 0x8951a0)
+005cddc4              esi_1 = *(esi + 0x30)
+005cddc9          eax.b = esi_1 != 0
+005cdd8e      if (((*(esi + 0x38) u>> 0xf).b & 1) != 0 || (((*(esi + 0x38) u>> 0xf).b & 1) == 0 && eax.b != 0))
+005cddd6          eax = sub_5c8df0(ebp)
+005cdddb          if (eax.b == 0)
+005cdde3              var_40 = edi
+005cdde8              void* var_28
+005cdde8              sub_5d5e30(&var_28, var_40)
+005cdded              void* esi_2 = *edi
+005cddef              int32_t eax_3
+005cddef              int32_t esi_3
+005cddef              if (esi_2 != 0)
+005cddf7                  eax_3 = *(esi_2 + 0x30)
+005cde02                  *(esi_2 + 0x3c) = *data_8ba770
+005cddef                  if (eax_3 != 0)
+005cde07                      esi_3 = eax_3
+005cddef                  if (eax_3 == 0 && *(esi_2 + 0x28) != 0)
+005cde10                      if ((*(esi_2 + 0x38) & 0x9000) != 0)
+005cde19                          var_40 = data_8951a0
+005cde20                          sub_41a5e0(esi_2, 0x8951a0)
+005cde25                      esi_3 = *(esi_2 + 0x30)
+005cddef              if (esi_2 == 0 || ((esi_2 != 0 && eax_3 == 0) && *(esi_2 + 0x28) == 0))
+005cde2a                  esi_3 = 0
+005cde2c              *(ebp + 0x100) = esi_3
+005cde32              void* esi_4 = var_28
+005cde36              void* eax_5
+005cde36              if (esi_4 != 0)
+005cde3f                  *(esi_4 + 0x3c) = *data_8ba770
+005cde42                  eax_5 = *(esi_4 + 0x30)
+005cde36                  if (eax_5 == 0 && *(esi_4 + 0x28) != 0)
+005cde4e                      if ((*(esi_4 + 0x38) & 0x9000) != 0)
+005cde57                          var_40 = data_8951a0
+005cde5e                          sub_41a5e0(esi_4, 0x8951a0)
+005cde63                      eax_5 = *(esi_4 + 0x30)
+005cde36              if (esi_4 == 0 || ((esi_4 != 0 && eax_5 == 0) && *(esi_4 + 0x28) == 0))
+005cde68                  eax_5 = nullptr
+005cde6a              char ecx_4 = *(eax_5 + 0x164)
+005cde77              var_40 = nullptr
+005cde7a              sub_70f5f0(ebp + 0x44, nullptr)
+005cde7f              var_40 = 6
+005cde83              int32_t ecx_9 = sub_70f5f0(ebp + 0x44, 6)
+005cde88              int32_t var_24_1 = 0
+005cde8c              int32_t var_1c_1 = 0
+005cde90              int32_t var_20_1 = 0
+005cde94              void* var_44
+005cde94              int32_t var_4
+005cde94              void* esi_8
+005cde94              while (true)
+005cde94                  void* esi_6 = *edi
+005cde96                  void* eax_6
+005cde96                  void* esi_7
+005cde96                  if (esi_6 != 0)
+005cde9a                      eax_6 = *(esi_6 + 0x30)
+005cdea5                      *(esi_6 + 0x3c) = *data_8ba770
+005cde96                      if (eax_6 != 0)
+005cdeaa                          esi_7 = eax_6
+005cde96                      if (eax_6 == 0 && *(esi_6 + 0x28) != 0)
+005cdeb3                          if ((*(esi_6 + 0x38) & 0x9000) != 0)
+005cdebc                              var_40 = data_8951a0
+005cdec3                              ecx_9 = sub_41a5e0(esi_6, 0x8951a0)
+005cdec8                          esi_7 = *(esi_6 + 0x30)
+005cde96                  if (esi_6 == 0 || ((esi_6 != 0 && eax_6 == 0) && *(esi_6 + 0x28) == 0))
+005cdecd                      esi_7 = nullptr
+005cded9                  esi_8 = *edi
+005cdedb                  if (var_24_1 s>= *(esi_7 + 0xc8))
+005cdedb                      break
+005cdee1                  void* eax_8
+005cdee1                  if (esi_8 != 0)
+005cdee5                      eax_8 = *(esi_8 + 0x30)
+005cdeea                      ecx_9 = *data_8ba770
+005cdef0                      *(esi_8 + 0x3c) = ecx_9
+005cdee1                      if (eax_8 == 0 && *(esi_8 + 0x28) != 0)
+005cdefa                          if ((*(esi_8 + 0x38) & 0x9000) != 0)
+005cdf03                              var_40 = data_8951a0
+005cdf0a                              ecx_9 = sub_41a5e0(esi_8, 0x8951a0)
+005cdf0f                          eax_8 = *(esi_8 + 0x30)
+005cdee1                  if (esi_8 == 0 || ((esi_8 != 0 && eax_8 == 0) && *(esi_8 + 0x28) == 0))
+005cdf14                      eax_8 = nullptr
+005cdf1c                  void* esi_10 = *(eax_8 + 0xd0) + var_20_1
+005cdf20                  var_40 = ecx_9
+005cdf2d                  sub_495950(&var_40)
+005cdf34                  var_4.b = 1
+005cdf39                  sub_495a50(&var_40)
+005cdf44                  var_44 = *(esi_10 + 0x80)
+005cdf4c                  var_44 = sub_495a70(&var_40, var_44)
+005cdf56                  var_4.b = 2
+005cdf5b                  sub_67a280(edi, &var_44)
+005cdf65                  var_4.b = 0
+005cdf69                  sub_5cdc20("diffuse map", var_44)
+005cdf7d                  sub_495950(&var_40)
+005cdf84                  var_4.b = 3
+005cdf89                  sub_495a50(&var_40)
+005cdf94                  var_44 = *(esi_10 + 0x84)
+005cdf9c                  var_44 = sub_495a70(&var_40, var_44)
+005cdfa6                  var_4.b = 4
+005cdfab                  sub_67a280(edi, &var_44)
+005cdfb5                  var_4.b = 0
+005cdfb9                  sub_5cdc20("detail map", var_44)
+005cdfcd                  sub_495950(&var_40)
+005cdfd4                  var_4.b = 5
+005cdfd9                  sub_495a50(&var_40)
+005cdfe4                  var_44 = *(esi_10 + 0x88)
+005cdfec                  var_44 = sub_495a70(&var_40, var_44)
+005cdff6                  var_4.b = 6
+005cdffb                  sub_67a280(edi, &var_44)
+005ce005                  var_4.b = 0
+005ce009                  sub_5cdc20("light map", var_44)
+005ce01d                  sub_495950(&var_40)
+005ce024                  var_4.b = 7
+005ce029                  sub_495a50(&var_40)
+005ce034                  var_44 = *(esi_10 + 0x90)
+005ce03c                  var_44 = sub_495a70(&var_40, var_44)
+005ce046                  var_4.b = 8
+005ce04b                  sub_67a280(edi, &var_44)
+005ce055                  var_4.b = 0
+005ce059                  sub_5cdc20("env map", var_44)
+005ce06d                  sub_495950(&var_40)
+005ce074                  var_4.b = 9
+005ce079                  sub_495a50(&var_40)
+005ce084                  var_44 = *(esi_10 + 0x8c)
+005ce08c                  var_44 = sub_495a70(&var_40, var_44)
+005ce096                  var_4.b = 0xa
+005ce09b                  sub_67a280(edi, &var_44)
+005ce0a5                  var_4.b = 0
+005ce0a9                  sub_5cdc20("bump map", var_44)
+005ce0bd                  sub_495950(&var_40)
+005ce0c4                  var_4.b = 0xb
+005ce0c9                  sub_495a50(&var_40)
+005ce0d4                  var_44 = *(esi_10 + 0x94)
+005ce0dc                  var_44 = sub_495a70(&var_40, var_44)
+005ce0e6                  var_4.b = 0xc
+005ce0eb                  sub_67a280(edi, &var_44)
+005ce0f5                  var_4.b = 0
+005ce0f9                  sub_5cdc20("specular color map", var_44)
+005ce10d                  sub_495950(&var_40)
+005ce114                  var_4.b = 0xd
+005ce119                  sub_495a50(&var_40)
+005ce124                  var_44 = *(esi_10 + 0x98)
+005ce12c                  var_44 = sub_495a70(&var_40, var_44)
+005ce136                  var_4.b = 0xe
+005ce13b                  sub_67a280(edi, &var_44)
+005ce145                  var_4.b = 0
+005ce149                  ecx_9 = sub_5cdc20("ambient map", var_44)
+005ce14e                  void* esi_11 = *(esi_10 + 4)
+005ce154                  if (esi_11 != 0)
+005ce15f                      bool cond:8_1 = *(esi_11 + 0x30) != 0
+005ce161                      ecx_9 = *data_8ba770
+005ce167                      *(esi_11 + 0x3c) = ecx_9
+005ce175                      if ((not(cond:8_1) && *(esi_11 + 0x28) != 0) && (*(esi_11 + 0x38) & 0x9000) != 0)
+005ce17e                          var_40 = data_8951a0
+005ce185                          ecx_9 = sub_41a5e0(esi_11, 0x8951a0)
+005ce16a                      if (cond:8_1 || ((not(cond:8_1) && *(esi_11 + 0x28) != 0) && *(esi_11 + 0x30) != 0))
+005ce19c                          int32_t esi_13 = *(var_18 + 0x40) + var_1c_1
+005ce1a0                          var_40 = 5
+005ce1a4                          sub_70f5f0(esi_13, 5)
+005ce1a9                          var_40 = 3
+005ce1ad                          sub_70f5f0(esi_13, 3)
+005ce1b2                          var_40 = 2
+005ce1b6                          ecx_9 = sub_70f5f0(esi_13, 2)
+005ce1bb                          if (ecx_4 != 0)
+005ce1c1                              void* ebp_1 = var_28
+005ce1c5                              void* eax_14
+005ce1c5                              void* ebp_2
+005ce1c5                              if (ebp_1 != 0)
+005ce1ce                                  *(ebp_1 + 0x3c) = *data_8ba770
+005ce1d1                                  eax_14 = *(ebp_1 + 0x30)
+005ce1c5                                  if (eax_14 != 0)
+005ce1d8                                      ebp_2 = eax_14
+005ce1c5                                  if (eax_14 == 0 && *(ebp_1 + 0x28) != 0)
+005ce1e1                                      if ((*(ebp_1 + 0x38) & 0x9000) != 0)
+005ce1ea                                          var_40 = data_8951a0
+005ce1f1                                          ecx_9 = sub_41a5e0(ebp_1, 0x8951a0)
+005ce1f6                                      ebp_2 = *(ebp_1 + 0x30)
+005ce1c5                              if (ebp_1 == 0 || ((ebp_1 != 0 && eax_14 == 0) && *(ebp_1 + 0x28) == 0))
+005ce1fb                                  ebp_2 = nullptr
+005ce1fd                              if (*(ebp_2 + 0xf8) == 0)
+005ce205                                  var_40 = 1
+005ce209                                  ecx_9 = sub_70f5f0(esi_13, 1)
+005ce20e                          void* ebp_3 = var_28
+005ce212                          void* eax_15
+005ce212                          void* ebp_4
+005ce212                          if (ebp_3 != 0)
+005ce216                              eax_15 = *(ebp_3 + 0x30)
+005ce21b                              ecx_9 = *data_8ba770
+005ce221                              *(ebp_3 + 0x3c) = ecx_9
+005ce212                              if (eax_15 != 0)
+005ce226                                  ebp_4 = eax_15
+005ce212                              if (eax_15 == 0 && *(ebp_3 + 0x28) != 0)
+005ce22f                                  if ((*(ebp_3 + 0x38) & 0x9000) != 0)
+005ce238                                      var_40 = data_8951a0
+005ce23f                                      ecx_9 = sub_41a5e0(ebp_3, 0x8951a0)
+005ce244                                  ebp_4 = *(ebp_3 + 0x30)
+005ce212                          if (ebp_3 == 0 || ((ebp_3 != 0 && eax_15 == 0) && *(ebp_3 + 0x28) == 0))
+005ce249                              ebp_4 = nullptr
+005ce24b                          if (*(ebp_4 + 0x166) == 0)
+005ce253                              var_40 = 4
+005ce257                              ecx_9 = sub_70f5f0(esi_13, 4)
+005ce25c                  var_24_1 = var_24_1 + 1
+005ce261                  var_20_1 = var_20_1 + 0x158
+005ce269                  var_1c_1 = var_1c_1 + 0x78
+005ce26e                  ebp = var_18
+005ce277              void* eax_16
+005ce277              void* esi_14
+005ce277              if (esi_8 != 0)
+005ce27b                  eax_16 = *(esi_8 + 0x30)
+005ce286                  *(esi_8 + 0x3c) = *data_8ba770
+005ce277                  if (eax_16 != 0)
+005ce28b                      esi_14 = eax_16
+005ce277                  if (eax_16 == 0 && *(esi_8 + 0x28) != 0)
+005ce294                      if ((*(esi_8 + 0x38) & 0x9000) != 0)
+005ce29d                          var_40 = data_8951a0
+005ce2a4                          sub_41a5e0(esi_8, 0x8951a0)
+005ce2a9                      esi_14 = *(esi_8 + 0x30)
+005ce277              if (esi_8 == 0 || ((esi_8 != 0 && eax_16 == 0) && *(esi_8 + 0x28) == 0))
+005ce2ae                  esi_14 = nullptr
+005ce2b0              esi_14 = *(esi_14 + 0x74)
+005ce2b3              if (esi_14 s> 0)
+005ce2bb                  if (*(ebp + 0x164) == 0)
+005ce2c3                      var_40 = 0xcc
+005ce2cd                      void* eax_17 = sub_42dc60(0xcc)
+005ce2d8                      var_4.b = 0xf
+005ce2d6                      int32_t* eax_18
+005ce2d6                      if (eax_17 == 0)
+005ce2e8                          eax_18 = nullptr
+005ce2e1                      else
+005ce2e1                          eax_18 = sub_5b31b0(eax_17)
+005ce2ea                      var_40 = 1
+005ce2ec                      var_44 = 1
+005ce2f3                      var_4.b = 0
+005ce2f7                      *(ebp + 0x164) = eax_18
+005ce2fd                      sub_5b4a40(eax_18, esi_14, 0xc, 1, 1)
+005ce308                      var_40 = 1
+005ce30a                      var_44 = 3
+005ce30e                      sub_5b3040(*(ebp + 0x164), 0, 0, 3, 1)
+005ce313                  if (*(ebp + 0x168) == 0)
+005ce31b                      var_40 = 0xcc
+005ce325                      void* eax_19 = sub_42dc60(0xcc)
+005ce330                      var_4.b = 0x10
+005ce32e                      int32_t* eax_20
+005ce32e                      if (eax_19 == 0)
+005ce340                          eax_20 = nullptr
+005ce339                      else
+005ce339                          eax_20 = sub_5b31b0(eax_19)
+005ce342                      var_40 = 1
+005ce344                      var_44 = 2
+005ce34b                      var_4.b = 0
+005ce34f                      *(ebp + 0x168) = eax_20
+005ce355                      sub_5b4a40(eax_20, esi_14, 0xc, 2, 1)
+005ce360                      var_40 = 1
+005ce362                      var_44 = 3
+005ce367                      sub_5b3040(*(ebp + 0x168), 2, 0, 3, 1)
+005ce36c              void* edi_1 = *edi
+005ce36e              void* eax_22
+005ce36e              void* edi_2
+005ce36e              if (edi_1 != 0)
+005ce377                  *(edi_1 + 0x3c) = *data_8ba770
+005ce37a                  eax_22 = *(edi_1 + 0x30)
+005ce36e                  if (eax_22 != 0)
+005ce381                      edi_2 = eax_22
+005ce36e                  if (eax_22 == 0 && *(edi_1 + 0x28) != 0)
+005ce38a                      if ((*(edi_1 + 0x38) & 0x9000) != 0)
+005ce393                          var_40 = data_8951a0
+005ce39a                          sub_41a5e0(edi_1, 0x8951a0)
+005ce39f                      edi_2 = *(edi_1 + 0x30)
+005ce36e              if (edi_1 == 0 || ((edi_1 != 0 && eax_22 == 0) && *(edi_1 + 0x28) == 0))
+005ce3a4                  edi_2 = nullptr
+005ce3a9              void* eax_23 = *(ebp + 0x20)
+005ce3ac              *(ebp + 0x12c) = *(edi_2 + 0x68)
+005ce3b2              *(ebp + 0x175) = 1
+005ce3b9              void* esi_15 = *(eax_23 + 0x64)
+005ce3bc              int32_t** ecx_68
+005ce3bc              if (esi_15 != 0)
+005ce3c0                  ecx_68 = *(esi_15 + 0x30)
+005ce3cb                  *(esi_15 + 0x3c) = *data_8ba770
+005ce3bc                  if (ecx_68 == 0 && *(esi_15 + 0x28) != 0)
+005ce3d5                      if ((*(esi_15 + 0x38) & 0x9000) != 0)
+005ce3de                          var_40 = data_8951a0
+005ce3e5                          sub_41a5e0(esi_15, 0x8951a0)
+005ce3ea                      ecx_68 = *(esi_15 + 0x30)
+005ce3bc              if (esi_15 == 0 || ((esi_15 != 0 && ecx_68 == 0) && *(esi_15 + 0x28) == 0))
+005ce3ef                  ecx_68 = nullptr
+005ce3f1              var_40 = ebp
+005ce3f2              sub_4212b0(ecx_68, var_40)
+005ce3f7              void* ecx_70 = var_28
+005ce3fb              if (ecx_70 != 0)
+005ce407                  var_40 = __gfids_table[0xbae7688].rvAddr+3
+005ce409                  sub_418890(ecx_70, 0xffffffff)
+005ce41a              eax = sub_495d10(&var_28)
+005ce426  *fsbase = var_c
+005ce431  return eax
+
+
+
+-----------------------------------------------------------------------------------------------
+
+
+void* sub_71afe0()
+
+0071afee  *data_8fa314 = *data_8fa314 | 0x1f00000
+0071affd  *data_8fa398 = *data_8fa398 | 0x1e000
+0071b00c  *data_8fa3a8 = *data_8fa3a8 | 0xf0
+0071b01b  *data_8fa3b4 = *data_8fa3b4 | 0xf00
+0071b02f  *data_8fa3cc = (*data_8fa3cc | 0x10000) | 0x100000
+0071b03e  int32_t edx = *data_8fa39c
+0071b049  *data_8fa3d8 = (*data_8fa3d8 | 0x20000) | 0x200000
+0071b05d  *data_8fa3e4 = (*data_8fa3e4 | 0x40000) | 0x400000
+0071b071  *data_8fa3f0 = (*data_8fa3f0 | 0x80000) | 0x800000
+0071b07b  *data_8fa3c4 = *data_8fa3c4 | *data_8fa3a0
+0071b086  *data_8fa3c8 = *data_8fa3c8 | *data_8fa3a4
+0071b08c  int32_t eax_22 = *data_8fa3a8
+0071b091  int32_t ebp = *data_8fa3d0
+0071b097  int32_t ecx = *data_8fa37c
+0071b0a9  *data_8fa3ec = *data_8fa3ec | 1
+0071b0af  *data_8fa3f4 = *data_8fa3f4 | 8
+0071b0b6  *data_8fa3f8 = *data_8fa3f8 | 2
+0071b0c3  *data_8fa3e8 = *data_8fa3e8 | 4
+0071b0cb  int32_t edx_4 = (((edx | 1) | 2) | 4) | 8
+0071b0ce  *data_8fa3c0 = *data_8fa3c0 | edx_4
+0071b0d4  *data_8fa3c0 = *data_8fa3c0 | eax_22
+0071b0df  *data_8fa3c4 = *data_8fa3c4 | *data_8fa3ac
+0071b0ea  *data_8fa3c8 = *data_8fa3c8 | *data_8fa3b0
+0071b102  *data_8fa404 = *data_8fa404 | 0x1c0
+0071b107  int32_t eax_27 = *data_8fa40c
+0071b10c  *data_8fa3d0 = (ebp | 1) | 0x40000000
+0071b11b  int32_t ebp_4 = *data_8fa3dc | 2
+0071b11d  *data_8fa40c = eax_27 | 0x60
+0071b12b  *data_8fa414 = 0xffffffff
+0071b130  *data_8fa418 = 0xffffffff
+0071b135  *data_8fa41c = 0xffffffff
+0071b13a  int32_t eax_29 = *data_8fa318
+0071b13f  *data_8fa3dc = ebp_4 | 0x80000000
+0071b145  int32_t ebp_6 = *data_8fa31c
+0071b14b  int32_t ecx_1 = ecx | 0x3ff00000
+0071b156  *data_8fa37c = ecx_1
+0071b15c  *data_8fa39c = edx_4
+0071b16b  int32_t ebp_8 = (ebp_6 | 0x60) | *data_8fa394
+0071b171  *data_8fa318 = (eax_29 | 0x7f000000) | *data_8fa390
+0071b17b  int32_t eax_33 = *data_8fa320 | *data_8fa398
+0071b181  *data_8fa31c = ebp_8
+0071b18c  *data_8fa320 = eax_33 | 0xc0000
+0071b19b  *data_8fa338 = *data_8fa338 | 0x21fc0
+0071b1aa  int32_t ebp_9 = *data_8fa344
+0071b1ba  *data_8fa340 = ((*data_8fa340 | 0x1fc00) | 0x390) | 0xe0000
+0071b1c6  int32_t eax_43 = (*data_8fa348 | edx_4) | *data_8fa3a8
+0071b1d2  *data_8fa34c = *data_8fa34c | *data_8fa3a0
+0071b1d8  int32_t eax_44 = eax_43 | *data_8fa3b4
+0071b1e4  *data_8fa350 = *data_8fa350 | *data_8fa3a4
+0071b1f0  *data_8fa34c = *data_8fa34c | *data_8fa3ac
+0071b207  int32_t edx_10 = (*data_8fa350 | *data_8fa3b0) | *data_8fa3bc
+0071b20f  *data_8fa348 = eax_44 | 0xf000
+0071b222  int32_t eax_48 = (*data_8fa35c | *data_8fa3d4) | *data_8fa3e0
+0071b228  *data_8fa344 = (ebp_9 | 4) | 0x20
+0071b234  *data_8fa34c = *data_8fa34c | *data_8fa3b8
+0071b24c  int32_t eax_50 = (eax_48 | *data_8fa3ec) | *data_8fa3f8
+0071b252  int32_t ebp_15 = (*data_8fa358 | *data_8fa3d0) | *data_8fa3dc
+0071b258  *data_8fa32c = *data_8fa32c | 0x2000000
+0071b262  int32_t ebp_16 = ebp_15 | *data_8fa3e8
+0071b268  *data_8fa33c = *data_8fa33c | 0x80000000
+0071b272  int32_t ebp_17 = ebp_16 | *data_8fa3f4
+0071b278  *data_8fa350 = edx_10
+0071b284  int32_t edx_12 = *data_8fa354 | *data_8fa3cc
+0071b28a  *data_8fa35c = eax_50
+0071b2a6  int32_t edx_15 = ((edx_12 | *data_8fa3d8) | *data_8fa3e4) | *data_8fa3f0
+0071b2ac  int32_t eax_53 = (*data_8fa360 | *data_8fa30c) | *data_8fa378
+0071b2b2  *data_8fa358 = ebp_17
+0071b2be  int32_t ebp_19 = *data_8fa368 | *data_8fa314
+0071b2c4  *data_8fa354 = edx_15
+0071b2d0  int32_t edx_17 = *data_8fa364 | *data_8fa310
+0071b2d6  int32_t ebp_20 = ebp_19 | *data_8fa380
+0071b2dc  *data_8fa360 = eax_53
+0071b2e8  int32_t eax_55 = *data_8fa374 | 0x30000000
+0071b2f7  *data_8fa364 = edx_17 | ecx_1
+0071b2fd  *data_8fa368 = ebp_20
+0071b303  *data_8fa374 = eax_55
+0071b308  sub_5ad900(data_8fa2ec, data_8efad8)
+0071b317  sub_5ad900(data_8fa2f0, data_8efad8)
+0071b326  sub_5ad900(data_8fa2f4, data_8efadc)
+0071b335  sub_5ad900(data_8fa2f4, data_8efae8)
+0071b344  sub_5ad900(data_8fa2f4, data_8efae4)
+0071b353  sub_5ad900(data_8fa2f8, data_8efadc)
+0071b362  sub_5ad900(data_8fa2f8, data_8efae0)
+0071b371  sub_5ad900(data_8fa2f8, data_8efae4)
+0071b380  sub_5ad900(data_8fa2fc, data_8efadc)
+0071b38f  sub_5ad900(data_8fa300, data_8efae8)
+0071b39e  sub_5ad900(data_8fa304, data_8efae0)
+0071b3ad  sub_5ad900(data_8fa308, data_8efadc)
+0071b3be  sub_7611e0(data_8f9d08, 0, 0x178)
+0071b3cf  sub_7611e0(data_8f9e80, 0, 0x178)
+0071b3d7  *data_8f9d08 = 0x8025b8  {"sLight0Color"}
+0071b3e1  *data_8f9d0c = 0x8025a8  {"sLight0Position"}
+0071b3eb  *data_8f9d10 = 0x802598  {"sLight0Params"}
+0071b3f5  *data_8f9d14 = 0x802584  {"sLight0SimpleParams"}
+0071b3ff  *data_8f9d18 = 0x802574  {"sLight1Color"}
+0071b409  *data_8f9d1c = 0x802564  {"sLight1Position"}
+0071b413  *data_8f9d20 = 0x802554  {"sLight1Params"}
+0071b41d  *data_8f9d24 = 0x802540  {"sLight1SimpleParams"}
+0071b427  *data_8f9d28 = 0x802530  {"sLight2Color"}
+0071b431  *data_8f9d2c = 0x802520  {"sLight2Position"}
+0071b43b  *data_8f9d30 = 0x802510  {"sLight2Params"}
+0071b445  *data_8f9d34 = 0x8024fc  {"sLight2SimpleParams"}
+0071b44f  *data_8f9d38 = 0x8024ec  {"sLightDirColor"}
+0071b459  *data_8f9d3c = 0x8024d8  {"sLightDirDirection"}
+0071b463  *data_8f9d40 = 0x8024c8  {"sLightDirParams"}
+0071b46d  *data_8f9d44 = 0x8024b4  {"sAmbientLightColor"}
+0071b477  *data_8f9d48 = 0x802498  {"sLightDirShadow0Intensity"}
+0071b481  *data_8f9d88 = 0x802480  {"sLightDirShadow0Matrix"}
+0071b48b  *data_8f9d58 = 0x802464  {"sLightDirShadow0Direction"}
+0071b495  *data_8f9d4c = 0x802448  {"sLightDirShadow1Intensity"}
+0071b49f  *data_8f9d8c = 0x802430  {"sLightDirShadow1Matrix"}
+0071b4a9  *data_8f9d5c = 0x802414  {"sLightDirShadow1Direction"}
+0071b4b3  *data_8f9d50 = 0x8023f8  {"sLightDirShadow2Intensity"}
+0071b4bd  *data_8f9d90 = 0x8023e0  {"sLightDirShadow2Matrix"}
+0071b4c7  *data_8f9d60 = 0x8023c4  {"sLightDirShadow2Direction"}
+0071b4d1  *data_8f9d54 = 0x8023a8  {"sLightDirShadow3Intensity"}
+0071b4db  *data_8f9d94 = 0x802390  {"sLightDirShadow3Matrix"}
+0071b4e5  *data_8f9d64 = 0x802374  {"sLightDirShadow3Direction"}
+0071b4ef  *data_8f9d68 = 0x802364  {"sWorldMatrix"}
+0071b4f9  *data_8f9d6c = 0x802354  {"sInvWorldMatrix"}
+0071b503  *data_8f9d70 = 0x802348  {"sViewMatrix"}
+0071b50d  *data_8f9d74 = 0x802338  {"sInvViewMatrix"}
+0071b517  *data_8f9d78 = 0x802324  {"sProjectionMatrix"}
+0071b521  *data_8f9d7c = 0x802310  {"sWorldViewMatrix"}
+0071b52b  *data_8f9d80 = 0x8022f4  {"sWorldViewProjectionMatrix"}
+0071b535  *data_8f9d9c = 0x8022e8  {"sEnvMapX"}
+0071b53f  *data_8f9da0 = 0x8022dc  {"sEnvMapY"}
+0071b549  *data_8f9d84 = 0x8022cc  {"sTextureMatrix"}
+0071b553  *data_8f9d98 = 0x8022b8  {"sScreenAspectRatio"}
+0071b55d  *data_8f9da4 = 0x80229c  {"sScreenSpaceUVDepthScaling"}
+0071b567  *data_8f9da8 = 0x802284  {"sScreenSpaceUVScaling"}
+0071b571  *data_8f9dac = 0x802268  {"sScreenSpaceUVTranslation"}
+0071b57b  *data_8f9db0 = 0x80225c  {"sDiffuseMap"}
+0071b585  *data_8f9db8 = 0x802250  {"sNormalMap"}
+0071b594  *data_8f9db4 = 0x802240  {"sSpecularMap"}
+0071b59e  *data_8f9dbc = 0x802230  {"sReflectionMap"}
+0071b5a8  *data_8f9dc0 = 0x802224  {"sLightMap"}
+0071b5b2  *data_8f9dc4 = 0x802210  {"sAmbientTexTexture"}
+0071b5bc  *data_8f9dc8 = 0x8021fc  {"sBumpLightmapLookup"}
+0071b5c6  *data_8f9dcc = 0x8021f0  {"sMovieTex0"}
+0071b5d0  *data_8f9dd0 = 0x8021e4  {"sMovieTex1"}
+0071b5da  *data_8f9dd4 = 0x8021d8  {"sMovieTex2"}
+0071b5e4  *data_8f9dd8 = 0x8021c4  {"sRenderTargetMap"}
+0071b5ee  *data_8f9ddc = 0x8021b8  {"sGaussX1Map"}
+0071b5f8  *data_8f9de0 = 0x8021ac  {"sGaussX2Map"}
+0071b602  *data_8f9de4 = 0x8021a0  {"sGaussX3Map"}
+0071b60c  *data_8f9de8 = 0x802194  {"sGaussX4Map"}
+0071b616  *data_8f9dec = 0x802180  {"sDepthOfFieldMap"}
+0071b620  *data_8f9df0 = 0x802170  {"sTempTextureMap"}
+0071b62a  *data_8f9df4 = 0x802164  {"sGlowMap"}
+0071b634  *data_8f9e00 = 0x802158  {"sShadowMap"}
+0071b63e  *data_8f9e04 = 0x80214c  {"sShadowMap1"}
+0071b648  *data_8f9e08 = 0x802140  {"sShadowMap2"}
+0071b652  *data_8f9e0c = 0x802134  {"sShadowMap3"}
+0071b65c  *data_8f9e5c = 0x80212c  {"sDeltaU"}
+0071b666  *data_8f9e60 = 0x802124  {"sDeltaV"}
+0071b670  *data_8f9df8 = 0x802110  {"s2DShadowTexture"}
+0071b67a  *data_8f9dfc = 0x8020f8  {"s2DShadowMaskTexture"}
+0071b684  *data_8f9e64 = 0x8020e4  {"sBackgroundStrenght"}
+0071b68e  *data_8f9e68 = 0x8020d0  {"sContourStrenght"}
+0071b698  *data_8f9e10 = 0x8020b4  {"sShadowAccumulationBuffer"}
+0071b6a2  *data_8f9e14 = 0x8020a0  {"sShadowAccTexWidth"}
+0071b6ac  *data_8f9e18 = 0x80208c  {"sShadowAccTexHeight"}
+0071b6b6  *data_8f9e1c = 0x802078  {"sLightMapTransform"}
+0071b6c0  *data_8f9e20 = 0x802060  {"sMaterialSpecularExp"}
+0071b6ca  *data_8f9e24 = 0x802044  {"sMaterialSpecularIntensity"}
+0071b6d4  *data_8f9e28 = 0x80202c  {"sMaterialSpecularColor"}
+0071b6de  *data_8f9e2c = 0x802014  {"sMaterialReflectivity"}
+0071b6e8  *data_8f9e30 = 0x802000  {"sMaterialBumpDepth"}
+0071b6f2  *data_8f9e34 = 0x801fe8  {"sMaterialDiffuseColor"}
+0071b6fc  *data_8f9e38 = 0x801fcc  {"sMaterialShadowIntensity"}
+0071b706  *data_8f9e6c = 0x801fb8  {"sSkinningMatrices"}
+0071b710  *data_8f9e78 = 0x801f98  {"sDebugSpecularLightIntensity"}
+0071b71a  *data_8f9e7c = 0x801f7c  {"sDebugDiffuseLightIntensity"}
+0071b724  *data_8f9e3c = 0x801f68  {"sDepthOfFieldFar"}
+0071b72e  *data_8f9e40 = 0x801f54  {"sDepthOfFieldNear"}
+0071b738  *data_8f9e44 = 0x801f3c  {"sDepthOfFieldFarRamp"}
+0071b742  *data_8f9e48 = 0x801f24  {"sDepthOfFieldNearRamp"}
+0071b74c  *data_8f9e4c = 0x801f14  {"sGlowIntensity"}
+0071b756  *data_8f9e50 = 0x801f04  {"s2DShadowNear"}
+0071b760  *data_8f9e54 = 0x801ef4  {"s2DShadowFar"}
+0071b76a  *data_8f9e58 = 0x801edc  {"sDimSelectionIntensity"}
+0071b774  *data_8f9e70 = 0x801ecc  {"sAlphaTestRef"}
+0071b77e  *data_8f9e74 = 0x801eb8  {"sAlphaTestDirection"}
+0071b788  *data_8f9e80 = 2
+0071b78e  *data_8f9e84 = 2
+0071b794  *data_8f9e88 = 2
+0071b79a  *data_8f9e8c = 2
+0071b7a0  *data_8f9e90 = 2
+0071b7a6  *data_8f9e94 = 2
+0071b7ac  *data_8f9e98 = 2
+0071b7b2  *data_8f9e9c = 2
+0071b7b8  *data_8f9ea0 = 2
+0071b7be  *data_8f9ea4 = 2
+0071b7c4  *data_8f9ea8 = 2
+0071b7ca  *data_8f9eac = 2
+0071b7d0  *data_8f9eb0 = 2
+0071b7d6  *data_8f9eb4 = 2
+0071b7dc  *data_8f9eb8 = 2
+0071b7e2  *data_8f9ebc = 2
+0071b7e8  *data_8f9ee0 = 3
+0071b7ee  *data_8f9ee4 = 3
+0071b7f4  *data_8f9ee8 = 3
+0071b7fa  *data_8f9eec = 3
+0071b800  *data_8f9ef0 = 3
+0071b806  *data_8f9ef4 = 3
+0071b80c  *data_8f9ef8 = 3
+0071b812  *data_8f9f14 = 2
+0071b818  *data_8f9f18 = 2
+0071b81e  *data_8f9efc = 3
+0071b824  *data_8f9f10 = 1
+0071b82a  *data_8f9f28 = 4
+0071b830  *data_8f9f30 = 4
+0071b836  *data_8f9f2c = 4
+0071b83c  *data_8f9fa0 = 2
+0071b842  *data_8f9fac = 2
+0071b848  *data_8f9f24 = 2
+0071b84e  *data_8f9ed0 = 2
+0071b854  *data_8f9ed4 = 2
+0071b85a  *data_8f9ed8 = 2
+0071b860  *data_8f9edc = 2
+0071b866  *data_8f9f94 = 2
+0071b86e  int32_t ecx_2 = 0x5e
+0071b873  int32_t* edi = data_8f9ff8
+0071b878  for (; ecx_2 != 0; ecx_2 = ecx_2 - 1)
+0071b878      *edi = 1
+0071b878      edi = edi + 4
+0071b87a  int32_t ecx_3 = 0
+0071b87c  *data_8f9f34 = 4
+0071b882  *data_8f9f38 = 4
+0071b888  *data_8f9f3c = 4
+0071b88e  *data_8f9f40 = 4
+0071b894  *data_8f9f44 = 4
+0071b89a  *data_8f9f48 = 4
+0071b8a0  *data_8f9f4c = 4
+0071b8a6  *data_8f9f50 = 4
+0071b8ac  *data_8f9f54 = 4
+0071b8b2  *data_8f9f58 = 4
+0071b8b8  *data_8f9f5c = 4
+0071b8be  *data_8f9f60 = 4
+0071b8c4  *data_8f9f64 = 4
+0071b8ca  *data_8f9f68 = 4
+0071b8d0  *data_8f9f6c = 4
+0071b8d6  *data_8f9f78 = 4
+0071b8dc  *data_8f9f7c = 4
+0071b8e2  *data_8f9f80 = 4
+0071b8e8  *data_8f9f84 = 4
+0071b8ee  *data_8f9f70 = 4
+0071b8f4  *data_8f9f74 = 4
+0071b8fa  *data_8f9fd4 = 1
+0071b900  *data_8f9fd8 = 1
+0071b906  *data_8f9fdc = 1
+0071b90c  *data_8f9fe0 = 1
+0071b912  *data_8f9f98 = 1
+0071b918  *data_8f9f9c = 1
+0071b91e  *data_8f9fa4 = 1
+0071b924  *data_8f9fa8 = 1
+0071b92a  *data_8f9fb0 = 1
+0071b930  *data_8f9fe4 = 3
+0071b936  *data_8f9ff0 = 1
+0071b93c  *data_8f9ff4 = 1
+0071b942  *data_8f9f1c = 1
+0071b948  *data_8f9f20 = 1
+0071b94e  *data_8f9fb4 = 1
+0071b954  *data_8f9fb8 = 1
+0071b95a  *data_8f9fbc = 1
+0071b960  *data_8f9fc0 = 1
+0071b966  *data_8f9fc4 = 1
+0071b96c  *data_8f9fc8 = 1
+0071b972  *data_8f9fcc = 1
+0071b978  *data_8f9fd0 = 1
+0071b97e  *data_8f9ec0 = 1
+0071b984  *data_8f9f00 = 3
+0071b98a  *data_8f9ec4 = 1
+0071b990  *data_8f9f04 = 3
+0071b996  *data_8f9ec8 = 1
+0071b99c  *data_8f9f08 = 3
+0071b9a2  *data_8f9ecc = 1
+0071b9a8  *data_8f9f0c = 3
+0071b9ae  *data_8f9f88 = 4
+0071b9b4  *data_8f9f8c = 1
+0071b9ba  *data_8f9f90 = 1
+0071b9c0  *data_8f9fe8 = 1
+0071b9c6  *data_8f9fec = 1
+0071b9cc  *data_8fa15c = 0x12
+0071b9d6  void* eax_56 = nullptr
+0071b9e6  do
+0071b9e6      int32_t edi_1 = *(eax_56 + 0x8f9ff8)
+0071b9ec      int32_t esi_2 = *(eax_56 + 0x8f9e80) + 0xffffffff
+0071b9f1      *(eax_56 + 0x8fa170) = ecx_3
+0071b9ef      int32_t esi_3
+0071b9ef      if (esi_2 u> 3)
+0071ba12          esi_3 = 0
+0071b9f9      else
+0071b9f9          if (esi_2 == 0 || esi_2 == 3)
+0071ba00              esi_3 = 4
+0071b9f9          if (esi_2 == 1)
+0071ba04              esi_3 = 0x10
+0071b9f9          if (esi_2 == 2)
+0071ba0b              esi_3 = 0x40
+0071ba14      esi_3 = esi_3 * edi_1
+0071ba17      eax_56 = eax_56 + 4
+0071ba19      ecx_3 = ecx_3 + esi_3
+0071ba19  while (eax_56 s< 0x178)
+0071ba25  *data_8fa2e8 = ecx_3
+0071ba2c  return eax_56
+
+
+---------------------------------------------------------------
+
+
+int32_t sub_5b01f0()
+
+005b01f7  int32_t* fsbase
+005b01f7  void* eax = *fsbase
+005b01fd  void* var_c = eax
+005b01fe  *fsbase = &var_c
+005b0206  if (*data_8bb6c8 != 0)
+005b057d      int32_t esi_1 = *data_8bb6cc
+005b0583      if (esi_1 != 0)
+005b058e          do
+005b058e              eax = *(*esi_1 + 0x10)()
+005b0590              esi_1 = *(esi_1 + 0xc)
+005b0590          while (esi_1 != 0)
+005b021b  else
+005b021b      void* eax_1 = sub_42dc60(0x50)
+005b0224      if (eax_1 != 0)
+005b0232          sub_72b020(eax_1)
+005b0245      void* eax_2 = sub_42dc60(0x50)
+005b024e      if (eax_2 != 0)
+005b025c          sub_72ad10(eax_2)
+005b026c      void* eax_3 = sub_42dc60(0x50)
+005b0275      if (eax_3 != 0)
+005b0283          sub_72aa30(eax_3)
+005b0293      void* eax_4 = sub_42dc60(0x50)
+005b029c      if (eax_4 != 0)
+005b02aa          sub_72a600(eax_4)
+005b02ba      void* eax_5 = sub_42dc60(0x50)
+005b02c3      if (eax_5 != 0)
+005b02d1          sub_72a350(eax_5)
+005b02e1      void* eax_6 = sub_42dc60(0x50)
+005b02ea      if (eax_6 != 0)
+005b02f8          sub_729fd0(eax_6)
+005b0308      void* eax_7 = sub_42dc60(0x50)
+005b0311      if (eax_7 != 0)
+005b031f          sub_729c20(eax_7)
+005b032f      void* eax_8 = sub_42dc60(0x50)
+005b0338      if (eax_8 != 0)
+005b0346          sub_7298e0(eax_8)
+005b0356      void* eax_9 = sub_42dc60(0x50)
+005b035f      if (eax_9 != 0)
+005b036d          sub_729400(eax_9)
+005b037d      void* eax_10 = sub_42dc60(0x50)
+005b0386      if (eax_10 != 0)
+005b0394          sub_728f20(eax_10)
+005b03a4      void* eax_11 = sub_42dc60(0x50)
+005b03ad      if (eax_11 != 0)
+005b03bb          sub_7289d0(eax_11)
+005b03cb      void* eax_12 = sub_42dc60(0x50)
+005b03d4      if (eax_12 != 0)
+005b03e2          sub_728650(eax_12)
+005b03f2      void* eax_13 = sub_42dc60(0x50)
+005b03fb      if (eax_13 != 0)
+005b0409          sub_728280(eax_13)
+005b0419      void* eax_14 = sub_42dc60(0x50)
+005b0422      if (eax_14 != 0)
+005b0430          sub_727eb0(eax_14)
+005b0440      void* eax_15 = sub_42dc60(0x50)
+005b0449      if (eax_15 != 0)
+005b0457          sub_727c30(eax_15)
+005b0467      void* eax_16 = sub_42dc60(0x50)
+005b0470      if (eax_16 != 0)
+005b047e          sub_726670(eax_16)
+005b048e      void* eax_17 = sub_42dc60(0x50)
+005b0497      if (eax_17 != 0)
+005b04a5          sub_724ec0(eax_17)
+005b04b5      void* eax_18 = sub_42dc60(0x50)
+005b04be      if (eax_18 != 0)
+005b04cc          sub_723b70(eax_18)
+005b04dc      void* eax_19 = sub_42dc60(0x50)
+005b04e5      if (eax_19 != 0)
+005b04f3          sub_722950(eax_19)
+005b0503      void* eax_20 = sub_42dc60(0x50)
+005b050c      if (eax_20 != 0)
+005b051a          sub_7213b0(eax_20)
+005b052a      void* eax_21 = sub_42dc60(0x50)
+005b0533      if (eax_21 != 0)
+005b0541          sub_71fb70(eax_21)
+005b0551      eax = sub_42dc60(0x50)
+005b0568      if (eax != 0)
+005b0568          int32_t* eax_22 = sub_71e4c0(eax)
+005b0572          *fsbase = var_c
+005b057c          return eax_22
+005b059c  *fsbase = var_c
+005b05a6  return eax
+
+------------------------------------------------------------------
+
+
+
+int32_t* __stdcall sub_5c2d90(void* arg1 @ ecx, int32_t* arg2)
+
+005c2d9e  uint32_t eax = *(arg2 + 0x90)
+005c2da7  void* edi = arg1
+005c2da4  char var_18_1
+005c2da4  if (eax != 0)
+005c2db2      eax = *(eax + 0x38) u>> 0xd
+005c2db5      eax.b = not.b(eax.b)
+005c2db9      var_18_1 = 1
+005c2da4  if (eax == 0 || (eax != 0 && (eax.b & 1) == 0))
+005c2dc0      var_18_1 = 0
+005c2dc5  long double x87_r7 = fconvert.t(0.00999999978f)
+005c2dcb  char var_19 = 1
+005c2dd0  long double temp1 = fconvert.t(*(arg2 + 0x144))
+005c2dd0  x87_r7 - temp1
+005c2dd6  eax.w = (x87_r7 < temp1 ? 1 : 0 << 8) | ((0 ? 1 : 0 << 9) | ((is_unordered.t(x87_r7, temp1) ? 1 : 0 << 0xa) | ((x87_r7 == temp1 ? 1 : 0 << 0xe) | 0)))
+005c2dd8  eax:1.b & 5
+005c2dd8  bool p = unimplemented  {test ah, 0x5}
+005c2ddb  if (p)
+005c2ddd      var_19 = 0
+005c2de8  void* eax_2 = *(arg2 + 0x8c)
+005c2dfc  arg1.b = *(arg2 + 0x101)
+005c2e08  char var_15 = arg1.b
+005c2e1c  float var_10 = fconvert.s((fconvert.t(*(arg2 + 0x120)) * fconvert.t(0.5899999737739563)) + (fconvert.t(*(arg2 + 0x11c)) * fconvert.t(0.30000001192092896)) + (fconvert.t(*(arg2 + 0x124)) * fconvert.t(0.10999999940395355)))
+005c2dee  char var_17_1
+005c2dee  if (eax_2 != 0)
+005c2e2d      var_17_1 = 1
+005c2dee  if (eax_2 == 0 || (eax_2 != 0 && (not.b((*(eax_2 + 0x38) u>> 0xd).b) & 1) == 0))
+005c2e34      var_17_1 = 0
+005c2e39  void* eax_3 = *(arg2 + 0x88)
+005c2e3f  char var_1a_1
+005c2e3f  if (eax_3 != 0)
+005c2e4d      var_1a_1 = 1
+005c2e3f  if (eax_3 == 0 || (eax_3 != 0 && (not.b((*(eax_3 + 0x38) u>> 0xd).b) & 1) == 0))
+005c2e54      var_1a_1 = 0
+005c2e59  void* eax_6 = *(arg2 + 0xa0)
+005c2e61  arg1.b = *(edi + 0x167)
+005c2e67  char var_16 = arg1.b
+005c2e5f  char ebx
+005c2e5f  if ((eax_6 == 0 || (eax_6 != 0 && (not.b((*(eax_6 + 0x38) u>> 0xd).b) & 1) == 0)) && *(arg2 + 0x9c) == 0)
+005c2e83      ebx = 0
+005c2e5f  if ((eax_6 != 0 && (not.b((*(eax_6 + 0x38) u>> 0xd).b) & 1) != 0) || ((eax_6 == 0 || (eax_6 != 0 && (not.b((*(eax_6 + 0x38) u>> 0xd).b) & 1) == 0)) && *(arg2 + 0x9c) != 0))
+005c2e87      ebx = 1
+005c2e89  int16_t eax_7 = sub_45f740()
+005c2e8e  if (eax_7.b == 0 || (eax_7.b != 0 && *data_8e5dc4 == 0))
+005c2e9f      eax_7.b = 0
+005c2e8e  if (eax_7.b != 0 && *data_8e5dc4 != 0)
+005c2e9b      eax_7.b = 1
+005c2ea1  if (ebx != 0)
+005c2ea5      eax_7.b = 0
+005c2ea9  *(arg2 + 8) = 0
+005c2ea7  int32_t* eax_15
+005c2ea7  if (eax_7.b == 0)
+005c3178      char* var_2c_5
+005c3178      char* var_2c_10
+005c3178      if (ebx == 0)
+005c3178          if (*(edi + 0x164) == 0)
+005c3178              if (var_16 == 0)
+005c3196                  if (var_18_1 != 0 && var_19 != 0)
+005c3196                      float* ecx_27 = &var_10
+005c31a1                      if (var_1a_1 != 0)
+005c31a1                          sub_4966c0(ecx_27, "EnvLightmap")
+005c31ad                          sub_5c1f40(arg2, &var_10)
+005c31bb                          sub_4966c0(&var_10, "EnvLightmap")
+005c31d2                          return sub_5c1f70(arg2, &var_10)
+005c31da                      sub_4966c0(ecx_27, data_7f5224)
+005c31e6                      sub_5c1f40(arg2, &var_10)
+005c31eb                      var_2c_10 = data_7f5224
+005c3191                      goto label_5c3312
+005c3205                  if (var_17_1 != 0)
+005c3205                      float* ecx_32 = &var_10
+005c3294                      if (var_15 == 0)
+005c3294                          if (var_1a_1 == 0)
+005c3294                              sub_4966c0(ecx_32, "BumpDiffuse")
+005c32a0                              sub_5c1f40(arg2, &var_10)
+005c32a5                              var_2c_5 = "BumpDiffuse"
+005c32aa                              goto label_5c3035
+005c3277                          sub_4966c0(ecx_32, "BumpDiffuseLightmap")
+005c3283                          sub_5c1f40(arg2, &var_10)
+005c3288                          var_2c_10 = "BumpDiffuseLightmap"
+005c328d                          goto label_5c3312
+005c3237                      if (var_1a_1 == 0)
+005c3237                          sub_4966c0(ecx_32, "Bump")
+005c3243                          sub_5c1f40(arg2, &var_10)
+005c3251                          sub_4966c0(&var_10, "Bump")
+005c3268                          return sub_5c1f70(arg2, &var_10)
+005c3217                      sub_4966c0(ecx_32, "BumpLightmap")
+005c3223                      sub_5c1f40(arg2, &var_10)
+005c3228                      var_2c_5 = "BumpLightmap"
+005c320b                      goto label_5c3035
+005c32b4              float* ecx_39 = &var_10
+005c32bf              if (var_1a_1 != 0)
+005c32bf                  sub_4966c0(ecx_39, "Lightmap")
+005c32cb                  sub_5c1f40(arg2, &var_10)
+005c32d9                  sub_4966c0(&var_10, "Lightmap")
+005c32f0                  return sub_5c1f70(arg2, &var_10)
+005c32f8              sub_4966c0(ecx_39, "Simple")
+005c3304              sub_5c1f40(arg2, &var_10)
+005c3309              var_2c_10 = "Simple"
+005c32af              goto label_5c3312
+005c30d7          if (var_16 == 0)
+005c30f5              if (var_18_1 != 0 && var_19 != 0)
+005c30f5                  sub_4966c0(&var_10, "EnvDeform")
+005c3101                  sub_5c1f40(arg2, &var_10)
+005c310f                  sub_4966c0(&var_10, data_7f5224)
+005c3126                  return sub_5c1f70(arg2, &var_10)
+005c3139              if (var_17_1 != 0)
+005c3139                  sub_4966c0(&var_10, "BumpDeform")
+005c3145                  sub_5c1f40(arg2, &var_10)
+005c314a                  var_2c_10 = "Bump"
+005c314f                  goto label_5c3312
+005c315d          sub_4966c0(&var_10, "SimpleDeform")
+005c3169          sub_5c1f40(arg2, &var_10)
+005c316e          var_2c_5 = "Simple"
+005c3035          label_5c3035:
+005c3035          sub_4966c0(&var_10, var_2c_5)
+005c304c          return sub_5c1f70(arg2, &var_10)
+005c2faa      float* ecx_8 = &var_10
+005c2fa3      int32_t* var_2c_3
+005c2fa3      char* var_2c_4
+005c2fa3      bool p_3
+005c2fa3      if (*(edi + 0x164) == 0)
+005c305d          if (*(arg2 + 0xd4) != 0)
+005c305d              sub_4966c0(ecx_8, "CartoonEnv")
+005c3069              sub_5c1f40(arg2, &var_10)
+005c3077              sub_4966c0(&var_10, "Cartoon")
+005c308e              return sub_5c1f70(arg2, &var_10)
+005c3091          long double x87_r7_7 = float.t(0)
+005c3093          long double temp3_1 = fconvert.t(*(arg2 + 0xc4))
+005c3093          x87_r7_7 - temp3_1
+005c3099          (x87_r7_7 < temp3_1 ? 1 : 0 << 8) | ((0 ? 1 : 0 << 9) | ((is_unordered.t(x87_r7_7, temp3_1) ? 1 : 0 << 0xa) | ((x87_r7_7 == temp3_1 ? 1 : 0 << 0xe) | 0))):1.b & 0x44
+005c309b          p_3 = unimplemented  {test ah, 0x44}
+005c2fa3          if (p_3)
+005c30c0              var_2c_4 = "Cartoon"
+005c30a5          else
+005c30a5              sub_4966c0(ecx_8, "CartoonNoOutline")
+005c30b1              sub_5c1f40(arg2, &var_10)
+005c30b6              var_2c_10 = data_7f526c  {"CartoonNoOutline"}
+005c3312              label_5c3312:
+005c3312              sub_4966c0(&var_10, var_2c_10)
+005c331e              eax_15 = sub_5c1f70(arg2, &var_10)
+005c2fb4      else
+005c2fb4          long double x87_r7_6 = float.t(0)
+005c2fb6          long double temp2_1 = fconvert.t(*(arg2 + 0xc4))
+005c2fb6          x87_r7_6 - temp2_1
+005c2fbc          (x87_r7_6 < temp2_1 ? 1 : 0 << 8) | ((0 ? 1 : 0 << 9) | ((is_unordered.t(x87_r7_6, temp2_1) ? 1 : 0 << 0xa) | ((x87_r7_6 == temp2_1 ? 1 : 0 << 0xe) | 0))):1.b & 0x44
+005c2fbe          bool p_2 = unimplemented  {test ah, 0x44}
+005c2fc8          if (not(p_2))
+005c2fc8              sub_4966c0(ecx_8, "CartoonDeformNoOutline")
+005c2fd4              sub_5c1f40(arg2, &var_10)
+005c2fe2              sub_4966c0(&var_10, "CartoonNoOutline")
+005c2ff9              return sub_5c1f70(arg2, &var_10)
+005c300a          if (*(arg2 + 0xd4) != 0)
+005c300a              sub_4966c0(ecx_8, "CartoonDeformEnv")
+005c3013              var_2c_3 = &var_10
+005c3027              label_5c3027:
+005c3027              sub_5c1f40(arg2, var_2c_3)
+005c302c              var_2c_5 = data_7f5240  {"Cartoon"}
+005c302c              goto label_5c3035
+005c3016          var_2c_4 = "CartoonDeform"
+005c301b      if (((*(edi + 0x164) == 0 && *(arg2 + 0xd4) == 0) && p_3) || *(edi + 0x164) != 0)
+005c301b          sub_4966c0(ecx_8, var_2c_4)
+005c3024          var_2c_3 = &var_10
+005c3024          goto label_5c3027
+005c2ee2  else
+005c2edd      *(*arg2 + 0x30)()
+005c2eeb      if ((var_18_1 == 0 || (var_18_1 != 0 && var_19 != 0)) && var_19 != 0)
+005c2f0a          int32_t eax_12 = *(*arg2 + 0x2c)()
+005c2f0c          bool p_1
+005c2f0c          if (eax_12 == 0)
+005c2f10              long double x87_r7_5 = float.t(0)
+005c2f12              long double temp4_1 = fconvert.t(var_10)
+005c2f12              x87_r7_5 - temp4_1
+005c2f16              eax_12.w = (x87_r7_5 < temp4_1 ? 1 : 0 << 8) | ((0 ? 1 : 0 << 9) | ((is_unordered.t(x87_r7_5, temp4_1) ? 1 : 0 << 0xa) | ((x87_r7_5 == temp4_1 ? 1 : 0 << 0xe) | 0)))
+005c2f18              eax_12:1.b & 5
+005c2f18              p_1 = unimplemented  {test ah, 0x5}
+005c2f0c          if (eax_12 != 0 || (eax_12 == 0 && not(p_1)))
+005c2f1f              *(*arg2 + 0x2c)()
+005c2f38      eax_15 = sub_5c1e80(arg2, data_8ef4b0)
+005c2f45      if (eax_15.b != 0)
+005c2f45          *(arg2 + 8) = 1
+005c2f49          void* esi_1 = *(arg2 + 4)
+005c2f4c          void* ecx_5
+005c2f4c          if (esi_1 != 0)
+005c2f56              *(esi_1 + 0x3c) = *data_8ba770
+005c2f59              ecx_5 = *(esi_1 + 0x30)
+005c2f65              if (ecx_5 == 0 && *(esi_1 + 0x28) != ecx_5)
+005c2f65                  if ((*(esi_1 + 0x38) & 0x9000) != 0)
+005c2f75                      sub_41a5e0(esi_1, 0x8951a0)
+005c2f88                  return sub_6ca6c0(*(esi_1 + 0x30))
+005c2f4c          if (esi_1 == 0 || (esi_1 != 0 && ecx_5 == 0))
+005c2f8b              ecx_5 = nullptr
+005c2f98          return sub_6ca6c0(ecx_5)
+005c3329  return eax_15
+
+-------------------------------------------------------------------------
+
+uint32_t __fastcall sub_5cdd50(void* arg1)
+
+005cdd57  int32_t* fsbase
+005cdd57  uint32_t eax = *fsbase
+005cdd5d  uint32_t var_c = eax
+005cdd5e  *fsbase = &var_c
+005cdd6b  void* ebp = arg1
+005cdd6d  void* esi = *(ebp + 0xfc)
+005cdd74  void* edi = ebp + 0xfc
+005cdd7e  void* var_18 = ebp
+005cdd7c  if (esi != 0)
+005cdd8e      void* var_40
+005cdd8e      if (((*(esi + 0x38) u>> 0xf).b & 1) == 0)
+005cdd92          eax = *(esi + 0x30)
+005cdd9d          *(esi + 0x3c) = *data_8ba770
+005cdd95          uint32_t esi_1
+005cdd95          if (eax != 0)
+005cdda2              esi_1 = eax
+005cdda6          else if (*(esi + 0x28) == 0)
+005cddab              esi_1 = 0
+005cddaf          else
+005cddaf              if ((*(esi + 0x38) & 0x9000) != 0)
+005cddb8                  var_40 = data_8951a0
+005cddbf                  sub_41a5e0(esi, 0x8951a0)
+005cddc4              esi_1 = *(esi + 0x30)
+005cddc9          eax.b = esi_1 != 0
+005cdd8e      if (((*(esi + 0x38) u>> 0xf).b & 1) != 0 || (((*(esi + 0x38) u>> 0xf).b & 1) == 0 && eax.b != 0))
+005cddd6          eax = sub_5c8df0(ebp)
+005cdddb          if (eax.b == 0)
+005cdde3              var_40 = edi
+005cdde8              void* var_28
+005cdde8              sub_5d5e30(&var_28, var_40)
+005cdded              void* esi_2 = *edi
+005cddef              int32_t eax_3
+005cddef              int32_t esi_3
+005cddef              if (esi_2 != 0)
+005cddf7                  eax_3 = *(esi_2 + 0x30)
+005cde02                  *(esi_2 + 0x3c) = *data_8ba770
+005cddef                  if (eax_3 != 0)
+005cde07                      esi_3 = eax_3
+005cddef                  if (eax_3 == 0 && *(esi_2 + 0x28) != 0)
+005cde10                      if ((*(esi_2 + 0x38) & 0x9000) != 0)
+005cde19                          var_40 = data_8951a0
+005cde20                          sub_41a5e0(esi_2, 0x8951a0)
+005cde25                      esi_3 = *(esi_2 + 0x30)
+005cddef              if (esi_2 == 0 || ((esi_2 != 0 && eax_3 == 0) && *(esi_2 + 0x28) == 0))
+005cde2a                  esi_3 = 0
+005cde2c              *(ebp + 0x100) = esi_3
+005cde32              void* esi_4 = var_28
+005cde36              void* eax_5
+005cde36              if (esi_4 != 0)
+005cde3f                  *(esi_4 + 0x3c) = *data_8ba770
+005cde42                  eax_5 = *(esi_4 + 0x30)
+005cde36                  if (eax_5 == 0 && *(esi_4 + 0x28) != 0)
+005cde4e                      if ((*(esi_4 + 0x38) & 0x9000) != 0)
+005cde57                          var_40 = data_8951a0
+005cde5e                          sub_41a5e0(esi_4, 0x8951a0)
+005cde63                      eax_5 = *(esi_4 + 0x30)
+005cde36              if (esi_4 == 0 || ((esi_4 != 0 && eax_5 == 0) && *(esi_4 + 0x28) == 0))
+005cde68                  eax_5 = nullptr
+005cde6a              char ecx_4 = *(eax_5 + 0x164)
+005cde77              var_40 = nullptr
+005cde7a              sub_70f5f0(ebp + 0x44, nullptr)
+005cde7f              var_40 = 6
+005cde83              int32_t ecx_9 = sub_70f5f0(ebp + 0x44, 6)
+005cde88              int32_t var_24_1 = 0
+005cde8c              int32_t var_1c_1 = 0
+005cde90              int32_t var_20_1 = 0
+005cde94              void* var_44
+005cde94              int32_t var_4
+005cde94              void* esi_8
+005cde94              while (true)
+005cde94                  void* esi_6 = *edi
+005cde96                  void* eax_6
+005cde96                  void* esi_7
+005cde96                  if (esi_6 != 0)
+005cde9a                      eax_6 = *(esi_6 + 0x30)
+005cdea5                      *(esi_6 + 0x3c) = *data_8ba770
+005cde96                      if (eax_6 != 0)
+005cdeaa                          esi_7 = eax_6
+005cde96                      if (eax_6 == 0 && *(esi_6 + 0x28) != 0)
+005cdeb3                          if ((*(esi_6 + 0x38) & 0x9000) != 0)
+005cdebc                              var_40 = data_8951a0
+005cdec3                              ecx_9 = sub_41a5e0(esi_6, 0x8951a0)
+005cdec8                          esi_7 = *(esi_6 + 0x30)
+005cde96                  if (esi_6 == 0 || ((esi_6 != 0 && eax_6 == 0) && *(esi_6 + 0x28) == 0))
+005cdecd                      esi_7 = nullptr
+005cded9                  esi_8 = *edi
+005cdedb                  if (var_24_1 s>= *(esi_7 + 0xc8))
+005cdedb                      break
+005cdee1                  void* eax_8
+005cdee1                  if (esi_8 != 0)
+005cdee5                      eax_8 = *(esi_8 + 0x30)
+005cdeea                      ecx_9 = *data_8ba770
+005cdef0                      *(esi_8 + 0x3c) = ecx_9
+005cdee1                      if (eax_8 == 0 && *(esi_8 + 0x28) != 0)
+005cdefa                          if ((*(esi_8 + 0x38) & 0x9000) != 0)
+005cdf03                              var_40 = data_8951a0
+005cdf0a                              ecx_9 = sub_41a5e0(esi_8, 0x8951a0)
+005cdf0f                          eax_8 = *(esi_8 + 0x30)
+005cdee1                  if (esi_8 == 0 || ((esi_8 != 0 && eax_8 == 0) && *(esi_8 + 0x28) == 0))
+005cdf14                      eax_8 = nullptr
+005cdf1c                  void* esi_10 = *(eax_8 + 0xd0) + var_20_1
+005cdf20                  var_40 = ecx_9
+005cdf2d                  sub_495950(&var_40)
+005cdf34                  var_4.b = 1
+005cdf39                  sub_495a50(&var_40)
+005cdf44                  var_44 = *(esi_10 + 0x80)
+005cdf4c                  var_44 = sub_495a70(&var_40, var_44)
+005cdf56                  var_4.b = 2
+005cdf5b                  sub_67a280(edi, &var_44)
+005cdf65                  var_4.b = 0
+005cdf69                  sub_5cdc20("diffuse map", var_44)
+005cdf7d                  sub_495950(&var_40)
+005cdf84                  var_4.b = 3
+005cdf89                  sub_495a50(&var_40)
+005cdf94                  var_44 = *(esi_10 + 0x84)
+005cdf9c                  var_44 = sub_495a70(&var_40, var_44)
+005cdfa6                  var_4.b = 4
+005cdfab                  sub_67a280(edi, &var_44)
+005cdfb5                  var_4.b = 0
+005cdfb9                  sub_5cdc20("detail map", var_44)
+005cdfcd                  sub_495950(&var_40)
+005cdfd4                  var_4.b = 5
+005cdfd9                  sub_495a50(&var_40)
+005cdfe4                  var_44 = *(esi_10 + 0x88)
+005cdfec                  var_44 = sub_495a70(&var_40, var_44)
+005cdff6                  var_4.b = 6
+005cdffb                  sub_67a280(edi, &var_44)
+005ce005                  var_4.b = 0
+005ce009                  sub_5cdc20("light map", var_44)
+005ce01d                  sub_495950(&var_40)
+005ce024                  var_4.b = 7
+005ce029                  sub_495a50(&var_40)
+005ce034                  var_44 = *(esi_10 + 0x90)
+005ce03c                  var_44 = sub_495a70(&var_40, var_44)
+005ce046                  var_4.b = 8
+005ce04b                  sub_67a280(edi, &var_44)
+005ce055                  var_4.b = 0
+005ce059                  sub_5cdc20("env map", var_44)
+005ce06d                  sub_495950(&var_40)
+005ce074                  var_4.b = 9
+005ce079                  sub_495a50(&var_40)
+005ce084                  var_44 = *(esi_10 + 0x8c)
+005ce08c                  var_44 = sub_495a70(&var_40, var_44)
+005ce096                  var_4.b = 0xa
+005ce09b                  sub_67a280(edi, &var_44)
+005ce0a5                  var_4.b = 0
+005ce0a9                  sub_5cdc20("bump map", var_44)
+005ce0bd                  sub_495950(&var_40)
+005ce0c4                  var_4.b = 0xb
+005ce0c9                  sub_495a50(&var_40)
+005ce0d4                  var_44 = *(esi_10 + 0x94)
+005ce0dc                  var_44 = sub_495a70(&var_40, var_44)
+005ce0e6                  var_4.b = 0xc
+005ce0eb                  sub_67a280(edi, &var_44)
+005ce0f5                  var_4.b = 0
+005ce0f9                  sub_5cdc20("specular color map", var_44)
+005ce10d                  sub_495950(&var_40)
+005ce114                  var_4.b = 0xd
+005ce119                  sub_495a50(&var_40)
+005ce124                  var_44 = *(esi_10 + 0x98)
+005ce12c                  var_44 = sub_495a70(&var_40, var_44)
+005ce136                  var_4.b = 0xe
+005ce13b                  sub_67a280(edi, &var_44)
+005ce145                  var_4.b = 0
+005ce149                  ecx_9 = sub_5cdc20("ambient map", var_44)
+005ce14e                  void* esi_11 = *(esi_10 + 4)
+005ce154                  if (esi_11 != 0)
+005ce15f                      bool cond:8_1 = *(esi_11 + 0x30) != 0
+005ce161                      ecx_9 = *data_8ba770
+005ce167                      *(esi_11 + 0x3c) = ecx_9
+005ce175                      if ((not(cond:8_1) && *(esi_11 + 0x28) != 0) && (*(esi_11 + 0x38) & 0x9000) != 0)
+005ce17e                          var_40 = data_8951a0
+005ce185                          ecx_9 = sub_41a5e0(esi_11, 0x8951a0)
+005ce16a                      if (cond:8_1 || ((not(cond:8_1) && *(esi_11 + 0x28) != 0) && *(esi_11 + 0x30) != 0))
+005ce19c                          int32_t esi_13 = *(var_18 + 0x40) + var_1c_1
+005ce1a0                          var_40 = 5
+005ce1a4                          sub_70f5f0(esi_13, 5)
+005ce1a9                          var_40 = 3
+005ce1ad                          sub_70f5f0(esi_13, 3)
+005ce1b2                          var_40 = 2
+005ce1b6                          ecx_9 = sub_70f5f0(esi_13, 2)
+005ce1bb                          if (ecx_4 != 0)
+005ce1c1                              void* ebp_1 = var_28
+005ce1c5                              void* eax_14
+005ce1c5                              void* ebp_2
+005ce1c5                              if (ebp_1 != 0)
+005ce1ce                                  *(ebp_1 + 0x3c) = *data_8ba770
+005ce1d1                                  eax_14 = *(ebp_1 + 0x30)
+005ce1c5                                  if (eax_14 != 0)
+005ce1d8                                      ebp_2 = eax_14
+005ce1c5                                  if (eax_14 == 0 && *(ebp_1 + 0x28) != 0)
+005ce1e1                                      if ((*(ebp_1 + 0x38) & 0x9000) != 0)
+005ce1ea                                          var_40 = data_8951a0
+005ce1f1                                          ecx_9 = sub_41a5e0(ebp_1, 0x8951a0)
+005ce1f6                                      ebp_2 = *(ebp_1 + 0x30)
+005ce1c5                              if (ebp_1 == 0 || ((ebp_1 != 0 && eax_14 == 0) && *(ebp_1 + 0x28) == 0))
+005ce1fb                                  ebp_2 = nullptr
+005ce1fd                              if (*(ebp_2 + 0xf8) == 0)
+005ce205                                  var_40 = 1
+005ce209                                  ecx_9 = sub_70f5f0(esi_13, 1)
+005ce20e                          void* ebp_3 = var_28
+005ce212                          void* eax_15
+005ce212                          void* ebp_4
+005ce212                          if (ebp_3 != 0)
+005ce216                              eax_15 = *(ebp_3 + 0x30)
+005ce21b                              ecx_9 = *data_8ba770
+005ce221                              *(ebp_3 + 0x3c) = ecx_9
+005ce212                              if (eax_15 != 0)
+005ce226                                  ebp_4 = eax_15
+005ce212                              if (eax_15 == 0 && *(ebp_3 + 0x28) != 0)
+005ce22f                                  if ((*(ebp_3 + 0x38) & 0x9000) != 0)
+005ce238                                      var_40 = data_8951a0
+005ce23f                                      ecx_9 = sub_41a5e0(ebp_3, 0x8951a0)
+005ce244                                  ebp_4 = *(ebp_3 + 0x30)
+005ce212                          if (ebp_3 == 0 || ((ebp_3 != 0 && eax_15 == 0) && *(ebp_3 + 0x28) == 0))
+005ce249                              ebp_4 = nullptr
+005ce24b                          if (*(ebp_4 + 0x166) == 0)
+005ce253                              var_40 = 4
+005ce257                              ecx_9 = sub_70f5f0(esi_13, 4)
+005ce25c                  var_24_1 = var_24_1 + 1
+005ce261                  var_20_1 = var_20_1 + 0x158
+005ce269                  var_1c_1 = var_1c_1 + 0x78
+005ce26e                  ebp = var_18
+005ce277              void* eax_16
+005ce277              void* esi_14
+005ce277              if (esi_8 != 0)
+005ce27b                  eax_16 = *(esi_8 + 0x30)
+005ce286                  *(esi_8 + 0x3c) = *data_8ba770
+005ce277                  if (eax_16 != 0)
+005ce28b                      esi_14 = eax_16
+005ce277                  if (eax_16 == 0 && *(esi_8 + 0x28) != 0)
+005ce294                      if ((*(esi_8 + 0x38) & 0x9000) != 0)
+005ce29d                          var_40 = data_8951a0
+005ce2a4                          sub_41a5e0(esi_8, 0x8951a0)
+005ce2a9                      esi_14 = *(esi_8 + 0x30)
+005ce277              if (esi_8 == 0 || ((esi_8 != 0 && eax_16 == 0) && *(esi_8 + 0x28) == 0))
+005ce2ae                  esi_14 = nullptr
+005ce2b0              esi_14 = *(esi_14 + 0x74)
+005ce2b3              if (esi_14 s> 0)
+005ce2bb                  if (*(ebp + 0x164) == 0)
+005ce2c3                      var_40 = 0xcc
+005ce2cd                      void* eax_17 = sub_42dc60(0xcc)
+005ce2d8                      var_4.b = 0xf
+005ce2d6                      int32_t* eax_18
+005ce2d6                      if (eax_17 == 0)
+005ce2e8                          eax_18 = nullptr
+005ce2e1                      else
+005ce2e1                          eax_18 = sub_5b31b0(eax_17)
+005ce2ea                      var_40 = 1
+005ce2ec                      var_44 = 1
+005ce2f3                      var_4.b = 0
+005ce2f7                      *(ebp + 0x164) = eax_18
+005ce2fd                      sub_5b4a40(eax_18, esi_14, 0xc, 1, 1)
+005ce308                      var_40 = 1
+005ce30a                      var_44 = 3
+005ce30e                      sub_5b3040(*(ebp + 0x164), 0, 0, 3, 1)
+005ce313                  if (*(ebp + 0x168) == 0)
+005ce31b                      var_40 = 0xcc
+005ce325                      void* eax_19 = sub_42dc60(0xcc)
+005ce330                      var_4.b = 0x10
+005ce32e                      int32_t* eax_20
+005ce32e                      if (eax_19 == 0)
+005ce340                          eax_20 = nullptr
+005ce339                      else
+005ce339                          eax_20 = sub_5b31b0(eax_19)
+005ce342                      var_40 = 1
+005ce344                      var_44 = 2
+005ce34b                      var_4.b = 0
+005ce34f                      *(ebp + 0x168) = eax_20
+005ce355                      sub_5b4a40(eax_20, esi_14, 0xc, 2, 1)
+005ce360                      var_40 = 1
+005ce362                      var_44 = 3
+005ce367                      sub_5b3040(*(ebp + 0x168), 2, 0, 3, 1)
+005ce36c              void* edi_1 = *edi
+005ce36e              void* eax_22
+005ce36e              void* edi_2
+005ce36e              if (edi_1 != 0)
+005ce377                  *(edi_1 + 0x3c) = *data_8ba770
+005ce37a                  eax_22 = *(edi_1 + 0x30)
+005ce36e                  if (eax_22 != 0)
+005ce381                      edi_2 = eax_22
+005ce36e                  if (eax_22 == 0 && *(edi_1 + 0x28) != 0)
+005ce38a                      if ((*(edi_1 + 0x38) & 0x9000) != 0)
+005ce393                          var_40 = data_8951a0
+005ce39a                          sub_41a5e0(edi_1, 0x8951a0)
+005ce39f                      edi_2 = *(edi_1 + 0x30)
+005ce36e              if (edi_1 == 0 || ((edi_1 != 0 && eax_22 == 0) && *(edi_1 + 0x28) == 0))
+005ce3a4                  edi_2 = nullptr
+005ce3a9              void* eax_23 = *(ebp + 0x20)
+005ce3ac              *(ebp + 0x12c) = *(edi_2 + 0x68)
+005ce3b2              *(ebp + 0x175) = 1
+005ce3b9              void* esi_15 = *(eax_23 + 0x64)
+005ce3bc              int32_t** ecx_68
+005ce3bc              if (esi_15 != 0)
+005ce3c0                  ecx_68 = *(esi_15 + 0x30)
+005ce3cb                  *(esi_15 + 0x3c) = *data_8ba770
+005ce3bc                  if (ecx_68 == 0 && *(esi_15 + 0x28) != 0)
+005ce3d5                      if ((*(esi_15 + 0x38) & 0x9000) != 0)
+005ce3de                          var_40 = data_8951a0
+005ce3e5                          sub_41a5e0(esi_15, 0x8951a0)
+005ce3ea                      ecx_68 = *(esi_15 + 0x30)
+005ce3bc              if (esi_15 == 0 || ((esi_15 != 0 && ecx_68 == 0) && *(esi_15 + 0x28) == 0))
+005ce3ef                  ecx_68 = nullptr
+005ce3f1              var_40 = ebp
+005ce3f2              sub_4212b0(ecx_68, var_40)
+005ce3f7              void* ecx_70 = var_28
+005ce3fb              if (ecx_70 != 0)
+005ce407                  var_40 = __gfids_table[0xbae7688].rvAddr+3
+005ce409                  sub_418890(ecx_70, 0xffffffff)
+005ce41a              eax = sub_495d10(&var_28)
+005ce426  *fsbase = var_c
+005ce431  return eax
+
+
+-----------------------------------------------------------------
+
+int32_t* sub_493d80(int32_t* arg1)
+
+00493d85  *(arg1 + 0x10) = *(arg1 + 0x10) | 0x200000
+00493d8c  *(arg1 + 0x28) = 0x89b2b4
+00493d93  *arg1 = 0x7e987c  {"d3dmesh"}
+00493da0  *data_8c3528 = 0x1b
+00493daa  *data_8c352c = 0x5c11c0
+00493db4  sub_434ec0(arg1, data_8c3528)
+00493dc0  *data_8c351c = 0x1a
+00493dca  *data_8c3520 = 0x5c11d0
+00493dd4  sub_434ec0(arg1, data_8c351c)
+00493de0  *data_8c3510 = 0
+00493dea  *data_8c3514 = 0x5c1cf0
+00493df4  sub_434ec0(arg1, data_8c3510)
+00493e00  *data_8c3504 = 0x14
+00493e0a  *data_8c3508 = 0x5c4b10
+00493e14  sub_434ec0(arg1, data_8c3504)
+00493e1e  *data_8c3500 = 0x6c2d80
+00493e28  *data_8c34e8 = 0x7e3ce0  {"mName"}
+00493e32  *data_8c34ec = 0x44
+00493e3c  *data_8c34f4 = arg1
+00493e42  *(arg1 + 0x1c) = 0x8c34e8
+00493e4e  *data_8c34e4 = 0x4f33e0
+00493e54  *data_8c34cc = 0x7e3e68  {"mVersion"}
+00493e5e  *data_8c34d0 = 0x60
+00493e68  *data_8c34d8 = arg1
+00493e6e  *data_8c34f8 = 0x8c34cc
+00493e78  *data_8c34c8 = 0x7397b0
+00493e7d  *data_8c34b0 = 0x7e986c  {"mbDeformable"}
+00493e87  *data_8c34b4 = 0x164
+00493e91  *data_8c34bc = arg1
+00493e97  *data_8c34dc = 0x8c34b0
+00493ea1  *data_8c34ac = 0x480dc0
+00493eab  *data_8c3494 = 0x7e9568  {"mBoundingBox"}
+00493eb5  *data_8c3498 = 0x78
+00493ebf  *data_8c34a0 = arg1
+00493ec5  *data_8c34c0 = 0x8c3494
+00493ecf  *data_8c3490 = 0x4916a0
+00493ed9  *data_8c3478 = 0x7e985c  {"mTriangleSets"}
+00493ee3  *data_8c347c = 0xc4
+00493eed  *data_8c3484 = arg1
+00493ef3  *data_8c34a4 = 0x8c3478
+00493efd  *data_8c3474 = 0x48e750
+00493f07  *data_8c345c = 0x7e9848  {"mVertexAnimations"}
+00493f11  *data_8c3460 = 0xd4
+00493f1b  *data_8c3468 = arg1
+00493f21  *data_8c3488 = 0x8c345c
+00493f2b  *data_8c3458 = 0x489ca0
+00493f35  *data_8c3440 = 0x7e9838  {"mBonePalettes"}
+00493f3f  *data_8c3444 = 0xe4
+00493f49  *data_8c344c = arg1
+00493f4f  *data_8c346c = 0x8c3440
+00493f59  *data_8c343c = 0x4875f0
+00493f63  *data_8c3424 = 0x7e9828  {"mSkinningData"}
+00493f6d  *data_8c3428 = 0xf4
+00493f77  *data_8c3430 = arg1
+00493f7d  *data_8c3450 = 0x8c3424
+00493f87  *data_8c3420 = 0x7397b0
+00493f8c  *data_8c3408 = 0x7e981c  {"mbLightmaps"}
+00493f96  *data_8c340c = 0x165
+00493fa0  *data_8c3414 = arg1
+00493fa6  *data_8c3434 = 0x8c3408
+00493fb0  *data_8c3404 = 0x7397b0
+00493fb5  *data_8c33ec = 0x7e9808  {"mbLowQualityRender"}
+00493fbf  *data_8c33f0 = 0x167
+00493fc9  *data_8c33f8 = arg1
+00493fcf  *data_8c3418 = 0x8c33ec
+00493fd9  *data_8c33e8 = 0x7397b0
+00493fde  *data_8c33d0 = 0x7e97f0  {"mbVertexAlphaSupport"}
+00493fe8  *data_8c33d4 = 0x168
+00493ff2  *data_8c33dc = arg1
+00493ff8  *data_8c33cc = 0x7397b0
+00493ffd  *data_8c33b0 = 0x7397b0
+00494002  *data_8c33c0 = arg1
+00494008  *data_8c3388 = arg1
+0049400e  *data_8c33a4 = arg1
+00494014  *data_8c336c = arg1
+0049401a  *data_8c3350 = arg1
+00494020  *data_8c3334 = arg1
+00494026  *data_8c3318 = arg1
+0049402e  *data_8c33fc = 0x8c33d0
+00494038  *data_8c33b4 = 0x7e97d8  {"mbMeshHasVertexAlpha"}
+00494042  *data_8c33b8 = 0x169
+0049404c  *data_8c33e0 = 0x8c33b4
+00494056  *data_8c3394 = 0x4f33e0
+0049405c  *data_8c337c = 0x7e97c4  {"mTriangleStripState"}
+00494066  *data_8c3380 = 0x70
+00494070  *data_8c33c4 = 0x8c337c
+0049407a  *data_8c3398 = 0x7e97a4  {"mbMeshHasSmoothNormalsSupport"}
+00494084  *data_8c339c = 0x16a
+0049408e  *data_8c338c = 0x8c3398
+00494098  *data_8c3378 = 0x4f33e0
+0049409e  *data_8c3360 = 0x7e978c  {"mAnimatedVertexCount"}
+004940a8  *data_8c3364 = 0x74
+004940b2  *data_8c33a8 = 0x8c3360
+004940bc  *data_8c335c = 0x40d890
+004940c6  *data_8c3344 = 0x7e3c80  {"mFlags"}
+004940d0  *data_8c3348 = 0x64
+004940da  *data_8c3370 = 0x8c3344
+004940e4  *data_8c3340 = 0x48e790
+004940ee  *data_8c3328 = 0x7e9770  {"mToolAnimatedVertexEntries"}
+004940f8  *data_8c332c = 0x16c
+00494102  *data_8c3354 = 0x8c3328
+0049410c  *data_8c3324 = 0x493c60
+00494116  *data_8c330c = 0x7e9750  {"mToolAnimatedVertexGroupEntries"}
+00494120  *data_8c3310 = 0x17c
+0049412a  *data_8c3338 = 0x8c330c
+00494135  return arg1
