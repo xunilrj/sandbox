@@ -1,4 +1,4 @@
-use crate::indexbuffer;
+use crate::{attributes::read_att, indexbuffer};
 use json::JsonValue;
 use log::debug;
 use std::{io::Read, str::FromStr};
@@ -532,22 +532,15 @@ pub fn parse_d3dfile<S: AsRef<str>>(
         mesh.indices[0] = input.parse_le_u32("Index Start") as usize;
         mesh.indices[1] = 0;
 
-        let _ = input.parse_le_u32("?");
+        let _ = input.parse_le_u32("polygon count?");
         let _ = input.parse_le_u64("section header");
 
         const ATT_BOUNDING_BOX: u32 = 0;
         const ATT_DIFFUSE_MAP: u32 = 25;
         for _ in 0..9 {
-            let att = input.parse_le_u32("attribute");
-
+            let att = crate::attributes::read_att(&mut input);
             match att {
-                ATT_BOUNDING_BOX => {
-                    let minx = input.parse_le_f32("bbox.minx");
-                    let miny = input.parse_le_f32("bbox.miny");
-                    let minz = input.parse_le_f32("bbox.minz");
-                    let maxx = input.parse_le_f32("bbox.maxx");
-                    let maxy = input.parse_le_f32("bbox.maxy");
-                    let maxz = input.parse_le_f32("bbox.maxz");
+                crate::attributes::Attribute::BoundingBox(minx, miny, minz, maxx, maxy, maxz) => {
                     mesh.bbox = D3DBoundingBox {
                         minx,
                         miny,
@@ -555,266 +548,23 @@ pub fn parse_d3dfile<S: AsRef<str>>(
                         maxx,
                         maxy,
                         maxz,
-                    };
+                    }
                 }
-                8 => {
-                    let _ = input.parse_le_u32("?");
-                }
-                18 => {
-                    let name = input.parse_length_string("some texture");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                20 => {
-                    let _ = input.parse_le_f32("?");
-                    let _ = input.parse_le_f32("?");
-                    let _ = input.parse_le_f32("?");
-                    let _ = input.parse_le_f32("?");
-                }
-                23 => {
-                    let name = input.parse_length_string("some texture");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                24 => {
-                    let name = input.parse_length_string("some texture");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                ATT_DIFFUSE_MAP => {
-                    let name = input.parse_length_string("some texture");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                26 => {
-                    let name = input.parse_length_string("some texture");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                27 => {
-                    let name = input.parse_length_string("some texture");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                28 => {
-                    let name = input.parse_length_string("some texture");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                29 => {
-                    let name = input.parse_length_string("some texture");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                30 => {
-                    let name = input.parse_length_string("some texture");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                31 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                32 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                33 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                34 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                35 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                36 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                37 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                38 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                39 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                40 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                41 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                42 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                43 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                44 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                45 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                46 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                47 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                49 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                50 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                51 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                52 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                54 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                57 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-                58 => {
-                    let name = input.parse_length_string("?? map");
-                    mesh.maps.push(D3DMap {
-                        r#type: "??".to_string(),
-                        name: name.to_string(),
-                    });
-                }
-
-                x @ _ => todo!("{:?}", x),
+                _ => {}
             }
         }
 
-        let att1 = input.parse_n_bytes(1);
-        if att1[0] == 49 {
-            let size = input.parse_le_u32("size");
-            let _ = input.parse_n_bytes(size as usize);
-        }
-        let att2 = input.parse_n_bytes(1);
-        let att3 = input.parse_n_bytes(1);
-        let att4 = input.parse_le_u32("?");
-        let att5 = input.parse_n_bytes(1);
-
-        let _ = input.parse_le_u32("?");
+        let _ = input.parse_n_bytes(1);
+        let _ = read_att(&mut input);
         let _ = input.parse_le_u32("?");
 
+        let _ = input.parse_n_bytes(1);
+        let _ = input.parse_n_bytes(1);
+        let _ = input.parse_le_u32("?");
+
+        // material and parameters?
+        let _ = input.parse_n_bytes(1);
+        let _ = read_att(&mut input);
         let _ = input.parse_le_f32("?");
         let _ = input.parse_le_f32("?");
         let _ = input.parse_le_f32("?");
@@ -862,41 +612,14 @@ pub fn parse_d3dfile<S: AsRef<str>>(
         let _ = input.parse_n_bytes(1);
         let _ = input.parse_n_bytes(1);
 
-        let _ = input.parse_le_u32("?");
-        let _ = input.parse_n_bytes(6);
-        let _ = input.parse_le_u32("?");
-        let _ = input.parse_n_bytes(6);
+        let _ = input.parse_length_string("?");
+        let _ = input.parse_length_string("?");
 
         d3dfile.meshes.push(mesh);
     }
 
-    let _ = input.parse_le_u32("?");
-    let _ = input.parse_le_u32("?");
-
-    let t = input.parse_le_u32("?");
-    if t == 60 {
-        let _ = input.parse_le_u32("?");
-
-        let mut qty = input.parse_le_u32("?");
-        if qty > 0 {
-            loop {
-                if qty > 0 {
-                    let _ = input.parse_le_u64("?");
-                    let _ = input.parse_le_u32("?");
-                } else {
-                    break;
-                }
-                qty -= 1;
-            }
-
-            let _ = input.parse_le_u32("?");
-            let _ = input.parse_le_u32("?");
-        }
-    } else {
-        let _ = input.parse_le_u32("?");
-
-        let _ = input.parse_le_u32("?");
-        let _ = input.parse_le_u32("?");
+    for _ in 0..3 {
+        let _ = crate::attributes::read_att2(&mut input);
     }
 
     let _ = input.parse_n_bytes(1);
@@ -910,11 +633,9 @@ pub fn parse_d3dfile<S: AsRef<str>>(
     let _ = input.parse_le_u32("?");
     let _ = input.parse_le_u32("?");
 
-    let _ = input.parse_le_u32("?");
-    let _ = input.parse_le_u32("?");
-
-    let _ = input.parse_le_u32("?");
-    let _ = input.parse_le_u32("?");
+    for _ in 0..2 {
+        let _ = crate::attributes::read_att(&mut input);
+    }
 
     let _ = input.parse_n_bytes(1);
 

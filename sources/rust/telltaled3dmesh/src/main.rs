@@ -1,5 +1,6 @@
 #![feature(with_options)]
 
+mod attributes;
 mod d3dfile;
 mod indexbuffer;
 pub mod outputs;
