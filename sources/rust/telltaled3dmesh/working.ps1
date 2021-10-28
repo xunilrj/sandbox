@@ -1,6 +1,6 @@
 cargo build --release
 
-ls C:\Users\xunil\Downloads\ttarctext\mi101\*.d3dmesh | % {
+ls C:\Users\xunil\Downloads\ttarctext\mi101\sk*.d3dmesh | % {
     $_.Name
 } | % {
     # $output = ($_.Replace(".d3dmesh", ".json"))

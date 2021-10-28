@@ -330,6 +330,16 @@ pub fn read_att2(input: &mut NomSlice) -> Attribute {
             }
             Attribute::None
         }
+        120 => {
+            //sk39_monkeyelectrocute.obj
+            let _ = input.parse_le_u32("?");
+            let qty = input.parse_le_u32("qty?");
+            for _ in 0..qty {
+                let _ = input.parse_le_u64("?");
+                let _ = input.parse_le_u32("?");
+            }
+            Attribute::None
+        }
         144 => {
             let _ = input.parse_le_u32("?");
             let qty = input.parse_le_u32("qty?");
@@ -346,6 +356,218 @@ pub fn read_att2(input: &mut NomSlice) -> Attribute {
             for _ in 0..qty {
                 let _ = input.parse_le_u64("?");
                 let _ = input.parse_le_u32("?");
+            }
+            Attribute::None
+        }
+        340 => {
+            //?
+            let _ = input.parse_le_u32("?");
+            let qty = input.parse_le_u32("qty?");
+            for _ in 0..qty {
+                let _ = input.parse_le_u64("?");
+                let _ = input.parse_le_u32("?");
+            }
+            Attribute::None
+        }
+        500 => {
+            //sk37_seagull.obj
+            let _ = input.parse_le_u32("?");
+            let qty = input.parse_le_u32("qty?");
+            for _ in 0..qty {
+                let _ = input.parse_le_u64("?");
+                let _ = input.parse_le_u32("?");
+            }
+            Attribute::None
+        }
+        1036 => {
+            //sk39_monkeyarms.d3dmesh
+            let qty = input.parse_le_u32("1696:1");
+            for _ in 0..qty {
+                let qty = input.parse_le_u32("1696:qty");
+                for _ in 0..qty {
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                }
+            }
+            Attribute::None
+        }
+        1548 => {
+            //sk20_pirateacrimpdigit.d3dmesh
+            let qty = input.parse_le_u32("1696:1");
+            for _ in 0..qty {
+                let qty = input.parse_le_u32("1696:qty");
+                for _ in 0..qty {
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                }
+            }
+            Attribute::None
+        }
+        1660 => {
+            //sk20_pirateamcgeepox.d3dmesh
+            let qty = input.parse_le_u32("1696:1");
+            for _ in 0..qty {
+                let qty = input.parse_le_u32("1696:qty");
+                for _ in 0..qty {
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                }
+            }
+            Attribute::None
+        }
+        1696 => {
+            //sk13_scorpionmonkey.d3dmesh
+            let qty = input.parse_le_u32("1696:1");
+            for _ in 0..qty {
+                let qty = input.parse_le_u32("1696:qty");
+                for _ in 0..qty {
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                }
+            }
+            Attribute::None
+        }
+        1732 => {
+            //sk20_pirateamcgeepox.d3dmesh
+            let qty = input.parse_le_u32("1768:1");
+            for _ in 0..qty {
+                let qty = input.parse_le_u32("1768:qty");
+                for _ in 0..qty {
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                }
+            }
+            Attribute::None
+        }
+        1768 => {
+            //sk14_lechuckhuman.d3dmesh
+            let qty = input.parse_le_u32("1768:1");
+            for _ in 0..qty {
+                let qty = input.parse_le_u32("1768:qty");
+                for _ in 0..qty {
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                }
+            }
+            Attribute::None
+        }
+        1928 => {
+            //sk03_elaine.d3dmesh
+            let qty = input.parse_le_u32("1928:1");
+            for _ in 0..qty {
+                let qty = input.parse_le_u32("1928:qty");
+                for _ in 0..qty {
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                }
+            }
+            Attribute::None
+        }
+        2052 => {
+            //sk20_desinge.d3dmesh
+            let qty = input.parse_le_u32("1928:1");
+            for _ in 0..qty {
+                let qty = input.parse_le_u32("1928:qty");
+                for _ in 0..qty {
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                }
+            }
+            Attribute::None
+        }
+        2088 => {
+            //sk39_monkey.d3dmesh
+            let qty = input.parse_le_u32("1928:1");
+            for _ in 0..qty {
+                let qty = input.parse_le_u32("1928:qty");
+                for _ in 0..qty {
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                }
+            }
+            Attribute::None
+        }
+        2208 => {
+            //sk20_guybrush.d3dmesh
+            let qty = input.parse_le_u32("2208:1");
+            for _ in 0..qty {
+                let qty = input.parse_le_u32("2208:qty");
+                for _ in 0..qty {
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                }
+            }
+            Attribute::None
+        }
+        2248 => {
+            //sk04_voodoolady.d3dmesh
+            let qty = input.parse_le_u32("2248:1");
+            for _ in 0..qty {
+                let qty = input.parse_le_u32("2248:qty");
+                for _ in 0..qty {
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                }
+            }
+            Attribute::None
+        }
+        2368 => {
+            //sk15_piratebwinslow.d3dmesh
+            let qty = input.parse_le_u32("2248:1");
+            for _ in 0..qty {
+                let qty = input.parse_le_u32("2248:qty");
+                for _ in 0..qty {
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                }
+            }
+            Attribute::None
+        }
+        2272 => {
+            //sk15_piratebdoro.d3dmesh
+            let qty = input.parse_le_u32("2248:1");
+            for _ in 0..qty {
+                let qty = input.parse_le_u32("2248:qty");
+                for _ in 0..qty {
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                }
+            }
+            Attribute::None
+        }
+        2688 => {
+            //sk15_piratebnipperkin.d3dmesh
+            let qty = input.parse_le_u32("2248:1");
+            for _ in 0..qty {
+                let qty = input.parse_le_u32("2248:qty");
+                for _ in 0..qty {
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                }
+            }
+            Attribute::None
+        }
+        2712 => {
+            //sk14_lechuckblue.d3dmesh
+            let qty = input.parse_le_u32("2712:1");
+            for _ in 0..qty {
+                let qty = input.parse_le_u32("2712:qty");
+                for _ in 0..qty {
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                }
+            }
+            Attribute::None
+        }
+        2196 => {
+            //sk14_lechuckdemon.d3dmesh
+            let qty = input.parse_le_u32("2196:1");
+            for _ in 0..qty {
+                let qty = input.parse_le_u32("2196:qty");
+                for _ in 0..qty {
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                }
             }
             Attribute::None
         }

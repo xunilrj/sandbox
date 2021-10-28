@@ -71,13 +71,13 @@ impl Context {
         self.mount_mem(addr, v)
     }
 
-    pub fn get_register(&mut self, register: iced_x86::Register) -> u32 {
+    pub fn get_register(&mut self, register: iced_x86::Register) -> Value {
         match register {
-            Register::EIP => return self.eip,
-            Register::EAX => return self.eax,
-            Register::EBX => return self.ebx,
-            Register::ECX => return self.ecx,
-            Register::EDX => return self.edx,
+            Register::EIP => return Value::U32(self.eip),
+            Register::EAX => return Value::U32(self.eax),
+            Register::EBX => return Value::U32(self.ebx),
+            Register::ECX => return Value::U32(self.ecx),
+            Register::EDX => return Value::U32(self.edx),
             _ => {}
         }
 
@@ -87,22 +87,22 @@ impl Context {
                 self.log
                     .push_str(format!(" read {}=0x{:X?}", name, r).as_str());
             }
-            *r
+            Value::U32(*r)
         } else {
             match name.as_str() {
                 "AX" => {
                     let v = self.get_register(Register::EAX);
-                    low_u16(v).into()
+                    Value::U16(low_u16(v.as_u32()))
                 }
                 "DX" => {
                     let v = self.get_register(Register::EDX);
-                    low_u16(v).into()
+                    Value::U16(low_u16(v.as_u32()))
                 }
                 "CL" => {
                     let v = self.get_register(Register::ECX);
-                    low_u8(v).into()
+                    Value::U8(low_u8(v.as_u32()))
                 }
-                _ => 0,
+                _ => todo!(),
             }
         }
     }
@@ -157,16 +157,17 @@ impl Context {
         }
     }
 
-    pub fn solve_u32(&mut self, addr: Value) -> u32 {
+    pub fn solve_u32(&mut self, addr: Value) -> Value {
         match addr {
             Value::MemoryRegisterValue(base, delta) => {
                 let addr = self.get_register(base);
-                self.read_at((addr + delta) as usize)
+                Value::U32(self.read_at((addr + delta) as usize))
             }
-            Value::Memory(addr) => self.read_at((addr) as usize),
+            Value::Memory(addr) => Value::U32(self.read_at((addr) as usize)),
             Value::Register(r) => self.get_register(r),
-            Value::U8(v) => v as u32,
-            Value::U32(v) => v,
+            Value::U8(v) => Value::U8(v),
+            Value::U16(v) => Value::U16(v),
+            Value::U32(v) => Value::U32(v),
         }
     }
 
@@ -212,27 +213,56 @@ impl Context {
         &self.mems[area.val as usize]
     }
 
-    pub fn set_value(&mut self, dst: Value, v: u32) {
+    pub fn set_value(&mut self, dst: Value, v: Value) {
         match dst {
-            Value::Register(register) => self.set_register(register, v),
+            Value::Register(register) => self.set_register(register, v.as_u32()),
             Value::MemoryRegisterValue(base, delta) => {
-                let base = self.get_register(base);
-                let addr = base + delta;
-                let (start, mem) = self.get_mem_vec_mut(addr as usize);
-                let addr = addr as usize - start;
-                let addr: &mut u32 = unsafe { std::mem::transmute(&mut mem[addr]) };
-                *addr = v;
+                let base = self.get_register(base).as_usize();
+                let addr = base + (delta as usize);
+                let (start, mem) = self.get_mem_vec_mut(addr);
+                let addr = addr - start;
+
+                match v {
+                    Value::U8(v) => {
+                        let addr: &mut u8 = unsafe { std::mem::transmute(&mut mem[addr]) };
+                        *addr = v;
+                    }
+                    Value::U16(v) => {
+                        let addr: &mut u16 = unsafe { std::mem::transmute(&mut mem[addr]) };
+                        *addr = v;
+                    }
+                    Value::U32(v) => {
+                        let addr: &mut u32 = unsafe { std::mem::transmute(&mut mem[addr]) };
+                        *addr = v;
+                    }
+                    _ => todo!(),
+                }
 
                 if self.debug {
-                    self.log
-                        .push_str(format!(" write mem[0x{:X?}]=0x{:X?}", base + delta, v).as_str());
+                    self.log.push_str(
+                        format!(" write mem[0x{:X?}]=0x{:X?}", base + (delta as usize), v).as_str(),
+                    );
                 }
             }
             Value::Memory(addr) => {
                 let (start, mem) = self.get_mem_vec_mut(addr as usize);
                 let addr = addr as usize - start;
-                let addr: &mut u32 = unsafe { std::mem::transmute(&mut mem[addr]) };
-                *addr = v;
+
+                match v {
+                    Value::U8(v) => {
+                        let addr: &mut u8 = unsafe { std::mem::transmute(&mut mem[addr]) };
+                        *addr = v;
+                    }
+                    Value::U16(v) => {
+                        let addr: &mut u16 = unsafe { std::mem::transmute(&mut mem[addr]) };
+                        *addr = v;
+                    }
+                    Value::U32(v) => {
+                        let addr: &mut u32 = unsafe { std::mem::transmute(&mut mem[addr]) };
+                        *addr = v;
+                    }
+                    _ => todo!(),
+                }
 
                 if self.debug {
                     self.log
@@ -240,24 +270,25 @@ impl Context {
                 }
             }
             Value::U8(_) => panic!("Impossible"),
+            Value::U16(_) => panic!("Impossible"),
             Value::U32(_) => panic!("Impossible"),
         }
     }
 
-    pub fn set_value_op0(&mut self, i: &Instruction, v: u32) {
+    pub fn set_value_op0(&mut self, i: &Instruction, v: Value) {
         let addr = Value::from_op0(&i);
         self.set_value(addr, v);
     }
 
-    pub fn read_op0(&mut self, i: &Instruction) -> u32 {
+    pub fn read_op0(&mut self, i: &Instruction) -> Value {
         self.solve_u32(Value::from_op0(&i))
     }
 
-    pub fn read_op1(&mut self, i: &Instruction) -> u32 {
+    pub fn read_op1(&mut self, i: &Instruction) -> Value {
         self.solve_u32(Value::from_op1(&i))
     }
 
-    pub fn read_op0_1(&mut self, i: &Instruction) -> (u32, u32) {
+    pub fn read_op0_1(&mut self, i: &Instruction) -> (Value, Value) {
         (
             self.solve_u32(Value::from_op0(&i)),
             self.solve_u32(Value::from_op1(&i)),
@@ -265,16 +296,16 @@ impl Context {
     }
 
     pub fn register_incr(&mut self, register: iced_x86::Register, incr: isize) {
-        let v = self.get_register(register) as isize + incr;
+        let v = self.get_register(register) + incr;
         self.set_register(register, v as u32)
     }
 
     pub fn read_eip(&mut self) -> (u32, &[u8]) {
-        let eip = self.get_register(iced_x86::Register::EIP);
-        let (start, mem) = self.get_mem_vec(eip as usize);
-        let i = eip as usize - start;
+        let eip = self.get_register(iced_x86::Register::EIP).as_usize();
+        let (start, mem) = self.get_mem_vec(eip);
+        let i = eip - start;
         let mem = mem.as_slice();
-        (eip, &mem[i..])
+        (eip as u32, &mem[i..])
     }
 
     pub fn read_at<T: Copy + std::fmt::Debug>(&mut self, addr: usize) -> T {
@@ -296,12 +327,66 @@ impl Context {
     }
 }
 
+#[derive(Clone, Copy, Debug)]
 pub enum Value {
     Register(iced_x86::Register),
     Memory(u32),
     MemoryRegisterValue(iced_x86::Register, u32),
     U8(u8),
+    U16(u16),
     U32(u32),
+}
+
+impl std::ops::Add<isize> for Value {
+    type Output = isize;
+
+    fn add(self, rhs: isize) -> Self::Output {
+        match &self {
+            Value::U8(x) => (*x as isize) + rhs,
+            Value::U16(x) => (*x as isize) + rhs,
+            Value::U32(x) => (*x as isize) + rhs,
+            _ => todo!(),
+        }
+    }
+}
+
+impl std::ops::Add<u32> for Value {
+    type Output = u32;
+
+    fn add(self, rhs: u32) -> Self::Output {
+        match &self {
+            Value::U8(x) => (*x as u32) + rhs,
+            Value::U16(x) => (*x as u32) + rhs,
+            Value::U32(x) => (*x as u32) + rhs,
+            _ => todo!(),
+        }
+    }
+}
+
+impl std::ops::BitAnd for Value {
+    type Output = Value;
+
+    fn bitand(self, rhs: Self) -> Self::Output {
+        match (self, rhs) {
+            (Value::U8(l), Value::U8(r)) => Value::U8(l & r),
+            (Value::U16(l), Value::U16(r)) => Value::U16(l & r),
+            (Value::U32(l), Value::U32(r)) => Value::U32(l & r),
+            _ => todo!(),
+        }
+    }
+}
+
+impl std::ops::BitOr for Value {
+    type Output = Value;
+
+    fn bitor(self, rhs: Self) -> Self::Output {
+        match (self, rhs) {
+            (Value::U8(l), Value::U8(r)) => Value::U8(l | r),
+            (Value::U16(l), Value::U16(r)) => Value::U16(l | r),
+            (Value::U32(l), Value::U32(r)) => Value::U32(l | r),
+            _ => todo!(),
+        }
+    }
 }
 
 impl Value {
@@ -310,6 +395,7 @@ impl Value {
         let displacement = i.memory_displacement32();
         Value::MemoryRegisterValue(base, displacement)
     }
+
     pub fn from_op0(i: &Instruction) -> Value {
         match i.op0_kind() {
             iced_x86::OpKind::Memory => Self::from_memory(i),
@@ -330,6 +416,134 @@ impl Value {
             iced_x86::OpKind::Immediate8to32 => Value::U32(i.immediate8to32() as u32),
             iced_x86::OpKind::Immediate32 => Value::U32(i.immediate32() as u32),
             x @ _ => todo!("{:?}", x),
+        }
+    }
+
+    pub fn as_u32(&self) -> u32 {
+        match &self {
+            Value::U8(x) => *x as u32,
+            Value::U16(x) => *x as u32,
+            Value::U32(x) => *x as u32,
+            _ => todo!(),
+        }
+    }
+
+    pub fn as_i64(&self) -> i64 {
+        match &self {
+            Value::U8(x) => *x as i64,
+            Value::U16(x) => *x as i64,
+            Value::U32(x) => *x as i64,
+            _ => todo!(),
+        }
+    }
+
+    pub fn as_usize(&self) -> usize {
+        match &self {
+            Value::U8(x) => *x as usize,
+            Value::U16(x) => *x as usize,
+            Value::U32(x) => *x as usize,
+            _ => todo!(),
+        }
+    }
+
+    pub fn as_isize(&self) -> isize {
+        match &self {
+            Value::U8(x) => *x as isize,
+            Value::U16(x) => *x as isize,
+            Value::U32(x) => *x as isize,
+            _ => todo!(),
+        }
+    }
+
+    pub fn overflowing_shr(&self, rhs: Value) -> (Value, bool) {
+        let rhs = rhs.as_u32();
+        match &self {
+            Value::U8(x) => {
+                let (x, cf) = x.overflowing_shr(rhs);
+                (Value::U8(x), cf)
+            }
+            Value::U16(x) => {
+                let (x, cf) = x.overflowing_shr(rhs);
+                (Value::U16(x), cf)
+            }
+            Value::U32(x) => {
+                let (x, cf) = x.overflowing_shr(rhs);
+                (Value::U32(x), cf)
+            }
+            _ => todo!(),
+        }
+    }
+
+    pub fn overflowing_shl(&self, rhs: Value) -> (Value, bool) {
+        let rhs = rhs.as_u32();
+        match &self {
+            Value::U8(x) => {
+                let (x, cf) = x.overflowing_shl(rhs);
+                (Value::U8(x), cf)
+            }
+            Value::U16(x) => {
+                let (x, cf) = x.overflowing_shl(rhs);
+                (Value::U16(x), cf)
+            }
+            Value::U32(x) => {
+                let (x, cf) = x.overflowing_shl(rhs);
+                (Value::U32(x), cf)
+            }
+            _ => todo!(),
+        }
+    }
+
+    pub fn overflowing_mul(&self, rhs: Value) -> (Value, bool) {
+        match (&self, rhs) {
+            (Value::U8(l), Value::U8(r)) => {
+                let (x, cf) = (*l as i64).overflowing_mul(r as i64);
+                (Value::U8(x as u8), cf)
+            }
+            (Value::U16(l), Value::U16(r)) => {
+                let (x, cf) = (*l as i64).overflowing_mul(r as i64);
+                (Value::U16(x as u16), cf)
+            }
+            (Value::U32(l), Value::U32(r)) => {
+                let (x, cf) = (*l as i64).overflowing_mul(r as i64);
+                (Value::U32(x as u32), cf)
+            }
+            _ => todo!(),
+        }
+    }
+
+    pub fn overflowing_add(&self, rhs: Value) -> (Value, bool) {
+        match (&self, rhs) {
+            (Value::U8(l), Value::U8(r)) => {
+                let (x, cf) = l.overflowing_add(r);
+                (Value::U8(x as u8), cf)
+            }
+            (Value::U16(l), Value::U16(r)) => {
+                let (x, cf) = l.overflowing_add(r);
+                (Value::U16(x as u16), cf)
+            }
+            (Value::U32(l), Value::U32(r)) => {
+                let (x, cf) = l.overflowing_add(r);
+                (Value::U32(x as u32), cf)
+            }
+            _ => todo!(),
+        }
+    }
+
+    pub fn overflowing_sub(&self, rhs: Value) -> (Value, bool) {
+        match (&self, rhs) {
+            (Value::U8(l), Value::U8(r)) => {
+                let (x, cf) = l.overflowing_sub(r);
+                (Value::U8(x as u8), cf)
+            }
+            (Value::U16(l), Value::U16(r)) => {
+                let (x, cf) = l.overflowing_sub(r);
+                (Value::U16(x as u16), cf)
+            }
+            (Value::U32(l), Value::U32(r)) => {
+                let (x, cf) = l.overflowing_sub(r);
+                (Value::U32(x as u32), cf)
+            }
+            _ => todo!(),
         }
     }
 }
@@ -397,7 +611,7 @@ pub fn run(ctx: &mut Context, steps: usize) {
                 ctx.of = false;
                 ctx.sf = false;
                 ctx.cf = false;
-                ctx.zf = v == 0;
+                ctx.zf = v.as_i64() == 0;
                 ctx.register_incr(iced_x86::Register::EIP, i.len() as isize);
             }
             iced_x86::Mnemonic::Or => {
@@ -407,7 +621,7 @@ pub fn run(ctx: &mut Context, steps: usize) {
                 ctx.of = false;
                 ctx.sf = false;
                 ctx.cf = false;
-                ctx.zf = v == 0;
+                ctx.zf = v.as_isize() == 0;
                 ctx.register_incr(iced_x86::Register::EIP, i.len() as isize);
             }
             iced_x86::Mnemonic::Add => {
@@ -417,7 +631,7 @@ pub fn run(ctx: &mut Context, steps: usize) {
                 ctx.of = false;
                 ctx.sf = false;
                 ctx.cf = cf;
-                ctx.zf = wrapped_value == 0;
+                ctx.zf = wrapped_value.as_i64() == 0;
                 ctx.register_incr(iced_x86::Register::EIP, i.len() as isize);
             }
             iced_x86::Mnemonic::Sub => {
@@ -427,19 +641,17 @@ pub fn run(ctx: &mut Context, steps: usize) {
                 ctx.of = false;
                 ctx.sf = false;
                 ctx.cf = cf;
-                ctx.zf = wrapped_value == 0;
+                ctx.zf = wrapped_value.as_i64() == 0;
                 ctx.register_incr(iced_x86::Register::EIP, i.len() as isize);
             }
             iced_x86::Mnemonic::Imul => {
                 let (dst, src) = ctx.read_op0_1(&i);
-                let dst = dst as i64;
-                let src = src as i64;
                 let (wrapped_value, of) = dst.overflowing_mul(src);
-                ctx.set_value_op0(&i, wrapped_value as u32);
+                ctx.set_value_op0(&i, wrapped_value);
                 ctx.of = of;
-                ctx.sf = wrapped_value < 0;
+                ctx.sf = wrapped_value.as_i64() < 0;
                 ctx.cf = false;
-                ctx.zf = wrapped_value == 0;
+                ctx.zf = wrapped_value.as_i64() == 0;
                 ctx.register_incr(iced_x86::Register::EIP, i.len() as isize);
             }
             iced_x86::Mnemonic::Shl => {
@@ -449,7 +661,7 @@ pub fn run(ctx: &mut Context, steps: usize) {
                 ctx.of = false;
                 ctx.sf = false;
                 ctx.cf = cf;
-                ctx.zf = wrapped_value == 0;
+                ctx.zf = wrapped_value.as_i64() == 0;
                 ctx.register_incr(iced_x86::Register::EIP, i.len() as isize);
             }
             iced_x86::Mnemonic::Shr => {
@@ -459,13 +671,14 @@ pub fn run(ctx: &mut Context, steps: usize) {
                 ctx.of = false;
                 ctx.sf = false;
                 ctx.cf = cf;
-                ctx.zf = wrapped_value == 0;
+                ctx.zf = wrapped_value.as_i64() == 0;
                 ctx.register_incr(iced_x86::Register::EIP, i.len() as isize);
             }
             iced_x86::Mnemonic::Neg => {
-                let v = 0isize - ctx.read_op0(&i) as isize;
+                //how neg works on 16, 8 registers?
+                let v = 0isize - ctx.read_op0(&i).as_isize();
                 let v = v as u32;
-                ctx.set_value_op0(&i, v);
+                ctx.set_value_op0(&i, Value::U32(v));
                 ctx.of = false;
                 ctx.sf = false;
                 ctx.cf = false;
@@ -478,7 +691,7 @@ pub fn run(ctx: &mut Context, steps: usize) {
                 ctx.of = false;
                 ctx.sf = cf;
                 ctx.cf = cf;
-                ctx.zf = wrapped_value == 0;
+                ctx.zf = wrapped_value.as_i64() == 0;
                 ctx.register_incr(iced_x86::Register::EIP, i.len() as isize);
             }
             iced_x86::Mnemonic::Test => {
@@ -487,16 +700,16 @@ pub fn run(ctx: &mut Context, steps: usize) {
                 ctx.of = false;
                 ctx.sf = false;
                 ctx.cf = false;
-                ctx.zf = v == 0;
+                ctx.zf = v.as_i64() == 0;
                 ctx.register_incr(iced_x86::Register::EIP, i.len() as isize);
             }
             iced_x86::Mnemonic::Jmp => {
-                let addr = ((ctx.read_op0(&i) as isize) + (eip as isize)) as usize;
+                let addr = ctx.read_op0(&i) + eip;
                 ctx.set_register(iced_x86::Register::EIP, addr as u32);
             }
             iced_x86::Mnemonic::Je => {
                 if ctx.zf {
-                    let addr = ((ctx.read_op0(&i) as isize) + (eip as isize)) as usize;
+                    let addr = ctx.read_op0(&i) + eip;
                     ctx.set_register(iced_x86::Register::EIP, addr as u32);
                 } else {
                     ctx.register_incr(iced_x86::Register::EIP, i.len() as isize);
@@ -504,7 +717,7 @@ pub fn run(ctx: &mut Context, steps: usize) {
             }
             iced_x86::Mnemonic::Jne => {
                 if !ctx.zf {
-                    let addr = ((ctx.read_op0(&i) as isize) + (eip as isize)) as usize;
+                    let addr = ctx.read_op0(&i) + eip;
                     ctx.set_register(iced_x86::Register::EIP, addr as u32);
                 } else {
                     ctx.register_incr(iced_x86::Register::EIP, i.len() as isize);
@@ -512,7 +725,7 @@ pub fn run(ctx: &mut Context, steps: usize) {
             }
             iced_x86::Mnemonic::Jae => {
                 if !ctx.cf || ctx.zf {
-                    let addr = ((ctx.read_op0(&i) as isize) + (eip as isize)) as usize;
+                    let addr = ctx.read_op0(&i) + eip;
                     ctx.set_register(iced_x86::Register::EIP, addr as u32);
                 } else {
                     ctx.register_incr(iced_x86::Register::EIP, i.len() as isize);
@@ -520,7 +733,7 @@ pub fn run(ctx: &mut Context, steps: usize) {
             }
             iced_x86::Mnemonic::Jle => {
                 if ctx.sf != ctx.of || ctx.zf {
-                    let addr = ((ctx.read_op0(&i) as isize) + (eip as isize)) as usize;
+                    let addr = ctx.read_op0(&i) + eip;
                     ctx.set_register(iced_x86::Register::EIP, addr as u32);
                 } else {
                     ctx.register_incr(iced_x86::Register::EIP, i.len() as isize);
@@ -528,7 +741,7 @@ pub fn run(ctx: &mut Context, steps: usize) {
             }
             iced_x86::Mnemonic::Jl => {
                 if ctx.sf != ctx.of {
-                    let addr = ((ctx.read_op0(&i) as isize) + (eip as isize)) as usize;
+                    let addr = ctx.read_op0(&i) + eip;
                     ctx.set_register(iced_x86::Register::EIP, addr as u32);
                 } else {
                     ctx.register_incr(iced_x86::Register::EIP, i.len() as isize);

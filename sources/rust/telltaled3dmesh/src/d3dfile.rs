@@ -670,19 +670,22 @@ pub fn parse_d3dfile<S: AsRef<str>>(
         &mut esi1c,
         &mut esi20,
     );
+    debug!("converting index buffer");
     let index_buffer = unsafe {
         std::slice::from_raw_parts(
             index_buffer_bytes.as_ptr() as *const u16,
-            qty_indices as usize,
+            index_buffer_bytes.len() / 2,
         )
     };
 
+    debug!("writing index buffer");
     d3dfile.buffers.push(D3DBuffer {
         r#type: "index".to_string(),
         qty: qty_indices,
         stride: 2,
         data: D3DBufferData::U16(index_buffer.to_vec()),
     });
+    debug!("done.");
 
     // Fix indices
     for i in 0..d3dfile.meshes.len() {
@@ -712,10 +715,10 @@ pub fn parse_d3dfile<S: AsRef<str>>(
             let output = std::path::PathBuf::from_str(output.as_str()).unwrap();
             let output = output.with_extension("ib");
 
-            if detach_index_buffer {
-                use std::str::FromStr;
-                std::fs::write(output, index_buffer_bytes);
-            }
+            // if detach_index_buffer {
+            //     use std::str::FromStr;
+            //     std::fs::write(output, index_buffer_bytes);
+            // }
         }
         None => {
             todo!("print to stdout")
