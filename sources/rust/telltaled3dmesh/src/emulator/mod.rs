@@ -549,7 +549,7 @@ impl Value {
 }
 
 pub fn read_code() -> Vec<u8> {
-    let r = include_bytes!("../ibf.txt").to_vec();
+    let r = include_bytes!("./ibf.txt").to_vec();
     let r = String::from_utf8(r).unwrap();
     let r: Vec<_> = r
         .split(" ")

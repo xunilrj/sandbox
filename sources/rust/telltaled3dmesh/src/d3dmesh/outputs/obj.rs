@@ -1,4 +1,4 @@
-use crate::d3dfile::D3DFile;
+use super::super::d3dfile::D3DFile;
 use std::io::Write;
 use std::{fs::File, path::PathBuf};
 
@@ -38,9 +38,8 @@ pub fn save_to_obj(mesh: &D3DFile, path: PathBuf) {
         .find(|x| x.r#type == "position")
         .unwrap();
     let vertices: Vec<_> = vertices.as_f32().chunks(3).collect();
-
-    for vi in vertices {
-        obj_v(&mut f, vi[0], vi[1], vi[2])
+    for v in vertices {
+        obj_v(&mut f, v[0], v[1], v[2])
     }
 
     let indices = mesh.buffers.iter().find(|x| x.r#type == "index").unwrap();
@@ -49,19 +48,18 @@ pub fn save_to_obj(mesh: &D3DFile, path: PathBuf) {
     for (i, m) in mesh.meshes.iter().enumerate() {
         obj_g(&mut f, format!("group_{}", i).as_str());
 
-        let idxs: Vec<_> = (m.indices[0]..m.indices[1]).collect();
-        for fi in idxs.chunks(3) {
-            if fi.len() != 3 {
-                continue;
-            }
+        let start = m.index_start;
+        let end = start + (m.tri_count * 3);
+        let idxs = (start..end).step_by(3);
+        for fi in idxs {
             obj_f(
                 &mut f,
-                indices[fi[0]] + 1,
-                indices[fi[1]] + 1,
-                indices[fi[2]] + 1,
+                indices[fi + 0] + 1,
+                indices[fi + 1] + 1,
+                indices[fi + 2] + 1,
             );
         }
 
-        write!(f, "\n\n");
+        write!(f, "\n");
     }
 }

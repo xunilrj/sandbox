@@ -1,30 +1,40 @@
 #![feature(with_options)]
 
-mod attributes;
-mod d3dfile;
-mod indexbuffer;
-pub mod outputs;
-pub mod run;
+mod d3dmesh;
+mod emulator;
+mod parser;
+mod skl;
 
-use d3dfile::parse_d3dfile;
 use structopt::StructOpt;
 
 #[derive(StructOpt, Debug)]
-#[structopt(about = "Telltale Games D3DMesh converter")]
+#[structopt(about = "D3DMesh converter")]
+pub struct MeshConvertArgs {
+    #[structopt(short, long)]
+    path: String,
+    /// Relative or absolute path of the file that will be generated. Supported formats: .json, .obj.
+    #[structopt(short, long)]
+    output: Option<String>,
+    #[structopt(long)]
+    pretty_print: bool,
+    #[structopt(long)]
+    buffer_as_base64: bool,
+    #[structopt(long)]
+    detach_index_buffer: bool,
+}
+
+#[derive(StructOpt, Debug)]
+#[structopt(about = "SKL converter")]
+pub struct SklConvertArgs {
+    #[structopt(short, long)]
+    path: String,
+}
+
+#[derive(StructOpt, Debug)]
+#[structopt(about = "Telltale Games converters")]
 enum Args {
-    Convert {
-        #[structopt(short, long)]
-        path: String,
-        /// Relative or absolute path of the file that will be generated. Supported formats: .json, .obj.
-        #[structopt(short, long)]
-        output: Option<String>,
-        #[structopt(long)]
-        pretty_print: bool,
-        #[structopt(long)]
-        buffer_as_base64: bool,
-        #[structopt(long)]
-        detach_index_buffer: bool,
-    },
+    MeshConvert(MeshConvertArgs),
+    SklConvert(SklConvertArgs),
 }
 
 fn main() {
@@ -34,14 +44,14 @@ fn main() {
     //println!("{:?}", args);
 
     match args {
-        Args::Convert {
+        Args::MeshConvert(MeshConvertArgs {
             path,
             output,
             pretty_print,
             buffer_as_base64,
             detach_index_buffer,
-        } => {
-            parse_d3dfile(
+        }) => {
+            d3dmesh::convert(
                 path,
                 output,
                 pretty_print,
@@ -50,5 +60,6 @@ fn main() {
             )
             .unwrap();
         }
+        Args::SklConvert(SklConvertArgs { path }) => skl::convert(path),
     }
 }

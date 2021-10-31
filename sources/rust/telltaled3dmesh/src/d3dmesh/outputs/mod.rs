@@ -1,4 +1,4 @@
-use crate::d3dfile::D3DFile;
+use super::d3dfile::D3DFile;
 use std::path::PathBuf;
 use std::str::FromStr;
 

@@ -3,7 +3,7 @@ use std::iter::FromIterator;
 use iced_x86::Register;
 use log::debug;
 
-use crate::run::{Context, Value};
+use crate::emulator::{Context, Value};
 
 pub fn get_index_buffer(
     ib: Vec<u8>,
@@ -27,7 +27,7 @@ pub fn get_index_buffer(
         .parse()
         .unwrap();
     ctx.mount_mem(0x19E000, vec![0u8; 4 * 1024]);
-    ctx.mount_mem(0x0070FC81, crate::run::read_code());
+    ctx.mount_mem(0x0070FC81, crate::emulator::read_code());
     ctx.mount_mem(0xEF14F28, vec![0u8; 100]);
     ctx.mount_mem(0xF8200A0, vec![0u8; output_buffer_size]);
     ctx.mount_mem(0x3BD3020, ib);
@@ -76,7 +76,7 @@ pub fn get_index_buffer(
         .parse()
         .unwrap();
     debug!("max steps: {}", max_steps);
-    crate::run::run(&mut ctx, max_steps);
+    crate::emulator::run(&mut ctx, max_steps);
     debug!("done.");
 
     let output = ctx.borrow_mem(0xF8200A0);
