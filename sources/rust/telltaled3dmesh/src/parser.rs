@@ -55,7 +55,7 @@ fn parse_u8_slice(input: &[u8], size: usize) -> nom::IResult<&[u8], &[u8]> {
 }
 
 #[allow(dead_code)]
-fn whats_next(input: &[u8]) {
+pub fn whats_next(input: &[u8]) {
     println!("Options:");
     println!(
         "    parse_le_u16: {:?} or {:?} or {:?} or {:?} or {:?}",
@@ -110,7 +110,7 @@ fn find_u16(input: &[u8]) {
 }
 
 #[allow(dead_code)]
-fn find_u32(input: &[u8]) {
+pub fn find_u32(input: &[u8]) {
     println!("Trying to find a u32:");
     for i in 0..128 {
         let input = &input[i..];
@@ -123,7 +123,7 @@ fn find_u32(input: &[u8]) {
 }
 
 #[allow(dead_code)]
-fn find_f32(input: &[u8]) {
+pub fn find_f32(input: &[u8]) {
     println!("Trying to find a f32:");
     for i in 0..128 {
         let input = &input[i..];
@@ -215,15 +215,18 @@ impl<'a> NomSlice<'a> {
 
     #[inline(always)]
     pub fn parse_n_bytes(&mut self, n: usize) -> &[u8] {
-        if let Ok((i, data)) = parse_n_bytes(self.slice, n) {
-            self.slice = i;
-            self.qty += n;
+        match parse_n_bytes(self.slice, n) {
+            Ok((i, data)) => {
+                self.slice = i;
+                self.qty += n;
 
-            let d: Vec<_> = data.iter().take(10).collect();
-            debug!("read {} bytes: {:?}", n, d);
-            data
-        } else {
-            panic!("parse_n_bytes");
+                let d: Vec<_> = data.iter().take(10).collect();
+                debug!("read {} bytes: {:?}", n, d);
+                data
+            }
+            Err(e) => {
+                panic!("parse_n_bytes: {:?}", e);
+            }
         }
     }
 
@@ -289,6 +292,18 @@ impl<'a> NomSlice<'a> {
     }
 
     #[inline(always)]
+    pub fn parse_length_buffer(&mut self, name: &str) -> &[u8] {
+        let n = self.parse_le_u32(name);
+        self.parse_n_bytes(n as usize)
+    }
+
+    #[inline(always)]
+    pub fn parse_length1_buffer(&mut self, name: &str) -> &[u8] {
+        let n = self.parse_n_bytes(1)[0];
+        self.parse_n_bytes(n as usize)
+    }
+
+    #[inline(always)]
     #[allow(dead_code)]
     pub fn parse_u16_slice(&mut self, n: usize) -> &[u16] {
         let bytes_size = std::mem::size_of::<u16>() * n;
@@ -300,6 +315,20 @@ impl<'a> NomSlice<'a> {
         debug!("read {} u16: {:?}", n, bytes_size);
 
         unsafe { std::slice::from_raw_parts(data.as_ptr() as *const u16, n) }
+    }
+
+    #[inline(always)]
+    #[allow(dead_code)]
+    pub fn parse_u32_slice(&mut self, n: usize) -> &[u32] {
+        let bytes_size = std::mem::size_of::<u32>() * n;
+        let (i, data) = parse_n_bytes(self.slice, bytes_size).unwrap();
+        self.slice = i;
+        self.qty += bytes_size;
+
+        let d: Vec<_> = data.iter().take(10).collect();
+        debug!("read {} u32: {:?}", n, bytes_size);
+
+        unsafe { std::slice::from_raw_parts(data.as_ptr() as *const u32, n) }
     }
 
     #[inline(always)]
@@ -358,7 +387,12 @@ impl<'a> NomSlice<'a> {
         for i in 0..4 {
             q[i] = self.parse_le_f32("?");
         }
-        debug!("read {:?} as quat {:?}", name, q);
+        debug!(
+            "read {:?} as quat {:?} length: {}",
+            name,
+            q,
+            (q[0] * q[0] + q[1] * q[1] + q[2] * q[2] + q[3] * q[3]).sqrt()
+        );
         q
     }
 

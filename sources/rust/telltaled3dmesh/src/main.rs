@@ -1,5 +1,6 @@
 #![feature(with_options)]
 
+mod anm;
 mod d3dmesh;
 mod emulator;
 mod parser;
@@ -31,10 +32,18 @@ pub struct SklConvertArgs {
 }
 
 #[derive(StructOpt, Debug)]
+#[structopt(about = "Anm converter")]
+pub struct AnmConvertArgs {
+    #[structopt(short, long)]
+    path: String,
+}
+
+#[derive(StructOpt, Debug)]
 #[structopt(about = "Telltale Games converters")]
 enum Args {
     MeshConvert(MeshConvertArgs),
     SklConvert(SklConvertArgs),
+    AnmConvert(AnmConvertArgs),
 }
 
 fn main() {
@@ -61,5 +70,6 @@ fn main() {
             .unwrap();
         }
         Args::SklConvert(SklConvertArgs { path }) => skl::convert(path),
+        Args::AnmConvert(AnmConvertArgs { path }) => anm::convert(path),
     }
 }

@@ -1298,3 +1298,1423 @@ uint32_t __stdcall sub_738460(int32_t* arg1 @ ecx, LPVOID arg2, DWORD arg3)
 007384f8  uint32_t eax_5 = arg3
 007384fc  *(arg1 + 0x44) = *(arg1 + 0x44) + eax_5
 00738503  return eax_5
+
+----------------------------------------------------------------------
+
+int32_t __stdcall sub_6c6500(void* arg1 @ ecx, int32_t* arg2)                                       <- Read anm buffer
+
+006c6504  int32_t* ebx = arg2
+006c6509  void* ebp = *ebx
+006c650f  arg2.b = 0
+006c6514  if (*(ebp + 0x64) != 0)
+006c6532      char var_9 = 0
+006c6537      sub_44a280(&var_9, 1)
+006c6524  else
+006c6524      sub_44a3a0(ebp, &arg2, 1)                             <- read the buffer size
+006c653c  char eax = arg2.b                                         <- .b gets the lowest byte.
+006c6540  uint32_t var_20_1
+006c6540  int32_t eax_1
+006c6540  if (eax != 0xff)                                          
+006c6586      eax_1 = sub_5f13c0(ebx, zx.d(eax))                    <- first buffer has length 71, so it enters here; (ebx + 0xC) is the buffer address
+006c6590      var_20_1 = zx.d(arg2.b)                               <- var_20_1 is 71
+006c6547  else
+006c6547      int32_t var_8 = 0
+006c6544      if (*(ebp + 0x64) != 0)
+006c6562          int32_t var_4 = 0
+006c6566          sub_44a280(&var_4, 2)
+006c6556      else
+006c6556          sub_44a3a0(ebp, &var_8, 2)
+006c6573      eax_1 = sub_5f13c0(ebx, zx.d(var_8.w))
+006c657d      var_20_1 = zx.d(var_8.w)
+006c6591  int32_t* edi = arg1 + 0x40                                
+006c6597  sub_5f04e0(edi, edi, eax_1, var_20_1)                     <- will write to (arg1 + 0x40 + 4) = var_20_1 << 3
+006c659f  void* ecx_8 = *edi
+006c65a4  uint32_t eax_5 = (*(arg1 + 0x44) + 7) u>> 3               <- will undo this here. This will be 71 bytes + 7 bits
+006c65a7  if (*(ebp + 0x64) != 0)
+006c65b8      sub_44a280(ecx_8, eax_5)
+006c65b1  else
+006c65b1      sub_44a3a0(ebp, ecx_8, eax_5)                         << read 71 bytes buffer here
+006c65c1  sub_74aa80(arg1 + 0x18, ebx)
+006c65d1  *(arg1 + 0x50) = (**edi).w & 0x3fff
+006c65e1  return sub_6c6230(arg1)
+
+------------------------------------------------------------
+
+
+int32_t __stdcall sub_74aa80(int32_t* arg1 @ ecx, int32_t* arg2)                <- read the second buffer of the anm
+
+0074aa85  int32_t* ebp = arg2
+0074aa8b  void* edi = *ebp
+0074aa90  arg2.b = 0
+0074aa94  if (*(edi + 0x64) != 0)
+0074aab2      char var_9 = 0
+0074aab6      sub_44a280(&var_9, 1)
+0074aaa4  else
+0074aaa4      sub_44a3a0(edi, &arg2, 1)
+0074aabb  char eax = arg2.b
+0074aabf  int32_t eax_1
+0074aabf  uint32_t ecx_6
+0074aabf  if (eax != 0xff)
+0074ab11      sub_5f0580(arg1, edi, zx.d(eax))
+0074ab1e      eax_1 = sub_5f13c0(ebp, zx.d(arg2.b))
+0074ab23      ecx_6 = zx.d(arg2.b)
+0074aac6  else
+0074aac6      int32_t var_8 = 0
+0074aac3      if (*(edi + 0x64) != 0)
+0074aae1          int32_t var_4 = 0
+0074aae5          sub_44a280(&var_4, 2)
+0074aad5      else
+0074aad5          sub_44a3a0(edi, &var_8, 2)
+0074aaf2      sub_5f0580(arg1, edi, zx.d(var_8.w))
+0074aaff      eax_1 = sub_5f13c0(ebp, zx.d(var_8.w))
+0074ab04      ecx_6 = zx.d(var_8.w)
+0074ab2c  sub_5f04e0(arg1, edi, eax_1, ecx_6)
+0074ab34  void* ecx_10 = *arg1
+0074ab39  uint32_t eax_5 = (*(arg1 + 4) + 7) u>> 3
+0074ab3c  if (*(edi + 0x64) != 0)
+0074ab4c      sub_44a280(ecx_10, eax_5)
+0074ab45  else
+0074ab45      sub_44a3a0(edi, ecx_10, eax_5)
+0074ab5b  *(arg1 + 0x18) = fconvert.s(fconvert.t(0.0333333351f))
+0074ab5e  *(arg1 + 0x1c) = 0xffffffff
+0074ab65  sub_5f03b0(arg1, 0xd)
+0074ab70  *(arg1 + 0x14) = fconvert.s(fconvert.t(-0.0333333351f))
+0074ab7d  *(arg1 + 0x10) = fconvert.s(fconvert.t(-0.0333333351f))
+0074ab80  *(arg1 + 0x25) = 1
+0074ab84  int32_t eax_6 = sub_74a6c0(arg1, 1.40129846e-45f)
+0074ab8d  *(arg1 + 0x10) = fconvert.s(fconvert.t(*(arg1 + 0x14)))
+0074ab96  return eax_6
+
+----------------------------------------
+
+int32_t __stdcall sub_5f03b0(void* arg1 @ ecx, int32_t arg2)
+
+    005f03b4  *(arg1 + 8) = arg2
+    005f03b7  return arg2
+
+
+----------------------------------------
+
+int32_t __stdcall sub_5f04e0(int32_t* arg1 @ ecx, int32_t arg2, int32_t arg3)               <- arg3 is the buffer size 71.
+    005f04e6  if (*(arg1 + 0xc) != 0)
+    005f04f3      sub_42dca0(*arg1)
+    005f04f8      *arg1 = 0
+    005f04fa      *(arg1 + 4) = 0
+    005f04fd      *(arg1 + 8) = 0
+    005f0500      *(arg1 + 0xc) = 0
+    005f050b  int32_t eax_2 = arg3 << 3                                                     <- multiplying by 8 to get number of bits?
+    005f0512  *(arg1 + 0xc) = 0
+    005f0515  *arg1 = arg2
+    005f0517  *(arg1 + 4) = eax_2
+    005f051c  return eax_2
+
+---------------------------------------------
+
+int32_t __stdcall sub_5f0580(int32_t* arg1 @ ecx, int32_t arg2)
+
+    005f058f  return sub_5f0520(arg1, __return_addr) __tailcall
+
+---------------------------------------------
+
+char* __stdcall sub_5f0520(int32_t* arg1 @ ecx, int32_t arg2)
+
+    005f0523  if (*(arg1 + 0xc) != 0)
+    005f0532      sub_42dca0(*arg1)
+    005f0537      *arg1 = 0
+    005f053d      *(arg1 + 4) = 0
+    005f0544      *(arg1 + 8) = 0
+    005f054b      *(arg1 + 0xc) = 0
+    005f0556  uint32_t edi_1 = (arg2 + 7) u>> 3
+    005f055f  *(arg1 + 4) = arg2
+    005f0562  void* eax_3 = sub_42dc60(edi_1)
+    005f056b  *arg1 = eax_3
+    005f056d  char* eax_4 = sub_7611e0(eax_3, 0, edi_1)
+    005f0576  *(arg1 + 0xc) = 1
+    005f057b  return eax_4
+
+--------------------------------------------
+
+void* __stdcall sub_42dc60(SIZE_T arg1)
+
+    0042dc6d  return sub_7630ca(arg1)
+
+-------------------------------------------------
+
+void* sub_7630ca(SIZE_T arg1)
+
+    00763178  if (arg1 u> 0xffffffe0)
+    00763178      sub_770e98(arg1)
+    00763183      *sub_766b77() = 0xc
+    0076318c      return 0
+    007630e9  SIZE_T var_14_1
+    007630e9  while (true)
+    007630e9      uint32_t edi_1 = arg1
+    007630f4      if (*data_8fb14c == 0)
+    007630f4          sub_76e113(sub_76e2b3(), 0x1e)
+    007630fe          sub_762815(0xff)
+    007630fe          noreturn
+    00763105      int32_t eax_1 = *data_8fb640
+    0076310d      if (eax_1 == 1)
+    0076310d          break
+    0076311d      LPVOID eax_3
+    0076311d      if (eax_1 == 3)
+    00763123          eax_3 = sub_76307b(0, edi_1)
+    0076311d      if (eax_1 != 3 || (eax_1 == 3 && eax_3 == 0))
+    0076311d          if (arg1 == 0)
+    00763133              edi_1 = 1
+    00763134          edi_1 = edi_1 + 0xf
+    0076313a          var_14_1 = edi_1 & 0xfffffff0
+    00763142          label_763142:
+    00763142          eax_3 = HeapAlloc(hHeap: *data_8fb14c, dwFlags: 0, dwBytes: var_14_1)
+    00763146      if (eax_3 == 0)
+    0076314a          if (*data_8fb2f4 == eax_3)
+    00763167              *sub_766b77() = 0xc
+    0076315e          else if (sub_770e98(arg1) != 0)
+    0076315e              continue
+    0076316e          *sub_766b77() = 0xc
+    00763176      return eax_3
+    0076310f  SIZE_T eax_2
+    0076310f  if (arg1 == 0)
+    00763119      eax_2 = 1
+    00763113  else
+    00763113      eax_2 = arg1
+    0076311a  var_14_1 = eax_2
+    0076311b  goto label_763142
+
+--------------------------------------------------------
+
+0x08
+0x1c
+0x14 f32
+0x18 f32
+0x20
+0x24 u8
+0x25 u8
+0x26 u8
+
+int32_t __stdcall sub_74a6c0(int32_t* arg1 @ ecx, float arg2)
+
+    0074a6c6  *(arg1 + 0x1c) = *(arg1 + 0x1c) + 1
+    0074a6ca  int32_t eax = *(arg1 + 0x1c)
+    0074a6cd  if (eax s< arg2)
+    0074a6d7      char temp1_1 = *(arg1 + 0x25)
+    0074a6d7      *(arg1 + 0x25) = *(arg1 + 0x25) + 0xff
+    0074a6d7      if (temp1_1 == 1)
+    0074a6e4          int32_t edi_1 = *(arg1 + 8)                                                               // edi_1 = 13
+    0074a6e7          int32_t* ebp_1 = *arg1                                                                    //*arg1 points to the buffer
+    0074a6f1          *(arg1 + 8) = edi_1 + 1                                                                   // updates to 14
+    0074a708          *(arg1 + 0x26) = (*((edi_1 u>> 3) + ebp_1) & (1 << (edi_1.b & 7)).b) != 0
+    0074a70e          float edx_3 = *ebp_1 & 7                                                                  // fourth byte of the buffer
+    0074a711          int32_t edi_3 = edi_1 + 1 i+ edx_3                                                        // fourth + 14
+    0074a71a          int32_t ecx_2 = (edi_1 + 1) & 0x1f
+    0074a726          void* ebx_4 = (((edi_1 + 1) u>> 3) & 0xfffffffc) + ebp_1
+    0074a72a          *(arg1 + 8) = edi_3
+    0074a731          arg2 = 0x20 - ecx_2
+    0074a728          if (0x20 - ecx_2 u>= edx_3)
+    0074a737              arg2 = edx_3
+    0074a73b          int32_t var_c_1
+    0074a73b          if (arg2 != 0x20)
+    0074a757              ecx_2 = ecx_2
+    0074a75e              var_c_1 = (1 << arg2.b) - 1
+    0074a742          else
+    0074a742              var_c_1 = 0xffffffff
+    0074a766          int32_t eax_8 = (*ebx_4 u>> ecx_2.b) & var_c_1
+    0074a76a          char edx_4 = edx_3.b - arg2.b
+    0074a76e          char var_8_2 = eax_8.b
+    0074a76a          if (edx_3 != arg2)
+    0074a791              eax_8 = eax_8 | ((((1 << edx_4) - 1) & *(ebx_4 + 4)) << arg2.b)
+    0074a793              var_8_2 = eax_8.b
+    0074a797          *(arg1 + 0x24) = eax_8.b
+    0074a7a3          float ebx_5 = ((*ebp_1 u>> 3) & 7) + 1
+    0074a7ab          int32_t edx_9 = edi_3 i+ ebx_5
+    0074a7ae          int32_t edi_4 = edi_3 & 0x1f
+    0074a7b9          float ecx_6 = 0x20 - edi_4
+    0074a7bb          void* eax_15 = ((edi_3 u>> 3) & 0xfffffffc) + ebp_1                           << EBP is buffer?
+    0074a7c3          *(arg1 + 8) = edx_9
+    0074a7bd          if (ecx_6 u>= ebx_5)
+    0074a7ce              arg2 = ebx_5
+    0074a7d2              ecx_6 = ebx_5
+    0074a7c8          else
+    0074a7c8              arg2 = ecx_6
+    0074a7d4          int32_t var_c_2
+    0074a7d4          if (ecx_6 != 0x20)
+    0074a7ed              var_c_2 = (1 << ecx_6.b) - 1
+    0074a7d9          else
+    0074a7d9              var_c_2 = 0xffffffff
+    0074a7fb          int32_t ebx_10 = (*eax_15 u>> edi_4.b) & var_c_2
+    0074a7ff          char ecx_9 = ebx_5.b - arg2.b
+    0074a7ff          if (ebx_5 != arg2)
+    0074a818              ebx_10 = ebx_10 | ((((1 << ecx_9) - 1) & *(eax_15 + 4)) << arg2.b)
+    0074a81f          *(arg1 + 0x25) = ebx_10.b
+    0074a81a          if (var_8_2 u> 0)
+    0074a82e              int32_t ecx_13 = (*ebp_1 u>> 0xa) & 7
+    0074a831              long double x87_r7_1
+    0074a831              if (ecx_13 == 7)
+    0074a838                  x87_r7_1 = sub_5f05a0(arg1)
+    0074a84f              else
+    0074a84f                  float var_4_2 = fconvert.s(fconvert.t(*((ecx_13 << 2) + 0x817b80)))
+    0074a853                  float eax_18 = (*ebp_1 u>> 6) & 0xf
+    0074a85e                  *(arg1 + 8) = edx_9 i+ eax_18
+    0074a861                  int32_t edx_10 = edx_9 & 0x1f
+    0074a86c                  float ecx_16 = 0x20 - edx_10
+    0074a86e                  void* edi_12 = ((edx_9 u>> 3) & 0xfffffffc) + ebp_1
+    0074a870                  if (ecx_16 u>= eax_18)
+    0074a87a                      arg2 = eax_18
+    0074a87e                      ecx_16 = eax_18
+    0074a874                  else
+    0074a874                      arg2 = ecx_16
+    0074a880                  int32_t ebp_2
+    0074a880                  if (ecx_16 != 0x20)
+    0074a891                      ebp_2 = (1 << ecx_16.b) - 1
+    0074a885                  else
+    0074a885                      ebp_2 = 0xffffffff
+    0074a8a0                  int32_t ebx_13 = (*edi_12 u>> edx_10.b) & ebp_2
+    0074a8a2                  float ecx_19 = eax_18 i- arg2
+    0074a8a2                  if (eax_18 != arg2)
+    0074a8b7                      ebx_13 = ebx_13 | ((((1 << ecx_19.b) - 1) & *(edi_12 + 4)) << arg2.b)
+    0074a8c3                  x87_r7_1 = sub_6cb330(ebx_13, eax_18, fconvert.s(fconvert.t(var_4_2)))
+    0074a8cb              *(arg1 + 0x20) = fconvert.s(x87_r7_1)
+    0074a8ce      uint32_t ebx_14 = zx.d(*(arg1 + 0x24))
+    0074a8d2      int32_t eax_19 = *(arg1 + 8)
+    0074a8d8      *(arg1 + 8) = eax_19 + ebx_14
+    0074a8e0      float eax_20 = eax_19 & 0x1f
+    0074a8e6      int32_t* edx_16 = ((eax_19 u>> 3) & 0xfffffffc) + *arg1
+    0074a8f5      uint32_t eax_21 = 0x20 i- eax_20
+    0074a8ef      if (0x20 i- eax_20 u>= ebx_14)
+    0074a8f9          eax_21 = ebx_14
+    0074a8fb      int32_t ebp_8
+    0074a8fb      if (eax_21 != 0x20)
+    0074a90e          ebp_8 = (1 << eax_21.b) - 1
+    0074a900      else
+    0074a900          ebp_8 = 0xffffffff
+    0074a91b      int32_t edi_15 = (*edx_16 u>> eax_20.b) & ebp_8
+    0074a91d      uint32_t ecx_24 = ebx_14 - eax_21
+    0074a91d      if (ebx_14 != eax_21)
+    0074a932          edi_15 = edi_15 | ((((1 << ecx_24.b) - 1) & *(edx_16 + 4)) << eax_21.b)
+    0074a934      edx_16.b = *(arg1 + 0x26)
+    0074a93c      eax_21.b = edx_16.b != 0
+    0074a948      long double st0_3
+    0074a948      st0_3, eax = sub_74a560(edi_15, ebx_14, fconvert.s(fconvert.t(*(arg1 + 0x20))), eax_21.b)
+    0074a94d      arg2 = fconvert.s(st0_3)
+    0074a95f      if (edx_16.b != 0)
+    0074a95f          *(arg1 + 0x18) = fconvert.s(fconvert.t(*(arg1 + 0x18)) + fconvert.t(arg2))
+    0074a968          *(arg1 + 0x14) = fconvert.s(fconvert.t(*(arg1 + 0x18)) + fconvert.t(*(arg1 + 0x14)))
+    0074a96f          return eax
+    0074a976      *(arg1 + 0x18) = fconvert.s(fconvert.t(arg2))
+    0074a97f      *(arg1 + 0x14) = fconvert.s(fconvert.t(*(arg1 + 0x18)) + fconvert.t(*(arg1 + 0x14)))
+    0074a986  return eax
+
+
+-------------------------------------------------------------
+
+long double sub_6cb330(int32_t arg1, float arg2, float arg3)
+
+    006cb33f  float eax_1 = (1 << arg2.b) - 1
+    006cb34a  if (arg1 == eax_1)
+    006cb34a      return fconvert.t(arg3)
+    006cb351  if (arg1 == 0)
+    006cb351      return float.t(0)
+    006cb354  float edx_1 = eax_1 & arg1
+    006cb35c  long double x87_r7_2 = float.t(edx_1)
+    006cb356  if (edx_1 s< 0)
+    006cb362      x87_r7_2 = x87_r7_2 + fconvert.t(4.2949673e+09f)
+    006cb36a  long double x87_r6 = fconvert.t(arg3)
+    006cb374  long double x87_r7_3 = x87_r7_2 * x87_r6
+    006cb376  long double x87_r5_1 = float.t(eax_1)
+    006cb368  if (eax_1 s< 0)
+    006cb37c      x87_r5_1 = x87_r5_1 + fconvert.t(4.2949673e+09f)
+    006cb384  long double x87_r7_5 = x87_r6
+    006cb38a  long double x87_r6_2 = float.t(0)
+    006cb38c  long double x87_r5_2 = fconvert.t(fconvert.s(x87_r7_3 / x87_r5_1))
+    006cb390  x87_r5_2 - x87_r6_2
+    006cb392  eax_1.w = (x87_r5_2 < x87_r6_2 ? 1 : 0 << 8) | ((0 ? 1 : 0 << 9) | ((is_unordered.t(x87_r5_2, x87_r6_2) ? 1 : 0 << 0xa) | ((x87_r5_2 == x87_r6_2 ? 1 : 0 << 0xe) | 0x2800)))
+    006cb394  if ((eax_1:1.b & 0x41) != 0)
+    006cb39d      x87_r6_2 = x87_r5_2
+    006cb399  else
+    006cb399      x87_r7_5 = x87_r5_2
+    006cb3a3  long double x87_r6_3 = fconvert.t(fconvert.s(x87_r6_2))
+    006cb3a7  x87_r6_3 - x87_r7_5
+    006cb3a9  eax_1.w = (x87_r6_3 < x87_r7_5 ? 1 : 0 << 8) | ((0 ? 1 : 0 << 9) | ((is_unordered.t(x87_r6_3, x87_r7_5) ? 1 : 0 << 0xa) | ((x87_r6_3 == x87_r7_5 ? 1 : 0 << 0xe) | 0x3000)))
+    006cb3ab  eax_1:1.b & 5
+    006cb3ab  bool p = unimplemented  {test ah, 0x5}
+    006cb3c5  if (p)
+    006cb3c5      return fconvert.t(fconvert.s(x87_r6_3))
+    006cb3ba  return fconvert.t(fconvert.s(x87_r7_5))
+
+----------------------------------------------------------------------------
+
+int32_t __fastcall sub_6c6230(void* arg1)
+
+006c6246  *(arg1 + 0xf3) = (*(*(arg1 + 0x40) + 4) u>> 0xe).b & 3
+006c624c  *(arg1 + 0xe8) = 0xffff
+006c6255  sub_5f03b0(arg1 + 0x40, 0x31)
+006c6260  *(arg1 + 0x54) = fconvert.s(fconvert.t(*data_895184))
+006c6269  *(arg1 + 0x58) = fconvert.s(fconvert.t(*data_895188))
+006c6272  *(arg1 + 0x5c) = fconvert.s(fconvert.t(*data_89518c))
+006c627b  *(arg1 + 0x60) = fconvert.s(fconvert.t(*data_895190))
+006c6284  *(arg1 + 0x64) = fconvert.s(fconvert.t(*data_895194))
+006c628d  *(arg1 + 0x68) = fconvert.s(fconvert.t(*data_895198))
+006c6296  *(arg1 + 0x6c) = fconvert.s(fconvert.t(*data_89519c))
+006c6299  int32_t eax_5 = *(arg1 + 0xe0)
+006c62a6  int32_t eax_6 = eax_5 + eax_5
+006c62ac  *(arg1 + 0xe0) = (eax_6 + eax_6) | zx.d(*(arg1 + 0xf3))
+006c62b8  *(arg1 + 0x70) = fconvert.s(fconvert.t(*data_895184))
+006c62c1  *(arg1 + 0x74) = fconvert.s(fconvert.t(*data_895188))
+006c62ca  *(arg1 + 0x78) = fconvert.s(fconvert.t(*data_89518c))
+006c62d3  *(arg1 + 0x7c) = fconvert.s(fconvert.t(*data_895190))
+006c62dc  *(arg1 + 0x80) = fconvert.s(fconvert.t(*data_895194))
+006c62e8  *(arg1 + 0x84) = fconvert.s(fconvert.t(*data_895198))
+006c62f4  *(arg1 + 0x88) = fconvert.s(fconvert.t(*data_89519c))
+006c62fa  int32_t edx = *(arg1 + 0xe0)
+006c6307  int32_t edx_1 = edx + edx
+006c630d  *(arg1 + 0xe0) = (edx_1 + edx_1) | zx.d(*(arg1 + 0xf3))
+006c6319  *(arg1 + 0x8c) = fconvert.s(fconvert.t(*data_895184))
+006c6325  *(arg1 + 0x90) = fconvert.s(fconvert.t(*data_895188))
+006c6331  *(arg1 + 0x94) = fconvert.s(fconvert.t(*data_89518c))
+006c633d  *(arg1 + 0x98) = fconvert.s(fconvert.t(*data_895190))
+006c6349  *(arg1 + 0x9c) = fconvert.s(fconvert.t(*data_895194))
+006c6355  *(arg1 + 0xa0) = fconvert.s(fconvert.t(*data_895198))
+006c6361  *(arg1 + 0xa4) = fconvert.s(fconvert.t(*data_89519c))
+006c6367  int32_t ecx_2 = *(arg1 + 0xe0)
+006c6374  int32_t ecx_3 = ecx_2 + ecx_2
+006c637a  *(arg1 + 0xe0) = (ecx_3 + ecx_3) | zx.d(*(arg1 + 0xf3))
+006c6386  *(arg1 + 0xa8) = fconvert.s(fconvert.t(*data_895184))
+006c6392  *(arg1 + 0xac) = fconvert.s(fconvert.t(*data_895188))
+006c639e  *(arg1 + 0xb0) = fconvert.s(fconvert.t(*data_89518c))
+006c63aa  *(arg1 + 0xb4) = fconvert.s(fconvert.t(*data_895190))
+006c63b6  *(arg1 + 0xb8) = fconvert.s(fconvert.t(*data_895194))
+006c63c2  *(arg1 + 0xbc) = fconvert.s(fconvert.t(*data_895198))
+006c63ce  *(arg1 + 0xc0) = fconvert.s(fconvert.t(*data_89519c))
+006c63d4  int32_t eax_10 = *(arg1 + 0xe0)
+006c63e1  int32_t eax_11 = eax_10 + eax_10
+006c63e7  *(arg1 + 0xe0) = (eax_11 + eax_11) | zx.d(*(arg1 + 0xf3))
+006c63ed  int32_t eax_13
+006c63ed  eax_13.b = 0
+006c63f5  *(arg1 + 0xc4) = fconvert.s(fconvert.t(*data_8bad30))
+006c6401  *(arg1 + 0xc8) = fconvert.s(fconvert.t(*data_8bad34))
+006c640d  *(arg1 + 0xcc) = fconvert.s(fconvert.t(*data_8bad38))
+006c6419  *(arg1 + 0xd0) = fconvert.s(fconvert.t(*data_8bad3c))
+006c6425  *(arg1 + 0xd4) = fconvert.s(fconvert.t(*data_8bad40))
+006c6431  *(arg1 + 0xd8) = fconvert.s(fconvert.t(*data_8bad44))
+006c643d  *(arg1 + 0xdc) = fconvert.s(fconvert.t(*data_8bad48))
+006c6443  *(arg1 + 0xf4) = eax_13.b
+006c6449  *(arg1 + 0xf2) = 1
+006c6450  *(arg1 + 0xf5) = eax_13.b
+006c6457  return eax_13
+
+
+
+-------------------------------------------------------
+
+
+int32_t sub_4972f0(void* arg1 @ ebp, void* arg2, void* arg3, void* arg4, void* arg5)                        <- Read anm file
+
+004972fd  int32_t* fsbase
+004972fd  int32_t var_c = *fsbase
+004972fe  *fsbase = &var_c
+00497314  int32_t edi
+00497314  int32_t var_d0 = edi
+00497321  if (*(arg5 + 0x64) == 1)
+00497326      *(arg2 + 0xc) = 4
+0049733b  void* var_d4 = arg5
+0049733f  sub_43d4f0(arg1, arg2, arg2, arg3, arg4, var_d4)
+00497349  sub_44a6e0(arg5)
+00497352  int32_t eax_1 = *(arg2 + 0x20)
+00497355  int32_t var_b0 = eax_1
+00497359  var_d4 = 4
+0049734e  int32_t var_c0
+0049734e  int32_t* esp_1
+0049734e  if (*(arg5 + 0x64) != 0)
+0049736b      var_c0 = eax_1
+00497374      sub_44a280(&var_c0)
+00497374      esp_1 = &var_d0
+00497364  else
+00497364      sub_44a3a0(arg5, &var_b0, var_d4)
+00497364      esp_1 = &var_d0
+00497379  if (*(arg5 + 0x64) != 1)
+00497382      if ((*data_8b98d0 & 0x20000000) == 0)
+0049738e          var_d4 = data_893304
+00497398          sub_438160(0x8b98c0, 0x893304)
+0049739d          var_d4 = data_8b98c0
+004973a2          *data_8b98d4 = 0x18
+004973ac          sub_40e610(0x8b98c0)
+004973b4      void* eax_2 = *(arg2 + 0x24)
+004973bb      var_d4 = arg1
+004973bc      void* ebp = eax_2 + var_b0
+004973bf      void* ebx_1 = nullptr
+004973c1      void* var_a8
+004973c1      if (ebp != eax_2)
+004973cb          int32_t* edi_2 = *(arg2 + 0x28)
+004973c9          if (ebp s> 0)
+004973e6              ebx_1 = sub_42dc60(ebp << 2)
+004973e8          void* ecx_5 = *(arg2 + 0x20)
+004973eb          if (ecx_5 s>= ebp)
+004973f5              ecx_5 = ebp
+004973f7              var_a8 = ebp
+004973ef          else
+004973ef              var_a8 = ecx_5
+004973fd          int32_t eax_5 = *(arg2 + 0x20)
+00497400          var_c0 = eax_5
+004973fb          if (ecx_5 s> 0)
+00497408              void* eax_6 = ebx_1
+0049740a              void* edx_2 = edi_2 - ebx_1
+0049740c              void* var_b4_1 = ecx_5
+00497410              void* temp0_1
+00497410              do
+00497410                  if (eax_6 != 0)
+00497414                      *eax_6 = 0
+0049741d                      *eax_6 = *(edx_2 + eax_6)
+0049741f                  eax_6 = eax_6 + 4
+00497422                  temp0_1 = var_b4_1
+00497422                  var_b4_1 = var_b4_1 - 1
+00497422              while (temp0_1 != 1)
+00497429              eax_5 = var_c0
+0049742d          if (eax_5 s> 0)
+00497431              int32_t* edi_4 = edi_2
+00497439              for (int32_t ecx_6 = eax_5; ecx_6 != 0; ecx_6 = ecx_6 - 1)
+00497439                  *edi_4 = 0
+00497439                  edi_4 = edi_4 + 4
+0049743b              ecx_5 = var_a8
+00497443          *(arg2 + 0x20) = ecx_5
+0049744c          *(arg2 + 0x24) = ebp
+0049744f          *(arg2 + 0x28) = ebx_1
+00497452          sub_42dca0(edi_2)
+00497457          ebx_1 = nullptr
+00497459      if (*(arg2 + 0xc) s< 4)
+00497867          int32_t var_bc = 0
+00497864          if (*(arg5 + 0x64) != 0)
+00497882              int32_t var_a4 = 0
+00497886              sub_44a280(&var_a4, 4)
+00497886              esp_1 = &var_d4
+00497874          else
+00497874              sub_44a3a0(arg5, &var_bc, 4)
+00497874              esp_1 = &var_d4
+0049788b          if (var_bc s> 0)
+004978b0              do
+004978b0                  *(esp_1 + 0x18) = *(esp_1 + 0x18) - 1
+004978b5                  void* esp_39
+004978b5                  void* edi_10
+004978b5                  if (*(arg2 + 0xc) != 0)
+0049796b                      sub_4966b0(esp_1 + 0x5c)
+00497970                      if ((*data_8b9408 & 0x20000000) == 0)
+0049797c                          *(esp_1 - 4) = 0x8937b4
+00497986                          sub_438160(0x8b93f8)
+0049798b                          *(esp_1 - 4) = 0x8b93f8
+00497990                          *data_8b940c = 8
+0049799a                          sub_40c960()
+0049799f                          esp_1 = esp_1
+004979a2                      *(esp_1 - 4) = 0x14
+004979a2                      esp_1 = esp_1 - 4
+004979a9                      int32_t eax_38 = sub_434e10(0x8b93f8)
+004979a9                      void* esp_45 = esp_1 + 4
+004979ae                      if (eax_38 != 0)
+004979b9                          *(esp_45 - 4) = *(esp_45 + 0xe4)
+004979ba                          *(esp_45 - 8) = 0
+004979c0                          *(esp_45 - 0xc) = 0x8b93f8
+004979c5                          *(esp_45 - 0x10) = esp_45 + 0x5c
+004979c6                          eax_38()
+004979c6                          esp_45 = esp_45
+004979ae                      if (eax_38 == 0)
+004979da                          *(esp_45 - 4) = *(esp_45 + 0xe4)
+004979db                          *(esp_45 - 8) = 0
+004979e1                          *(esp_45 - 0xc) = 0x8b93f8
+004979e6                          *(esp_45 - 0x10) = esp_45 + 0x5c
+004979e6                          esp_45 = esp_45 - 0x10
+004979e7                          sub_43d4f0(ebp, arg2)
+004979ae                      if (eax_38 != 0 || eax_38 == 0)
+004979ec                          esp_45 = esp_45 + 0x10
+004979f3                      int32_t eax_40 = *(esp_45 + 0x5c)
+004979f7                      *(esp_45 - 4) = *(esp_45 + 0x60)
+004979f8                      *(esp_45 - 8) = eax_40
+004979f9                      void* eax_41 = sub_434e60()
+004979fe                      edi_10 = *(esp_45 + 0xe4)
+00497a05                      esp_39 = esp_45
+00497a08                      ebp = eax_41
+00497a0a                      *(esp_39 + 0x50) = eax_41
+004978c4                  else
+004978c4                      *(esp_1 + 0x90) = 0xf
+004978cb                      *(esp_1 + 0x8c) = 0
+004978d6                      *(esp_1 + 0x7c) = 0
+004978db                      edi_10 = *(esp_1 + 0xe4)
+004978e6                      *(esp_1 - 4) = esp_1 + 0x78
+004978e9                      *(esp_1 + 0xd0) = 4
+004978f4                      sub_44a810(edi_10)
+004978fd                      *(esp_1 - 4) = esp_1 + 0x78
+00497902                      sub_4967a0(esp_1 + 0x64)
+0049790b                      int32_t eax_34 = *(esp_1 + 0x64)
+0049790f                      *(esp_1 - 4) = *(esp_1 + 0x68)
+00497910                      *(esp_1 - 8) = eax_34
+00497916                      ebp = sub_434e60()
+00497918                      int32_t eax_36 = *(esp_1 + 0x90)
+0049791f                      esp_39 = esp_1
+00497925                      *(esp_39 + 0x50) = ebp
+00497929                      *(esp_39 + 0xd0) = 0xffffffff
+00497922                      if (eax_36 u>= 0x10)
+00497936                          int32_t ecx_52 = *(esp_39 + 0x7c)
+0049793d                          *(esp_39 - 4) = eax_36 + 1
+0049793e                          *(esp_39 - 8) = ecx_52
+00497946                          sub_4a99b0()
+00497946                          esp_39 = esp_39
+0049794b                      *(esp_39 + 0x90) = 0xf
+00497952                      *(esp_39 + 0x8c) = 0
+0049795d                      *(esp_39 + 0x7c) = 0
+00497a0e                  bool cond:14_1 = *(edi_10 + 0x64) != 0
+00497a12                  *(esp_39 - 4) = 4
+00497a12                  void* esp_55 = esp_39 - 4
+00497a14                  if (cond:14_1)
+00497a24                      int32_t edx_21 = *(esp_55 + 0x14)
+00497a2c                      *(esp_55 - 4) = esp_55 + 0x34
+00497a2f                      *(esp_55 + 0x34) = edx_21
+00497a33                      sub_44a280()
+00497a33                      esp_1 = esp_55 + 4
+00497a1a                  else
+00497a1a                      *(esp_55 - 4) = esp_55 + 0x14
+00497a1d                      sub_44a3a0(edi_10)
+00497a1d                      esp_1 = esp_55 + 4
+00497a38                  if (*(esp_1 + 0x10) s> 0)
+00497a43                      bool cond:25_1
+00497a43                      do
+00497a43                          *(esp_1 + 0x10) = *(esp_1 + 0x10) - 1
+00497a4a                          int32_t eax_43 = sub_434cf0(ebp)
+00497a4f                          *(esp_1 - 4) = 0x8b98c0
+00497a54                          *(esp_1 - 8) = eax_43
+00497a5c                          int32_t* edi_11 = sub_434db0(ebp)
+00497a60                          int32_t edx_23 = *(*edi_11 + 0x10)
+00497a63                          *(esp_1 - 4) = 0
+00497a69                          *(esp_1 - 8) = esp_1 + 0x40
+00497a6c                          *(esp_1 + 0x58) = edi_11
+00497a70                          edx_23()
+00497a70                          esp_1 = esp_1
+00497a72                          *(esp_1 + 0x38) = edi_11
+00497a76                          int32_t eax_46 = *(arg2 + 0x24)
+00497a79                          bool cond:21_1 = *(arg2 + 0x20) != eax_46
+00497a7c                          *(esp_1 + 0xd0) = 5
+00497a87                          if (not(cond:21_1))
+00497a8d                              int32_t ecx_65 = eax_46
+00497a8f                              if (ecx_65 s< 0xa)
+00497a94                                  ecx_65 = 0xa
+00497a99                              int32_t ebx_5 = ecx_65 + eax_46
+00497a9e                              *(esp_1 + 0x14) = ebx_5
+00497a9c                              if (ebx_5 != eax_46)
+00497aab                                  int32_t* ebp_3 = nullptr
+00497aaf                                  *(esp_1 + 0x20) = *(arg2 + 0x28)
+00497aad                                  if (ebx_5 s> 0)
+00497abc                                      *(esp_1 - 4) = ebx_5 << 2
+00497ac2                                      esp_1 = esp_1
+00497ac7                                      ebp_3 = sub_42dc60()
+00497ac9                                  int32_t eax_50 = *(arg2 + 0x20)
+00497ace                                  int32_t ebx_6 = eax_50
+00497acc                                  if (eax_50 s>= ebx_5)
+00497ad2                                      ebx_6 = *(esp_1 + 0x14)
+00497ad8                                  int32_t ecx_67 = eax_50
+00497ada                                  *(esp_1 + 0x30) = ecx_67
+00497ad6                                  if (ebx_6 s> 0)
+00497ae4                                      int32_t* eax_51 = ebp_3
+00497ae6                                      int32_t* edx_25 = *(esp_1 + 0x20) - ebp_3
+00497ae8                                      int32_t edi_12 = ebx_6
+00497aea                                      ebx_6 = ebx_6
+00497af0                                      int32_t temp1_1
+00497af0                                      do
+00497af0                                          if (eax_51 != 0)
+00497af4                                              *eax_51 = 0
+00497afd                                              *eax_51 = *(edx_25 + eax_51)
+00497aff                                          eax_51 = eax_51 + 4
+00497b02                                          temp1_1 = edi_12
+00497b02                                          edi_12 = edi_12 - 1
+00497b02                                      while (temp1_1 != 1)
+00497b07                                      ecx_67 = *(esp_1 + 0x30)
+00497b0b                                  if (ecx_67 s> 0)
+00497b0f                                      int32_t* edi_13 = *(esp_1 + 0x20)
+00497b15                                      for (; ecx_67 != 0; ecx_67 = ecx_67 - 1)
+00497b15                                          *edi_13 = 0
+00497b15                                          edi_13 = edi_13 + 4
+00497b1b                                  int32_t edx_26 = *(esp_1 + 0x14)
+00497b1f                                  *(esp_1 - 4) = *(esp_1 + 0x20)
+00497b25                                  *(arg2 + 0x20) = ebx_6
+00497b28                                  *(arg2 + 0x24) = edx_26
+00497b2b                                  *(arg2 + 0x28) = ebp_3
+00497b2e                                  sub_42dca0()
+00497b2e                                  esp_1 = esp_1
+00497b33                                  edi_11 = *(esp_1 + 0x58)
+00497b37                                  ebp = *(esp_1 + 0x50)
+00497b41                          int32_t** eax_53 = *(arg2 + 0x28) + (*(arg2 + 0x20) << 2)
+00497b44                          if (eax_53 != 0)
+00497b48                              *eax_53 = edi_11
+00497b4a                          *(arg2 + 0x20) = *(arg2 + 0x20) + 1
+00497b4e                          cond:25_1 = *(esp_1 + 0x10) s> 0
+00497b53                          *(esp_1 + 0xd0) = 0xffffffff
+00497b53                      while (cond:25_1)
+00497b64                  *(esp_1 + 0x10) = *(esp_1 + 0x10) - 1
+00497b64              while (*(esp_1 + 0x18) s> 0)
+0049746f      else
+0049746f          var_a8 = nullptr
+0049746c          if (*(arg5 + 0x64) != 0)
+0049748a              var_c0 = 0
+0049748e              sub_44a280(&var_c0, 4)
+0049747c          else
+0049747c              sub_44a3a0(arg5, &var_a8, 4)
+00497496          int32_t var_c4 = 0
+00497493          if (*(arg5 + 0x64) != 0)
+004974b1              var_c0 = 0
+004974b5              sub_44a280(&var_c0, 4)
+004974a5          else
+004974a5              sub_44a3a0(arg5, &var_c4, 4)                                                  <- this reads how many "buffer descriptions" there are. See 18
+004974c7          void var_68
+004974c7          sub_5a6ed0(&var_68, var_c4)
+004974df          void var_34
+004974df          sub_5a6ed0(&var_34, var_c4)
+004974f0          int32_t var_4_1
+004974f0          var_4_1.b = 1
+004974f8          void var_40
+004974f8          sub_5a6ed0(&var_40, var_c4)
+004974f8          esp_1 = &var_d4
+00497501          var_4_1.b = 2
+004974fd          if (var_c4 s> 0)
+00497514              do                                                                                <- loop that reads the buffers description. See 19, 23, 27
+00497514                  sub_4966b0(esp_1 + 0x38)
+00497519                  if ((*data_8b9408 & 0x20000000) == 0)
+00497525                      *(esp_1 - 4) = 0x8937b4
+0049752f                      sub_438160(0x8b93f8)
+00497534                      *(esp_1 - 4) = 0x8b93f8
+00497539                      *data_8b940c = 8
+00497543                      sub_40c960()
+00497548                      esp_1 = esp_1
+0049754b                  *(esp_1 - 4) = 0x14
+0049754b                  esp_1 = esp_1 - 4
+00497552                  int32_t eax_8 = sub_434e10(0x8b93f8)
+00497552                  void* esp_5 = esp_1 + 4
+00497557                  if (eax_8 != 0)
+0049755b                      *(esp_5 - 4) = arg5
+0049755c                      *(esp_5 - 8) = 0
+00497562                      *(esp_5 - 0xc) = 0x8b93f8
+00497567                      *(esp_5 - 0x10) = esp_5 + 0x38
+00497568                      eax_8()
+00497568                      esp_5 = esp_5
+00497557                  if (eax_8 == 0)
+00497575                      *(esp_5 - 4) = arg5
+00497576                      *(esp_5 - 8) = 0
+0049757c                      *(esp_5 - 0xc) = 0x8b93f8
+00497581                      *(esp_5 - 0x10) = esp_5 + 0x38
+00497581                      esp_5 = esp_5 - 0x10
+00497582                      sub_43d4f0(ebp, arg2)
+00497557                  if (eax_8 != 0 || eax_8 == 0)
+00497587                      esp_5 = esp_5 + 0x10
+0049758e                  *(esp_5 - 4) = esp_5 + 0x38
+00497597                  bool cond:16_1 = *(arg5 + 0x64) != 0
+0049759b                  ebp = sub_435660()
+0049759d                  *(esp_5 - 4) = 2
+0049759d                  void* esp_15 = esp_5 - 4
+0049759f                  void* esp_17
+0049759f                  if (cond:16_1)
+004975af                      uint32_t eax_11 = zx.d(*(esp_15 + 0x2c))
+004975b8                      *(esp_15 - 4) = esp_15 + 0x18
+004975bb                      *(esp_15 + 0x18) = eax_11
+004975bf                      sub_44a280()
+004975bf                      esp_17 = esp_15 + 4
+004975a5                  else
+004975a5                      *(esp_15 - 4) = esp_15 + 0x2c
+004975a8                      sub_44a3a0(arg5)
+004975a8                      esp_17 = esp_15 + 4
+004975c4                  bool cond:22_1 = *(arg5 + 0x64) != 0
+004975c8                  *(esp_17 - 4) = 2
+004975c8                  void* esp_19 = esp_17 - 4
+004975ca                  if (cond:22_1)
+004975da                      uint32_t eax_12 = zx.d(*(esp_19 + 0x1c))
+004975e3                      *(esp_19 - 4) = esp_19 + 0x18
+004975e6                      *(esp_19 + 0x18) = eax_12
+004975ea                      sub_44a280()
+004975ea                      esp_1 = esp_19 + 4
+004975d0                  else
+004975d0                      *(esp_19 - 4) = esp_19 + 0x1c
+004975d3                      sub_44a3a0(arg5)
+004975d3                      esp_1 = esp_19 + 4
+004975f8                  int32_t eax_13 = *(esp_1 + 0x6c)
+004975fc                  *(esp_1 + 0x1c) = *(esp_1 + 0x1c) + (zx.d(*(esp_1 + 0x28)) * *(ebp + 0x14))
+00497600                  *(eax_13 + (ebx_1 << 2)) = ebp
+0049760f                  *(*(esp_1 + 0xa0) + (ebx_1 << 2)) = zx.d(*(esp_1 + 0x28))
+0049761e                  *(*(esp_1 + 0x94) + (ebx_1 << 2)) = zx.d(*(esp_1 + 0x18))
+00497621                  ebx_1 = ebx_1 + 1
+00497621              while (ebx_1 s< *(esp_1 + 0x10))
+0049762e              if (*(esp_1 + 0x1c) s> 0)
+00497635                  int32_t eax_15 = *(esp_1 + 0x1c)
+00497639                  *(esp_1 - 4) = eax_15
+0049763f                  *(arg2 + 0x30) = eax_15
+00497642                  esp_1 = esp_1
+00497647                  *(arg2 + 0x2c) = sub_42dc60()
+0049764a          int32_t ecx_29 = *(esp_1 + 0x2c)
+0049764e          if (ecx_29 s> 0)
+00497652              *(esp_1 - 4) = ecx_29
+00497658              esp_1 = esp_1
+0049765d              ecx_29 = *(esp_1 + 0x2c)
+00497661              *(arg2 + 0x34) = sub_42dc60()
+00497667          int32_t ebx_2 = *(arg2 + 0x2c)
+0049766a          *(esp_1 + 0x44) = *(arg2 + 0x34)
+00497670          bool cond:12_1 = *(esp_1 + 0x10) s<= 0
+00497674          *(esp_1 + 0x40) = arg5
+00497678          *(esp_1 + 0x48) = ecx_29
+0049767c          *(esp_1 + 0x4c) = 0
+00497680          *(esp_1 + 0x20) = 0
+00497684          if (not(cond:12_1))
+0049768a              int32_t ebx_3 = ebx_2
+00497690              bool cond:15_1
+00497690              do
+00497690                  int32_t eax_19 = *(esp_1 + 0x20)
+0049769b                  int32_t edx_11 = *(esp_1 + 0xa0)
+004976a2                  *(esp_1 + 0x64) = *(*(esp_1 + 0x6c) + (eax_19 << 2))
+004976a6                  int32_t ecx_32 = *(edx_11 + (eax_19 << 2))
+004976b2                  int32_t eax_20 = *(*(esp_1 + 0x94) + (eax_19 << 2))
+004976b5                  *(esp_1 + 0x28) = ecx_32
+004976b9                  *(esp_1 + 0x5c) = eax_20
+004976a9                  if (ecx_32 s> 0)
+004976d0                      bool cond:23_1
+004976d0                      do                                                                            <- anm buffer loop???
+004976d0                          *(esp_1 + 0x28) = *(esp_1 + 0x28) - 1
+004976de                          int32_t ebp_1 = *(esp_1 + 0x64)
+004976e2                          *(esp_1 - 4) = ebx_3
+004976e5                          int32_t edi_6 = ebx_3
+004976e7                          sub_434d10(ebp_1)
+004976ec                          ebx_3 = ebx_3 + *(ebp_1 + 0x14)
+004976ef                          *(esp_1 - 4) = 0x8b98c0
+004976f4                          *(esp_1 - 8) = edi_6
+004976f7                          *(esp_1 + 0x30) = ebx_3
+004976fb                          int32_t* eax_21 = sub_434db0(ebp_1)
+00497709                          int32_t edx_14 = *(*eax_21 + 0x10)
+0049770c                          *(esp_1 - 4) = *(esp_1 + 0x5c)
+00497711                          *(esp_1 - 8) = esp_1 + 0x40
+00497714                          edx_14()                                                                  <- read buffers. dynamic dispatch. ecx = this. arg2 on the stack
+00497714                          esp_1 = esp_1
+00497716                          *(esp_1 + 0x38) = eax_21
+0049771a                          int32_t eax_23 = *(arg2 + 0x24)
+0049771d                          bool cond:20_1 = *(arg2 + 0x20) != eax_23
+00497720                          *(esp_1 + 0xd0) = 3
+00497728                          if (not(cond:20_1))
+0049772e                              int32_t ecx_38 = eax_23
+00497730                              if (ecx_38 s< 0xa)
+00497735                                  ecx_38 = 0xa
+0049773a                              ecx_38 = ecx_38 + eax_23
+0049773e                              *(esp_1 + 0x1c) = ecx_38
+0049773c                              if (ecx_38 != eax_23)
+0049774b                                  int32_t edi_7 = ecx_38
+0049774d                                  int32_t* ebx_4 = nullptr
+00497751                                  *(esp_1 + 0x18) = *(arg2 + 0x28)
+0049774f                                  if (edi_7 s> 0)
+0049775e                                      *(esp_1 - 4) = edi_7 << 2
+00497764                                      esp_1 = esp_1
+00497769                                      ebx_4 = sub_42dc60()
+0049776b                                  int32_t ecx_40 = *(arg2 + 0x20)
+0049776e                                  if (ecx_40 s>= edi_7)
+00497778                                      ecx_40 = edi_7
+0049777a                                      *(esp_1 + 0x14) = edi_7
+00497772                                  else
+00497772                                      *(esp_1 + 0x14) = ecx_40
+00497780                                  int32_t eax_27 = *(arg2 + 0x20)
+00497783                                  *(esp_1 + 0x58) = eax_27
+0049777e                                  if (ecx_40 s> 0)
+0049778d                                      int32_t* eax_28 = ebx_4
+0049778f                                      int32_t* edx_16 = *(esp_1 + 0x18) - ebx_4
+00497791                                      *(esp_1 + 0x50) = ecx_40
+00497795                                      int32_t temp2_1
+00497795                                      do
+00497795                                          if (eax_28 != 0)
+00497799                                              *eax_28 = 0
+004977a2                                              *eax_28 = *(edx_16 + eax_28)
+004977a4                                          eax_28 = eax_28 + 4
+004977a7                                          temp2_1 = *(esp_1 + 0x50)
+004977a7                                          *(esp_1 + 0x50) = *(esp_1 + 0x50) - 1
+004977a7                                      while (temp2_1 != 1)
+004977ae                                      eax_27 = *(esp_1 + 0x58)
+004977b2                                      edi_7 = *(esp_1 + 0x1c)
+004977b6                                  if (eax_27 s> 0)
+004977ba                                      int32_t* edi_9 = *(esp_1 + 0x18)
+004977c2                                      for (int32_t ecx_41 = eax_27; ecx_41 != 0; ecx_41 = ecx_41 - 1)
+004977c2                                          *edi_9 = 0
+004977c2                                          edi_9 = edi_9 + 4
+004977c4                                      edi_7 = *(esp_1 + 0x1c)
+004977c8                                      ecx_40 = *(esp_1 + 0x14)
+004977cc                                  *(arg2 + 0x20) = ecx_40
+004977d3                                  *(esp_1 - 4) = *(esp_1 + 0x18)
+004977d9                                  *(arg2 + 0x24) = edi_7
+004977dc                                  *(arg2 + 0x28) = ebx_4
+004977df                                  sub_42dca0()
+004977df                                  esp_1 = esp_1
+004977e4                                  ebx_3 = *(esp_1 + 0x30)
+004977ee                          int32_t** eax_30 = *(arg2 + 0x28) + (*(arg2 + 0x20) << 2)
+004977f1                          if (eax_30 != 0)
+004977f5                              *eax_30 = eax_21
+004977f7                          *(arg2 + 0x20) = *(arg2 + 0x20) + 1
+004977fb                          cond:23_1 = *(esp_1 + 0x28) s> 0
+00497800                          *(esp_1 + 0xd0) = 2
+00497800                      while (cond:23_1)                                                                             <- anm buffer loop???
+00497815                  cond:15_1 = *(esp_1 + 0x20) + 1 s< *(esp_1 + 0x10)
+00497819                  *(esp_1 + 0x20) = *(esp_1 + 0x20) + 1
+00497812              while (cond:15_1)
+0049782a          *(esp_1 + 0xd0) = 1
+00497832          sub_560b90(esp_1 + 0x94)
+0049783e          *(esp_1 + 0xd0) = 0
+00497846          sub_560b90(esp_1 + 0xa0)
+0049784f          *(esp_1 + 0xd0) = 0xffffffff
+0049785a          sub_560b90(esp_1 + 0x6c)
+00497b74      int32_t eax_54 = *(arg2 + 0xc)
+00497b77      if (eax_54 s>= 2)
+00497b80          if (eax_54 s>= 3)
+00497b85              int32_t ebx_7 = 0
+00497b87              if (*(esp_1 + 0x24) s> 0)
+00497b93                  bool cond:18_1
+00497b93                  do
+00497b93                      void* edi_14 = *(*(arg2 + 0x28) + (ebx_7 << 2))
+00497b99                      *(esp_1 + 0x38) = edi_14
+00497b9d                      void* ecx_71 = *(esp_1 + 0xe4)
+00497ba4                      bool cond:17_1 = *(ecx_71 + 0x64) != 0
+00497ba8                      *(esp_1 + 0xd0) = 6
+00497baf                      *(esp_1 + 0x14) = 0
+00497bb7                      *(esp_1 - 4) = 4
+00497bb7                      void* esp_65 = esp_1 - 4
+00497bb9                      if (cond:17_1)
+00497bcb                          *(esp_65 - 4) = esp_65 + 0x34
+00497bcc                          *(esp_65 + 0x34) = 0
+00497bd4                          sub_44a280()
+00497bd4                          esp_1 = esp_65 + 4
+00497bbf                      else
+00497bbf                          *(esp_65 - 4) = esp_65 + 0x18
+00497bc0                          sub_44a3a0(ecx_71)
+00497bc0                          esp_1 = esp_65 + 4
+00497bd9                      *(edi_14 + 0x10) = 0
+00497be4                      *(edi_14 + 0x10) = *(edi_14 + 0x10) | *(esp_1 + 0x14)
+00497be7                      ebx_7 = ebx_7 + 1
+00497bea                      cond:18_1 = ebx_7 s< *(esp_1 + 0x24)
+00497bee                      *(esp_1 + 0xd0) = 0xffffffff
+00497bee                  while (cond:18_1)
+00497bfb          void* ebp_4 = *(esp_1 + 0xe4)
+00497c02          int32_t edi_15 = 0
+00497c04          bool cond:10_1 = *(ebp_4 + 0x64) != 0
+00497c07          *(esp_1 + 0x10) = 0
+00497c0b          *(esp_1 - 4) = 2
+00497c0b          void* esp_68 = esp_1 - 4
+00497c0f          if (cond:10_1)
+00497c21              *(esp_68 - 4) = esp_68 + 0x34
+00497c22              *(esp_68 + 0x34) = 0
+00497c26              sub_44a280()
+00497c26              esp_1 = esp_68 + 4
+00497c15          else
+00497c15              *(esp_68 - 4) = esp_68 + 0x14
+00497c16              sub_44a3a0(ebp_4)
+00497c16              esp_1 = esp_68 + 4
+00497c2b          if (*(esp_1 + 0x10) u<= 0)
+00497d16              int32_t ebx_9 = 0
+00497d18              if (*(esp_1 + 0x24) s> 0)
+00497d26                  do
+00497d26                      sub_4966b0(esp_1 + 0x38)
+00497d2b                      if ((*data_8b9408 & 0x20000000) == 0)
+00497d37                          *(esp_1 - 4) = 0x8937b4
+00497d41                          sub_438160(0x8b93f8)
+00497d46                          *(esp_1 - 4) = 0x8b93f8
+00497d4b                          *data_8b940c = 8
+00497d55                          sub_40c960()
+00497d5a                          esp_1 = esp_1
+00497d5d                      *(esp_1 - 4) = 0x14
+00497d5d                      esp_1 = esp_1 - 4
+00497d64                      int32_t eax_66 = sub_434e10(0x8b93f8)
+00497d64                      void* esp_86 = esp_1 + 4
+00497d69                      if (eax_66 != 0)
+00497d6d                          *(esp_86 - 4) = ebp_4
+00497d6e                          *(esp_86 - 8) = 0
+00497d73                          *(esp_86 - 0xc) = 0x8b93f8
+00497d78                          *(esp_86 - 0x10) = esp_86 + 0x38
+00497d79                          eax_66()
+00497d79                          esp_86 = esp_86
+00497d69                      if (eax_66 == 0)
+00497d86                          *(esp_86 - 4) = ebp_4
+00497d87                          *(esp_86 - 8) = 0
+00497d8c                          *(esp_86 - 0xc) = 0x8b93f8
+00497d91                          *(esp_86 - 0x10) = esp_86 + 0x38
+00497d91                          esp_86 = esp_86 - 0x10
+00497d92                          sub_43d4f0(ebp_4, arg2)
+00497d69                      if (eax_66 != 0 || eax_66 == 0)
+00497d97                          esp_86 = esp_86 + 0x10
+00497d9d                      int32_t eax_68 = *(*(arg2 + 0x28) + (ebx_9 << 2))
+00497da4                      *(esp_86 - 4) = esp_86 + 0x38
+00497da8                      sub_4966e0(eax_68 + 8)
+00497da8                      esp_1 = esp_86
+00497dad                      ebx_9 = ebx_9 + 1
+00497dad                  while (ebx_9 s< *(esp_1 + 0x24))
+00497c3e          else
+00497c3e              int32_t eax_60 = *(**(ebp_4 + 0xc) + 0x5c)()
+00497c46              sub_5f03a0(esp_1 + 0x40)
+00497c50              *(esp_1 - 4) = zx.d(*(esp_1 + 0x10))
+00497c55              *(esp_1 + 0xd0) = 7
+00497c60              sub_560bb0(esp_1 + 0x6c)
+00497c6a              int32_t eax_61 = *(esp_1 + 0x6c)
+00497c6e              *(esp_1 - 4) = zx.d(*(esp_1 + 0x10))
+00497c6f              *(esp_1 - 8) = eax_61
+00497c74              *(esp_1 + 0xd0) = 8
+00497c7c              sub_5f04e0(esp_1 + 0x40)
+00497c81              bool cond:13_1 = *(ebp_4 + 0x64) != 0
+00497c89              *(esp_1 - 4) = zx.d(*(esp_1 + 0x10))
+00497c89              void* esp_76 = esp_1 - 4
+00497c8a              if (cond:13_1)
+00497c9e                  *(esp_76 - 4) = *(esp_76 + 0x44)
+00497ca1                  sub_44a280()
+00497ca1                  esp_1 = esp_76 + 4
+00497c90              else
+00497c90                  *(esp_76 - 4) = *(esp_76 + 0x44)
+00497c93                  sub_44a3a0(ebp_4)
+00497c93                  esp_1 = esp_76 + 4
+00497ca6              if (*(esp_1 + 0x24) s> 0)
+00497cac                  esp_1 = esp_1
+00497cb3                  do
+00497cb3                      int32_t ebp_5 = *(*(arg2 + 0x28) + (edi_15 << 2))
+00497cb9                      *(esp_1 + 0x38) = ebp_5
+00497cc1                      *(esp_1 - 4) = esp_1 + 0x40
+00497cc6                      *(esp_1 - 8) = esp_1 + 0x30
+00497cc9                      *(esp_1 + 0xd0) = 9
+00497cd1                      sub_5f0980(eax_60)
+00497cda                      *(esp_1 - 4) = esp_1 + 0x30
+00497cde                      sub_4966e0(ebp_5 + 8)
+00497cde                      esp_1 = esp_1
+00497ce3                      edi_15 = edi_15 + 1
+00497ce3                  while (edi_15 s< *(esp_1 + 0x24))
+00497cf0              *(esp_1 + 0xd0) = 7
+00497cf8              sub_560b90(esp_1 + 0x6c)
+00497d01              *(esp_1 + 0xd0) = 0xffffffff
+00497d0c              sub_5f0830(esp_1 + 0x40)
+00497dba      *esp_1
+00497dba      esp_1 = esp_1 + 4
+00497dbb  void* edi_16 = *(esp_1 + 0xe0)
+00497dc4  sub_44a5c0(edi_16)
+00497dcc  void* esi_2 = arg2 + 0x10
+00497dcf  if ((*(arg2 + 0x10) | *(esi_2 + 4)) == 0)
+00497ddb      *(esp_1 - 4) = esp_1 + 0xa8
+00497de4      *(esp_1 - 4) = sub_4aaf20(edi_16 + 0x10)
+00497de9      *(esp_1 + 0xcc) = 0xa
+00497df4      sub_4967a0(esp_1 + 0x4c)
+00497dfd      *(esp_1 - 4) = esp_1 + 0x4c
+00497e00      sub_4966e0(esi_2)
+00497e00      esp_1 = esp_1
+00497e05      int32_t eax_72 = *(esp_1 + 0xc0)
+00497e0f      *(esp_1 + 0xcc) = 0xffffffff
+00497e0c      if (eax_72 u>= 0x10)
+00497e1f          *(esp_1 - 4) = eax_72 + 1
+00497e27          *(esp_1 - 8) = *(esp_1 + 0xac)
+00497e2f          sub_4a99b0()
+00497e2f          esp_1 = esp_1
+00497e3b  *esp_1
+00497e3c  *(esp_1 + 4)
+00497e42  *(esp_1 + 8)
+00497e43  *fsbase = *(esp_1 + 0xc4)
+00497e50  return 1
+
+----------------------------------------------------------
+
+void* __stdcall sub_434d10(void* arg1 @ ecx, int32_t arg2)
+
+00434d10  void* eax = *(arg1 + 0x28)
+00434d13  if (eax != 0)
+00434d17      eax = *(eax + 8)
+00434d1a      if (eax != 0)
+00434d23          eax = eax(arg2)
+00434d26  return eax
+
+
+-------------------------------------------------------------
+
+int32_t* sub_6204b0(int32_t* arg1)
+
+006204b7  int32_t* fsbase
+006204b7  int32_t* eax = *fsbase
+006204bd  int32_t* var_c = eax
+006204be  *fsbase = &var_c
+006204cf  if (arg1 != 0)
+006204de      *arg1 = 0x7e3a94
+006204e4      eax = sub_4966b0(arg1 + 8)
+006204e9      long double x87_r7_1 = float.t(0)
+006204eb      *(arg1 + 0x10) = 0
+006204f2      *arg1 = 0x7f8380
+006204f8      *(arg1 + 0x18) = fconvert.s(x87_r7_1)
+006204fb      *(arg1 + 0x1c) = fconvert.s(x87_r7_1)
+006204fe      *(arg1 + 0x20) = fconvert.s(x87_r7_1)
+00620503      *(arg1 + 0x24) = fconvert.s(float.t(1))
+0062050b  *fsbase = var_c
+00620515  return eax
+
+----------------------------------------------
+
+
+int32_t __stdcall sub_434db0(void* arg1 @ ecx, int32_t arg2, int32_t arg3)
+
+00434dbe  if (arg1 == arg3)
+00434dbe      return arg2
+00434dc2  void* esi = *(arg1 + 0x1c)
+00434dc5  if (esi != 0)
+00434dd0      do
+00434dd0          int32_t eax_2 = *(esi + 8)
+00434dd3          if ((eax_2.b & 0x10) != 0)
+00434dd7              if ((eax_2 & 0x10000000) == 0)
+00434de1                  int32_t eax_4 = *(esi + 0x18)()
+00434de3                  *(esi + 8) = *(esi + 8) | 0x10000000
+00434dea                  *(esi + 0x18) = eax_4
+00434df7              int32_t eax_5 = sub_434db0(*(esi + 0x18), *(esi + 4) + arg2, arg3)
+00434e0c              if (eax_5 != 0)
+00434e0c                  return eax_5
+00434e00          esi = *(esi + 0x10)
+00434e00      while (esi != 0)
+00434e0c  return 0
+
+--------------------------------------------------------
+
+
+int32_t __stdcall sub_5f13c0(void* arg1 @ ecx, int32_t arg2)                    <- arg2 is 71 the first buffer length
+    005f13c0  int32_t edx = *(arg1 + 0xc)
+    005f13c3  int32_t eax = *(arg1 + 4)
+    005f13d3  *(arg1 + 0xc) = ((arg2 + 3) & 0xfffffffc) + edx                   <- "& 0xfffffffc" looks like is alignment 11111111111111111111111111111100
+    005f13d9  return eax + edx
+
+
+
+---------------------------------------------------------
+
+
+int32_t* __fastcall sub_6c5e00(int32_t* arg1)
+
+006c5e0d  int32_t* fsbase
+006c5e0d  int32_t var_c = *fsbase
+006c5e0e  *fsbase = &var_c
+006c5e21  *arg1 = 0x7e3a94
+006c5e27  sub_4966b0(arg1 + 8)
+006c5e2e  *(arg1 + 0x10) = 0
+006c5e38  *arg1 = 0x7ef8f8
+006c5e3e  sub_5f03a0(arg1 + 0x18)
+006c5e46  int32_t var_4
+006c5e46  var_4.b = 1
+006c5e4b  sub_5f03a0(arg1 + 0x40)
+006c5e50  long double x87_r7 = float.t(0)
+006c5e52  *(arg1 + 0x54) = fconvert.s(x87_r7)
+006c5e55  int32_t ecx_3 = var_c
+006c5e59  *(arg1 + 0x58) = fconvert.s(x87_r7)
+006c5e5e  *(arg1 + 0x5c) = fconvert.s(x87_r7)
+006c5e61  long double x87_r6 = float.t(1)
+006c5e63  *(arg1 + 0x60) = fconvert.s(x87_r6)
+006c5e68  *(arg1 + 0x64) = fconvert.s(x87_r7)
+006c5e6b  *(arg1 + 0x68) = fconvert.s(x87_r7)
+006c5e6e  *(arg1 + 0x6c) = fconvert.s(x87_r7)
+006c5e71  *(arg1 + 0x70) = fconvert.s(x87_r7)
+006c5e74  *(arg1 + 0x74) = fconvert.s(x87_r7)
+006c5e77  *(arg1 + 0x78) = fconvert.s(x87_r7)
+006c5e7c  *(arg1 + 0x7c) = fconvert.s(x87_r6)
+006c5e81  *(arg1 + 0x80) = fconvert.s(x87_r7)
+006c5e87  *(arg1 + 0x84) = fconvert.s(x87_r7)
+006c5e8d  *(arg1 + 0x88) = fconvert.s(x87_r7)
+006c5e93  *(arg1 + 0x8c) = fconvert.s(x87_r7)
+006c5e99  *(arg1 + 0x90) = fconvert.s(x87_r7)
+006c5e9f  *(arg1 + 0x94) = fconvert.s(x87_r7)
+006c5ea7  *(arg1 + 0x98) = fconvert.s(x87_r6)
+006c5eaf  *(arg1 + 0x9c) = fconvert.s(x87_r7)
+006c5eb5  *(arg1 + 0xa0) = fconvert.s(x87_r7)
+006c5ebb  *(arg1 + 0xa4) = fconvert.s(x87_r7)
+006c5ec1  *(arg1 + 0xa8) = fconvert.s(x87_r7)
+006c5ec7  *(arg1 + 0xac) = fconvert.s(x87_r7)
+006c5ecd  *(arg1 + 0xb0) = fconvert.s(x87_r7)
+006c5ed5  *(arg1 + 0xb4) = fconvert.s(x87_r6)
+006c5edd  *(arg1 + 0xb8) = fconvert.s(x87_r7)
+006c5ee3  *(arg1 + 0xbc) = fconvert.s(x87_r7)
+006c5ee9  *(arg1 + 0xc0) = fconvert.s(x87_r7)
+006c5eef  *(arg1 + 0xc4) = fconvert.s(x87_r7)
+006c5ef5  *(arg1 + 0xc8) = fconvert.s(x87_r7)
+006c5efb  *(arg1 + 0xcc) = fconvert.s(x87_r7)
+006c5f03  *(arg1 + 0xd0) = fconvert.s(x87_r6)
+006c5f09  *(arg1 + 0xd4) = fconvert.s(x87_r7)
+006c5f0f  *(arg1 + 0xd8) = fconvert.s(x87_r7)
+006c5f15  *(arg1 + 0xdc) = fconvert.s(x87_r7)
+006c5f1b  *(arg1 + 0xf4) = 0
+006c5f21  *(arg1 + 0xf5) = 0
+006c5f29  *fsbase = ecx_3
+006c5f33  return arg1
+
+-------------------------------------------------------------------
+
+00895184  data_895184:
+00895184              00 00 00 00                                                                              ....
+
+00895188  int32_t data_895188 = 0x0
+0089518c  int32_t data_89518c = 0x0
+00895190  int32_t data_895190 = 0x3f800000
+00895194  int32_t data_895194 = 0x0
+00895198  int32_t data_895198 = 0x0
+0089519c  int32_t data_89519c = 0x0
+
+
+int32_t __fastcall sub_6c6230(void* arg1)
+
+006c6246  *(arg1 + 0xf3) = (*(*(arg1 + 0x40) + 4) u>> 0xe).b & 3
+006c624c  *(arg1 + 0xe8) = 0xffff
+006c6255  sub_5f03b0(arg1 + 0x40, 0x31)
+006c6260  *(arg1 + 0x54) = fconvert.s(fconvert.t(*data_895184))
+006c6269  *(arg1 + 0x58) = fconvert.s(fconvert.t(*data_895188))
+006c6272  *(arg1 + 0x5c) = fconvert.s(fconvert.t(*data_89518c))
+006c627b  *(arg1 + 0x60) = fconvert.s(fconvert.t(*data_895190))
+006c6284  *(arg1 + 0x64) = fconvert.s(fconvert.t(*data_895194))
+006c628d  *(arg1 + 0x68) = fconvert.s(fconvert.t(*data_895198))
+006c6296  *(arg1 + 0x6c) = fconvert.s(fconvert.t(*data_89519c))
+006c6299  int32_t eax_5 = *(arg1 + 0xe0)
+006c62a6  int32_t eax_6 = eax_5 + eax_5
+006c62ac  *(arg1 + 0xe0) = (eax_6 + eax_6) | zx.d(*(arg1 + 0xf3))
+006c62b8  *(arg1 + 0x70) = fconvert.s(fconvert.t(*data_895184))
+006c62c1  *(arg1 + 0x74) = fconvert.s(fconvert.t(*data_895188))
+006c62ca  *(arg1 + 0x78) = fconvert.s(fconvert.t(*data_89518c))
+006c62d3  *(arg1 + 0x7c) = fconvert.s(fconvert.t(*data_895190))
+006c62dc  *(arg1 + 0x80) = fconvert.s(fconvert.t(*data_895194))
+006c62e8  *(arg1 + 0x84) = fconvert.s(fconvert.t(*data_895198))
+006c62f4  *(arg1 + 0x88) = fconvert.s(fconvert.t(*data_89519c))
+006c62fa  int32_t edx = *(arg1 + 0xe0)
+006c6307  int32_t edx_1 = edx + edx
+006c630d  *(arg1 + 0xe0) = (edx_1 + edx_1) | zx.d(*(arg1 + 0xf3))
+006c6319  *(arg1 + 0x8c) = fconvert.s(fconvert.t(*data_895184))
+006c6325  *(arg1 + 0x90) = fconvert.s(fconvert.t(*data_895188))
+006c6331  *(arg1 + 0x94) = fconvert.s(fconvert.t(*data_89518c))
+006c633d  *(arg1 + 0x98) = fconvert.s(fconvert.t(*data_895190))
+006c6349  *(arg1 + 0x9c) = fconvert.s(fconvert.t(*data_895194))
+006c6355  *(arg1 + 0xa0) = fconvert.s(fconvert.t(*data_895198))
+006c6361  *(arg1 + 0xa4) = fconvert.s(fconvert.t(*data_89519c))
+006c6367  int32_t ecx_2 = *(arg1 + 0xe0)
+006c6374  int32_t ecx_3 = ecx_2 + ecx_2
+006c637a  *(arg1 + 0xe0) = (ecx_3 + ecx_3) | zx.d(*(arg1 + 0xf3))
+006c6386  *(arg1 + 0xa8) = fconvert.s(fconvert.t(*data_895184))
+006c6392  *(arg1 + 0xac) = fconvert.s(fconvert.t(*data_895188))
+006c639e  *(arg1 + 0xb0) = fconvert.s(fconvert.t(*data_89518c))
+006c63aa  *(arg1 + 0xb4) = fconvert.s(fconvert.t(*data_895190))
+006c63b6  *(arg1 + 0xb8) = fconvert.s(fconvert.t(*data_895194))
+006c63c2  *(arg1 + 0xbc) = fconvert.s(fconvert.t(*data_895198))
+006c63ce  *(arg1 + 0xc0) = fconvert.s(fconvert.t(*data_89519c))
+006c63d4  int32_t eax_10 = *(arg1 + 0xe0)
+006c63e1  int32_t eax_11 = eax_10 + eax_10
+006c63e7  *(arg1 + 0xe0) = (eax_11 + eax_11) | zx.d(*(arg1 + 0xf3))
+006c63ed  int32_t eax_13
+006c63ed  eax_13.b = 0
+006c63f5  *(arg1 + 0xc4) = fconvert.s(fconvert.t(*data_8bad30))
+006c6401  *(arg1 + 0xc8) = fconvert.s(fconvert.t(*data_8bad34))
+006c640d  *(arg1 + 0xcc) = fconvert.s(fconvert.t(*data_8bad38))
+006c6419  *(arg1 + 0xd0) = fconvert.s(fconvert.t(*data_8bad3c))
+006c6425  *(arg1 + 0xd4) = fconvert.s(fconvert.t(*data_8bad40))
+006c6431  *(arg1 + 0xd8) = fconvert.s(fconvert.t(*data_8bad44))
+006c643d  *(arg1 + 0xdc) = fconvert.s(fconvert.t(*data_8bad48))
+006c6443  *(arg1 + 0xf4) = eax_13.b
+006c6449  *(arg1 + 0xf2) = 1
+006c6450  *(arg1 + 0xf5) = eax_13.b
+006c6457  return eax_13
+
+-----------------------------------------------------------------
+
+float* __stdcall sub_6c4450(void* arg1 @ ecx, float* arg2, float* arg3, float arg4)
+
+006c4457  uint32_t ebx = zx.d(*(arg1 + 0x50))
+006c4469  if (ebx == 0)
+006c4469      *arg2 = fconvert.s(fconvert.t(*data_8bad4c))
+006c4473      *(arg2 + 4) = fconvert.s(fconvert.t(*data_8bad50))
+006c447c      *(arg2 + 8) = fconvert.s(fconvert.t(*data_8bad54))
+006c4485      *arg3 = fconvert.s(float.t(0))
+006c448a      return arg3
+006c448d  long double x87_r7_4 = float.t(0)
+006c4491  float var_68 = fconvert.s(x87_r7_4)
+006c4499  float var_64 = fconvert.s(x87_r7_4)
+006c44b2  int32_t eax_2
+006c44b2  int80_t st0
+006c44b2  st0, eax_2 = sub_74a990(arg1 + 0x18, fconvert.s(fconvert.t(arg4)), ebx, &var_68, &var_64)
+006c44b7  int32_t edi = eax_2
+006c44c0  int32_t ebp = edi + 2
+006c44c5  int32_t var_6c = edi
+006c44c3  if (ebp s< sx.d(*(arg1 + 0x98)))
+006c44cd      sub_6c4110(arg1)
+006c44d9  float var_60
+006c44d9  float var_54
+006c44d9  float var_3c
+006c44d9  if (sx.d(*(arg1 + 0x98)) s< ebp)
+006c44e1      do
+006c44e1          int32_t eax_3
+006c44e1          eax_3.b = *(arg1 + 0xa1)
+006c44e7          eax_3.b = eax_3.b + 1
+006c44e9          eax_3.b = eax_3.b & 3
+006c44eb          *(arg1 + 0xa1) = eax_3.b
+006c44f1          int32_t ecx_3 = sx.d(eax_3.b)
+006c4500          void* eax_7 = arg1 + ((((ecx_3 + 0xffffffff) & 3) + 7 + ((((ecx_3 + 0xffffffff) & 3) + 7) << 1)) << 2)
+006c4507          void* ecx_5 = arg1 + ((ecx_3 + (ecx_3 << 1) + 0x15) << 2)
+006c450c          *ecx_5 = fconvert.s(fconvert.t(*eax_7))
+006c4511          *(ecx_5 + 4) = fconvert.s(fconvert.t(*(eax_7 + 4)))
+006c4517          *(ecx_5 + 8) = fconvert.s(fconvert.t(*(eax_7 + 8)))
+006c451a          *(arg1 + 0x98) = *(arg1 + 0x98) + 1
+006c4522          int16_t eax_8 = *(arg1 + 0x98)
+006c4529          *(arg1 + 0x90) = *(arg1 + 0x90) << 2
+006c4530          *(arg1 + 0xa0) = *(arg1 + 0xa0) + 1
+006c4537          int32_t ecx_6 = *(arg1 + 0x90)
+006c453d          int32_t edx_1
+006c453d          edx_1.b = *(arg1 + 0xa0)
+006c4546          if (sx.d(eax_8) s>= ebx)
+006c47e6              *(arg1 + 0x90) = zx.d(*(arg1 + 0x9f)) | ecx_6
+006c454e          else
+006c454e              if (edx_1.b u>= *(arg1 + 0x9e))
+006c4558                  sub_6c3d40(arg1)
+006c4576              var_3c = 0f
+006c4582              int32_t eax_10
+006c4582              int32_t ecx_9
+006c4582              eax_10, ecx_9 = sub_5f06a0(arg1 + 0x40, *(arg1 + 0x48), &var_3c, arg1 + 0x9b, 3)
+006c4588              *(arg1 + 0x48) = eax_10
+006c45b3              sub_6c4250(&var_60, &var_3c, zx.d(*(arg1 + 0x9b)), zx.d(*(arg1 + 0x9c)), zx.d(*(arg1 + 0x9d)), fconvert.s(fconvert.t(*(arg1 + 0x94))))
+006c45bb              long double x87_r7_15
+006c45bb              float var_5c
+006c45bb              float var_58
+006c45bb              if (*(arg1 + 0x9a) == 0)
+006c45f4                  *(arg1 + 0x84) = fconvert.s(fconvert.t(var_60))
+006c45fe                  *(arg1 + 0x88) = fconvert.s(fconvert.t(var_5c))
+006c4604                  x87_r7_15 = fconvert.t(var_58)
+006c45ce              else
+006c45ce                  *(arg1 + 0x84) = fconvert.s(fconvert.t(var_60) + fconvert.t(*(arg1 + 0x84)))
+006c45de                  *(arg1 + 0x88) = fconvert.s(fconvert.t(*(arg1 + 0x88)) + fconvert.t(var_5c))
+006c45ea                  x87_r7_15 = fconvert.t(*(arg1 + 0x8c)) + fconvert.t(var_58)
+006c4608              *(arg1 + 0x8c) = fconvert.s(x87_r7_15)
+006c4621              float* eax_14 = arg1 + ((sx.d(*(arg1 + 0xa1)) + 7 + ((sx.d(*(arg1 + 0xa1)) + 7) << 1)) << 2)
+006c4626              *eax_14 = fconvert.s(fconvert.t(*(arg1 + 0x84)) + fconvert.t(*eax_14))
+006c4631              *(eax_14 + 4) = fconvert.s(fconvert.t(*(arg1 + 0x88)) + fconvert.t(*(eax_14 + 4)))
+006c463d              *(eax_14 + 8) = fconvert.s(fconvert.t(*(arg1 + 0x8c)) + fconvert.t(*(eax_14 + 8)))
+006c4647              *(arg1 + 0x90) = *(arg1 + 0x90) | zx.d(*(arg1 + 0x9f))
+006c464d              if (*(arg1 + 0x98) == 0)
+006c4668                  void* eax_18 = arg1 + ((sx.d(*(arg1 + 0xa1)) + 7 + ((sx.d(*(arg1 + 0xa1)) + 7) << 1)) << 2)
+006c466d                  var_54 = fconvert.s(fconvert.t(*eax_18))
+006c4674                  float var_50_1 = fconvert.s(fconvert.t(*(eax_18 + 4)))
+006c467b                  float var_4c_1 = fconvert.s(fconvert.t(*(eax_18 + 8)))
+006c467f                  long double x87_r7_27 = fconvert.t(var_54)
+006c4683                  *(arg1 + 0x54) = fconvert.s(x87_r7_27)
+006c4686                  long double x87_r6_1 = fconvert.t(var_50_1)
+006c468a                  *(arg1 + 0x58) = fconvert.s(x87_r6_1)
+006c468d                  long double x87_r5_1 = fconvert.t(var_4c_1)
+006c4691                  *(arg1 + 0x5c) = fconvert.s(x87_r5_1)
+006c4694                  int32_t edx_5 = *(arg1 + 0x90)
+006c46a3                  int32_t edx_6 = edx_5 + edx_5
+006c46a9                  *(arg1 + 0x90) = (edx_6 + edx_6) | zx.d(*(arg1 + 0x9f))
+006c46af                  *(arg1 + 0x60) = fconvert.s(x87_r7_27)
+006c46b4                  *(arg1 + 0x64) = fconvert.s(x87_r6_1)
+006c46b9                  *(arg1 + 0x68) = fconvert.s(x87_r5_1)
+006c46bc                  int32_t ecx_12 = *(arg1 + 0x90)
+006c46cb                  int32_t ecx_13 = ecx_12 + ecx_12
+006c46d1                  *(arg1 + 0x90) = (ecx_13 + ecx_13) | zx.d(*(arg1 + 0x9f))
+006c46d7                  *(arg1 + 0x6c) = fconvert.s(x87_r7_27)
+006c46dc                  *(arg1 + 0x70) = fconvert.s(x87_r6_1)
+006c46e1                  *(arg1 + 0x74) = fconvert.s(x87_r5_1)
+006c46e4                  int32_t eax_20 = *(arg1 + 0x90)
+006c46f3                  int32_t eax_21 = eax_20 + eax_20
+006c46f9                  *(arg1 + 0x90) = (eax_21 + eax_21) | zx.d(*(arg1 + 0x9f))
+006c46ff                  *(arg1 + 0x78) = fconvert.s(x87_r7_27)
+006c4702                  *(arg1 + 0x7c) = fconvert.s(x87_r6_1)
+006c4705                  *(arg1 + 0x80) = fconvert.s(x87_r5_1)
+006c470b                  int32_t edx_10 = *(arg1 + 0x90)
+006c4718                  int32_t edx_11 = edx_10 + edx_10
+006c471e                  *(arg1 + 0x90) = (edx_11 + edx_11) | zx.d(*(arg1 + 0x9f))
+006c4724              edi = var_6c
+006c4724      while (sx.d(*(arg1 + 0x98)) s< edi + 2)
+006c473a  int32_t ecx_18 = sx.d(*(arg1 + 0x98))
+006c474f  long double x87_r6_5 = fconvert.t(var_68)
+006c4759  long double x87_r7_34 = x87_r6_5
+006c475b  int32_t eax_27 = (sx.d(*(arg1 + 0xa1)) - ecx_18) + edi
+006c4760  arg4 = fconvert.s(fconvert.t(arg4) - x87_r6_5)
+006c476a  long double x87_r6_7 = float.t(0)
+006c476f  long double x87_r5_10 = fconvert.t(arg4)
+006c4779  x87_r5_10 - x87_r6_7
+006c477b  void* ebx_1 = arg1 + ((((eax_27 + 0xffffffff) & 3) + 7 + ((((eax_27 + 0xffffffff) & 3) + 7) << 1)) << 2)
+006c4789  char ecx_19 = ecx_18.b - edi.b
+006c478b  float* edi_2 = arg1 + (((eax_27 & 3) + 7 + (((eax_27 & 3) + 7) << 1)) << 2)
+006c47a0  float* ebp_2 = arg1 + ((((eax_27 + 1) & 3) + 7 + ((((eax_27 + 1) & 3) + 7) << 1)) << 2)
+006c47a9  float* edx_26 = arg1 + ((((eax_27 + 0xfffffffe) & 3) + 7 + ((((eax_27 + 0xfffffffe) & 3) + 7) << 1)) << 2)
+006c47ac  int32_t esi_1 = *(arg1 + 0x90)
+006c47b6  int32_t eax_31
+006c47b6  eax_31.w = (x87_r5_10 < x87_r6_7 ? 1 : 0 << 8) | ((0 ? 1 : 0 << 9) | ((is_unordered.t(x87_r5_10, x87_r6_7) ? 1 : 0 << 0xa) | ((x87_r5_10 == x87_r6_7 ? 1 : 0 << 0xe) | 0x2800)))
+006c47ba  char ecx_20 = ecx_19 + ecx_19
+006c47c6  int32_t edx_30 = ((esi_1 u>> ecx_20) & 3) + 1
+006c47cc  int32_t esi_4 = ((esi_1 u>> (ecx_20 - 2)) & 3) + 1
+006c47cf  if ((eax_31:1.b & 0x41) != 0)
+006c47f1      x87_r6_7 = x87_r5_10
+006c47f3      arg4 = fconvert.s(x87_r6_7)
+006c47d4  else
+006c47d4      arg4 = fconvert.s(x87_r5_10)
+006c47fa  long double x87_r5_11 = fconvert.t(var_64)
+006c4802  x87_r7_34 - x87_r5_11
+006c4804  eax_31.w = (x87_r7_34 < x87_r5_11 ? 1 : 0 << 8) | ((0 ? 1 : 0 << 9) | ((is_unordered.t(x87_r7_34, x87_r5_11) ? 1 : 0 << 0xa) | ((x87_r7_34 == x87_r5_11 ? 1 : 0 << 0xe) | 0x2800)))
+006c4806  eax_31:1.b & 0x44
+006c4806  bool p = unimplemented  {test ah, 0x44}
+006c4809  long double x87_r6_8
+006c4809  long double x87_r6_9
+006c4809  if (not(p))
+006c4820      x87_r6_9 = fconvert.t(arg4)
+006c4827      long double temp1_1 = fconvert.t(1.0)
+006c4827      x87_r6_9 - temp1_1
+006c482d      eax_31.w = (x87_r6_9 < temp1_1 ? 1 : 0 << 8) | ((0 ? 1 : 0 << 9) | ((is_unordered.t(x87_r6_9, temp1_1) ? 1 : 0 << 0xa) | ((x87_r6_9 == temp1_1 ? 1 : 0 << 0xe) | 0x3000)))
+006c4809      if ((eax_31:1.b & 0x41) == 0)
+006c4834          x87_r7_34 = x87_r6_9
+006c4836          x87_r6_8 = float.t(1)
+006c480b  else
+006c480b      long double x87_r4_1 = fconvert.t(arg4)
+006c4818      x87_r6_8 = x87_r4_1 / x87_r4_1
+006c4818      x87_r7_34 = x87_r6_7
+006c4809  if (p || (not(p) && (eax_31:1.b & 0x41) == 0))
+006c4838      arg4 = fconvert.s(x87_r6_8)
+006c483f      x87_r6_9 = fconvert.t(arg4)
+006c4869  if (esi_4 == 2 && edx_30 == esi_4)
+006c4869      var_54 = fconvert.s(fconvert.t(*edi_2))
+006c487f      long double x87_r5_13 = fconvert.t(var_54)
+006c4889      var_60 = fconvert.s(fconvert.t(*ebp_2) - x87_r5_13)
+006c4890      long double x87_r4_4 = fconvert.t(fconvert.s(fconvert.t(*(edi_2 + 4))))
+006c48a2      long double x87_r3_2 = fconvert.t(fconvert.s(fconvert.t(*(edi_2 + 8))))
+006c48b8      var_54 = fconvert.s(fconvert.t(var_60) * x87_r7_34)
+006c48da      var_60 = fconvert.s(x87_r5_13 + fconvert.t(var_54))
+006c48e2      float var_5c_2 = fconvert.s(x87_r4_4 + fconvert.t(fconvert.s(fconvert.t(fconvert.s(fconvert.t(*(ebp_2 + 4)) - x87_r4_4)) * x87_r7_34)))
+006c48ea      float var_58_2 = fconvert.s(x87_r3_2 + fconvert.t(fconvert.s(x87_r7_34 * fconvert.t(fconvert.s(fconvert.t(*(ebp_2 + 8)) - x87_r3_2)))))
+006c48f2      *arg2 = fconvert.s(fconvert.t(var_60))
+006c48f8      *(arg2 + 4) = fconvert.s(fconvert.t(var_5c_2))
+006c48ff      *(arg2 + 8) = fconvert.s(fconvert.t(var_58_2))
+006c4904      *arg3 = fconvert.s(float.t(1))
+006c4909      return arg2
+006c490f  long double x87_r7_44 = x87_r6_9
+006c4925  if (edx_30 == 1)
+006c4925      *arg2 = fconvert.s(fconvert.t(*edi_2))
+006c492a      *(arg2 + 4) = fconvert.s(fconvert.t(*(edi_2 + 4)))
+006c4931      *(arg2 + 8) = fconvert.s(fconvert.t(*(edi_2 + 8)))
+006c4938      *arg3 = fconvert.s(float.t(1))
+006c493e      return arg2
+006c4944  var_60 = fconvert.s(x87_r7_44)
+006c4950  var_54 = fconvert.s(x87_r7_44)
+006c495c  long double x87_r6_19 = fconvert.t(2.0)
+006c4941  if (edx_30 == 4)
+006c4964      ebx_1 = ebp_2
+006c496b  else if (edx_30 != 3)
+006c4977      ebx_1 = &var_60
+006c498f      long double x87_r4_11 = fconvert.t(fconvert.s(fconvert.t(*ebp_2)))
+006c4999      var_3c = fconvert.s(fconvert.t(*edi_2) - x87_r4_11)
+006c497f      *(ebp_2 + 4)
+006c4986      *(ebp_2 + 8)
+006c49e5      var_3c = fconvert.s(x87_r4_11 + fconvert.t(fconvert.s(fconvert.t(var_3c) * x87_r6_19)))
+006c49fd      var_60 = fconvert.s(fconvert.t(var_3c))
+006c499d      *(edi_2 + 4)
+006c49ae      *(edi_2 + 8)
+006c4a11  float* eax_34
+006c4a11  if (esi_4 == 4)
+006c4a16      x87_r7_44 = x87_r6_19
+006c4a18      eax_34 = edi_2
+006c4a1f  else if (esi_4 != 3)
+006c4a31      eax_34 = &var_54
+006c4a35      var_3c = fconvert.s(fconvert.t(*edi_2))
+006c4a4a      long double x87_r4_17 = fconvert.t(var_3c)
+006c4a39      *(edi_2 + 4)
+006c4a40      *(edi_2 + 8)
+006c4a80      var_3c = fconvert.s(fconvert.t(fconvert.s(fconvert.t(*ebp_2) - x87_r4_17)) * x87_r6_19)
+006c4aba      var_54 = fconvert.s(fconvert.t(fconvert.s(x87_r4_17 + fconvert.t(var_3c))))
+006c4a58      *(ebp_2 + 4)
+006c4a69      *(ebp_2 + 8)
+006c4a24  else
+006c4a24      eax_34 = edx_26
+006c4a28      x87_r7_44 = x87_r6_19
+006c4ace  float var_30 = fconvert.s(x87_r7_44)
+006c4b0f  sub_6c3810(&var_30, ebx_1, edi_2, ebp_2, eax_34)
+006c4b28  float* eax_35
+006c4b28  int80_t st0_1
+006c4b28  st0_1, eax_35 = sub_6c4bb0(&var_30, &var_3c, fconvert.s(fconvert.t(arg4)))
+006c4b36  *arg2 = fconvert.s(fconvert.t(*eax_35))
+006c4b3d  *(arg2 + 4) = fconvert.s(fconvert.t(*(eax_35 + 4)))
+006c4b45  *(arg2 + 8) = fconvert.s(fconvert.t(*(eax_35 + 8)))
+006c4b4e  *arg3 = fconvert.s(float.t(1))
+006c4b53  return eax_35

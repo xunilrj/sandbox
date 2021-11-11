@@ -3,11 +3,17 @@
 #rm $file
 #ni -ItemType SymbolicLink -Path $file -Target "C:\Users\xunil\Downloads\ttarctext\mi101\sk13_scorpionmonkey.d3dmesh"
 
-$file = "sk20_guybrush.skl"
+$file = "sk20_idle_guybrush.anm"
 $source = 'C:\Users\xunil\Downloads\ttarctext\mi101'
 $target = 'C:\Program Files (x86)\Telltale Games\Tales of Monkey Island\Launch of the Screaming Narwhal\Pack'
+rm "$target/$file"
 cp "$source/$file" "$target/$file"
 
-c:\github\milkdbg\target\debug\milkdbg.exe --path "all.createfilea.js" > a.txt
-#rm $file
-#ni -ItemType SymbolicLink -Path $file -Target "C:\Users\xunil\Downloads\ttarctext\mi101\sk13_scorpionmonkey.d3dmesh"
+# $fake_file = "sk20_guybrush_poxhandpunchface.anm"
+# pushd $target
+#     rm $fake_file
+#     ni -ItemType SymbolicLink -Path $fake_file -Target "C:\Users\xunil\Downloads\ttarctext\mi101\$file"
+# popd
+
+rm env:/RUST_LOG
+c:\github\milkdbg\target\release\milkdbg.exe --path "all_readfile_of.js"
