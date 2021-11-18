@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{any::TypeId, collections::HashMap};
 
 use log::debug;
 
@@ -8,13 +8,33 @@ fn parse_n_bytes(input: &[u8], n: usize) -> nom::IResult<&[u8], &[u8]> {
 }
 
 #[inline(always)]
+fn parse_u8(input: &[u8]) -> nom::IResult<&[u8], u8> {
+    nom::number::complete::u8(input)
+}
+
+#[inline(always)]
+fn parse_i8(input: &[u8]) -> nom::IResult<&[u8], i8> {
+    nom::number::complete::i8(input)
+}
+
+#[inline(always)]
 fn parse_le_u16(input: &[u8]) -> nom::IResult<&[u8], u16> {
     nom::number::complete::le_u16(input)
 }
 
 #[inline(always)]
+fn parse_le_i16(input: &[u8]) -> nom::IResult<&[u8], i16> {
+    nom::number::complete::le_i16(input)
+}
+
+#[inline(always)]
 fn parse_le_u32(input: &[u8]) -> nom::IResult<&[u8], u32> {
     nom::number::complete::le_u32(input)
+}
+
+#[inline(always)]
+fn parse_le_i32(input: &[u8]) -> nom::IResult<&[u8], i32> {
+    nom::number::complete::le_i32(input)
 }
 
 #[inline(always)]
@@ -56,35 +76,48 @@ fn parse_u8_slice(input: &[u8], size: usize) -> nom::IResult<&[u8], &[u8]> {
 
 #[allow(dead_code)]
 pub fn whats_next(input: &[u8]) {
-    println!("Options:");
-    println!(
-        "    parse_le_u16: {:?} or {:?} or {:?} or {:?} or {:?}",
-        parse_le_u16(input).unwrap().1,
-        parse_le_u16(&input[1..]).unwrap().1,
-        parse_le_u16(&input[2..]).unwrap().1,
-        parse_le_u16(&input[3..]).unwrap().1,
-        parse_le_u16(&input[4..]).unwrap().1,
-    );
-    println!(
-        "    parse_le_u32: {:?} or {:?} or {:?} or {:?} or {:?}",
-        parse_le_u32(input).unwrap().1,
-        parse_le_u32(&input[1..]).unwrap().1,
-        parse_le_u32(&input[2..]).unwrap().1,
-        parse_le_u32(&input[3..]).unwrap().1,
-        parse_le_u32(&input[4..]).unwrap().1,
-    );
-    println!(
-        "    parse_le_f32: {:?} or {:?} or {:?} or {:?} or {:?}",
-        parse_le_f32(input).unwrap().1,
-        parse_le_f32(&input[1..]).unwrap().1,
-        parse_le_f32(&input[2..]).unwrap().1,
-        parse_le_f32(&input[3..]).unwrap().1,
-        parse_le_f32(&input[4..]).unwrap().1,
-    );
+    use itertools::Itertools;
+
+    #[derive(Debug, Clone, PartialEq, Eq)]
+    enum Types{
+        U8,
+        U16,
+        U32,
+        I8,
+        I16,
+        I32,
+        F32
+    }
+
+    fn print(mut input: &[u8], types: &[&Types]) -> Result<(),()> {
+        for i in types {
+            input = match i {
+                Types::U8 => { let(s, v) = parse_u8(input).unwrap(); print!("{:?}, ", v); s },
+                Types::U16 => { let(s, v) = parse_le_u16(input).unwrap(); print!("{:?}, ", v); s },
+                Types::U32 => { let(s, v) = parse_le_u32(input).unwrap(); print!("{:?}, ", v); s },
+                Types::I8 => { let(s, v) = parse_i8(input).unwrap(); print!("{:?}, ", v); s },
+                Types::I16 => { let(s, v) = parse_le_i16(input).unwrap(); print!("{:?}, ", v); s },
+                Types::I32 => { let(s, v) = parse_le_i32(input).unwrap(); print!("{:?}, ", v); s },
+                Types::F32 => { let(s, v) = parse_le_f32(input).unwrap(); print!("{:?}, ", v); s },
+            }
+        }
+        print!("{:?}", types);
+        println!("");
+        Ok(())
+    }
+
+    println!("Whats Next:");
+    let mut items = vec![Types::U8, Types::U16, Types::U32,
+        Types::I8, Types::I16, Types::I32,
+        Types::F32];
+    for types in items.iter().combinations_with_replacement(8) {
+        let mut input = input.clone();
+        print(input, types.as_slice());
+    }
 }
 
 #[allow(dead_code)]
-fn find_str(input: &[u8], size: usize) {
+pub fn find_str(input: &[u8], size: usize) {
     println!("Trying to find a str:");
     for i in 0..128 {
         let input = &input[i..(i + size)];
@@ -124,6 +157,13 @@ pub fn find_u32(input: &[u8]) {
 
 #[allow(dead_code)]
 pub fn find_f32(input: &[u8]) {
+    fn bounds(f: f32) -> f32 {
+        if f > -1000.0 && f < 1000.0 {
+            f
+        } else {
+            f32::NAN
+        }
+    }
     println!("Trying to find a f32:");
     for i in 0..128 {
         let input = &input[i..];
@@ -131,7 +171,7 @@ pub fn find_f32(input: &[u8]) {
         let (input, b) = parse_le_f32(input).unwrap();
         let (input, c) = parse_le_f32(input).unwrap();
         let (_, d) = parse_le_f32(input).unwrap();
-        println!("    {}: {:40.3},{:40.3},{:40.3},{:40.3},", i, a, b, c, d);
+        println!("    {}: {:20.3},{:20.3},{:20.3},{:20.3},", i, bounds(a), bounds(b), bounds(c), bounds(d));
     }
 }
 
@@ -220,7 +260,7 @@ impl<'a> NomSlice<'a> {
                 self.slice = i;
                 self.qty += n;
 
-                let d: Vec<_> = data.iter().take(10).collect();
+                let d: Vec<_> = data.iter().collect();
                 debug!("read {} bytes: {:?}", n, d);
                 data
             }

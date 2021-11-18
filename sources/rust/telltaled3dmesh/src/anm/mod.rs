@@ -62,40 +62,43 @@ pub fn convert<P: AsRef<str>>(path: P) {
         somethings.push(i);
     }
 
-    // 0
-    if let Some(s) = somethings.get(0) {
-        let buffers = s.qty;
-        for _ in 0..buffers {
-            let buffer = input.parse_length1_buffer("?");
-            println!("{} {:?}", buffer.len(), buffer);
-            let buffer = input.parse_length1_buffer("?");
-            println!("{} {:?}", buffer.len(), buffer);
-            println!("");
+    for s in somethings {
+        match s.hash {
+            0xFC6597EB1FE5458E => {
+                
+                let buffers = s.qty;
+                for _ in 0..buffers {
+                    // parser::whats_next(input.slice);
+                    parser::find_f32(input.slice);
+                    let buffer = input.parse_length1_buffer("?");
+                    // parser::whats_next(input.slice);
+                    parser::find_f32(input.slice);
+                    let buffer = input.parse_length1_buffer("?");
+                    panic!();
+                }
+            }
+            0xCECACE3A835CB7EE => {
+                let floats = s.qty;
+                for _ in 0..floats {
+                    let a = input.read_quat("quat");
+                }
+            }
+            0xC1E84D6FF72CE80 => {
+                let floats = s.qty;
+                for _ in 0..floats {
+                    let _ = input.read_quat("quat");
+                    let _ = input.read_vec3("vec3");
+                }
+                    
+                let a = input.parse_u32_slice(qty_bones);
+                println!("{} {:?}", a.len(), a);
+                println!("");
+        
+                let _ = input.parse_le_u16("?");
+        
+                let _ = input.read_n_properties(qty_bones);
+            }
+            _ => todo!("{:?}", s.hash)
         }
     }
-
-    // 1
-    if let Some(s) = somethings.get(1) {
-        let floats = s.qty;
-        for _ in 0..floats {
-            let a = input.read_quat("quat");
-        }
-    }
-
-    // 2
-    if let Some(s) = somethings.get(2) {
-        let floats = s.qty;
-        for _ in 0..floats {
-            let _ = input.read_quat("quat");
-            let _ = input.read_vec3("vec3");
-        }
-    }
-
-    let a = input.parse_f32_slice(qty_bones);
-    println!("{} {:?} {}", a.len(), a, a.iter().sum::<f32>());
-    println!("");
-
-    let _ = input.parse_le_u16("?");
-
-    let _ = input.read_n_properties(qty_bones);
 }

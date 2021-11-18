@@ -3,8 +3,8 @@
 #rm $file
 #ni -ItemType SymbolicLink -Path $file -Target "C:\Users\xunil\Downloads\ttarctext\mi101\sk13_scorpionmonkey.d3dmesh"
 
-$file = "sk20_idle_guybrush.anm"
-$source = 'C:\Users\xunil\Downloads\ttarctext\mi101'
+$file = "sk20_move_guybrushwalkdeterminedship.anm"
+$source = 'C:\temp\mi101'
 $target = 'C:\Program Files (x86)\Telltale Games\Tales of Monkey Island\Launch of the Screaming Narwhal\Pack'
 rm "$target/$file"
 cp "$source/$file" "$target/$file"
@@ -16,4 +16,4 @@ cp "$source/$file" "$target/$file"
 # popd
 
 rm env:/RUST_LOG
-c:\github\milkdbg\target\release\milkdbg.exe --path "all_readfile_of.js"
+c:\temp\milkdbg\target\release\milkdbg.exe --path "all_readfile_of.js"

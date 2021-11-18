@@ -123,7 +123,7 @@ async function traceNext(qty, anm) {
                     await print(`From now on, only if uses ${ api.args.lpBuffer}`)
                     while(true) {
                         await step();
-                        await goUntilUsesMem(api.args.lpBuffer);
+                        await goUntilUsesMem(api.args.lpBuffer, api.args.lpBuffer + 195);
                     }
                     bufferMem = `mem[${api.args.lpBuffer.toString()}`;
                 }
