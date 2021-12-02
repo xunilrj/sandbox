@@ -1,4 +1,3 @@
-#![feature(with_options)]
 
 mod anm;
 mod d3dmesh;

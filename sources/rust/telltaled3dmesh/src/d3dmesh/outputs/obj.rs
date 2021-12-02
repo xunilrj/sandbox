@@ -23,12 +23,8 @@ fn obj_f(f: &mut File, a: u16, b: u16, c: u16) {
 }
 
 pub fn save_to_obj(mesh: &D3DFile, path: PathBuf) {
-    let mut f = File::with_options()
-        .write(true)
-        .create(true)
-        .truncate(true)
-        .open(path)
-        .unwrap();
+    let _ = std::fs::remove_file(&path);
+    let mut f = std::fs::File::create(&path).unwrap();
 
     obj_o(&mut f, "obj");
 

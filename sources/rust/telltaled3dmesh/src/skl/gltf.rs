@@ -38,5 +38,5 @@ pub fn save<P: AsRef<Path>>(path: P, skl: super::SklFile) {
         skins: skins
     };
 
-    std::fs::write("./viewer/models/result.gltf", gltf.dump());
+    std::fs::write(path, gltf.dump());
 }

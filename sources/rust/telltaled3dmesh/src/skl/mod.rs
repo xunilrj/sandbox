@@ -71,7 +71,7 @@ pub fn convert<P: AsRef<str>>(path: P) {
         for _ in 0..qty {
             let bone_name = input.parse_length_string("Bone Name");
             let crc = crc64::crc64(0, bone_name.as_bytes());
-            println!("{} = {:X} {:?}", bone_name, crc, crc.to_le_bytes());
+            // println!("{} = {:X} {:?}", bone_name, crc, crc.to_le_bytes());
 
             let _ = input.parse_le_f32("?");
         }
@@ -90,6 +90,7 @@ pub fn convert<P: AsRef<str>>(path: P) {
         }
     }
 
+    bar.set_job_title("Saving...");
     let out = PathBuf::from_str(path.as_ref()).unwrap();
     let out = out.with_extension("gltf");
     gltf::save(&out, skl);
