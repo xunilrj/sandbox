@@ -69,7 +69,10 @@ pub fn convert<P: AsRef<str>>(path: P) {
         let _ = input.parse_le_u32("IK Section Length");
         let qty = input.parse_le_u32("IK qty");
         for _ in 0..qty {
-            let _ = input.parse_length_string("Bone Name");
+            let bone_name = input.parse_length_string("Bone Name");
+            let crc = crc64::crc64(0, bone_name.as_bytes());
+            println!("{} = {:X} {:?}", bone_name, crc, crc.to_le_bytes());
+
             let _ = input.parse_le_f32("?");
         }
 

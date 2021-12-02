@@ -8,7 +8,7 @@ fn parse_n_bytes(input: &[u8], n: usize) -> nom::IResult<&[u8], &[u8]> {
 }
 
 #[inline(always)]
-fn parse_u8(input: &[u8]) -> nom::IResult<&[u8], u8> {
+pub fn parse_u8(input: &[u8]) -> nom::IResult<&[u8], u8> {
     nom::number::complete::u8(input)
 }
 
@@ -18,8 +18,14 @@ fn parse_i8(input: &[u8]) -> nom::IResult<&[u8], i8> {
 }
 
 #[inline(always)]
-fn parse_le_u16(input: &[u8]) -> nom::IResult<&[u8], u16> {
+pub fn parse_le_u16(input: &[u8]) -> nom::IResult<&[u8], u16> {
     nom::number::complete::le_u16(input)
+}
+
+#[inline(always)]
+pub fn parse_le_u16_as_f32(input: &[u8], min: f32, max: f32) -> nom::IResult<&[u8], f32> {
+    let (input, v) = nom::number::complete::le_u16(input)?;
+    Ok((input, ((v as f32 / u16::MAX as f32) * (max - min)) + min))
 }
 
 #[inline(always)]
@@ -28,7 +34,7 @@ fn parse_le_i16(input: &[u8]) -> nom::IResult<&[u8], i16> {
 }
 
 #[inline(always)]
-fn parse_le_u32(input: &[u8]) -> nom::IResult<&[u8], u32> {
+pub fn parse_le_u32(input: &[u8]) -> nom::IResult<&[u8], u32> {
     nom::number::complete::le_u32(input)
 }
 
@@ -38,13 +44,18 @@ fn parse_le_i32(input: &[u8]) -> nom::IResult<&[u8], i32> {
 }
 
 #[inline(always)]
-fn parse_le_u64(input: &[u8]) -> nom::IResult<&[u8], u64> {
+pub fn parse_le_u64(input: &[u8]) -> nom::IResult<&[u8], u64> {
     nom::number::complete::le_u64(input)
 }
 
 #[inline(always)]
-fn parse_le_f32(input: &[u8]) -> nom::IResult<&[u8], f32> {
+pub fn parse_le_f32(input: &[u8]) -> nom::IResult<&[u8], f32> {
     nom::number::complete::le_f32(input)
+}
+
+#[inline(always)]
+pub fn parse_be_f32(input: &[u8]) -> nom::IResult<&[u8], f32> {
+    nom::number::complete::be_f32(input)
 }
 
 #[inline(always)]
@@ -76,44 +87,77 @@ fn parse_u8_slice(input: &[u8], size: usize) -> nom::IResult<&[u8], &[u8]> {
 
 #[allow(dead_code)]
 pub fn whats_next(input: &[u8]) {
-    use itertools::Itertools;
+    // use itertools::Itertools;
 
-    #[derive(Debug, Clone, PartialEq, Eq)]
-    enum Types{
-        U8,
-        U16,
-        U32,
-        I8,
-        I16,
-        I32,
-        F32
+    // #[derive(Debug, Clone, Copy, PartialEq, Eq)]
+    // enum Types{
+    //     U8,
+    //     U16,
+    //     U32,
+    //     I8,
+    //     I16,
+    //     I32,
+    //     F32
+    // }
+
+    // fn print(mut input: &[u8], types: &[&Types]) -> Result<(),()> {
+    //     for i in types {
+    //         input = match i {
+    //             Types::U8 => { let(s, v) = parse_u8(input).unwrap(); print!("{:?}, ", v); s },
+    //             Types::U16 => { let(s, v) = parse_le_u16(input).unwrap(); print!("{:?}, ", v); s },
+    //             Types::U32 => { let(s, v) = parse_le_u32(input).unwrap(); print!("{:?}, ", v); s },
+    //             Types::I8 => { let(s, v) = parse_i8(input).unwrap(); print!("{:?}, ", v); s },
+    //             Types::I16 => { let(s, v) = parse_le_i16(input).unwrap(); print!("{:?}, ", v); s },
+    //             Types::I32 => { let(s, v) = parse_le_i32(input).unwrap(); print!("{:?}, ", v); s },
+    //             Types::F32 => { let(s, v) = parse_le_f32(input).unwrap(); print!("{:?}, ", v); s },
+    //         }
+    //     }
+    //     print!("{:?}", types);
+    //     println!("");
+    //     Ok(())
+    // }
+
+    // println!("Whats Next:");
+    // let mut items = vec![];
+    // let qty = 2;
+    // items.extend([Types::U8].repeat(qty));
+    // items.extend([Types::U16].repeat(qty));
+    // items.extend([Types::U32].repeat(qty));
+    // items.extend([Types::I8].repeat(qty));
+    // items.extend([Types::I16].repeat(qty));
+    // items.extend([Types::I32].repeat(qty));
+    // items.extend([Types::F32].repeat(qty));
+    // for types in items.iter().permutations(qty) {
+    //     let mut input = input.clone();
+    //     print(input, types.as_slice());
+    // }
+
+    let ahead = 64;
+
+    struct Values{ i: usize, a: u8, b: u16, c: u32, d: f32, e: f32 };
+
+    let mut out = std::io::stdout();
+    let mut stream = tablestream::Stream::new(&mut out, vec![
+        tablestream::col!(Values: .i).header("#"),
+        tablestream::col!(Values: .a).header("U8"),
+        tablestream::col!(Values: .b).header("U16"),
+        tablestream::col!(Values: .c).header("U32"),
+        tablestream::col!(Values: .d).header("F32 le"),
+        tablestream::col!(Values: .e).header("F32 be"),
+    ]);
+
+    for i in 0..ahead {
+        let (_, a) =  parse_u8(&input[i..]).unwrap();
+        let (_, b) = parse_le_u16(&input[i..]).unwrap();
+        let (_, c) = parse_le_u32(&input[i..]).unwrap();
+        let (_, d) = parse_le_f32(&input[i..]).unwrap();
+        let (_, e) = parse_be_f32(&input[i..]).unwrap();
+        
+        let v = Values { i, a, b, c, d, e};
+        stream.row(v).unwrap();
     }
 
-    fn print(mut input: &[u8], types: &[&Types]) -> Result<(),()> {
-        for i in types {
-            input = match i {
-                Types::U8 => { let(s, v) = parse_u8(input).unwrap(); print!("{:?}, ", v); s },
-                Types::U16 => { let(s, v) = parse_le_u16(input).unwrap(); print!("{:?}, ", v); s },
-                Types::U32 => { let(s, v) = parse_le_u32(input).unwrap(); print!("{:?}, ", v); s },
-                Types::I8 => { let(s, v) = parse_i8(input).unwrap(); print!("{:?}, ", v); s },
-                Types::I16 => { let(s, v) = parse_le_i16(input).unwrap(); print!("{:?}, ", v); s },
-                Types::I32 => { let(s, v) = parse_le_i32(input).unwrap(); print!("{:?}, ", v); s },
-                Types::F32 => { let(s, v) = parse_le_f32(input).unwrap(); print!("{:?}, ", v); s },
-            }
-        }
-        print!("{:?}", types);
-        println!("");
-        Ok(())
-    }
-
-    println!("Whats Next:");
-    let mut items = vec![Types::U8, Types::U16, Types::U32,
-        Types::I8, Types::I16, Types::I32,
-        Types::F32];
-    for types in items.iter().combinations_with_replacement(8) {
-        let mut input = input.clone();
-        print(input, types.as_slice());
-    }
+    stream.finish().unwrap();
 }
 
 #[allow(dead_code)]
@@ -390,16 +434,23 @@ impl<'a> NomSlice<'a> {
         header_magic == "ERTM"
     }
 
-    pub fn read_properties(&mut self) -> HashMap<u64, u32> {
+    pub fn read_properties(&mut self) -> HashMap<String, u32> {
         let qty = self.parse_le_u32("qty of properties");
         self.read_n_properties(qty as usize)
     }
 
-    pub fn read_n_properties(&mut self, n: usize) -> HashMap<u64, u32> {
+    pub fn read_n_properties(&mut self, n: usize) -> HashMap<String, u32> {
         let mut map = HashMap::new();
 
         for _ in 0..n {
             let k = self.parse_le_u64("prop hash");
+            let k = match k {
+                0x774CFA08CA715D06 => "animation".to_string(),
+                0x84283CB979D71641 => "flags".to_string(), 
+                0x4F023463D89FB0 => "symbol".to_string(),
+                0x634167EE598932B9 => "transform".to_string(),  
+                x @ _ => format!("{}", x)
+            };
             let v = self.parse_le_u32("prop value");
 
             map.insert(k, v);

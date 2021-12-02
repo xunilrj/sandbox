@@ -57,13 +57,13 @@ async function traceNext(qty, anm) {
         ip = ctx.ip;
         // await IncrIP(ip);
 
-        let print_instruction = false;
+        let print_instruction = true;
         const str = await getCurrentInstructionString();
 
       
-        if (bufferMem) {
-            print_instruction = str.includes(bufferMem);
-        }
+        // if (bufferMem) {
+        //     print_instruction = str.includes(bufferMem);
+        // }
 
         if (str.includes("call")) {
             print_instruction = true;
@@ -74,7 +74,7 @@ async function traceNext(qty, anm) {
             tabdelta = -1;
         }
 
-        const ignore = [0x7354e0, 0x5947c0, 0x6ebe60, 0x43d4f0, 0x41a5e0, 0x445ff0, 0x712b40, 0x496e70, 0x43dd00];  
+        const ignore = [0x7354e0, 0x445ff0, 0x593e50, 0x6ebe60, 0x43d4f0, 0x41a5e0, 0x712b40, 0x496e70, 0x43dd00];  
         if (ignore.indexOf(ip) >= 0) {
             await goUntilReturn();
             tabdelta = -1;
@@ -119,12 +119,8 @@ async function traceNext(qty, anm) {
                     await print(`${i} ${api.args.lpBuffer} 0x${api.args.lpBuffer.toString(16)} ${api.args.nNumberOfBytesToRead} [too big]`);
                 }
 
-                if (api.args.nNumberOfBytesToRead == 195) {
-                    await print(`From now on, only if uses ${ api.args.lpBuffer}`)
-                    while(true) {
-                        await step();
-                        await goUntilUsesMem(api.args.lpBuffer, api.args.lpBuffer + 195);
-                    }
+                let length = 8;
+                if (api.args.nNumberOfBytesToRead == length) {
                     bufferMem = `mem[${api.args.lpBuffer.toString()}`;
                 }
 
@@ -345,12 +341,14 @@ async function IncrIP(ip) {
     }
 }
 
-async function printAllCreateFileA() {
-    await addBreakpoint("CreateFileA");
+async function printAllCallsTo(fs) {
+    for (const f of fs) {
+        await addBreakpoint(f);
+    }
     await init("C:\\Program Files (x86)\\Telltale Games\\Tales of Monkey Island\\Launch of the Screaming Narwhal\\MonkeyIsland101.exe");
 
     while(true) {
-        const { api } = await goUntil(x => x.name == "CreateFileA");
+        const { api } = await goUntil(x => fs.indexOf(x.name) != -1);
         await print(api);
     }
 }
@@ -388,7 +386,17 @@ async function printAnm(anm) {
     await addBreakpoint("CreateFileA");
     await init("C:\\Program Files (x86)\\Telltale Games\\Tales of Monkey Island\\Launch of the Screaming Narwhal\\MonkeyIsland101.exe");
     const { api } = await goUntil(x => x.name == "CreateFileA" && x.args.lpFileName.includes(anm));
-    await addBreakpoint("ReadFile");
+    // await addBreakpoint("ReadFile");
+
+    await print("--------------------");
+    await goUntil((x,ctx) => ctx.ip == 0x00434e60);
+
+    await print("--------------------");
+    let v = await read("u32", 0x8bad18);
+    await print(v);
+    await print("--------------------");
+
+    await addBreakpoint(0x00434e60);
     
     // await addBreakpoint(0x6c4450);
     // await addBreakpoint(0x6c6460);
@@ -397,19 +405,32 @@ async function printAnm(anm) {
     // await addBreakpoint(0x6c70c0);
     // await addBreakpoint(0x6c7160);
 
-    await print(api);
-    await traceNext(10000000, anm);
+    // await print(api);
+    // await traceNext(10000000, anm);
 
-    while (true) {
-         await go();
-         await print(`\t${await getCurrentInstructionString()}`);
-    }
+    // while (true) {
+    //      await go();
+    //      await print(`\t${await getCurrentInstructionString()}`);
+    // }
 }
 
 async function main() {
-    // await printAllCreateFileA();
+    //await printAllCallsTo(["CreateFileA", "FindFirstFileA"]);
     //await printAllReadFile("sk20_move_guybrushwalkdeterminedship.anm");
+    
     await printAnm("sk20_move_guybrushwalkdeterminedship.anm");
+
+
+    // let anm = "sk20_move_guybrushwalkdeterminedship.anm";
+    // // await addBreakpoint("CreateFileA");
+    // await init("C:\\Program Files (x86)\\Telltale Games\\Tales of Monkey Island\\Launch of the Screaming Narwhal\\MonkeyIsland101.exe");
+    // // const { api } = await goUntil(x => x.name == "CreateFileA" && x.args.lpFileName.includes(anm));
+
+    // await addBreakpoint(0x006cb5fe);
+    // await go();
+    // await traceNext(10000000, anm);
+    
+    
     
     // await addBreakpoint(0x74a6c0);
     // await addBreakpoint(0x74aa80);
