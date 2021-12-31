@@ -1,9 +1,4 @@
-use crate::d3dmesh;
-
-use super::{attributes::read_att, indexbuffer};
 use json::JsonValue;
-use log::debug;
-use std::{io::Read, str::FromStr};
 
 pub enum D3DBufferData {
     U16(Vec<u16>),

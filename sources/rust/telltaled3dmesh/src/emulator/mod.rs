@@ -66,6 +66,7 @@ impl Context {
         self.mem = Lapper::new(self.intervals.clone());
     }
 
+    #[allow(dead_code)]
     pub fn mount_mem_file(&mut self, addr: usize, path: &str) {
         let v = std::fs::read(path).unwrap();
         self.mount_mem(addr, v)

@@ -5,7 +5,7 @@ async function goUntil(f) {
         const ctx = await getThreadContext();
         if (f && f.then && (await f(api, ctx))) {
             return { api, ctx };
-        } else if (f(api, ctx)) {
+        } else if (f && f(api, ctx)) {
             return { api, ctx };
         }
     }
@@ -23,7 +23,6 @@ async function stepUntil(f) {
         }
     }
 }
-
 
 async function traceUntil(f) {
     while (true) {
@@ -386,32 +385,58 @@ async function printAnm(anm) {
     await addBreakpoint("CreateFileA");
     await init("C:\\Program Files (x86)\\Telltale Games\\Tales of Monkey Island\\Launch of the Screaming Narwhal\\MonkeyIsland101.exe");
     const { api } = await goUntil(x => x.name == "CreateFileA" && x.args.lpFileName.includes(anm));
-    // await addBreakpoint("ReadFile");
-
-    await print("--------------------");
-    await goUntil((x,ctx) => ctx.ip == 0x00434e60);
-
-    await print("--------------------");
-    let v = await read("u32", 0x8bad18);
-    await print(v);
-    await print("--------------------");
-
-    await addBreakpoint(0x00434e60);
+    await print(api);
+    // await trace(10000000, [0x7354e0, 0x5947c0, 0x6ebe60, 0x43d4f0, 0x41a5e0, 0x445ff0, 0x712b40, 0x496e70, 0x43dd00]);
+    // await trace(500000, [0x7354e0, 0x5947c0, 0x6ebe60, 0x593a60, 0x603a69]);
+    // await go();
     
-    // await addBreakpoint(0x6c4450);
-    // await addBreakpoint(0x6c6460);
-    // await addBreakpoint(0x6c65f0);
-    // await addBreakpoint(0x6c7050);
-    // await addBreakpoint(0x6c70c0);
-    // await addBreakpoint(0x6c7160);
+    // await addBreakpoint(0x6c5f40);
+    await addBreakpoint(0x6C6004 );
+    await addBreakpoint(0x5F0746 );
+    
+    await addBreakpoint("ReadFile");
+    let sizes = [];
+    while(true) {
+        const { api, ctx } = await goUntil((x,{ip}) => x.name == "ReadFile" || ip == 0x6C6004 || ip == 0x5F0746 || ip == 0x6c602b );
+        // await print(api);
+        if (ctx.ip == 0x6C6004 ) {
+            sizes.push(ctx.ax);
+            if (ctx.cx == 6) {
+                await print(sizes)
+                sizes = [];
+            }
+        } else if (ctx.ip == 0x5F0746 ) {
+            const str = await getCurrentInstructionString();
+            await print(str);
+        }
+    }
+}
 
-    // await print(api);
-    // await traceNext(10000000, anm);
-
-    // while (true) {
-    //      await go();
-    //      await print(`\t${await getCurrentInstructionString()}`);
-    // }
+async function getUnknownStruct(addr, f) {
+    let v = await getStruct(addr, {
+        a: {delta: 0, type: "u32" },
+        b: {delta: 4, type: "u32" },
+        c: {delta: 8, type: "u32" },
+        d: {delta: 0xC, type: "u32" },
+        e: {delta: 0x10, type: "u32" },
+        f: {delta: 0x14, type: "u32" },
+        g: {delta: 0x18, type: "u32" },
+        h: {delta: 0x1C, type: "u32" },
+        i: {delta: 0x20, type: "u32" },
+        j: {delta: 0x24, type: "u32" },
+        k: {delta: 0x2C, type: "u32" },
+        m: {delta: 0x30, type: "u32" },
+        n: {delta: 0x34, type: "u32" },
+        o: {delta: 0x38, type: "u32" },
+        p: {delta: 0x3C, type: "u32" },
+        q: {delta: 0x40, type: "u32" },
+        r: {delta: 0x44, type: "u32" },
+    });
+    if (f) {
+        await f(v);
+    }
+    await print(`\t${JSON.stringify(v)}`);
+    return v
 }
 
 async function main() {
@@ -422,89 +447,89 @@ async function main() {
 
 
     // let anm = "sk20_move_guybrushwalkdeterminedship.anm";
-    // // await addBreakpoint("CreateFileA");
+    // await addBreakpoint("CreateFileA");
     // await init("C:\\Program Files (x86)\\Telltale Games\\Tales of Monkey Island\\Launch of the Screaming Narwhal\\MonkeyIsland101.exe");
-    // // const { api } = await goUntil(x => x.name == "CreateFileA" && x.args.lpFileName.includes(anm));
+    // const { api } = await goUntil(x => x.name == "CreateFileA" && x.args.lpFileName.includes(anm));
 
-    // await addBreakpoint(0x006cb5fe);
-    // await go();
-    // await traceNext(10000000, anm);
-    
-    
-    
-    // await addBreakpoint(0x74a6c0);
-    // await addBreakpoint(0x74aa80);
-    // while (true) {
-    //      await go();
-    //      const { ip, bp, sp, cx, si } = await getThreadContext();
-    //      await print(`\t${await getCurrentInstructionString()}`);
+
+
+    // await addBreakpoint(0x434EA4);
+    // while(true) {
+    //     const {ctx} = await goUntil((x,{di}) => di == 535119246);
+    //     await print(ctx);
+    //     let v = await getStruct(ctx.ax, {
+    //         header: {delta: 0, type: "u32" },
+    //         a: {delta: 0x4, type: "u32" },
+    //         hasha: {delta: 0x8, type: "u32" },
+    //         hashb: {delta: 0xC, type: "u32" },
+    //         flags: {delta: 0x10, type: "u32" },
+    //         c: {delta: 0x14, type: "u32" },
+    //         d: {delta: 0x18, type: "u32" },
+    //         type: {delta: 0x1C, type: "u32" },
+    //         f: {delta: 0x20, type: "u32" },
+    //         next: {delta: 0x24, type: "u32" },
+    //         bb: {delta: 0x28, type: "u32" },
+    //         cc: {delta: 0x2C, type: "u32" },
+    //         dd: {delta: 0x30, type: "u32" },
+    //     });
+    //     await print(`\t${JSON.stringify(v)}`);
+
+    //     let vbb = await getUnknownStruct(v.bb, async x => {
+    //         x.ctor = x.a;
+    //         delete x.a;
+    //     });
+
+    //     //v.a - not a pointer
+    //     //v.b - not a pointer
+    //     //v.e
+    //     let vtype = await getUnknownStruct(v.type, async x => {
+    //         x.name = await read("nullString", x.a);
+    //         x.flags = x.c;
+    //         x.properties = x.g;
+    //         delete x.a;
+    //         delete x.c;
+    //         delete x.g;
+    //     });
+    //     let vproperties = await getUnknownStruct(vtype.properties, async x => {
+    //         x.hashb = x.c;
+    //         x.hasha = x.d;
+    //         x.flags = x.e;
+    //         x.first = x.h;
+    //         x.size = x.f;
+    //         delete x.c;
+    //         delete x.d;
+    //         delete x.e;
+    //         delete x.h;
+    //         delete x.f;
+    //     });
+    //     let next = vproperties.first;
+    //     let i = 10;
+    //     while(true) {
+    //         let vprop = await getUnknownStruct(next, async x => {
+    //             x.name = await read("nullString", x.a);
+    //             x.next = x.e;
+    //             x.size = x.b;
+    //             x.offset = x.i;
+    //             x.properties = x.d;
+    //             delete x.a;
+    //             delete x.e;
+    //             delete x.b;
+    //             delete x.i;
+    //             delete x.d;
+    //         });
+    //         next = vprop.next;
+    //         i--;
+
+    //         if (i <= 0) {
+    //             break;
+    //         }
+    //         if (!next) {
+    //             break;
+    //         }
+    //     }
+
+    //     await trace(100);
     // }
-
-    // let i = 0;
-    // while (true) {
-    //     await go();
-    //     const api = await currentStackFrame();
-    //     const { ip, bp, sp, cx, si } = await getThreadContext();
-
-    //     if (i == 963) {
-    //         break
-    //     }
-
-    //     // if (ip == 0x74aa80) {
-    //     //     const { cx } = await getThreadContext();
-    //     //     const addr = cx;
-    //     //     let last_s;
-    //     //     let last_json;
-    //     //     await print(`Start @ ${addr} (0x${addr.toString(16)})`);
-    //     //     while (true) {
-    //     //         const { ip, bp, sp, cx, si } = await getThreadContext();
-    //     //         if (ip == 0x0074ab96) {
-    //     //             break;
-    //     //         }
-    //     //         await print(`\t ${await getCurrentInstructionString()}`);
-    //     //         await step();
-    //     //         const current_s = await getS(addr);
-    //     //         const current_json = JSON.stringify(current_s);
-    //     //         if (current_json != last_json) {
-    //     //             print(`\t${JSON.stringify(diff(last_s, current_s), null, 4)}`);
-    //     //         }
-    //     //         last_s = current_s;
-    //     //         last_json = current_json;
-    //     //     }
-    //     //     continue;
-    //     // }
-
-    //     if (api.name == "ReadFile") {
-    //         await goUntilReturn();
-
-    //         const buffer = await readArray("u8", api.args.nNumberOfBytesToRead, api.args.lpBuffer);
-
-    //         if (api.args.nNumberOfBytesToRead < 256) {
-    //             print(`${i} ${api.args.lpBuffer} 0x${api.args.lpBuffer.toString(16)} ${api.args.nNumberOfBytesToRead} [${buffer}]`);
-    //         } else {
-    //             print(`${i} ${api.args.lpBuffer} 0x${api.args.lpBuffer.toString(16)} ${api.args.nNumberOfBytesToRead} [too big]`);
-    //         }
-
-    //         await print(`\t${JSON.stringify(api)} `);
-    //         // await printStack();
-    //         try {
-    //             await traceNext(100);
-    //         }
-    //         catch (e) {
-    //             break
-    //         }
-
-    //         i += 1;
-    //         continue
-    //     }
-
-    //     if (api.name == "CreateFileA") {
-
-    //         break;
-    //     }
-    // }
-
-    // await print(IPS);
 
 }
 main();

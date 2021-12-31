@@ -17,7 +17,7 @@ pub fn save<P: AsRef<Path>>(path: P, skl: super::SklFile) {
 
     for bone in &skl.bones {
         let children: Vec<_> = bone.children.iter().map(|x| *x + 1).collect();
-        nodes.push(json::object! {
+        let _ = nodes.push(json::object! {
             translation: &bone.translation[..],
             rotation: &bone.rotation[..],
             children: children.as_slice(),
@@ -38,5 +38,5 @@ pub fn save<P: AsRef<Path>>(path: P, skl: super::SklFile) {
         skins: skins
     };
 
-    std::fs::write(path, gltf.dump());
+    let _ = std::fs::write(path, gltf.dump());
 }

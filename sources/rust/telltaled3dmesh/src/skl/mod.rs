@@ -5,6 +5,7 @@ use std::{io::Read, path::PathBuf, str::FromStr};
 use crate::parser::NomSlice;
 
 pub struct Bone {
+    #[allow(dead_code)]
     parent: usize,
     children: Vec<usize>,
     translation: [f32; 3],
@@ -70,7 +71,7 @@ pub fn convert<P: AsRef<str>>(path: P) {
         let qty = input.parse_le_u32("IK qty");
         for _ in 0..qty {
             let bone_name = input.parse_length_string("Bone Name");
-            let crc = crc64::crc64(0, bone_name.as_bytes());
+            let _crc = crc64::crc64(0, bone_name.as_bytes());
             // println!("{} = {:X} {:?}", bone_name, crc, crc.to_le_bytes());
 
             let _ = input.parse_le_f32("?");

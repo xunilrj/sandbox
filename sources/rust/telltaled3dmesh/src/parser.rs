@@ -1,4 +1,4 @@
-use std::{any::TypeId, collections::HashMap};
+use std::{collections::HashMap};
 
 use log::debug;
 
@@ -13,6 +13,7 @@ pub fn parse_u8(input: &[u8]) -> nom::IResult<&[u8], u8> {
 }
 
 #[inline(always)]
+#[allow(dead_code)]
 fn parse_i8(input: &[u8]) -> nom::IResult<&[u8], i8> {
     nom::number::complete::i8(input)
 }
@@ -23,12 +24,14 @@ pub fn parse_le_u16(input: &[u8]) -> nom::IResult<&[u8], u16> {
 }
 
 #[inline(always)]
+#[allow(dead_code)]
 pub fn parse_le_u16_as_f32(input: &[u8], min: f32, max: f32) -> nom::IResult<&[u8], f32> {
     let (input, v) = nom::number::complete::le_u16(input)?;
     Ok((input, ((v as f32 / u16::MAX as f32) * (max - min)) + min))
 }
 
 #[inline(always)]
+#[allow(dead_code)]
 fn parse_le_i16(input: &[u8]) -> nom::IResult<&[u8], i16> {
     nom::number::complete::le_i16(input)
 }
@@ -39,6 +42,13 @@ pub fn parse_le_u32(input: &[u8]) -> nom::IResult<&[u8], u32> {
 }
 
 #[inline(always)]
+#[allow(dead_code)]
+pub fn parse_be_u32(input: &[u8]) -> nom::IResult<&[u8], u32> {
+    nom::number::complete::be_u32(input)
+}
+
+#[inline(always)]
+#[allow(dead_code)]
 fn parse_le_i32(input: &[u8]) -> nom::IResult<&[u8], i32> {
     nom::number::complete::le_i32(input)
 }
@@ -134,7 +144,7 @@ pub fn whats_next(input: &[u8]) {
 
     let ahead = 64;
 
-    struct Values{ i: usize, a: u8, b: u16, c: u32, d: f32, e: f32 };
+    struct Values{ i: usize, a: u8, b: u16, c: u32, d: f32, e: f32 }
 
     let mut out = std::io::stdout();
     let mut stream = tablestream::Stream::new(&mut out, vec![
@@ -335,6 +345,17 @@ impl<'a> NomSlice<'a> {
     }
 
     #[inline(always)]
+    #[allow(dead_code)]
+    pub fn parse_be_u32(&mut self, name: &str) -> u32 {
+        let (i, data) = parse_be_u32(self.slice).unwrap();
+        self.slice = i;
+        self.qty += 4;
+
+        debug!("[{}] as u32: {}", name, data);
+        data
+    }
+
+    #[inline(always)]
     pub fn parse_le_u64(&mut self, name: &str) -> u64 {
         let (i, data) = parse_le_u64(self.slice).unwrap();
         self.slice = i;
@@ -376,13 +397,14 @@ impl<'a> NomSlice<'a> {
     }
 
     #[inline(always)]
+    #[allow(dead_code)]
     pub fn parse_length_buffer(&mut self, name: &str) -> &[u8] {
         let n = self.parse_le_u32(name);
         self.parse_n_bytes(n as usize)
     }
 
     #[inline(always)]
-    pub fn parse_length1_buffer(&mut self, name: &str) -> &[u8] {
+    pub fn parse_length1_buffer(&mut self, _name: &str) -> &[u8] {
         let n = self.parse_n_bytes(1)[0];
         self.parse_n_bytes(n as usize)
     }
@@ -395,7 +417,7 @@ impl<'a> NomSlice<'a> {
         self.slice = i;
         self.qty += bytes_size;
 
-        let d: Vec<_> = data.iter().take(10).collect();
+        let _d: Vec<_> = data.iter().take(10).collect();
         debug!("read {} u16: {:?}", n, bytes_size);
 
         unsafe { std::slice::from_raw_parts(data.as_ptr() as *const u16, n) }
@@ -409,7 +431,7 @@ impl<'a> NomSlice<'a> {
         self.slice = i;
         self.qty += bytes_size;
 
-        let d: Vec<_> = data.iter().take(10).collect();
+        let _d: Vec<_> = data.iter().take(10).collect();
         debug!("read {} u32: {:?}", n, bytes_size);
 
         unsafe { std::slice::from_raw_parts(data.as_ptr() as *const u32, n) }
@@ -422,7 +444,7 @@ impl<'a> NomSlice<'a> {
         self.slice = i;
         self.qty += bytes_size;
 
-        let d: Vec<_> = data.iter().take(10).collect();
+        let _d: Vec<_> = data.iter().take(10).collect();
         debug!("read {} f32: {:?}", n, bytes_size);
 
         unsafe { std::slice::from_raw_parts(data.as_ptr() as *const f32, n) }
@@ -466,6 +488,7 @@ impl<'a> NomSlice<'a> {
         }
     }
 
+    #[allow(dead_code)]
     pub fn read_m44<S: AsRef<str>>(&mut self, name: S) {
         debug!("reading matrix {}", name.as_ref());
         for _ in 0..16 {

@@ -56,6 +56,6 @@ pub fn save_to_obj(mesh: &D3DFile, path: PathBuf) {
             );
         }
 
-        write!(f, "\n");
+        let _ = write!(f, "\n");
     }
 }

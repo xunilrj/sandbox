@@ -1,4 +1,3 @@
-use std::iter::FromIterator;
 
 use iced_x86::Register;
 use log::debug;

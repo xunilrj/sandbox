@@ -19,7 +19,7 @@ pub fn convert<S: AsRef<str>>(
     output: Option<String>,
     pretty_print: bool,
     buffer_as_base64: bool,
-    detach_index_buffer: bool,
+    _detach_index_buffer: bool,
 ) -> std::result::Result<(), ParseD3dMeshError> {
     let mut bar = progress::Bar::new();
     bar.set_job_title("Parsing...");
@@ -96,8 +96,6 @@ pub fn convert<S: AsRef<str>>(
         mesh.tri_count = input.parse_le_u32("Tri Count") as usize;
         let _ = input.parse_le_u64("section header");
 
-        const ATT_BOUNDING_BOX: u32 = 0;
-        const ATT_DIFFUSE_MAP: u32 = 25;
         for _ in 0..9 {
             let att = attributes::read_att(&mut input);
             match att {
@@ -264,7 +262,7 @@ pub fn convert<S: AsRef<str>>(
             outputs::save_to(&d3dfile, output.as_str(), buffer_as_base64, pretty_print);
 
             let output = std::path::PathBuf::from_str(output.as_str()).unwrap();
-            let output = output.with_extension("ib");
+            let _output = output.with_extension("ib");
 
             // if detach_index_buffer {
             //     use std::str::FromStr;
