@@ -4,11 +4,52 @@ use bitvec::{slice::BitSlice, order::Lsb0};
 
 use crate::parser::{self, NomSlice};
 
-pub struct AnmFile {}
+#[derive(Debug)]
+pub struct AnmFile {
+    bones: Vec<Bone>
+}
 
 impl AnmFile {
     pub fn new() -> Self {
-        Self {}
+        Self {
+            bones: vec![]
+        }
+    }
+
+    pub fn push_animated_bone(&mut self, bone: AnimatedBone) {
+        self.bones.push(Bone::Animated(bone));
+    }
+}
+
+#[derive(Debug)]
+pub struct AnimatedBoneFrame {
+    rotation: [f64;4],
+    translation: [f64;3]
+}
+
+#[derive(Debug)]
+pub struct AnimatedBone {
+    frames: Vec<AnimatedBoneFrame>
+}
+
+impl AnimatedBone {
+    pub fn new() -> Self {
+        Self { 
+            frames: vec![]
+        }
+    }
+}
+
+#[derive(Debug)]
+pub enum Bone {
+    Animated(AnimatedBone)
+}
+
+impl Bone {
+    pub fn as_animated(&self) -> &AnimatedBone {
+        match &self {
+            Bone::Animated(bone) => &bone,
+        }
     }
 }
 
@@ -55,7 +96,7 @@ pub fn convert<P: AsRef<str>>(path: P) {
         panic!("ERTM not found")
     }
 
-    let _anm = AnmFile::new();
+    let mut anm = AnmFile::new();
 
     let header = input.read_properties();
     println!("{:?}", header);
@@ -97,6 +138,9 @@ pub fn convert<P: AsRef<str>>(path: P) {
             //CompressedTransformKeys
             0xFC6597EB1FE5458E => {
                 for _i in 0..buffer.qty {
+                    let mut bone = AnimatedBone::new();
+                    
+
                     let length = input.parse_n_bytes(1);
                     let length = if length[0] == 255 {
                         input.parse_le_u16("length")
@@ -150,58 +194,56 @@ pub fn convert<P: AsRef<str>>(path: P) {
                         let bitsizessum = bounds_bitsizes.iter().sum::<usize>();
                         println!("\tBounds Bit sizes: {:?} {}", bounds_bitsizes, bitsizessum);
                         
-                        // if bitsizessum == 0 {
-                        //     for i in datapos..(datapos + 100) {
-                        //         let mut pos = i;
-                        //         let mut bounds_bitsizes = vec![];
-                        //         for i in 0..7 {
-                        //             let idx = skip_take_as_usize(bits, pos, bounds_sizes[i]);
-                        //             pos += bounds_sizes[i];
-                        //             bounds_bitsizes.push(idx);
-                        //         }
-                        //         println!("{} - {:?}", i, bounds_bitsizes);
-                        //     }
-                        // }
-
                         print_datapos(datapos);
                         let qty_samples = skip_take_as_usize(bits, datapos, bits_per_sample);
                         datapos += bits_per_sample;
-
-                        // if qty_samples == 0 {
-                        //     println!("\tOriginal Qty Sample: {:?}", qty_samples);
-                        //     qty_samples = sample_count - samples;
-                        // }
 
                         samples += qty_samples;
 
                         println!("\tQty Sample: {:?}", qty_samples);
                         println!("\tdatapos: {}", datapos);
 
-                        // if qty_samples == 0 {
-                        //     continue;
-                        // }
-
+                        let mut upper_value = 0.0;
+                        let mut lower_value = 0.0;
                         if bitsizessum != 0 {
                             let b0 = skip_take_as_usize(bits, datapos, bits_per_bounds);
                             datapos += bits_per_bounds;
                             println!("\tSome Value: {}", b0);
                             let max = ((2usize).pow(bits_per_bounds as u32) - 1) as f64;
-                            let b0 = (b0 as f64) / max;
-                            println!("\tSome Value: {}", b0);
+                            let new_b0 = (b0 as f64) / max * max_bound;
+                            println!("\tSome Value: {} = {} / {} * {}", new_b0, b0, max, max_bound);
+                            upper_value = new_b0 * 2.0;
+                            lower_value = -new_b0;
                         }
                         
 
                         for _ in 0..qty_samples {
                             println!("\tdatapos: {}", datapos);
                             let mut samples = vec![];
+                            let mut fsamples = vec![];
                             for size in &bounds_bitsizes {
                                 let v = skip_take_as_usize(bits, datapos, *size);
                                 datapos += size;
-                                // let max = ((2usize).pow(*size as u32) - 1) as f64;
-                                // let v = (v as f64) / max * max_bound;
+
                                 samples.push(v);
+
+                                let v = if *size == 0 {
+                                    0.0
+                                } else {
+                                    let max = ((2usize).pow(*size as u32) - 1) as f64;
+                                    let v = (v as f64) / max;
+                                    v * upper_value + lower_value
+                                };
+
+                                fsamples.push(v);
                             }
                             println!("\tSamples Values: {:?}", samples);
+                            println!("\tSamples Values: {:?}", fsamples);
+
+                            bone.frames.push(AnimatedBoneFrame {
+                                rotation: [fsamples[0], fsamples[1], fsamples[2], fsamples[3]],
+                                translation: [fsamples[4], fsamples[5], fsamples[6]],
+                            })
                         }
 
                        
@@ -235,9 +277,12 @@ pub fn convert<P: AsRef<str>>(path: P) {
                     }
 
                     let data = input.parse_length1_buffer("?");
-                    let _a = data[0] & 7;
 
-                    // println!("data: {} {} {} {}", a, 14 + a, a >> 14, a >> 3 & 7 + 1);
+                    println!("Second Buffer: {:?}", data);
+                    let data = unsafe { std::slice::from_raw_parts(data.as_ptr() as *const u32, data.len() / 4)};
+                    println!("Second Buffer: {:?}", data);
+
+                    anm.push_animated_bone(bone);
                 }
             }
             0x6B77C806C0E23EA1 => {
@@ -271,4 +316,91 @@ pub fn convert<P: AsRef<str>>(path: P) {
     if skip_symbols == 0 {
         let _ = input.read_n_properties(qty_values);
     }
+
+    // dbg!(anm);
+
+    let bones_qty = 83;
+
+    let bone = &anm.bones[0];
+    let bone = bone.as_animated();
+
+    let skl = crate::skl::parse_skl("C:\\temp\\mi101\\sk20_guybrush.skl");
+    let mut gltf = crate::skl::gltf::to_gltf(&skl);
+
+    //time buffer
+    let step = 1.0 / bone.frames.len() as f32;
+
+    let mut time_buffer = vec![];
+    for bone in anm.bones.iter().take(bones_qty) {
+        let bone = bone.as_animated();
+        let b: Vec<f32> = bone.frames.iter()
+            .scan(0.0f32, |t,_| { *t += step; Some(*t) })
+            .collect();
+        time_buffer.extend(b);
+    }
+
+    //rot buffer
+    let mut rot_buffer = vec![];
+    for bone in anm.bones.iter().take(bones_qty) {
+        let bone = bone.as_animated();
+        let b: Vec<f32> = bone.frames.iter().flat_map(|x| 
+            [x.rotation[0] as f32, x.rotation[1] as f32, x.rotation[2] as f32, x.rotation[3] as f32]
+        ).collect();
+        rot_buffer.extend(b);
+    }
+
+    let mut time_buffer_view = crate::gltf::push_buffer(&mut gltf, time_buffer.as_slice());
+    time_buffer_view["target"] = json::JsonValue::Number(34963i32.into());
+    let time_buffer_idx = crate::gltf::push_buffer_view(&mut gltf, time_buffer_view);
+
+    let mut rot_buffer_view = crate::gltf::push_buffer(&mut gltf, rot_buffer.as_slice());
+    rot_buffer_view["target"] = json::JsonValue::Number(34963i32.into());
+    let rot_buffer_idx = crate::gltf::push_buffer_view(&mut gltf, rot_buffer_view);
+
+    let mut anim01 = json::object!{};
+
+    let mut offset = 0;
+    let mut bone_idx = 0;
+    for bone in anm.bones.iter().take(bones_qty) {
+        let bone = bone.as_animated();
+
+        let time_acessor_idx = crate::gltf::push_accessor(&mut gltf, 
+            json::object! {
+                bufferView: time_buffer_idx,
+                componentType: 5126,
+                count: bone.frames.len(),
+                type: "SCALAR",
+                offset: offset,
+            }
+        );
+        let rot_acessor_idx = crate::gltf::push_accessor(&mut gltf, json::object! {
+            bufferView : rot_buffer_idx,
+            componentType : 5126,
+            count : bone.frames.len(),
+            type : "VEC4",
+            offset: offset * 4,
+        });
+
+        let sampler_idx = crate::gltf::push_sampler(&mut anim01, json::object! {
+            input : time_acessor_idx,
+            interpolation : "LINEAR",
+            output : rot_acessor_idx
+        });
+        crate::gltf::push_channel(&mut anim01, json::object!{
+            sampler: sampler_idx,
+            target: json::object!{
+                node: bone_idx + 1,
+                path: "rotation"
+            }
+        });
+
+        offset += bone.frames.len();
+        bone_idx += 1;
+    }
+
+    gltf["animations"] = json::array![
+        anim01
+    ];
+
+    crate::skl::gltf::save(".\\viewer\\models\\result.gltf", &gltf);
 }

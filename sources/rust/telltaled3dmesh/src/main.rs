@@ -4,6 +4,7 @@ mod d3dmesh;
 mod emulator;
 mod parser;
 mod skl;
+mod gltf;
 
 use structopt::StructOpt;
 

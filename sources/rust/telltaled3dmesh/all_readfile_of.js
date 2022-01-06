@@ -381,6 +381,17 @@ async function printAllReadFile(anm) {
     }
 }
 
+async function getStack(qty) {
+    let ctx = await getThreadContext();
+    let i = 0;
+    let stack = {};
+    for (let i = 0;i < qty; ++i) {
+        const d = i + 1;
+        stack[`arg_${i}`] = await read("u32", ctx.sp + (d*4));
+    }
+    return stack;
+}
+
 async function printAnm(anm) {
     await addBreakpoint("CreateFileA");
     await init("C:\\Program Files (x86)\\Telltale Games\\Tales of Monkey Island\\Launch of the Screaming Narwhal\\MonkeyIsland101.exe");
@@ -389,25 +400,33 @@ async function printAnm(anm) {
     // await trace(10000000, [0x7354e0, 0x5947c0, 0x6ebe60, 0x43d4f0, 0x41a5e0, 0x445ff0, 0x712b40, 0x496e70, 0x43dd00]);
     // await trace(500000, [0x7354e0, 0x5947c0, 0x6ebe60, 0x593a60, 0x603a69]);
     // await go();
-    
-    // await addBreakpoint(0x6c5f40);
-    await addBreakpoint(0x6C6004 );
-    await addBreakpoint(0x5F0746 );
-    
-    await addBreakpoint("ReadFile");
-    let sizes = [];
+    const breakpoints = {
+        // "ReadFile": async (api) => {
+        //     await print(api);
+        // },
+        [0x6c5f40]: async () => {
+            await trace(10000, [])
+        }
+    }
+
+    // const vip = [
+    //     , // - reads compressedkey buffer
+    //     //0x6cb3a3,
+    //     //0x6CB386, // - store float value inside each chunk of the compressed key buffer - see st0
+    //      0x6C64C9, // copy samples as floats to struct
+    // ];
+
+    // await addBreakpoint("ReadFile");
+    await addBreakpoint(0x6c5f40);
+    // for (const ip of Object.keys(breakpoints)) {
+    //     await print(ip);
+    //     await addBreakpoint(ip);
+    // }
     while(true) {
-        const { api, ctx } = await goUntil((x,{ip}) => x.name == "ReadFile" || ip == 0x6C6004 || ip == 0x5F0746 || ip == 0x6c602b );
-        // await print(api);
-        if (ctx.ip == 0x6C6004 ) {
-            sizes.push(ctx.ax);
-            if (ctx.cx == 6) {
-                await print(sizes)
-                sizes = [];
-            }
-        } else if (ctx.ip == 0x5F0746 ) {
-            const str = await getCurrentInstructionString();
-            await print(str);
+        const { api, ctx } = await goUntil(({name},{ip}) => !!breakpoints[name] || !!breakpoints[ip]);
+        const f = breakpoints[api.name] || breakpoints[ctx.ip];
+        if (f) {
+            await f(api, ctx);
         }
     }
 }

@@ -1,15 +1,20 @@
-mod gltf;
+pub mod gltf;
 
-use std::{io::Read, path::PathBuf, str::FromStr};
+use std::{io::Read, path::PathBuf, str::FromStr, collections::vec_deque};
+
+use itertools::Itertools;
 
 use crate::parser::NomSlice;
 
+#[derive(Debug)]
 pub struct Bone {
-    #[allow(dead_code)]
-    parent: usize,
+    parent: Option<usize>,
     children: Vec<usize>,
     translation: [f32; 3],
     rotation: [f32; 4],
+    global_matrix: glam::Mat4,
+    local_matrix: glam::Mat4,
+    inverse_bind_pose: glam::Mat4
 }
 
 pub struct SklFile {
@@ -20,12 +25,13 @@ impl SklFile {
     pub fn new() -> Self {
         Self { bones: Vec::new() }
     }
+
+    pub fn calculate_inverse_bind_pose(&mut self) {
+
+    }
 }
 
-pub fn convert<P: AsRef<str>>(path: P) {
-    let mut bar = progress::Bar::new();
-    bar.set_job_title("Parsing...");
-
+pub fn parse_skl<P: AsRef<str>>(path: P) -> SklFile {
     let mut f = std::fs::File::open(path.as_ref()).unwrap();
     let bytes = {
         let mut bytes = vec![];
@@ -79,11 +85,21 @@ pub fn convert<P: AsRef<str>>(path: P) {
 
         let _ = input.parse_le_f32("?");
 
+        let t = glam::vec3(translation[0], translation[1], translation[2]);
+        let t = glam::Mat4::from_translation(t);
+        let r = glam::quat(rotation[0], rotation[1], rotation[2], rotation[3]);
+        let r = glam::Mat4::from_quat(r);
+        let local_matrix = t * r;
+        let global_matrix = glam::Mat4::IDENTITY;
+        let inverse_bind_pose = glam::Mat4::IDENTITY;
         let bone = Bone {
-            parent,
+            parent: if parent == 4294967295 { None } else { Some(parent) },
             children: Vec::new(),
             translation,
             rotation,
+            global_matrix,
+            local_matrix,
+            inverse_bind_pose
         };
         skl.bones.push(bone);
         if parent != (u32::MAX as usize) {
@@ -91,8 +107,35 @@ pub fn convert<P: AsRef<str>>(path: P) {
         }
     }
 
+    let (root, _) = skl.bones.iter().find_position(|x| x.parent.is_none()).unwrap();
+    let mut q = std::collections::VecDeque::from([root]);
+    while let Some(idx) = q.pop_front() {
+        let bone = &skl.bones[idx];
+
+        let parent_global = bone.parent
+            .map(|p| skl.bones[p].global_matrix)
+            .unwrap_or(glam::Mat4::IDENTITY);
+
+        let bone = &mut skl.bones[idx];
+        bone.global_matrix = parent_global * bone.local_matrix;
+        bone.inverse_bind_pose = bone.global_matrix.inverse();
+
+        for child in &bone.children {
+            q.push_back(*child);
+        }
+    }
+
+    skl
+}
+
+pub fn convert<P: AsRef<str>>(path: P) {
+    let mut bar = progress::Bar::new();
+
+    bar.set_job_title("Parsing...");
+    let skl = parse_skl(path.as_ref());
+
     bar.set_job_title("Saving...");
     let out = PathBuf::from_str(path.as_ref()).unwrap();
     let out = out.with_extension("gltf");
-    gltf::save(&out, skl);
+    gltf::convert_and_save(&out, &skl);
 }
