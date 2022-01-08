@@ -246,10 +246,6 @@ pub fn convert<P: AsRef<str>>(path: P) {
                             })
                         }
 
-                       
-
-                      
-
                         println!("\tdatapos: {}", datapos);
 
                         println!("\tSamples: {}", samples);
@@ -319,7 +315,7 @@ pub fn convert<P: AsRef<str>>(path: P) {
 
     // dbg!(anm);
 
-    let bones_qty = 83;
+    let bones_qty = 105;
 
     let bone = &anm.bones[0];
     let bone = bone.as_animated();
@@ -328,7 +324,7 @@ pub fn convert<P: AsRef<str>>(path: P) {
     let mut gltf = crate::skl::gltf::to_gltf(&skl);
 
     //time buffer
-    let step = 1.0 / bone.frames.len() as f32;
+    let step = 1.0 / 30.0;
 
     let mut time_buffer = vec![];
     for bone in anm.bones.iter().take(bones_qty) {
@@ -341,12 +337,40 @@ pub fn convert<P: AsRef<str>>(path: P) {
 
     //rot buffer
     let mut rot_buffer = vec![];
+    let mut t_buffer = vec![];
     for bone in anm.bones.iter().take(bones_qty) {
         let bone = bone.as_animated();
-        let b: Vec<f32> = bone.frames.iter().flat_map(|x| 
-            [x.rotation[0] as f32, x.rotation[1] as f32, x.rotation[2] as f32, x.rotation[3] as f32]
-        ).collect();
+        let b: Vec<f32> = bone.frames.iter()
+            .scan([0.0,0.0,0.0,1.0], |acc, frame| {
+                acc[0] += frame.rotation[0] as f32;
+                acc[1] += frame.rotation[1] as f32;
+                acc[2] += frame.rotation[2] as f32;
+                acc[3] += frame.rotation[3] as f32;
+                let q = glam::quat(
+                    acc[0],
+                    acc[1],
+                    acc[2],
+                    acc[3],
+                );
+                let q = q.normalize();
+                Some([ 
+                    q.x, q.y, q.z, q.w
+                ])
+            })
+            .flat_map(|x| x)
+            .collect();
         rot_buffer.extend(b);
+
+        let b: Vec<f32> = bone.frames.iter()
+            .scan([0.0,0.0,0.0], |acc, frame| {
+                acc[0] += frame.translation[0] as f32;
+                acc[1] += frame.translation[1] as f32;
+                acc[2] += frame.translation[2] as f32;
+                Some(acc.clone())
+            })
+            .flat_map(|x| x)
+            .collect();
+        t_buffer.extend(b);
     }
 
     let mut time_buffer_view = crate::gltf::push_buffer(&mut gltf, time_buffer.as_slice());
@@ -356,6 +380,10 @@ pub fn convert<P: AsRef<str>>(path: P) {
     let mut rot_buffer_view = crate::gltf::push_buffer(&mut gltf, rot_buffer.as_slice());
     rot_buffer_view["target"] = json::JsonValue::Number(34963i32.into());
     let rot_buffer_idx = crate::gltf::push_buffer_view(&mut gltf, rot_buffer_view);
+
+    let mut t_buffer_view = crate::gltf::push_buffer(&mut gltf, t_buffer.as_slice());
+    t_buffer_view["target"] = json::JsonValue::Number(34963i32.into());
+    let t_buffer_idx = crate::gltf::push_buffer_view(&mut gltf, t_buffer_view);
 
     let mut anim01 = json::object!{};
 
@@ -380,6 +408,15 @@ pub fn convert<P: AsRef<str>>(path: P) {
             type : "VEC4",
             offset: offset * 4,
         });
+        let t_acessor_idx = crate::gltf::push_accessor(&mut gltf, json::object! {
+            bufferView : t_buffer_idx,
+            componentType : 5126,
+            count : bone.frames.len(),
+            type : "VEC3",
+            offset: offset * 3,
+        });
+
+        let bidx = bone_idx;
 
         let sampler_idx = crate::gltf::push_sampler(&mut anim01, json::object! {
             input : time_acessor_idx,
@@ -389,8 +426,21 @@ pub fn convert<P: AsRef<str>>(path: P) {
         crate::gltf::push_channel(&mut anim01, json::object!{
             sampler: sampler_idx,
             target: json::object!{
-                node: bone_idx + 1,
+                node: bidx,
                 path: "rotation"
+            }
+        });
+
+        let sampler_idx = crate::gltf::push_sampler(&mut anim01, json::object! {
+            input : time_acessor_idx,
+            interpolation : "LINEAR",
+            output : t_acessor_idx
+        });
+        crate::gltf::push_channel(&mut anim01, json::object!{
+            sampler: sampler_idx,
+            target: json::object!{
+                node: bidx,
+                path: "translation"
             }
         });
 
@@ -403,4 +453,6 @@ pub fn convert<P: AsRef<str>>(path: P) {
     ];
 
     crate::skl::gltf::save(".\\viewer\\models\\result.gltf", &gltf);
+
+    println!("{:#?}", anm);
 }

@@ -371,7 +371,9 @@ impl<'a> NomSlice<'a> {
         self.slice = i;
         self.qty += 4;
 
-        debug!("[{}] as f32: {}", name, data);
+        if name != "" {
+            debug!("[{}] as f32: {}", name, data);
+        }
         data
     }
 
@@ -481,11 +483,14 @@ impl<'a> NomSlice<'a> {
         map
     }
 
-    pub fn read_m33<S: AsRef<str>>(&mut self, name: S) {
+    pub fn read_m33<S: AsRef<str>>(&mut self, name: S) -> [f32;9] {
         debug!("reading matrix {}", name.as_ref());
-        for _ in 0..9 {
-            let _ = self.parse_le_f32("?");
+        let mut m = [0.0;9];
+        for i in 0..9 {
+            let v = self.parse_le_f32("");
+            m[i] = v;
         }
+        m
     }
 
     #[allow(dead_code)]

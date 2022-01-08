@@ -12,6 +12,7 @@ pub struct Bone {
     children: Vec<usize>,
     translation: [f32; 3],
     rotation: [f32; 4],
+    basis: glam::Mat4,
     global_matrix: glam::Mat4,
     local_matrix: glam::Mat4,
     inverse_bind_pose: glam::Mat4
@@ -71,7 +72,7 @@ pub fn parse_skl<P: AsRef<str>>(path: P) -> SklFile {
         let _ = input.parse_le_f32("?");
         let _ = input.parse_le_f32("?");
 
-        let _ = input.read_m33("Bone Basis");
+        let basis = input.read_m33("Bone Basis");
 
         let _ = input.parse_le_u32("IK Section Length");
         let qty = input.parse_le_u32("IK qty");
@@ -85,11 +86,15 @@ pub fn parse_skl<P: AsRef<str>>(path: P) -> SklFile {
 
         let _ = input.parse_le_f32("?");
 
+        let basis = glam::Mat3::from_cols_array(&basis);
+        let basis = glam::Mat4::from_mat3(basis);
+
         let t = glam::vec3(translation[0], translation[1], translation[2]);
         let t = glam::Mat4::from_translation(t);
         let r = glam::quat(rotation[0], rotation[1], rotation[2], rotation[3]);
         let r = glam::Mat4::from_quat(r);
         let local_matrix = t * r;
+
         let global_matrix = glam::Mat4::IDENTITY;
         let inverse_bind_pose = glam::Mat4::IDENTITY;
         let bone = Bone {
@@ -97,6 +102,7 @@ pub fn parse_skl<P: AsRef<str>>(path: P) -> SklFile {
             children: Vec::new(),
             translation,
             rotation,
+            basis,
             global_matrix,
             local_matrix,
             inverse_bind_pose
@@ -117,7 +123,7 @@ pub fn parse_skl<P: AsRef<str>>(path: P) -> SklFile {
             .unwrap_or(glam::Mat4::IDENTITY);
 
         let bone = &mut skl.bones[idx];
-        bone.global_matrix = parent_global * bone.local_matrix;
+        bone.global_matrix = parent_global * bone.basis;
         bone.inverse_bind_pose = bone.global_matrix.inverse();
 
         for child in &bone.children {

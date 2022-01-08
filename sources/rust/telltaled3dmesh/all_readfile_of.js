@@ -392,6 +392,13 @@ async function getStack(qty) {
     return stack;
 }
 
+async function print_who_called_me() {
+    let ctx = await getThreadContext();
+    let return_to = await read("u32", ctx.sp);
+    await print(ctx);
+    await print(return_to);
+}
+
 async function printAnm(anm) {
     await addBreakpoint("CreateFileA");
     await init("C:\\Program Files (x86)\\Telltale Games\\Tales of Monkey Island\\Launch of the Screaming Narwhal\\MonkeyIsland101.exe");
@@ -401,11 +408,27 @@ async function printAnm(anm) {
     // await trace(500000, [0x7354e0, 0x5947c0, 0x6ebe60, 0x593a60, 0x603a69]);
     // await go();
     const breakpoints = {
-        // "ReadFile": async (api) => {
+        // ["ReadFile"]: async (api) => {
         //     await print(api);
         // },
-        [0x6c5f40]: async () => {
-            await trace(10000, [])
+        // Read the 7 values inside buffer
+        // [0x6c5f40]: async (api, ctx) => {
+        //     // let return_to = await read("u32", ctx.sp);
+        //     // await print(ctx);
+        //     // await print(return_to);
+        //     // await print("------------------------------------------------------------")
+        //     // await trace(10000, [])
+        // },
+        // Calls the function that reads the 7 values
+        // [0x6C6762]: async (api,ctx) => {
+        //     await print("------------------------------------------------------------")
+        //     await trace(10000, [])
+        // },
+        //0x6c65f0
+        //0x4a33c0
+        //0x5be530 
+        [0x5be530]: async () => {
+            await print_who_called_me();
         }
     }
 
@@ -414,14 +437,15 @@ async function printAnm(anm) {
     //     //0x6cb3a3,
     //     //0x6CB386, // - store float value inside each chunk of the compressed key buffer - see st0
     //      0x6C64C9, // copy samples as floats to struct
+    // 0x6C5548 divides the q0 by its max value
     // ];
 
     // await addBreakpoint("ReadFile");
-    await addBreakpoint(0x6c5f40);
-    // for (const ip of Object.keys(breakpoints)) {
-    //     await print(ip);
-    //     await addBreakpoint(ip);
-    // }
+    // await addBreakpoint(0x4a33c0);
+    for (const ip of Object.keys(breakpoints)) {
+        await print(ip.toString(16));
+        await addBreakpoint(parseInt(ip.toString()));
+    }
     while(true) {
         const { api, ctx } = await goUntil(({name},{ip}) => !!breakpoints[name] || !!breakpoints[ip]);
         const f = breakpoints[api.name] || breakpoints[ctx.ip];
