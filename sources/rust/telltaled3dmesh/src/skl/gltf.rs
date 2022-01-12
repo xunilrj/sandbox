@@ -19,45 +19,50 @@ pub fn to_gltf(skl: &super::SklFile) -> json::JsonValue {
 
     for bone in &skl.bones {
         let children: Vec<_> = bone.children.iter().map(|x| *x + 1).collect();
-        let _ = nodes.push(json::object! {
+
+        let mut node = json::object! {
             translation: &bone.translation[..],
             rotation: &bone.rotation[..],
-            children: children.as_slice(),
-        });
-    }
+        };
+        if children.len() > 0 {
+            let children = children.iter().map(|x| JsonValue::Number((*x as isize).into())).collect();
+            node["children"] = JsonValue::Array(children);
+        }
 
-    let joints: Vec<_> = skl.bones.iter().enumerate().map(|(i, _)| i + 1).collect();
-    let skins = json::array![{
-        inverseBindMatrices: 4,
-        joints: joints.as_slice()
-    }];
+        let _ = nodes.push(node);
+    }
 
     let mut gltf = json::object! {
         asset: asset,
         scene: 0,
         scenes: scenes,
         nodes: nodes,
-        skins: skins,
     };
 
     let mut inverse_bind_pose = vec![];
     for bone in &skl.bones {
-        let data: &[f32;16] = bone.inverse_bind_pose.as_ref();
+        let data= bone.inverse_bind_pose.to_cols_array();
         inverse_bind_pose.extend_from_slice(&data[..])
     }
     let mut inverse_buffer_view = crate::gltf::push_buffer(&mut gltf, inverse_bind_pose.as_slice());
     inverse_buffer_view["target"] = JsonValue::Number(34963i32.into());
     let inverse_bfview_idx = crate::gltf::push_buffer_view(&mut gltf, inverse_buffer_view);
-    crate::gltf::push_accessor(&mut gltf, 
+    let inverse_acessor_idx = crate::gltf::push_accessor(&mut gltf, 
         json::object! {
             bufferView: inverse_bfview_idx,
             componentType: 5126,
-            offset: 0,
+            byteOffset: 0,
             count: skl.bones.len(),
             type: "MAT4",
         }
     );
-
+    
+    let joints: Vec<_> = skl.bones.iter().enumerate().map(|(i, _)| i + 1).collect();
+    gltf["skins"] = json::array![{
+        inverseBindMatrices: inverse_acessor_idx,
+        joints: joints.as_slice()
+    }];
+   
     gltf
 }
 

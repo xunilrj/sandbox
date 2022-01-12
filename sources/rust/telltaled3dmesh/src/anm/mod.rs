@@ -1,4 +1,4 @@
-use std::io::Read;
+use std::{io::Read, collections::HashMap};
 
 use bitvec::{slice::BitSlice, order::Lsb0};
 
@@ -131,6 +131,8 @@ pub fn convert<P: AsRef<str>>(path: P) {
 
     let max_bounds = [0.00999999978, 0.0500000007, 0.100000001, 0.5,
         0.699999988, 0.800000012, 1.0, 1.5, 2.0, 3.0, 4.0, 5.5, 7.0, 8.5, 10.0];
+
+    let mut bones = vec![];
     
     for buffer in buffers {
         println!("buffer: {:?}", buffer.hash);
@@ -293,6 +295,7 @@ pub fn convert<P: AsRef<str>>(path: P) {
                     let _q = input.read_quat("quat");
                 }
             }
+           
             // SingleValue<Transform>
             0xC1E84D6FF72CE80 => {
                 for _ in 0..buffer.qty {
@@ -300,35 +303,200 @@ pub fn convert<P: AsRef<str>>(path: P) {
                     let _ = input.read_vec3("vec3");
                 }
             }
-            _ => todo!("{:?}", buffer.hash)
+            
+            // keyframedvalue<quaternion>
+            0x1019453EB19C1ABD => {
+                for _ in 0..buffer.qty {
+                    let mut bone = AnimatedBone::new();
+
+                    log::debug!("- new bone (quat)");
+                    let _ = input.parse_le_u32("?");
+                    let _ = input.parse_le_u32("?");
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                    let _ = input.parse_le_u32("?");
+                    let _ = input.read_quat("?");
+                    let _ = input.read_quat("?");
+
+                    let _ = input.parse_le_u32("?");
+                    
+                    let qty = input.parse_le_u32("?");
+
+                    for i in 0..=qty {
+                        log::debug!("-- new quat");
+                        let t = input.parse_le_u32("?");
+    
+                        match t {
+                            0 => {
+                                bone.frames.push(AnimatedBoneFrame{
+                                    rotation: [0.0, 0.0, 0.0, 0.0],
+                                    translation: [0.0, 0.0, 0.0],
+                                });
+                            }
+                            2 => {
+                                let q = input.read_quat("");
+
+                                bone.frames.push(AnimatedBoneFrame{
+                                    rotation: [q[0] as f64, q[1] as f64, q[2] as f64, q[3] as f64],
+                                    translation: [0.0, 0.0, 0.0],
+                                });
+
+                                if i == qty {
+                                    break
+                                }
+                            }
+                            x => todo!("{}", x)
+                        }
+    
+                        let _ = input.parse_n_bytes(1);
+                    }
+
+                    bones.push(bone);
+                }
+            }
+            
+            // keyframedvalue<transform>
+            0x5D3E9FC6FA9369BF => {
+                for _ in 0..buffer.qty {
+                    let mut bone = AnimatedBone::new();
+
+                    log::debug!("- new bone transform");
+                    let _ = input.parse_le_u32("?");
+                    let _ = input.parse_le_u32("?");
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                    let _ = input.parse_le_u32("?");
+
+                    let _ = input.parse_le_u32("?");
+                    let _ = input.read_quat("?");
+                    let _ = input.read_vec3("?");
+
+                    let _ = input.parse_le_u32("?");
+                    let _ = input.read_quat("?");
+                    let _ = input.read_vec3("?");
+
+                    let _ = input.parse_le_u32("?");
+                    let qty = input.parse_le_u32("?");
+
+                    for i in 0..=qty {
+                        log::debug!("-");
+                        let t = input.parse_le_u32("?");
+
+                        match t {
+                            0 => {
+
+                            }
+                            2 => {
+                                let _ = input.parse_le_u32("?");
+                                let q = input.read_quat("?");
+                                let t = input.read_vec3("?");
+
+                                bone.frames.push(AnimatedBoneFrame{
+                                    rotation: [q[0] as f64, q[1] as f64, q[2] as f64, q[3] as f64],
+                                    translation: [t[0] as f64, t[1] as f64, t[2] as f64],
+                                });
+
+                                if i == qty {
+                                    break
+                                }
+                                let _ = input.parse_le_f32("time?");
+                            }
+                            x => todo!("{}", x)
+                        }
+
+                        let _ = input.parse_n_bytes(1);
+                    }
+
+                    bones.push(bone);
+                }
+            }
+            
+            //keyframedvalue<vector3>
+            0xF6F394AF6E4003AD => {
+                for _ in 0..buffer.qty {
+                    let mut bone = AnimatedBone::new();
+                    log::debug!("- new bone vec3");
+
+                    let _ = input.parse_le_u32("?");
+                    let _ = input.parse_le_u32("?");
+                    let _ = input.parse_le_u64("?");
+                    let _ = input.parse_le_u32("?");
+                    let _ = input.parse_le_u32("?");
+
+                    let _ = input.read_vec3("?");
+                    let _ = input.read_vec3("?");
+
+                    let _ = input.parse_le_u32("?");
+                    let qty = input.parse_le_u32("?");
+
+                    for i in 0..qty {
+                        log::debug!("-- new vec3");
+                        let t = input.parse_le_u32("?");
+
+                        match t {
+                            0 => {
+
+                            }
+                            2 => {
+                                let _ = input.parse_le_u32("?");
+                                let t = input.read_vec3("?");
+
+                                bone.frames.push(AnimatedBoneFrame{
+                                    rotation: [0.0, 0.0, 0.0, 0.0],
+                                    translation: [t[0] as f64, t[1] as f64, t[2] as f64],
+                                });
+                            }
+                            x => todo!("{}", x)
+                        }
+
+                        let _ = input.parse_n_bytes(1);
+                    }
+
+                    let _ = input.parse_le_u32("?");
+                    let _ = input.read_vec3("?");
+
+                    bones.push(bone);
+                }
+            }
+            _ => todo!("{:X?}", buffer.hash)
         }
     }
     
     for i in 0..qty_values {
-        let _ = input.parse_le_f32(format!("value: {}", i).as_str());
+        let _ = input.parse_le_u32(format!("value: {}", i).as_str());
     }
     
-    let skip_symbols = input.parse_le_u16("?");
-    if skip_symbols == 0 {
-        let _ = input.read_n_properties(qty_values);
+    let _ = input.parse_le_u16("?");
+
+    let mut byid = HashMap::new();
+    for i in 0..qty_values {
+        let k = input.parse_le_u64("Bone ID");
+        let _ = input.parse_le_u32("");
+        byid.insert(k, i + 1);
     }
-
-    // dbg!(anm);
-
-    let bones_qty = 105;
-
-    let bone = &anm.bones[0];
-    let bone = bone.as_animated();
 
     let skl = crate::skl::parse_skl("C:\\temp\\mi101\\sk20_guybrush.skl");
     let mut gltf = crate::skl::gltf::to_gltf(&skl);
+    println!("{:#?}", skl);
+
+    println!("{:#?}", skl.bones.len());
+    println!("{:#?}", anm.bones.len());
+    println!("{:#?}", anm);
+
+    // dbg!(anm);
+
+    let bones_qty = anm.bones.len();
+
+    
 
     //time buffer
     let step = 1.0 / 30.0;
+    let t_scale = 0.1;
 
     let mut time_buffer = vec![];
-    for bone in anm.bones.iter().take(bones_qty) {
-        let bone = bone.as_animated();
+    for sklbone in skl.bones.iter() {
+        let bid = byid[&sklbone.start];
+        let bone = &bones[bid];
         let b: Vec<f32> = bone.frames.iter()
             .scan(0.0f32, |t,_| { *t += step; Some(*t) })
             .collect();
@@ -338,14 +506,15 @@ pub fn convert<P: AsRef<str>>(path: P) {
     //rot buffer
     let mut rot_buffer = vec![];
     let mut t_buffer = vec![];
-    for bone in anm.bones.iter().take(bones_qty) {
-        let bone = bone.as_animated();
+    for sklbone in skl.bones.iter() {
+        let bid = byid[&sklbone.start];
+        let bone = &bones[bid];
         let b: Vec<f32> = bone.frames.iter()
-            .scan([0.0,0.0,0.0,1.0], |acc, frame| {
-                acc[0] += frame.rotation[0] as f32;
-                acc[1] += frame.rotation[1] as f32;
-                acc[2] += frame.rotation[2] as f32;
-                acc[3] += frame.rotation[3] as f32;
+            .scan(sklbone.rotation, |acc, frame| {
+                acc[0] = frame.rotation[0] as f32;
+                acc[1] = frame.rotation[1] as f32;
+                acc[2] = frame.rotation[2] as f32;
+                acc[3] = frame.rotation[3] as f32;
                 let q = glam::quat(
                     acc[0],
                     acc[1],
@@ -362,10 +531,10 @@ pub fn convert<P: AsRef<str>>(path: P) {
         rot_buffer.extend(b);
 
         let b: Vec<f32> = bone.frames.iter()
-            .scan([0.0,0.0,0.0], |acc, frame| {
-                acc[0] += frame.translation[0] as f32;
-                acc[1] += frame.translation[1] as f32;
-                acc[2] += frame.translation[2] as f32;
+            .scan(sklbone.translation.clone(), |acc, frame| {
+                acc[0] = 0.0*t_scale*sklbone.translation[0] + 0.0*t_scale*frame.translation[0] as f32;
+                acc[1] = 0.0*t_scale*sklbone.translation[1] + 0.0*t_scale*frame.translation[1] as f32;
+                acc[2] = 0.0*t_scale*sklbone.translation[2] + 0.0*t_scale*frame.translation[2] as f32;
                 Some(acc.clone())
             })
             .flat_map(|x| x)
@@ -388,9 +557,9 @@ pub fn convert<P: AsRef<str>>(path: P) {
     let mut anim01 = json::object!{};
 
     let mut offset = 0;
-    let mut bone_idx = 0;
-    for bone in anm.bones.iter().take(bones_qty) {
-        let bone = bone.as_animated();
+    for (skli, sklbone) in skl.bones.iter().enumerate() {
+        let bid = byid[&sklbone.start];
+        let bone = &bones[bid];
 
         let time_acessor_idx = crate::gltf::push_accessor(&mut gltf, 
             json::object! {
@@ -398,7 +567,7 @@ pub fn convert<P: AsRef<str>>(path: P) {
                 componentType: 5126,
                 count: bone.frames.len(),
                 type: "SCALAR",
-                offset: offset,
+                byteOffset: offset * 4,
             }
         );
         let rot_acessor_idx = crate::gltf::push_accessor(&mut gltf, json::object! {
@@ -406,17 +575,15 @@ pub fn convert<P: AsRef<str>>(path: P) {
             componentType : 5126,
             count : bone.frames.len(),
             type : "VEC4",
-            offset: offset * 4,
+            byteOffset: offset * 4 * 4,
         });
         let t_acessor_idx = crate::gltf::push_accessor(&mut gltf, json::object! {
             bufferView : t_buffer_idx,
             componentType : 5126,
             count : bone.frames.len(),
             type : "VEC3",
-            offset: offset * 3,
+            byteOffset: offset * 3 * 4,
         });
-
-        let bidx = bone_idx;
 
         let sampler_idx = crate::gltf::push_sampler(&mut anim01, json::object! {
             input : time_acessor_idx,
@@ -426,7 +593,7 @@ pub fn convert<P: AsRef<str>>(path: P) {
         crate::gltf::push_channel(&mut anim01, json::object!{
             sampler: sampler_idx,
             target: json::object!{
-                node: bidx,
+                node: skli + 1,
                 path: "rotation"
             }
         });
@@ -439,13 +606,12 @@ pub fn convert<P: AsRef<str>>(path: P) {
         crate::gltf::push_channel(&mut anim01, json::object!{
             sampler: sampler_idx,
             target: json::object!{
-                node: bidx,
+                node: skli + 1,
                 path: "translation"
             }
         });
 
         offset += bone.frames.len();
-        bone_idx += 1;
     }
 
     gltf["animations"] = json::array![

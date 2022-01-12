@@ -209,6 +209,20 @@ pub fn find_u32(input: &[u8]) {
     }
 }
 
+
+#[allow(dead_code)]
+pub fn find_u64(input: &[u8]) {
+    println!("Trying to find a u64:");
+    for i in 0..(100*1024) {
+        let input = &input[i..];
+        let (input, a) = parse_le_u64(input).unwrap();
+        let (input, b) = parse_le_u64(input).unwrap();
+        let (input, c) = parse_le_u64(input).unwrap();
+        let (_, d) = parse_le_u64(input).unwrap();
+        println!("    {}: {:40},{:40},{:40},{:40},", i, a, b, c, d);
+    }
+}
+
 #[allow(dead_code)]
 pub fn find_f32(input: &[u8]) {
     fn bounds(f: f32) -> f32 {
@@ -484,27 +498,28 @@ impl<'a> NomSlice<'a> {
     }
 
     pub fn read_m33<S: AsRef<str>>(&mut self, name: S) -> [f32;9] {
-        debug!("reading matrix {}", name.as_ref());
         let mut m = [0.0;9];
         for i in 0..9 {
             let v = self.parse_le_f32("");
             m[i] = v;
         }
+        debug!("read matrix {}: {:?}", name.as_ref(), m);
         m
     }
 
     #[allow(dead_code)]
     pub fn read_m44<S: AsRef<str>>(&mut self, name: S) {
-        debug!("reading matrix {}", name.as_ref());
-        for _ in 0..16 {
-            let _ = self.parse_le_f32("?");
+        let mut m = [0.0;16];
+        for i in 0..16 {
+            m[i] = self.parse_le_f32("");
         }
+        debug!("read matrix {}: {:?}", name.as_ref(), m);
     }
 
     pub fn read_quat<S: std::fmt::Debug>(&mut self, name: S) -> [f32; 4] {
         let mut q = [0.0; 4];
         for i in 0..4 {
-            q[i] = self.parse_le_f32("?");
+            q[i] = self.parse_le_f32("");
         }
         debug!(
             "read {:?} as quat {:?} length: {}",
@@ -518,7 +533,7 @@ impl<'a> NomSlice<'a> {
     pub fn read_vec3<S: std::fmt::Debug>(&mut self, name: S) -> [f32; 3] {
         let mut v = [0.0; 3];
         for i in 0..3 {
-            v[i] = self.parse_le_f32("?");
+            v[i] = self.parse_le_f32("");
         }
         debug!("read {:?} as vec3 {:?}", name, v);
         v

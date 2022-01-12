@@ -8,16 +8,19 @@ use crate::parser::NomSlice;
 
 #[derive(Debug)]
 pub struct Bone {
-    parent: Option<usize>,
-    children: Vec<usize>,
-    translation: [f32; 3],
-    rotation: [f32; 4],
-    basis: glam::Mat4,
-    global_matrix: glam::Mat4,
-    local_matrix: glam::Mat4,
-    inverse_bind_pose: glam::Mat4
+    pub(crate) start: u64,
+    pub(crate) end: u64,
+    pub(crate) parent: Option<usize>,
+    pub(crate) children: Vec<usize>,
+    pub(crate) translation: [f32; 3],
+    pub(crate) rotation: [f32; 4],
+    pub(crate) basis: glam::Mat4,
+    pub(crate) global_matrix: glam::Mat4,
+    pub(crate) local_matrix: glam::Mat4,
+    pub(crate) inverse_bind_pose: glam::Mat4
 }
 
+#[derive(Debug)]
 pub struct SklFile {
     pub bones: Vec<Bone>,
 }
@@ -51,37 +54,34 @@ pub fn parse_skl<P: AsRef<str>>(path: P) -> SklFile {
     let _ = input.read_properties();
 
     let _ = input.parse_le_u32("?");
-    let qty = input.parse_le_u32("?") as usize;
+    let qty = input.parse_le_u32("Bones Qty") as usize;
 
     for i in 0..qty {
-        let _ = input.read_n_properties(2);
+        let mut ends = vec![];
+        for i in 0..2 {
+            let k = input.parse_le_u64("Bone ID");
+            let _ = input.parse_le_u32("Zero");
+            ends.push(k);
+        }
 
-        let parent = input.parse_le_u32("parent?") as usize;
+        let parent = input.parse_le_u32("parent") as usize;
 
         let translation = input.read_vec3("translation");
         let rotation = input.read_quat("rotation");
 
         let l = input.parse_le_u32("Bone Q Section Length");
         assert!(l == 32);
-        let _ = input.parse_le_f32("?");
-        let _ = input.parse_le_f32("?");
-        let _ = input.parse_le_f32("?");
-        let _ = input.parse_le_f32("Bone Q");
 
-        let _ = input.parse_le_f32("?");
-        let _ = input.parse_le_f32("?");
-        let _ = input.parse_le_f32("?");
+        let _ = input.read_quat("Q quat");
+        let _ = input.read_vec3("Q vec");
 
         let basis = input.read_m33("Bone Basis");
 
         let _ = input.parse_le_u32("IK Section Length");
         let qty = input.parse_le_u32("IK qty");
         for _ in 0..qty {
-            let bone_name = input.parse_length_string("Bone Name");
-            let _crc = crc64::crc64(0, bone_name.as_bytes());
-            // println!("{} = {:X} {:?}", bone_name, crc, crc.to_le_bytes());
-
-            let _ = input.parse_le_f32("?");
+            let _ = input.parse_length_string("Bone Name");
+            let _ = input.parse_le_f32("weight ?");
         }
 
         let _ = input.parse_le_f32("?");
@@ -98,6 +98,8 @@ pub fn parse_skl<P: AsRef<str>>(path: P) -> SklFile {
         let global_matrix = glam::Mat4::IDENTITY;
         let inverse_bind_pose = glam::Mat4::IDENTITY;
         let bone = Bone {
+            start: ends[0],
+            end: ends[1],
             parent: if parent == 4294967295 { None } else { Some(parent) },
             children: Vec::new(),
             translation,

@@ -257,7 +257,7 @@
 
                 actions = [];
                 for (let anim of animations) {
-                    THREE.AnimationUtils.makeClipAdditive(anim);
+                    // THREE.AnimationUtils.makeClipAdditive(anim);
                     console.log(anim);
                     actions.push(mixer.clipAction(anim));
                 }

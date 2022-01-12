@@ -407,10 +407,27 @@ async function printAnm(anm) {
     // await trace(10000000, [0x7354e0, 0x5947c0, 0x6ebe60, 0x43d4f0, 0x41a5e0, 0x445ff0, 0x712b40, 0x496e70, 0x43dd00]);
     // await trace(500000, [0x7354e0, 0x5947c0, 0x6ebe60, 0x593a60, 0x603a69]);
     // await go();
+    let i = 0;
     const breakpoints = {
-        // ["ReadFile"]: async (api) => {
-        //     await print(api);
-        // },
+        ["ReadFile"]: async (api) => {
+            await print(api);
+            await goUntilReturn();
+            const buffer = await readArray("u8", api.args.nNumberOfBytesToRead, api.args.lpBuffer);
+            await print(`\t${i} ${api.args.lpBuffer} 0x${api.args.lpBuffer.toString(16)} ${api.args.nNumberOfBytesToRead} [${buffer}]`);
+
+            if (api.args.nNumberOfBytesToRead == 4) {
+                const b = new ArrayBuffer(4);
+                const ui8 = new Uint8Array(b);
+                ui8[0] = buffer[0];
+                ui8[1] = buffer[1];
+                ui8[2] = buffer[2];
+                ui8[3] = buffer[3];
+                await print(`\tas f32: ${new Float32Array(b)[0]}`)
+                await print(`\tas u32: ${new Uint32Array(b)[0]}`)
+            }
+
+            i += 1;
+        },
         // Read the 7 values inside buffer
         // [0x6c5f40]: async (api, ctx) => {
         //     // let return_to = await read("u32", ctx.sp);
@@ -427,9 +444,9 @@ async function printAnm(anm) {
         //0x6c65f0
         //0x4a33c0
         //0x5be530 
-        [0x5be530]: async () => {
-            await print_who_called_me();
-        }
+        // [0x5be530]: async () => {
+        //     await print_who_called_me();
+        // }
     }
 
     // const vip = [
@@ -440,11 +457,17 @@ async function printAnm(anm) {
     // 0x6C5548 divides the q0 by its max value
     // ];
 
-    // await addBreakpoint("ReadFile");
-    // await addBreakpoint(0x4a33c0);
     for (const ip of Object.keys(breakpoints)) {
-        await print(ip.toString(16));
-        await addBreakpoint(parseInt(ip.toString()));
+        let where = ip;
+        try {
+            let n = parseInt(ip.toString())
+            if (n) {
+                where = n;
+            }
+        } catch (e) {
+        }
+        await print(`Breakpoint at: ${ip.toString()}`);
+        await addBreakpoint(where);
     }
     while(true) {
         const { api, ctx } = await goUntil(({name},{ip}) => !!breakpoints[name] || !!breakpoints[ip]);
