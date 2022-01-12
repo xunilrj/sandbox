@@ -538,4 +538,14 @@ impl<'a> NomSlice<'a> {
         debug!("read {:?} as vec3 {:?}", name, v);
         v
     }
+
+    pub fn read_length_transform<S: std::fmt::Debug>(&mut self, name: S) -> ([f32; 4], [f32; 3]) {
+        let length = self.parse_le_u32("transform length");
+        assert!(length == 32);
+
+        let q = self.read_quat("quaternion");
+        let t = self.read_vec3("translation");
+
+        (q, t)
+    }
 }

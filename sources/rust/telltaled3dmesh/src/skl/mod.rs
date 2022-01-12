@@ -124,9 +124,18 @@ pub fn parse_skl<P: AsRef<str>>(path: P) -> SklFile {
             .map(|p| skl.bones[p].global_matrix)
             .unwrap_or(glam::Mat4::IDENTITY);
 
+        let t: glam::Vec3 = bone.translation.into();
+        let t = glam::Mat4::from_translation(t);
+
+        let r = glam::Quat::from_array(bone.rotation);
+        let r = glam::Mat4::from_quat(r);
+
         let bone = &mut skl.bones[idx];
-        bone.global_matrix = parent_global * bone.basis;
+        bone.global_matrix = parent_global * (t * r);
         bone.inverse_bind_pose = bone.global_matrix.inverse();
+
+        println!("global matrix: {:?}", bone.global_matrix.to_cols_array());
+        println!("inverse: {:?}", bone.inverse_bind_pose.to_cols_array());
 
         for child in &bone.children {
             q.push_back(*child);

@@ -29,12 +29,14 @@ pub struct AnimatedBoneFrame {
 
 #[derive(Debug)]
 pub struct AnimatedBone {
+    id: u64,
     frames: Vec<AnimatedBoneFrame>
 }
 
 impl AnimatedBone {
     pub fn new() -> Self {
         Self { 
+            id: 0,
             frames: vec![]
         }
     }
@@ -312,7 +314,7 @@ pub fn convert<P: AsRef<str>>(path: P) {
                     log::debug!("- new bone (quat)");
                     let _ = input.parse_le_u32("?");
                     let _ = input.parse_le_u32("?");
-                    let _ = input.parse_le_u64("?");
+                    let boneid = input.parse_le_u64("?");
                     let _ = input.parse_le_u32("?");
                     let _ = input.parse_le_u32("?");
                     let _ = input.read_quat("?");
@@ -320,19 +322,16 @@ pub fn convert<P: AsRef<str>>(path: P) {
 
                     let _ = input.parse_le_u32("?");
                     
-                    let qty = input.parse_le_u32("?");
+                    let qty = input.parse_le_u32("qty");
 
-                    for i in 0..=qty {
+                    let t = input.parse_le_u32("?");
+                    let _ = input.parse_n_bytes(1);
+
+                    for i in 0..qty {
                         log::debug!("-- new quat");
-                        let t = input.parse_le_u32("?");
+                        let t = input.parse_le_u32("type");
     
                         match t {
-                            0 => {
-                                bone.frames.push(AnimatedBoneFrame{
-                                    rotation: [0.0, 0.0, 0.0, 0.0],
-                                    translation: [0.0, 0.0, 0.0],
-                                });
-                            }
                             2 => {
                                 let q = input.read_quat("");
 
@@ -341,7 +340,7 @@ pub fn convert<P: AsRef<str>>(path: P) {
                                     translation: [0.0, 0.0, 0.0],
                                 });
 
-                                if i == qty {
+                                if i == (qty - 1) {
                                     break
                                 }
                             }
@@ -351,6 +350,7 @@ pub fn convert<P: AsRef<str>>(path: P) {
                         let _ = input.parse_n_bytes(1);
                     }
 
+                    bone.id = boneid;
                     bones.push(bone);
                 }
             }
@@ -361,35 +361,31 @@ pub fn convert<P: AsRef<str>>(path: P) {
                     let mut bone = AnimatedBone::new();
 
                     log::debug!("- new bone transform");
-                    let _ = input.parse_le_u32("?");
-                    let _ = input.parse_le_u32("?");
-                    let _ = input.parse_le_u64("?");
+                    let header_length = input.parse_le_u32("header length");
+                    assert!(header_length == 24);
+                    let subheader_length = input.parse_le_u32("subheader length");
+                    assert!(subheader_length == 20);
+
+                    let boneid = input.parse_le_u64("boneid");
                     let _ = input.parse_le_u32("?");
                     let _ = input.parse_le_u32("?");
 
-                    let _ = input.parse_le_u32("?");
-                    let _ = input.read_quat("?");
-                    let _ = input.read_vec3("?");
+                    let (minq, mint) = input.read_length_transform("min");
+                    let (maxq, maxt) = input.read_length_transform("max");
 
-                    let _ = input.parse_le_u32("?");
-                    let _ = input.read_quat("?");
-                    let _ = input.read_vec3("?");
-
-                    let _ = input.parse_le_u32("?");
-                    let qty = input.parse_le_u32("?");
+                    let _ = input.parse_le_u32("frames length in bytes");
+                    let qty = input.parse_le_u32("qty");
 
                     for i in 0..=qty {
-                        log::debug!("-");
-                        let t = input.parse_le_u32("?");
+                        log::debug!("- frame {}", i);
+                        let t = input.parse_le_u32("type");
 
                         match t {
                             0 => {
-
+                                let _ = input.parse_n_bytes(1);
                             }
                             2 => {
-                                let _ = input.parse_le_u32("?");
-                                let q = input.read_quat("?");
-                                let t = input.read_vec3("?");
+                                let (q, t) = input.read_length_transform("max");
 
                                 bone.frames.push(AnimatedBoneFrame{
                                     rotation: [q[0] as f64, q[1] as f64, q[2] as f64, q[3] as f64],
@@ -399,14 +395,15 @@ pub fn convert<P: AsRef<str>>(path: P) {
                                 if i == qty {
                                     break
                                 }
-                                let _ = input.parse_le_f32("time?");
+
+                                let _ = input.parse_le_f32("time");
+                                let _ = input.parse_n_bytes(1);
                             }
                             x => todo!("{}", x)
                         }
-
-                        let _ = input.parse_n_bytes(1);
                     }
 
+                    bone.id = boneid;
                     bones.push(bone);
                 }
             }
@@ -472,7 +469,11 @@ pub fn convert<P: AsRef<str>>(path: P) {
     for i in 0..qty_values {
         let k = input.parse_le_u64("Bone ID");
         let _ = input.parse_le_u32("");
-        byid.insert(k, i + 1);
+        // byid.insert(k, i + 1);
+    }
+
+    for (i, bone) in bones.iter().enumerate() {
+        byid.insert(bone.id, i);
     }
 
     let skl = crate::skl::parse_skl("C:\\temp\\mi101\\sk20_guybrush.skl");
@@ -482,12 +483,6 @@ pub fn convert<P: AsRef<str>>(path: P) {
     println!("{:#?}", skl.bones.len());
     println!("{:#?}", anm.bones.len());
     println!("{:#?}", anm);
-
-    // dbg!(anm);
-
-    let bones_qty = anm.bones.len();
-
-    
 
     //time buffer
     let step = 1.0 / 30.0;
@@ -510,7 +505,7 @@ pub fn convert<P: AsRef<str>>(path: P) {
         let bid = byid[&sklbone.start];
         let bone = &bones[bid];
         let b: Vec<f32> = bone.frames.iter()
-            .scan(sklbone.rotation, |acc, frame| {
+            .scan([0.0,0.0,0.0,1.0], |acc, frame| {
                 acc[0] = frame.rotation[0] as f32;
                 acc[1] = frame.rotation[1] as f32;
                 acc[2] = frame.rotation[2] as f32;
@@ -521,7 +516,7 @@ pub fn convert<P: AsRef<str>>(path: P) {
                     acc[2],
                     acc[3],
                 );
-                let q = q.normalize();
+                // let q = q.normalize();
                 Some([ 
                     q.x, q.y, q.z, q.w
                 ])
@@ -532,9 +527,9 @@ pub fn convert<P: AsRef<str>>(path: P) {
 
         let b: Vec<f32> = bone.frames.iter()
             .scan(sklbone.translation.clone(), |acc, frame| {
-                acc[0] = 0.0*t_scale*sklbone.translation[0] + 0.0*t_scale*frame.translation[0] as f32;
-                acc[1] = 0.0*t_scale*sklbone.translation[1] + 0.0*t_scale*frame.translation[1] as f32;
-                acc[2] = 0.0*t_scale*sklbone.translation[2] + 0.0*t_scale*frame.translation[2] as f32;
+                acc[0] = frame.translation[0] as f32;
+                acc[1] = frame.translation[1] as f32;
+                acc[2] = frame.translation[2] as f32;
                 Some(acc.clone())
             })
             .flat_map(|x| x)
