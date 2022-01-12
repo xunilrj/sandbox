@@ -598,13 +598,15 @@ pub fn convert<P: AsRef<str>>(path: P) {
             interpolation : "LINEAR",
             output : t_acessor_idx
         });
-        crate::gltf::push_channel(&mut anim01, json::object!{
-            sampler: sampler_idx,
-            target: json::object!{
-                node: skli + 1,
-                path: "translation"
-            }
-        });
+        //TODO seems to be out of scale
+        //maybe only makes sense when apllying the model
+        // crate::gltf::push_channel(&mut anim01, json::object!{
+        //     sampler: sampler_idx,
+        //     target: json::object!{
+        //         node: skli + 1,
+        //         path: "translation"
+        //     }
+        // });
 
         offset += bone.frames.len();
     }
