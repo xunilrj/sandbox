@@ -5,7 +5,7 @@
   },
   "dependencies": {
     "perlin.js": "^1.0.0",
-    "three": "^0.116.1",
+    "three": "^0.137.0",
     "three-orbit-controls": "^82.1.0"
   },  
   "devDependencies": {
