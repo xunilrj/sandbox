@@ -1579,7 +1579,7 @@ float* __stdcall sub_6c65f0(void* arg1 @ ecx, float* arg2, float* arg3, float ar
 006c6b6c              *(arg1 + 0xe0) = zx.d(*(arg1 + 0xf3)) | ecx_5
 006c6753          else
 006c6753              if (edx_4.b u>= *(arg1 + 0xf2))
-006c675d                  sub_6c5f40(arg1)
+006c675d                  sub_6c5f40(arg1)                                      <- reads first buffer
 006c677b              var_98 = 0f
 006c67a3              int32_t eax_10
 006c67a3              int32_t ecx_8
@@ -2790,3 +2790,158 @@ void __fastcall sub_5d1420(void* arg1)
 005d1d93  *fsbase = var_14
 005d1d9f  *var_b0
 005d1da0  return x87_r0
+
+
+--------------------------------------
+
+void sub_6c53f0(float* arg1, int32_t* arg2, int32_t arg3, int32_t arg4, int32_t arg5, int32_t arg6, float arg7)
+
+006c53f3  long double x87_r7 = fconvert.t(arg7)
+006c540a  long double x87_r6_2 = fconvert.t(fconvert.s(fneg(x87_r7)))
+006c5412  float var_4 = fconvert.s(x87_r6_2)
+006c541e  long double x87_r6_5 = fconvert.t(fconvert.s(x87_r7 + x87_r7))
+006c5422  float var_8 = fconvert.s(x87_r6_5)
+006c542e  long double x87_r7_2 = float.t(0)
+006c5430  *arg1 = fconvert.s(x87_r7_2)
+006c5432  *(arg1 + 4) = fconvert.s(x87_r7_2)
+006c5435  *(arg1 + 8) = fconvert.s(x87_r7_2)
+006c5438  *(arg1 + 0xc) = fconvert.s(x87_r7_2)
+006c543b  long double x87_r7_3 = fconvert.t(fconvert.s(x87_r6_2))
+006c543f  long double x87_r6_6 = fconvert.t(fconvert.s(x87_r6_5))
+006c5401  if (arg3 s> 0)
+006c544e      float edx_2 = (1 << arg3.b) - 1
+006c5451      float ecx_2 = *arg2 & edx_2
+006c5459      long double x87_r5_1 = float.t(ecx_2)
+006c5453      if (ecx_2 s< 0)
+006c545f          x87_r5_1 = x87_r5_1 + fconvert.t(4.2949673e+09f)
+006c546b      long double x87_r4_1 = float.t(edx_2)
+006c5465      if (edx_2 s< 0)
+006c5471          x87_r4_1 = x87_r4_1 + fconvert.t(4.2949673e+09f)
+006c547d      *arg1 = fconvert.s(((x87_r5_1 / x87_r4_1) * x87_r6_6) + x87_r7_3)
+006c5483  if (arg4 s> 0)
+006c5491      float edx_4 = (1 << arg4.b) - 1
+006c5494      float ecx_5 = *(arg2 + 4) & edx_4
+006c549c      long double x87_r5_5 = float.t(ecx_5)
+006c5496      if (ecx_5 s< 0)
+006c54a2          x87_r5_5 = x87_r5_5 + fconvert.t(4.2949673e+09f)
+006c54ae      long double x87_r4_2 = float.t(edx_4)
+006c54a8      if (edx_4 s< 0)
+006c54b4          x87_r4_2 = x87_r4_2 + fconvert.t(4.2949673e+09f)
+006c54c0      *(arg1 + 4) = fconvert.s(((x87_r5_5 / x87_r4_2) * x87_r6_6) + x87_r7_3)
+006c54c7  if (arg5 s> 0)
+006c54d5      float edx_6 = (1 << arg5.b) - 1
+006c54d8      float ecx_8 = *(arg2 + 8) & edx_6
+006c54e0      long double x87_r5_9 = float.t(ecx_8)
+006c54da      if (ecx_8 s< 0)
+006c54e6          x87_r5_9 = x87_r5_9 + fconvert.t(4.2949673e+09f)
+006c54f2      long double x87_r4_3 = float.t(edx_6)
+006c54ec      if (edx_6 s< 0)
+006c54f8          x87_r4_3 = x87_r4_3 + fconvert.t(4.2949673e+09f)
+006c5504      *(arg1 + 8) = fconvert.s(x87_r7_3 + (x87_r6_6 * (x87_r5_9 / x87_r4_3)))
+006c5511  if (arg6 s> 0)
+006c551f      float edx_8 = (1 << arg6.b) - 1
+006c5522      float ecx_11 = *(arg2 + 0xc) & edx_8
+006c552a      long double x87_r7_5 = float.t(ecx_11)
+006c5524      if (ecx_11 s< 0)
+006c5530          x87_r7_5 = x87_r7_5 + fconvert.t(4.2949673e+09f)
+006c553c      long double x87_r6_8 = float.t(edx_8)
+006c5536      if (edx_8 s< 0)
+006c5542          x87_r6_8 = x87_r6_8 + fconvert.t(4.2949673e+09f)
+006c5552      *(arg1 + 0xc) = fconvert.s(((x87_r7_5 / x87_r6_8) * fconvert.t(var_8)) + fconvert.t(var_4))
+
+----------------------------------------------
+
+float* sub_6c4250(float* arg1, int32_t* arg2, int32_t arg3, int32_t arg4, int32_t arg5, float arg6)
+
+006c4251  long double x87_r7 = fconvert.t(arg6)
+006c4272  long double x87_r7_2 = float.t(0)
+006c4274  *arg1 = fconvert.s(x87_r7_2)
+006c4276  *(arg1 + 4) = fconvert.s(x87_r7_2)
+006c4279  *(arg1 + 8) = fconvert.s(x87_r7_2)
+006c427c  long double x87_r7_3 = fconvert.t(fconvert.s(fneg(x87_r7)))
+006c4280  long double x87_r6_2 = fconvert.t(fconvert.s(x87_r7 + x87_r7))
+006c425f  if (arg3 s> 0)
+006c428f      float edx_2 = (1 << arg3.b) - 1
+006c4292      float ecx_3 = *arg2 & edx_2
+006c429a      long double x87_r5_1 = float.t(ecx_3)
+006c4294      if (ecx_3 s< 0)
+006c42a0          x87_r5_1 = x87_r5_1 + fconvert.t(4.2949673e+09f)
+006c42ac      long double x87_r4_1 = float.t(edx_2)
+006c42a6      if (edx_2 s< 0)
+006c42b2          x87_r4_1 = x87_r4_1 + fconvert.t(4.2949673e+09f)
+006c42be      *arg1 = fconvert.s(((x87_r5_1 / x87_r4_1) * x87_r6_2) + x87_r7_3)
+006c42c4  if (arg4 s> 0)
+006c42d2      float edx_4 = (1 << arg4.b) - 1
+006c42d5      float ecx_6 = *(arg2 + 4) & edx_4
+006c42dd      long double x87_r5_5 = float.t(ecx_6)
+006c42d7      if (ecx_6 s< 0)
+006c42e3          x87_r5_5 = x87_r5_5 + fconvert.t(4.2949673e+09f)
+006c42ef      long double x87_r4_2 = float.t(edx_4)
+006c42e9      if (edx_4 s< 0)
+006c42f5          x87_r4_2 = x87_r4_2 + fconvert.t(4.2949673e+09f)
+006c4301      *(arg1 + 4) = fconvert.s(((x87_r5_5 / x87_r4_2) * x87_r6_2) + x87_r7_3)
+006c4351  if (arg5 s<= 0)
+006c4351      return arg1
+006c4316  float edx_6 = (1 << arg5.b) - 1
+006c4319  float ecx_9 = *(arg2 + 8) & edx_6
+006c4321  long double x87_r5_9 = float.t(ecx_9)
+006c431b  if (ecx_9 s< 0)
+006c4327      x87_r5_9 = x87_r5_9 + fconvert.t(4.2949673e+09f)
+006c4333  long double x87_r4_3 = float.t(edx_6)
+006c432d  if (edx_6 s< 0)
+006c4339      x87_r4_3 = x87_r4_3 + fconvert.t(4.2949673e+09f)
+006c4346  *(arg1 + 8) = fconvert.s(x87_r7_3 + (x87_r6_2 * (x87_r5_9 / x87_r4_3)))
+006c434a  return arg1
+
+-------------------------------------------------------------
+
+void __stdcall sub_74a990(int32_t* arg1 @ ecx, float arg2, float arg3, float* arg4, float* arg5)
+
+0074a990  long double x87_r7 = fconvert.t(arg2)
+0074a997  long double x87_r6 = fconvert.t(*(arg1 + 0x10))
+0074a99f  x87_r6 - x87_r7
+0074a9a3  int0_t x87_r0
+0074a9a3  if (((x87_r6 < x87_r7 ? 1 : 0 << 8) | ((0 ? 1 : 0 << 9) | ((is_unordered.t(x87_r6, x87_r7) ? 1 : 0 << 0xa) | ((x87_r6 == x87_r7 ? 1 : 0 << 0xe) | 0x3800))):1.b & 0x41) == 0)
+0074a9a8      if (*(arg1 + 0x1c) s> 0)
+0074a9ae          x87_r0 = x87_r7
+0074a9b8          *(arg1 + 0x1c) = 0xffffffff
+0074a9bf          *(arg1 + 0x18) = fconvert.s(fconvert.t(0.0333333351f))
+0074a9c2          sub_5f03b0(arg1, 0xd)
+0074a9ce          *(arg1 + 0x14) = fconvert.s(fconvert.t(-0.0333333351f))
+0074a9d9          *(arg1 + 0x25) = 1
+0074a9dd          *(arg1 + 0x10) = fconvert.s(fconvert.t(-0.0333333351f))
+0074a9e0          sub_74a6c0(arg1, arg3)
+0074a9e8          *(arg1 + 0x10) = fconvert.s(fconvert.t(*(arg1 + 0x14)))
+0074a9eb          x87_r7 = fconvert.t(arg2)
+0074a9ef      long double x87_r6_1 = fconvert.t(*(arg1 + 0x10))
+0074a9f2      x87_r6_1 - x87_r7
+0074aa08      if (((x87_r6_1 < x87_r7 ? 1 : 0 << 8) | ((0 ? 1 : 0 << 9) | ((is_unordered.t(x87_r6_1, x87_r7) ? 1 : 0 << 0xa) | ((x87_r6_1 == x87_r7 ? 1 : 0 << 0xe) | 0x3800))):1.b & 1) == 0)
+0074aa08          *arg4 = fconvert.s(fconvert.t(*(arg1 + 0x10)))
+0074aa10          *arg5 = fconvert.s(fconvert.t(*(arg1 + 0x14)))
+0074aa13          return x87_r7
+0074aa16  if (*(arg1 + 0x1c) s>= arg3)
+0074aa1b      x87_r0 = x87_r7
+0074aa4b  else
+0074aa4b      while (true)
+0074aa4b          long double x87_r6_2 = fconvert.t(*(arg1 + 0x10))
+0074aa4e          x87_r6_2 - x87_r7
+0074aa52          if (((x87_r6_2 < x87_r7 ? 1 : 0 << 8) | ((0 ? 1 : 0 << 9) | ((is_unordered.t(x87_r6_2, x87_r7) ? 1 : 0 << 0xa) | ((x87_r6_2 == x87_r7 ? 1 : 0 << 0xe) | 0x3800))):1.b & 0x41) == 0)
+0074aa65              x87_r0 = x87_r7
+0074aa57          else
+0074aa57              long double x87_r6_3 = fconvert.t(*(arg1 + 0x14))
+0074aa5a              x87_r6_3 - x87_r7
+0074aa5c              (x87_r6_3 < x87_r7 ? 1 : 0 << 8) | ((0 ? 1 : 0 << 9) | ((is_unordered.t(x87_r6_3, x87_r7) ? 1 : 0 << 0xa) | ((x87_r6_3 == x87_r7 ? 1 : 0 << 0xe) | 0))):1.b & 5
+0074aa5e              bool p_1 = unimplemented  {test ah, 0x5}
+0074aa61              if (p_1)
+0074aa61                  break
+0074aa6d          *(arg1 + 0x10) = fconvert.s(fconvert.t(*(arg1 + 0x14)))
+0074aa70          sub_74a6c0(arg1, arg3)
+0074aa78          if (*(arg1 + 0x1c) s>= arg3)
+0074aa78              break
+0074aa47          x87_r7 = fconvert.t(arg2)
+0074aa1d  int32_t eax_3 = *(arg1 + 0x1c)
+0074aa2a  *arg4 = fconvert.s(fconvert.t(*(arg1 + 0x10)))
+0074aa34  int32_t edx
+0074aa34  edx.b = eax_3 - 1 s< 0
+0074aa42  *arg5 = fconvert.s(fconvert.t(*(arg1 + 0x14)))
+0074aa44  return x87_r0

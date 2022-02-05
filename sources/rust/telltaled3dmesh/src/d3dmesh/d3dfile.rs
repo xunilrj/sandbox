@@ -1,7 +1,10 @@
 use json::JsonValue;
 
+#[derive(Debug)]
 pub enum D3DBufferData {
+    U8(Vec<u8>),
     U16(Vec<u16>),
+    U32(Vec<u32>),
     F32(Vec<f32>),
 }
 
@@ -13,10 +16,17 @@ pub struct D3DBuffer {
 }
 
 impl D3DBuffer {
+    pub fn as_u8(&self) -> &Vec<u8> {
+        match &self.data {
+            D3DBufferData::U8(v) => v,
+            _ => panic!("buffer is {:?}", self.data),
+        }
+    }
+
     pub fn as_u16(&self) -> &Vec<u16> {
         match &self.data {
             D3DBufferData::U16(v) => v,
-            _ => panic!(),
+            _ => panic!("buffer is {:?}", self.data),
         }
     }
 
@@ -27,9 +37,20 @@ impl D3DBuffer {
         }
     }
 
+    pub fn as_u32(&self) -> &Vec<u32> {
+        match &self.data {
+            D3DBufferData::U32(v) => v,
+            _ => panic!(),
+        }
+    }
+
     pub fn as_bytes(&self) -> &[u8] {
         match &self.data {
+            D3DBufferData::U8(v) => v.as_slice(),
             D3DBufferData::U16(v) => unsafe {
+                std::slice::from_raw_parts(v.as_ptr() as *const u8, v.len() / 2)
+            },
+            D3DBufferData::U32(v) => unsafe {
                 std::slice::from_raw_parts(v.as_ptr() as *const u8, v.len() / 2)
             },
             D3DBufferData::F32(v) => unsafe {
@@ -40,7 +61,23 @@ impl D3DBuffer {
 
     pub fn to_json_number(&self) -> Vec<JsonValue> {
         match &self.data {
+            D3DBufferData::U8(v) => {
+                let mut n = vec![];
+                for v in v {
+                    let number = json::number::Number::from(*v);
+                    n.push(JsonValue::Number(number));
+                }
+                n
+            }
             D3DBufferData::U16(v) => {
+                let mut n = vec![];
+                for v in v {
+                    let number = json::number::Number::from(*v);
+                    n.push(JsonValue::Number(number));
+                }
+                n
+            }
+            D3DBufferData::U32(v) => {
                 let mut n = vec![];
                 for v in v {
                     let number = json::number::Number::from(*v);
@@ -81,6 +118,7 @@ pub struct D3DMesh {
     pub vertices: [usize; 2],
     pub index_start: usize,
     pub tri_count: usize,
+    pub bone_pallete: usize,
 }
 
 impl D3DMesh {
@@ -91,8 +129,13 @@ impl D3DMesh {
             vertices: [0; 2],
             index_start: 0,
             tri_count: 0,
+            bone_pallete: 0,
         }
     }
+}
+
+pub struct BonePallete {
+    pub bones: Vec<usize>
 }
 
 pub struct D3DFile {
@@ -100,6 +143,7 @@ pub struct D3DFile {
     pub bbox: D3DBoundingBox,
     pub meshes: Vec<D3DMesh>,
     pub buffers: Vec<D3DBuffer>,
+    pub palletes: Vec<BonePallete>
 }
 
 impl D3DFile {
@@ -109,7 +153,15 @@ impl D3DFile {
             meshes: Vec::with_capacity(10),
             buffers: Vec::with_capacity(10),
             bbox: D3DBoundingBox::default(),
+            palletes: vec![]
         }
+    }
+    
+    pub fn get_buffer(&self, name: &str) -> &D3DBuffer {
+        self.buffers
+            .iter()
+            .find(|x| x.r#type == name)
+            .unwrap()
     }
 }
 

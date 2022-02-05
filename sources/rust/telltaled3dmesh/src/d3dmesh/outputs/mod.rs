@@ -4,6 +4,7 @@ use std::str::FromStr;
 
 mod json;
 mod obj;
+pub mod gltf;
 
 pub fn save_to(d3dfile: &D3DFile, output: &str, buffer_as_base64: bool, pretty_print: bool) {
     let path = PathBuf::from_str(output).unwrap();
@@ -18,6 +19,8 @@ pub fn save_to(d3dfile: &D3DFile, output: &str, buffer_as_base64: bool, pretty_p
         let _ = std::fs::write(path, json);
     } else if ext == "obj" {
         obj::save_to_obj(d3dfile, path);
+    } else if ext == "gltf" {
+        gltf::save_to_gltf(d3dfile, path);
     } else {
         todo!();
     }

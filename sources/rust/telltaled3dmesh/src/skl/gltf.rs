@@ -9,12 +9,12 @@ pub fn to_gltf(skl: &super::SklFile) -> json::JsonValue {
     };
 
     let scenes = json::array! [{
-        nodes: [1]
+        nodes: [0, 1]
     }];
 
     let mut nodes = json::array! [{
         skin: 0,
-        // mesh: 0,
+        mesh: 0,
     }];
 
     for bone in &skl.bones {

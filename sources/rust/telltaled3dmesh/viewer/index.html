@@ -54,7 +54,7 @@
 
                 for (let i = 0; i < bones.length; i++) {
                     const bone = bones[i];
-                    console.log(bone);
+                    // console.log(bone);
                     if (bone.parent && bone.parent.isBone) {
                         vertices.push(0, 0, 0);
                         vertices.push(0, 0, 0);
@@ -224,18 +224,18 @@
 
             const loader = new GLTFLoader();
             loader.load('models/result.gltf', function (gltf) {
+                console.log(gltf);
                 model = gltf.scene;
-                console.log(model);
-                scene.add(model);
-
-                model.traverse(function (object) {
+                gltf.scene.traverse(function (object) {
                     if (object.isMesh) {
+                        console.log(object);
+                        scene.add(object);
                         object.castShadow = true;
-                        object.material = new THREE.MeshPhongMaterial({
-                            color: 0xFF0000,
-                            flatShading: true,
-                            side: THREE.DoubleSide
-                        });
+                        // object.material = new THREE.MeshPhongMaterial({
+                        //     color: 0xFF0000,
+                        //     flatShading: true,
+                        //     side: THREE.DoubleSide
+                        // });
                     }
                 });
 
@@ -258,7 +258,7 @@
                 actions = [];
                 for (let anim of animations) {
                     // THREE.AnimationUtils.makeClipAdditive(anim);
-                    console.log(anim);
+                    // console.log(anim);
                     actions.push(mixer.clipAction(anim));
                 }
 

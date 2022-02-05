@@ -1,5 +1,7 @@
 use crate::parser::NomSlice;
 
+use super::d3dfile::BonePallete;
+
 pub enum Attribute {
     None,
     BoundingBox(f32, f32, f32, f32, f32, f32),
@@ -64,6 +66,7 @@ pub enum Attribute {
     // ATT58(String),
     // // ATT59(String),
     // ATT60(String),
+    BonePallete(Vec<BonePallete>)
 }
 
 pub fn read_att(input: &mut NomSlice) -> Attribute {
@@ -113,6 +116,25 @@ pub fn read_att2(input: &mut NomSlice) -> Attribute {
         8 => {
             let _ = input.parse_le_u32("?");
             Attribute::ATT8
+        }
+        2208 => {
+            let mut palletes = vec![];           
+            log::debug!("Bones palletes");
+            let qty = input.parse_le_u32("qty of palletes");
+            for _ in 0..qty {
+                let mut pallete = BonePallete {
+                    bones: vec![],
+                };
+                let qty = input.parse_le_u32("qty of bones");
+                for _ in 0..qty {
+                    let boneid = input.parse_le_u64("bone id") as usize;
+                    let _ = input.parse_le_u32("zero");
+
+                    pallete.bones.push(boneid);
+                }
+                palletes.push(pallete);
+            }
+            Attribute::BonePallete(palletes)
         }
         36.. => {
             //example: obj_ballcannon

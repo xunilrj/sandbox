@@ -1,5 +1,6 @@
 use std::{io::Read, str::FromStr};
 
+use itertools::Itertools;
 use log::debug;
 
 use crate::{
@@ -12,18 +13,9 @@ use self::d3dfile::D3DBuffer;
 mod attributes;
 mod d3dfile;
 mod indexbuffer;
-mod outputs;
+pub mod outputs;
 
-pub fn convert<S: AsRef<str>>(
-    path: S,
-    output: Option<String>,
-    pretty_print: bool,
-    buffer_as_base64: bool,
-    _detach_index_buffer: bool,
-) -> std::result::Result<(), ParseD3dMeshError> {
-    let mut bar = progress::Bar::new();
-    bar.set_job_title("Parsing...");
-
+pub fn parse_d3dmesh<S: AsRef<str>>(path: S) -> Result<D3DFile, &'static str> {
     let mut d3dfile = D3DFile::new();
 
     let mut f = std::fs::File::open(path.as_ref()).unwrap();
@@ -36,7 +28,7 @@ pub fn convert<S: AsRef<str>>(
     let mut input = NomSlice::new(bytes.as_slice());
 
     if !input.read_ertm_magic_number() {
-        panic!("ERTM not found")
+        return Err("ERTM not found")
     }
 
     let param_count = input.parse_le_u32("?");
@@ -75,7 +67,7 @@ pub fn convert<S: AsRef<str>>(
 
     for i in 0..qty_meshes {
         debug!("Mesh: {}", i);
-        bar.reach_percent(25);
+        
         let mut mesh = D3DMesh::new();
 
         input.qty = 0;
@@ -86,7 +78,7 @@ pub fn convert<S: AsRef<str>>(
         let _ = input.parse_le_u64("?");
 
         let _ = input.parse_le_u32("?");
-        let _ = input.parse_le_u32("?");
+        mesh.bone_pallete = input.parse_le_u32("Bone Pallete") as usize;
         let _ = input.parse_le_u32("?");
 
         mesh.vertices[0] = input.parse_le_u32("Vertex Start") as usize;
@@ -178,7 +170,13 @@ pub fn convert<S: AsRef<str>>(
     }
 
     for _ in 0..3 {
-        let _ = attributes::read_att2(&mut input);
+        let prop = attributes::read_att2(&mut input);
+        match prop {
+            attributes::Attribute::BonePallete(pallete) => {
+                d3dfile.palletes.extend(pallete)
+            },
+            _ => {}
+        }
     }
 
     let _ = input.parse_n_bytes(1);
@@ -199,8 +197,6 @@ pub fn convert<S: AsRef<str>>(
     let _ = input.parse_n_bytes(1);
 
     // Buffers
-
-    bar.reach_percent(50);
 
     let _ = input.parse_le_u32("?");
     let qty_indices = input.parse_le_u32("IB Qty Indices");
@@ -249,10 +245,33 @@ pub fn convert<S: AsRef<str>>(
     // Read buffers
 
     while input.slice.len() != 0 {
-        bar.reach_percent(75);
         let buffer = parse_d3dmesh_buffer(&mut input);
         d3dfile.buffers.push(buffer);
     }
+
+    Ok(d3dfile)
+}
+
+pub fn convert<S: AsRef<str>>(
+    path: S,
+    output: Option<String>,
+    pretty_print: bool,
+    buffer_as_base64: bool,
+    _detach_index_buffer: bool,
+) -> std::result::Result<(), ParseD3dMeshError> {
+    let mut bar = progress::Bar::new();
+    bar.set_job_title("Parsing...");
+
+    let d3dfile = parse_d3dmesh(path).unwrap();
+
+    // let b4 = d3dfile.buffers.iter().find(|x| x.r#type == "bone_weigth?").unwrap();
+    // let b5 = d3dfile.buffers.iter().find(|x| x.r#type == "5").unwrap();
+
+    // let w = b4.as_f32();
+    // let i  = b5.as_u32();
+    // for (w, i) in w.iter().zip(i.iter()) {
+    //     println!("{} {}", *w, *i);
+    // }
 
     bar.reach_percent(100);
     let mut bar = progress::Bar::new();
@@ -292,12 +311,41 @@ fn parse_d3dmesh_buffer(input: &mut NomSlice) -> D3DBuffer {
     let stride = input.parse_le_u32("Buffer Stride");
     let t = input.parse_le_u32("Buffer Type");
     let _ = input.parse_le_u32("?");
-    let data = input.parse_f32_slice(((stride * qty) / 4) as usize);
+    let data = match t {
+        4 => {
+            use itertools::*;
+            let data = input.parse_f32_slice(((stride * qty) / 4) as usize);
+            let mut newdata = vec![];
+            for chunk in &data.iter().chunks(3) {
+                let chunk = chunk.collect::<Vec<_>>();
+                newdata.extend([*chunk[0], *chunk[1], *chunk[2], 0.0]);
+            }
+            D3DBufferData::F32(newdata)
+        }
+        5 => {
+            let data = input.parse_u32_slice(((stride * qty) / 4) as usize);
+            let mut newdata = vec![];
+            for v in data {
+                let a = (v & 0x000000FF) >> 0;
+                let b = (v & 0x0000FF00) >> 8;
+                let c = (v & 0x00FF0000) >> 16;
+                let d = (v & 0xFF000000) >> 24;
+                // println!("{} - {} {} {} {}", v, a, b, c, d);
+                newdata.extend(&[a as u8, b as u8, c as u8, 0u8]);
+            }
+            D3DBufferData::U8(newdata)
+        }
+        _ => {
+            let data = input.parse_f32_slice(((stride * qty) / 4) as usize);
+            D3DBufferData::F32(data.to_vec())
+        }
+    };
 
     let t = match t {
         1 => "position".to_string(),
         2 => "normal".to_string(),
-        4 => "bone_weigth?".to_string(),
+        4 => "bone_weigth".to_string(),
+        5 => "bone_idx".to_string(),
         _ => format!("{}", t),
     };
 
@@ -305,6 +353,6 @@ fn parse_d3dmesh_buffer(input: &mut NomSlice) -> D3DBuffer {
         r#type: t,
         qty,
         stride,
-        data: D3DBufferData::F32(data.to_vec()),
+        data,
     }
 }

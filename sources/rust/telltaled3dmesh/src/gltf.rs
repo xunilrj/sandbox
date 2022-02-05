@@ -51,7 +51,6 @@ pub fn push_sampler(anim: &mut JsonValue, sampler: JsonValue) -> usize {
     anim["samplers"].len() - 1
 }
 
-
 pub fn push_channel(anim: &mut JsonValue, channels: JsonValue) -> usize {
     if !anim["channels"].is_array() {
         anim["channels"] = json::array![];
@@ -59,4 +58,13 @@ pub fn push_channel(anim: &mut JsonValue, channels: JsonValue) -> usize {
 
     let _ = anim["channels"].push(channels);
     anim["channels"].len() - 1
+}
+
+pub fn push_mesh(gltf: &mut JsonValue, mesh: JsonValue) -> usize {
+    if !gltf["meshes"].is_array() {
+        gltf["meshes"] = json::array![];
+    }
+
+    let _ = gltf["meshes"].push(mesh);
+    gltf["meshes"].len() - 1
 }

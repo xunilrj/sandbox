@@ -410,6 +410,7 @@ async function printAnm(anm) {
     let i = 0;
     const breakpoints = {
         ["ReadFile"]: async (api) => {
+            await print("------------------------------------------------------------");
             await print(api);
             await goUntilReturn();
             const buffer = await readArray("u8", api.args.nNumberOfBytesToRead, api.args.lpBuffer);
@@ -427,6 +428,10 @@ async function printAnm(anm) {
             }
 
             i += 1;
+
+            const str = await getCurrentInstructionString();
+            await print(str);
+            await trace(200, [])
         },
         // Read the 7 values inside buffer
         // [0x6c5f40]: async (api, ctx) => {
@@ -441,11 +446,23 @@ async function printAnm(anm) {
         //     await print("------------------------------------------------------------")
         //     await trace(10000, [])
         // },
+        // [0x6c545f]: async (api, ctx) => {
+        //     const str = await getCurrentInstructionString();
+        //     await print("------------------------------------------------------------")
+        //     await print(str);
+        //     await trace(4, [])
+        // },
         //0x6c65f0
         //0x4a33c0
         //0x5be530 
         // [0x5be530]: async () => {
         //     await print_who_called_me();
+        // }
+        // [0x5edf30]: async (api, ctx) => {
+        //     const str = await getCurrentInstructionString();
+        //     await print("------------------------------------------------------------")
+        //     await print(str);
+        //     await trace(1000, [])
         // }
     }
 
@@ -509,7 +526,8 @@ async function main() {
     //await printAllCallsTo(["CreateFileA", "FindFirstFileA"]);
     //await printAllReadFile("sk20_move_guybrushwalkdeterminedship.anm");
     
-    await printAnm("sk20_move_guybrushwalkdeterminedship.anm");
+    // await printAnm("sk20_move_guybrushwalkdeterminedship.anm");
+    await printAnm("sk20_guybrush.d3dmesh");
 
 
     // let anm = "sk20_move_guybrushwalkdeterminedship.anm";
