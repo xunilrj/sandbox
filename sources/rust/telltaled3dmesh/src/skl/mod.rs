@@ -1,6 +1,11 @@
 pub mod gltf;
 
-use std::{io::Read, path::PathBuf, str::FromStr, collections::vec_deque};
+use std::{
+    collections::vec_deque,
+    io::Read,
+    path::{Path, PathBuf},
+    str::FromStr,
+};
 
 use itertools::Itertools;
 
@@ -17,7 +22,7 @@ pub struct Bone {
     pub(crate) basis: glam::Mat4,
     pub(crate) global_matrix: glam::Mat4,
     pub(crate) local_matrix: glam::Mat4,
-    pub(crate) inverse_bind_pose: glam::Mat4
+    pub(crate) inverse_bind_pose: glam::Mat4,
 }
 
 #[derive(Debug)]
@@ -30,13 +35,16 @@ impl SklFile {
         Self { bones: Vec::new() }
     }
 
-    pub fn calculate_inverse_bind_pose(&mut self) {
+    pub fn calculate_inverse_bind_pose(&mut self) {}
 
+    pub fn bone_position(&self, bid: u64) -> Option<usize> {
+        self.bones.iter().position(|x| x.start == bid)
     }
 }
 
-pub fn parse_skl<P: AsRef<str>>(path: P) -> SklFile {
-    let mut f = std::fs::File::open(path.as_ref()).unwrap();
+pub fn parse_skl<P: AsRef<Path>>(path: P) -> SklFile {
+    let path = path.as_ref().to_str().unwrap();
+    let mut f = std::fs::File::open(path).unwrap();
     let bytes = {
         let mut bytes = vec![];
         f.read_to_end(&mut bytes).unwrap();
@@ -100,14 +108,18 @@ pub fn parse_skl<P: AsRef<str>>(path: P) -> SklFile {
         let bone = Bone {
             start: ends[0],
             end: ends[1],
-            parent: if parent == 4294967295 { None } else { Some(parent) },
+            parent: if parent == 4294967295 {
+                None
+            } else {
+                Some(parent)
+            },
             children: Vec::new(),
             translation,
             rotation,
             basis,
             global_matrix,
             local_matrix,
-            inverse_bind_pose
+            inverse_bind_pose,
         };
         skl.bones.push(bone);
         if parent != (u32::MAX as usize) {
@@ -115,12 +127,17 @@ pub fn parse_skl<P: AsRef<str>>(path: P) -> SklFile {
         }
     }
 
-    let (root, _) = skl.bones.iter().find_position(|x| x.parent.is_none()).unwrap();
+    let (root, _) = skl
+        .bones
+        .iter()
+        .find_position(|x| x.parent.is_none())
+        .unwrap();
     let mut q = std::collections::VecDeque::from([root]);
     while let Some(idx) = q.pop_front() {
         let bone = &skl.bones[idx];
 
-        let parent_global = bone.parent
+        let parent_global = bone
+            .parent
             .map(|p| skl.bones[p].global_matrix)
             .unwrap_or(glam::Mat4::IDENTITY);
 

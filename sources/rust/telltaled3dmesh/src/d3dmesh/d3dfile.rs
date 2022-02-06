@@ -23,6 +23,13 @@ impl D3DBuffer {
         }
     }
 
+    pub fn as_u8_mut(&mut self) -> &mut Vec<u8> {
+        match &mut self.data {
+            D3DBufferData::U8(v) => v,
+            _ => panic!(),
+        }
+    }
+
     pub fn as_u16(&self) -> &Vec<u16> {
         match &self.data {
             D3DBufferData::U16(v) => v,
@@ -135,7 +142,7 @@ impl D3DMesh {
 }
 
 pub struct BonePallete {
-    pub bones: Vec<usize>
+    pub bones: Vec<usize>,
 }
 
 pub struct D3DFile {
@@ -143,7 +150,7 @@ pub struct D3DFile {
     pub bbox: D3DBoundingBox,
     pub meshes: Vec<D3DMesh>,
     pub buffers: Vec<D3DBuffer>,
-    pub palletes: Vec<BonePallete>
+    pub palletes: Vec<BonePallete>,
 }
 
 impl D3DFile {
@@ -153,15 +160,11 @@ impl D3DFile {
             meshes: Vec::with_capacity(10),
             buffers: Vec::with_capacity(10),
             bbox: D3DBoundingBox::default(),
-            palletes: vec![]
+            palletes: vec![],
         }
     }
-    
+
     pub fn get_buffer(&self, name: &str) -> &D3DBuffer {
-        self.buffers
-            .iter()
-            .find(|x| x.r#type == name)
-            .unwrap()
+        self.buffers.iter().find(|x| x.r#type == name).unwrap()
     }
 }
-

@@ -1,4 +1,4 @@
-use std::{io::Read, str::FromStr};
+use std::{io::Read, path::Path, str::FromStr};
 
 use itertools::Itertools;
 use log::debug;
@@ -15,10 +15,14 @@ mod d3dfile;
 mod indexbuffer;
 pub mod outputs;
 
-pub fn parse_d3dmesh<S: AsRef<str>>(path: S) -> Result<D3DFile, &'static str> {
+pub fn parse_d3dmesh<S: AsRef<Path>>(
+    path: S,
+    skl: Option<&crate::skl::SklFile>,
+) -> Result<D3DFile, &'static str> {
+    let path = path.as_ref().to_str().unwrap();
     let mut d3dfile = D3DFile::new();
 
-    let mut f = std::fs::File::open(path.as_ref()).unwrap();
+    let mut f = std::fs::File::open(path).unwrap();
     let bytes = {
         let mut bytes = vec![];
         f.read_to_end(&mut bytes).unwrap();
@@ -28,7 +32,7 @@ pub fn parse_d3dmesh<S: AsRef<str>>(path: S) -> Result<D3DFile, &'static str> {
     let mut input = NomSlice::new(bytes.as_slice());
 
     if !input.read_ertm_magic_number() {
-        return Err("ERTM not found")
+        return Err("ERTM not found");
     }
 
     let param_count = input.parse_le_u32("?");
@@ -67,7 +71,7 @@ pub fn parse_d3dmesh<S: AsRef<str>>(path: S) -> Result<D3DFile, &'static str> {
 
     for i in 0..qty_meshes {
         debug!("Mesh: {}", i);
-        
+
         let mut mesh = D3DMesh::new();
 
         input.qty = 0;
@@ -172,9 +176,7 @@ pub fn parse_d3dmesh<S: AsRef<str>>(path: S) -> Result<D3DFile, &'static str> {
     for _ in 0..3 {
         let prop = attributes::read_att2(&mut input);
         match prop {
-            attributes::Attribute::BonePallete(pallete) => {
-                d3dfile.palletes.extend(pallete)
-            },
+            attributes::Attribute::BonePallete(pallete) => d3dfile.palletes.extend(pallete),
             _ => {}
         }
     }
@@ -245,14 +247,43 @@ pub fn parse_d3dmesh<S: AsRef<str>>(path: S) -> Result<D3DFile, &'static str> {
     // Read buffers
 
     while input.slice.len() != 0 {
-        let buffer = parse_d3dmesh_buffer(&mut input);
+        let mut buffer = parse_d3dmesh_buffer(&mut input);
+
+        if buffer.r#type == "bone_idx" {
+            if let Some(skl) = skl {
+                let mut bone_indices = buffer.as_u8_mut();
+
+                let indices = d3dfile.get_buffer("index");
+                let indices = indices.as_u16();
+                for m in d3dfile.meshes.iter() {
+                    let start = m.index_start;
+                    let end = start + (m.tri_count * 3);
+                    for fi in start..end {
+                        let vertex_index = indices[fi] as usize;
+                        fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 0], skl);
+                        fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 1], skl);
+                        fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 2], skl);
+                        fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 3], skl);
+                    }
+                }
+            }
+        }
+
         d3dfile.buffers.push(buffer);
     }
 
     Ok(d3dfile)
 }
 
-pub fn convert<S: AsRef<str>>(
+fn fix_bone_index(d3dfile: &D3DFile, m: &D3DMesh, bone_index: &mut u8, skl: &crate::skl::SklFile) {
+    let pallete = &d3dfile.palletes[m.bone_pallete];
+    if let Some(bone) = pallete.bones.get(*bone_index as usize) {
+        let bone = skl.bone_position(*bone as u64).unwrap();
+        *bone_index = bone as u8;
+    }
+}
+
+pub fn convert<S: AsRef<Path>>(
     path: S,
     output: Option<String>,
     pretty_print: bool,
@@ -262,7 +293,8 @@ pub fn convert<S: AsRef<str>>(
     let mut bar = progress::Bar::new();
     bar.set_job_title("Parsing...");
 
-    let d3dfile = parse_d3dmesh(path).unwrap();
+    let path = path.as_ref();
+    let d3dfile = parse_d3dmesh(path, None).unwrap();
 
     // let b4 = d3dfile.buffers.iter().find(|x| x.r#type == "bone_weigth?").unwrap();
     // let b5 = d3dfile.buffers.iter().find(|x| x.r#type == "5").unwrap();
@@ -323,14 +355,13 @@ fn parse_d3dmesh_buffer(input: &mut NomSlice) -> D3DBuffer {
             D3DBufferData::F32(newdata)
         }
         5 => {
-            let data = input.parse_u32_slice(((stride * qty) / 4) as usize);
+            let data = input.parse_u32_slice(qty as usize);
             let mut newdata = vec![];
             for v in data {
-                let a = (v & 0x000000FF) >> 0;
-                let b = (v & 0x0000FF00) >> 8;
-                let c = (v & 0x00FF0000) >> 16;
-                let d = (v & 0xFF000000) >> 24;
-                // println!("{} - {} {} {} {}", v, a, b, c, d);
+                let a = (v & 0x000000FF) >> 0 >> 2;
+                let b = (v & 0x0000FF00) >> 8 >> 2;
+                let c = (v & 0x00FF0000) >> 16 >> 2;
+                let d = (v & 0xFF000000) >> 24 >> 2;
                 newdata.extend(&[a as u8, b as u8, c as u8, 0u8]);
             }
             D3DBufferData::U8(newdata)
