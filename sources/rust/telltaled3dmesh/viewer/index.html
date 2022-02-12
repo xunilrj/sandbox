@@ -225,9 +225,10 @@
             const loader = new GLTFLoader();
             loader.load('models/result.gltf', function (gltf) {
                 model = gltf.scene;
+                scene.add(model);
+
                 gltf.scene.traverse(function (object) {
                     if (object.isMesh) {
-                        scene.add(object);
                         object.castShadow = true;
                         object.material = new THREE.MeshPhongMaterial({
                             color: 0xFF0000,
@@ -250,14 +251,13 @@
 
                 //
 
-                mixer = new THREE.AnimationMixer(model);
-                const animations = gltf.animations;
-
                 actions = [];
-                for (let anim of animations) {
-                    // THREE.AnimationUtils.makeClipAdditive(anim);
-                    actions.push(mixer.clipAction(anim));
-                }
+                model = gltf.scene;
+                mixer = new THREE.AnimationMixer(model);
+                gltf.animations.forEach((clip) => {
+                    const action = mixer.clipAction(clip);
+                    actions.push(action);
+                });
 
                 activateAllActions();
                 animate();
@@ -331,12 +331,14 @@
         }
 
         function deactivateAllActions() {
+            console.log("deactivateAllActions");
             actions.forEach(function (action) {
                 action.stop();
             });
         }
 
         function activateAllActions() {
+            console.log("activateAllActions");
             actions.forEach(function (action) {
                 setWeight(action, 1);
                 action.play();
@@ -348,7 +350,7 @@
                 singleStepMode = false;
                 unPauseAllActions();
             } else {
-                if (idleAction.paused) {
+                if (idleAction && idleAction.paused) {
                     unPauseAllActions();
                 } else {
                     pauseAllActions();

@@ -149,7 +149,7 @@ impl Constructable for TypeCheckerTypes {
     type Type = FinalTypes;
 
     fn construct(&self, children: &[Self::Type]) -> Result<Self::Type, Self::Err> {
-        trace!(target: "<Variant as Constructable>::construct" ,"{:?} {:?}", self, children);        
+        trace!(target: "<TypeCheckerTypes as Constructable>::construct" ,"{:?} {:?}", self, children);        
         use TypeCheckerTypes::*;
         match self {
             Any => Ok(FinalTypes::Any),
@@ -165,7 +165,7 @@ If we run now (remembering of commenting the ```impose```), we have:
 > cargo run
     Finished dev [unoptimized + debuginfo] target(s) in 1.72s
     Running `target\debug\typechecker.exe`
- TRACE <Variant as Constructable>::construct > Integer(5) []
+ TRACE <TypeCheckerTypes as Constructable>::construct > Integer(5) []
 [src\main.rs:91] r = Ok(
     {
         TcKey {
@@ -177,4 +177,298 @@ If we run now (remembering of commenting the ```impose```), we have:
 
 Much better! ```Ok``` and ```Any```.
 
-# Understanding the set of possible sets
+## How rusttyc deal with types
+
+The type checker is flexible in the set of types it can work on. Actually it knows nothing about this set. It only knows that these types can have some standard relation ships. It is up to us to define not only these relationships, but the types themselves.
+
+To define this, we create a simple enum:
+
+```rust
+#[derive(Debug, Clone, Copy, PartialOrd, PartialEq, Ord, Eq, Hash)]
+enum TypeCheckerTypes {
+    Any,
+    Fixed(u8, u8),
+    Integer(u8),
+    Numeric,
+    Bool,
+}
+```
+
+It really does not matter what you put here, it is up to you and whatever you are modelling. The important part is that this enum must implement ```Variant```.
+
+```rust
+impl Variant for TypeCheckerTypes {
+    ...
+}
+```
+
+First we need to define what is the most abstract possible type. In our case this is easy: ```TypeCheckerTypes```. 
+
+```rust
+impl Variant for TypeCheckerTypes {
+    ...
+    fn top() -> Self {
+        Self::Any
+    }
+    ...
+}
+```
+
+The season why the method is called ```top```and not ```get_most_abstract_variant``` is because of the algorithm used to solve all the constraints, which we can try to dive into later.
+
+If we log when this method is called...
+
+```rust
+impl Variant for TypeCheckerTypes {
+    ...
+    fn top() -> Self {
+        trace!(target: "<TypeCheckerTypes as Variant>::top", "");
+        Self::Any
+    }
+    ...
+}
+```
+
+we get
+
+```rust
+> cargo run
+    Finished dev [unoptimized + debuginfo] target(s) in 0.90s
+    Running `target\debug\typechecker.exe`
+ TRACE <TypeCheckerTypes as Variant>::top > 
+ TRACE <TypeCheckerTypes as Constructable>::construct > Integer(5) []
+[src\main.rs:89] r = Ok(
+    {
+        TcKey {
+            ix: 0,
+        }: Int128,
+    },
+)
+```
+
+Which makes sense. First the type checker calls ```Variant::top``` to initialize all variables and at the end it tell us its conclusions and it asks us to convert from ```TypeCheckerTypes``` to our final type ```FinalTypes```. Whice is simply an enum will all possible types that we want to see at the end. For example
+
+```rust
+#[derive(Debug, Clone, Copy, PartialOrd, PartialEq, Ord, Eq, Hash)]
+enum FinalTypes {
+    Any,
+    Int128,
+    FixedPointI64F64,
+    Bool,
+}
+```
+
+If our language support parametrized types, we could have them here. What is important is that the bridge between these types is also define by us at the ```Constructable``` trait. Now we can understand its complete implementation.
+
+```rust
+impl Constructable for TypeCheckerTypes {
+    type Type = FinalTypes;
+
+    fn construct(&self, children: &[Self::Type]) -> Result<Self::Type, Self::Err> {
+        trace!(target: "<TypeCheckerTypes as Constructable>::construct" ,"{:?} {:?}", self, children);
+        use TypeCheckerTypes::*;
+        match self {
+            Any => Ok(FinalTypes::Any),
+            Integer(w) if *w <= 128 => Ok(FinalTypes::Int128),
+            Integer(w) => Err(format!("Integer too wide, {}-bit not supported.", w)),
+            Fixed(i, f) if *i <= 64 && *f <= 64 => Ok(FinalTypes::FixedPointI64F64),
+            Fixed(i, f) => Err(format!("Fixed point number too wide, I{}F{} not supported.", i, f)),
+            Numeric => {
+                Err("Cannot reify a numeric value. Either define a default (int/fixed) or restrict type.".to_string())
+            }
+            Bool => Ok(FinalTypes::Bool),
+        }
+    }
+}
+```
+
+## What happens when we impose a type
+
+This is all fine and good. But we saw at the beggining that we need to impose something into the type checker to allow it to reify our ```variable_a``` into something more concrete than ```Any```.
+
+Given that the type checker does not know the set of all possible types. And it does not know its relationships. Would be impossible for it to know if ```Integer(5)``` is "better" than ```Any```. Even if it is "better" than ```Integet(4)``` or ```Integer(6)```.
+
+Actually, all this is opaque to it. We have to help it somehow.
+
+This help come from the implementation of ```Variant::meet```. This method receives two parameters, that we can understand better by tracing them.
+
+```rust
+impl Variant for TypeCheckerTypes {
+    ...
+    fn meet(lhs: Partial<Self>, rhs: Partial<Self>) -> Result<Partial<Self>, Self::Err> {
+        trace!(target: "<TypeCheckerTypes as Variant>::meet", "{:?} {:?}", &lhs, &rhs);
+        ...
+    }
+    ...
+}
+```
+
+If we run now we get:
+
+```
+> cargo run
+    Finished dev [unoptimized + debuginfo] target(s) in 1.03s
+    Running `target\debug\typechecker.exe`
+ TRACE <TypeCheckerTypes as Variant>::top > 
+ TRACE <TypeCheckerTypes as Variant>::meet > Partial { variant: Any, least_arity: 0 } Partial { variant: Integer(5), least_arity: 0 }
+ TRACE <TypeCheckerTypes as Constructable>::construct > Integer(5) []
+[src\main.rs:89] r = Ok(
+    {
+        TcKey {
+            ix: 0,
+        }: Int128,
+    },
+)
+```
+
+First thing to notice is that ```Variant::meet``` is called after ```Variant::top``` and before ```Constructable::construct```. Second is that the ```lhs``` parameter has a variant ```Any``` and ```rhs``` parameter has a value of ```Integer(5)```. The initial value and the imposed value of ```variable_a```. No coincidences here, of course.
+
+The type checker found a "impose rule" and is calling ```Variant::meet``` to try to satisfy this rule. Is this particular case the implementation is quite easy, because we can transition from ```Any``` to any other type.
+
+```rust
+impl Variant for TypeCheckerTypes {
+    ...
+    fn meet(lhs: Partial<Self>, rhs: Partial<Self>) -> Result<Partial<Self>, Self::Err> {
+        trace!(target: "<TypeCheckerTypes as Variant>::meet", "{:?} {:?}", &lhs, &rhs);
+        use TypeCheckerTypes::*;
+        let variant = match (lhs.variant, rhs.variant) {
+            (Any, other) | (other, Any) => Ok(other),
+            ...
+        }?;
+        Ok(Partial {
+            variant,
+            least_arity: 0,
+        })
+    }
+}
+```
+
+Important to realise that this method returns ```Result<...>```. It can fail. This means that if we find a contradiction, the type checker will signal this to us. And it does this in two possible ways.
+
+Fist when we call ```TypeChecker::type_check(...)```. This methods returns a ```Result<...>``` and two interesting variants of the ```Err``` side are: ```KeyEquation``` and ```Bound```.
+
+This second one is very easy to get. We just need to impose two contradictory rules, for example.
+
+```rust
+fn main() {
+    pretty_env_logger::init();
+
+    let mut system: VarlessTypeChecker<TypeCheckerTypes> = TypeChecker::without_vars();
+
+    let variable_a = system.new_term_key();
+
+    let rule1 = variable_a.concretizes_explicit(TypeCheckerTypes::Bool);
+    dbg!(system.impose(rule1));
+
+    let rule2 = variable_a.concretizes_explicit(TypeCheckerTypes::Integer(5));
+    dbg!(system.impose(rule2));
+}
+```
+
+We not even need to call the ```type_check``` method, because in this case the type checker will realise as soon as we impose the contradiction, tha something is fishy.
+
+```
+> cargo run
+    Finished dev [unoptimized + debuginfo] target(s) in 0.98s
+    Running `target\debug\typechecker.exe`
+ TRACE <TypeCheckerTypes as Variant>::top > 
+ TRACE <TypeCheckerTypes as Variant>::meet > Partial { variant: Any, least_arity: 0 } Partial { variant: Bool, least_arity: 0 }
+ TRACE typechecker                         > Ok(())
+ TRACE <TypeCheckerTypes as Variant>::meet > Partial { variant: Bool, least_arity: 0 } Partial { variant: Integer(5), least_arity: 0 }
+ TRACE typechecker                         > Err(Bound(TcKey { ix: 0 }, None, "bool can only be combined with bool"))
+ ```
+
+The last line is the interesting one, and it come from our code. In the ```Variant::meet``` method we say that we can't "meet" integer and booleans.
+
+```rust
+impl Variant for TypeCheckerTypes {
+    ...
+    fn meet(lhs: Partial<Self>, rhs: Partial<Self>) -> Result<Partial<Self>, Self::Err> {
+        trace!(target: "<TypeCheckerTypes as Variant>::meet", "{:?} {:?}", &lhs, &rhs);
+        use TypeCheckerTypes::*;
+        let variant = match (lhs.variant, rhs.variant) {
+            (Any, other) | (other, Any) => Ok(other),
+            ...
+            (Bool, Bool) => Ok(Bool),
+            (Bool, _) | (_, Bool) => Err("bool can only be combined with bool"),
+            ...
+        }?;
+        Ok(Partial {
+            variant,
+            least_arity: 0,
+        })
+    }
+    ...
+}
+```
+
+A second possibility is when we introduce two variables; we say that ```variable_a``` is ```Bool```; ```variable_b``` is ```Integer(5)```.
+
+
+```rust
+fn main() {
+    pretty_env_logger::init();
+
+    let mut system: VarlessTypeChecker<TypeCheckerTypes> = TypeChecker::without_vars();
+
+    let variable_a = system.new_term_key();
+    let rule1 = variable_a.concretizes_explicit(TypeCheckerTypes::Bool);
+    trace!("{:?}", system.impose(rule1));
+
+    let variable_b = system.new_term_key();
+    let rule2 = variable_b.concretizes_explicit(TypeCheckerTypes::Integer(5));
+    trace!("{:?}", system.impose(rule2));
+
+    let rule3 = variable_a.concretizes(variable_b);
+    trace!("{:?}", system.impose(rule3));
+
+    let r = system.type_check();
+    dbg!(r);
+}
+```
+
+It is interesting to realize that imposing ```rule3``` is ok. The type checker will see not immediate contradiction. It will only be realized in the ```type_check``` method.
+
+```
+> cargo run
+    Finished dev [unoptimized + debuginfo] target(s) in 0.90s
+    Running `target\debug\typechecker.exe`
+ TRACE <TypeCheckerTypes as Variant>::top >
+ TRACE <TypeCheckerTypes as Variant>::meet > Partial { variant: Any, least_arity: 0 } Partial { variant: Bool, least_arity: 0 }
+ TRACE typechecker                         > Ok(())
+ TRACE <TypeCheckerTypes as Variant>::top  >
+ TRACE <TypeCheckerTypes as Variant>::meet > Partial { variant: Any, least_arity: 0 } Partial { variant: Integer(5), least_arity: 0 }
+ TRACE typechecker                         > Ok(())
+ TRACE typechecker                         > Ok(())
+TypeChecker::type_check
+ TRACE <TypeCheckerTypes as Variant>::meet > Partial { variant: Bool, least_arity: 0 } Partial { variant: Integer(5), least_arity: 0 }
+[src\main.rs:96] r = Err(
+    Bound(
+        TcKey {
+            ix: 0,
+        },
+        Some(
+            TcKey {
+                ix: 1,
+            },
+        ),
+        "bool can only be combined with bool",
+    ),
+)
+```
+
+Which is telling me that it failed bounding ```variable_a``` (index 0) and ```variable_b``` (index 1).
+
+This is interesting, because this is the kind of bind rule that can happen in code like 
+
+```
+variable_a = true
+variable_b = 123
+if something { variable_a } else { variable_b }
+```
+
+We can now generate a nice error stating that each branch of the "if" needs to return compatible types.
+
+# Theory
+
+https://www.youtube.com/playlist?list=PL5rqYzyihIQ0nzfnsEKxxedCpbNQoifgg

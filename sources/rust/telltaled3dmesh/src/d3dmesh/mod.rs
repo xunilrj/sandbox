@@ -81,9 +81,9 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
         let _ = input.parse_le_u32("?");
         let _ = input.parse_le_u64("?");
 
-        let _ = input.parse_le_u32("?");
-        mesh.bone_pallete = input.parse_le_u32("Bone Pallete") as usize;
-        let _ = input.parse_le_u32("?");
+        mesh.bone_pallete = input.parse_le_u32("Bone Pallete1") as usize;
+        let _ = input.parse_le_u32("Bone Pallete2") as usize;
+        let _ = input.parse_le_u32("Bone Pallete3") as usize;
 
         mesh.vertices[0] = input.parse_le_u32("Vertex Start") as usize;
         mesh.vertices[1] = input.parse_le_u32("Vertex End") as usize;
@@ -263,7 +263,7 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
                         fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 0], skl);
                         fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 1], skl);
                         fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 2], skl);
-                        fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 3], skl);
+                        // fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 3], skl);
                     }
                 }
             }
