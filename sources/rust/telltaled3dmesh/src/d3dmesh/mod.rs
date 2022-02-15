@@ -81,8 +81,8 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
         let _ = input.parse_le_u32("?");
         let _ = input.parse_le_u64("?");
 
-        mesh.bone_pallete = input.parse_le_u32("Bone Pallete1") as usize;
-        let _ = input.parse_le_u32("Bone Pallete2") as usize;
+        let _ = input.parse_le_u32("Bone Pallete1") as usize;
+        mesh.bone_pallete = input.parse_le_u32("Bone Pallete2") as usize;
         let _ = input.parse_le_u32("Bone Pallete3") as usize;
 
         mesh.vertices[0] = input.parse_le_u32("Vertex Start") as usize;
@@ -252,20 +252,75 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
         if buffer.r#type == "bone_idx" {
             if let Some(skl) = skl {
                 let mut bone_indices = buffer.as_u8_mut();
+                let mut new_bone_indices = vec![0u8; bone_indices.len()];
 
                 let indices = d3dfile.get_buffer("index");
                 let indices = indices.as_u16();
                 for m in d3dfile.meshes.iter() {
+                    let pallete = &d3dfile.palletes[m.bone_pallete];
                     let start = m.index_start;
                     let end = start + (m.tri_count * 3);
                     for fi in start..end {
                         let vertex_index = indices[fi] as usize;
-                        fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 0], skl);
-                        fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 1], skl);
-                        fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 2], skl);
-                        // fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 3], skl);
+                        let a = bone_indices[vertex_index * 4 + 0];
+                        let b = bone_indices[vertex_index * 4 + 1];
+                        let c = bone_indices[vertex_index * 4 + 2];
+
+                        println!(
+                            "index={} vi={} bone_indices=[{},{},{}] [{:?},{:?},{:?}]",
+                            fi,
+                            vertex_index,
+                            a,
+                            b,
+                            c,
+                            pallete
+                                .bones
+                                .get(a as usize)
+                                .and_then(|i| skl.bone_position(*i as u64)),
+                            pallete
+                                .bones
+                                .get(b as usize)
+                                .and_then(|i| skl.bone_position(*i as u64)),
+                            pallete
+                                .bones
+                                .get(c as usize)
+                                .and_then(|i| skl.bone_position(*i as u64))
+                        );
+
+                        new_bone_indices[vertex_index * 4 + 0] = pallete
+                            .bones
+                            .get(a as usize)
+                            .and_then(|i| skl.bone_position(*i as u64))
+                            .unwrap()
+                            as u8;
+
+                        new_bone_indices[vertex_index * 4 + 1] = pallete
+                            .bones
+                            .get(b as usize)
+                            .and_then(|i| skl.bone_position(*i as u64))
+                            .unwrap()
+                            as u8;
+
+                        new_bone_indices[vertex_index * 4 + 2] = pallete
+                            .bones
+                            .get(c as usize)
+                            .and_then(|i| skl.bone_position(*i as u64))
+                            .unwrap()
+                            as u8;
+
+                        // if a >= 18 || b >= 18 || c >= 18 {
+                        //     println!("Strange Bone: {} - {} {} {}", vertex_index, a, b, c);
+                        // } else {
+                        //     println!("Good Bone: {}", vertex_index);
+                        // }
+                        // fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 0], skl);
+                        // fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 1], skl);
+                        // fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 2], skl);
+                        // // fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 3], skl);
                     }
                 }
+
+                buffer.data = D3DBufferData::U8(new_bone_indices);
             }
         }
 
@@ -275,11 +330,18 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
     Ok(d3dfile)
 }
 
-fn fix_bone_index(d3dfile: &D3DFile, m: &D3DMesh, bone_index: &mut u8, skl: &crate::skl::SklFile) {
-    let pallete = &d3dfile.palletes[m.bone_pallete];
+fn fix_bone_index(
+    d3dfile: &D3DFile,
+    mesh: &D3DMesh,
+    bone_index: &mut u8,
+    skl: &crate::skl::SklFile,
+) {
+    let pallete = &d3dfile.palletes[mesh.bone_pallete];
     if let Some(bone) = pallete.bones.get(*bone_index as usize) {
         let bone = skl.bone_position(*bone as u64).unwrap();
         *bone_index = bone as u8;
+    } else {
+        println!("Bone mismatch: {}", *bone_index)
     }
 }
 
