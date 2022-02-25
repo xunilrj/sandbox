@@ -440,3 +440,7 @@ In the end, we have very safe use of the Vec.
 # Unit Tests
 
 // TODO
+
+# Interesting crates
+
+https://github.com/orlp/slotmap
