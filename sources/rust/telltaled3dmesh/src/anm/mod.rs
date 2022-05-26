@@ -1,32 +1,33 @@
 use std::{collections::HashMap, io::Read, path::Path};
 
 use bitvec::{order::Lsb0, slice::BitSlice};
+use log::trace;
 
 use crate::parser::{self, NomSlice};
 
 #[derive(Debug)]
 pub struct AnmFile {
-    bones: Vec<Bone>,
+    tracks: Vec<Track>,
 }
 
 impl AnmFile {
     pub fn new() -> Self {
-        Self { bones: vec![] }
+        Self { tracks: vec![] }
     }
 
-    pub fn push_animated_bone(&mut self, bone: AnimatedBone) {
-        self.bones.push(Bone::Animated(bone));
+    pub fn push_animated_track(&mut self, bone: AnimatedTrack) {
+        self.tracks.push(Track::Animated(bone));
     }
 }
 
 #[derive(Debug)]
-pub struct AnimatedBoneFrame {
+pub struct AnimatedTrackFrame {
     compressed: bool,
     rotation: [f64; 4],
     translation: [f64; 3],
 }
 
-impl AnimatedBoneFrame {
+impl AnimatedTrackFrame {
     pub fn translation_as_f32(&self) -> [f32; 3] {
         [
             self.translation[0] as f32,
@@ -46,34 +47,34 @@ impl AnimatedBoneFrame {
 }
 
 #[derive(Debug)]
-pub struct AnimatedBone {
-    id: u64,
-    frames: Vec<AnimatedBoneFrame>,
+pub struct AnimatedTrack {
+    bone_id: u64,
+    frames: Vec<AnimatedTrackFrame>,
 }
 
-impl AnimatedBone {
+impl AnimatedTrack {
     pub fn new() -> Self {
         Self {
-            id: 0,
+            bone_id: 0,
             frames: vec![],
         }
     }
 }
 
 #[derive(Debug)]
-pub enum Bone {
-    Animated(AnimatedBone),
+pub enum Track {
+    Animated(AnimatedTrack),
 }
 
-impl Bone {
-    pub fn as_animated(&self) -> &AnimatedBone {
+impl Track {
+    pub fn as_animated(&self) -> &AnimatedTrack {
         match &self {
-            Bone::Animated(bone) => &bone,
+            Track::Animated(bone) => &bone,
         }
     }
 }
 
-pub struct Buffer {
+pub struct TrackType {
     hash: u64,
     #[allow(dead_code)]
     a: u32,
@@ -96,16 +97,17 @@ fn skip_take_as_usize(bits: &BitSlice<Lsb0, u8>, skip: usize, take: usize) -> us
 }
 
 fn print_datapos(datapos: usize) {
-    println!(
-        "\tdatapos: {} - {}th byte - {}th dword",
-        datapos,
-        datapos / 8,
-        datapos / 32
-    );
+    // println!(
+    //     "\tdatapos: {} - {}th byte - {}th dword",
+    //     datapos,
+    //     datapos / 8,
+    //     datapos / 32
+    // );
 }
 
-pub fn convert<P: AsRef<Path>>(path: P) {
+pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
     let path = path.as_ref();
+    let filename = path.file_stem().unwrap().to_str().unwrap().to_string();
 
     let mut bar = progress::Bar::new();
     bar.set_job_title("Parsing...");
@@ -126,7 +128,7 @@ pub fn convert<P: AsRef<Path>>(path: P) {
     let mut anm = AnmFile::new();
 
     let header = input.read_properties();
-    println!("{:?}", header);
+    dbg!(header);
 
     let _ = input.parse_le_u32("?");
     let _ = input.parse_le_u32("?");
@@ -137,23 +139,32 @@ pub fn convert<P: AsRef<Path>>(path: P) {
 
     let _anim_length = input.parse_le_u32("animation length in bytes?");
 
-    let qty_values = input.parse_le_u32("qtd values") as usize;
+    let qty_tracks = input.parse_le_u32("qty of tracks") as usize;
     let _length = input.parse_le_u32("length?");
-    let qty_buffers = input.parse_le_u32("qty");
+    let qty_track_types = input.parse_le_u32("qty of track types");
 
-    let mut buffers = vec![];
-    for _ in 0..qty_buffers {
-        let hash = input.parse_le_u64("?");
+    let mut track_types = vec![];
+    for _ in 0..qty_track_types {
+        let hash = input.parse_le_u64_with_debug("track type hash", |hash| {
+            match hash {
+                0x1019453EB19C1ABD => "Keyframed track of quaternion",
+                0x5D3E9FC6FA9369BF => "Keyframed track of transform",
+                0xF6F394AF6E4003AD => "Keyframed track of vector3",
+                _ => "?",
+            }
+            .to_string()
+        });
+
         let hbytes = hash.to_le_bytes();
         let (hbytes, a) = parser::parse_le_u32(&hbytes[..]).unwrap();
         let (_, b) = parser::parse_le_u32(hbytes).unwrap();
-        println!("{} {}", a, b);
+        // println!("{} {}", a, b);
         let a = input.parse_le_u32("?");
-        let qty = input.parse_le_u16("?");
+        let qty = input.parse_le_u16("qty of tracks");
         let b = input.parse_le_u16("?");
 
-        let i = Buffer { hash, qty, a, b };
-        buffers.push(i);
+        let i = TrackType { hash, qty, a, b };
+        track_types.push(i);
     }
 
     let max_bounds = [
@@ -174,15 +185,15 @@ pub fn convert<P: AsRef<Path>>(path: P) {
         10.0,
     ];
 
-    let mut bones = vec![];
+    let mut tracks = vec![];
 
-    for buffer in buffers {
-        println!("buffer: {:?}", buffer.hash);
-        match buffer.hash {
+    for track_type in track_types {
+        // println!("buffer: {:?}", buffer.hash);
+        match track_type.hash {
             //CompressedTransformKeys
             0xFC6597EB1FE5458E => {
-                for _ in 0..buffer.qty {
-                    let mut bone = AnimatedBone::new();
+                for _ in 0..track_type.qty {
+                    let mut bone = AnimatedTrack::new();
 
                     let length = input.parse_n_bytes(1);
                     let length = if length[0] == 255 {
@@ -219,15 +230,15 @@ pub fn convert<P: AsRef<Path>>(path: P) {
                                 header.len() / 4,
                             )
                         };
-                        println!("{} {:?}", header32.len(), header32);
-                        println!(
-                            "Max Bounds: {:?} {} [{}]",
-                            bounds_sizes, max_bound, max_bounds_index
-                        );
-                        println!("Sample Count: {}", sample_count);
-                        println!("bits_per_sample: {}", bits_per_sample);
-                        println!("max_bounds_index: {}", max_bounds_index);
-                        println!("bits_per_bounds: {}", bits_per_bounds);
+                        // println!("{} {:?}", header32.len(), header32);
+                        // println!(
+                        //     "Max Bounds: {:?} {} [{}]",
+                        //     bounds_sizes, max_bound, max_bounds_index
+                        // );
+                        // println!("Sample Count: {}", sample_count);
+                        // println!("bits_per_sample: {}", bits_per_sample);
+                        // println!("max_bounds_index: {}", max_bounds_index);
+                        // println!("bits_per_bounds: {}", bits_per_bounds);
 
                         let mut samples = 0;
                         let mut datapos = 50;
@@ -237,8 +248,8 @@ pub fn convert<P: AsRef<Path>>(path: P) {
                                 break;
                             }
 
-                            println!("loop start: {}", samples);
-                            println!("\tdatapos: {}", datapos);
+                            // println!("loop start: {}", samples);
+                            // println!("\tdatapos: {}", datapos);
 
                             let mut bounds_bitsizes = vec![];
                             for i in 0..7 {
@@ -247,7 +258,7 @@ pub fn convert<P: AsRef<Path>>(path: P) {
                                 bounds_bitsizes.push(idx);
                             }
                             let bitsizessum = bounds_bitsizes.iter().sum::<usize>();
-                            println!("\tBounds Bit sizes: {:?} {}", bounds_bitsizes, bitsizessum);
+                            // println!("\tBounds Bit sizes: {:?} {}", bounds_bitsizes, bitsizessum);
 
                             print_datapos(datapos);
                             let qty_samples = skip_take_as_usize(bits, datapos, bits_per_sample);
@@ -255,15 +266,15 @@ pub fn convert<P: AsRef<Path>>(path: P) {
 
                             samples += qty_samples;
 
-                            println!("\tQty Sample: {:?}", qty_samples);
-                            println!("\tdatapos: {}", datapos);
+                            // println!("\tQty Sample: {:?}", qty_samples);
+                            // println!("\tdatapos: {}", datapos);
 
                             let mut upper_value = 0.0;
                             let mut lower_value = 0.0;
                             if bitsizessum != 0 {
                                 let b0 = skip_take_as_usize(bits, datapos, bits_per_bounds);
                                 datapos += bits_per_bounds;
-                                println!("\tSome Value: {}", b0);
+                                // println!("\tSome Value: {}", b0);
                                 if bits_per_bounds == 0 {
                                     upper_value = 2.0 * max_bound;
                                     lower_value = -max_bound;
@@ -271,18 +282,18 @@ pub fn convert<P: AsRef<Path>>(path: P) {
                                     let max = ((1 << bits_per_bounds) - 1);
                                     let new_b0 = b0 & max;
                                     let new_b0 = (new_b0 as f64) / (max as f64) * max_bound;
-                                    println!(
-                                        "\tSome Value: {} = {} / {} * {}",
-                                        new_b0, b0, max, max_bound
-                                    );
+                                    // println!(
+                                    //     "\tSome Value: {} = {} / {} * {}",
+                                    //     new_b0, b0, max, max_bound
+                                    // );
                                     upper_value = new_b0 * 2.0;
                                     lower_value = -new_b0;
-                                    println!("\t{} {}", upper_value, lower_value);
+                                    // println!("\t{} {}", upper_value, lower_value);
                                 }
                             }
 
                             for _ in 0..qty_samples {
-                                println!("\tdatapos: {}", datapos);
+                                // println!("\tdatapos: {}", datapos);
                                 let mut samples = vec![];
                                 let mut fsamples = vec![];
                                 for &size in &bounds_bitsizes {
@@ -299,16 +310,16 @@ pub fn convert<P: AsRef<Path>>(path: P) {
                                         let max = (1 << size) - 1;
                                         let v = v & max;
                                         let v = (v as f64) / (max as f64);
-                                        println!("\t{} * {} + {}", v, upper_value, lower_value);
+                                        // println!("\t{} * {} + {}", v, upper_value, lower_value);
                                         v * upper_value + lower_value
                                     };
 
                                     fsamples.push(v);
                                 }
-                                println!("\tSamples Values: {:?}", samples);
-                                println!("\tSamples Values: {:?}", fsamples);
+                                // println!("\tSamples Values: {:?}", samples);
+                                // println!("\tSamples Values: {:?}", fsamples);
 
-                                let frame = AnimatedBoneFrame {
+                                let frame = AnimatedTrackFrame {
                                     compressed: true,
                                     rotation: [fsamples[0], fsamples[1], fsamples[2], fsamples[3]],
                                     translation: [fsamples[4], fsamples[5], fsamples[6]],
@@ -317,19 +328,19 @@ pub fn convert<P: AsRef<Path>>(path: P) {
                                 bone.frames.push(frame);
                             }
 
-                            println!("\tdatapos: {}", datapos);
+                            // println!("\tdatapos: {}", datapos);
 
-                            println!("\tSamples: {}", samples);
+                            // println!("\tSamples: {}", samples);
 
                             if samples < sample_count {
                                 let b = skip_take_as_usize(bits, datapos, 1);
                                 datapos += 1;
-                                println!("\t?: {:?}", b);
+                                // println!("\t?: {:?}", b);
                             } else {
                                 break;
                             }
 
-                            println!("\tdatapos: {}", datapos);
+                            // println!("\tdatapos: {}", datapos);
                         }
 
                         let all_padding = bits.iter().skip(datapos).all(|x| x == false);
@@ -351,12 +362,12 @@ pub fn convert<P: AsRef<Path>>(path: P) {
 
                     let data = input.parse_length1_buffer("?");
 
-                    println!("Second Buffer: {:?}", data);
+                    // println!("Second Buffer: {:?}", data);
                     {
                         let data = unsafe {
                             std::slice::from_raw_parts(data.as_ptr() as *const u32, data.len() / 4)
                         };
-                        println!("Second Buffer: {:?}", data);
+                        // println!("Second Buffer: {:?}", data);
                     }
 
                     let bits = BitSlice::<Lsb0, _>::from_slice(&data[..]).unwrap();
@@ -391,100 +402,101 @@ pub fn convert<P: AsRef<Path>>(path: P) {
                         //look up at table
                     }
 
-                    println!(
-                        "a: {}, b: {}, b2: {}, tblA: {}, c: {}, d: {}, e: {}",
-                        a, b, b2, tblA, c, d, e
-                    );
+                    // println!(
+                    //     "a: {}, b: {}, b2: {}, tblA: {}, c: {}, d: {}, e: {}",
+                    //     a, b, b2, tblA, c, d, e
+                    // );
 
-                    bones.push(bone);
+                    tracks.push(bone);
                 }
             }
 
             0x9A946F2A83FC7658 => {
-                for _ in 0..buffer.qty {
-                    let mut bone = AnimatedBone::new();
-                    bone.frames.push(AnimatedBoneFrame {
+                for _ in 0..track_type.qty {
+                    let mut bone = AnimatedTrack::new();
+                    bone.frames.push(AnimatedTrackFrame {
                         compressed: false,
                         rotation: [0.0, 0.0, 0.0, 1.0],
                         translation: [0.0, 0.0, 0.0],
                     });
-                    bones.push(bone);
+                    tracks.push(bone);
                 }
             }
 
             //singlevalue<vector3>
             0x6B77C806C0E23EA1 => {
-                for _ in 0..buffer.qty {
-                    let mut bone = AnimatedBone::new();
+                for _ in 0..track_type.qty {
+                    let mut bone = AnimatedTrack::new();
                     let t = input.read_vec3("vec3");
-                    bone.frames.push(AnimatedBoneFrame {
+                    bone.frames.push(AnimatedTrackFrame {
                         compressed: false,
                         rotation: [0.0, 0.0, 0.0, 1.0],
                         translation: [t[0] as f64, t[1] as f64, t[2] as f64],
                     });
-                    bones.push(bone);
+                    tracks.push(bone);
                 }
             }
 
             // SingleValue<Quaternion>
             0xCECACE3A835CB7EE => {
-                for _ in 0..buffer.qty {
-                    let mut bone = AnimatedBone::new();
+                for _ in 0..track_type.qty {
+                    let mut bone = AnimatedTrack::new();
                     let q = input.read_quat("quat");
-                    bone.frames.push(AnimatedBoneFrame {
+                    bone.frames.push(AnimatedTrackFrame {
                         compressed: false,
                         rotation: [q[0] as f64, q[1] as f64, q[2] as f64, q[3] as f64],
                         translation: [0.0, 0.0, 0.0],
                     });
-                    bones.push(bone);
+                    tracks.push(bone);
                 }
             }
 
             // SingleValue<Transform>
             0xC1E84D6FF72CE80 => {
-                for _ in 0..buffer.qty {
-                    let mut bone = AnimatedBone::new();
+                for _ in 0..track_type.qty {
+                    let mut bone = AnimatedTrack::new();
                     let q = input.read_quat("quat");
                     let t = input.read_vec3("vec3");
-                    bone.frames.push(AnimatedBoneFrame {
+                    bone.frames.push(AnimatedTrackFrame {
                         compressed: false,
                         rotation: [q[0] as f64, q[1] as f64, q[2] as f64, q[3] as f64],
                         translation: [t[0] as f64, t[1] as f64, t[2] as f64],
                     });
-                    bones.push(bone);
+                    tracks.push(bone);
                 }
             }
 
             // keyframedvalue<quaternion>
             0x1019453EB19C1ABD => {
-                for _ in 0..buffer.qty {
-                    let mut bone = AnimatedBone::new();
+                for _ in 0..track_type.qty {
+                    log::debug!("New Track - keyframed quaternions");
 
-                    log::debug!("- new bone (quat)");
+                    let mut track = AnimatedTrack::new();
+
                     let _ = input.parse_le_u32("?");
                     let _ = input.parse_le_u32("?");
-                    let boneid = input.parse_le_u64("?");
-                    let _ = input.parse_le_u32("?");
-                    let _ = input.parse_le_u32("?");
+                    let bone_id = input.parse_le_u64("bone id");
+                    let _ = input.parse_le_u32("min");
+                    let _ = input.parse_le_u32("max");
                     let _ = input.read_quat("?");
                     let _ = input.read_quat("?");
 
                     let _ = input.parse_le_u32("?");
 
-                    let qty = input.parse_le_u32("qty");
+                    let qty = input.parse_le_u32("qty keyframes");
 
                     let t = input.parse_le_u32("?");
                     let _ = input.parse_n_bytes(1);
 
                     for i in 0..qty {
-                        log::debug!("-- new quat");
+                        log::debug!("keyframe quaternion");
                         let t = input.parse_le_u32("type");
 
                         match t {
                             2 => {
                                 let q = input.read_quat("");
 
-                                bone.frames.push(AnimatedBoneFrame {
+                                track.frames.push(AnimatedTrackFrame {
                                     compressed: false,
                                     rotation: [q[0] as f64, q[1] as f64, q[2] as f64, q[3] as f64],
                                     translation: [0.0, 0.0, 0.0],
@@ -500,15 +512,15 @@ pub fn convert<P: AsRef<Path>>(path: P) {
                         let _ = input.parse_n_bytes(1);
                     }
 
-                    bone.id = boneid;
-                    bones.push(bone);
+                    track.bone_id = bone_id;
+                    tracks.push(track);
                 }
             }
 
             // keyframedvalue<transform>
             0x5D3E9FC6FA9369BF => {
-                for _ in 0..buffer.qty {
-                    let mut bone = AnimatedBone::new();
+                for _ in 0..track_type.qty {
+                    let mut bone = AnimatedTrack::new();
 
                     log::debug!("- new bone transform");
                     let header_length = input.parse_le_u32("header length");
@@ -537,7 +549,7 @@ pub fn convert<P: AsRef<Path>>(path: P) {
                             2 => {
                                 let (q, t) = input.read_length_transform("max");
 
-                                bone.frames.push(AnimatedBoneFrame {
+                                bone.frames.push(AnimatedTrackFrame {
                                     compressed: false,
                                     rotation: [q[0] as f64, q[1] as f64, q[2] as f64, q[3] as f64],
                                     translation: [t[0] as f64, t[1] as f64, t[2] as f64],
@@ -554,15 +566,15 @@ pub fn convert<P: AsRef<Path>>(path: P) {
                         }
                     }
 
-                    bone.id = boneid;
-                    bones.push(bone);
+                    bone.bone_id = boneid;
+                    tracks.push(bone);
                 }
             }
 
             //keyframedvalue<vector3>
             0xF6F394AF6E4003AD => {
-                for _ in 0..buffer.qty {
-                    let mut bone = AnimatedBone::new();
+                for _ in 0..track_type.qty {
+                    let mut track = AnimatedTrack::new();
                     log::debug!("- new bone vec3");
 
                     let _ = input.parse_le_u32("?");
@@ -571,23 +583,29 @@ pub fn convert<P: AsRef<Path>>(path: P) {
                     let _ = input.parse_le_u32("?");
                     let _ = input.parse_le_u32("?");
 
-                    let _ = input.read_vec3("?");
-                    let _ = input.read_vec3("?");
+                    let _ = input.read_vec3("min");
+                    let _ = input.read_vec3("max");
 
                     let _ = input.parse_le_u32("?");
-                    let qty = input.parse_le_u32("?");
+                    let qty = input.parse_le_u32("qty frames");
 
                     for i in 0..qty {
                         log::debug!("-- new vec3");
-                        let t = input.parse_le_u32("?");
+                        let t = input.parse_le_u32("vector type");
 
                         match t {
-                            0 => {}
+                            0 => {
+                                track.frames.push(AnimatedTrackFrame {
+                                    compressed: false,
+                                    rotation: [0.0, 0.0, 0.0, 0.0],
+                                    translation: [0.0, 0.0, 0.0],
+                                });
+                            }
                             2 => {
                                 let _ = input.parse_le_u32("?");
                                 let t = input.read_vec3("?");
 
-                                bone.frames.push(AnimatedBoneFrame {
+                                track.frames.push(AnimatedTrackFrame {
                                     compressed: false,
                                     rotation: [0.0, 0.0, 0.0, 0.0],
                                     translation: [t[0] as f64, t[1] as f64, t[2] as f64],
@@ -600,40 +618,45 @@ pub fn convert<P: AsRef<Path>>(path: P) {
                     }
 
                     let _ = input.parse_le_u32("?");
-                    let _ = input.read_vec3("?");
+                    let t = input.read_vec3("?");
+                    track.frames.push(AnimatedTrackFrame {
+                        compressed: false,
+                        rotation: [0.0, 0.0, 0.0, 0.0],
+                        translation: [t[0] as f64, t[1] as f64, t[2] as f64],
+                    });
 
-                    bones.push(bone);
+                    tracks.push(dbg!(track));
                 }
             }
 
-            _ => todo!("{:X?}", buffer.hash),
+            _ => todo!("{:X?}", track_type.hash),
         }
     }
 
-    for i in 0..qty_values {
+    for i in 0..qty_tracks {
         let _ = input.parse_le_u32(format!("value: {}", i).as_str());
     }
 
     let _ = input.parse_le_u16("?");
 
     assert!(
-        qty_values == bones.len(),
+        qty_tracks == tracks.len(),
         "{} == {}",
-        qty_values,
-        bones.len()
+        qty_tracks,
+        tracks.len()
     );
 
     let mut byid = HashMap::new();
-    for i in 0..qty_values {
+    for i in 0..qty_tracks {
         let k = input.parse_le_u64("Bone ID");
         let _ = input.parse_le_u32("");
-        if bones[i].id == 0 {
-            bones[i].id = k;
+        if tracks[i].bone_id == 0 {
+            tracks[i].bone_id = k;
         }
     }
 
-    for (i, bone) in bones.iter().enumerate() {
-        byid.insert(bone.id, i);
+    for (i, bone) in tracks.iter().enumerate() {
+        byid.insert(bone.bone_id, i);
     }
 
     let mut skl_path = path.to_path_buf();
@@ -648,10 +671,10 @@ pub fn convert<P: AsRef<Path>>(path: P) {
     let d3dmesh = crate::d3dmesh::parse_d3dmesh(&d3dmesh_path, Some(&skl)).unwrap();
     crate::d3dmesh::outputs::gltf::add_mesh_to_gltf(&d3dmesh, &mut gltf);
 
-    println!("{:#?}", skl);
-    println!("{:#?}", skl.bones.len());
-    println!("{:#?}", anm.bones.len());
-    println!("{:#?}", anm);
+    // println!("{:#?}", skl);
+    // println!("{:#?}", skl.bones.len());
+    // println!("{:#?}", anm.bones.len());
+    // println!("{:#?}", anm);
 
     //time buffer
 
@@ -662,7 +685,7 @@ pub fn convert<P: AsRef<Path>>(path: P) {
         }
 
         let bid = byid[&sklbone.start];
-        let bone = &bones[bid];
+        let bone = &tracks[bid];
 
         // let qty_frames = bone.frames.len();
         // let step = if qty_frames == 1 { 0.0 } else { 1.0 / (bone.frames.len() - 1) as f32 };
@@ -680,15 +703,15 @@ pub fn convert<P: AsRef<Path>>(path: P) {
     }
 
     //rot buffer
-    let mut rot_buffer = vec![];
-    let mut t_buffer = vec![];
+    let mut rotation_buffer = vec![];
+    let mut translation_buffer = vec![];
     for sklbone in skl.bones.iter() {
         if !byid.contains_key(&sklbone.start) {
             continue;
         }
 
         let bid = byid[&sklbone.start];
-        let bone = &bones[bid];
+        let bone = &tracks[bid];
         //glam::Quat::from_array(sklbone.rotation)
         let b: Vec<f32> = bone
             .frames
@@ -704,38 +727,38 @@ pub fn convert<P: AsRef<Path>>(path: P) {
             })
             .flat_map(|x| x)
             .collect();
-        rot_buffer.extend(b);
+        rotation_buffer.extend(b);
 
         let b: Vec<f32> = bone
             .frames
             .iter()
-            .scan(
-                glam::Vec3::from_slice(&sklbone.translation[..]),
-                |acc, frame| {
-                    let t = glam::Vec3::from_slice(&frame.translation_as_f32()[..]);
-                    *acc = *acc + t;
-                    Some(*acc.as_ref())
-                },
-            )
+            .scan(glam::Vec3::default(), |acc, frame| {
+                use glam::Vec3Swizzles;
+                let t = glam::Vec3::from_slice(&frame.translation_as_f32()[..]).xzy() * 0.1; // why 0.1 here?
+                *acc = *acc + t;
+                Some(*acc.as_ref())
+            })
             .flat_map(|x| x)
             .collect();
-        t_buffer.extend(b);
+        translation_buffer.extend(b);
     }
 
     let mut time_buffer_view = crate::gltf::push_buffer(&mut gltf, time_buffer.as_slice());
     time_buffer_view["target"] = json::JsonValue::Number(34963i32.into());
     let time_buffer_idx = crate::gltf::push_buffer_view(&mut gltf, time_buffer_view);
 
-    dbg!(&rot_buffer);
-    let mut rot_buffer_view = crate::gltf::push_buffer(&mut gltf, rot_buffer.as_slice());
+    // dbg!(&rot_buffer);
+    let mut rot_buffer_view = crate::gltf::push_buffer(&mut gltf, rotation_buffer.as_slice());
     rot_buffer_view["target"] = json::JsonValue::Number(34963i32.into());
     let rot_buffer_idx = crate::gltf::push_buffer_view(&mut gltf, rot_buffer_view);
 
-    let mut t_buffer_view = crate::gltf::push_buffer(&mut gltf, t_buffer.as_slice());
+    let mut t_buffer_view = crate::gltf::push_buffer(&mut gltf, translation_buffer.as_slice());
     t_buffer_view["target"] = json::JsonValue::Number(34963i32.into());
     let t_buffer_idx = crate::gltf::push_buffer_view(&mut gltf, t_buffer_view);
 
-    let mut anim01 = json::object! {};
+    let mut anim01 = json::object! {
+        name: filename
+    };
 
     let mut offset = 0;
     for (skli, sklbone) in skl.bones.iter().enumerate() {
@@ -744,7 +767,7 @@ pub fn convert<P: AsRef<Path>>(path: P) {
         }
 
         let bid = byid[&sklbone.start];
-        let bone = &bones[bid];
+        let bone = &tracks[bid];
 
         let time_acessor_idx = crate::gltf::push_accessor(
             &mut gltf,
@@ -796,30 +819,33 @@ pub fn convert<P: AsRef<Path>>(path: P) {
             },
         );
 
-        let sampler_idx = crate::gltf::push_sampler(
-            &mut anim01,
-            json::object! {
-                input : time_acessor_idx,
-                interpolation : "LINEAR",
-                output : t_acessor_idx
-            },
-        );
-        //TODO seems to be out of scale
-        //maybe only makes sense when apllying the model
-        // crate::gltf::push_channel(&mut anim01, json::object!{
-        //     sampler: sampler_idx,
-        //     target: json::object!{
-        //         node: skli + 1,
-        //         path: "translation"
-        //     }
-        // });
+        if skli == 0 {
+            let sampler_idx = crate::gltf::push_sampler(
+                &mut anim01,
+                json::object! {
+                    input : time_acessor_idx,
+                    interpolation : "LINEAR",
+                    output : t_acessor_idx
+                },
+            );
+            crate::gltf::push_channel(
+                &mut anim01,
+                json::object! {
+                    sampler: sampler_idx,
+                    target: json::object!{
+                        node: skli + 1,
+                        path: "translation"
+                    }
+                },
+            );
+        }
 
         offset += bone.frames.len();
     }
 
     gltf["animations"] = json::array![anim01];
 
-    crate::skl::gltf::save(".\\viewer\\models\\result.gltf", &gltf);
+    crate::skl::gltf::save(output, &gltf);
 
-    println!("{:#?}", anm);
+    // println!("{:#?}", anm);
 }

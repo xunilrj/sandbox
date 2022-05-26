@@ -59,7 +59,8 @@ pub fn parse_skl<P: AsRef<Path>>(path: P) -> SklFile {
 
     let mut skl = SklFile::new();
 
-    let _ = input.read_properties();
+    let properties = input.read_properties();
+    dbg!(properties);
 
     let _ = input.parse_le_u32("?");
     let qty = input.parse_le_u32("Bones Qty") as usize;
@@ -151,8 +152,8 @@ pub fn parse_skl<P: AsRef<Path>>(path: P) -> SklFile {
         bone.global_matrix = parent_global * (t * r);
         bone.inverse_bind_pose = bone.global_matrix.inverse();
 
-        println!("global matrix: {:?}", bone.global_matrix.to_cols_array());
-        println!("inverse: {:?}", bone.inverse_bind_pose.to_cols_array());
+        // println!("global matrix: {:?}", bone.global_matrix.to_cols_array());
+        // println!("inverse: {:?}", bone.inverse_bind_pose.to_cols_array());
 
         for child in &bone.children {
             q.push_back(*child);

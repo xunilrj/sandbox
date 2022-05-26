@@ -1,4 +1,4 @@
-use std::{collections::HashMap};
+use std::collections::HashMap;
 
 use log::debug;
 
@@ -144,26 +144,36 @@ pub fn whats_next(input: &[u8]) {
 
     let ahead = 64;
 
-    struct Values{ i: usize, a: u8, b: u16, c: u32, d: f32, e: f32 }
+    struct Values {
+        i: usize,
+        a: u8,
+        b: u16,
+        c: u32,
+        d: f32,
+        e: f32,
+    }
 
     let mut out = std::io::stdout();
-    let mut stream = tablestream::Stream::new(&mut out, vec![
-        tablestream::col!(Values: .i).header("#"),
-        tablestream::col!(Values: .a).header("U8"),
-        tablestream::col!(Values: .b).header("U16"),
-        tablestream::col!(Values: .c).header("U32"),
-        tablestream::col!(Values: .d).header("F32 le"),
-        tablestream::col!(Values: .e).header("F32 be"),
-    ]);
+    let mut stream = tablestream::Stream::new(
+        &mut out,
+        vec![
+            tablestream::col!(Values: .i).header("#"),
+            tablestream::col!(Values: .a).header("U8"),
+            tablestream::col!(Values: .b).header("U16"),
+            tablestream::col!(Values: .c).header("U32"),
+            tablestream::col!(Values: .d).header("F32 le"),
+            tablestream::col!(Values: .e).header("F32 be"),
+        ],
+    );
 
     for i in 0..ahead {
-        let (_, a) =  parse_u8(&input[i..]).unwrap();
+        let (_, a) = parse_u8(&input[i..]).unwrap();
         let (_, b) = parse_le_u16(&input[i..]).unwrap();
         let (_, c) = parse_le_u32(&input[i..]).unwrap();
         let (_, d) = parse_le_f32(&input[i..]).unwrap();
         let (_, e) = parse_be_f32(&input[i..]).unwrap();
-        
-        let v = Values { i, a, b, c, d, e};
+
+        let v = Values { i, a, b, c, d, e };
         stream.row(v).unwrap();
     }
 
@@ -209,11 +219,10 @@ pub fn find_u32(input: &[u8]) {
     }
 }
 
-
 #[allow(dead_code)]
 pub fn find_u64(input: &[u8]) {
     println!("Trying to find a u64:");
-    for i in 0..(100*1024) {
+    for i in 0..(100 * 1024) {
         let input = &input[i..];
         let (input, a) = parse_le_u64(input).unwrap();
         let (input, b) = parse_le_u64(input).unwrap();
@@ -239,7 +248,14 @@ pub fn find_f32(input: &[u8]) {
         let (input, b) = parse_le_f32(input).unwrap();
         let (input, c) = parse_le_f32(input).unwrap();
         let (_, d) = parse_le_f32(input).unwrap();
-        println!("    {}: {:20.3},{:20.3},{:20.3},{:20.3},", i, bounds(a), bounds(b), bounds(c), bounds(d));
+        println!(
+            "    {}: {:20.3},{:20.3},{:20.3},{:20.3},",
+            i,
+            bounds(a),
+            bounds(b),
+            bounds(c),
+            bounds(d)
+        );
     }
 }
 
@@ -380,6 +396,17 @@ impl<'a> NomSlice<'a> {
     }
 
     #[inline(always)]
+    pub fn parse_le_u64_with_debug<F: FnOnce(u64) -> String>(&mut self, name: &str, f: F) -> u64 {
+        let (i, data) = parse_le_u64(self.slice).unwrap();
+        self.slice = i;
+        self.qty += 8;
+
+        let msg = f(data);
+        debug!("[{}] as u64: {} 0x{:X?} - {}", name, data, data, msg);
+        data
+    }
+
+    #[inline(always)]
     pub fn parse_le_f32(&mut self, name: &str) -> f32 {
         let (i, data) = parse_le_f32(self.slice).unwrap();
         self.slice = i;
@@ -484,10 +511,26 @@ impl<'a> NomSlice<'a> {
             let k = self.parse_le_u64("prop hash");
             let k = match k {
                 0x774CFA08CA715D06 => "animation".to_string(),
-                0x84283CB979D71641 => "flags".to_string(), 
+                0x84283CB979D71641 => "flags".to_string(),
                 0x4F023463D89FB0 => "symbol".to_string(),
-                0x634167EE598932B9 => "transform".to_string(),  
-                x @ _ => format!("{}", x)
+                0x634167EE598932B9 => "transform".to_string(),
+                0x1019453EB19C1ABD => "keyframedvalue<quaternion>".to_string(),
+                0xF6F394AF6E4003AD => "keyframedvalue<vector3>".to_string(),
+                0x5D3E9FC6FA9369BF => "keyframedvalue<transform>".to_string(),
+                0x88E2A4048B7CAC53 => "animationvalueinterfacebase".to_string(),
+                0xCB17BA9E6EF9F5A9 => "animatedvalueinterface<vector3>".to_string(),
+                0x918069BEE7BDA403 => "animatedvalueinterface<quaternion>".to_string(),
+                0x552D6026F0D9CDD8 => "animatedvalueinterface<transform>".to_string(),
+                0x98A19836CF4CCB7D => "d3dmesh".to_string(),
+                0x75D9082D642E1791 => "boundingbox".to_string(),
+                0xEF63F3FBAE7B5BE9 => "d3dmesh::triangleset".to_string(),
+                0x852A87571E57CCF8 => "sphere".to_string(),
+                0xC16762F7763D62AB => "color".to_string(),
+                0x7BBCA244E61F1A07 => "vector2".to_string(),
+                0x920DE72BC933501C => "d3dmesh::paletteentry".to_string(),
+                0x5D530FD1E2EAEBF0 => "t3indexbuffer".to_string(),
+                0x3223B5B39079800D => "t3vertexbuffer".to_string(),
+                x @ _ => format!("{}", x),
             };
             let v = self.parse_le_u32("prop value");
 
@@ -497,8 +540,8 @@ impl<'a> NomSlice<'a> {
         map
     }
 
-    pub fn read_m33<S: AsRef<str>>(&mut self, name: S) -> [f32;9] {
-        let mut m = [0.0;9];
+    pub fn read_m33<S: AsRef<str>>(&mut self, name: S) -> [f32; 9] {
+        let mut m = [0.0; 9];
         for i in 0..9 {
             let v = self.parse_le_f32("");
             m[i] = v;
@@ -509,7 +552,7 @@ impl<'a> NomSlice<'a> {
 
     #[allow(dead_code)]
     pub fn read_m44<S: AsRef<str>>(&mut self, name: S) {
-        let mut m = [0.0;16];
+        let mut m = [0.0; 16];
         for i in 0..16 {
             m[i] = self.parse_le_f32("");
         }

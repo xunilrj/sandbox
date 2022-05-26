@@ -35,15 +35,9 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
         return Err("ERTM not found");
     }
 
-    let param_count = input.parse_le_u32("?");
-    let _param_hash = input.parse_n_bytes(8);
+    let properties = input.read_properties();
+    dbg!(properties);
 
-    for _ in 0..(param_count - 1) {
-        let _ = input.parse_le_u32("?");
-        let _ = input.parse_n_bytes(8);
-    }
-
-    let _ = input.parse_le_u32("?");
     let _header_len = input.parse_le_u32("?");
     let d3d_name = input.parse_length_string("?");
 
@@ -266,26 +260,26 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
                         let b = bone_indices[vertex_index * 4 + 1];
                         let c = bone_indices[vertex_index * 4 + 2];
 
-                        println!(
-                            "index={} vi={} bone_indices=[{},{},{}] [{:?},{:?},{:?}]",
-                            fi,
-                            vertex_index,
-                            a,
-                            b,
-                            c,
-                            pallete
-                                .bones
-                                .get(a as usize)
-                                .and_then(|i| skl.bone_position(*i as u64)),
-                            pallete
-                                .bones
-                                .get(b as usize)
-                                .and_then(|i| skl.bone_position(*i as u64)),
-                            pallete
-                                .bones
-                                .get(c as usize)
-                                .and_then(|i| skl.bone_position(*i as u64))
-                        );
+                        // println!(
+                        //     "index={} vi={} bone_indices=[{},{},{}] [{:?},{:?},{:?}]",
+                        //     fi,
+                        //     vertex_index,
+                        //     a,
+                        //     b,
+                        //     c,
+                        //     pallete
+                        //         .bones
+                        //         .get(a as usize)
+                        //         .and_then(|i| skl.bone_position(*i as u64)),
+                        //     pallete
+                        //         .bones
+                        //         .get(b as usize)
+                        //         .and_then(|i| skl.bone_position(*i as u64)),
+                        //     pallete
+                        //         .bones
+                        //         .get(c as usize)
+                        //         .and_then(|i| skl.bone_position(*i as u64))
+                        // );
 
                         new_bone_indices[vertex_index * 4 + 0] = pallete
                             .bones
@@ -330,20 +324,20 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
     Ok(d3dfile)
 }
 
-fn fix_bone_index(
-    d3dfile: &D3DFile,
-    mesh: &D3DMesh,
-    bone_index: &mut u8,
-    skl: &crate::skl::SklFile,
-) {
-    let pallete = &d3dfile.palletes[mesh.bone_pallete];
-    if let Some(bone) = pallete.bones.get(*bone_index as usize) {
-        let bone = skl.bone_position(*bone as u64).unwrap();
-        *bone_index = bone as u8;
-    } else {
-        println!("Bone mismatch: {}", *bone_index)
-    }
-}
+// fn fix_bone_index(
+//     d3dfile: &D3DFile,
+//     mesh: &D3DMesh,
+//     bone_index: &mut u8,
+//     skl: &crate::skl::SklFile,
+// ) {
+//     let pallete = &d3dfile.palletes[mesh.bone_pallete];
+//     if let Some(bone) = pallete.bones.get(*bone_index as usize) {
+//         let bone = skl.bone_position(*bone as u64).unwrap();
+//         *bone_index = bone as u8;
+//     } else {
+//         println!("Bone mismatch: {}", *bone_index)
+//     }
+// }
 
 pub fn convert<S: AsRef<Path>>(
     path: S,

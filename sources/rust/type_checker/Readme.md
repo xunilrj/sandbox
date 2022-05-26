@@ -471,4 +471,16 @@ We can now generate a nice error stating that each branch of the "if" needs to r
 
 # Theory
 
+
+Primer on Order Theory  
+Explains:  
+- Less than
+- Join/Merge
+- (Least) Upper Bound
+- Lattice
+
+https://www.youtube.com/watch?v=OOlnp2bZVRs
+
+Complete Order Theory Course (for the brave!)
+
 https://www.youtube.com/playlist?list=PL5rqYzyihIQ0nzfnsEKxxedCpbNQoifgg

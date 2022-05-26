@@ -140,16 +140,14 @@
         let scene, renderer, camera, stats;
         let model, skeleton, mixer, clock;
 
-        const crossFadeControls = [];
-
-        let idleAction, walkAction, runAction;
-        let idleWeight, walkWeight, runWeight;
         let actions, settings;
 
         let singleStepMode = false;
         let sizeOfNextStep = 0;
 
         let controls;
+
+        let folder2;
 
         init();
 
@@ -183,6 +181,42 @@
 
             controls.update();
 
+        }
+
+        function load_animation_of(url) {
+            const loader = new GLTFLoader();
+            loader.load(url, function (gltf) {
+                gltf.animations.forEach((clip) => {
+                    console.log(clip);
+                    let name = `${clip.name}`;
+
+                    const action = mixer.clipAction(clip);
+                    actions.push(action);
+
+                    settings[name] = function () {
+                        fadeToAction(action, 0.2);
+                    }
+                    folder2.add(settings, name);
+                });
+            });
+        }
+
+        let previousAction;
+        let activeAction;
+        function fadeToAction(action, duration) {
+            previousAction = activeAction;
+            activeAction = action;
+
+            if (previousAction && previousAction !== activeAction) {
+                previousAction.fadeOut(duration);
+            }
+
+            activeAction
+                .reset()
+                .setEffectiveTimeScale(1)
+                .setEffectiveWeight(1)
+                .fadeIn(duration)
+                .play();
         }
 
         function init() {
@@ -222,6 +256,18 @@
             mesh.receiveShadow = true;
             scene.add(mesh);
 
+            // grid
+
+            var grid = new THREE.GridHelper(100, 10);
+            scene.add(grid);
+
+            var originAxis = new THREE.AxesHelper(1);
+            scene.add(originAxis);
+
+            // character
+
+            actions = [];
+
             const loader = new GLTFLoader();
             loader.load('models/result.gltf', function (gltf) {
                 model = gltf.scene;
@@ -252,15 +298,13 @@
                 //
 
                 actions = [];
-                model = gltf.scene;
                 mixer = new THREE.AnimationMixer(model);
-                gltf.animations.forEach((clip) => {
-                    const action = mixer.clipAction(clip);
-                    actions.push(action);
-                });
 
-                activateAllActions();
                 animate();
+
+                load_animation_of("models/guybrush_walk.gltf");
+                load_animation_of("models/guybrush_run.gltf");
+                load_animation_of("models/sk20_idle_guybrush.gltf");
             });
 
             renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -281,7 +325,7 @@
             const panel = new GUI({ width: 310 });
 
             const folder1 = panel.addFolder('Visibility');
-            const folder2 = panel.addFolder('Activation/Deactivation');
+            folder2 = panel.addFolder('Activation/Deactivation');
             const folder3 = panel.addFolder('Pausing/Stepping');
             const folder5 = panel.addFolder('Blend Weights');
             const folder6 = panel.addFolder('General Speed');

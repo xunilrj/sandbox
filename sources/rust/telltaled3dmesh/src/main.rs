@@ -1,10 +1,9 @@
-
 mod anm;
 mod d3dmesh;
 mod emulator;
+mod gltf;
 mod parser;
 mod skl;
-mod gltf;
 
 use structopt::StructOpt;
 
@@ -36,6 +35,9 @@ pub struct SklConvertArgs {
 pub struct AnmConvertArgs {
     #[structopt(short, long)]
     path: String,
+    /// Relative or absolute path of the file that will be generated. Supported formats: .gltf.
+    #[structopt(short, long)]
+    output: String,
 }
 
 #[derive(StructOpt, Debug)]
@@ -70,6 +72,6 @@ fn main() {
             .unwrap();
         }
         Args::SklConvert(SklConvertArgs { path }) => skl::convert(path),
-        Args::AnmConvert(AnmConvertArgs { path }) => anm::convert(path),
+        Args::AnmConvert(AnmConvertArgs { path, output }) => anm::convert(path, output),
     }
 }
