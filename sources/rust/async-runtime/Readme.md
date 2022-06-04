@@ -851,3 +851,28 @@ fd 0 is ready
 c
 fd 0 is ready
 ```
+
+### Inverting the logic
+
+Our solution is much better, but still has a couple of strange things.
+First is that we loop and wait forever.
+
+
+```rust
+loop {
+    epoll.wait();
+}
+```
+
+The second is that we are storing the callback inside the epoll, and for that we need to box closures and store them as ```dyn Fn()```. 
+And the ```epoll``` should not care about this at all.
+It should only signal to us that something we were waiting is done.
+
+And for that there is a better solution. We can use what OSes call "events".
+Yeah. Another meaning for the same word.
+
+What we are going to do now is:
+1 - create the OS event;
+2 - pass the event description to the ```Epoll``` class;
+3 - when a file descriptor signal is ready, we signal this event instead of calling a callback;
+4 - The "outside" code wait for this event.
