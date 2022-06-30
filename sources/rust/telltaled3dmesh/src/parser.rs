@@ -97,52 +97,7 @@ fn parse_u8_slice(input: &[u8], size: usize) -> nom::IResult<&[u8], &[u8]> {
 
 #[allow(dead_code)]
 pub fn whats_next(input: &[u8]) {
-    // use itertools::Itertools;
-
-    // #[derive(Debug, Clone, Copy, PartialEq, Eq)]
-    // enum Types{
-    //     U8,
-    //     U16,
-    //     U32,
-    //     I8,
-    //     I16,
-    //     I32,
-    //     F32
-    // }
-
-    // fn print(mut input: &[u8], types: &[&Types]) -> Result<(),()> {
-    //     for i in types {
-    //         input = match i {
-    //             Types::U8 => { let(s, v) = parse_u8(input).unwrap(); print!("{:?}, ", v); s },
-    //             Types::U16 => { let(s, v) = parse_le_u16(input).unwrap(); print!("{:?}, ", v); s },
-    //             Types::U32 => { let(s, v) = parse_le_u32(input).unwrap(); print!("{:?}, ", v); s },
-    //             Types::I8 => { let(s, v) = parse_i8(input).unwrap(); print!("{:?}, ", v); s },
-    //             Types::I16 => { let(s, v) = parse_le_i16(input).unwrap(); print!("{:?}, ", v); s },
-    //             Types::I32 => { let(s, v) = parse_le_i32(input).unwrap(); print!("{:?}, ", v); s },
-    //             Types::F32 => { let(s, v) = parse_le_f32(input).unwrap(); print!("{:?}, ", v); s },
-    //         }
-    //     }
-    //     print!("{:?}", types);
-    //     println!("");
-    //     Ok(())
-    // }
-
-    // println!("Whats Next:");
-    // let mut items = vec![];
-    // let qty = 2;
-    // items.extend([Types::U8].repeat(qty));
-    // items.extend([Types::U16].repeat(qty));
-    // items.extend([Types::U32].repeat(qty));
-    // items.extend([Types::I8].repeat(qty));
-    // items.extend([Types::I16].repeat(qty));
-    // items.extend([Types::I32].repeat(qty));
-    // items.extend([Types::F32].repeat(qty));
-    // for types in items.iter().permutations(qty) {
-    //     let mut input = input.clone();
-    //     print(input, types.as_slice());
-    // }
-
-    let ahead = 64;
+    let ahead = 128;
 
     struct Values {
         i: usize,
@@ -151,6 +106,7 @@ pub fn whats_next(input: &[u8]) {
         c: u32,
         d: f32,
         e: f32,
+        s: String,
     }
 
     let mut out = std::io::stdout();
@@ -163,6 +119,7 @@ pub fn whats_next(input: &[u8]) {
             tablestream::col!(Values: .c).header("U32"),
             tablestream::col!(Values: .d).header("F32 le"),
             tablestream::col!(Values: .e).header("F32 be"),
+            tablestream::col!(Values: .s).header("String"),
         ],
     );
 
@@ -173,8 +130,40 @@ pub fn whats_next(input: &[u8]) {
         let (_, d) = parse_le_f32(&input[i..]).unwrap();
         let (_, e) = parse_be_f32(&input[i..]).unwrap();
 
-        let v = Values { i, a, b, c, d, e };
-        stream.row(v).unwrap();
+        let mut s = String::new();
+
+        let mut j = i;
+        loop {
+            match std::str::from_utf8(&input[j..j + 16])
+                .ok()
+                .and_then(|s| s.chars().next())
+            {
+                Some(chr) => {
+                    if chr.is_control() {
+                        break;
+                    }
+                    j += chr.len_utf8();
+                    s.push(chr);
+                }
+                None => break,
+            }
+        }
+
+        if s.len() > 0 {
+            s.push_str(&format!(" (len:{})", s.len()));
+        }
+
+        stream
+            .row(Values {
+                i,
+                a,
+                b,
+                c,
+                d,
+                e,
+                s,
+            })
+            .unwrap();
     }
 
     stream.finish().unwrap();
@@ -345,7 +334,7 @@ impl<'a> NomSlice<'a> {
                 self.qty += n;
 
                 let d: Vec<_> = data.iter().collect();
-                debug!("read {} bytes: {:?}", n, d);
+                debug!("read {} bytes", n);
                 data
             }
             Err(e) => {
@@ -371,6 +360,16 @@ impl<'a> NomSlice<'a> {
         self.qty += 4;
 
         debug!("[{}] as u32: {}", name, data);
+        data
+    }
+
+    #[inline(always)]
+    pub fn parse_le_i32(&mut self, name: &str) -> i32 {
+        let (i, data) = parse_le_i32(self.slice).unwrap();
+        self.slice = i;
+        self.qty += 4;
+
+        debug!("[{}] as i32: {}", name, data);
         data
     }
 
@@ -429,13 +428,13 @@ impl<'a> NomSlice<'a> {
     }
 
     #[inline(always)]
-    pub fn parse_string(&mut self, size: usize) -> &str {
+    pub fn parse_string(&mut self, size: usize, name: &str) -> &str {
         let (i, data) = parse_n_bytes(self.slice, size).unwrap();
         let data = std::str::from_utf8(data).unwrap();
         self.slice = i;
         self.qty += size;
 
-        debug!("read string: {} {}", size, data);
+        debug!("read {name}: {} {}", size, data);
         data
     }
 
@@ -495,7 +494,7 @@ impl<'a> NomSlice<'a> {
 
     // Telltale specifics
     pub fn read_ertm_magic_number(&mut self) -> bool {
-        let header_magic = self.parse_string(4);
+        let header_magic = self.parse_string(4, "header_magic");
         header_magic == "ERTM"
     }
 
@@ -510,6 +509,7 @@ impl<'a> NomSlice<'a> {
         for _ in 0..n {
             let k = self.parse_le_u64("prop hash");
             let k = match k {
+                0x3E249E7E6F38CCE2 => "t3texture".to_string(),
                 0x774CFA08CA715D06 => "animation".to_string(),
                 0x84283CB979D71641 => "flags".to_string(),
                 0x4F023463D89FB0 => "symbol".to_string(),

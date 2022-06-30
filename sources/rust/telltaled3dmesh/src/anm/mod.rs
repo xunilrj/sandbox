@@ -668,7 +668,7 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
     let mut d3dmesh_path = path.to_path_buf();
     d3dmesh_path.pop();
     d3dmesh_path.push("sk20_guybrush.d3dmesh");
-    let d3dmesh = crate::d3dmesh::parse_d3dmesh(&d3dmesh_path, Some(&skl)).unwrap();
+    let d3dmesh = crate::d3dmesh::parse_d3dmesh(&d3dmesh_path, Some(&skl), None).unwrap();
     crate::d3dmesh::outputs::gltf::add_mesh_to_gltf(&d3dmesh, &mut gltf);
 
     // println!("{:#?}", skl);

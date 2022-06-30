@@ -164,7 +164,11 @@ impl D3DFile {
         }
     }
 
-    pub fn get_buffer(&self, name: &str) -> &D3DBuffer {
-        self.buffers.iter().find(|x| x.r#type == name).unwrap()
+    pub fn get_buffer(&self, name: &str) -> Option<&D3DBuffer> {
+        self.buffers.iter().find(|x| x.r#type == name)
+    }
+
+    pub fn nth_buffer(&self, n: usize, name: &str) -> Option<&D3DBuffer> {
+        self.buffers.iter().filter(|x| x.r#type == name).nth(n)
     }
 }

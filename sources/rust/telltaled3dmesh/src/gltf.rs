@@ -1,10 +1,12 @@
 use json::JsonValue;
 
 pub fn push_buffer<T>(value: &mut JsonValue, buffer: &[T]) -> JsonValue {
-    let buffer = unsafe { std::slice::from_raw_parts(
-        buffer.as_ptr() as *const u8, 
-        buffer.len() * std::mem::size_of::<T>()
-    ) };
+    let buffer = unsafe {
+        std::slice::from_raw_parts(
+            buffer.as_ptr() as *const u8,
+            buffer.len() * std::mem::size_of::<T>(),
+        )
+    };
     let byte_length = buffer.len();
     let buffer = base64::encode(buffer);
     let buffer = json::object! {
@@ -18,7 +20,7 @@ pub fn push_buffer<T>(value: &mut JsonValue, buffer: &[T]) -> JsonValue {
 
     let _ = value["buffers"].push(buffer);
 
-    json::object!{
+    json::object! {
         buffer: value["buffers"].len() - 1,
         byteLength: byte_length,
     }
@@ -67,4 +69,22 @@ pub fn push_mesh(gltf: &mut JsonValue, mesh: JsonValue) -> usize {
 
     let _ = gltf["meshes"].push(mesh);
     gltf["meshes"].len() - 1
+}
+
+pub fn push_scene(gltf: &mut JsonValue, scene: JsonValue) -> usize {
+    if !gltf["scenes"].is_array() {
+        gltf["scenes"] = json::array![];
+    }
+
+    let _ = gltf["scenes"].push(scene);
+    gltf["scenes"].len() - 1
+}
+
+pub fn push_node(gltf: &mut JsonValue, node: JsonValue) -> usize {
+    if !gltf["nodes"].is_array() {
+        gltf["nodes"] = json::array![];
+    }
+
+    let _ = gltf["nodes"].push(node);
+    gltf["nodes"].len() - 1
 }

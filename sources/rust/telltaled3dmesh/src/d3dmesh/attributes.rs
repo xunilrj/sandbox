@@ -28,7 +28,7 @@ pub enum Attribute {
     ATT20,
     // ATT21(String),
     // ATT22(String),
-    ATT23(String),
+    TextureMap(String),
     // ATT24(String),
     // ATT25(String),
     // ATT26(String),
@@ -66,7 +66,7 @@ pub enum Attribute {
     // ATT58(String),
     // // ATT59(String),
     // ATT60(String),
-    BonePallete(Vec<BonePallete>)
+    BonePallete(Vec<BonePallete>),
 }
 
 pub fn read_att(input: &mut NomSlice) -> Attribute {
@@ -104,7 +104,7 @@ pub fn read_att(input: &mut NomSlice) -> Attribute {
         }
         23..=64 => {
             let name = input.parse_length_string("some texture map");
-            Attribute::ATT23(name.to_string())
+            Attribute::TextureMap(name.to_string())
         }
         x @ _ => todo!("{:?}", x),
     }
@@ -118,13 +118,11 @@ pub fn read_att2(input: &mut NomSlice) -> Attribute {
             Attribute::ATT8
         }
         2208 => {
-            let mut palletes = vec![];           
+            let mut palletes = vec![];
             log::debug!("Bones palletes");
             let qty = input.parse_le_u32("qty of palletes");
             for _ in 0..qty {
-                let mut pallete = BonePallete {
-                    bones: vec![],
-                };
+                let mut pallete = BonePallete { bones: vec![] };
                 let qty = input.parse_le_u32("qty of bones");
                 for _ in 0..qty {
                     let boneid = input.parse_le_u64("bone id") as usize;
@@ -151,4 +149,3 @@ pub fn read_att2(input: &mut NomSlice) -> Attribute {
         x @ _ => todo!("{:?}", x),
     }
 }
-

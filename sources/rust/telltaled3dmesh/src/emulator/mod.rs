@@ -358,7 +358,10 @@ impl std::ops::Add<u32> for Value {
         match &self {
             Value::U8(x) => (*x as u32) + rhs,
             Value::U16(x) => (*x as u32) + rhs,
-            Value::U32(x) => (*x as u32) + rhs,
+            Value::U32(x) => {
+                let (r, overflow) = (*x as u32).overflowing_add(rhs);
+                r
+            }
             _ => todo!(),
         }
     }

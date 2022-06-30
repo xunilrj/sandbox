@@ -1,4 +1,8 @@
-use std::{io::Read, path::Path, str::FromStr};
+use std::{
+    io::Read,
+    path::{Path, PathBuf},
+    str::FromStr,
+};
 
 use itertools::Itertools;
 use log::debug;
@@ -18,6 +22,7 @@ pub mod outputs;
 pub fn parse_d3dmesh<S: AsRef<Path>>(
     path: S,
     skl: Option<&crate::skl::SklFile>,
+    texture_path: Option<String>,
 ) -> Result<D3DFile, &'static str> {
     let path = path.as_ref().to_str().unwrap();
     let mut d3dfile = D3DFile::new();
@@ -98,6 +103,26 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
                         maxy,
                         maxz,
                     }
+                }
+                attributes::Attribute::TextureMap(name) => {
+                    if let Some(texture_path) = texture_path.as_ref() {
+                        let mut f = PathBuf::from_str(texture_path).unwrap();
+                        f.push(&name);
+                        let f = f.with_extension("png");
+
+                        if std::fs::metadata(&f).map(|x| x.is_file()).unwrap_or(false) {
+                            mesh.maps.push(d3dfile::D3DMap {
+                                r#type: "".to_string(),
+                                name: f.display().to_string(),
+                            });
+                            continue;
+                        }
+                    }
+
+                    mesh.maps.push(d3dfile::D3DMap {
+                        r#type: "".to_string(),
+                        name,
+                    });
                 }
                 _ => {}
             }
@@ -248,7 +273,7 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
                 let mut bone_indices = buffer.as_u8_mut();
                 let mut new_bone_indices = vec![0u8; bone_indices.len()];
 
-                let indices = d3dfile.get_buffer("index");
+                let indices = d3dfile.get_buffer("index").unwrap();
                 let indices = indices.as_u16();
                 for m in d3dfile.meshes.iter() {
                     let pallete = &d3dfile.palletes[m.bone_pallete];
@@ -345,12 +370,13 @@ pub fn convert<S: AsRef<Path>>(
     pretty_print: bool,
     buffer_as_base64: bool,
     _detach_index_buffer: bool,
+    texture_path: Option<String>,
 ) -> std::result::Result<(), ParseD3dMeshError> {
     let mut bar = progress::Bar::new();
     bar.set_job_title("Parsing...");
 
     let path = path.as_ref();
-    let d3dfile = parse_d3dmesh(path, None).unwrap();
+    let mut d3dfile = parse_d3dmesh(path, None, texture_path).unwrap();
 
     // let b4 = d3dfile.buffers.iter().find(|x| x.r#type == "bone_weigth?").unwrap();
     // let b5 = d3dfile.buffers.iter().find(|x| x.r#type == "5").unwrap();
@@ -364,9 +390,34 @@ pub fn convert<S: AsRef<Path>>(
     bar.reach_percent(100);
     let mut bar = progress::Bar::new();
     bar.set_job_title("Saving...");
+
     match output {
         Some(output) => {
-            outputs::save_to(&d3dfile, output.as_str(), buffer_as_base64, pretty_print);
+            let mut o = PathBuf::from_str(&output).unwrap();
+            o.pop();
+            let _ = std::fs::create_dir_all(&o);
+
+            for mesh in d3dfile.meshes.iter_mut() {
+                for map in mesh.maps.iter_mut() {
+                    let i = PathBuf::from(&map.name);
+
+                    let mut o = PathBuf::from_str(&output).unwrap();
+                    o.pop();
+                    o.push(i.file_name().unwrap());
+
+                    bar.set_job_title(format!("copying {}", i.display()).as_str());
+                    let _ = std::fs::copy(&i, o);
+
+                    map.name = i.file_name().unwrap().to_str().unwrap().to_string();
+                }
+            }
+
+            outputs::save_to(
+                &mut d3dfile,
+                output.as_str(),
+                buffer_as_base64,
+                pretty_print,
+            );
 
             let output = std::path::PathBuf::from_str(output.as_str()).unwrap();
             let _output = output.with_extension("ib");
