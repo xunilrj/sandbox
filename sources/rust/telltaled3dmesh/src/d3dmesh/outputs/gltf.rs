@@ -1,5 +1,5 @@
 use json::JsonValue;
-use std::path::PathBuf;
+use std::{collections::HashMap, path::PathBuf};
 
 use crate::d3dmesh::d3dfile::D3DFile;
 
@@ -50,7 +50,7 @@ pub fn add_mesh_to_gltf(mesh: &D3DFile, gltf: &mut JsonValue) {
     uvs_acessors.extend(push_texture_coordinate(mesh, 0, gltf));
     uvs_acessors.extend(push_texture_coordinate(mesh, 1, gltf));
 
-    dbg!(&uvs_acessors);
+    let mut image_idxs = HashMap::new();
 
     let sampler_idx = crate::gltf::push_sampler(
         gltf,
@@ -123,12 +123,18 @@ pub fn add_mesh_to_gltf(mesh: &D3DFile, gltf: &mut JsonValue) {
             gltf["meshes"][mesh_idx]["primitives"][primitive_id]["attributes"][texcoordi] =
                 JsonValue::Number((*uv).into());
 
-            let image_idx = crate::gltf::push_image(
-                gltf,
-                json::object! {
-                    uri: map.name.as_str()
-                },
-            );
+            let image_idx = if let Some(image_idx) = image_idxs.get(&map.name) {
+                *image_idx
+            } else {
+                let image_idx = crate::gltf::push_image(
+                    gltf,
+                    json::object! {
+                        uri: map.name.as_str()
+                    },
+                );
+                image_idxs.insert(map.name.clone(), image_idx);
+                image_idx
+            };
 
             let texture_idx = crate::gltf::push_texture(
                 gltf,
