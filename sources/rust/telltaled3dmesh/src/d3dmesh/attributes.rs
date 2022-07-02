@@ -28,6 +28,7 @@ pub enum Attribute {
     ATT20,
     // ATT21(String),
     // ATT22(String),
+    OcclusionTextureMap(String),
     TextureMap(String),
     // ATT24(String),
     // ATT25(String),
@@ -101,6 +102,10 @@ pub fn read_att(input: &mut NomSlice) -> Attribute {
             let _ = input.parse_le_f32("?");
             let _ = input.parse_le_f32("?");
             Attribute::ATT20
+        }
+        32 => {
+            let name = input.parse_length_string("occlusion texture map");
+            Attribute::OcclusionTextureMap(name.to_string())
         }
         23..=64 => {
             let name = input.parse_length_string("some texture map");

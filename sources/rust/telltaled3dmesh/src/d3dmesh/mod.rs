@@ -1,4 +1,5 @@
 use std::{
+    borrow::Borrow,
     io::Read,
     path::{Path, PathBuf},
     str::FromStr,
@@ -18,6 +19,27 @@ mod attributes;
 mod d3dfile;
 mod indexbuffer;
 pub mod outputs;
+
+pub fn push_map(mesh: &mut D3DMesh, ty: &str, name: &str, texture_path: &Option<String>) {
+    if let Some(texture_path) = texture_path.as_ref() {
+        let mut f = PathBuf::from_str(texture_path).unwrap();
+        f.push(&name);
+        let f = f.with_extension("png");
+
+        if std::fs::metadata(&f).map(|x| x.is_file()).unwrap_or(false) {
+            mesh.maps.push(d3dfile::D3DMap {
+                r#type: ty.to_string(),
+                name: f.display().to_string(),
+            });
+            return;
+        }
+    }
+
+    mesh.maps.push(d3dfile::D3DMap {
+        r#type: "".to_string(),
+        name: name.to_string(),
+    });
+}
 
 pub fn parse_d3dmesh<S: AsRef<Path>>(
     path: S,
@@ -104,25 +126,11 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
                         maxz,
                     }
                 }
+                attributes::Attribute::OcclusionTextureMap(name) => {
+                    push_map(&mut mesh, "occlusion", &name, &texture_path);
+                }
                 attributes::Attribute::TextureMap(name) => {
-                    if let Some(texture_path) = texture_path.as_ref() {
-                        let mut f = PathBuf::from_str(texture_path).unwrap();
-                        f.push(&name);
-                        let f = f.with_extension("png");
-
-                        if std::fs::metadata(&f).map(|x| x.is_file()).unwrap_or(false) {
-                            mesh.maps.push(d3dfile::D3DMap {
-                                r#type: "".to_string(),
-                                name: f.display().to_string(),
-                            });
-                            continue;
-                        }
-                    }
-
-                    mesh.maps.push(d3dfile::D3DMap {
-                        r#type: "".to_string(),
-                        name,
-                    });
+                    push_map(&mut mesh, "albedo", &name, &texture_path);
                 }
                 _ => {}
             }
@@ -265,6 +273,25 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
 
     // Read buffers
 
+    let maps0 = d3dfile
+        .meshes
+        .iter()
+        .flat_map(|x| x.maps.get(0))
+        .next()
+        .map(|x| x.r#type.clone())
+        .unwrap_or("".to_string());
+    let maps1 = d3dfile
+        .meshes
+        .iter()
+        .flat_map(|x| x.maps.get(1))
+        .next()
+        .map(|x| x.r#type.clone())
+        .unwrap_or("".to_string());
+
+    let map_types = [maps0, maps1];
+    dbg!(&map_types);
+
+    let mut texcoodsi = 0;
     while input.slice.len() != 0 {
         let mut buffer = parse_d3dmesh_buffer(&mut input);
 
@@ -341,6 +368,18 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
 
                 buffer.data = D3DBufferData::U8(new_bone_indices);
             }
+        }
+
+        dbg!(&texcoodsi);
+        if buffer.r#type == "texcoords" {
+            if let Some("occlusion") = map_types.get(texcoodsi).map(String::as_str) {
+                dbg!("fixing occlusion texcoords");
+                for uv in buffer.as_f32_mut().chunks_exact_mut(2) {
+                    // uv[1] = 1.0 - uv[1];
+                }
+            }
+
+            texcoodsi += 1;
         }
 
         d3dfile.buffers.push(buffer);
@@ -482,6 +521,7 @@ fn parse_d3dmesh_buffer(input: &mut NomSlice) -> D3DBuffer {
     let t = match t {
         1 => "position".to_string(),
         2 => "normal".to_string(),
+        3 => "texcoords".to_string(),
         4 => "bone_weigth".to_string(),
         5 => "bone_idx".to_string(),
         _ => format!("{}", t),

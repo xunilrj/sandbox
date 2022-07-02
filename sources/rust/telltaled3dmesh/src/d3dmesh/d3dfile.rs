@@ -44,6 +44,13 @@ impl D3DBuffer {
         }
     }
 
+    pub fn as_f32_mut(&mut self) -> &mut Vec<f32> {
+        match &mut self.data {
+            D3DBufferData::F32(v) => v,
+            _ => panic!(),
+        }
+    }
+
     pub fn as_u32(&self) -> &Vec<u32> {
         match &self.data {
             D3DBufferData::U32(v) => v,
@@ -114,6 +121,7 @@ pub struct D3DBoundingBox {
     pub maxz: f32,
 }
 
+#[derive(Debug)]
 pub struct D3DMap {
     pub r#type: String,
     pub name: String,
@@ -170,5 +178,9 @@ impl D3DFile {
 
     pub fn nth_buffer(&self, n: usize, name: &str) -> Option<&D3DBuffer> {
         self.buffers.iter().filter(|x| x.r#type == name).nth(n)
+    }
+
+    pub fn nth_buffer_mut(&mut self, n: usize, name: &str) -> Option<&mut D3DBuffer> {
+        self.buffers.iter_mut().filter(|x| x.r#type == name).nth(n)
     }
 }
