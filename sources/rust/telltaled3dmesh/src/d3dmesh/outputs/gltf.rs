@@ -51,6 +51,7 @@ pub fn add_mesh_to_gltf(mesh: &D3DFile, gltf: &mut JsonValue) {
     uvs_acessors.extend(push_texture_coordinate(mesh, 1, gltf));
 
     let mut image_idxs = HashMap::new();
+    let mut textures_idxs = HashMap::new();
 
     let sampler_idx = crate::gltf::push_sampler(
         gltf,
@@ -136,13 +137,20 @@ pub fn add_mesh_to_gltf(mesh: &D3DFile, gltf: &mut JsonValue) {
                 image_idx
             };
 
-            let texture_idx = crate::gltf::push_texture(
-                gltf,
-                json::object! {
-                    sampler: sampler_idx,
-                    source: image_idx
-                },
-            );
+            let texture_idx =
+                if let Some(texture_idx) = textures_idxs.get(&(sampler_idx, image_idx)) {
+                    *texture_idx
+                } else {
+                    let texture_idx = crate::gltf::push_texture(
+                        gltf,
+                        json::object! {
+                            sampler: sampler_idx,
+                            source: image_idx
+                        },
+                    );
+                    textures_idxs.insert((sampler_idx, image_idx), texture_idx);
+                    texture_idx
+                };
 
             match map.r#type.as_str() {
                 "albedo" => {
