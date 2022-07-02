@@ -370,18 +370,6 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
             }
         }
 
-        dbg!(&texcoodsi);
-        if buffer.r#type == "texcoords" {
-            if let Some("occlusion") = map_types.get(texcoodsi).map(String::as_str) {
-                dbg!("fixing occlusion texcoords");
-                for uv in buffer.as_f32_mut().chunks_exact_mut(2) {
-                    // uv[1] = 1.0 - uv[1];
-                }
-            }
-
-            texcoodsi += 1;
-        }
-
         d3dfile.buffers.push(buffer);
     }
 

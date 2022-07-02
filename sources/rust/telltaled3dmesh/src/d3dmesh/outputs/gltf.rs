@@ -62,6 +62,23 @@ pub fn add_mesh_to_gltf(mesh: &D3DFile, gltf: &mut JsonValue) {
         },
     );
 
+    let mesh_idx = crate::gltf::push_mesh(
+        gltf,
+        json::object! {
+            primitives : []
+        },
+    );
+
+    let node_idx = crate::gltf::push_node(
+        gltf,
+        json::object! {
+            mesh: mesh_idx,
+        },
+    );
+
+    let scene = crate::gltf::get_scene_0_mut(gltf);
+    let _ = scene["nodes"].push(node_idx);
+
     for (_, m) in mesh.meshes.iter().enumerate() {
         let start = m.index_start;
         let end = start + (m.tri_count * 3);
@@ -77,14 +94,13 @@ pub fn add_mesh_to_gltf(mesh: &D3DFile, gltf: &mut JsonValue) {
             },
         );
 
-        let mut mesh = json::object! {
-            primitives : [{
-                attributes: {
-                    POSITION: pos_acessor
-              },
-              indices: indices_acessor_idx
-            }]
-        };
+        let _ = gltf["meshes"][mesh_idx]["primitives"].push(json::object! {
+            attributes: {
+                POSITION: pos_acessor
+            },
+            indices: indices_acessor_idx
+        });
+        let primitive_id = gltf["meshes"][mesh_idx]["primitives"].len() - 1;
 
         let material_idx = crate::gltf::push_material(
             gltf,
@@ -104,7 +120,8 @@ pub fn add_mesh_to_gltf(mesh: &D3DFile, gltf: &mut JsonValue) {
 
             let texcoordi = format!("TEXCOORD_{i}");
 
-            mesh["primitives"][0]["attributes"][texcoordi] = JsonValue::Number((*uv).into());
+            gltf["meshes"][mesh_idx]["primitives"][primitive_id]["attributes"][texcoordi] =
+                JsonValue::Number((*uv).into());
 
             let image_idx = crate::gltf::push_image(
                 gltf,
@@ -136,21 +153,10 @@ pub fn add_mesh_to_gltf(mesh: &D3DFile, gltf: &mut JsonValue) {
                 }
                 _ => {}
             }
-
-            mesh["primitives"][0]["material"] = JsonValue::Number(material_idx.into());
         }
 
-        let mesh_idx = crate::gltf::push_mesh(gltf, mesh);
-
-        let node_idx = crate::gltf::push_node(
-            gltf,
-            json::object! {
-                mesh: mesh_idx,
-            },
-        );
-
-        let scene = crate::gltf::get_scene_0_mut(gltf);
-        let _ = scene["nodes"].push(node_idx);
+        gltf["meshes"][mesh_idx]["primitives"][primitive_id]["material"] =
+            JsonValue::Number(material_idx.into());
     }
 
     // if let Some(bone_idx) = mesh.get_buffer("bone_idx") {
