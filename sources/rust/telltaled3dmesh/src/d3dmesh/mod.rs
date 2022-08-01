@@ -48,6 +48,7 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
 ) -> Result<D3DFile, &'static str> {
     let path = path.as_ref().to_str().unwrap();
     let mut d3dfile = D3DFile::new();
+    d3dfile.skl = skl.cloned();
 
     let mut f = std::fs::File::open(path).unwrap();
     let bytes = {
@@ -63,7 +64,6 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
     }
 
     let properties = input.read_properties();
-    dbg!(properties);
 
     let _header_len = input.parse_le_u32("?");
     let d3d_name = input.parse_length_string("?");
@@ -136,16 +136,16 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
             }
         }
 
-        let _ = input.parse_n_bytes(1);
+        let _ = input.parse_n_bytes(1, "?");
         let _ = attributes::read_att(&mut input);
         let _ = input.parse_le_u32("?");
 
-        let _ = input.parse_n_bytes(1);
-        let _ = input.parse_n_bytes(1);
+        let _ = input.parse_n_bytes(1, "?");
+        let _ = input.parse_n_bytes(1, "?");
         let _ = input.parse_le_u32("?");
 
         // material and parameters?
-        let _ = input.parse_n_bytes(1);
+        let _ = input.parse_n_bytes(1, "?");
         let _ = attributes::read_att(&mut input);
         let _ = input.parse_le_f32("?");
         let _ = input.parse_le_f32("?");
@@ -157,7 +157,7 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
         let _ = input.parse_le_f32("?");
         let _ = input.parse_le_f32("?");
 
-        let _ = input.parse_n_bytes(1);
+        let _ = input.parse_n_bytes(1, "?");
         let _ = input.parse_le_f32("?");
         let _ = input.parse_le_f32("?");
         let _ = input.parse_le_f32("?");
@@ -170,29 +170,29 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
         let _ = input.parse_le_f32("?");
         let _ = input.parse_le_f32("?");
 
-        let _ = input.parse_n_bytes(1);
-        let _ = input.parse_n_bytes(1);
-        let _ = input.parse_n_bytes(1);
-        let _ = input.parse_n_bytes(1);
-        let _ = input.parse_n_bytes(1);
+        let _ = input.parse_n_bytes(1, "?");
+        let _ = input.parse_n_bytes(1, "?");
+        let _ = input.parse_n_bytes(1, "?");
+        let _ = input.parse_n_bytes(1, "?");
+        let _ = input.parse_n_bytes(1, "?");
 
         let _ = input.parse_le_f32("?");
         let _ = input.parse_le_f32("?");
         let _ = input.parse_le_f32("?");
         let _ = input.parse_le_f32("?");
 
-        let _ = input.parse_n_bytes(1);
+        let _ = input.parse_n_bytes(1, "?");
         let _ = input.parse_le_f32("?");
         let _ = input.parse_le_f32("?");
         let _ = input.parse_le_u32("?");
 
-        let _ = input.parse_n_bytes(1);
-        let _ = input.parse_n_bytes(1);
+        let _ = input.parse_n_bytes(1, "?");
+        let _ = input.parse_n_bytes(1, "?");
         let _ = input.parse_le_u32("?");
         let _ = input.parse_le_f32("?");
 
-        let _ = input.parse_n_bytes(1);
-        let _ = input.parse_n_bytes(1);
+        let _ = input.parse_n_bytes(1, "?");
+        let _ = input.parse_n_bytes(1, "?");
 
         let _ = input.parse_length_string("?");
         let _ = input.parse_length_string("?");
@@ -208,14 +208,19 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
         }
     }
 
-    let _ = input.parse_n_bytes(1);
-    let _ = input.parse_n_bytes(1);
-    let _ = input.parse_n_bytes(1);
-    let _ = input.parse_n_bytes(1);
+    // let path = PathBuf::from_str(path).unwrap().with_extension("skl");
+    // if path.exists() {
+    //     d3dfile.skl = Some(crate::skl::parse_skl(path));
+    // }
+
+    let _ = input.parse_n_bytes(1, "?");
+    let _ = input.parse_n_bytes(1, "?");
+    let _ = input.parse_n_bytes(1, "?");
+    let _ = input.parse_n_bytes(1, "?");
 
     let _ = input.parse_le_u32("?");
 
-    let _ = input.parse_n_bytes(1);
+    let _ = input.parse_n_bytes(1, "?");
     let _ = input.parse_le_u32("?");
     let _ = input.parse_le_u32("?");
 
@@ -223,7 +228,7 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
         let _ = attributes::read_att(&mut input);
     }
 
-    let _ = input.parse_n_bytes(1);
+    let _ = input.parse_n_bytes(1, "?");
 
     // Buffers
 
@@ -234,7 +239,7 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
 
     let buffer_size = input.parse_le_u32("IB Buffer Size");
     let index_buffer: Vec<_> = input
-        .parse_n_bytes(buffer_size as usize)
+        .parse_n_bytes(buffer_size as usize, "index buffer")
         .iter()
         .map(|x| *x)
         .collect();
@@ -289,13 +294,13 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
         .unwrap_or("".to_string());
 
     let map_types = [maps0, maps1];
-    dbg!(&map_types);
 
     let mut texcoodsi = 0;
     while input.slice.len() != 0 {
         let mut buffer = parse_d3dmesh_buffer(&mut input);
 
         if buffer.r#type == "bone_idx" {
+            // Fix the bone index if we have a skl.
             if let Some(skl) = skl {
                 let mut bone_indices = buffer.as_u8_mut();
                 let mut new_bone_indices = vec![0u8; bone_indices.len()];
@@ -311,27 +316,6 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
                         let a = bone_indices[vertex_index * 4 + 0];
                         let b = bone_indices[vertex_index * 4 + 1];
                         let c = bone_indices[vertex_index * 4 + 2];
-
-                        // println!(
-                        //     "index={} vi={} bone_indices=[{},{},{}] [{:?},{:?},{:?}]",
-                        //     fi,
-                        //     vertex_index,
-                        //     a,
-                        //     b,
-                        //     c,
-                        //     pallete
-                        //         .bones
-                        //         .get(a as usize)
-                        //         .and_then(|i| skl.bone_position(*i as u64)),
-                        //     pallete
-                        //         .bones
-                        //         .get(b as usize)
-                        //         .and_then(|i| skl.bone_position(*i as u64)),
-                        //     pallete
-                        //         .bones
-                        //         .get(c as usize)
-                        //         .and_then(|i| skl.bone_position(*i as u64))
-                        // );
 
                         new_bone_indices[vertex_index * 4 + 0] = pallete
                             .bones
@@ -353,16 +337,6 @@ pub fn parse_d3dmesh<S: AsRef<Path>>(
                             .and_then(|i| skl.bone_position(*i as u64))
                             .unwrap()
                             as u8;
-
-                        // if a >= 18 || b >= 18 || c >= 18 {
-                        //     println!("Strange Bone: {} - {} {} {}", vertex_index, a, b, c);
-                        // } else {
-                        //     println!("Good Bone: {}", vertex_index);
-                        // }
-                        // fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 0], skl);
-                        // fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 1], skl);
-                        // fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 2], skl);
-                        // // fix_bone_index(&d3dfile, m, &mut bone_indices[vertex_index * 4 + 3], skl);
                     }
                 }
 
@@ -398,12 +372,16 @@ pub fn convert<S: AsRef<Path>>(
     buffer_as_base64: bool,
     _detach_index_buffer: bool,
     texture_path: Option<String>,
+    skl: Option<String>,
 ) -> std::result::Result<(), ParseD3dMeshError> {
     let mut bar = progress::Bar::new();
     bar.set_job_title("Parsing...");
 
+    let skl = skl.map(|path| crate::skl::parse_skl(path));
+    let skl = skl.as_ref();
+
     let path = path.as_ref();
-    let mut d3dfile = parse_d3dmesh(path, None, texture_path).unwrap();
+    let mut d3dfile = parse_d3dmesh(path, skl, texture_path).unwrap();
 
     // let b4 = d3dfile.buffers.iter().find(|x| x.r#type == "bone_weigth?").unwrap();
     // let b5 = d3dfile.buffers.iter().find(|x| x.r#type == "5").unwrap();

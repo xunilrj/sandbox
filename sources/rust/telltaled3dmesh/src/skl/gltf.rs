@@ -12,13 +12,15 @@ pub fn to_gltf(skl: &super::SklFile) -> json::JsonValue {
         nodes: [0, 1]
     }];
 
+    // first node is the mesh
     let mut nodes = json::array! [{
         skin: 0,
-        mesh: 0,
     }];
 
+    // Order here is important because of the
+    // joints0 buffer
     for bone in &skl.bones {
-        let children: Vec<_> = bone.children.iter().map(|x| *x + 1).collect();
+        let children: Vec<_> = bone.children.iter().map(|x| *x + 1).collect(); // + 1 because first node is the mesh
 
         let mut node = json::object! {
             name: format!("{}", bone.start),
@@ -62,7 +64,7 @@ pub fn to_gltf(skl: &super::SklFile) -> json::JsonValue {
         },
     );
 
-    let joints: Vec<_> = skl.bones.iter().enumerate().map(|(i, _)| i + 1).collect();
+    let joints: Vec<_> = skl.bones.iter().enumerate().map(|(i, _)| i + 1).collect(); // + 1 because the first node is the mesh
     gltf["skins"] = json::array![{
         inverseBindMatrices: inverse_acessor_idx,
         joints: joints.as_slice()
@@ -72,7 +74,13 @@ pub fn to_gltf(skl: &super::SklFile) -> json::JsonValue {
 }
 
 pub fn save<P: AsRef<Path>>(path: P, gltf: &json::JsonValue) {
-    let _ = std::fs::write(path, gltf.dump());
+    let mut f = std::fs::OpenOptions::new()
+        .truncate(true)
+        .create(true)
+        .write(true)
+        .open(path)
+        .unwrap();
+    let _ = gltf.write_pretty(&mut f, 4);
 }
 
 pub fn convert_and_save<P: AsRef<Path>>(path: P, skl: &super::SklFile) {

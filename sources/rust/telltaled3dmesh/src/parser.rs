@@ -327,14 +327,14 @@ impl<'a> NomSlice<'a> {
     }
 
     #[inline(always)]
-    pub fn parse_n_bytes(&mut self, n: usize) -> &[u8] {
+    pub fn parse_n_bytes(&mut self, n: usize, name: &str) -> &[u8] {
         match parse_n_bytes(self.slice, n) {
             Ok((i, data)) => {
                 self.slice = i;
                 self.qty += n;
 
                 let d: Vec<_> = data.iter().collect();
-                debug!("read {} bytes", n);
+                debug!("read {} bytes {}", n, name);
                 data
             }
             Err(e) => {
@@ -442,13 +442,13 @@ impl<'a> NomSlice<'a> {
     #[allow(dead_code)]
     pub fn parse_length_buffer(&mut self, name: &str) -> &[u8] {
         let n = self.parse_le_u32(name);
-        self.parse_n_bytes(n as usize)
+        self.parse_n_bytes(n as usize, name)
     }
 
     #[inline(always)]
-    pub fn parse_length1_buffer(&mut self, _name: &str) -> &[u8] {
-        let n = self.parse_n_bytes(1)[0];
-        self.parse_n_bytes(n as usize)
+    pub fn parse_length1_buffer(&mut self, name: &str) -> &[u8] {
+        let n = self.parse_n_bytes(1, &format!("{} length", name))[0];
+        self.parse_n_bytes(n as usize, name)
     }
 
     #[inline(always)]

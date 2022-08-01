@@ -103,6 +103,16 @@ pub fn push_node(gltf: &mut JsonValue, node: JsonValue) -> usize {
     gltf["nodes"].len() - 1
 }
 
+pub fn merge_node(gltf: &mut JsonValue, i: usize, node: JsonValue) {
+    if !gltf["nodes"].is_array() {
+        gltf["nodes"] = json::array![];
+    }
+
+    for (k, v) in node.entries() {
+        gltf["nodes"][i][k] = v.clone();
+    }
+}
+
 pub fn push_material(gltf: &mut JsonValue, material: JsonValue) -> usize {
     if !gltf["materials"].is_array() {
         gltf["materials"] = json::array![];

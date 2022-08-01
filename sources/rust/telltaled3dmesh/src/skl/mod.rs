@@ -11,8 +11,11 @@ use itertools::Itertools;
 
 use crate::parser::NomSlice;
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct Bone {
+    // Format has what appearts to be two bones id.
+    // Start is the most likely the bone id.
+    // Probably used to draw the bone
     pub(crate) start: u64,
     pub(crate) end: u64,
     pub(crate) parent: Option<usize>,
@@ -25,7 +28,7 @@ pub struct Bone {
     pub(crate) inverse_bind_pose: glam::Mat4,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct SklFile {
     pub bones: Vec<Bone>,
 }
@@ -60,7 +63,7 @@ pub fn parse_skl<P: AsRef<Path>>(path: P) -> SklFile {
     let mut skl = SklFile::new();
 
     let properties = input.read_properties();
-    dbg!(properties);
+    // dbg!(properties);
 
     let _ = input.parse_le_u32("?");
     let qty = input.parse_le_u32("Bones Qty") as usize;

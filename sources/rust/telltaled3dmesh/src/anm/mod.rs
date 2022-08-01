@@ -1,7 +1,13 @@
-use std::{collections::HashMap, io::Read, path::Path};
+use std::{
+    collections::HashMap,
+    io::Read,
+    path::{Path, PathBuf},
+    str::FromStr,
+};
 
 use bitvec::{order::Lsb0, slice::BitSlice};
-use log::trace;
+use glam::{quat, Quat, Vec3};
+use log::{debug, trace};
 
 use crate::parser::{self, NomSlice};
 
@@ -105,7 +111,7 @@ fn print_datapos(datapos: usize) {
     // );
 }
 
-pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
+pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl AsRef<Path>) {
     let path = path.as_ref();
     let filename = path.file_stem().unwrap().to_str().unwrap().to_string();
 
@@ -128,7 +134,6 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
     let mut anm = AnmFile::new();
 
     let header = input.read_properties();
-    dbg!(header);
 
     let _ = input.parse_le_u32("?");
     let _ = input.parse_le_u32("?");
@@ -148,8 +153,11 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
         let hash = input.parse_le_u64_with_debug("track type hash", |hash| {
             match hash {
                 0x1019453EB19C1ABD => "Keyframed track of quaternion",
+                0xCECACE3A835CB7EE => "Single Quaternion",
                 0x5D3E9FC6FA9369BF => "Keyframed track of transform",
                 0xF6F394AF6E4003AD => "Keyframed track of vector3",
+                0xFC6597EB1FE5458E => "Compressed transforms",
+                0xC1E84D6FF72CE80 => "Single Transform",
                 _ => "?",
             }
             .to_string()
@@ -192,17 +200,19 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
         match track_type.hash {
             //CompressedTransformKeys
             0xFC6597EB1FE5458E => {
-                for _ in 0..track_type.qty {
+                debug!("CompressedTransformKeys");
+                for i in 0..track_type.qty {
+                    debug!("Track: {}", i);
                     let mut bone = AnimatedTrack::new();
 
-                    let length = input.parse_n_bytes(1);
+                    let length = input.parse_n_bytes(1, "length");
                     let length = if length[0] == 255 {
                         input.parse_le_u16("length")
                     } else {
                         length[0] as u16
                     };
 
-                    let header = input.parse_n_bytes(length as usize);
+                    let header = input.parse_n_bytes(length as usize, "header");
 
                     if header.len() > 0 {
                         // 1111 1111 1111 1111 1111 1111 1111 1111/1111 1111 1111 1111 1111 1111 1111 1111
@@ -214,6 +224,11 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
                         let max_bounds_index = ((u32_1 >> 0x7) & 0xF) as usize;
                         let bits_per_bounds = ((u32_1 >> 0x3) & 0xF) as usize;
 
+                        debug!("Sample Count: {}", sample_count);
+                        debug!("Bit per Sample: {}", bits_per_sample);
+                        debug!("Max Bounds Index: {}", max_bounds_index);
+                        debug!("Bits pr Bounds: {}", bits_per_bounds);
+
                         let mut bounds_sizes = vec![];
                         let bits = BitSlice::<Lsb0, _>::from_slice(&header[..]).unwrap();
                         for i in 0..7 {
@@ -224,22 +239,6 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
 
                         let max_bound = max_bounds[max_bounds_index];
 
-                        let header32 = unsafe {
-                            std::slice::from_raw_parts(
-                                header.as_ptr() as *const u32,
-                                header.len() / 4,
-                            )
-                        };
-                        // println!("{} {:?}", header32.len(), header32);
-                        // println!(
-                        //     "Max Bounds: {:?} {} [{}]",
-                        //     bounds_sizes, max_bound, max_bounds_index
-                        // );
-                        // println!("Sample Count: {}", sample_count);
-                        // println!("bits_per_sample: {}", bits_per_sample);
-                        // println!("max_bounds_index: {}", max_bounds_index);
-                        // println!("bits_per_bounds: {}", bits_per_bounds);
-
                         let mut samples = 0;
                         let mut datapos = 50;
 
@@ -248,33 +247,24 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
                                 break;
                             }
 
-                            // println!("loop start: {}", samples);
-                            // println!("\tdatapos: {}", datapos);
-
                             let mut bounds_bitsizes = vec![];
                             for i in 0..7 {
                                 let idx = skip_take_as_usize(bits, datapos, bounds_sizes[i]);
                                 datapos += bounds_sizes[i];
                                 bounds_bitsizes.push(idx);
                             }
-                            let bitsizessum = bounds_bitsizes.iter().sum::<usize>();
-                            // println!("\tBounds Bit sizes: {:?} {}", bounds_bitsizes, bitsizessum);
 
-                            print_datapos(datapos);
+                            let bitsizessum = bounds_bitsizes.iter().sum::<usize>();
                             let qty_samples = skip_take_as_usize(bits, datapos, bits_per_sample);
                             datapos += bits_per_sample;
-
                             samples += qty_samples;
-
-                            // println!("\tQty Sample: {:?}", qty_samples);
-                            // println!("\tdatapos: {}", datapos);
 
                             let mut upper_value = 0.0;
                             let mut lower_value = 0.0;
                             if bitsizessum != 0 {
                                 let b0 = skip_take_as_usize(bits, datapos, bits_per_bounds);
                                 datapos += bits_per_bounds;
-                                // println!("\tSome Value: {}", b0);
+
                                 if bits_per_bounds == 0 {
                                     upper_value = 2.0 * max_bound;
                                     lower_value = -max_bound;
@@ -282,18 +272,13 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
                                     let max = ((1 << bits_per_bounds) - 1);
                                     let new_b0 = b0 & max;
                                     let new_b0 = (new_b0 as f64) / (max as f64) * max_bound;
-                                    // println!(
-                                    //     "\tSome Value: {} = {} / {} * {}",
-                                    //     new_b0, b0, max, max_bound
-                                    // );
+
                                     upper_value = new_b0 * 2.0;
                                     lower_value = -new_b0;
-                                    // println!("\t{} {}", upper_value, lower_value);
                                 }
                             }
 
                             for _ in 0..qty_samples {
-                                // println!("\tdatapos: {}", datapos);
                                 let mut samples = vec![];
                                 let mut fsamples = vec![];
                                 for &size in &bounds_bitsizes {
@@ -310,37 +295,28 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
                                         let max = (1 << size) - 1;
                                         let v = v & max;
                                         let v = (v as f64) / (max as f64);
-                                        // println!("\t{} * {} + {}", v, upper_value, lower_value);
                                         v * upper_value + lower_value
                                     };
 
                                     fsamples.push(v);
                                 }
-                                // println!("\tSamples Values: {:?}", samples);
-                                // println!("\tSamples Values: {:?}", fsamples);
 
                                 let frame = AnimatedTrackFrame {
                                     compressed: true,
                                     rotation: [fsamples[0], fsamples[1], fsamples[2], fsamples[3]],
                                     translation: [fsamples[4], fsamples[5], fsamples[6]],
                                 };
+                                debug!("{:?}", frame);
 
                                 bone.frames.push(frame);
                             }
 
-                            // println!("\tdatapos: {}", datapos);
-
-                            // println!("\tSamples: {}", samples);
-
                             if samples < sample_count {
-                                let b = skip_take_as_usize(bits, datapos, 1);
+                                let _ = skip_take_as_usize(bits, datapos, 1);
                                 datapos += 1;
-                                // println!("\t?: {:?}", b);
                             } else {
                                 break;
                             }
-
-                            // println!("\tdatapos: {}", datapos);
                         }
 
                         let all_padding = bits.iter().skip(datapos).all(|x| x == false);
@@ -362,14 +338,6 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
 
                     let data = input.parse_length1_buffer("?");
 
-                    // println!("Second Buffer: {:?}", data);
-                    {
-                        let data = unsafe {
-                            std::slice::from_raw_parts(data.as_ptr() as *const u32, data.len() / 4)
-                        };
-                        // println!("Second Buffer: {:?}", data);
-                    }
-
                     let bits = BitSlice::<Lsb0, _>::from_slice(&data[..]).unwrap();
 
                     //         00000111|11|100|0|0000|100|000
@@ -387,6 +355,8 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
                     let c = skip_take_as_usize(&bits, 14, 2);
                     let d = skip_take_as_usize(&bits, 16, 5);
                     let e = skip_take_as_usize(&bits, 21, 11);
+
+                    debug!("Second Buffer Header: {:?}", (a, b, b2, tblA, c, d, e));
 
                     // table A
                     // 00817b80  float data_817b80 = 0.100000001
@@ -486,7 +456,7 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
                     let qty = input.parse_le_u32("qty keyframes");
 
                     let t = input.parse_le_u32("?");
-                    let _ = input.parse_n_bytes(1);
+                    let _ = input.parse_n_bytes(1, "?");
 
                     for i in 0..qty {
                         log::debug!("keyframe quaternion");
@@ -509,7 +479,7 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
                             x => todo!("{}", x),
                         }
 
-                        let _ = input.parse_n_bytes(1);
+                        let _ = input.parse_n_bytes(1, "?");
                     }
 
                     track.bone_id = bone_id;
@@ -544,7 +514,7 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
 
                         match t {
                             0 => {
-                                let _ = input.parse_n_bytes(1);
+                                let _ = input.parse_n_bytes(1, "?");
                             }
                             2 => {
                                 let (q, t) = input.read_length_transform("max");
@@ -560,7 +530,7 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
                                 }
 
                                 let _ = input.parse_le_f32("time");
-                                let _ = input.parse_n_bytes(1);
+                                let _ = input.parse_n_bytes(1, "?");
                             }
                             x => todo!("{}", x),
                         }
@@ -614,7 +584,7 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
                             x => todo!("{}", x),
                         }
 
-                        let _ = input.parse_n_bytes(1);
+                        let _ = input.parse_n_bytes(1, "?");
                     }
 
                     let _ = input.parse_le_u32("?");
@@ -625,7 +595,7 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
                         translation: [t[0] as f64, t[1] as f64, t[2] as f64],
                     });
 
-                    tracks.push(dbg!(track));
+                    tracks.push(track);
                 }
             }
 
@@ -659,22 +629,13 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
         byid.insert(bone.bone_id, i);
     }
 
-    let mut skl_path = path.to_path_buf();
-    skl_path.pop();
-    skl_path.push("sk20_guybrush.skl");
-    let skl = crate::skl::parse_skl(&skl_path);
+    let skl = PathBuf::from_str(&skl).unwrap();
+    let skl = crate::skl::parse_skl(&skl);
     let mut gltf = crate::skl::gltf::to_gltf(&skl);
 
-    let mut d3dmesh_path = path.to_path_buf();
-    d3dmesh_path.pop();
-    d3dmesh_path.push("sk20_guybrush.d3dmesh");
-    let d3dmesh = crate::d3dmesh::parse_d3dmesh(&d3dmesh_path, Some(&skl), None).unwrap();
-    crate::d3dmesh::outputs::gltf::add_mesh_to_gltf(&d3dmesh, &mut gltf);
-
-    // println!("{:#?}", skl);
-    // println!("{:#?}", skl.bones.len());
-    // println!("{:#?}", anm.bones.len());
-    // println!("{:#?}", anm);
+    let d3dmesh = PathBuf::from_str(&mesh).unwrap();
+    let d3dmesh = crate::d3dmesh::parse_d3dmesh(&d3dmesh, Some(&skl), None).unwrap();
+    crate::d3dmesh::outputs::gltf::add_mesh_to_gltf(&d3dmesh, &mut gltf, false, Some(0));
 
     //time buffer
 
@@ -702,7 +663,7 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
         time_buffer.extend(b);
     }
 
-    //rot buffer
+    //transformations buffer
     let mut rotation_buffer = vec![];
     let mut translation_buffer = vec![];
     for sklbone in skl.bones.iter() {
@@ -712,11 +673,14 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
 
         let bid = byid[&sklbone.start];
         let bone = &tracks[bid];
+        let (gs, gr, gt) = sklbone.global_matrix.to_scale_rotation_translation();
+        let (ls, lr, lt) = sklbone.local_matrix.to_scale_rotation_translation();
+
         //glam::Quat::from_array(sklbone.rotation)
         let b: Vec<f32> = bone
             .frames
             .iter()
-            .scan(glam::Quat::default(), |acc, frame| {
+            .scan(Quat::default(), |acc, frame| {
                 if frame.compressed {
                     *acc = *acc + glam::Quat::from_array(frame.rotation_as_f32());
                     let q = acc.normalize();
@@ -747,7 +711,6 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
     time_buffer_view["target"] = json::JsonValue::Number(34963i32.into());
     let time_buffer_idx = crate::gltf::push_buffer_view(&mut gltf, time_buffer_view);
 
-    // dbg!(&rot_buffer);
     let mut rot_buffer_view = crate::gltf::push_buffer(&mut gltf, rotation_buffer.as_slice());
     rot_buffer_view["target"] = json::JsonValue::Number(34963i32.into());
     let rot_buffer_idx = crate::gltf::push_buffer_view(&mut gltf, rot_buffer_view);
@@ -792,15 +755,15 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
         let t_acessor_idx = crate::gltf::push_accessor(
             &mut gltf,
             json::object! {
-                bufferView : t_buffer_idx,
-                componentType : 5126,
-                count : bone.frames.len(),
-                type : "VEC3",
+                bufferView: t_buffer_idx,
+                componentType: 5126,
+                count: bone.frames.len(),
+                type: "VEC3",
                 byteOffset: offset * 3 * 4,
             },
         );
 
-        let sampler_idx = crate::gltf::push_sampler(
+        let rot_sampler_idx = crate::gltf::push_sampler(
             &mut anim01,
             json::object! {
                 input : time_acessor_idx,
@@ -811,7 +774,7 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
         crate::gltf::push_channel(
             &mut anim01,
             json::object! {
-                sampler: sampler_idx,
+                sampler: rot_sampler_idx,
                 target: json::object!{
                     node: skli + 1,
                     path: "rotation"
@@ -819,19 +782,20 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
             },
         );
 
+        // skli == 0 translation gives root motion
         if skli == 0 {
-            let sampler_idx = crate::gltf::push_sampler(
+            let t_sampler_idx = crate::gltf::push_sampler(
                 &mut anim01,
                 json::object! {
-                    input : time_acessor_idx,
-                    interpolation : "LINEAR",
-                    output : t_acessor_idx
+                    input: time_acessor_idx,
+                    interpolation: "LINEAR",
+                    output: t_acessor_idx
                 },
             );
             crate::gltf::push_channel(
                 &mut anim01,
                 json::object! {
-                    sampler: sampler_idx,
+                    sampler: t_sampler_idx,
                     target: json::object!{
                         node: skli + 1,
                         path: "translation"
@@ -846,6 +810,4 @@ pub fn convert(path: impl AsRef<Path>, output: impl AsRef<Path>) {
     gltf["animations"] = json::array![anim01];
 
     crate::skl::gltf::save(output, &gltf);
-
-    // println!("{:#?}", anm);
 }

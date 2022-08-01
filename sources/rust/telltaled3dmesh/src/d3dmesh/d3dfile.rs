@@ -1,5 +1,7 @@
 use json::JsonValue;
 
+use crate::skl::SklFile;
+
 #[derive(Debug)]
 pub enum D3DBufferData {
     U8(Vec<u8>),
@@ -149,6 +151,7 @@ impl D3DMesh {
     }
 }
 
+#[derive(Debug)]
 pub struct BonePallete {
     pub bones: Vec<usize>,
 }
@@ -159,6 +162,7 @@ pub struct D3DFile {
     pub meshes: Vec<D3DMesh>,
     pub buffers: Vec<D3DBuffer>,
     pub palletes: Vec<BonePallete>,
+    pub skl: Option<SklFile>,
 }
 
 impl D3DFile {
@@ -169,6 +173,7 @@ impl D3DFile {
             buffers: Vec::with_capacity(10),
             bbox: D3DBoundingBox::default(),
             palletes: vec![],
+            skl: None,
         }
     }
 
@@ -176,6 +181,7 @@ impl D3DFile {
         self.buffers.iter().find(|x| x.r#type == name)
     }
 
+    // Returns the nth buffer with a given name
     pub fn nth_buffer(&self, n: usize, name: &str) -> Option<&D3DBuffer> {
         self.buffers.iter().filter(|x| x.r#type == name).nth(n)
     }
