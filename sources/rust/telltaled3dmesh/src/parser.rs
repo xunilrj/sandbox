@@ -354,6 +354,16 @@ impl<'a> NomSlice<'a> {
     }
 
     #[inline(always)]
+    pub fn parse_flag_le_u32<T: std::fmt::Debug + From<u32>>(&mut self, name: &str) -> T {
+        let (i, data) = parse_le_u32(self.slice).unwrap();
+        self.slice = i;
+        self.qty += 4;
+
+        debug!("[{}] as u32: {:?} [{}]", name, T::from(data), data);
+        T::from(data)
+    }
+
+    #[inline(always)]
     pub fn parse_le_u32(&mut self, name: &str) -> u32 {
         let (i, data) = parse_le_u32(self.slice).unwrap();
         self.slice = i;

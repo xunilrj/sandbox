@@ -542,6 +542,7 @@ name = "telltaleconv"
 version = "0.2.0"
 dependencies = [
  "base64",
+ "bitflags",
  "bitvec",
  "crc64",
  "glam",

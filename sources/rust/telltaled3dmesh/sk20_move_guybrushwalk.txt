@@ -1,0 +1,74 @@
+cargo build --release
+   Compiling telltaleconv v0.2.0 (/mnt/d/github/sandbox/sources/rust/telltaled3dmesh)
+warning: unused imports: `Vec3`, `quat`
+  --> src/anm/mod.rs:10:12
+   |
+10 | use glam::{quat, Quat, Vec3};
+   |            ^^^^        ^^^^
+   |
+   = note: `#[warn(unused_imports)]` on by default
+
+warning: unused import: `trace`
+  --> src/anm/mod.rs:11:18
+   |
+11 | use log::{debug, trace};
+   |                  ^^^^^
+
+warning: unnecessary parentheses around assigned value
+   --> src/anm/mod.rs:310:47
+    |
+310 | ...                   let max = ((1 << bits_per_bounds) - 1);
+    |                                 ^                          ^
+    |
+    = note: `#[warn(unused_parens)]` on by default
+help: remove these parentheses
+    |
+310 -                                     let max = ((1 << bits_per_bounds) - 1);
+310 +                                     let max = (1 << bits_per_bounds) - 1;
+    | 
+
+warning: unused import: `borrow::Borrow`
+ --> src/d3dmesh/mod.rs:2:5
+  |
+2 |     borrow::Borrow,
+  |     ^^^^^^^^^^^^^^
+
+warning: unused imports: `number::Number`, `value`
+ --> src/skl/gltf.rs:3:12
+  |
+3 | use json::{number::Number, value, JsonValue};
+  |            ^^^^^^^^^^^^^^  ^^^^^
+
+warning: unused import: `collections::vec_deque`
+ --> src/skl/mod.rs:4:5
+  |
+4 |     collections::vec_deque,
+  |     ^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `parser::parse_le_u32`
+ --> src/main.rs:8:5
+  |
+8 | use parser::parse_le_u32;
+  |     ^^^^^^^^^^^^^^^^^^^^
+
+error[E0282]: type annotations needed for `HashMap<K, V>`
+   --> src/anm/mod.rs:824:33
+    |
+723 |     let mut time_bone_id_to_offset = HashMap::new();
+    |         -------------------------- consider giving `time_bone_id_to_offset` the explicit type `HashMap<K, V>`, where the type parameter `V` is specified
+...
+824 |                     byteOffset: time_bone_id_to_offset[&bone_id],
+    |                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ cannot infer type for type parameter `V`
+    |
+    = note: type must be known at this point
+
+warning: unused import: `itertools::Itertools`
+ --> src/d3dmesh/mod.rs:8:5
+  |
+8 | use itertools::Itertools;
+  |     ^^^^^^^^^^^^^^^^^^^^
+
+For more information about this error, try `rustc --explain E0282`.
+warning: `telltaleconv` (bin "telltaleconv") generated 8 warnings
+error: could not compile `telltaleconv` due to previous error; 8 warnings emitted
+error: Recipe `build-release` failed on line 2 with exit code 101

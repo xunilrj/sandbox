@@ -7,6 +7,7 @@ use std::{
     str::FromStr,
 };
 
+use glam::{vec3, Mat4};
 use itertools::Itertools;
 
 use crate::parser::NomSlice;
@@ -37,8 +38,6 @@ impl SklFile {
     pub fn new() -> Self {
         Self { bones: Vec::new() }
     }
-
-    pub fn calculate_inverse_bind_pose(&mut self) {}
 
     pub fn bone_position(&self, bid: u64) -> Option<usize> {
         self.bones.iter().position(|x| x.start == bid)
@@ -136,8 +135,8 @@ pub fn parse_skl<P: AsRef<Path>>(path: P) -> SklFile {
         .iter()
         .find_position(|x| x.parent.is_none())
         .unwrap();
-    let mut q = std::collections::VecDeque::from([root]);
-    while let Some(idx) = q.pop_front() {
+    let mut queue = std::collections::VecDeque::from([root]);
+    while let Some(idx) = queue.pop_front() {
         let bone = &skl.bones[idx];
 
         let parent_global = bone
@@ -146,20 +145,18 @@ pub fn parse_skl<P: AsRef<Path>>(path: P) -> SklFile {
             .unwrap_or(glam::Mat4::IDENTITY);
 
         let t: glam::Vec3 = bone.translation.into();
-        let t = glam::Mat4::from_translation(t);
-
-        let r = glam::Quat::from_array(bone.rotation);
-        let r = glam::Mat4::from_quat(r);
+        let q = glam::Quat::from_array(bone.rotation);
 
         let bone = &mut skl.bones[idx];
-        bone.global_matrix = parent_global * (t * r);
+        bone.local_matrix = Mat4::from_scale_rotation_translation(vec3(1.0, 1.0, 1.0), q, t);
+        bone.global_matrix = parent_global * bone.local_matrix;
         bone.inverse_bind_pose = bone.global_matrix.inverse();
 
         // println!("global matrix: {:?}", bone.global_matrix.to_cols_array());
         // println!("inverse: {:?}", bone.inverse_bind_pose.to_cols_array());
 
         for child in &bone.children {
-            q.push_back(*child);
+            queue.push_back(*child);
         }
     }
 

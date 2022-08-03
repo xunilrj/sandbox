@@ -5,6 +5,7 @@ use std::{
     str::FromStr,
 };
 
+use bitflags::bitflags;
 use bitvec::{order::Lsb0, slice::BitSlice};
 use glam::{quat, Quat, Vec3};
 use log::{debug, trace};
@@ -28,6 +29,7 @@ impl AnmFile {
 
 #[derive(Debug)]
 pub struct AnimatedTrackFrame {
+    time: f32,
     compressed: bool,
     rotation: [f64; 4],
     translation: [f64; 3],
@@ -109,6 +111,41 @@ fn print_datapos(datapos: usize) {
     //     datapos / 8,
     //     datapos / 32
     // );
+}
+
+bitflags! {
+    struct BoneFlags: u32 {
+        const DISABLED = 0x1;
+        const TIME_BEHAVIOR = 0x2;
+        const WEIGHT_BEHAVIOR = 0x4;
+        const MOVER_ANIM = 0x10;
+        const PROPERTY_ANIMATION = 0x20;
+        const TEXTURE_MATRIX_ANIMATION = 0x40;
+        const AUDIO_DATA_ANIMATION = 0x80;
+        const DONT_OPTIMIZE = 0x100;
+        const HOMOGENEOUS = 0x200;
+        const MIXER_SCALED = 0x400;
+        const MIXER_HOMOGENEOUS = 0x800;
+        const STYLE_ANIMATION = 0x1000;
+        const PROP_FORCE_UPDATE = 0x2000;
+        const MIXER_OWNED = 0x4000;
+        const MIXER_DIRTY = 0x8000;
+        const ADDITIVE = 0x10000;
+        const EXTERNALLY_OWNED = 0x20000;
+        const DONT_MIX_PAUSED_CONTROLLERS = 0x40000;
+        const RUNTIME_ANIMATION = 0x80000;
+        const TRANSIENT_ANIMATION = 0x100000;
+        const TOOL_ONLY = 0x200000;
+        const KEYED_ATTACHMENT_ANIMATION = 0x400000;
+        const MIXER_WEIGHTED_BLEND = 0x800000;
+        const VALUE_KIND = 0xFF000000;
+    }
+}
+
+impl From<u32> for BoneFlags {
+    fn from(bits: u32) -> Self {
+        BoneFlags::from_bits(bits).unwrap()
+    }
 }
 
 pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl AsRef<Path>) {
@@ -203,7 +240,7 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
                 debug!("CompressedTransformKeys");
                 for i in 0..track_type.qty {
                     debug!("Track: {}", i);
-                    let mut bone = AnimatedTrack::new();
+                    let mut track = AnimatedTrack::new();
 
                     let length = input.parse_n_bytes(1, "length");
                     let length = if length[0] == 255 {
@@ -242,6 +279,7 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
                         let mut samples = 0;
                         let mut datapos = 50;
 
+                        let mut time = 0.0;
                         loop {
                             if samples >= sample_count {
                                 break;
@@ -302,13 +340,14 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
                                 }
 
                                 let frame = AnimatedTrackFrame {
+                                    time,
                                     compressed: true,
                                     rotation: [fsamples[0], fsamples[1], fsamples[2], fsamples[3]],
                                     translation: [fsamples[4], fsamples[5], fsamples[6]],
                                 };
                                 debug!("{:?}", frame);
 
-                                bone.frames.push(frame);
+                                track.frames.push(frame);
                             }
 
                             if samples < sample_count {
@@ -317,6 +356,8 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
                             } else {
                                 break;
                             }
+
+                            time += 1.0 / 30.0;
                         }
 
                         let all_padding = bits.iter().skip(datapos).all(|x| x == false);
@@ -377,28 +418,32 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
                     //     a, b, b2, tblA, c, d, e
                     // );
 
-                    tracks.push(bone);
+                    tracks.push(track);
                 }
             }
 
+            //compressedkeys<quaternion>
             0x9A946F2A83FC7658 => {
-                for _ in 0..track_type.qty {
-                    let mut bone = AnimatedTrack::new();
-                    bone.frames.push(AnimatedTrackFrame {
-                        compressed: false,
-                        rotation: [0.0, 0.0, 0.0, 1.0],
-                        translation: [0.0, 0.0, 0.0],
-                    });
-                    tracks.push(bone);
-                }
+                todo!();
+                // for _ in 0..track_type.qty {
+                //     let mut bone = AnimatedTrack::new();
+                //     bone.frames.push(AnimatedTrackFrame {
+                //         compressed: false,
+                //         rotation: [0.0, 0.0, 0.0, 1.0],
+                //         translation: [0.0, 0.0, 0.0],
+                //     });
+                //     tracks.push(bone);
+                // }
             }
 
-            //singlevalue<vector3>
+            //SngleValue<vector3>
             0x6B77C806C0E23EA1 => {
+                debug!("SingleValue<Vector3>");
                 for _ in 0..track_type.qty {
                     let mut bone = AnimatedTrack::new();
                     let t = input.read_vec3("vec3");
                     bone.frames.push(AnimatedTrackFrame {
+                        time: 0.0,
                         compressed: false,
                         rotation: [0.0, 0.0, 0.0, 1.0],
                         translation: [t[0] as f64, t[1] as f64, t[2] as f64],
@@ -409,10 +454,12 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
 
             // SingleValue<Quaternion>
             0xCECACE3A835CB7EE => {
+                debug!("SingleValue<Quaternion>");
                 for _ in 0..track_type.qty {
                     let mut bone = AnimatedTrack::new();
                     let q = input.read_quat("quat");
                     bone.frames.push(AnimatedTrackFrame {
+                        time: 0.0,
                         compressed: false,
                         rotation: [q[0] as f64, q[1] as f64, q[2] as f64, q[3] as f64],
                         translation: [0.0, 0.0, 0.0],
@@ -423,11 +470,13 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
 
             // SingleValue<Transform>
             0xC1E84D6FF72CE80 => {
+                debug!("SingleValue<Transform>");
                 for _ in 0..track_type.qty {
                     let mut bone = AnimatedTrack::new();
                     let q = input.read_quat("quat");
                     let t = input.read_vec3("vec3");
                     bone.frames.push(AnimatedTrackFrame {
+                        time: 0.0,
                         compressed: false,
                         rotation: [q[0] as f64, q[1] as f64, q[2] as f64, q[3] as f64],
                         translation: [t[0] as f64, t[1] as f64, t[2] as f64],
@@ -438,6 +487,8 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
 
             // keyframedvalue<quaternion>
             0x1019453EB19C1ABD => {
+                debug!("keyframedvalue<quaternion>");
+
                 for _ in 0..track_type.qty {
                     log::debug!("New Track - keyframed quaternions");
 
@@ -458,6 +509,7 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
                     let t = input.parse_le_u32("?");
                     let _ = input.parse_n_bytes(1, "?");
 
+                    let mut time = 0.0;
                     for i in 0..qty {
                         log::debug!("keyframe quaternion");
                         let t = input.parse_le_u32("type");
@@ -467,6 +519,7 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
                                 let q = input.read_quat("");
 
                                 track.frames.push(AnimatedTrackFrame {
+                                    time,
                                     compressed: false,
                                     rotation: [q[0] as f64, q[1] as f64, q[2] as f64, q[3] as f64],
                                     translation: [0.0, 0.0, 0.0],
@@ -480,6 +533,8 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
                         }
 
                         let _ = input.parse_n_bytes(1, "?");
+
+                        time += 1.0 / 30.0;
                     }
 
                     track.bone_id = bone_id;
@@ -489,6 +544,8 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
 
             // keyframedvalue<transform>
             0x5D3E9FC6FA9369BF => {
+                debug!("keyframedvalue<transform>");
+
                 for _ in 0..track_type.qty {
                     let mut bone = AnimatedTrack::new();
 
@@ -500,7 +557,8 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
 
                     let boneid = input.parse_le_u64("boneid");
                     let _ = input.parse_le_u32("?");
-                    let _ = input.parse_le_u32("?");
+
+                    let _ = input.parse_flag_le_u32::<BoneFlags>("flags?");
 
                     let (minq, mint) = input.read_length_transform("min");
                     let (maxq, maxt) = input.read_length_transform("max");
@@ -508,18 +566,18 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
                     let _ = input.parse_le_u32("frames length in bytes");
                     let qty = input.parse_le_u32("qty");
 
+                    let mut time = 0.0;
                     for i in 0..=qty {
                         log::debug!("- frame {}", i);
                         let t = input.parse_le_u32("type");
 
                         match t {
-                            0 => {
-                                let _ = input.parse_n_bytes(1, "?");
-                            }
+                            0 => {}
                             2 => {
                                 let (q, t) = input.read_length_transform("max");
 
                                 bone.frames.push(AnimatedTrackFrame {
+                                    time,
                                     compressed: false,
                                     rotation: [q[0] as f64, q[1] as f64, q[2] as f64, q[3] as f64],
                                     translation: [t[0] as f64, t[1] as f64, t[2] as f64],
@@ -530,10 +588,14 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
                                 }
 
                                 let _ = input.parse_le_f32("time");
-                                let _ = input.parse_n_bytes(1, "?");
                             }
                             x => todo!("{}", x),
                         }
+
+                        let v = input.parse_n_bytes(1, "?");
+                        debug!("v: {:?}", v);
+
+                        time += 1.0 / 30.0;
                     }
 
                     bone.bone_id = boneid;
@@ -543,6 +605,8 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
 
             //keyframedvalue<vector3>
             0xF6F394AF6E4003AD => {
+                debug!("keyframedvalue<vector3>");
+
                 for _ in 0..track_type.qty {
                     let mut track = AnimatedTrack::new();
                     log::debug!("- new bone vec3");
@@ -559,6 +623,7 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
                     let _ = input.parse_le_u32("?");
                     let qty = input.parse_le_u32("qty frames");
 
+                    let mut time = 0.0;
                     for i in 0..qty {
                         log::debug!("-- new vec3");
                         let t = input.parse_le_u32("vector type");
@@ -566,8 +631,9 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
                         match t {
                             0 => {
                                 track.frames.push(AnimatedTrackFrame {
+                                    time,
                                     compressed: false,
-                                    rotation: [0.0, 0.0, 0.0, 0.0],
+                                    rotation: [0.0, 0.0, 0.0, 1.0],
                                     translation: [0.0, 0.0, 0.0],
                                 });
                             }
@@ -576,8 +642,9 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
                                 let t = input.read_vec3("?");
 
                                 track.frames.push(AnimatedTrackFrame {
+                                    time,
                                     compressed: false,
-                                    rotation: [0.0, 0.0, 0.0, 0.0],
+                                    rotation: [0.0, 0.0, 0.0, 1.0],
                                     translation: [t[0] as f64, t[1] as f64, t[2] as f64],
                                 });
                             }
@@ -585,13 +652,16 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
                         }
 
                         let _ = input.parse_n_bytes(1, "?");
+
+                        time += 1.0 / 30.0;
                     }
 
                     let _ = input.parse_le_u32("?");
                     let t = input.read_vec3("?");
                     track.frames.push(AnimatedTrackFrame {
+                        time,
                         compressed: false,
-                        rotation: [0.0, 0.0, 0.0, 0.0],
+                        rotation: [0.0, 0.0, 0.0, 1.0],
                         translation: [t[0] as f64, t[1] as f64, t[2] as f64],
                     });
 
@@ -603,8 +673,9 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
         }
     }
 
+    debug!("One Value per track");
     for i in 0..qty_tracks {
-        let _ = input.parse_le_u32(format!("value: {}", i).as_str());
+        let _ = input.parse_flag_le_u32::<BoneFlags>(format!("value: {}", i).as_str());
     }
 
     let _ = input.parse_le_u16("?");
@@ -616,22 +687,38 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
         tracks.len()
     );
 
-    let mut byid = HashMap::new();
+    debug!("Bone IDs");
     for i in 0..qty_tracks {
         let k = input.parse_le_u64("Bone ID");
         let _ = input.parse_le_u32("");
-        if tracks[i].bone_id == 0 {
+        if tracks[i].bone_id == 0 || tracks[i].bone_id == k {
             tracks[i].bone_id = k;
+        } else {
+            panic!("Old value: {}, new value: {}", tracks[i].bone_id, k);
         }
     }
 
+    let mut bone_id_to_idx = HashMap::new();
+    let mut bone_idx_to_id = HashMap::new();
     for (i, bone) in tracks.iter().enumerate() {
-        byid.insert(bone.bone_id, i);
+        bone_id_to_idx.insert(bone.bone_id, i);
+        bone_idx_to_id.insert(i, bone.bone_id);
     }
 
     let skl = PathBuf::from_str(&skl).unwrap();
     let skl = crate::skl::parse_skl(&skl);
     let mut gltf = crate::skl::gltf::to_gltf(&skl);
+
+    let bones_ids = gltf["skins"][0]["joints"]
+        .members()
+        .map(|x| {
+            gltf["nodes"][x.as_usize().unwrap()]["name"]
+                .as_str()
+                .unwrap()
+                .parse::<u64>()
+                .unwrap()
+        })
+        .collect::<Vec<_>>();
 
     let d3dmesh = PathBuf::from_str(&mesh).unwrap();
     let d3dmesh = crate::d3dmesh::parse_d3dmesh(&d3dmesh, Some(&skl), None).unwrap();
@@ -639,71 +726,60 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
 
     //time buffer
 
-    let mut time_buffer = vec![];
-    for sklbone in skl.bones.iter() {
-        if !byid.contains_key(&sklbone.start) {
-            continue;
+    let mut time_buffer: Vec<u8> = vec![];
+    let mut time_bone_id_to_offset = HashMap::new();
+    for bone_id in bones_ids.iter() {
+        let track = &tracks[bone_id_to_idx[bone_id]];
+        assert!(track.bone_id == *bone_id);
+
+        time_bone_id_to_offset.insert(*bone_id, time_buffer.len());
+        for frame in track.frames.iter() {
+            time_buffer.extend(frame.time.to_le_bytes());
         }
-
-        let bid = byid[&sklbone.start];
-        let bone = &tracks[bid];
-
-        // let qty_frames = bone.frames.len();
-        // let step = if qty_frames == 1 { 0.0 } else { 1.0 / (bone.frames.len() - 1) as f32 };
-        let step = 1.0 / 30.0;
-
-        let b: Vec<f32> = bone
-            .frames
-            .iter()
-            .scan(-step, |t, _| {
-                *t += step;
-                Some(*t)
-            })
-            .collect();
-        time_buffer.extend(b);
     }
 
     //transformations buffer
-    let mut rotation_buffer = vec![];
-    let mut translation_buffer = vec![];
-    for sklbone in skl.bones.iter() {
-        if !byid.contains_key(&sklbone.start) {
-            continue;
-        }
+    let mut rotation_buffer: Vec<u8> = vec![];
+    let mut translation_buffer: Vec<u8> = vec![];
 
-        let bid = byid[&sklbone.start];
-        let bone = &tracks[bid];
-        let (gs, gr, gt) = sklbone.global_matrix.to_scale_rotation_translation();
-        let (ls, lr, lt) = sklbone.local_matrix.to_scale_rotation_translation();
+    let mut r_bone_id_to_offset = HashMap::new();
+    let mut t_bone_id_to_offset = HashMap::new();
+    for bone_id in bones_ids.iter() {
+        let track = &tracks[bone_id_to_idx[bone_id]];
+        assert!(track.bone_id == *bone_id);
 
-        //glam::Quat::from_array(sklbone.rotation)
-        let b: Vec<f32> = bone
+        let b: Vec<u8> = track
             .frames
             .iter()
             .scan(Quat::default(), |acc, frame| {
-                if frame.compressed {
-                    *acc = *acc + glam::Quat::from_array(frame.rotation_as_f32());
-                    let q = acc.normalize();
-                    Some([q.x, q.y, q.z, q.w])
-                } else {
-                    Some(frame.rotation_as_f32())
-                }
+                // if frame.compressed {
+                //     *acc = glam::Quat::from_array(frame.rotation_as_f32());
+                //     let q = acc.normalize();
+                //     Some([q.x, q.y, q.z, q.w])
+                // } else {
+                Some(frame.rotation_as_f32())
+                // }
             })
             .flat_map(|x| x)
+            .flat_map(|x| x.to_le_bytes())
             .collect();
+        r_bone_id_to_offset.insert(*bone_id, rotation_buffer.len());
         rotation_buffer.extend(b);
 
-        let b: Vec<f32> = bone
+        let b: Vec<u8> = track
             .frames
             .iter()
             .scan(glam::Vec3::default(), |acc, frame| {
-                use glam::Vec3Swizzles;
-                let t = glam::Vec3::from_slice(&frame.translation_as_f32()[..]).xzy() * 0.1; // why 0.1 here?
-                *acc = *acc + t;
-                Some(*acc.as_ref())
+                // use glam::Vec3Swizzles;
+                // let t = glam::Vec3::from_slice(&frame.translation_as_f32()[..]).xzy() * 0.1; // why 0.1 here?
+                // *acc = *acc + t;
+                // Some(*acc.as_ref())
+                Some(frame.translation_as_f32())
             })
             .flat_map(|x| x)
+            .flat_map(|x| x.to_le_bytes())
             .collect();
+        t_bone_id_to_offset.insert(*bone_id, translation_buffer.len());
         translation_buffer.extend(b);
     }
 
@@ -717,94 +793,94 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
 
     let mut t_buffer_view = crate::gltf::push_buffer(&mut gltf, translation_buffer.as_slice());
     t_buffer_view["target"] = json::JsonValue::Number(34963i32.into());
-    let t_buffer_idx = crate::gltf::push_buffer_view(&mut gltf, t_buffer_view);
+    let translation_buffer_idx = crate::gltf::push_buffer_view(&mut gltf, t_buffer_view);
 
     let mut anim01 = json::object! {
         name: filename
     };
 
-    let mut offset = 0;
-    for (skli, sklbone) in skl.bones.iter().enumerate() {
-        if !byid.contains_key(&sklbone.start) {
-            continue;
-        }
+    for bone_id in bones_ids.iter() {
+        let track = &tracks[bone_id_to_idx[bone_id]];
+        assert!(track.bone_id == *bone_id);
 
-        let bid = byid[&sklbone.start];
-        let bone = &tracks[bid];
+        let bone_name = format!("{}", bone_id);
 
-        let time_acessor_idx = crate::gltf::push_accessor(
-            &mut gltf,
-            json::object! {
-                bufferView: time_buffer_idx,
-                componentType: 5126,
-                count: bone.frames.len(),
-                type: "SCALAR",
-                byteOffset: offset * 4,
-            },
-        );
-        let rot_acessor_idx = crate::gltf::push_accessor(
-            &mut gltf,
-            json::object! {
-                bufferView : rot_buffer_idx,
-                componentType : 5126,
-                count : bone.frames.len(),
-                type : "VEC4",
-                byteOffset: offset * 4 * 4,
-            },
-        );
-        let t_acessor_idx = crate::gltf::push_accessor(
-            &mut gltf,
-            json::object! {
-                bufferView: t_buffer_idx,
-                componentType: 5126,
-                count: bone.frames.len(),
-                type: "VEC3",
-                byteOffset: offset * 3 * 4,
-            },
-        );
+        if let Some(node_id) = gltf["nodes"]
+            .members()
+            .position(|node| node["name"] == bone_name)
+        {
+            let time_acessor_idx = crate::gltf::push_accessor(
+                &mut gltf,
+                json::object! {
+                    bufferView: time_buffer_idx,
+                    componentType: 5126,
+                    count: track.frames.len(),
+                    type: "SCALAR",
+                    byteOffset: time_bone_id_to_offset[&bone_id],
+                },
+            );
+            let rot_acessor_idx = crate::gltf::push_accessor(
+                &mut gltf,
+                json::object! {
+                    bufferView : rot_buffer_idx,
+                    componentType : 5126,
+                    count : track.frames.len(),
+                    type : "VEC4",
+                    byteOffset: r_bone_id_to_offset[&bone_id],
+                },
+            );
+            let translation_acessor_idx = crate::gltf::push_accessor(
+                &mut gltf,
+                json::object! {
+                    bufferView: translation_buffer_idx,
+                    componentType: 5126,
+                    count: track.frames.len(),
+                    type: "VEC3",
+                    byteOffset: t_bone_id_to_offset[&bone_id],
+                },
+            );
 
-        let rot_sampler_idx = crate::gltf::push_sampler(
-            &mut anim01,
-            json::object! {
-                input : time_acessor_idx,
-                interpolation : "LINEAR",
-                output : rot_acessor_idx
-            },
-        );
-        crate::gltf::push_channel(
-            &mut anim01,
-            json::object! {
-                sampler: rot_sampler_idx,
-                target: json::object!{
-                    node: skli + 1,
-                    path: "rotation"
-                }
-            },
-        );
-
-        // skli == 0 translation gives root motion
-        if skli == 0 {
-            let t_sampler_idx = crate::gltf::push_sampler(
+            let rot_sampler_idx = crate::gltf::push_sampler(
                 &mut anim01,
                 json::object! {
-                    input: time_acessor_idx,
-                    interpolation: "LINEAR",
-                    output: t_acessor_idx
+                    input : time_acessor_idx,
+                    interpolation : "LINEAR",
+                    output : rot_acessor_idx
                 },
             );
             crate::gltf::push_channel(
                 &mut anim01,
                 json::object! {
-                    sampler: t_sampler_idx,
+                    sampler: rot_sampler_idx,
                     target: json::object!{
-                        node: skli + 1,
+                        node: node_id,
+                        path: "rotation"
+                    }
+                },
+            );
+
+            // skli == 0 translation gives root motion
+            // if skli == 0 {
+            let translation_sampler_idx = crate::gltf::push_sampler(
+                &mut anim01,
+                json::object! {
+                    input: time_acessor_idx,
+                    interpolation: "LINEAR",
+                    output: translation_acessor_idx
+                },
+            );
+            crate::gltf::push_channel(
+                &mut anim01,
+                json::object! {
+                    sampler: translation_sampler_idx,
+                    target: json::object!{
+                        node: node_id,
                         path: "translation"
                     }
                 },
             );
+            // }
         }
-
-        offset += bone.frames.len();
     }
 
     gltf["animations"] = json::array![anim01];
