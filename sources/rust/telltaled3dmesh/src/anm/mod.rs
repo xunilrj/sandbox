@@ -170,7 +170,8 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
 
     let mut anm = AnmFile::new();
 
-    let header = input.read_properties();
+    let file_properties = input.read_properties();
+    debug!("File Properties: {:#?}", file_properties);
 
     let _ = input.parse_le_u32("?");
     let _ = input.parse_le_u32("?");
@@ -574,28 +575,31 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
                         match t {
                             0 => {}
                             2 => {
-                                let (q, t) = input.read_length_transform("max");
+                                let (q, t) = input.read_length_transform("frame transform");
 
-                                bone.frames.push(AnimatedTrackFrame {
+                                let mut frame = AnimatedTrackFrame {
                                     time,
                                     compressed: false,
                                     rotation: [q[0] as f64, q[1] as f64, q[2] as f64, q[3] as f64],
                                     translation: [t[0] as f64, t[1] as f64, t[2] as f64],
-                                });
+                                };
 
                                 if i == qty {
+                                    bone.frames.push(frame);
                                     break;
+                                } else {
+                                    let filetime = input.parse_le_f32("time");
+                                    frame.time = filetime;
+                                    bone.frames.push(frame);
                                 }
 
-                                let _ = input.parse_le_f32("time");
+                                time += 1.0 / 30.0;
                             }
                             x => todo!("{}", x),
                         }
 
                         let v = input.parse_n_bytes(1, "?");
                         debug!("v: {:?}", v);
-
-                        time += 1.0 / 30.0;
                     }
 
                     bone.bone_id = boneid;
@@ -869,16 +873,16 @@ pub fn convert(path: impl AsRef<Path>, mesh: String, skl: String, output: impl A
                     output: translation_acessor_idx
                 },
             );
-            crate::gltf::push_channel(
-                &mut anim01,
-                json::object! {
-                    sampler: translation_sampler_idx,
-                    target: json::object!{
-                        node: node_id,
-                        path: "translation"
-                    }
-                },
-            );
+            // crate::gltf::push_channel(
+            //     &mut anim01,
+            //     json::object! {
+            //         sampler: translation_sampler_idx,
+            //         target: json::object!{
+            //             node: node_id,
+            //             path: "translation"
+            //         }
+            //     },
+            // );
             // }
         }
     }

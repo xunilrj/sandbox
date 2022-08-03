@@ -1,3 +1,5 @@
+From: https://github.com/frostbone25/TelltaleToolLib
+
 containerinterface : 4F6D302E7708C977
 dcarray<keyframedvalue<bool>::sample> : 2EFDDB0CE55AB6A6
 _containerinterface : 9ADAF7A5E8EF22BD
@@ -128,7 +130,7 @@ _dlgchainhead : 27C4F61C14345253
 dlgobjidowner : 8D53D2745D07232B
 _containerinterface : 9ADAF7A5E8EF22BD
 containerinterface : 4F6D302E7708C977
-ãž@ãÿâ™¦ : 1FD2BE6B30BCD9F2
+ï¿½@ï¿½ï¿½â™¦ : 1FD2BE6B30BCD9F2
 _containerinterface : 9ADAF7A5E8EF22BD
 containerinterface : 4F6D302E7708C977
 _containerinterface : 9ADAF7A5E8EF22BD
@@ -159,7 +161,7 @@ dlgnodelink : 1FC8525B23714149
 _dlgobjidowner : 5220C85E39DD585
 dlgobjidowner : 8D53D2745D07232B
 dlgvisibilityconditions : B54642189B1237CA
-_dlâ•šfãÿâ™¦ : A58C071FC949D584
+_dlâ•šfï¿½ï¿½â™¦ : A58C071FC949D584
 dlgobjidowner : 8D53D2745D07232B
 dlgdownstreamvisibilityconditions : AD550479D1324785
 _dlgobjidowner : 5220C85E39DD585
@@ -273,7 +275,7 @@ dcarray<keyframedvalue<transform>::sample> : A5190A70F8F74C4C
 _containerinterface : 9ADAF7A5E8EF22BD
 containerinterface : 4F6D302E7708C977
 bonecontraints : 86DD6FDD80394AB3
-string>â¼nãÿâ™¦b : 3699194A83CAE94C
+string>ï¿½nï¿½ï¿½â™¦b : 3699194A83CAE94C
 map<string,float,less<string>> : 890FE2DA04AADE49
 handle<t3texture> : 52A09151F1C3F2C7
 boundingbox : 75D9082D642E1791
@@ -284,7 +286,7 @@ containerinterface : 4F6D302E7708C977
 propertyset : CD75DC4F6B9F15D2
 dcarray<choreresource::block> : 9DEC4BBA95CEDB28
 containerinterface : 4F6D302E7708C977
-string>â• rãÿâ™¦b : F6B3010C4BCD0C90
+string>â• rï¿½ï¿½â™¦b : F6B3010C4BCD0C90
 map<string,float,less<string>> : 890FE2DA04AADE49
 actoragentbinding : 849BD029B8FB3C04
 sarray<t3vertexcomponent,13> : 9970B1E94689173
@@ -519,7 +521,7 @@ map<dlgobjid,int,dlgobjidless> : 8F11614B53249632
 map<int,dlgline,less<int>> : ABA164D5AAB73489
 dcarray<ptr<actingpalettegroup>> : AB04CC2F75BCF6C0
 animatedvalueinterface<soundeventname<0>> : 9646F3B778897027
-taâ–„â””â•? : 412C7851C8E12DD2
+taâ–„â””ï¿½? : 412C7851C8E12DD2
 string,vector3,less<string>> : C6A3744B201368BB
 preloadpackage::runtimedatadialog::dlgobjidandstartnodeoffset : C56C8B068B903C58
 preloadpackage::runtimedatadialog::dlgobjidandstartnodeoffset : C56C8B068B903C58
@@ -559,7 +561,7 @@ dcarray<map<string,string,less<string>>> : D8785AF203AA53EB
 list<map<string,string,less<string>>> : 2BDB4B5DC519BBFA
 map<string,dcarray<unsignedchar>,less<string>> : FE96A13E293CC8EF
 map<string,phonemetable::phonemeentry,less<string>> : 2396FCD59456C981
-â–“ã­vã©ã˜kâ˜º : 2E1427B07544A0AB
+â–“ï¿½vï¿½ï¿½kâ˜º : 2E1427B07544A0AB
 string>> : E0B88290FA976389
 map<string,map<string,dcarray<string>,less<string>>,less<string>> : F61F7BA7EA84F63B
 map<string,set<symbol,less<symbol>>,less<string>> : 2B764A50099A3FEF
@@ -698,7 +700,7 @@ uid::generator : 4BD04E27E6716EA0
 _actingoverridablepropowner : 70D8548CD8823E5A
 actingoverridablepropowner : FF38D8541F524A49
 name : 3A29033D75B5197E
-string>4â†“ã’â™¦b : DE6AE6A22264F60C
+string>4â†“ï¿½â™¦b : DE6AE6A22264F60C
 map<string,float,less<string>> : 890FE2DA04AADE49
 name : 3A29033D75B5197E
 name : 3A29033D75B5197E
@@ -1173,10 +1175,10 @@ symbol : 4F023463D89FB0
 dlgnode : 8940087148BF4C61
 blendentry> : 5702A8F72EB40DCB
 blendgraph::enumblendgraphtype : E37774F4D4CD6E67
-anã»â¿â•?â¿ã„â™€â”€ : 1A419C89C83130E9
+anï¿½ï¿½ï¿½?ï¿½ï¿½â™€â”€ : 1A419C89C83130E9
 dcarray<symbol> : 4252D2F4AC275D24
-dcarray<blenã‰â¿â•?â«ã¨â™€â”€â—„ : 55CD8EFA031A72F8
-blendgraph::enumbã´â¿â•?â¡ã§â™€â”€â—„ : 89C029CADF350252
+dcarray<blenï¿½ï¿½ï¿½?ï¿½ï¿½â™€â”€â—„ : 55CD8EFA031A72F8
+blendgraph::enumbï¿½ï¿½ï¿½?ï¿½ï¿½â™€â”€â—„ : 89C029CADF350252
 dcarray<correspondencepoint> : B038C6742811D7FA
 uid::owner : 48588668F74FED9F
 _dlgobjidowner : 5220C85E39DD585
@@ -1408,8 +1410,8 @@ dcarray<keyframedvalue<handle<t3texture>>::sample> : D521915AA8E8C0F7
 animationvalueinterfacebase : 88E2A4048B7CAC53
 _animatedvalueinterface<t> : C3D8ED9A5E154022
 animationvalueinterfacebase : 88E2A4048B7CAC53
-â§ã?ã¬â–ˆâ˜º : 966AA67323843831
-scexã¹ã?ã¬â–ˆâ˜º : 692279B9C30DCF79
+ï¿½ï¿½?ï¿½â–ˆâ˜º : 966AA67323843831
+scexï¿½ï¿½?ï¿½â–ˆâ˜º : 692279B9C30DCF79
 dcarray<handlelock<scene>> : 5A907691E82FECD5
 propertyset : CD75DC4F6B9F15D2
 quaternion : 62C9E560C8DCEC67
@@ -1581,7 +1583,7 @@ preloadpackage::startnodeoffset : 525D34DF4EAD98FD
 dcarray<preloadpackage::runtimedatadialog::dialogresourceinfo> : 49FCF5BDD5993666
 transitionremapper : C7D5ECFC6FE533D1
 keyframedvalue<float> : 6B070125830EF084
-stxâ¨ã?ã¬â–ˆâ˜º : E3E2FA7D8D5548FF
+stxï¿½ï¿½?ï¿½â–ˆâ˜º : E3E2FA7D8D5548FF
 map<string,transitionmap::transitionmapinfo,less<string>> : 66B37980B2836614
 animatedvalueinterface<soundeventname<0>> : 9646F3B778897027
 _animationvalueinterfacebase : 82D011F0CEC3A54A
@@ -1759,9 +1761,9 @@ enlightenmodule::enumeproberesolutionwithdefault : CCE2FC8ABD78A775
 t3lightsceneinternaldata::qualityentry : 89161F76F17740BA
 enlightenmodule::enlightenprimitivesettings : EA086C95C87CA185
 dlgnodeparallel::dlgchildsetelement : E7E302FBBD9C4126
-liâ®â–€ã«â–ˆâ˜º : 83CAFDB85171F0A6
-dcã‡â®â–€ã«â–ˆâ˜º : A2B10DCCDF2D53B3
-idâ””â®â–€ã«â–ˆâ˜º : B588560644F3AC95
+liï¿½â–€ï¿½â–ˆâ˜º : 83CAFDB85171F0A6
+dcï¿½ï¿½â–€ï¿½â–ˆâ˜º : A2B10DCCDF2D53B3
+idâ””ï¿½â–€ï¿½â–ˆâ˜º : B588560644F3AC95
 datestamp : 94C4526CF9F79AC5
 dlgchild : BFB0CE2BD1F38792
 dlgchainhead : E26BBBA29EBA3E2A
@@ -2193,7 +2195,7 @@ set<color,less<color>> : D27EA1BFAC786303
 map<int,int,less<int>> : A33B55750C7BF243
  : 0
 list<int> : 2913E82ADFBF4CAD
-lipâ½ã“ã«â–ˆâ˜º : 68ADD2B353A5E79E
+lipï¿½ï¿½ï¿½â–ˆâ˜º : 68ADD2B353A5E79E
 32 : F6D7CE528EA14E14
 32 : F6D7CE528EA14E14
 32 : F6D7CE528EA14E14
@@ -2423,7 +2425,7 @@ dcarray<handle<scene>> : A1975655F1C71142
 dcarray<handle<t3texture>> : 14B01C37623D58CB
 dcarray<particlepropconnect> : 3421FA8D08F00332
 keyframedvalue<handle<sounddata> : E783FCDFAD1F59
-â?animatedvalueinterface<phonemekey> : 7853ADAC4D3E4B8B
+ï¿½?animatedvalueinterface<phonemekey> : 7853ADAC4D3E4B8B
 singlevalue<handle<soundeventdata>> : E139ECA106BB239A
 compressedkeys<handle<walkboxes>> : CCDF9AEC974E91FC
 animatedvalueinterface<scriptenum> : 8B9A601312D0C170
