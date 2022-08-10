@@ -1,6 +1,0 @@
-#V2
-addBreakpoint("CreateFileA")
-init("C:\\\\Program Files (x86)\\\\Telltale Games\\\\Tales of Monkey Island\\\\Launch of the Screaming Narwhal\\\\MonkeyIsland101.exe")
-go()
-go
-go()
