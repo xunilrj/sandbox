@@ -28,6 +28,10 @@ impl Skeleton {
                 .parent_index
                 .and_then(|p| self.bones[p].bind_pose_transformation.clone())
                 .unwrap_or(Mat4::IDENTITY);
+            let parent_anim_translation_scale = self.bones[i]
+                .parent_index
+                .map(|p| self.bones[p].anim_translation_scale.clone())
+                .unwrap_or(Vec3::ONE);
             let bone = &mut self.bones[i];
 
             let bind_pose_transformation = parent_global * bone.local_transformation;
@@ -36,6 +40,9 @@ impl Skeleton {
 
             bone.inverse_bind_pose_transformation = Some(inverse_bind_pose_transformation);
             bone.bind_pose_transformation = Some(bind_pose_transformation);
+
+            bone.local_anim_translation_scale =
+                bone.anim_translation_scale / parent_anim_translation_scale;
 
             q.extend(bone.children.iter());
         }
@@ -54,6 +61,7 @@ pub struct Bone {
     pub global_translation_scale: Vec3,
     pub local_translation_scale: Vec3,
     pub anim_translation_scale: Vec3,
+    pub local_anim_translation_scale: Vec3,
     pub children: Vec<usize>,
     pub local_transformation: Mat4,
     pub bind_pose_transformation: Option<Mat4>,
@@ -130,16 +138,6 @@ impl SklParser {
         }
 
         input.assert_eof();
-
-        for bone in bones.iter() {
-            println!(
-                "{:?},{},{},{}",
-                bone.name.clone().unwrap_or(format!("{}", bone.name_hash)),
-                bone.anim_translation_scale.x,
-                bone.anim_translation_scale.y,
-                bone.anim_translation_scale.z
-            );
-        }
 
         let name = path.file_stem().unwrap().to_str().unwrap().to_string();
         Ok(Skeleton { name, bones })
@@ -218,6 +216,7 @@ impl BoneParser {
             global_translation_scale,
             local_translation_scale,
             anim_translation_scale,
+            local_anim_translation_scale: Vec3::ONE,
             children: vec![],
             local_transformation,
             bind_pose_transformation: None,

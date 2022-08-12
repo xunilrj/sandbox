@@ -25,11 +25,9 @@ impl ChoreParser {
     }
 
     fn parse_resource(&mut self, input: &mut NomSlice) {
-        trace!("START parse_resource");
-
         let _ = input.parse_le_u32("?");
 
-        let _ = input.parse_le_u32("Animation/Chore Section Length");
+        let _ = input.parse_le_u32("Resource Name Section Length");
         let _ = input.parse_length_string("Resource Name");
         let _ = input.parse_le_f32("Length");
         let _ = input.parse_le_u32("Priority");
@@ -40,9 +38,9 @@ impl ChoreParser {
         let _ = input.parse_le_u32("Animation/Chore Length");
         let _ = input.parse_length_string("?");
 
-        let l = input.parse_le_u32("Section Length?");
+        let l = input.parse_le_u32("Embedded Data Section Length?");
         let buffer = input.parse_n_bytes((l - 4) as usize, "?");
-        whats_next(buffer);
+        // whats_next(buffer);
 
         let l = input.parse_le_u32("Chore Blocks Section Length");
         let qty = input.parse_le_u32("Chore Blocks Quantity");
@@ -66,7 +64,7 @@ impl ChoreParser {
 
         let l = input.parse_le_u32("Resource Properties Section Length?");
         let buffer = input.parse_n_bytes((l - 4) as usize, "?");
-        whats_next(buffer);
+        // whats_next(buffer);
 
         let l = input.parse_le_u32("Resource Group Section Length?");
         let qty = input.parse_le_u32("Resource Group Quantity");
@@ -76,8 +74,6 @@ impl ChoreParser {
         }
 
         let _ = input.parse_le_u32("Status");
-
-        trace!("END parse_resource");
     }
 
     fn parse_agent(&mut self, input: &mut NomSlice, mapping: &ChecksumMap) {
@@ -107,7 +103,6 @@ impl ChoreParser {
 
         let l = input.parse_le_u32("Section Length?");
         let buffer = input.parse_n_bytes((l - 4) as usize, "?");
-        whats_next(buffer);
 
         trace!("START parse_agent");
     }
@@ -139,7 +134,6 @@ impl ChoreParser {
 
         let l = input.parse_le_u32("Section Length?");
         let buffer = input.parse_n_bytes((l - 4) as usize, "?");
-        whats_next(buffer);
 
         input.parse_n_bytes(1, "?");
         let scene_section = input.parse_n_bytes(1, "Scene Section?");
@@ -156,8 +150,10 @@ impl ChoreParser {
         let _ = input.parse_le_u32("?");
         input.parse_n_bytes(1, "?");
 
-        for _ in 0..resource_qty {
+        for i in 0..resource_qty {
+            trace!("START parse_resource {}", i);
             self.parse_resource(&mut input);
+            trace!("END parse_resource");
         }
 
         for _ in 0..agent_qty {

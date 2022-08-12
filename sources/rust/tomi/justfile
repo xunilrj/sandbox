@@ -10,8 +10,9 @@ export-guybrush-skl: build-release
 
 export-guybrush-walk: build-release
     target/release/tomi convert-anm \
-        -p /mnt/d/downloads/ttarctext/a/sk20_move_guybrushwalk.anm  \
+        --mesh /mnt/d/downloads/ttarctext/a/sk20_guybrush.d3dmesh \
         --skl /mnt/d/downloads/ttarctext/a/sk20_guybrush.skl \
+        --anm /mnt/d/downloads/ttarctext/a/sk20_move_guybrushwalk.anm  \
         -o viewer/models/result.gltf
 
 export-guybrush-idle: build-release
@@ -22,7 +23,7 @@ export-guybrush-idle: build-release
 
 export-guybrush-idle-chore: build-release
     target/release/tomi convert-chore \
-        -p /mnt/d/downloads/ttarctext/a/sk20_move_guybrushwalkdeterminedship.chore  \
+        -p /mnt/d/downloads/ttarctext/a/_sk20_move_guybrush_setface.chore \
         -o viewer/models/sk20_move_guybrushwalkdeterminedship.chore.json
     
 # export-guybrush-mesh: build-release

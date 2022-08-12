@@ -1,6 +1,6 @@
 
 // WARNING: [rz-ghidra] Var arg_4h is stack pointer based, which is not supported for decompilation.
-
+// Chore
 void fcn.00449620(undefined4 *param_1)
 {
     int32_t *piVar1;
@@ -168,7 +168,7 @@ code_r0x004497ef:
 
 // WARNING: [rz-ghidra] Var arg_8h is stack pointer based, which is not supported for decompilation.
 // WARNING: [rz-ghidra] Var arg_ch is stack pointer based, which is not supported for decompilation.
-
+// ChoreResource
 int32_t fcn.00592c30(int32_t param_1)
 {
     *(undefined4 *)(param_1 + 0x28) = 0x8a9a40;
@@ -352,3 +352,143 @@ void fcn.005919d0(int32_t param_1)
     *(undefined4 *)0x8eed44 = 0x8eecfc;
     return;
 }
+
+
+// WARNING: [rz-ghidra] Var arg_8h is stack pointer based, which is not supported for decompilation.
+// WARNING: [rz-ghidra] Var arg_ch is stack pointer based, which is not supported for decompilation.
+// ChoreResource
+int32_t fcn.00592c30(int32_t param_1)
+{
+    *(undefined4 *)(param_1 + 0x28) = 0x8a9a40;
+    *(undefined4 *)0x8ef2d8 = 0x14;
+    *(undefined4 *)0x8ef2dc = 0x5f49e0;
+    fcn.00434ec0(0x8ef2d8);
+    *(code **)0x8ef2d4 = method.DCArray_class_Ptr_class_AnimationValueInterfaceBase__.virtual_4;
+
+    *(char **)0x8ef2bc = "mpChore";
+    *(undefined4 *)0x8ef2c0 = 0;
+    *(int32_t *)0x8ef2c8 = param_1;
+    *(undefined4 *)(param_1 + 0x1c) = 0x8ef2bc;
+    *(undefined4 *)0x8ef08c = 0x7f26f8;
+    *(undefined4 *)0x8ef090 = 0xac;
+    *(undefined4 *)0x8ef094 = 0x40;
+    *(int32_t *)0x8ef098 = param_1;
+    *(code **)0x8ef0a4 = method.Map_int__class_LanguageResource__struct_std::less_int__.virtual_28;
+
+    *(char **)0x8ef0a8 = "mResourceGroupInclude";
+    *(undefined4 *)0x8ef0ac = 0xfc;
+    *(int32_t *)0x8ef0b4 = param_1;
+    *(undefined4 *)0x8ef0b8 = 0x8ef08c;
+    
+    *(undefined4 *)0x8ef0c0 = 0x48c450;
+    *(char **)0x8ef0c4 = "mResourceProperties";
+    *(undefined4 *)0x8ef0c8 = 0xb0;
+    *(int32_t *)0x8ef0d0 = param_1;
+    *(undefined4 *)0x8ef0d4 = 0x8ef0a8;
+    *(code **)0x8ef0dc = fcn.004185b0;
+
+    *(char **)0x8ef0e0 = "mbViewResourceGroups";
+    *(undefined4 *)0x8ef0e4 = 0xa7;
+    *(int32_t *)0x8ef0ec = param_1;
+    *(undefined4 *)0x8ef0f0 = 0x8ef0c4;
+    *(code **)0x8ef0f8 = method.Function1_bool_.virtual_12;
+
+    *(char **)0x8ef0fc = "mbViewProperties";
+    *(undefined4 *)0x8ef100 = 0xa6;
+    *(int32_t *)0x8ef108 = param_1;
+    *(undefined4 *)0x8ef10c = 0x8ef0e0;
+    *(code **)0x8ef114 = method.Function1_bool_.virtual_12;
+
+    *(char **)0x8ef118 = "mbViewEmptyGraphs";
+    *(undefined4 *)0x8ef11c = 0xa5;
+    *(int32_t *)0x8ef124 = param_1;
+    *(undefined4 *)0x8ef128 = 0x8ef0fc;
+    *(code **)0x8ef130 = method.Function1_bool_.virtual_12;
+
+    *(char **)0x8ef134 = "mbViewGraphs";
+    *(undefined4 *)0x8ef138 = 0xa4;
+    *(int32_t *)0x8ef140 = param_1;
+    *(undefined4 *)0x8ef144 = 0x8ef118;
+    *(code **)0x8ef14c = method.Function1_bool_.virtual_12;
+
+    *(char **)0x8ef150 = "mbIsAgentResource";
+    *(undefined4 *)0x8ef154 = 0xa3;
+    *(int32_t *)0x8ef15c = param_1;
+    *(undefined4 *)0x8ef160 = 0x8ef134;
+    *(code **)0x8ef168 = method.Function1_bool_.virtual_12;
+
+    *(char **)0x8ef16c = "mbEnabled";
+    *(undefined4 *)0x8ef170 = 0xa2;
+    *(int32_t *)0x8ef178 = param_1;
+    *(undefined4 *)0x8ef17c = 0x8ef150;
+    *(code **)0x8ef184 = method.Function1_bool_.virtual_12;
+
+    *(char **)0x8ef188 = "mbEmbedded";
+    *(undefined4 *)0x8ef18c = 0xa1;
+    *(int32_t *)0x8ef194 = param_1;
+    *(undefined4 *)0x8ef198 = 0x8ef16c;
+    *(code **)0x8ef1a0 = method.Function1_bool_.virtual_12;
+
+    *(char **)0x8ef1a4 = "mbNoPose";
+    *(undefined4 *)0x8ef1a8 = 0xa0;
+    *(int32_t *)0x8ef1b0 = param_1;
+    *(undefined4 *)0x8ef1b4 = 0x8ef188;
+    *(code **)0x8ef1bc = method.Function1_bool_.virtual_12;
+
+    *(char **)0x8ef1c0 = "mBlocks";
+    *(undefined4 *)0x8ef1c4 = 0x90;
+    *(int32_t *)0x8ef1cc = param_1;
+    *(undefined4 *)0x8ef1d0 = 0x8ef1a4;
+    *(undefined4 *)0x8ef1d8 = 0x592420;
+
+    *(char **)0x8ef1dc = "mControlAnimation";
+    *(undefined4 *)0x8ef1e0 = 0x50;
+    *(int32_t *)0x8ef1e8 = param_1;
+    *(undefined4 *)0x8ef1ec = 0x8ef1c0;
+    *(code **)0x8ef1f4 = method.Animation.virtual_4;
+
+    *(char **)0x8ef1f8 = "mhObject";
+    *(undefined4 *)0x8ef1fc = 0x4c;
+    *(int32_t *)0x8ef204 = param_1;
+    *(undefined4 *)0x8ef208 = 0x8ef1dc;
+    *(undefined4 *)0x8ef210 = 0x499f70;
+
+    *(char **)0x8ef214 = "mFlags";
+    *(undefined4 *)0x8ef218 = 0x2c;
+    *(int32_t *)0x8ef220 = param_1;
+    *(undefined4 *)0x8ef224 = 0x8ef284;
+    *(undefined4 *)0x8ef22c = 0x40d890;
+
+    *(char **)0x8ef230 = "mPriority";
+    *(undefined4 *)0x8ef234 = 0x28;
+    *(int32_t *)0x8ef23c = param_1;
+    *(undefined4 *)0x8ef240 = 0x8ef214;
+    *(code **)0x8ef248 = method.Map_int__class_LanguageResource__struct_std::less_int__.virtual_28;
+
+    *(char **)0x8ef24c = "mResLength";
+    *(undefined4 *)0x8ef250 = 0x24;
+    *(int32_t *)0x8ef258 = param_1;
+    *(undefined4 *)0x8ef25c = 0x8ef230;
+    *(code **)0x8ef264 = method.Function1_float_.virtual_12;
+
+    *(char **)0x8ef268 = "mVersion";
+    *(undefined4 *)0x8ef26c = 4;
+    *(int32_t *)0x8ef274 = param_1;
+    *(undefined4 *)0x8ef278 = 0x8ef2a0;
+    *(code **)0x8ef280 = method.Map_int__class_LanguageResource__struct_std::less_int__.virtual_28;
+
+    *(char **)0x8ef284 = "mResourceGroup";
+    *(undefined4 *)0x8ef288 = 0x30;
+    *(int32_t *)0x8ef290 = param_1;
+    *(undefined4 *)0x8ef294 = 0x8ef1f8;
+    *(code **)0x8ef29c = method.DCArray_class_String_.virtual_4;
+
+    *(char **)0x8ef2a0 = "mResName";
+    *(undefined4 *)0x8ef2a4 = 8;
+    *(int32_t *)0x8ef2ac = param_1;
+    *(undefined4 *)0x8ef2b0 = 0x8ef24c;
+    *(code **)0x8ef2b8 = method.DCArray_class_String_.virtual_4;
+    *(undefined4 *)0x8ef2cc = 0x8ef268;
+    return param_1;
+}
+

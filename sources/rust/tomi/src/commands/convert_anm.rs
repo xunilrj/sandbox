@@ -9,7 +9,7 @@ use user_error::UserFacingError;
 
 use crate::{
     checksum_mapping::ChecksumMap,
-    formats::{anm::AnmParser, skl::SklParser},
+    formats::{anm::AnmParser, d3dmesh::D3dMeshParser, skl::SklParser},
     utils::create_dir_all,
     Progress,
 };
@@ -18,7 +18,11 @@ use crate::{
 pub struct ConvertAnmArgs {
     /// Path to the anm file
     #[structopt(short, long)]
-    path: String,
+    anm: String,
+
+    /// Path to the skl file
+    #[structopt(long)]
+    mesh: String,
 
     /// Path to the skl file
     #[structopt(long)]
@@ -35,13 +39,27 @@ impl ConvertAnmArgs {
         mapping: &ChecksumMap,
         progress: &mut Progress,
     ) -> Result<(), UserFacingError> {
-        trace!("Parsing skl: {:?}", self.path);
+        trace!("Parsing mesh: {:?}", self.mesh);
+        let mut parser = D3dMeshParser::new();
+        let mut mesh = parser.parse(&self.mesh, mapping).unwrap();
+
+        trace!("Parsing skl: {:?}", self.skl);
         let mut parser = SklParser::new();
         let mut skl = parser.parse(&self.skl, mapping).unwrap();
         skl.calculate_inverse_bind_pose();
 
+        for bone in skl.bones.iter() {
+            println!(
+                "{:?},{},{},{}",
+                bone.name.clone().unwrap_or(format!("{}", bone.name_hash)),
+                bone.local_anim_translation_scale.x,
+                bone.local_anim_translation_scale.y,
+                bone.local_anim_translation_scale.z
+            );
+        }
+
         let mut parser = AnmParser::new();
-        let anm = parser.parse(&self.path, mapping).unwrap();
+        let anm = parser.parse(&self.anm, mapping).unwrap();
 
         trace!("Saving anm to: {:?}", self.output);
         let output: PathBuf = self.output.clone().into();

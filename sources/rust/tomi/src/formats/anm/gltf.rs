@@ -104,13 +104,7 @@ pub fn to_gltf(skl: &Skeleton, anm: &Animation, gltf: &mut JsonValue) {
             r_max.z = r_max.z.max(frame.rotation.z);
             r_max.w = r_max.w.max(frame.rotation.w);
 
-            let translation = bone.bind_pose_transformation.unwrap()
-                * vec4(
-                    frame.translation.x,
-                    frame.translation.y,
-                    frame.translation.z,
-                    1.0,
-                );
+            let translation = frame.translation * bone.local_anim_translation_scale;
 
             translation_buffer.extend(translation.x.to_le_bytes());
             translation_buffer.extend(translation.y.to_le_bytes());
