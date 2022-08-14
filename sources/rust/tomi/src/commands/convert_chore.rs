@@ -1,41 +1,25 @@
-use std::{
-    io::{BufWriter, Cursor},
-    path::PathBuf,
-};
-
 use log::trace;
 use structopt::StructOpt;
 use user_error::UserFacingError;
 
-use crate::{
-    checksum_mapping::ChecksumMap,
-    formats::{anm::AnmParser, chore::ChoreParser, skl::SklParser},
-    utils::create_dir_all,
-    Progress,
-};
+use crate::{checksum_mapping::ChecksumMap, formats::chore::ChoreParser, Progress};
 
 #[derive(StructOpt, Debug)]
 pub struct ConvertChoreArgs {
     /// Path to the chore file
     #[structopt(short, long)]
     path: String,
-
-    /// Formats: gltf = nodes and skins
-    #[structopt(short, long)]
-    output: String,
+    // Formats: gltf = nodes and skins
+    // #[structopt(short, long)]
+    // output: String,
 }
 
 impl ConvertChoreArgs {
-    pub fn run(
-        &self,
-        mapping: &ChecksumMap,
-        progress: &mut Progress,
-    ) -> Result<(), UserFacingError> {
+    pub fn run(&self, mapping: &ChecksumMap, _: &mut Progress) -> Result<(), UserFacingError> {
         trace!("Parsing chore: {:?}", self.path);
         let mut parser = ChoreParser::new();
-        let mut chore = parser.parse(&self.path, mapping).unwrap();
+        let _ = parser.parse(&self.path, mapping).unwrap();
 
-        dbg!(chore);
         todo!();
 
         // trace!("Saving chore to: {:?}", self.output);

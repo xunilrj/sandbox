@@ -3,7 +3,7 @@ use log::warn;
 
 use crate::formats::gltf::{
     get_scene_0_mut, push_accessor, push_buffer, push_buffer_view, push_node, push_node_to_scene,
-    push_skin, ARRAY_BUFFER, ELEMENT_ARRAY_BUFFER, FLOAT,
+    push_skin, FLOAT,
 };
 
 use super::Skeleton;
@@ -69,7 +69,7 @@ pub fn to_gltf(skl: &Skeleton, gltf: &mut JsonValue) {
             .map(|(i, _)| i + first_node_id)
             .collect();
 
-        let skin_id = push_skin(
+        let _ = push_skin(
             gltf,
             json::object! {
                 inverseBindMatrices: inverse_bind_pose_acessor_idx,

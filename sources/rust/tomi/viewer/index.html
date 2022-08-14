@@ -31,6 +31,7 @@
     <script type="module">
 
         import * as THREE from '../build/three.module.js';
+        import InfiniteGridHelper from '../build/infinitegridhelper.js'
 
         import Stats from './jsm/libs/stats.module.js';
         import {GUI} from './jsm/libs/dat.gui.module.js';
@@ -251,14 +252,15 @@
 
             // ground
 
-            const mesh = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), new THREE.MeshPhongMaterial({color: 0x999999, depthWrite: false}));
-            mesh.rotation.x = - Math.PI / 2;
-            mesh.receiveShadow = true;
-            scene.add(mesh);
+            // const mesh = new THREE.Mesh(new THREE.PlaneGeometry(100, 100), new THREE.MeshPhongMaterial({color: 0x999999, depthWrite: false}));
+            // mesh.rotation.x = - Math.PI / 2;
+            // mesh.receiveShadow = true;
+            // scene.add(mesh);
 
             // grid
 
-            var grid = new THREE.GridHelper(100, 10);
+
+            const grid = new THREE.GridHelper(10, 100);
             scene.add(grid);
 
             var originAxis = new THREE.AxesHelper(1);

@@ -1,7 +1,4 @@
-use std::{
-    io::{BufWriter, Cursor},
-    path::PathBuf,
-};
+use std::{io::Cursor, path::PathBuf};
 
 use log::trace;
 use structopt::StructOpt;
@@ -41,22 +38,12 @@ impl ConvertAnmArgs {
     ) -> Result<(), UserFacingError> {
         trace!("Parsing mesh: {:?}", self.mesh);
         let mut parser = D3dMeshParser::new();
-        let mut mesh = parser.parse(&self.mesh, mapping).unwrap();
+        let _ = parser.parse(&self.mesh, mapping).unwrap();
 
         trace!("Parsing skl: {:?}", self.skl);
         let mut parser = SklParser::new();
         let mut skl = parser.parse(&self.skl, mapping).unwrap();
         skl.calculate_inverse_bind_pose();
-
-        for bone in skl.bones.iter() {
-            println!(
-                "{:?},{},{},{}",
-                bone.name.clone().unwrap_or(format!("{}", bone.name_hash)),
-                bone.local_anim_translation_scale.x,
-                bone.local_anim_translation_scale.y,
-                bone.local_anim_translation_scale.z
-            );
-        }
 
         let mut parser = AnmParser::new();
         let anm = parser.parse(&self.anm, mapping).unwrap();

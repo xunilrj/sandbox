@@ -17,8 +17,9 @@ export-guybrush-walk: build-release
 
 export-guybrush-idle: build-release
     target/release/tomi convert-anm \
-        -p /mnt/d/downloads/ttarctext/a/sk20_idle_guybrush.anm  \
+        --mesh /mnt/d/downloads/ttarctext/a/sk20_guybrush.d3dmesh \
         --skl /mnt/d/downloads/ttarctext/a/sk20_guybrush.skl \
+        --anm /mnt/d/downloads/ttarctext/a/sk20_idle_guybrush.anm \
         -o viewer/models/result.gltf
 
 export-guybrush-idle-chore: build-release

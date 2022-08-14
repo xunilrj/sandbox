@@ -4,7 +4,7 @@ use log::trace;
 
 use crate::{
     checksum_mapping::ChecksumMap,
-    parser::{whats_next, NomSlice},
+    parser::NomSlice,
     utils::{read_to_end, IOError},
 };
 
@@ -39,10 +39,9 @@ impl ChoreParser {
         let _ = input.parse_length_string("?");
 
         let l = input.parse_le_u32("Embedded Data Section Length?");
-        let buffer = input.parse_n_bytes((l - 4) as usize, "?");
-        // whats_next(buffer);
+        let _ = input.parse_n_bytes((l - 4) as usize, "?");
 
-        let l = input.parse_le_u32("Chore Blocks Section Length");
+        let _ = input.parse_le_u32("Chore Blocks Section Length");
         let qty = input.parse_le_u32("Chore Blocks Quantity");
         for i in 0..qty {
             trace!("Chore Block: {}", i);
@@ -63,12 +62,11 @@ impl ChoreParser {
         input.parse_n_bytes(1, "View Resource Groups");
 
         let l = input.parse_le_u32("Resource Properties Section Length?");
-        let buffer = input.parse_n_bytes((l - 4) as usize, "?");
-        // whats_next(buffer);
+        let _ = input.parse_n_bytes((l - 4) as usize, "?");
 
-        let l = input.parse_le_u32("Resource Group Section Length?");
+        let _ = input.parse_le_u32("Resource Group Section Length?");
         let qty = input.parse_le_u32("Resource Group Quantity");
-        for i in 0..qty {
+        for _ in 0..qty {
             let _ = input.parse_length_string("Resource Group Name");
             input.parse_le_f32("?");
         }
@@ -79,14 +77,14 @@ impl ChoreParser {
     fn parse_agent(&mut self, input: &mut NomSlice, mapping: &ChecksumMap) {
         trace!("START parse_agent");
         let _ = input.parse_le_u32("Agent Name Section Length");
-        let agent_name = input.parse_length_string("Agent Name");
+        let _ = input.parse_length_string("Agent Name");
 
         let _ = input.parse_le_u32("Flags");
 
         let _ = input.parse_le_u32("Resources Section Length");
         let resource_qty = input.parse_le_u32("Resources Quantity");
         for _ in 0..resource_qty {
-            let resource = input.parse_le_u32("Resources Index");
+            let _ = input.parse_le_u32("Resources Index");
         }
 
         let l = input.parse_le_u32("Attachment Section Length?");
@@ -101,8 +99,8 @@ impl ChoreParser {
         let _ = input.parse_n_bytes(1, "Preserve World Position");
         let _ = input.parse_n_bytes(1, "Leave Attachment When Complete");
 
-        let l = input.parse_le_u32("Section Length?");
-        let buffer = input.parse_n_bytes((l - 4) as usize, "?");
+        let _ = input.parse_le_u32("Section Length?");
+        let _ = input.parse_n_bytes((l - 4) as usize, "?");
 
         trace!("START parse_agent");
     }
@@ -133,7 +131,7 @@ impl ChoreParser {
         let agent_qty = input.parse_le_u32("Agent Quantity");
 
         let l = input.parse_le_u32("Section Length?");
-        let buffer = input.parse_n_bytes((l - 4) as usize, "?");
+        let _ = input.parse_n_bytes((l - 4) as usize, "?");
 
         input.parse_n_bytes(1, "?");
         let scene_section = input.parse_n_bytes(1, "Scene Section?");

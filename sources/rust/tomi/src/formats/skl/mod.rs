@@ -1,6 +1,6 @@
 pub mod gltf;
 
-use glam::{vec3, Mat4, Quat, Vec3};
+use glam::{Mat4, Quat, Vec3};
 use log::info;
 
 use crate::{
@@ -9,7 +9,7 @@ use crate::{
     utils::{read_to_end, IOError},
 };
 use std::{
-    collections::{BTreeSet, HashMap, VecDeque},
+    collections::{BTreeSet, VecDeque},
     path::Path,
 };
 
@@ -44,6 +44,14 @@ impl Skeleton {
             bone.local_anim_translation_scale =
                 bone.anim_translation_scale / parent_anim_translation_scale;
 
+            let (_, _, parent_pos) = parent_global.to_scale_rotation_translation();
+            let (_, _, pos) = bone
+                .bind_pose_transformation
+                .as_ref()
+                .unwrap()
+                .to_scale_rotation_translation();
+            bone.length = Some(parent_pos.distance(pos));
+
             q.extend(bone.children.iter());
         }
     }
@@ -67,6 +75,7 @@ pub struct Bone {
     pub bind_pose_transformation: Option<Mat4>,
     pub inverse_bind_pose_transformation: Option<Mat4>,
     pub groups: BTreeSet<String>,
+    pub length: Option<f32>,
 }
 
 impl Bone {
@@ -157,16 +166,16 @@ impl BoneParser {
         });
         let name = mapping.get_mapping(name_hash);
 
-        let v = input.parse_le_u32("?");
-        assert!(v == 0);
+        let zero = input.parse_le_u32("?");
+        assert!(zero == 0);
 
         let parent_name_hash = input.parse_le_u64_with_debug("Parent Bone Name Hash", |k| {
             mapping.get_mapping(k).unwrap_or_else(|| "?".to_string())
         });
         let parent_name = mapping.get_mapping(name_hash);
 
-        let v = input.parse_le_u32("?");
-        assert!(v == 0);
+        let zero = input.parse_le_u32("?");
+        assert!(zero == 0);
 
         let parent_index = input.parse_le_u32("Parent Bone Index") as usize;
         let parent_index = if parent_index == 4294967295 {
@@ -222,6 +231,7 @@ impl BoneParser {
             bind_pose_transformation: None,
             inverse_bind_pose_transformation: None,
             groups,
+            length: None,
         })
     }
 }

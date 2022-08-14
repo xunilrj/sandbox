@@ -1,4 +1,4 @@
-use glam::{quat, vec3, vec4, Vec3};
+use glam::{quat, vec3};
 use std::collections::HashMap;
 
 use json::JsonValue;
@@ -88,7 +88,7 @@ pub fn to_gltf(skl: &Skeleton, anm: &Animation, gltf: &mut JsonValue) {
                 .entry(bone.name_hash)
                 .or_insert(vec3(f32::MIN, f32::MIN, f32::MIN));
 
-        for frame in track.frames.iter() {
+        for (_, frame) in track.frames.iter().enumerate() {
             rotation_buffer.extend(frame.rotation.x.to_le_bytes());
             rotation_buffer.extend(frame.rotation.y.to_le_bytes());
             rotation_buffer.extend(frame.rotation.z.to_le_bytes());
@@ -104,7 +104,7 @@ pub fn to_gltf(skl: &Skeleton, anm: &Animation, gltf: &mut JsonValue) {
             r_max.z = r_max.z.max(frame.rotation.z);
             r_max.w = r_max.w.max(frame.rotation.w);
 
-            let translation = frame.translation * bone.local_anim_translation_scale;
+            let translation = *bone.length.as_ref().unwrap() * frame.translation.normalize();
 
             translation_buffer.extend(translation.x.to_le_bytes());
             translation_buffer.extend(translation.y.to_le_bytes());

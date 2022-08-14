@@ -1,7 +1,7 @@
 use json::JsonValue;
 
-pub const ARRAY_BUFFER: usize = 34962;
-pub const ELEMENT_ARRAY_BUFFER: usize = 34963;
+// pub const ARRAY_BUFFER: usize = 34962;
+// pub const ELEMENT_ARRAY_BUFFER: usize = 34963;
 pub const FLOAT: usize = 5126;
 
 pub fn empty() -> JsonValue {
@@ -75,14 +75,14 @@ pub fn push_channel_to_animation(anim: &mut JsonValue, channels: JsonValue) -> u
     anim["channels"].len() - 1
 }
 
-pub fn push_mesh(gltf: &mut JsonValue, mesh: JsonValue) -> usize {
-    if !gltf["meshes"].is_array() {
-        gltf["meshes"] = json::array![];
-    }
+// pub fn push_mesh(gltf: &mut JsonValue, mesh: JsonValue) -> usize {
+//     if !gltf["meshes"].is_array() {
+//         gltf["meshes"] = json::array![];
+//     }
 
-    let _ = gltf["meshes"].push(mesh);
-    gltf["meshes"].len() - 1
-}
+//     let _ = gltf["meshes"].push(mesh);
+//     gltf["meshes"].len() - 1
+// }
 
 pub fn push_skin(gltf: &mut JsonValue, skin: JsonValue) -> usize {
     if !gltf["skins"].is_array() {
@@ -102,14 +102,14 @@ pub fn push_animation(gltf: &mut JsonValue, animation: JsonValue) -> usize {
     gltf["animations"].len() - 1
 }
 
-pub fn push_scene(gltf: &mut JsonValue, scene: JsonValue) -> usize {
-    if !gltf["scenes"].is_array() {
-        gltf["scenes"] = json::array![];
-    }
+// pub fn push_scene(gltf: &mut JsonValue, scene: JsonValue) -> usize {
+//     if !gltf["scenes"].is_array() {
+//         gltf["scenes"] = json::array![];
+//     }
 
-    let _ = gltf["scenes"].push(scene);
-    gltf["scenes"].len() - 1
-}
+//     let _ = gltf["scenes"].push(scene);
+//     gltf["scenes"].len() - 1
+// }
 
 pub fn get_scene_0_mut(gltf: &mut JsonValue) -> &mut JsonValue {
     if !gltf["scenes"].is_array() {
@@ -142,39 +142,39 @@ pub fn push_node(gltf: &mut JsonValue, node: JsonValue) -> usize {
     gltf["nodes"].len() - 1
 }
 
-pub fn merge_node(gltf: &mut JsonValue, i: usize, node: JsonValue) {
-    if !gltf["nodes"].is_array() {
-        gltf["nodes"] = json::array![];
-    }
+// pub fn merge_node(gltf: &mut JsonValue, i: usize, node: JsonValue) {
+//     if !gltf["nodes"].is_array() {
+//         gltf["nodes"] = json::array![];
+//     }
 
-    for (k, v) in node.entries() {
-        gltf["nodes"][i][k] = v.clone();
-    }
-}
+//     for (k, v) in node.entries() {
+//         gltf["nodes"][i][k] = v.clone();
+//     }
+// }
 
-pub fn push_material(gltf: &mut JsonValue, material: JsonValue) -> usize {
-    if !gltf["materials"].is_array() {
-        gltf["materials"] = json::array![];
-    }
+// pub fn push_material(gltf: &mut JsonValue, material: JsonValue) -> usize {
+//     if !gltf["materials"].is_array() {
+//         gltf["materials"] = json::array![];
+//     }
 
-    let _ = gltf["materials"].push(material);
-    gltf["materials"].len() - 1
-}
+//     let _ = gltf["materials"].push(material);
+//     gltf["materials"].len() - 1
+// }
 
-pub fn push_texture(gltf: &mut JsonValue, texture: JsonValue) -> usize {
-    if !gltf["textures"].is_array() {
-        gltf["textures"] = json::array![];
-    }
+// pub fn push_texture(gltf: &mut JsonValue, texture: JsonValue) -> usize {
+//     if !gltf["textures"].is_array() {
+//         gltf["textures"] = json::array![];
+//     }
 
-    let _ = gltf["textures"].push(texture);
-    gltf["textures"].len() - 1
-}
+//     let _ = gltf["textures"].push(texture);
+//     gltf["textures"].len() - 1
+// }
 
-pub fn push_image(gltf: &mut JsonValue, image: JsonValue) -> usize {
-    if !gltf["images"].is_array() {
-        gltf["images"] = json::array![];
-    }
+// pub fn push_image(gltf: &mut JsonValue, image: JsonValue) -> usize {
+//     if !gltf["images"].is_array() {
+//         gltf["images"] = json::array![];
+//     }
 
-    let _ = gltf["images"].push(image);
-    gltf["images"].len() - 1
-}
+//     let _ = gltf["images"].push(image);
+//     gltf["images"].len() - 1
+// }

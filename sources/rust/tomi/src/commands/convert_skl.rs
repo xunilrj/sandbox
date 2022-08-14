@@ -1,7 +1,4 @@
-use std::{
-    io::{BufWriter, Cursor},
-    path::PathBuf,
-};
+use std::{io::Cursor, path::PathBuf};
 
 use log::trace;
 use structopt::StructOpt;
