@@ -15,11 +15,18 @@ export-guybrush-walk: build-release
         --anm /mnt/d/downloads/ttarctext/a/sk20_move_guybrushwalk.anm  \
         -o viewer/models/result.gltf
 
-export-guybrush-idle: build-release
+export-guybrush-idle-worried: build-release
     target/release/tomi convert-anm \
         --mesh /mnt/d/downloads/ttarctext/a/sk20_guybrush.d3dmesh \
         --skl /mnt/d/downloads/ttarctext/a/sk20_guybrush.skl \
-        --anm /mnt/d/downloads/ttarctext/a/sk20_idle_guybrush.anm \
+        --anm /mnt/d/downloads/ttarctext/a/sk20_idle_guybrushworried.anm \
+        -o viewer/models/result.gltf
+
+export-guybrush-pickup-low: build-release
+    target/release/tomi convert-anm \
+        --mesh /mnt/d/downloads/ttarctext/a/sk20_guybrush.d3dmesh \
+        --skl /mnt/d/downloads/ttarctext/a/sk20_guybrush.skl \
+        --anm /mnt/d/downloads/ttarctext/a/sk20_guybrush_pickuplow.anm  \
         -o viewer/models/result.gltf
 
 export-guybrush-idle-chore: build-release

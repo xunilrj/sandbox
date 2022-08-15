@@ -36,9 +36,9 @@ impl ConvertAnmArgs {
         mapping: &ChecksumMap,
         progress: &mut Progress,
     ) -> Result<(), UserFacingError> {
-        trace!("Parsing mesh: {:?}", self.mesh);
-        let mut parser = D3dMeshParser::new();
-        let _ = parser.parse(&self.mesh, mapping).unwrap();
+        // trace!("Parsing mesh: {:?}", self.mesh);
+        // let mut parser = D3dMeshParser::new();
+        // let _ = parser.parse(&self.mesh, mapping).unwrap();
 
         trace!("Parsing skl: {:?}", self.skl);
         let mut parser = SklParser::new();
