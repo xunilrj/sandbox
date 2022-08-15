@@ -249,6 +249,7 @@ impl AnmParser {
                             let mut datapos = 50;
 
                             let mut time = 0.0;
+                            // see 0x006c65f0 @ 0x6C66F9
                             let mut last_rot = [0.0, 0.0, 0.0, 1.0];
                             let mut last_translation = [0.0, 0.0, 0.0];
                             loop {

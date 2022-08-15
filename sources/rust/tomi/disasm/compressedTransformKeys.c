@@ -55,12 +55,19 @@ void __thiscall method.CompressedTransformKeys.virtual_16(int32_t param_1, int32
     piVar2 = param_2;
     iVar1 = *param_2;
     param_2 = (int32_t *)((uint32_t)param_2 & 0xffffff00);
+
+    // Read first buffer length
+
     if (*(int32_t *)(iVar1 + 100) == 0) {
         fcn.0044a3a0(&param_2);                                 // Reads file. End up at ;-- method.FileWin32.virtual_32: 0x00738460 
     } else {
         uStack12 = uStack12 & 0xffffff;
         fcn.0044a280((int32_t)&uStack12 + 3, 1);
     }
+
+    // if the length is -1
+    // the real length is the next u32
+
     if (cStack4 == -1) {
         if (*(int32_t *)(iVar1 + 100) == 0) {
             puVar4 = (undefined4 *)&stack0xfffffff0;
@@ -72,16 +79,25 @@ void __thiscall method.CompressedTransformKeys.virtual_16(int32_t param_1, int32
         }
         uVar3 = fcn.005f13c0(unaff_ESI & 0xffff);
     } else {
+
         uVar3 = fcn.005f13c0(cStack4);
         puVar4 = (undefined4 *)(uint32_t)uStack8;
     }
+
     fcn.005f04e0(uVar3, puVar4);                        // <- code below
+
+    // read the buffer using the length above
+
     if (*(int32_t *)(iVar1 + 100) == 0) {
         fcn.0044a3a0();
     } else {
         fcn.0044a280(*(undefined4 *)(param_1 + 0x40), *(int32_t *)(param_1 + 0x44) + 7U >> 3);
     }
+
+    // Reads the second buffer length
+    // and ends up calling method.CompressedTransformKeys.virtual_20
     fcn.0074aa80(piVar2); // <- code below
+
     *(uint16_t *)(param_1 + 0x50) = (uint16_t)**(undefined4 **)(undefined4 *)(param_1 + 0x40) & 0x3fff;
     fcn.006c6230();
     return;
@@ -159,6 +175,7 @@ void __thiscall method.CompressedTransformKeys.virtual_20(int32_t param_1, undef
     undefined4 *puStack8;
     float fStack4;
     
+    //fVar10 = number of frames
     fVar10 = (float)(uint32_t)*(uint16_t *)(param_1 + 0x50);
     if (fVar10 != 0.0) {
         auStack120[0] = 0;
@@ -177,6 +194,9 @@ void __thiscall method.CompressedTransformKeys.virtual_20(int32_t param_1, undef
                 *(uint8_t *)(param_1 + 0xf5) = uVar4;
                 puVar1 = (undefined4 *)(param_1 + (((int32_t)(char)uVar4 - 1U & 3) + 3) * 0x1c);
                 puVar2 = (undefined4 *)(param_1 + ((char)uVar4 + 3) * 0x1c);
+                // start with 
+                // q = 0, 0, 0, 1
+                // t = 0, 0, 0
                 *puVar2 = *puVar1;
                 puVar2[1] = puVar1[1];
                 puVar2[2] = puVar1[2];
@@ -187,7 +207,11 @@ void __thiscall method.CompressedTransformKeys.virtual_20(int32_t param_1, undef
                 *(int16_t *)(param_1 + 0xe8) = *(int16_t *)(param_1 + 0xe8) + 1;
                 *(int32_t *)(param_1 + 0xe0) = *(int32_t *)(param_1 + 0xe0) << 2;
                 *(char *)(param_1 + 0xf4) = *(char *)(param_1 + 0xf4) + '\x01';
-                if ((int32_t)*(int16_t *)(param_1 + 0xe8) < (int32_t)fVar10) {
+                // param_1 + 0xe8 = current frame
+                // fVar10 = number of frames
+                // 0x6C674B
+                if ((int32_t)*(int16_t *)(param_1 + 0xe8) < (int32_t)fVar10) {          
+                    //0x6C6753
                     if (*(uint8_t *)(param_1 + 0xf2) <= *(uint8_t *)(param_1 + 0xf4)) {
                         fcn.006c5f40();
                     }
@@ -205,9 +229,10 @@ void __thiscall method.CompressedTransformKeys.virtual_20(int32_t param_1, undef
                     fcn.006c6460();
                     if (*(char *)(param_1 + 0xea) == '\0') {
                         *(undefined **)(param_1 + 0xc4) = puVar13;
-                        *(float *)(param_1 + 200) = fVar14;
+                        *(float *)(param_1 + 200) = fVar14; //200 = 0xc8
                         *(undefined4 **)(param_1 + 0xcc) = puVar15;
                         *(undefined4 **)(param_1 + 0xd0) = puVar16;
+
                         *(float *)(param_1 + 0xd4) = fVar17;
                         *(float *)(param_1 + 0xd8) = unaff_EBP;
                         *(float **)(param_1 + 0xdc) = unaff_ESI;
@@ -215,6 +240,7 @@ void __thiscall method.CompressedTransformKeys.virtual_20(int32_t param_1, undef
                         *(float *)(param_1 + 0xd4) = fVar17 + *(float *)(param_1 + 0xd4);
                         *(float *)(param_1 + 0xd8) = unaff_EBP + *(float *)(param_1 + 0xd8);
                         *(float *)(param_1 + 0xdc) = *(float *)(param_1 + 0xdc) + (float)unaff_ESI;
+                       
                         *(float *)(param_1 + 0xc4) = *(float *)(param_1 + 0xc4) + (float)puVar13;
                         *(float *)(param_1 + 200) = *(float *)(param_1 + 200) + fVar14;
                         *(float *)(param_1 + 0xcc) = *(float *)(param_1 + 0xcc) + (float)puVar15;
@@ -560,6 +586,8 @@ void __thiscall fcn.0074aa80(undefined4 *param_1, int32_t *param_2)
     undefined uStack8;
     char cStack4;
     
+    // reads one byte, the first buffer length
+
     iVar1 = *param_2;
     param_2 = (int32_t *)((uint32_t)param_2 & 0xffffff00);
     uVar3 = 1;
@@ -569,7 +597,11 @@ void __thiscall fcn.0074aa80(undefined4 *param_1, int32_t *param_2)
         uStack12 = uStack12 & 0xffffff;
         fcn.0044a280((int32_t)&uStack12 + 3, 1);
     }
-    if (cStack4 == -1) {
+
+    //cStack4 is the length of the first buffer
+    //if equals -1, means that the tru length is the next u32
+
+    if (cStack4 == -1) {                                
         if (*(int32_t *)(iVar1 + 100) == 0) {
             fcn.0044a3a0(&stack0xfffffff0);
         } else {
@@ -580,23 +612,28 @@ void __thiscall fcn.0074aa80(undefined4 *param_1, int32_t *param_2)
         uVar2 = fcn.005f13c0(unaff_EDI & 0xffff);
         uVar3 = uVar3 & 0xffff;
     } else {
+        // first buffer length is known
         fcn.005f0580(cStack4);
         uVar2 = fcn.005f13c0(uStack8);
         uVar3 = uStack12 & 0xff;
     }
+
     fcn.005f04e0(uVar2, uVar3);
+
+    // Now we read the first buffer using the length above
     if (*(int32_t *)(iVar1 + 100) == 0) {
         fcn.0044a3a0();
     } else {
         fcn.0044a280(*param_1, param_1[1] + 7 >> 3);
     }
+
     param_1[6] = 0x3d088889;    // 0.0333333350718
     param_1[7] = 0xffffffff;    // nan
     fcn.005f03b0(0xd);
     param_1[5] = 0xbd088889;    // -0.0333333350718
     param_1[4] = 0xbd088889;    // -0.0333333350718
     *(undefined *)((int32_t)param_1 + 0x25) = 1;
-    fcn.0074a6c0(1);  // Code below
+    fcn.0074a6c0(1);            // Code below
     param_1[4] = param_1[5];
     return;
 }
