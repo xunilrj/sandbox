@@ -1869,6 +1869,17 @@ Wine-dbg>x $ESP+0xC 0385745b = arg3
 Wine-dbg>x $ESP+0x10 3f6ccecd = 0.925030529499 = arg4
 Wine-dbg>x $ESP+0x14 038d8fe4
 
+// ECX:039408b8
+// EBP:039409a3 <- arg3?
+    // Wine-dbg>x /b 0x039409a3+0x0 00
+    // Wine-dbg>x /b 0x039409a3+0x1 00
+    // Wine-dbg>x /b 0x039409a3+0x2 00
+    // Wine-dbg>x /b 0x039409a3+0x3 00
+    // Wine-dbg>x /b 0x039409a3+0x4 00
+    // Wine-dbg>x /b 0x039409a3+0x5 0f
+    // Wine-dbg>x /b 0x039409a3+0x6 0c
+// EAX:00c6f524
+// ECX:039408b8 
 // Decompress vec3 then quat
 // arg3 = sizes = size[0] qx, size[1] qy, size[2] qz, size[3] qw, size[4] tx, size[5] ty, size[6] tz
 float* __stdcall sub_6c6460(float* arg1, int32_t arg2, char* arg3, float arg4)

@@ -1,19 +1,2 @@
-[package]
-name = "tomi"
-version = "0.1.0"
-edition = "2021"
-
-[dependencies]
-log = "0.4.14"
-pretty_env_logger = "0.4.0"
-structopt = "0.3.23"
-nom = "7.0.0"
-crc = "2.0.0"
-spinoff = "0.5.3"
-user-error = "1.2.8"
-glam = "0.21.3"
-json = "0.12.4"
-base64 = "0.13.0"
-tablestream = "0.1.3"
-itertools = "0.10.1"
-bitvec = "0.22.3"
+[workspace]
+members = ["crates/tomi", "crates/x86_emulator"]

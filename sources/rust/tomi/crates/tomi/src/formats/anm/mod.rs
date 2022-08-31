@@ -5,7 +5,9 @@ use std::path::Path;
 use bitvec::order::Lsb0;
 use bitvec::slice::BitSlice;
 use glam::{quat, vec3, Quat, Vec3};
+use iced_x86::Register;
 use log::debug;
+use x86_emulator::Value;
 
 use crate::{
     checksum_mapping::ChecksumMap,
@@ -189,6 +191,78 @@ impl AnmParser {
                 0xFC6597EB1FE5458E => {
                     debug!("CompressedTransformKeys");
 
+                    // let code = x86_emulator::code_from_hex_string(include_str!("compressed.txt"));
+                    // // x86_emulator::disassembly(&code);
+
+                    // let fn0074a990 =
+                    //     x86_emulator::code_from_hex_string(include_str!("0x0074a990.txt"));
+                    // let mut ctx = x86_emulator::Context::new();
+                    // ctx.debug = true;
+
+                    // let mut data = vec![];
+                    // data.extend(0.0f32.to_le_bytes());
+                    // data.extend(0.0f32.to_le_bytes());
+                    // data.extend(0.0f32.to_le_bytes());
+                    // data.extend(1.0f32.to_le_bytes());
+                    // data.extend(0.0f32.to_le_bytes());
+                    // data.extend(0.0f32.to_le_bytes());
+                    // data.extend(0.0f32.to_le_bytes());
+                    // ctx.mount_mem(0x895184, data);
+
+                    // ctx.set_register(Register::EAX, 0x006c65f0);
+                    // ctx.set_register(Register::EBX, 0x03e3a5a0);
+                    // ctx.set_register(Register::ECX, 0x37dfd68);
+                    // ctx.set_register(Register::EDI, 0x038d9038);
+
+                    // let mut data = vec![];
+                    // data.extend(0x007ef8f8u32.to_le_bytes());
+                    // data.extend(0x02fdc328u32.to_le_bytes());
+                    // data.extend(0x765ba466u32.to_le_bytes());
+                    // data.extend(0x632fd7a5u32.to_le_bytes());
+                    // data.extend(0x03000200u32.to_le_bytes()); // 0x10
+                    // data.extend(0x00050004u32.to_le_bytes()); // 4
+                    // data.extend(0x037e3dfcu32.to_le_bytes()); // 8
+                    // data.extend(0x00000060u32.to_le_bytes()); // c
+                    // data.extend(0x00000015u32.to_le_bytes()); // 0x20
+                    // data.extend(0x00000000u32.to_le_bytes()); // 4
+                    // data.extend(0x00000000u32.to_le_bytes()); // 8
+                    // data.extend(0x00000000u32.to_le_bytes()); // c
+                    // data.extend(0x3d088889u32.to_le_bytes()); // 0x30
+                    // data.extend(0x00000000u32.to_le_bytes());
+                    // data.extend(0x00000000u32.to_le_bytes());
+                    // data.extend(0x00015100u32.to_le_bytes());
+                    // data.extend(0x037e3d98u32.to_le_bytes()); // 0x40
+                    // data.extend(0x00000318u32.to_le_bytes());
+                    // data.extend(0x00000031u32.to_le_bytes());
+                    // data.extend(0xb5743900u32.to_le_bytes());
+                    // data.extend(0x00000022u32.to_le_bytes()); // 0x50
+
+                    // ctx.mount_mem(0x37dfd68, data);
+
+                    // ctx.mount_mem(0x006c65f0, code);
+                    // ctx.mount_mem(0x0074a990, fn0074a990);
+                    // ctx.set_register(Register::EIP, 0x006c65f0);
+
+                    // ctx.mount_mem(0x00c6f5bc - 0x00010000, vec![0u8; 0x00020000]);
+
+                    // ctx.set_value(Value::Memory(0x00c6f5bc + 0x0), Value::U32(0x004a35af));
+                    // ctx.set_value(Value::Memory(0x00c6f5bc + 0x4), Value::U32(0x038d9038));
+                    // ctx.set_value(Value::Memory(0x00c6f5bc + 0x8), Value::U32(0x00c6f60c));
+                    // ctx.set_value(Value::Memory(0x00c6f5bc + 0xC), Value::U32(0x3e3ddcf2));
+                    // ctx.set_value(Value::Memory(0x00c6f5bc + 0x10), Value::U32(0x3f3ddd00));
+                    // ctx.set_value(Value::Memory(0x00c6f5bc + 0x14), Value::U32(0x00000000));
+                    // ctx.set_value(Value::Memory(0x00c6f5bc + 0x18), Value::U32(0x03e3e840));
+                    // ctx.set_value(Value::Memory(0x00c6f5bc + 0x1C), Value::U32(0x038d8fcc));
+                    // ctx.set_value(Value::Memory(0x00c6f5bc + 0x20), Value::U32(0x00000000));
+                    // ctx.set_value(Value::Memory(0x00c6f5bc + 0x24), Value::U32(0x00000000));
+                    // ctx.set_value(Value::Memory(0x00c6f5bc + 0x28), Value::U32(0x00000000));
+                    // ctx.set_value(Value::Memory(0x00c6f5bc + 0x2C), Value::U32(0x00000000));
+                    // ctx.set_register(Register::ESP, 0x00c6f5bc);
+
+                    // ctx.break_if_eip(0x006c6fd2);
+                    // x86_emulator::run(&mut ctx, 100);
+                    // todo!();
+
                     for i in 0..track_type.qty {
                         debug!("Track: {}", i);
 
@@ -244,16 +318,22 @@ impl AnmParser {
                                 10.0,
                             ];
                             let max_bound = max_bounds[max_bounds_index];
+                            debug!("max bound: {}", max_bound);
 
-                            let mut samples = 0;
+                            let mut sample_idx = 0;
                             let mut datapos = 50;
 
                             let mut time = 0.0;
                             // see 0x006c65f0 @ 0x6C66F9
-                            let mut last_rot = [0.0, 0.0, 0.0, 1.0];
-                            let mut last_translation = [0.0, 0.0, 0.0];
+                            let mut accum_rot = Quat::IDENTITY;
+                            let mut accum_translation = Vec3::ZERO;
+
+                            let mut sum_last = false;
+                            let mut last_rot = Quat::IDENTITY;
+                            let mut last_translation = Vec3::ZERO;
+
                             loop {
-                                if samples >= sample_count {
+                                if sample_idx >= sample_count {
                                     break;
                                 }
 
@@ -268,7 +348,7 @@ impl AnmParser {
                                 let qty_samples =
                                     skip_take_as_usize(bits, datapos, bits_per_sample);
                                 datapos += bits_per_sample;
-                                samples += qty_samples;
+                                debug!("qty_samples: {}", qty_samples);
 
                                 let mut upper_value = 0.0;
                                 let mut lower_value = 0.0;
@@ -289,6 +369,7 @@ impl AnmParser {
                                 }
 
                                 for _ in 0..qty_samples {
+                                    let mut sizes = vec![];
                                     let mut samples = vec![];
                                     let mut fsamples = vec![];
                                     for &size in &bounds_bitsizes {
@@ -297,57 +378,145 @@ impl AnmParser {
                                         //see sub_6c4250 for vec3
                                         let v = skip_take_as_usize(bits, datapos, size);
                                         datapos += size;
+                                        sizes.push(size);
 
                                         samples.push(v);
 
-                                        let v = if size == 0 {
-                                            0.0
+                                        if v == 0 {
+                                            fsamples.push(0.0);
                                         } else {
-                                            let max = (1 << size) - 1;
-                                            let v = v; // & max;
-                                            let new_v = (v as f64) / (max as f64);
-                                            new_v * upper_value + lower_value
-                                        };
-
-                                        fsamples.push(v);
+                                            if size == 0 {
+                                                fsamples.push(0.0);
+                                            } else {
+                                                let max = (1 << size) - 1;
+                                                let v = v; // & max;
+                                                if v == max {
+                                                    fsamples.push(max_bound);
+                                                } else {
+                                                    let new_v = (v as f64) / (max as f64);
+                                                    // debug!(
+                                                    //     "{} * {} + {}",
+                                                    //     new_v, upper_value, lower_value
+                                                    // );
+                                                    fsamples
+                                                        .push(new_v * upper_value + lower_value);
+                                                }
+                                            };
+                                        }
                                     }
 
-                                    debug!("{:?}", fsamples);
+                                    // debug!("sizes: {:?}", sizes);
+                                    // debug!("samples: {:?}", samples);
+                                    // debug!("fsamples: {:?}", fsamples);
 
-                                    last_rot[0] += fsamples[0];
-                                    last_rot[1] += fsamples[1];
-                                    last_rot[2] += fsamples[2];
-                                    last_rot[3] += fsamples[3];
+                                    let mut delta = quat(
+                                        fsamples[0] as f32,
+                                        fsamples[1] as f32,
+                                        fsamples[2] as f32,
+                                        fsamples[3] as f32,
+                                    );
+                                    if sum_last {
+                                        debug!(
+                                            "sum last: {} {} => {}",
+                                            delta.x,
+                                            last_rot.x,
+                                            delta.x + last_rot.x
+                                        );
+                                        debug!(
+                                            "sum last: {} {} => {}",
+                                            delta.y,
+                                            last_rot.y,
+                                            delta.y + last_rot.y
+                                        );
+                                        debug!(
+                                            "sum last: {} {} => {}",
+                                            delta.z,
+                                            last_rot.z,
+                                            delta.z + last_rot.z
+                                        );
+                                        debug!(
+                                            "sum last: {} {} => {}",
+                                            delta.w,
+                                            last_rot.w,
+                                            delta.w + last_rot.w
+                                        );
+                                        delta = delta + last_rot;
+                                    }
+                                    last_rot = delta;
+                                    let next_rot = (accum_rot + delta).normalize();
+                                    debug!("{} + {} => {}", accum_rot.x, delta.x, next_rot.x);
+                                    debug!("{} + {} => {}", accum_rot.y, delta.y, next_rot.y);
+                                    debug!("{} + {} => {}", accum_rot.z, delta.z, next_rot.z);
+                                    debug!("{} + {} => {}", accum_rot.w, delta.w, next_rot.w);
+                                    accum_rot = next_rot;
 
-                                    last_translation[0] += fsamples[4];
-                                    last_translation[1] += fsamples[5];
-                                    last_translation[2] += fsamples[6];
+                                    let mut delta = vec3(
+                                        fsamples[4] as f32,
+                                        fsamples[5] as f32,
+                                        fsamples[6] as f32,
+                                    );
+                                    if sum_last {
+                                        debug!(
+                                            "sum last: {} {} => {}",
+                                            delta.x,
+                                            last_translation.x,
+                                            delta.x + last_translation.x
+                                        );
+                                        debug!(
+                                            "sum last: {} {} => {}",
+                                            delta.y,
+                                            last_translation.y,
+                                            delta.y + last_translation.y
+                                        );
+                                        debug!(
+                                            "sum last: {} {} => {}",
+                                            delta.z,
+                                            last_translation.z,
+                                            delta.z + last_translation.z
+                                        );
+                                        delta = delta + last_translation;
+                                    }
+                                    last_translation = delta;
+                                    let next_translation = accum_translation + delta;
+                                    debug!(
+                                        "{} + {} => {}",
+                                        accum_translation.x, delta.x, next_translation.x
+                                    );
+                                    debug!(
+                                        "{} + {} => {}",
+                                        accum_translation.y, delta.y, next_translation.y
+                                    );
+                                    debug!(
+                                        "{} + {} => {}",
+                                        accum_translation.z, delta.z, next_translation.z
+                                    );
+                                    accum_translation = next_translation;
 
                                     // Order of samples see
                                     // 006c64b9
                                     let frame = Frame {
                                         time,
-                                        rotation: quat(
-                                            last_rot[0] as f32,
-                                            last_rot[1] as f32,
-                                            last_rot[2] as f32,
-                                            last_rot[3] as f32,
-                                        )
-                                        .normalize(),
-                                        translation: vec3(
-                                            last_translation[0] as f32,
-                                            last_translation[1] as f32,
-                                            last_translation[2] as f32,
-                                        ),
+                                        rotation: accum_rot.clone(),
+                                        translation: accum_translation,
                                     };
-                                    debug!("{:?}", frame);
+                                    // see 0x6C674B for cmp sample_idx and sample_count
+                                    debug!("{}/{} {:?}", sample_idx, sample_count, frame);
+                                    debug!("fsamples: {:?}", fsamples);
+                                    debug!("last r: {}", last_rot);
+                                    debug!("last t: {}", last_translation);
 
                                     frames.push(frame);
+                                    sample_idx += 1;
                                     time += 1.0 / 30.0;
                                 }
 
-                                if samples < sample_count {
-                                    let _ = skip_take_as_usize(bits, datapos, 1);
+                                if sample_idx < sample_count {
+                                    let v = skip_take_as_usize(bits, datapos, 1);
+                                    println!("SomeValue: {v}");
+                                    // this is used at 0x6C67C7
+                                    if v == 1 {
+                                        sum_last = true;
+                                    }
                                     datapos += 1;
                                 } else {
                                     break;
@@ -356,7 +525,7 @@ impl AnmParser {
 
                             let all_padding = bits.iter().skip(datapos).all(|x| x == false);
 
-                            assert!(samples == sample_count);
+                            assert!(sample_idx == sample_count);
                             if !all_padding {
                                 assert!(
                                     datapos == header.len() * 8,
@@ -417,6 +586,23 @@ impl AnmParser {
                             bone_name_hash: 0,
                             bone_name: None,
                             frames,
+                        });
+                    }
+                }
+
+                // SingleValue<Vector3>
+                0x6B77C806C0E23EA1 => {
+                    debug!("SingleValue<Vector3>");
+                    for _ in 0..track_type.qty {
+                        let translation = input.read_vec3("vec3");
+                        tracks.push(Track {
+                            bone_name_hash: 0,
+                            bone_name: None,
+                            frames: vec![Frame {
+                                time: 0.0,
+                                rotation: Quat::IDENTITY,
+                                translation,
+                            }],
                         });
                     }
                 }

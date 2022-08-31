@@ -1,0 +1,8 @@
+[package]
+name = "x86_emulator"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+iced-x86 = "1.14.0"
+rust-lapper = "1.0.0"
