@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="akka" Version="1.3.2" />
+    <PackageReference Include="akka" Version="1.4.46" />
   </ItemGroup>
 
 </Project>
