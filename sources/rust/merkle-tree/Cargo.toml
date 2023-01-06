@@ -5,7 +5,7 @@ edition = "2018"
 
 
 [dependencies]
-tokio = {version="1.10.0", features = ["full"]}
+tokio = {version="1.16.1", features = ["full"]}
 flume = "0.10.8"
 sha2 = "0.9.5"
 extension-trait = "1.0.0"
