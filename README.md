@@ -68,6 +68,8 @@
 [Unreal Engine - Basic locomotion using Mixamo](/sources/unreal/locomotion/Readme.md)  
 [Unreal Engine - Writing Complex Unreal functions in C++](/sources/unreal/complexlatentfunction/Readme.md)
 
+[Crazy Bus](https://garaujo.itch.io/crazy-bus) (Godot with GDScript)
+
 ### Concurrency
 
 [Concurrency](/texts/dev/ComputerScience/Concurrency)
