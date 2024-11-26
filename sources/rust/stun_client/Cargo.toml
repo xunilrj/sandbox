@@ -5,4 +5,4 @@ authors = ["Daniel Frederico Lins Leite <xunilrj@hotmail.com>"]
 edition = "2018"
 
 [dependencies]
-mio = {version = "0.7.5", features = ["os-poll", "udp"]}
+mio = {version = "0.7.6", features = ["os-poll", "udp"]}
