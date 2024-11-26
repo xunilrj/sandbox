@@ -5,4 +5,4 @@ authors = ["Daniel Leite <1985.daniel@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-tokio = { version = "0.2.21", features = ["full"] }
+tokio = { version = "1.18.5", features = ["full"] }
