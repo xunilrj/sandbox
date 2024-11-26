@@ -8,7 +8,7 @@ edition = "2018"
 
 [dependencies]
 multimap = "0.8.1"
-mio = {version = "0.7.0", features = ["os-poll","tcp"]}
+mio = {version = "0.7.6", features = ["os-poll","tcp"]}
 simple-error = "0.2.1"
 http_parser = "0.0.2"
 strings = "0.1.1"
